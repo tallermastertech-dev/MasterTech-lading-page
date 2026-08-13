@@ -826,7 +826,7 @@ export default function App() {
 
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
-            <p>© 2026 MASTERTECH AUTOMOTRIZ. Isla de Margarita, Venezuela.</p>
+            <p>© 2026 SOLUCIONES MASTERTECH C.A. Isla de Margarita, Venezuela. Todos los derechos reservados.</p>
             <div className="flex gap-12">
               <a href="#" className="hover:text-white transition-colors">Términos de Servicio</a>
               <a href="#" className="hover:text-white transition-colors">Política de Privacidad</a>

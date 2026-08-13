@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Phone, Calendar, Car, ShieldCheck, ArrowRight, X } from 'lucide-react';
+import { CheckCircle2, Phone, ShieldCheck, ArrowRight, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
 
@@ -12,8 +12,16 @@ export default function Inspeccion() {
   const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [formErrorMessage, setFormErrorMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string>('Línea de inspección gratuita');
   const [inspectionSlotStr, setInspectionSlotStr] = useState<string>('');
   const [isInspectionSlotValid, setIsInspectionSlotValid] = useState<boolean>(false);
+
+  const scrollToPaidPackages = () => {
+    const el = document.getElementById('paquetes-pago');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +30,7 @@ export default function Inspeccion() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-    data.servicio = "Línea de inspección gratuita"; 
+    data.servicio = selectedService || "Línea de inspección gratuita"; 
     if (inspectionSlotStr) {
       data.fecha_hora = inspectionSlotStr;
     }
@@ -97,7 +105,7 @@ export default function Inspeccion() {
       <main className="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="max-w-4xl mx-auto w-full relative z-10 text-center">
+        <div className="max-w-4xl mx-auto w-full relative z-10 text-center py-8">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -112,15 +120,14 @@ export default function Inspeccion() {
               REGÍSTRATE PARA SABER EXACTAMENTE <br className="hidden md:block"/> 
               <span className="text-primary font-black">
                 QUÉ NECESITA TU CARRO
-              </span> <br className="hidden md:block"/>
-              ANTES DE VIAJAR O COMPRAR
+              </span>
             </h1>
             
-            <p className="text-lg md:text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-              No dejes tu seguridad al azar. Nuestra línea de inspección evalúa más de 40 puntos críticos de tu vehículo con tecnología de vanguardia para que tomes decisiones informadas y viajes con total tranquilidad.
+            <p className="text-lg md:text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+              No dejes tu seguridad al azar. Nuestra línea de inspección evalúa más de 100pts críticos de tu vehículo con tecnología de vanguardia para que tomes decisiones informadas.
             </p>
 
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 mb-12 text-left max-w-3xl mx-auto backdrop-blur-md">
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 mb-10 text-left max-w-3xl mx-auto backdrop-blur-md">
               <h3 className="text-2xl font-black mb-6 text-center">¿Qué incluye la inspección y por qué la hacemos?</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="flex gap-4">
@@ -154,17 +161,115 @@ export default function Inspeccion() {
               </div>
             </div>
 
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="btn-primary font-black text-xl md:text-2xl py-6 px-12 rounded-2xl shadow-[0_20px_50px_rgba(194,164,114,0.35)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-4 mx-auto w-full md:w-auto"
-            >
-              RESERVAR MI CUPO GRATIS <ArrowRight className="w-8 h-8" />
-            </button>
+            {/* Main Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto mb-16">
+              <button 
+                onClick={() => { setSelectedService('Línea de inspección gratuita'); setIsModalOpen(true); }}
+                className="btn-primary font-black text-lg md:text-xl py-5 px-8 rounded-2xl shadow-[0_20px_50px_rgba(194,164,114,0.35)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 w-full sm:w-auto"
+              >
+                RESERVAR MI CUPO GRATIS <ArrowRight className="w-6 h-6" />
+              </button>
+
+              <button 
+                onClick={scrollToPaidPackages}
+                className="bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-lg md:text-xl py-5 px-8 rounded-2xl backdrop-blur-md transition-all duration-300 flex items-center justify-center gap-3 w-full sm:w-auto hover:border-primary/50"
+              >
+                RESERVAR CUPO DE REVISIÓN <ChevronDown className="w-6 h-6 text-primary" />
+              </button>
+            </div>
           </motion.div>
+
+          {/* Section: Paquetes de Pago de Revisiones */}
+          <div id="paquetes-pago" className="pt-12 border-t border-white/10 text-left max-w-4xl mx-auto">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4 text-primary font-bold text-xs uppercase tracking-widest">
+                Diagnósticos Avanzados
+              </div>
+              <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight mb-4">
+                PAQUETES DE <span className="text-primary italic">PAGO DE REVISIONES</span>
+              </h2>
+              <p className="text-zinc-400 max-w-xl mx-auto text-sm md:text-base">
+                Selecciona la inspección especializada que tu vehículo requiere para obtener un peritaje completo y reporte profesional.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Card 1: Línea de Inspección Paga */}
+              <div className="bg-gradient-to-b from-white/10 to-white/5 border border-primary/40 hover:border-primary rounded-3xl p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group shadow-xl">
+                <div className="absolute top-0 right-0 bg-primary/20 border-b border-l border-primary/30 px-4 py-1.5 rounded-bl-2xl text-[11px] font-black text-primary uppercase tracking-wider">
+                  Recomendado
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-white mb-2">Línea de Inspección Paga</h3>
+                  <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+                    Evaluación técnica profunda e integral de más de 100pts con scanner profesional y entrega de informe técnico.
+                  </p>
+                  <ul className="space-y-3 mb-8 text-sm text-zinc-300">
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Escaneo especializado de todos los módulos</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Prueba de compresión y ruta especializada</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Revisión exhaustiva de tren motriz y suspensión</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Reporte técnico impreso y digital</span>
+                    </li>
+                  </ul>
+                </div>
+                <button 
+                  onClick={() => { setSelectedService("Línea de inspección paga"); setIsModalOpen(true); }}
+                  className="btn-primary font-black py-4 px-6 rounded-2xl w-full text-center flex items-center justify-center gap-2 text-base shadow-lg"
+                >
+                  RESERVAR INSPECCIÓN PAGA <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Card 2: Inspección Compra Venta */}
+              <div className="bg-gradient-to-b from-white/10 to-white/5 border border-white/10 hover:border-primary/60 rounded-3xl p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group shadow-xl">
+                <div>
+                  <h3 className="text-2xl font-black text-white mb-2">Inspección Compra Venta</h3>
+                  <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+                    Peritaje pre-compra y pre-venta completo para verificar el estado real del vehículo antes de cerrar el negocio.
+                  </p>
+                  <ul className="space-y-3 mb-8 text-sm text-zinc-300">
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Peritaje de estructura, carrocería y latonería</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Verificación de fugas y salud de motor/caja</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Detección de kilometraje alterado y fallas ocultas</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
+                      <span>Aval técnico oficial MasterTech para negociación</span>
+                    </li>
+                  </ul>
+                </div>
+                <button 
+                  onClick={() => { setSelectedService("Inspección Compra Venta"); setIsModalOpen(true); }}
+                  className="bg-white/10 hover:bg-primary hover:text-black border border-white/20 hover:border-primary text-white font-black py-4 px-6 rounded-2xl w-full text-center transition-all duration-300 flex items-center justify-center gap-2 text-base"
+                >
+                  RESERVAR COMPRA VENTA <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
-      {/* Modal / Formulario Oculto */}
+      {/* Modal / Formulario */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -193,27 +298,28 @@ export default function Inspeccion() {
                 <div className="text-center py-10">
                   <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-6" />
                   <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">¡CUPO RESERVADO!</h3>
-                  <p className="text-zinc-400 mb-6">Tu reserva ha sido recibida. Un asesor de servicio te contactará de inmediato por WhatsApp para confirmar los detalles.</p>
+                  <p className="text-zinc-400 mb-6">Tu reserva para <strong>{selectedService}</strong> ha sido recibida. Un asesor de servicio te contactará de inmediato por WhatsApp para confirmar los detalles.</p>
                   <button onClick={() => { setFormStatus('idle'); setIsModalOpen(false); }} className="text-primary font-bold uppercase tracking-widest text-xs hover:underline">Cerrar</button>
                 </div>
               ) : (
                 <>
                   <div className="text-center mb-8">
-                    <h3 className="text-2xl font-black mb-2">Comienza tu Registro</h3>
-                    <p className="text-sm text-zinc-400">Completa estos 3 datos y asegura tu inspección gratuita.</p>
+                    <h3 className="text-2xl font-black mb-2">Reserva tu Cupo</h3>
+                    <p className="text-sm text-primary font-bold">{selectedService}</p>
+                    <p className="text-xs text-zinc-400 mt-1">Completa estos 3 datos y confirma tu atención personalizada.</p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="space-y-2">
                       <label htmlFor="inspeccion-nombre" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Nombre Completo</label>
-                      <input id="inspeccion-nombre" required name="nombre" type="text" placeholder="Tu Nombre" className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700" />
+                      <input id="inspeccion-nombre" required name="nombre" type="text" placeholder="Tu Nombre" className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-white" />
                     </div>
                     
                     <div className="space-y-2">
                       <label htmlFor="inspeccion-telefono" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Teléfono (WhatsApp)</label>
                       <div className="relative">
                         <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600" />
-                        <input id="inspeccion-telefono" required name="telefono" type="tel" placeholder="0412 000 0000" className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700" />
+                        <input id="inspeccion-telefono" required name="telefono" type="tel" placeholder="0412 000 0000" className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-white" />
                       </div>
                     </div>
 
@@ -240,8 +346,9 @@ export default function Inspeccion() {
       </AnimatePresence>
 
       <footer className="py-6 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
-        © 2026 MASTERTECH AUTOMOTRIZ. Todos los derechos reservados.
+        © 2026 SOLUCIONES MASTERTECH C.A. Todos los derechos reservados.
       </footer>
     </div>
   );
 }
+

@@ -438,7 +438,7 @@ export default function Contacto() {
 
       {/* Footer */}
       <footer className="py-5 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
-        © 2026 MASTERTECH AUTOMOTRIZ. Todos los derechos reservados.
+        © 2026 SOLUCIONES MASTERTECH C.A. Todos los derechos reservados.
       </footer>
     </div>
   );
