@@ -274,8 +274,7 @@ export default function App() {
       }
     };
     fetchSettings();
-    const interval = setInterval(fetchSettings, 4000);
-    return () => clearInterval(interval);
+    return () => {};
 
     // Internal router listener
     const handleHashChange = () => {
