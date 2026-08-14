@@ -233,7 +233,21 @@ export default function Jornadas() {
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => {
-        if (data) setConfig((prev: any) => ({ ...prev, ...data }));
+        if (data) {
+          const mergeSmart = (server: any, local: any) => {
+            const res = { ...(server || {}) };
+            if (local) {
+              for (const [k, v] of Object.entries(local)) {
+                if (v !== undefined && v !== null && v !== '') {
+                  res[k] = v;
+                }
+              }
+            }
+            return res;
+          };
+          const merged = mergeSmart(data, localData);
+          setConfig((prev: any) => ({ ...prev, ...merged }));
+        }
       })
       .catch(() => {});
 

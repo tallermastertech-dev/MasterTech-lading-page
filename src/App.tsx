@@ -242,14 +242,11 @@ export default function App() {
           } catch (e) {}
 
           const mergeSmart = (local: any, server: any) => {
-            const res = { ...(local || {}), ...(server || {}) };
+            const res = { ...(server || {}) };
             if (local) {
               for (const [k, v] of Object.entries(local)) {
-                if (typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('blob:'))) {
-                  const sVal = server ? server[k] : undefined;
-                  if (!sVal || !sVal.startsWith('data:image')) {
-                    res[k] = v;
-                  }
+                if (v !== undefined && v !== null && v !== '') {
+                  res[k] = v;
                 }
               }
             }
@@ -293,8 +290,23 @@ export default function App() {
         console.error("Error cargando configuración dinámica:", err);
       }
     };
-    fetchSettings();
-    return () => {};
+    // Live update listener for instant admin updates across tabs and components
+    const handleSettingsUpdated = (e: any) => {
+      const updated = e.detail || e;
+      if (updated && typeof updated === 'object') {
+        setConfig((prev: any) => ({ ...prev, ...updated }));
+        try { if (updated.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(updated.TEAM_MEMBERS_JSON)); } catch (err) {}
+        try { if (updated.REVIEWS_JSON) setReviews(JSON.parse(updated.REVIEWS_JSON)); } catch (err) {}
+        try { if (updated.SERVICES_JSON) setServices(JSON.parse(updated.SERVICES_JSON)); } catch (err) {}
+      }
+    };
+    window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    window.addEventListener('storage', fetchSettings);
+
+    return () => {
+      window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
+      window.removeEventListener('storage', fetchSettings);
+    };
 
     // Internal router listener
     const handleHashChange = () => {

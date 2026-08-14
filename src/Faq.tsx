@@ -67,7 +67,18 @@ export default function Faq() {
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const merged = { ...(currentLocal || {}), ...data };
+          const mergeSmart = (server: any, local: any) => {
+            const res = { ...(server || {}) };
+            if (local) {
+              for (const [k, v] of Object.entries(local)) {
+                if (v !== undefined && v !== null && v !== '') {
+                  res[k] = v;
+                }
+              }
+            }
+            return res;
+          };
+          const merged = mergeSmart(data, currentLocal);
           setConfig((prev: any) => ({ ...prev, ...merged }));
           try {
             if (merged.FAQS_JSON) {
