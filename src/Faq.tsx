@@ -67,7 +67,7 @@ export default function Faq() {
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const merged = { ...data, ...(currentLocal || {}) };
+          const merged = { ...(currentLocal || {}), ...data };
           setConfig((prev: any) => ({ ...prev, ...merged }));
           try {
             if (merged.FAQS_JSON) {
