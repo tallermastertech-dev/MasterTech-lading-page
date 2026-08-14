@@ -506,6 +506,7 @@ export default function App() {
                   ) : (
                     <div className="w-full h-full overflow-hidden relative rounded-[1.8rem] lg:rounded-[2rem] bg-black flex items-center justify-center">
                       <iframe 
+                        key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
                         src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
                         className="w-[130%] h-[145%] border-0 rounded-[1.8rem] lg:rounded-[2rem] pointer-events-auto shrink-0"
                         style={{

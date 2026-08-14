@@ -1847,7 +1847,14 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                     name="hero-reel-url"
                     type="text"
                     value={settingsForm.HERO_REEL_URL || ''}
-                    onChange={(e) => setSettingsForm({ ...settingsForm, HERO_REEL_URL: e.target.value })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const updated = { ...settingsForm, HERO_REEL_URL: val };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
+                      handleSaveSettings(updated);
+                    }}
                     className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
                     placeholder="Ej. https://www.instagram.com/reel/DYQxwH6jywd/ o tu video mp4"
                   />
