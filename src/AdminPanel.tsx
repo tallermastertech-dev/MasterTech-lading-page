@@ -1021,6 +1021,15 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       'REVIEWS_JSON',
       'SERVICES_JSON',
       'FAQS_JSON',
+      'JORNADAS_JSON',
+      'JORNADA_COUNTDOWN_TITLE',
+      'JORNADA_COUNTDOWN_END',
+      'HERO_IMG',
+      'LOGO_URL',
+      'IMG_INSTALACIONES',
+      'HERO_REEL_URL',
+      'PHONE_NUMBER',
+      'WHATSAPP_LINK'
     ];
 
     let localData: any = null;
@@ -1038,6 +1047,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       try { if (localData.REVIEWS_JSON) setReviews(JSON.parse(localData.REVIEWS_JSON)); } catch (e) {}
       try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
       try { if (localData.FAQS_JSON) setFaqs(JSON.parse(localData.FAQS_JSON)); } catch (e) {}
+      try { if (localData.JORNADAS_JSON) setJornadasList(JSON.parse(localData.JORNADAS_JSON)); } catch (e) {}
     }
 
     try {
@@ -1072,6 +1082,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         try { if (merged.REVIEWS_JSON) setReviews(JSON.parse(merged.REVIEWS_JSON)); } catch (e) {}
         try { if (merged.FAQS_JSON) setFaqs(JSON.parse(merged.FAQS_JSON)); } catch (e) {}
         try { if (merged.SERVICES_JSON) setServices(JSON.parse(merged.SERVICES_JSON)); } catch (e) {}
+        try { if (merged.JORNADAS_JSON) setJornadasList(JSON.parse(merged.JORNADAS_JSON)); } catch (e) {}
 
         // If we have good local data for priority fields, push it to the server
         // so Supabase gets updated even if it was out of sync
@@ -1197,7 +1208,8 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       REVIEWS_JSON: base.REVIEWS_JSON ?? JSON.stringify(reviews),
       SERVICES_JSON: base.SERVICES_JSON ?? JSON.stringify(services),
       FAQS_JSON: base.FAQS_JSON ?? JSON.stringify(faqs),
-      CATALOG_PRODUCTS_JSON: base.CATALOG_PRODUCTS_JSON ?? JSON.stringify(catalogItems)
+      CATALOG_PRODUCTS_JSON: base.CATALOG_PRODUCTS_JSON ?? JSON.stringify(catalogItems),
+      JORNADAS_JSON: base.JORNADAS_JSON ?? JSON.stringify(jornadasList)
     };
     if (targetForm.SUCCESS_BADGE && targetForm.SUCCESS_BADGE.includes('30%')) {
       targetForm.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
