@@ -72,19 +72,19 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           </a>
 
           {/* Live Taller Schedule Status Pill */}
-          <div className={`hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold shadow-md transition-all ${statusInfo.badgeBg} ${statusInfo.badgeBorder}`}>
+          <div className={`hidden xl:inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold shadow-md transition-all ${statusInfo.badgeBg} ${statusInfo.badgeBorder}`}>
             <span className={`w-2 h-2 rounded-full ${statusInfo.dotColor} animate-pulse`} />
             <span>{statusInfo.badgeText}</span>
           </div>
         </div>
 
         {/* Desktop Links with Hover Mega Dropdowns */}
-        <div className="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-bold text-zinc-400">
+        <div className="hidden lg:flex items-center gap-3 xl:gap-5 text-xs xl:text-sm font-bold text-zinc-400">
           
           {/* Inicio Link */}
           <a 
             href="/" 
-            className={`transition-colors py-2 ${
+            className={`transition-colors py-2 whitespace-nowrap ${
               activePage === 'inicio' ? 'text-primary font-black uppercase border-b-2 border-primary pb-0.5' : 'hover:text-white'
             }`}
           >
@@ -94,7 +94,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           {/* Nosotros Direct Link */}
           <a 
             href="/nosotros" 
-            className={`transition-colors py-2 ${
+            className={`transition-colors py-2 whitespace-nowrap ${
               activePage === 'nosotros' ? 'text-primary font-black uppercase border-b-2 border-primary pb-0.5' : 'hover:text-white'
             }`}
           >
@@ -104,13 +104,13 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           {/* Jornadas VIP Link */}
           <a 
             href="/jornada" 
-            className={`transition-all py-1.5 px-3 rounded-full flex items-center gap-1.5 border text-xs font-black uppercase tracking-wider shadow-lg transition-transform hover:scale-105 ${
+            className={`transition-all py-1.5 px-2.5 xl:px-3 rounded-full flex items-center gap-1.5 border text-[11px] xl:text-xs font-black uppercase tracking-wider shadow-lg transition-transform hover:scale-105 whitespace-nowrap ${
               activePage === ('jornadas' as any) 
                 ? 'bg-amber-500/30 border-amber-400 text-amber-200' 
                 : 'bg-amber-500/15 border-amber-500/40 text-amber-400 hover:bg-amber-500/25 hover:border-amber-400 hover:text-amber-200'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <Sparkles className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-amber-400 animate-pulse shrink-0" />
             <span>JORNADAS VIP</span>
           </a>
 
@@ -122,11 +122,12 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           >
             <a 
               href="/servicios"
-              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer ${
+              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer whitespace-nowrap ${
                 activePage === 'servicios' ? 'text-primary font-black border-b-2 border-primary pb-0.5' : 'hover:text-white'
               }`}
             >
-              <span>Servicios Taller</span>
+              <span className="hidden xl:inline">Servicios Taller</span>
+              <span className="inline xl:hidden">Servicios</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'servicios' ? 'rotate-180 text-primary' : ''}`} />
             </a>
 
@@ -186,11 +187,12 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           >
             <a 
               href="/catalogo"
-              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer ${
-                activePage === 'catalogo' ? 'text-primary font-black uppercase border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer whitespace-nowrap ${
+                activePage === 'catalogo' ? 'text-primary font-black border-b-2 border-primary pb-0.5' : 'hover:text-white'
               }`}
             >
-              <span>Catálogo Repuestos</span>
+              <span className="hidden xl:inline">Catálogo Repuestos</span>
+              <span className="inline xl:hidden">Catálogo</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'catalogo' ? 'rotate-180 text-primary' : ''}`} />
             </a>
 
@@ -264,11 +266,12 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           >
             <a 
               href="/faq"
-              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer ${
+              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer whitespace-nowrap ${
                 activePage === 'faq' ? 'text-primary font-black border-b-2 border-primary pb-0.5' : 'hover:text-white'
               }`}
             >
-              <span>Preguntas Frecuentes</span>
+              <span className="hidden xl:inline">Preguntas Frecuentes</span>
+              <span className="inline xl:hidden">FAQ</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'faq' ? 'rotate-180 text-primary' : ''}`} />
             </a>
 
@@ -314,10 +317,11 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             href={cfg.WHATSAPP_LINK || "https://wa.link/xnj37f"}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary !py-2.5 !px-5 text-xs font-black !text-[#0D0D0D] flex items-center gap-2 border-none ml-2 shrink-0"
+            className="btn-primary !py-2 !px-3 xl:!py-2.5 xl:!px-5 text-xs font-black !text-[#0D0D0D] flex items-center gap-1.5 border-none ml-1 xl:ml-2 shrink-0 whitespace-nowrap"
           >
-            <WhatsAppIcon size={16} className="!text-[#0D0D0D] fill-current" />
-            <span className="font-black !text-[#0D0D0D] tracking-wide">Reserva Ahora</span>
+            <WhatsAppIcon size={16} className="!text-[#0D0D0D] fill-current shrink-0" />
+            <span className="font-black !text-[#0D0D0D] tracking-wide hidden sm:inline">Reserva Ahora</span>
+            <span className="font-black !text-[#0D0D0D] tracking-wide sm:hidden">Reservar</span>
           </a>
         </div>
 
