@@ -235,7 +235,21 @@ export default function App() {
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const merged = { ...(currentLocal || {}), ...data };
+          const mergeSmart = (local: any, server: any) => {
+            const res = { ...(local || {}), ...(server || {}) };
+            if (local) {
+              for (const [k, v] of Object.entries(local)) {
+                if (typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('blob:'))) {
+                  const sVal = server ? server[k] : undefined;
+                  if (!sVal || !sVal.startsWith('data:image')) {
+                    res[k] = v;
+                  }
+                }
+              }
+            }
+            return res;
+          };
+          const merged = mergeSmart(currentLocal, data);
           if (merged.SUCCESS_BADGE && merged.SUCCESS_BADGE.includes('30%')) {
             merged.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
           }

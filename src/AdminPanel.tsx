@@ -940,12 +940,13 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         // Merge: server fills non-priority fields; localStorage wins for priority fields
         const merged: any = { ...serverData };
         if (localData) {
-          for (const field of LOCAL_PRIORITY_FIELDS) {
-            // If localStorage has this field, it always wins
-            if (localData[field]) {
-              merged[field] = localData[field];
+          for (const [k, v] of Object.entries(localData)) {
+            if (LOCAL_PRIORITY_FIELDS.includes(k) || (typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('blob:')))) {
+              const sVal = serverData ? serverData[k] : undefined;
+              if (!sVal || !sVal.startsWith('data:image')) {
+                merged[k] = v;
+              }
             }
-            // If server has it but localStorage doesn't, push server value to localStorage
           }
         }
 
