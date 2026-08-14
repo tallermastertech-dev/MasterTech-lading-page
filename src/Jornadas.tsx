@@ -237,19 +237,27 @@ export default function Jornadas() {
       })
       .catch(() => {});
 
-    // Countdown Timer logic
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.secs > 0) return { ...prev, secs: prev.secs - 1 };
-        if (prev.mins > 0) return { ...prev, mins: prev.mins - 1, secs: 59 };
-        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, mins: 59, secs: 59 };
-        if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, mins: 59, secs: 59 };
-        return prev;
-      });
-    }, 1000);
+    // Dynamic Countdown Timer calculation
+    const calculateTimeLeft = () => {
+      let targetTime = Date.now() + (3 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000);
+      if (config && config.JORNADA_COUNTDOWN_END) {
+        const parsed = new Date(config.JORNADA_COUNTDOWN_END).getTime();
+        if (!isNaN(parsed) && parsed > 0) {
+          targetTime = parsed;
+        }
+      }
+      const diff = Math.max(0, targetTime - Date.now());
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / 1000 / 60) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+      setTimeLeft({ days, hours, mins, secs });
+    };
 
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [config.JORNADA_COUNTDOWN_END]);
 
   const currentJornadasList = React.useMemo(() => {
     if (config && config.JORNADAS_JSON) {
@@ -347,7 +355,7 @@ export default function Jornadas() {
           >
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-amber-400 sm:pr-4 sm:border-r sm:border-white/10">
               <Clock className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
-              <span>CIERRE DE CUPOS JORNADA:</span>
+              <span>{config.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}</span>
             </div>
 
             <div className="flex items-center gap-3">

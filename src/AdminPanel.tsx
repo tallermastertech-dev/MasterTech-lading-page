@@ -1928,6 +1928,86 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
               </button>
             </div>
 
+            {/* Timer Settings Card */}
+            <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-4">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2 border-b border-white/10 pb-3">
+                <Clock size={18} />
+                <span>Configuración del Reloj de Cierre de Cupos (Cuenta Regresiva)</span>
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label htmlFor="jornada-timer-title" className="text-zinc-400 font-bold block mb-1">
+                    Texto Encabezado del Reloj
+                  </label>
+                  <input
+                    id="jornada-timer-title"
+                    name="jornada-timer-title"
+                    type="text"
+                    value={settingsForm.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const updated = { ...settingsForm, JORNADA_COUNTDOWN_TITLE: val };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
+                      handleSaveSettings(updated);
+                    }}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-white outline-none focus:border-amber-400 font-bold"
+                    placeholder="Ej. CIERRE DE CUPOS JORNADA:"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="jornada-timer-end" className="text-zinc-400 font-bold block mb-1">
+                    Fecha & Hora de Cierre de Cupos
+                  </label>
+                  <input
+                    id="jornada-timer-end"
+                    name="jornada-timer-end"
+                    type="datetime-local"
+                    value={settingsForm.JORNADA_COUNTDOWN_END || ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: val };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
+                      handleSaveSettings(updated);
+                    }}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-white outline-none focus:border-amber-400 font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* Quick Days Buttons */}
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <span className="text-[11px] text-zinc-400 font-bold">Botones Rápidos de Reinicio:</span>
+                {[
+                  { label: "+1 Día", days: 1 },
+                  { label: "+3 Días", days: 3 },
+                  { label: "+7 Días (1 Semana)", days: 7 },
+                  { label: "+14 Días (2 Semanas)", days: 14 }
+                ].map((b, idx) => (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => {
+                      const targetIso = new Date(Date.now() + b.days * 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
+                      const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: targetIso };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
+                      handleSaveSettings(updated);
+                    }}
+                    className="bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all cursor-pointer"
+                  >
+                    ⚡ Cierre en {b.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* List of Jornadas */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {jornadasList.map((jornada: any, idx: number) => (
