@@ -4,6 +4,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
+import { getTallerStatus } from './utils/tallerStatus';
+
 interface NavbarProps {
   activePage?: 'inicio' | 'nosotros' | 'servicios' | 'catalogo' | 'faq' | 'contacto';
   config?: any;
@@ -37,6 +39,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   const [expandedMobileAccordion, setExpandedMobileAccordion] = useState<string | null>(null);
 
   const cfg = { ...DEFAULT_CONFIG, ...(config || {}) };
+  const statusInfo = getTallerStatus(cfg.IS_OPEN);
 
   const servicesOptions = [
     { title: "Mecánica General & Mantenimiento", desc: "Diagnóstico de motor, aceite sintético 5W30 y filtros OEM", href: "/servicios#mecanica", icon: Wrench },
@@ -60,13 +63,20 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   return (
     <nav className="fixed w-full z-50 bg-[#0D0D0D]/95 backdrop-blur-xl py-3 border-b border-[#8B8D91]/20 top-0 shadow-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative">
-        {/* Brand Logo & Name */}
-        <a href="/" className="cursor-pointer hover:opacity-90 transition-opacity flex items-center gap-2.5 group">
-          <img src={cfg.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-8 md:h-9 w-auto object-contain shrink-0 logo-gold" />
-          <span className="font-display font-black text-lg md:text-xl tracking-tighter uppercase text-white flex items-center">
-            MASTER<span className="text-primary italic">TECH</span>
-          </span>
-        </a>
+        <div className="flex items-center gap-3">
+          <a href="/" className="cursor-pointer hover:opacity-90 transition-opacity flex items-center gap-2.5 group">
+            <img src={cfg.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-8 md:h-9 w-auto object-contain shrink-0 logo-gold" />
+            <span className="font-display font-black text-lg md:text-xl tracking-tighter uppercase text-white flex items-center">
+              MASTER<span className="text-primary italic">TECH</span>
+            </span>
+          </a>
+
+          {/* Live Taller Schedule Status Pill */}
+          <div className={`hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold shadow-md transition-all ${statusInfo.badgeBg} ${statusInfo.badgeBorder}`}>
+            <span className={`w-2 h-2 rounded-full ${statusInfo.dotColor} animate-pulse`} />
+            <span>{statusInfo.badgeText}</span>
+          </div>
+        </div>
 
         {/* Desktop Links with Hover Mega Dropdowns */}
         <div className="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-bold text-zinc-400">

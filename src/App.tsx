@@ -33,6 +33,8 @@ import {
   Youtube
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import InspectionSlotPicker from './InspectionSlotPicker';
+import { getTallerStatus } from './utils/tallerStatus';
 import AdminPanel from './AdminPanel';
 import Inspeccion from './Inspeccion';
 import Contacto from './Contacto';
@@ -476,10 +478,15 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 mb-4 text-xs font-bold text-white shadow-lg">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(194,164,114,0.8)]" />
-                ★ Tecnología y Precisión Automotriz
-              </div>
+              {(() => {
+                const tallerStatus = getTallerStatus(config.IS_OPEN);
+                return (
+                  <div className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border mb-4 text-xs font-black uppercase tracking-wider shadow-xl transition-all ${tallerStatus.badgeBg} ${tallerStatus.badgeBorder}`}>
+                    <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.dotColor} animate-pulse`} />
+                    <span>{tallerStatus.badgeText}</span>
+                  </div>
+                );
+              })()}
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 uppercase leading-[1.05]">
                 TU VEHÍCULO MERECE <br />
                 <span className="text-primary font-black">ATENCIÓN EXPERTA</span>

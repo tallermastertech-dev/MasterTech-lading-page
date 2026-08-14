@@ -2242,17 +2242,30 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                 <h3 className="text-xs font-black uppercase tracking-widest text-primary">3. Estado del Taller & Distintivos</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label htmlFor="is-open" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Estado Operativo del Taller</label>
+                    <label htmlFor="is-open" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                      Modo Operativo del Taller (Badge Abierto/Cerrado)
+                    </label>
                     <select
                       id="is-open"
                       name="is-open"
-                      value={settingsForm.IS_OPEN || 'true'}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, IS_OPEN: e.target.value })}
+                      value={settingsForm.IS_OPEN || 'auto'}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const updated = { ...settingsForm, IS_OPEN: val };
+                        setSettingsForm(updated);
+                        setSettings(updated);
+                        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
+                        handleSaveSettings(updated);
+                      }}
                       className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary cursor-pointer"
                     >
-                      <option value="true">Abierto (Badge Verde)</option>
-                      <option value="false">Cerrado (Badge Rojo)</option>
+                      <option value="auto">🤖 Modo Automático por Horario (Lun-Vie 8am-5pm - Recomendado)</option>
+                      <option value="true">🟢 Forzar Taller Abierto (24/7 Verde)</option>
+                      <option value="false">🔴 Forzar Taller Cerrado (Emergencias 24/7)</option>
                     </select>
+                    <p className="text-[10px] text-zinc-400">
+                      En <strong>Modo Automático</strong>, el sitio web muestra 🟢 <strong>Taller Abierto</strong> automáticamente de Lunes a Viernes (8:00 AM a 5:00 PM Hora Vzla) y 🔴 <strong>Taller Cerrado • Solo Emergencias</strong> de 5:01 PM en adelante y los Fines de Semana.
+                    </p>
                   </div>
 
                   <div className="space-y-2">
