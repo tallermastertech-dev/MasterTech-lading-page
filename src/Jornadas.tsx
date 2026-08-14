@@ -13,6 +13,7 @@ import {
   Car, 
   Phone, 
   Award,
+  ChevronLeft,
   ChevronRight,
   Flame,
   Star,
@@ -195,6 +196,15 @@ export default function Jornadas() {
   const [selectedSlot, setSelectedSlot] = useState<string>('');
   const [isSlotValid, setIsSlotValid] = useState<boolean>(false);
 
+  const tabsRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    if (tabsRef.current) {
+      const scrollAmount = direction === 'left' ? -320 : 320;
+      tabsRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   // Form State
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -364,36 +374,66 @@ export default function Jornadas() {
         </div>
       </section>
 
-      {/* Jornadas Navigation Tabs */}
-      <section className="py-10 px-6 max-w-7xl mx-auto">
+      {/* Jornadas Navigation Tabs Slider */}
+      <section className="py-10 px-4 md:px-6 max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-2">
             SELECCIONA LA JORNADA PARA TU VEHÍCULO
           </h2>
-          <p className="text-xs md:text-sm text-zinc-400">Haz clic en cada pestaña para ver beneficios, precios especiales y compatibilidad</p>
+          <p className="text-xs md:text-sm text-zinc-400">
+            Desliza o usa las flechas laterales para explorar todas las jornadas disponibles
+          </p>
         </div>
 
-        <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-none justify-start lg:justify-center">
-          {currentJornadasList.map((j: any) => {
-            const isActive = j.id === activeJornadaId;
-            return (
-              <button
-                key={j.id}
-                onClick={() => setActiveJornadaId(j.id)}
-                className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                  isActive 
-                    ? 'bg-gradient-to-r from-amber-500/20 to-primary/20 border-primary text-white shadow-lg shadow-primary/20 scale-105' 
-                    : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
-                }`}
-              >
-                {j.icon}
-                <div className="text-left">
-                  <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
-                  <span className="font-bold text-xs">{j.title.split('(')[0]}</span>
-                </div>
-              </button>
-            );
-          })}
+        <div className="relative flex items-center group/slider">
+          {/* Left Slide Arrow */}
+          <button
+            type="button"
+            onClick={() => scrollTabs('left')}
+            className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+            title="Deslizar hacia la izquierda"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          {/* Scrollable Container */}
+          <div
+            ref={tabsRef}
+            className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none snap-x w-full"
+            style={{ scrollSnapType: 'x mandatory' }}
+          >
+            {currentJornadasList.map((j: any) => {
+              const isActive = j.id === activeJornadaId;
+              return (
+                <button
+                  type="button"
+                  key={j.id}
+                  onClick={() => setActiveJornadaId(j.id)}
+                  className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-amber-500/30 to-primary/30 border-primary text-white shadow-[0_10px_30px_rgba(194,164,114,0.3)] scale-105 z-10' 
+                      : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-amber-500/40 hover:bg-white/5'
+                  }`}
+                >
+                  {j.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
+                  <div className="text-left">
+                    <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
+                    <span className="font-bold text-xs whitespace-nowrap">{j.title.split('(')[0]}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Slide Arrow */}
+          <button
+            type="button"
+            onClick={() => scrollTabs('right')}
+            className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+            title="Deslizar hacia la derecha"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
       </section>
 
