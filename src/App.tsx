@@ -40,6 +40,7 @@ import Faq from './Faq';
 import Nosotros from './Nosotros';
 import Servicios from './Servicios';
 import Catalogo from './Catalogo';
+import Jornadas from './Jornadas';
 import InspectionSlotPicker from './InspectionSlotPicker';
 
 const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
@@ -176,6 +177,11 @@ export default function App() {
   const [isCatalogo, setIsCatalogo] = useState(
     window.location.pathname.toLowerCase() === '/catalogo'
   );
+  const [isJornadas, setIsJornadas] = useState(
+    window.location.pathname.toLowerCase() === '/jornada' ||
+    window.location.pathname.toLowerCase() === '/jornadas' ||
+    window.location.hash === '#jornadas'
+  );
 
   // Dynamic JSON arrays for team, reviews, and brands
   const [teamMembers, setTeamMembers] = useState<any[]>([
@@ -298,6 +304,12 @@ export default function App() {
       setIsFaq(window.location.pathname.toLowerCase() === '/faq');
       setIsNosotros(window.location.pathname.toLowerCase() === '/nosotros');
       setIsServicios(window.location.pathname.toLowerCase() === '/servicios');
+      setIsCatalogo(window.location.pathname.toLowerCase() === '/catalogo');
+      setIsJornadas(
+        window.location.pathname.toLowerCase() === '/jornada' ||
+        window.location.pathname.toLowerCase() === '/jornadas' ||
+        window.location.hash === '#jornadas'
+      );
     };
     window.addEventListener('hashchange', handleHashChange);
     window.addEventListener('popstate', handleHashChange);
@@ -410,6 +422,10 @@ export default function App() {
 
   if (isCatalogo) {
     return <Catalogo />;
+  }
+
+  if (isJornadas) {
+    return <Jornadas />;
   }
 
   return (

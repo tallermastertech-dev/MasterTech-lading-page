@@ -91,6 +91,19 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             Nosotros
           </a>
 
+          {/* Jornadas VIP Link */}
+          <a 
+            href="/jornada" 
+            className={`transition-all py-1.5 px-3 rounded-full flex items-center gap-1.5 border text-xs font-black uppercase tracking-wider shadow-lg transition-transform hover:scale-105 ${
+              activePage === ('jornadas' as any) 
+                ? 'bg-amber-500/30 border-amber-400 text-amber-200' 
+                : 'bg-amber-500/15 border-amber-500/40 text-amber-400 hover:bg-amber-500/25 hover:border-amber-400 hover:text-amber-200'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span>JORNADAS VIP</span>
+          </a>
+
           {/* Servicios Taller Mega Dropdown Trigger */}
           <div 
             className="relative"
