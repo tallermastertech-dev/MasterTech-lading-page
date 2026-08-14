@@ -1797,6 +1797,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                     aspectRatio={1 / 1}
                     placeholder="/logo.png"
                   />
+                  {/* Instalaciones section uploader v2 - Trigger Vercel deploy */}
                   <ImageUploader
                     label="Imagen de la Sección 'NUESTRAS INSTALACIONES'"
                     value={settingsForm.IMG_INSTALACIONES || ''}
