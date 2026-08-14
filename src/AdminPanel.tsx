@@ -1797,6 +1797,13 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                     aspectRatio={1 / 1}
                     placeholder="/logo.png"
                   />
+                  <ImageUploader
+                    label="Imagen de la Sección 'NUESTRAS INSTALACIONES'"
+                    value={settingsForm.IMG_INSTALACIONES || ''}
+                    onChange={(val) => setSettingsForm({ ...settingsForm, IMG_INSTALACIONES: val })}
+                    aspectRatio={4 / 3}
+                    placeholder="/assets/instalaciones.jpg"
+                  />
                 </div>
 
                 <div className="space-y-2 pt-2">
