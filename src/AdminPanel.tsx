@@ -1786,22 +1786,36 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                   <ImageUploader
                     label="Imagen de Fondo Principal (Hero)"
                     value={settingsForm.HERO_IMG || ''}
-                    onChange={(val) => setSettingsForm({ ...settingsForm, HERO_IMG: val })}
+                    onChange={(val) => {
+                      const updated = { ...settingsForm, HERO_IMG: val };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+                    }}
                     aspectRatio={16 / 9}
                     placeholder="/assets/hero_bg_custom.jpg"
                   />
                   <ImageUploader
                     label="Logo Oficial del Taller"
                     value={settingsForm.LOGO_URL || ''}
-                    onChange={(val) => setSettingsForm({ ...settingsForm, LOGO_URL: val })}
+                    onChange={(val) => {
+                      const updated = { ...settingsForm, LOGO_URL: val };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+                    }}
                     aspectRatio={1 / 1}
                     placeholder="/logo.png"
                   />
-                  {/* Instalaciones section uploader v2 - Trigger Vercel deploy */}
                   <ImageUploader
                     label="Imagen de la Sección 'NUESTRAS INSTALACIONES'"
                     value={settingsForm.IMG_INSTALACIONES || ''}
-                    onChange={(val) => setSettingsForm({ ...settingsForm, IMG_INSTALACIONES: val })}
+                    onChange={(val) => {
+                      const updated = { ...settingsForm, IMG_INSTALACIONES: val };
+                      setSettingsForm(updated);
+                      setSettings(updated);
+                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+                    }}
                     aspectRatio={4 / 3}
                     placeholder="/assets/instalaciones.jpg"
                   />
