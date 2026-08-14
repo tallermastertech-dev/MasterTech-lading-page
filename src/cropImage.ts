@@ -11,8 +11,8 @@ export default async function getCroppedImg(
   imageSrc: string,
   pixelCrop: { x: number; y: number; width: number; height: number },
   aspectRatio: number = 4/3,
-  maxDimension: number = 1920,
-  quality: number = 0.92
+  maxDimension: number = 1200,
+  quality: number = 0.82
 ): Promise<string> {
   const image = await createImage(imageSrc)
   const canvas = document.createElement('canvas')

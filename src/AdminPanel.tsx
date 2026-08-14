@@ -954,7 +954,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         }
 
         setSettings(merged);
-        setSettingsForm(merged);
+        setSettingsForm(prev => ({ ...merged, ...prev }));
         try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
 
         // Apply merged JSON fields to state
