@@ -1791,6 +1791,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                       setSettingsForm(updated);
                       setSettings(updated);
                       try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+                      handleSaveSettings(updated);
                     }}
                     aspectRatio={16 / 9}
                     placeholder="/assets/hero_bg_custom.jpg"
@@ -1803,6 +1804,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                       setSettingsForm(updated);
                       setSettings(updated);
                       try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+                      handleSaveSettings(updated);
                     }}
                     aspectRatio={1 / 1}
                     placeholder="/logo.png"
@@ -1815,6 +1817,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                       setSettingsForm(updated);
                       setSettings(updated);
                       try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+                      handleSaveSettings(updated);
                     }}
                     aspectRatio={4 / 3}
                     placeholder="/assets/instalaciones.jpg"
