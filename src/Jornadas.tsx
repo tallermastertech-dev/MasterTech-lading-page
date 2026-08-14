@@ -535,8 +535,10 @@ export default function Jornadas() {
                   <div>
                     <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible</label>
                     <InspectionSlotPicker
-                      onSlotSelect={(dateStr, timeStr) => setSelectedSlot(`${dateStr} a las ${timeStr}`)}
-                      onValidityChange={setIsSlotValid}
+                      onSelectSlot={(slotStr, isValid) => {
+                        setSelectedSlot(slotStr);
+                        setIsSlotValid(isValid);
+                      }}
                     />
                   </div>
                 </div>
