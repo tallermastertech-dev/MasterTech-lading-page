@@ -70,12 +70,6 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
               MASTER<span className="text-primary italic">TECH</span>
             </span>
           </a>
-
-          {/* Live Taller Schedule Status Pill */}
-          <div className={`hidden xl:inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold shadow-md transition-all ${statusInfo.badgeBg} ${statusInfo.badgeBorder}`}>
-            <span className={`w-2 h-2 rounded-full ${statusInfo.dotColor} animate-pulse`} />
-            <span>{statusInfo.badgeText}</span>
-          </div>
         </div>
 
         {/* Desktop Links with Hover Mega Dropdowns */}
