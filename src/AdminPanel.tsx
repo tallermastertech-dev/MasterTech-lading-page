@@ -35,7 +35,8 @@ import {
   Users,
   Sparkles,
   MessageSquare,
-  Star
+  Star,
+  Zap
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 
