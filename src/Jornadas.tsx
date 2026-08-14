@@ -241,7 +241,17 @@ export default function Jornadas() {
     return () => clearInterval(timer);
   }, []);
 
-  const currentJornada = JORNADAS_DATA.find(j => j.id === activeJornadaId) || JORNADAS_DATA[0];
+  const currentJornadasList = React.useMemo(() => {
+    if (config && config.JORNADAS_JSON) {
+      try {
+        const parsed = JSON.parse(config.JORNADAS_JSON);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return JORNADAS_DATA;
+  }, [config]);
+
+  const currentJornada = currentJornadasList.find((j: any) => j.id === activeJornadaId) || currentJornadasList[0] || JORNADAS_DATA[0];
 
   const handleWhatsAppBooking = (e: React.FormEvent) => {
     e.preventDefault();
@@ -364,7 +374,7 @@ export default function Jornadas() {
         </div>
 
         <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-none justify-start lg:justify-center">
-          {JORNADAS_DATA.map((j) => {
+          {currentJornadasList.map((j: any) => {
             const isActive = j.id === activeJornadaId;
             return (
               <button

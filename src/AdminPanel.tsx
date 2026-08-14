@@ -197,7 +197,103 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   }
 ];
 
-
+const DEFAULT_JORNADAS = [
+  {
+    id: "reprogramacion",
+    badge: "🏎️ Jornada de Potenciación",
+    title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
+    subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
+    img: "/assets/servicio-mecanica.jpg",
+    regularPrice: "$250 USD",
+    promoPrice: "$160 USD",
+    discountBadge: "AHORRAS $90 USD",
+    duration: "2 a 3 horas",
+    benefits: [
+      "Incremento de +15% a +35% de HP y Torque comprobables",
+      "Eliminación total del retardo (lag) del pedal del acelerador",
+      "Ahorro de hasta un 10% de combustible en viajes largos y autopista",
+      "Optimización de curvas de cambios en cajas automáticas (TCU Tuning)",
+      "Respaldo de mapa original 100% reversible en todo momento"
+    ],
+    compatibleModels: "Toyota (Hilux, Fortuner, 4Runner, Camry, Machito), Jeep (Cherokee, Grand Cherokee, Wrangler), Ford (F-150, Explorer, Mustang), Chevrolet (Silverado, Tahoe, Colorado), Nissan, VW & Turbo."
+  },
+  {
+    id: "egr-dpf",
+    badge: "⚡ Solución Electrónica Definitiva",
+    title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off",
+    subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.",
+    img: "/assets/servicio-electricidad.jpg",
+    regularPrice: "$180 USD",
+    promoPrice: "$120 USD",
+    discountBadge: "AHORRAS $60 USD",
+    duration: "1.5 a 2.5 horas",
+    benefits: [
+      "Anulación electrónica limpia de Válvula EGR (evita acumulación de hollín)",
+      "Solución definitiva a regeneración atascada de Filtro DPF/FAP en motores Diésel",
+      "Eliminación de modo emergencia/limitación de velocidad por sistema AdBlue/DEF",
+      "Limpieza de códigos DTC persistentes y luces de advertencia en tablero",
+      "Recuperación de la compresión y potencia original del motor"
+    ],
+    compatibleModels: "Toyota Hilux/Fortuner D4D/GD6, Ford Ranger/F-150, Mitsubishi Montero, Chevrolet Silverado/LUV D-Max, VW Amarok, Nissan NP300/Navara y motores Diésel/Gasolina."
+  },
+  {
+    id: "cielo-estrellado",
+    badge: "✨ Estética VIP Rolls-Royce",
+    title: "Cielo Estrellado de Fibra Óptica LED RGBW (Starlight Headliner)",
+    subtitle: "Transforma el techo interior de tu vehículo en un cielo estrellado de lujo artesanal con destellos y estrellas fugaces.",
+    img: "/assets/instalaciones.jpg",
+    regularPrice: "$380 USD",
+    promoPrice: "$260 USD",
+    discountBadge: "AHORRAS $120 USD",
+    duration: "1 día (Instalación Artesanal)",
+    benefits: [
+      "De 200 a 600 micro-hilos de fibra óptica ultra-fina integrados al techo",
+      "Control de colores y efectos por App de Smartphone (Bluetooth) + Control Remoto",
+      "Efecto de centelleo dinámico (Twinkle Effect) y Estrellas Fugaces (Shooting Stars)",
+      "Consumo eléctrico ultrabajo (módulo LED de última generación 12V)",
+      "Acabado 100% profesional sin cables ni conexiones visibles"
+    ],
+    compatibleModels: "Apto para todo tipo de vehículos: Sedanes, Coupés, SUVs, Camionetas 4x4 y Pick-ups."
+  },
+  {
+    id: "climatizacion",
+    badge: "❄️ Confort & Máximo Frío",
+    title: "Jornada de Climatización & Recuperación de Aire Acondicionado",
+    subtitle: "Restaura el frío polar de tu sistema A/A con recarga R134a de máxima pureza, aceite PAG sintético y trazador UV anti-fugas.",
+    img: "/assets/servicio-climatizacion.jpg",
+    regularPrice: "$65 USD",
+    promoPrice: "$40 USD",
+    discountBadge: "AHORRAS $25 USD",
+    duration: "45 min a 1 hora",
+    benefits: [
+      "Carga completa de gas refrigerante R134a sintético 100% puro",
+      "Inyección de aceite PAG sintético con aditivo lubricante para compresor",
+      "Aplicación de trazador fluorescente UV para detección rápida de micro-fugas",
+      "Desinfección de ductos con ozono para eliminar bacterias y malos olores",
+      "Medición de presiones de alta/baja y temperatura de salida en cabina"
+    ],
+    compatibleModels: "Todas las marcas y modelos con sistema de aire acondicionado automotriz R134a."
+  },
+  {
+    id: "inyeccion",
+    badge: "🔧 Rendimiento & Limpieza",
+    title: "Jornada de Limpieza & Calibración de Inyectores por Ultrasonido",
+    subtitle: "Devuelve la suavidad al motor y elimina tirones limpiando inyectores en banco ultrasónico con reemplazo de micro-filtros.",
+    img: "/assets/servicio-inyeccion.jpg",
+    regularPrice: "$50 USD",
+    promoPrice: "$30 USD",
+    discountBadge: "AHORRAS $20 USD",
+    duration: "1 a 1.5 horas",
+    benefits: [
+      "Limpieza ultrasónica a 40 kHz en tina térmica especializada",
+      "Prueba de abanico, estanqueidad y balanza de caudal en banco digital",
+      "Reemplazo de micro-filtros de cobre internos y juntas o-rings de Vitón",
+      "Optimización de la pulverización para evitar humo negro y temblores en mínimo",
+      "Verificación de presión de bomba de gasolina e historial de inyección"
+    ],
+    compatibleModels: "Sistemas de inyección de gasolina multipunto (MPFI) e inyección directa (GDI) multimarca."
+  }
+];
 
 interface Lead {
   id: number;
@@ -255,8 +351,19 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   const [isLoadingSettings, setIsLoadingSettings] = useState(false);
   
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'settings' | 'contenido' | 'integraciones'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'integraciones'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
+
+  // Dynamic Data — initialize directly from localStorage so data appears instantly
+  const [jornadasList, setJornadasList] = useState<any[]>(() => {
+    try {
+      const s = localStorage.getItem('mastertech_settings_store');
+      if (s) { const p = JSON.parse(s); if (p.JORNADAS_JSON) return JSON.parse(p.JORNADAS_JSON); }
+    } catch (e) {}
+    return DEFAULT_JORNADAS;
+  });
+  const [editingJornada, setEditingJornada] = useState<any>(null);
+  const [isJornadaModalOpen, setIsJornadaModalOpen] = useState(false);
 
   // Dynamic Data — initialize directly from localStorage so data appears instantly
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(() => {
@@ -1325,6 +1432,16 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
             </button>
 
             <button
+              onClick={() => setActiveTab('jornadas')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border ${
+                activeTab === 'jornadas' ? 'bg-amber-500 text-black border-amber-400 font-black shadow-lg shadow-amber-500/30' : 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:text-amber-300 hover:bg-amber-500/20'
+              }`}
+            >
+              <Zap size={14} />
+              <span>Jornadas VIP 🔥</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('settings')}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === 'settings' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
@@ -1762,6 +1879,113 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                         <Trash2 size={14} />
                       </button>
                     </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB: JORNADAS VIP (CREAR, EDITAR Y GESTIONAR JORNADAS ESPECIALES) */}
+        {/* ========================================================================= */}
+        {activeTab === 'jornadas' && (
+          <div className="max-w-6xl mx-auto space-y-6 animate-fade-in">
+            {/* Header & Add Button */}
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-[#12141a] p-6 rounded-2xl border border-amber-500/30">
+              <div>
+                <h2 className="text-xl font-bold uppercase tracking-tight text-white flex items-center gap-2">
+                  <Zap className="text-amber-400" size={22} />
+                  <span>Gestión de Jornadas VIP Automotrices</span>
+                </h2>
+                <p className="text-xs text-zinc-400 mt-1">
+                  Crea, edita o elimina las jornadas de servicio especial (Reprogramación, EGR/DPF, Cielo Estrellado, A/A, Inyección) mostradas públicamente en <code className="text-amber-300">/jornada</code>.
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setEditingJornada({
+                    id: `jornada-${Date.now()}`,
+                    badge: "🔥 Nueva Jornada Especial",
+                    title: "Título de la Nueva Jornada",
+                    subtitle: "Descripción detallada del servicio especial ofertado.",
+                    img: "/assets/servicio-mecanica.jpg",
+                    regularPrice: "$200 USD",
+                    promoPrice: "$120 USD",
+                    discountBadge: "AHORRAS $80 USD",
+                    duration: "2 horas",
+                    benefits: ["Beneficio 1", "Beneficio 2", "Beneficio 3"],
+                    compatibleModels: "Apto para todas las marcas y modelos."
+                  });
+                  setIsJornadaModalOpen(true);
+                }}
+                className="btn-primary !py-3 !px-5 text-xs font-black uppercase tracking-wider flex items-center gap-2 border-none shadow-lg shadow-amber-500/20"
+              >
+                <Plus size={16} />
+                <span>Crear Nueva Jornada VIP</span>
+              </button>
+            </div>
+
+            {/* List of Jornadas */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {jornadasList.map((jornada: any, idx: number) => (
+                <div key={jornada.id || idx} className="bg-[#12141a] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between p-5 space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-20 h-20 rounded-xl bg-black overflow-hidden shrink-0 border border-white/10">
+                      <img src={jornada.img || "/assets/servicio-mecanica.jpg"} alt={jornada.title} className="w-full h-full object-cover" />
+                    </div>
+
+                    <div className="flex-1 space-y-1">
+                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
+                        {jornada.badge}
+                      </span>
+                      <h3 className="font-bold text-white text-base leading-snug">{jornada.title}</h3>
+                      <p className="text-xs text-zinc-400 line-clamp-2">{jornada.subtitle}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs">
+                    <div>
+                      <span className="text-[10px] text-zinc-500 block">PRECIO REGULAR</span>
+                      <span className="text-zinc-400 line-through font-bold">{jornada.regularPrice}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-amber-400 font-bold block">OFERTA JORNADA</span>
+                      <span className="text-lg font-black text-primary">{jornada.promoPrice}</span>
+                    </div>
+                    <div className="bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold px-2 py-1 rounded-lg">
+                      {jornada.discountBadge}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                    <button
+                      onClick={() => {
+                        setEditingJornada(jornada);
+                        setIsJornadaModalOpen(true);
+                      }}
+                      className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <Edit size={14} />
+                      <span>Editar Jornada</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        const updated = jornadasList.filter((j: any) => j.id !== jornada.id);
+                        setJornadasList(updated);
+                        const newForm = { ...settingsForm, JORNADAS_JSON: JSON.stringify(updated) };
+                        setSettingsForm(newForm);
+                        setSettings(newForm);
+                        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
+                        handleSaveSettings(newForm);
+                      }}
+                      className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors"
+                      title="Eliminar Jornada"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -2818,6 +3042,147 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
             <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
               <button onClick={() => setSelectedLead(null)} className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-400 hover:text-white">Cerrar</button>
               <button onClick={() => handleUpdateLead(selectedLead.id)} className="btn-primary !py-2 !px-5 text-xs border-none">Guardar Ficha</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Jornada Modal */}
+      {isJornadaModalOpen && editingJornada && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#12141a] border border-white/10 rounded-2xl max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Zap size={18} className="text-amber-400" />
+                <span>Editar Jornada VIP Automotriz</span>
+              </h3>
+              <button onClick={() => setIsJornadaModalOpen(false)} className="text-zinc-400 hover:text-white">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Título de la Jornada</label>
+                <input
+                  type="text"
+                  value={editingJornada.title || ''}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, title: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                  placeholder="Ej. Reprogramación Electrónica & Chiptuning"
+                />
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Insignia / Badge Promocional</label>
+                <input
+                  type="text"
+                  value={editingJornada.badge || ''}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, badge: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                  placeholder="Ej. 🏎️ Jornada de Potenciación"
+                />
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Subtítulo Explicativo</label>
+                <textarea
+                  rows={2}
+                  value={editingJornada.subtitle || ''}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, subtitle: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Precio Regular</label>
+                  <input
+                    type="text"
+                    value={editingJornada.regularPrice || ''}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, regularPrice: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    placeholder="$250 USD"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-amber-400 font-bold block mb-1">Precio Jornada</label>
+                  <input
+                    type="text"
+                    value={editingJornada.promoPrice || ''}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, promoPrice: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-bold text-amber-400"
+                    placeholder="$160 USD"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Badge Ahorro</label>
+                  <input
+                    type="text"
+                    value={editingJornada.discountBadge || ''}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, discountBadge: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    placeholder="AHORRAS $90 USD"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Beneficios (Uno por línea)</label>
+                <textarea
+                  rows={4}
+                  value={Array.isArray(editingJornada.benefits) ? editingJornada.benefits.join('\n') : (editingJornada.benefits || '')}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, benefits: e.target.value.split('\n').filter(Boolean) })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-mono text-[11px]"
+                  placeholder="Incremento de +15% a +35% HP&#10;Eliminación de lag..."
+                />
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Modelos y Marcas Compatibles</label>
+                <input
+                  type="text"
+                  value={editingJornada.compatibleModels || ''}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, compatibleModels: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <ImageUploader
+                  label="Imagen de Portada de la Jornada"
+                  value={editingJornada.img || ''}
+                  onChange={(val) => setEditingJornada({ ...editingJornada, img: val })}
+                  aspectRatio={16 / 9}
+                  placeholder="/assets/servicio-mecanica.jpg"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
+              <button onClick={() => setIsJornadaModalOpen(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-400 hover:text-white">Cancelar</button>
+              <button
+                onClick={() => {
+                  const existingIdx = jornadasList.findIndex((j: any) => j.id === editingJornada.id);
+                  let updated = [];
+                  if (existingIdx >= 0) {
+                    updated = jornadasList.map((j: any, idx: number) => idx === existingIdx ? editingJornada : j);
+                  } else {
+                    updated = [...jornadasList, editingJornada];
+                  }
+                  setJornadasList(updated);
+                  setIsJornadaModalOpen(false);
+                  const newForm = { ...settingsForm, JORNADAS_JSON: JSON.stringify(updated) };
+                  setSettingsForm(newForm);
+                  setSettings(newForm);
+                  try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
+                  handleSaveSettings(newForm);
+                }}
+                className="btn-primary !py-2 !px-5 text-xs border-none"
+              >
+                Guardar y Publicar Jornada
+              </button>
             </div>
           </div>
         </div>
