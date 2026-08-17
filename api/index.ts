@@ -1598,10 +1598,5 @@ app.post('/api/seed', async (req, res) => {
 });
 
 // Vercel serverless handler (default export)
-export default function handler(req: any, res: any) {
-  return app(req, res);
-}
-
-// Named export for local dev server (server.ts)
-export { app };
+export default app;
 
