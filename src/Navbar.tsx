@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  ChevronDown, Wrench, Package, Users, HelpCircle, ShieldCheck, ArrowRight, X, Menu, Phone, Sparkles, Filter, Zap, Disc, Droplet, Clock, CreditCard, Globe, Plane, Cpu
+  ChevronDown, Wrench, Package, Users, HelpCircle, ShieldCheck, ArrowRight, X, Menu, Phone, Sparkles, Filter, Zap, Disc, Droplet, Clock, CreditCard, Globe, Plane, Cpu, Home
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -342,18 +342,20 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
               <a
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-base font-bold text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-bold text-white hover:text-primary transition-colors py-2 border-b border-white/5"
               >
-                🏠 Inicio
+                <Home size={18} className="text-primary" />
+                <span>Inicio</span>
               </a>
 
               {/* Nosotros Direct Link */}
               <a
                 href="/nosotros"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-base font-bold text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-bold text-white hover:text-primary transition-colors py-2 border-b border-white/5"
               >
-                👥 Nosotros
+                <Users size={18} className="text-primary" />
+                <span>Nosotros</span>
               </a>
 
               {/* Servicios Taller Accordion */}

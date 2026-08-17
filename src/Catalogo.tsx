@@ -25,6 +25,7 @@ export interface CatalogItem {
   desc: string;
   longDesc?: string;
   img: string;
+  images?: string[];
   badge?: string;
   specs?: string[];
   compatibility?: string;
@@ -177,6 +178,7 @@ export default function Catalogo() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogItem | null>(null);
+  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
 
   // USA Import Order Form Modal State
   const [isUsaModalOpen, setIsUsaModalOpen] = useState(false);
@@ -709,7 +711,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </a>
 
                       <button
-                        onClick={() => setSelectedProduct(item)}
+                        onClick={() => {
+                          setSelectedProduct(item);
+                          setActiveImageIndex(0);
+                        }}
                         className="w-full text-zinc-400 hover:text-white text-[9px] font-bold py-1 text-center flex items-center justify-center gap-0.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors cursor-pointer"
                       >
                         <span>Ficha</span>
@@ -1026,14 +1031,46 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
               {/* Modal Body */}
               <div className="p-6 overflow-y-auto space-y-6 flex-1 scrollbar-none">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10">
-                    <img src={selectedProduct.img} alt={selectedProduct.title} className="w-full h-full object-cover" />
-                    {selectedProduct.badge && (
-                      <span className="absolute top-3 left-3 bg-primary text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg">
-                        {selectedProduct.badge}
-                      </span>
-                    )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                  {/* Gallery Viewer */}
+                  <div className="space-y-3">
+                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-xl group">
+                      <img 
+                        src={selectedProduct.images && selectedProduct.images[activeImageIndex || 0] ? selectedProduct.images[activeImageIndex || 0] : selectedProduct.img} 
+                        alt={selectedProduct.title} 
+                        className="w-full h-full object-cover transition-all duration-300" 
+                      />
+                      {selectedProduct.badge && (
+                        <span className="absolute top-3 left-3 bg-primary text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
+                          {selectedProduct.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Thumbnails list if extra images exist */}
+                    {(() => {
+                      const allPhotos = [selectedProduct.img, ...(selectedProduct.images || [])].filter(Boolean);
+                      if (allPhotos.length <= 1) return null;
+                      return (
+                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                          {allPhotos.map((photo, pIdx) => {
+                            const isActive = (activeImageIndex || 0) === pIdx;
+                            return (
+                              <button
+                                key={pIdx}
+                                type="button"
+                                onClick={() => setActiveImageIndex(pIdx)}
+                                className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                                  isActive ? 'border-primary scale-105 shadow-md shadow-primary/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                                }`}
+                              >
+                                <img src={photo} alt="" className="w-full h-full object-cover" />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   <div className="space-y-3">

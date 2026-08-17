@@ -85,10 +85,12 @@ export interface CatalogItem {
   desc: string;
   longDesc?: string;
   img: string;
+  images?: string[];
   badge?: string;
   specs?: string[];
   compatibility?: string;
   partNumber?: string;
+  isImportedUSA?: boolean;
 }
 
 const DEFAULT_CATALOG: CatalogItem[] = [
@@ -3072,7 +3074,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
               </div>
 
               <div>
-                <label className="text-zinc-400 font-bold block mb-1">Imagen (URL o Subir)</label>
+                <label className="text-zinc-400 font-bold block mb-1">Imagen Principal (URL o Subir)</label>
                 <ImageUploader
                   label=""
                   value={editingProduct.img}
@@ -3080,6 +3082,65 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                   aspectRatio={16 / 9}
                   placeholder="/assets/servicio-frenos.jpg"
                 />
+              </div>
+
+              {/* Imágenes Adicionales (Galería de Repuesto) */}
+              <div className="space-y-2 p-3 bg-black/30 border border-white/10 rounded-2xl">
+                <div className="flex items-center justify-between">
+                  <label className="text-zinc-300 font-bold text-xs flex items-center gap-1.5">
+                    <Layers size={14} className="text-primary" />
+                    <span>Imágenes Adicionales / Ángulos del Repuesto</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentImgs = editingProduct.images || [];
+                      setEditingProduct({ ...editingProduct, images: [...currentImgs, ''] });
+                    }}
+                    className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 bg-primary/10 border border-primary/30 px-2 py-1 rounded-lg"
+                  >
+                    <Plus size={12} />
+                    <span>Agregar Otra Foto</span>
+                  </button>
+                </div>
+                <p className="text-[10px] text-zinc-400">Sube más fotos (diferentes ángulos, empaque o detalles técnicos) para que tus clientes puedan visualizar perfectamente la pieza.</p>
+
+                {editingProduct.images && editingProduct.images.length > 0 ? (
+                  <div className="space-y-3 pt-1">
+                    {editingProduct.images.map((extraImg, idx) => (
+                      <div key={idx} className="flex items-center gap-2 bg-black/40 p-2 rounded-xl border border-white/5">
+                        <div className="flex-1">
+                          <ImageUploader
+                            label={`Foto Adicional #${idx + 1}`}
+                            value={extraImg}
+                            onChange={(val) => {
+                              const updatedImgs = [...(editingProduct.images || [])];
+                              updatedImgs[idx] = val;
+                              setEditingProduct({ ...editingProduct, images: updatedImgs });
+                            }}
+                            aspectRatio={16 / 9}
+                            placeholder="/assets/instalaciones.jpg"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedImgs = (editingProduct.images || []).filter((_, i) => i !== idx);
+                            setEditingProduct({ ...editingProduct, images: updatedImgs });
+                          }}
+                          className="p-2 text-red-400 hover:bg-red-500/20 border border-red-500/30 rounded-xl transition-colors shrink-0"
+                          title="Eliminar esta foto"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-[11px] text-zinc-500 italic py-1 text-center bg-black/20 rounded-xl border border-dashed border-white/5">
+                    No hay imágenes adicionales. Haz clic en "+ Agregar Otra Foto" para sumar más vistas.
+                  </div>
+                )}
               </div>
 
               <div>
