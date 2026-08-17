@@ -963,13 +963,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     setTimeout(() => setAiStatusMsg(''), 4500);
   };
 
-  // Settings Edit State
-  const [settingsForm, setSettingsForm] = useState<Partial<Settings>>({});
-  const [isSavingSettings, setIsSavingSettings] = useState(false);
-  const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
-  const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
-
-  // Fetch Leads
+  // Fetch Leads con fusión garantizada y respaldo sin borrado
   const fetchLeads = async (authToken: string) => {
     setIsLoadingLeads(true);
     let apiLeads: any[] = [];
@@ -978,7 +972,8 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
       if (res.ok) {
-        apiLeads = await res.json();
+        const data = await res.json();
+        if (Array.isArray(data)) apiLeads = data;
       }
     } catch (e) {}
 
@@ -1001,7 +996,9 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     );
 
     setLeads(merged);
-    try { localStorage.setItem('mastertech_leads_store', JSON.stringify(merged.slice(0, 100))); } catch (e) {}
+    if (merged.length > 0) {
+      try { localStorage.setItem('mastertech_leads_store', JSON.stringify(merged.slice(0, 100))); } catch (e) {}
+    }
     setIsLoadingLeads(false);
   };
 
@@ -1107,11 +1104,15 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         // If we have good local data for priority fields, push it to the server
         // so Supabase gets updated even if it was out of sync
         if (localData) {
-          const needsServerSync = LOCAL_PRIORITY_FIELDS.some(
-            f => localData[f] && localData[f] !== serverData[f]
-          );
-          if (needsServerSync) {
-            // Fire-and-forget sync to server (don't await, don't block UI)
+          const syncObj: any = {};
+          let needsSync = false;
+          for (const key of LOCAL_PRIORITY_FIELDS) {
+            if (localData[key] && (!serverData || serverData[key] !== localData[key])) {
+              syncObj[key] = localData[key];
+              needsSync = true;
+            }
+          }
+          if (needsSync) {
             fetch('/api/settings', {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },

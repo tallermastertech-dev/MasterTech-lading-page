@@ -440,6 +440,10 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     }
   }
 
+  // 1. Obtener leads existentes para evitar sobreescribir registros anteriores
+  let existingLeads: any[] = [];
+  try { existingLeads = await getAllLeads(); } catch (e) {}
+
   const newLeadObj = {
     id: Date.now(),
     nombre,
@@ -460,9 +464,10 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
   saveLeadsToDisk();
   saveSettingsToDisk();
 
-  // Backup memoryLeadsCache to Supabase settings table under SAVED_LEADS (MUST AWAIT!)
+  // Backup combined leads list to Supabase settings table under SAVED_LEADS
   try {
-    const serializedLeads = JSON.stringify(memoryLeadsCache.slice(0, 200));
+    const combinedList = [newLeadObj, ...existingLeads.filter(l => String(l?.id) !== String(newLeadObj.id))];
+    const serializedLeads = JSON.stringify(combinedList.slice(0, 200));
     memorySettingsCache['SAVED_LEADS'] = serializedLeads;
     await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
   } catch (e) {
@@ -479,7 +484,14 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
       falla,
       fecha_hora
     }]).select();
-    if (error) console.error("Supabase insert error (RLS/schema issue), relying on SAVED_LEADS backup:", error);
+    if (error) {
+      console.error("Supabase leads table insert notice:", error.message);
+    } else if (data && data[0] && data[0].id) {
+      newLeadObj.id = data[0].id;
+    }
+  } catch (e) {
+    console.error("Supabase insert exception:", e);
+  }
 
       const settings = await getSettings();
       const webhookUrl = settings.WEBHOOK_URL;
@@ -622,33 +634,23 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
 // Memory cache tracking for permanently deleted lead IDs
 const memoryDeletedLeadIds = new Set<string>();
 
-// Helper: Get all leads combined across memory, disk, settings, and Supabase
+// Helper: Get all leads combined across Supabase, settings, disk, and memory
 async function getAllLeads(): Promise<any[]> {
   const combinedMap = new Map<string, any>();
 
-  // 1. First priority: Memory RAM cache
-  for (const lead of memoryLeadsCache) {
-    if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id))) {
-      combinedMap.set(String(lead.id), lead);
-    }
-  }
-
-  // 2. Second priority: Disk File LEADS_FILE_PATH
+  // 1. First priority: Supabase leads table (database)
   try {
-    if (fs.existsSync(LEADS_FILE_PATH)) {
-      const raw = fs.readFileSync(LEADS_FILE_PATH, 'utf-8');
-      const diskLeads = JSON.parse(raw);
-      if (Array.isArray(diskLeads)) {
-        for (const lead of diskLeads) {
-          if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id)) && !combinedMap.has(String(lead.id))) {
-            combinedMap.set(String(lead.id), lead);
-          }
+    const { data } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+    if (data && Array.isArray(data)) {
+      for (const lead of data) {
+        if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id))) {
+          combinedMap.set(String(lead.id), lead);
         }
       }
     }
   } catch (e) {}
 
-  // 3. Third priority: SAVED_LEADS in settings table
+  // 2. Second priority: SAVED_LEADS in settings table (backup JSON)
   try {
     const settings = await getSettings();
     if (settings.SAVED_LEADS) {
@@ -663,13 +665,23 @@ async function getAllLeads(): Promise<any[]> {
     }
   } catch (e) {}
 
-  // 4. Fourth priority: Supabase leads table
+  // 3. Third priority: Memory RAM cache
+  for (const lead of memoryLeadsCache) {
+    if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id)) && !combinedMap.has(String(lead.id))) {
+      combinedMap.set(String(lead.id), lead);
+    }
+  }
+
+  // 4. Fourth priority: Disk File LEADS_FILE_PATH
   try {
-    const { data } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
-    if (data && Array.isArray(data)) {
-      for (const lead of data) {
-        if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id)) && !combinedMap.has(String(lead.id))) {
-          combinedMap.set(String(lead.id), lead);
+    if (fs.existsSync(LEADS_FILE_PATH)) {
+      const raw = fs.readFileSync(LEADS_FILE_PATH, 'utf-8');
+      const diskLeads = JSON.parse(raw);
+      if (Array.isArray(diskLeads)) {
+        for (const lead of diskLeads) {
+          if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id)) && !combinedMap.has(String(lead.id))) {
+            combinedMap.set(String(lead.id), lead);
+          }
         }
       }
     }
