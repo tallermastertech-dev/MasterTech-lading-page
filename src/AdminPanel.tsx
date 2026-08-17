@@ -1066,14 +1066,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </h3>
                   <button
                     type="button"
-                    onClick={() => handleSaveSettings()}
-                    disabled={isSavingSettings}
-                    className="btn-primary !py-1.5 !px-4 text-[11px] font-black uppercase flex items-center gap-1.5 border-none shadow-md"
+                    onClick={() => handleSaveSection('jornadas')}
+                    disabled={savingSection === 'jornadas'}
+                    className="btn-primary !py-2 !px-5 text-[11px] font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer"
                   >
-                    {isSavingSettings ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
-                    <span>Guardar Banner</span>
+                    {savingSection === 'jornadas' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                    <span>{savedSectionSuccess === 'jornadas' ? '¡Banner Guardado!' : 'Guardar Banner y Reloj'}</span>
                   </button>
                 </div>
+
+                {savedSectionSuccess === 'jornadas' && (
+                  <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                    <CheckCircle2 size={16} />
+                    <span>¡Reloj y Banner de Apertura de Cupos guardados e integrados públicamente en `/jornada`!</span>
+                  </div>
+                )}
 
                 <div className="space-y-4 text-xs">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1657,11 +1664,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <ImageUploader
                         label="Imagen de Fondo Hero (Portada Principal)"
                         value={settingsForm.HERO_IMG || ''}
-                        onChange={(val) => {
-                          const updated = { ...settingsForm, HERO_IMG: val };
-                          setSettingsForm(updated);
-                          handleSaveSettings(updated);
-                        }}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, HERO_IMG: val })}
                         aspectRatio={16 / 9}
                         placeholder="/assets/hero_bg_custom.jpg"
                       />
@@ -1669,11 +1672,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <ImageUploader
                         label="Logo Oficial del Taller MasterTech"
                         value={settingsForm.LOGO_URL || ''}
-                        onChange={(val) => {
-                          const updated = { ...settingsForm, LOGO_URL: val };
-                          setSettingsForm(updated);
-                          handleSaveSettings(updated);
-                        }}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, LOGO_URL: val })}
                         aspectRatio={1 / 1}
                         placeholder="/logo.png"
                       />
@@ -1681,11 +1680,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <ImageUploader
                         label="Imagen de la Sección 'NUESTRAS INSTALACIONES'"
                         value={settingsForm.IMG_INSTALACIONES || ''}
-                        onChange={(val) => {
-                          const updated = { ...settingsForm, IMG_INSTALACIONES: val };
-                          setSettingsForm(updated);
-                          handleSaveSettings(updated);
-                        }}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, IMG_INSTALACIONES: val })}
                         aspectRatio={4 / 3}
                         placeholder="/assets/instalaciones.jpg"
                       />
@@ -1713,12 +1708,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <input
                       type="text"
                       value={settingsForm.HERO_REEL_URL || ''}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        const updated = { ...settingsForm, HERO_REEL_URL: val };
-                        setSettingsForm(updated);
-                        handleSaveSettings(updated);
-                      }}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, HERO_REEL_URL: e.target.value })}
                       className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
                       placeholder="Ej. https://www.instagram.com/reel/DYQxwH6jywd/ o tu video mp4"
                     />
@@ -1764,9 +1754,35 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </div>
                   </div>
 
+                  {savedSectionSuccess === 'settings' && (
+                    <div className="p-3.5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-xs font-bold flex items-center gap-2 shadow-lg">
+                      <CheckCircle2 size={18} />
+                      <span>¡Los Ajustes Generales del Sitio (Imágenes, WhatsApp y Redes) han sido guardados e integrados públicamente!</span>
+                    </div>
+                  )}
+
                   {/* Telegram Integration */}
                   <div className="space-y-3 pt-4 border-t border-white/10">
-                    <h3 className="text-xs font-black uppercase text-amber-400">3. Telegram Bot Notifications</h3>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase text-amber-400">3. Notificaciones Bot de Telegram</h3>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveSection('telegram')}
+                        disabled={savingSection === 'telegram'}
+                        className="px-4 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        {savingSection === 'telegram' ? <Loader2 className="animate-spin" size={13} /> : <Save size={13} />}
+                        <span>{savedSectionSuccess === 'telegram' ? '¡Telegram Guardado!' : 'Guardar Telegram'}</span>
+                      </button>
+                    </div>
+
+                    {savedSectionSuccess === 'telegram' && (
+                      <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                        <CheckCircle2 size={16} />
+                        <span>¡Configuración del Bot de Telegram guardada correctamente!</span>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
                         <label className="text-[9px] text-zinc-400 block mb-1">Telegram Bot Token</label>
@@ -1801,14 +1817,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                 <div className="pt-4 border-t border-white/10 flex justify-end">
                   <button
-                    onClick={() => handleSaveSettings()}
-                    disabled={isSavingSettings}
-                    className="btn-primary !py-2.5 !px-6 text-xs font-black uppercase tracking-wider flex items-center gap-2 border-none shadow-lg"
+                    type="button"
+                    onClick={() => handleSaveSection('settings')}
+                    disabled={savingSection === 'settings'}
+                    className="btn-primary !py-2.5 !px-6 text-xs font-black uppercase tracking-wider flex items-center gap-2 border-none shadow-lg cursor-pointer"
                   >
-                    {isSavingSettings ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
-                    <span>Guardar Todos los Ajustes</span>
+                    {savingSection === 'settings' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                    <span>{savedSectionSuccess === 'settings' ? '¡Ajustes Guardados!' : 'Guardar Ajustes Generales'}</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
               </div>
             </div>
           )}
