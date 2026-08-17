@@ -1091,26 +1091,6 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
             if (Array.isArray(parsed)) setJornadasList(parsed);
           }
         } catch (e) {}
-
-        // If we have good local data for priority fields, push it to the server
-        // so Supabase gets updated even if it was out of sync
-        if (localData) {
-          const syncObj: any = {};
-          let needsSync = false;
-          for (const key of LOCAL_PRIORITY_FIELDS) {
-            if (localData[key] && (!serverData || serverData[key] !== localData[key])) {
-              syncObj[key] = localData[key];
-              needsSync = true;
-            }
-          }
-          if (needsSync) {
-            fetch('/api/settings', {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-              body: JSON.stringify(merged)
-            }).catch(() => {});
-          }
-        }
       }
     } catch (err) {
       console.error('Error fetching settings:', err);
@@ -2042,7 +2022,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
 
             {/* List of Jornadas */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {(jornadasList && jornadasList.length > 0 ? jornadasList : DEFAULT_JORNADAS).map((jornada: any, idx: number) => (
+              {(jornadasList ?? DEFAULT_JORNADAS).map((jornada: any, idx: number) => (
                 <div key={jornada.id || idx} className="bg-[#12141a] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between p-5 space-y-4">
                   <div className="flex items-start gap-4">
                     <div className="w-20 h-20 rounded-xl bg-black overflow-hidden shrink-0 border border-white/10">
@@ -2092,7 +2072,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                     <button
                       onClick={() => {
                         if (!window.confirm(`¿Estás seguro de eliminar la jornada "${jornada.title}"?`)) return;
-                        const currentList = jornadasList && jornadasList.length > 0 ? jornadasList : DEFAULT_JORNADAS;
+                        const currentList = jornadasList || DEFAULT_JORNADAS;
                         const updated = currentList.filter((j: any) => String(j.id) !== String(jornada.id));
                         setJornadasList(updated);
                         const newForm = { ...settingsForm, JORNADAS_JSON: JSON.stringify(updated) };

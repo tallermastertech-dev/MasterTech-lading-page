@@ -295,6 +295,15 @@ async function getSettings() {
         { q: "¿Me informan antes de realizar algún trabajo adicional en mi vehículo?", a: "Totalmente. Mantenemos una política de cero sorpresas. Si durante la inspección o diagnóstico detectamos alguna anomalía extra, nuestro asesor de servicio le enviará un reporte técnico detallado junto al presupuesto correspondiente para su aprobación previa por WhatsApp antes de proceder." }
       ]),
 
+      // Jornadas VIP (JSON Array)
+      JORNADAS_JSON: JSON.stringify([
+        { id: "reprogramacion", badge: "🏎️ Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD" },
+        { id: "egr-dpf", badge: "🛠️ Jornada de Solución Definitiva", title: "Desactivación Electrónica EGR & DPF / AdBlue (Off-Road)", subtitle: "Elimina problemas de regeneración, pérdida de potencia y códigos de falla por obstrucción en sistemas diésel y gasolina.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD" },
+        { id: "cielo-estrellado", badge: "✨ Jornada de Lujo Interior", title: "Instalación de Techo Estrellado Starlight (Efecto Rolls-Royce)", subtitle: "Transforma el habitáculo de tu vehículo con fibras ópticas de alta densidad y control multicolor mediante App & Control.", img: "/assets/instalaciones.jpg", regularPrice: "$350 USD", promoPrice: "$260 USD", discountBadge: "AHORRAS $90 USD" },
+        { id: "climatizacion", badge: "❄️ Jornada de Verano VIP", title: "Jornada de Climatización & Aire Acondicionado Total", subtitle: "Recarga de gas refrigerante R134a, detección de fugas con tinte UV y desinfección de ductos por ozono.", img: "/assets/servicio-climatizacion.jpg", regularPrice: "$85 USD", promoPrice: "$55 USD", discountBadge: "AHORRAS $30 USD" },
+        { id: "inyeccion", badge: "⚡ Jornada de Eficiencia", title: "Jornada de Limpieza Ultra-Sónica de Inyectores & Admisión", subtitle: "Mantenimiento profundo de inyectores con prueba de pulso en banco, microfiltros y o-rings nuevos.", img: "/assets/servicio-inyeccion.jpg", regularPrice: "$75 USD", promoPrice: "$45 USD", discountBadge: "AHORRAS $30 USD" }
+      ]),
+
       // Integración Telegram Predeterminada
       TELEGRAM_BOT_TOKEN: '8970513614:AAGCdMrJTbIH1QmKCFXcIzv5QxPX86e_23U',
       TELEGRAM_CHAT_ID: '-1003940815012',
