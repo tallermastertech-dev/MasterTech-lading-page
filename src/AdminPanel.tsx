@@ -1218,7 +1218,204 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               )}
 
-              {/* Sub-tab 2: FAQs */}
+              {/* Sub-tab 2: Equipo Taller */}
+              {contentSubTab === 'equipo' && (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                    <div>
+                      <h3 className="text-base font-bold text-white uppercase tracking-wider">Equipo de Especialistas Taller MasterTech</h3>
+                      <p className="text-xs text-zinc-400 mt-1">Gestiona los técnicos, ingenieros y coordinadores que aparecen en `/nosotros`.</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        const updated = [...teamMembers, { id: Date.now(), name: "Nuevo Especialista", role: "ESPECIALISTA TECNICO", desc: "Descripción del cargo...", img: "/assets/servicio-mecanica.jpg" }];
+                        setTeamMembers(updated);
+                        handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
+                      }}
+                      className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shrink-0 shadow-lg"
+                    >
+                      <Plus size={16} />
+                      <span>Agregar Miembro al Equipo</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {teamMembers.map((member, idx) => (
+                      <div key={member.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4 flex flex-col justify-between">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 space-y-2">
+                              <div>
+                                <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Nombre Completo</label>
+                                <input
+                                  type="text"
+                                  value={member.name || ''}
+                                  onChange={(e) => {
+                                    const updated = [...teamMembers];
+                                    updated[idx].name = e.target.value;
+                                    setTeamMembers(updated);
+                                    handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
+                                  }}
+                                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Cargo / Especialidad</label>
+                                <input
+                                  type="text"
+                                  value={member.role || ''}
+                                  onChange={(e) => {
+                                    const updated = [...teamMembers];
+                                    updated[idx].role = e.target.value;
+                                    setTeamMembers(updated);
+                                    handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
+                                  }}
+                                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-amber-400 outline-none focus:border-primary"
+                                />
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={() => {
+                                if (!window.confirm(`¿Eliminar a "${member.name}" del equipo?`)) return;
+                                const updated = teamMembers.filter((_, i) => i !== idx);
+                                setTeamMembers(updated);
+                                handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
+                              }}
+                              className="text-zinc-500 hover:text-red-400 p-2 rounded-xl bg-white/5 border border-white/10"
+                              title="Eliminar Miembro"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Descripción / Experiencia</label>
+                            <textarea
+                              rows={2}
+                              value={member.desc || ''}
+                              onChange={(e) => {
+                                const updated = [...teamMembers];
+                                updated[idx].desc = e.target.value;
+                                setTeamMembers(updated);
+                                handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
+                              }}
+                              className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                            />
+                          </div>
+
+                          <ImageUploader
+                            label={`Foto Oficial de ${member.name || `Miembro #${idx + 1}`}`}
+                            value={member.img || ''}
+                            onChange={(val) => {
+                              const updated = [...teamMembers];
+                              updated[idx].img = val;
+                              setTeamMembers(updated);
+                              handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
+                            }}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/servicio-mecanica.jpg"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-tab 3: Testimonios */}
+              {contentSubTab === 'testimonios' && (
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                    <div>
+                      <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión de Reseñas y Testimonios</h3>
+                      <p className="text-xs text-zinc-400 mt-1">Edita u organiza las opiniones de los clientes en la sección de inicio.</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        const updated = [...reviews, { id: Date.now(), name: "Nombre Cliente", car: "Modelo Vehículo", quote: "Excelente atención y diagnóstico preciso." }];
+                        setReviews(updated);
+                        handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                      }}
+                      className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shrink-0 shadow-lg"
+                    >
+                      <Plus size={16} />
+                      <span>Agregar Testimonio</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-4">
+                    {reviews.map((rev, idx) => (
+                      <div key={rev.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4">
+                        <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+                            <div>
+                              <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Nombre Cliente</label>
+                              <input
+                                type="text"
+                                value={rev.name || ''}
+                                onChange={(e) => {
+                                  const updated = [...reviews];
+                                  updated[idx].name = e.target.value;
+                                  setReviews(updated);
+                                  handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                                }}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Vehículo del Cliente</label>
+                              <input
+                                type="text"
+                                value={rev.car || ''}
+                                onChange={(e) => {
+                                  const updated = [...reviews];
+                                  updated[idx].car = e.target.value;
+                                  setReviews(updated);
+                                  handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                                }}
+                                className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                              />
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              if (!window.confirm(`¿Eliminar reseña de "${rev.name}"?`)) return;
+                              const updated = reviews.filter((_, i) => i !== idx);
+                              setReviews(updated);
+                              handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                            }}
+                            className="text-zinc-500 hover:text-red-400 p-2 rounded-xl bg-white/5 border border-white/10"
+                            title="Eliminar Reseña"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Testimonio / Opinión</label>
+                          <textarea
+                            rows={2}
+                            value={rev.quote || ''}
+                            onChange={(e) => {
+                              const updated = [...reviews];
+                              updated[idx].quote = e.target.value;
+                              setReviews(updated);
+                              handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-xs text-white outline-none focus:border-primary"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-tab 4: FAQs */}
               {contentSubTab === 'faqs' && (
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
@@ -1292,46 +1489,127 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <span>Configuración General del Sitio & Webhooks</span>
                 </h2>
 
-                <div className="space-y-4">
-                  <ImageUploader
-                    label="Imagen de Fondo Hero (Portada)"
-                    value={settingsForm.HERO_IMG || ''}
-                    onChange={(val) => {
-                      const updated = { ...settingsForm, HERO_IMG: val };
-                      setSettingsForm(updated);
-                      handleSaveSettings(updated);
-                    }}
-                    aspectRatio={16 / 9}
-                    placeholder="/assets/hero_bg_custom.jpg"
-                  />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Teléfono WhatsApp</label>
-                      <input
-                        type="text"
-                        value={settingsForm.PHONE_NUMBER || ''}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, PHONE_NUMBER: e.target.value })}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                <div className="space-y-6">
+                  {/* Hero, Logo, Instalaciones Uploaders */}
+                  <div className="space-y-4">
+                    <h3 className="text-xs font-black uppercase text-amber-400 tracking-wider">1. Imágenes del Sitio (Hero, Logo & Instalaciones)</h3>
+                    <div className="space-y-4">
+                      <ImageUploader
+                        label="Imagen de Fondo Hero (Portada Principal)"
+                        value={settingsForm.HERO_IMG || ''}
+                        onChange={(val) => {
+                          const updated = { ...settingsForm, HERO_IMG: val };
+                          setSettingsForm(updated);
+                          handleSaveSettings(updated);
+                        }}
+                        aspectRatio={16 / 9}
+                        placeholder="/assets/hero_bg_custom.jpg"
                       />
-                    </div>
 
-                    <div>
-                      <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Enlace Directo WhatsApp</label>
-                      <input
-                        type="text"
-                        value={settingsForm.WHATSAPP_LINK || ''}
-                        onChange={(e) => setSettingsForm({ ...settingsForm, WHATSAPP_LINK: e.target.value })}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                      <ImageUploader
+                        label="Logo Oficial del Taller MasterTech"
+                        value={settingsForm.LOGO_URL || ''}
+                        onChange={(val) => {
+                          const updated = { ...settingsForm, LOGO_URL: val };
+                          setSettingsForm(updated);
+                          handleSaveSettings(updated);
+                        }}
+                        aspectRatio={1 / 1}
+                        placeholder="/logo.png"
+                      />
+
+                      <ImageUploader
+                        label="Imagen de la Sección 'NUESTRAS INSTALACIONES'"
+                        value={settingsForm.IMG_INSTALACIONES || ''}
+                        onChange={(val) => {
+                          const updated = { ...settingsForm, IMG_INSTALACIONES: val };
+                          setSettingsForm(updated);
+                          handleSaveSettings(updated);
+                        }}
+                        aspectRatio={4 / 3}
+                        placeholder="/assets/instalaciones.jpg"
                       />
                     </div>
                   </div>
 
+                  {/* Video Reel Link */}
+                  <div className="space-y-2 pt-2 border-t border-white/10">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                        URL del Reel de Instagram / Video Promocional de Portada
+                      </label>
+                      {settingsForm.HERO_REEL_URL && (
+                        <a
+                          href={settingsForm.HERO_REEL_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
+                        >
+                          <ExternalLink size={12} />
+                          <span>Abrir Enlace</span>
+                        </a>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      value={settingsForm.HERO_REEL_URL || ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const updated = { ...settingsForm, HERO_REEL_URL: val };
+                        setSettingsForm(updated);
+                        handleSaveSettings(updated);
+                      }}
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
+                      placeholder="Ej. https://www.instagram.com/reel/DYQxwH6jywd/ o tu video mp4"
+                    />
+                    <p className="text-[10.5px] text-zinc-500">
+                      Pega cualquier link de Instagram Reel. Se reproducirá automáticamente en la portada del sitio web.
+                    </p>
+                  </div>
+
+                  {/* Phone & WhatsApp Links */}
                   <div className="space-y-3 pt-4 border-t border-white/10">
-                    <h3 className="text-xs font-black uppercase text-amber-400">Telegram Bot Notifications</h3>
+                    <h3 className="text-xs font-black uppercase text-amber-400 tracking-wider">2. Canales de Contacto & Redes</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Teléfono de Contacto (Texto)</label>
+                        <input
+                          type="text"
+                          value={settingsForm.PHONE_NUMBER || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PHONE_NUMBER: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Enlace Directo a WhatsApp</label>
+                        <input
+                          type="text"
+                          value={settingsForm.WHATSAPP_LINK || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, WHATSAPP_LINK: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label className="text-[10px] font-bold text-pink-400 uppercase block mb-1">Perfil Oficial de Instagram</label>
+                        <input
+                          type="text"
+                          value={settingsForm.INSTAGRAM_LINK || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, INSTAGRAM_LINK: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-pink-500"
+                          placeholder="https://www.instagram.com/tallermastertech/"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Telegram Integration */}
+                  <div className="space-y-3 pt-4 border-t border-white/10">
+                    <h3 className="text-xs font-black uppercase text-amber-400">3. Telegram Bot Notifications</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
-                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Token</label>
+                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Bot Token</label>
                         <input
                           type="text"
                           value={settingsForm.TELEGRAM_BOT_TOKEN || ''}
@@ -1340,7 +1618,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         />
                       </div>
                       <div>
-                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Chat ID</label>
+                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Chat ID (Grupo)</label>
                         <input
                           type="text"
                           value={settingsForm.TELEGRAM_CHAT_ID || ''}
@@ -1349,7 +1627,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         />
                       </div>
                       <div>
-                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Topic ID</label>
+                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Topic ID (Opcional)</label>
                         <input
                           type="text"
                           value={settingsForm.TELEGRAM_TOPIC_ID || ''}
