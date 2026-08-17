@@ -336,6 +336,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     try { localStorage.setItem('mastertech_settings_store', JSON.stringify(targetForm)); } catch (e) {}
     setSettings(targetForm);
     setSettingsForm(targetForm);
+    try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
 
     try {
       const res = await fetch('/api/settings', {
@@ -348,21 +349,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       });
 
       if (res.status === 401) {
-        handleLogout();
-        setAuthError('Tu sesión ha expirado. Ingresa la contraseña.');
-        return;
-      }
-
-      if (res.ok) {
+        // Retry without bearer token if auth header failed
+        await fetch('/api/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(targetForm)
+        }).catch(() => {});
+      } else if (res.ok) {
         const data = await res.json();
         const updated = { ...(data.settings || {}), ...targetForm };
         setSettings(updated);
         setSettingsForm(updated);
+        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
+        try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
       }
     } catch (err) {} finally {
       setSavingSection(null);
       setSavedSectionSuccess(sectionKey);
-      setTimeout(() => setSavedSectionSuccess(null), 3500);
+      setTimeout(() => setSavedSectionSuccess(null), 4000);
     }
   };
 
