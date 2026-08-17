@@ -2593,14 +2593,17 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
               <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
                 <div className="flex justify-between items-center border-b border-white/10 pb-4">
                   <div>
-                    <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión de Testimonios y Reseñas</h3>
-                    <p className="text-xs text-zinc-400 mt-1">Edita las opiniones de clientes visibles en la página principal.</p>
+                    <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión de Reseñas y Testimonios</h3>
+                    <p className="text-xs text-zinc-400 mt-1">Edita u organiza las opiniones de los clientes en la sección de inicio.</p>
                   </div>
                   <button
                     onClick={() => {
                       const updated = [...reviews, { id: Date.now(), name: "Nombre Cliente", car: "Modelo Vehículo", quote: "Excelente atención y diagnóstico preciso." }];
                       setReviews(updated);
-                      setSettingsForm({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                      const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
+                      setSettingsForm(newForm);
+                      setSettings(newForm);
+                      handleSaveSettings(newForm);
                     }}
                     className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1 shrink-0"
                   >
@@ -2715,7 +2718,10 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                     onClick={() => {
                       const updated = [...faqs, { q: "Nueva Pregunta", a: "Respuesta de la pregunta." }];
                       setFaqs(updated);
-                      setSettingsForm({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
+                      const newForm = { ...settingsForm, FAQS_JSON: JSON.stringify(updated) };
+                      setSettingsForm(newForm);
+                      setSettings(newForm);
+                      handleSaveSettings(newForm);
                     }}
                     className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1"
                   >
