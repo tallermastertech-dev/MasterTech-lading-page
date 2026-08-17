@@ -519,13 +519,9 @@ export default function Jornadas() {
                 onClick={() => scrollTabs('right')}
                 className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
                 title="Deslizar hacia la derecha"
-              >
-                <ChevronRight className="w-6 h-6" />
               </button>
             </div>
           </section>
-        </>
-      )}
 
       {/* Selected Jornada Detail Display */}
       <section className="py-8 px-6 max-w-7xl mx-auto">
