@@ -1051,14 +1051,9 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       try {
         if (localData.JORNADAS_JSON) {
           const parsed = JSON.parse(localData.JORNADAS_JSON);
-          if (Array.isArray(parsed) && parsed.length > 0) setJornadasList(parsed);
-          else setJornadasList(DEFAULT_JORNADAS);
-        } else {
-          setJornadasList(DEFAULT_JORNADAS);
+          if (Array.isArray(parsed)) setJornadasList(parsed);
         }
-      } catch (e) {
-        setJornadasList(DEFAULT_JORNADAS);
-      }
+      } catch (e) {}
     }
 
     try {
@@ -1069,12 +1064,9 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         // Merge: server fills non-priority fields; localStorage wins for priority fields
         const merged: any = { ...serverData };
         if (localData) {
-          for (const [k, v] of Object.entries(localData)) {
-            if (LOCAL_PRIORITY_FIELDS.includes(k) || (typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('blob:')))) {
-              const sVal = serverData ? serverData[k] : undefined;
-              if (!sVal || !sVal.startsWith('data:image')) {
-                merged[k] = v;
-              }
+          for (const k of LOCAL_PRIORITY_FIELDS) {
+            if (localData[k] !== undefined && localData[k] !== null && localData[k] !== '') {
+              merged[k] = localData[k];
             }
           }
         }
@@ -1096,14 +1088,9 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         try {
           if (merged.JORNADAS_JSON) {
             const parsed = JSON.parse(merged.JORNADAS_JSON);
-            if (Array.isArray(parsed) && parsed.length > 0) setJornadasList(parsed);
-            else setJornadasList(DEFAULT_JORNADAS);
-          } else {
-            setJornadasList(DEFAULT_JORNADAS);
+            if (Array.isArray(parsed)) setJornadasList(parsed);
           }
-        } catch (e) {
-          setJornadasList(DEFAULT_JORNADAS);
-        }
+        } catch (e) {}
 
         // If we have good local data for priority fields, push it to the server
         // so Supabase gets updated even if it was out of sync
