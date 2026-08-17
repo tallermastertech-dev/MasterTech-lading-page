@@ -1,44 +1,53 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  ShieldCheck,
-  Search,
-  Calendar,
-  LogOut,
-  Settings as SettingsIcon,
-  Trash2,
-  Edit,
-  MessageCircle,
-  ExternalLink,
-  Lock,
-  RefreshCw,
-  AlertCircle,
-  User,
-  Car,
-  Wrench,
-  CheckCircle2,
-  Clock,
-  Briefcase,
-  X,
-  FileText,
-  Activity,
-  ArrowLeft,
-  Eye,
-  Check,
-  Save,
-  Loader2,
-  Plus,
-  Tag,
-  Package,
-  Layers,
-  Bot,
-  HelpCircle,
-  Users,
-  Sparkles,
-  MessageSquare,
-  Star,
-  Zap
+import { 
+  ShieldCheck, 
+  Search, 
+  Calendar, 
+  LogOut, 
+  Settings as SettingsIcon, 
+  Trash2, 
+  Edit, 
+  ExternalLink, 
+  Lock, 
+  RefreshCw, 
+  AlertCircle, 
+  User, 
+  Car, 
+  Wrench, 
+  CheckCircle2, 
+  Clock, 
+  X, 
+  Check, 
+  Save, 
+  Loader2, 
+  Plus, 
+  Tag, 
+  Package, 
+  Layers, 
+  HelpCircle, 
+  Users, 
+  Sparkles, 
+  MessageSquare, 
+  Star, 
+  Zap,
+  TrendingUp,
+  LayoutDashboard,
+  BellRing,
+  Globe,
+  Radio,
+  FileSpreadsheet,
+  Send,
+  Sliders,
+  ChevronRight,
+  Filter
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
+
+const WhatsAppIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M12 2a10 10 0 0 0-8.624 15.086L2 22l5.067-1.328A10 10 0 1 0 12 2zm5.457 14.28c-.244.686-1.413 1.309-1.977 1.393-.518.077-1.162.109-1.871-.116-.432-.137-.985-.32-1.693-.626-2.981-1.287-4.927-4.289-5.076-4.487-.149-.198-1.213-1.611-1.213-3.074 0-1.463.768-2.18 1.04-2.479.272-.298.594-.372.792-.372.198 0 .396.002.57.01.182.009.427-.069.669.51.247.595.841 2.058.916 2.206.075.149.124.323.025.521-.099.198-.149.322-.3.495-.149.174-.312.388-.446.521-.148.148-.303.309-.13.606.173.298.77 1.271 1.653 2.059 1.135 1.012 2.093 1.325 2.39 1.475.297.148.471.124.644-.075.173-.198.743-.867.94-1.164.199-.298.397-.249.67-.15.272.099 1.733.818 2.03.967.297.149.496.223.57.347.075.124.075.719-.173 1.414z"/>
+  </svg>
+);
 
 const DEFAULT_SERVICES = [
   { id: 1, title: "Mecánica General", desc: "Reparación profunda de motores, sustitución de embragues y solución de fallas mecánicas complejas con repuestos de alta calidad.", img: "/assets/servicio-mecanica.jpg" },
@@ -54,7 +63,7 @@ const DEFAULT_FAQS = [
   { q: "¿Cuánto tiempo toma un mantenimiento preventivo básico?", a: "El tiempo estimado oscila entre 45 minutos y 1 hora y media, dependiendo del plan de servicio requerido. Durante la intervención, puede esperar cómodamente en nuestra área Lounge VIP, equipada con estación de café y conectividad Wi-Fi de alta velocidad." },
   { q: "¿Tienen garantía los trabajos que realizan?", a: "Absolutamente. Todos nuestros servicios están respaldados por la Garantía Total MasterTech. Cubrimos la mano de obra calificada y los componentes o consumibles suministrados en nuestras instalaciones, asegurando un estándar óptimo de durabilidad y rendimiento." },
   { q: "¿Cómo agendo una cita para mi vehículo?", a: "Puede gestionar su cita en tiempo real de dos formas: directamente desde nuestra plataforma web haciendo clic en el botón \"Reserva Ahora\", o comunicándose directamente con nuestro equipo de asesores de servicio vía WhatsApp." },
-  { q: "¿Cuáles son los métodos de pago aceptados?", a: "Para su comodidad, disponemos de múltiples canales de pago: Pago Móvil, transferencias bancarias nacionales e internacionales, efectivo (USD/EUR) y Zelle." },
+  { q: "¿Cuáles son los métodos de pago aceptados?", a: "Para su comodidad, disponemos de múltiples canales de pago: Pago Móvil, transferencias bancarias nacionales en bolívares, transferencias internacionales, efectivo (USD/EUR) y Zelle." },
   { q: "¿Qué tipo de herramientas o tecnología utilizan para el diagnóstico?", a: "Contamos con equipos de diagnóstico computarizado y escáneres multimarca de última generación. Esto nos permite interactuar con los módulos electrónicos del vehículo, analizar datos en tiempo real y detectar fallas con precisión quirúrgica antes de cualquier reparación." },
   { q: "¿Puedo dejar mi vehículo en el taller si la reparación toma varios días?", a: "Sí. Disponemos de instalaciones cerradas con sistemas de seguridad activa y monitoreo para resguardar su vehículo si requiere procedimientos mecánicos o electrónicos complejos que extiendan el tiempo de entrega." },
   { q: "¿Me informan antes de realizar algún trabajo adicional en mi vehículo?", a: "Totalmente. Mantenemos una política de cero sorpresas. Si durante la inspección o diagnóstico detectamos alguna anomalía extra, nuestro asesor de servicio le enviará un reporte técnico detallado junto al presupuesto correspondiente para su aprobación previa por WhatsApp antes de proceder." }
@@ -98,270 +107,78 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     id: 1,
     title: "Kit Aceite Sintético Motor 5W-30 + Filtro de Aceite OEM",
     category: "Aceites y Lubricantes",
-    price: "$45.00",
-    desc: "Aceite 100% sintético de alto rendimiento con aditivos antidesgaste de última generación. Incluye filtro de aceite de especificación original.",
-    longDesc: "Formulación avanzada que reduce el rozamiento térmico en motores modernos. Protege componentes internos durante arranques en frío y prolonga la vida útil del bloque.",
+    price: "$45 USD",
+    desc: "Lubricante 100% sintético de máxima protección térmica con filtro de aceite de alta eficiencia.",
+    longDesc: "Formulado para brindar protección extrema contra el desgaste del motor a altas temperaturas. Incluye filtro de aceite OEM certificado.",
     img: "/24214142.png",
-    badge: "Más Vendido",
-    specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite OEM", "Soporta altas temperaturas de motor"],
-    compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai, Kia",
-    partNumber: "NP-SYN-5W30-OEM"
+    images: ["/24214142.png", "/assets/servicio-mecanica.jpg"],
+    badge: "Mantenimiento Esencial",
+    partNumber: "SYN-5W30-KIT",
+    specs: ["Aceite Sintético 5W-30 (4 Litros)", "Filtro de Aceite Anti-Drenaje", "Arandela de Cárter de Cobre", "Revisión de Niveles Gratis"],
+    compatibility: "Toyota, Chevrolet, Ford, Honda, Hyundai, Kia (Motores 4 y 6 cilindros)",
+    isImportedUSA: true
   },
   {
     id: 2,
-    title: "Pastillas de Freno Cerámicas Premium (Juego Delantero/Trasero)",
-    category: "Frenos y Suspensión",
-    price: "$55.00",
-    desc: "Pastillas cerámicas de baja emisión de polvo, frenado silencioso y máximo agarre térmico para SUVs, 4x4 y sedanes.",
-    longDesc: "Fabricadas con fibras cerámicas avanzadas que previenen chirridos metálicos y disminuyen el desgaste de los discos de freno.",
+    title: "Pastillas de Freno Cerámicas Delanteras Premium (Brembo/Akebono)",
+    category: "Frenos y Seguridad",
+    price: "$55 USD",
+    desc: "Pastillas de compuesto cerámico de bajo polvo y cero ruidos con máxima capacidad de frenado.",
+    longDesc: "Diseñadas para brindar frenadas precisas y silenciosas en condiciones extremas. Compuesto térmico resistente al desvanecimiento.",
     img: "/assets/servicio-frenos.jpg",
-    badge: "Garantía MasterTech",
-    specs: ["Compuesto 100% cerámico antidesgaste", "Libre de ruidos y polvo metálico", "Resistencia superior a 600°C"],
-    compatibility: "Vehículos Japoneses, Americanos y Coreanos",
-    partNumber: "NP-BP-CER-8842"
-  },
-  {
-    id: 3,
-    title: "Batería Automotriz Libre de Mantenimiento 600A / 700A",
-    category: "Baterías y Electricidad",
-    price: "$85.00",
-    desc: "Batería sellada de aleación plata-calcio de alta resistencia para arranques inmediatos en clima tropical.",
-    longDesc: "Diseñada para responder a altas exigencias eléctricas de sistemas multimedia, iluminación LED y aire acondicionado.",
-    img: "/assets/instalaciones.jpg",
-    badge: "Garantía 12 Meses",
-    specs: ["Sellada libre de mantenimiento", "Alta capacidad de arranque en frío (CCA)", "Placas reforzadas contra corrosión"],
-    compatibility: "Modelos estándar y Heavy Duty",
-    partNumber: "BT-MF-600A-MT"
-  },
-  {
-    id: 4,
-    title: "Kit de Filtro de Aire de Motor + Filtro de Aire de Cabina A/A",
-    category: "Filtros y Consumibles",
-    price: "$30.00",
-    desc: "Filtros de celulosa y carbón activado que bloquean polvo, polen y partículas finas antes de entrar al motor y cabina.",
-    longDesc: "Mantén el aire limpio dentro del vehículo y optimiza la aspiración del motor para asegurar una mezcla de combustión eficiente.",
-    img: "/assets/servicio-inyeccion.jpg",
-    badge: "Filtro Carbón Activado",
-    specs: ["Eficiencia de filtrado >99%", "Protege inyectores y flujo de aire", "Elimina malos olores en cabina"],
-    compatibility: "Amplio stock disponible para todas las marcas",
-    partNumber: "FLT-KIT-AIR-441"
-  },
-  {
-    id: 5,
-    title: "Gas Refrigerante R134a Sintético + Aceite PAG con Tinte UV",
-    category: "Fluidos y Refrigeración",
-    price: "$35.00",
-    desc: "Refrigerante ecológico R134a de máxima pureza con trazador fluorescente UV para detección rápida de fugas.",
-    longDesc: "Relleno especializado para compresores de aire acondicionado que restaura el rendimiento de congelamiento óptimo.",
-    img: "/assets/servicio-climatizacion.jpg",
-    badge: "Frío Garantizado",
-    specs: ["Refrigerante R134a 100% puro", "Aceite PAG para lubricación del compresor", "Incluye aditivo detector de fugas UV"],
-    compatibility: "Sistemas A/A automotrices R134a",
-    partNumber: "GAS-R134A-UV"
-  },
-  {
-    id: 6,
-    title: "Juego de Amortiguadores Reforzados Gas/Hidráulicos (Par)",
-    category: "Frenos y Suspensión",
-    price: "$120.00",
-    desc: "Amortiguadores de doble tubo presurizados con nitrógeno para estabilidad superior en terreno irregular.",
-    longDesc: "Absorben impactos y vibraciones del camino, manteniendo los neumáticos firmemente adheridos al asfalto en curvas exigentes.",
-    img: "/assets/servicio-mecanica.jpg",
-    badge: "Resistencia Heavy-Duty",
-    specs: ["Presurización por gas nitrógeno", "Vástago cromado ultrarresistente", "Retenes de baja fricción"],
-    compatibility: "SUVs, Pick-ups 4x4 y Camionetas",
-    partNumber: "AMR-HD-9082-GAS"
-  },
-  {
-    id: 7,
-    title: "Kit de Microfiltros, O-Rings y Sellos para Inyectores de Gasolina",
-    category: "Filtros y Consumibles",
-    price: "$25.00",
-    desc: "Microfiltros de mella fina de cobre y juntas o-rings de vitón resistentes a la gasolina y altas temperaturas.",
-    longDesc: "Reemplazo preventivo en mantenimiento de inyectores para evitar fugas de combustible y atascos de suciedad en la aguja de inyección.",
-    img: "/assets/servicio-inyeccion.jpg",
-    badge: "Vitón de Alta Presión",
-    specs: ["O-rings en material Vitón", "Microfiltros sintéticos lavables", "Previene fugas y goteo de combustible"],
-    compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
-    partNumber: "INJ-O-RING-VITON"
-  },
-  {
-    id: 8,
-    title: "Kit Champú Neutro Concentrado + Cera Sintética Protectora",
-    category: "Cuidado y Estética",
-    price: "$20.00",
-    desc: "Champú PH neutro espumoso y cera sintética con polímeros hidrofóbicos que repelen agua y polvo de la pintura.",
-    longDesc: "Protege la pintura contra rayos UV, excrementos de aves y lluvia ácida, aportando un brillo cristalino duradero.",
-    img: "/assets/instalaciones.jpg",
-    badge: "Efecto Espejo",
-    specs: ["Polímeros sintéticos selladores", "Protección UV de carrocería", "Biodegradable de fácil enjuague"],
-    compatibility: "Apto para todo tipo de pintura y barniz",
-    partNumber: "CAR-DET-CERA-PH"
+    images: ["/assets/servicio-frenos.jpg"],
+    badge: "Frenado de Alta Precisión",
+    partNumber: "AK-CERAMIC-DEL",
+    specs: ["Compuesto Cerámico Aislante", "Sensor de Desgaste Incluido", "Grasa Antiruido Térmica", "Limpieza de Cálipers Incluida"],
+    compatibility: "Toyota Hilux / Fortuner / 4Runner, Jeep Cherokee, Chevrolet Silverado, Ford Explorer",
+    isImportedUSA: true
   }
 ];
 
 const DEFAULT_JORNADAS = [
-  {
-    id: "reprogramacion",
-    badge: "🏎️ Jornada de Potenciación",
-    title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
-    subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
-    img: "/assets/servicio-mecanica.jpg",
-    regularPrice: "$250 USD",
-    promoPrice: "$160 USD",
-    discountBadge: "AHORRAS $90 USD",
-    duration: "2 a 3 horas",
-    benefits: [
-      "Incremento de +15% a +35% de HP y Torque comprobables",
-      "Eliminación total del retardo (lag) del pedal del acelerador",
-      "Ahorro de hasta un 10% de combustible en viajes largos y autopista",
-      "Optimización de curvas de cambios en cajas automáticas (TCU Tuning)",
-      "Respaldo de mapa original 100% reversible en todo momento"
-    ],
-    compatibleModels: "Toyota (Hilux, Fortuner, 4Runner, Camry, Machito), Jeep (Cherokee, Grand Cherokee, Wrangler), Ford (F-150, Explorer, Mustang), Chevrolet (Silverado, Tahoe, Colorado), Nissan, VW & Turbo."
-  },
-  {
-    id: "egr-dpf",
-    badge: "⚡ Solución Electrónica Definitiva",
-    title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off",
-    subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.",
-    img: "/assets/servicio-electricidad.jpg",
-    regularPrice: "$180 USD",
-    promoPrice: "$120 USD",
-    discountBadge: "AHORRAS $60 USD",
-    duration: "1.5 a 2.5 horas",
-    benefits: [
-      "Anulación electrónica limpia de Válvula EGR (evita acumulación de hollín)",
-      "Solución definitiva a regeneración atascada de Filtro DPF/FAP en motores Diésel",
-      "Eliminación de modo emergencia/limitación de velocidad por sistema AdBlue/DEF",
-      "Limpieza de códigos DTC persistentes y luces de advertencia en tablero",
-      "Recuperación de la compresión y potencia original del motor"
-    ],
-    compatibleModels: "Toyota Hilux/Fortuner D4D/GD6, Ford Ranger/F-150, Mitsubishi Montero, Chevrolet Silverado/LUV D-Max, VW Amarok, Nissan NP300/Navara y motores Diésel/Gasolina."
-  },
-  {
-    id: "cielo-estrellado",
-    badge: "✨ Estética VIP Rolls-Royce",
-    title: "Cielo Estrellado de Fibra Óptica LED RGBW (Starlight Headliner)",
-    subtitle: "Transforma el techo interior de tu vehículo en un cielo estrellado de lujo artesanal con destellos y estrellas fugaces.",
-    img: "/assets/instalaciones.jpg",
-    regularPrice: "$380 USD",
-    promoPrice: "$260 USD",
-    discountBadge: "AHORRAS $120 USD",
-    duration: "1 día (Instalación Artesanal)",
-    benefits: [
-      "De 200 a 600 micro-hilos de fibra óptica ultra-fina integrados al techo",
-      "Control de colores y efectos por App de Smartphone (Bluetooth) + Control Remoto",
-      "Efecto de centelleo dinámico (Twinkle Effect) y Estrellas Fugaces (Shooting Stars)",
-      "Consumo eléctrico ultrabajo (módulo LED de última generación 12V)",
-      "Acabado 100% profesional sin cables ni conexiones visibles"
-    ],
-    compatibleModels: "Apto para todo tipo de vehículos: Sedanes, Coupés, SUVs, Camionetas 4x4 y Pick-ups."
-  },
-  {
-    id: "climatizacion",
-    badge: "❄️ Confort & Máximo Frío",
-    title: "Jornada de Climatización & Recuperación de Aire Acondicionado",
-    subtitle: "Restaura el frío polar de tu sistema A/A con recarga R134a de máxima pureza, aceite PAG sintético y trazador UV anti-fugas.",
-    img: "/assets/servicio-climatizacion.jpg",
-    regularPrice: "$65 USD",
-    promoPrice: "$40 USD",
-    discountBadge: "AHORRAS $25 USD",
-    duration: "45 min a 1 hora",
-    benefits: [
-      "Carga completa de gas refrigerante R134a sintético 100% puro",
-      "Inyección de aceite PAG sintético con aditivo lubricante para compresor",
-      "Aplicación de trazador fluorescente UV para detección rápida de micro-fugas",
-      "Desinfección de ductos con ozono para eliminar bacterias y malos olores",
-      "Medición de presiones de alta/baja y temperatura de salida en cabina"
-    ],
-    compatibleModels: "Todas las marcas y modelos con sistema de aire acondicionado automotriz R134a."
-  },
-  {
-    id: "inyeccion",
-    badge: "🔧 Rendimiento & Limpieza",
-    title: "Jornada de Limpieza & Calibración de Inyectores por Ultrasonido",
-    subtitle: "Devuelve la suavidad al motor y elimina tirones limpiando inyectores en banco ultrasónico con reemplazo de micro-filtros.",
-    img: "/assets/servicio-inyeccion.jpg",
-    regularPrice: "$50 USD",
-    promoPrice: "$30 USD",
-    discountBadge: "AHORRAS $20 USD",
-    duration: "1 a 1.5 horas",
-    benefits: [
-      "Limpieza ultrasónica a 40 kHz en tina térmica especializada",
-      "Prueba de abanico, estanqueidad y balanza de caudal en banco digital",
-      "Reemplazo de micro-filtros de cobre internos y juntas o-rings de Vitón",
-      "Optimización de la pulverización para evitar humo negro y temblores en mínimo",
-      "Verificación de presión de bomba de gasolina e historial de inyección"
-    ],
-    compatibleModels: "Sistemas de inyección de gasolina multipunto (MPFI) e inyección directa (GDI) multimarca."
-  }
+  { id: "reprogramacion", badge: "🏎️ Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
+  { id: "egr-dpf", badge: "⚡ Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
 ];
 
-interface Lead {
-  id: number;
-  nombre: string;
-  telefono: string;
-  vehiculo: string;
-  servicio: string;
-  status: string;
-  notes: string;
-  created_at: string;
-  placa?: string;
-  anio?: string;
-  ubicacion?: string;
-  falla?: string;
-  fecha_hora?: string;
-}
-
-interface Settings {
-  PHONE_NUMBER: string;
-  WHATSAPP_LINK: string;
-  WEBHOOK_URL: string;
-  GOOGLE_MAPS_LINK: string;
-  GOOGLE_MAPS_EMBED: string;
-  GOOGLE_BUSINESS_URL: string;
-  HERO_IMG: string;
-  LOGO_URL: string;
-  BEFORE_AFTER_1: string;
-  BEFORE_AFTER_2: string;
-  HERO_REEL_URL?: string;
-  IS_OPEN: string;
-  BANNER_TEXT: string;
-  WHATSAPP_MESSAGE_TEMPLATE?: string;
-  SUCCESS_BADGE?: string;
-  SUCCESS_TEXT?: string;
-  TELEGRAM_BOT_TOKEN?: string;
-  TELEGRAM_CHAT_ID?: string;
-  TELEGRAM_TOPIC_ID?: string;
-  CATALOG_PRODUCTS_JSON?: string;
-  [key: string]: any;
-}
-
-interface AdminPanelProps {
-  onClose: () => void;
-}
-
-export default function AdminPanel({ onClose }: AdminPanelProps) {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('mastertech_admin_token'));
-  const [password, setPassword] = useState('');
+export default function AdminPanel() {
+  // Auth State
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('mastertech_admin_token'));
+  const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [settings, setSettings] = useState<Settings | null>(null);
-  const [settingsForm, setSettingsForm] = useState<Partial<Settings>>({});
-  const [isSavingSettings, setIsSavingSettings] = useState(false);
-  const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
-  const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
-  const [isLoadingLeads, setIsLoadingLeads] = useState(false);
-  const [isLoadingSettings, setIsLoadingSettings] = useState(false);
-  
   // Active Navigation Tab
   const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'integraciones'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
 
-  // Dynamic Data — initialize directly from localStorage so data appears instantly
+  // Dynamic Data States
+  const [settings, setSettings] = useState<any>({});
+  const [settingsForm, setSettingsForm] = useState<any>({});
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
+  const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
+
+  // Leads State
+  const [leads, setLeads] = useState<any[]>([]);
+  const [isLoadingLeads, setIsLoadingLeads] = useState(false);
+  const [selectedLead, setSelectedLead] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('Todos');
+
+  // Catalog State
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(() => {
+    try {
+      const s = localStorage.getItem('mastertech_settings_store');
+      if (s) { const p = JSON.parse(s); if (p.CATALOG_PRODUCTS_JSON) return JSON.parse(p.CATALOG_PRODUCTS_JSON); }
+    } catch (e) {}
+    return DEFAULT_CATALOG;
+  });
+  const [editingProduct, setEditingProduct] = useState<CatalogItem | null>(null);
+  const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
+  const [isAiAutofilling, setIsAiAutofilling] = useState(false);
+  const [aiStatusMsg, setAiStatusMsg] = useState('');
+
+  // Jornadas State
   const [jornadasList, setJornadasList] = useState<any[]>(() => {
     try {
       const s = localStorage.getItem('mastertech_settings_store');
@@ -372,658 +189,31 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   const [editingJornada, setEditingJornada] = useState<any>(null);
   const [isJornadaModalOpen, setIsJornadaModalOpen] = useState(false);
 
-  // Dynamic Data — initialize directly from localStorage so data appears instantly
-  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(() => {
-    try {
-      const s = localStorage.getItem('mastertech_settings_store');
-      if (s) { const p = JSON.parse(s); if (p.CATALOG_PRODUCTS_JSON) return JSON.parse(p.CATALOG_PRODUCTS_JSON); }
-    } catch (e) {}
-    return DEFAULT_CATALOG;
-  });
-  const [teamMembers, setTeamMembers] = useState<any[]>(() => {
-    try {
-      const s = localStorage.getItem('mastertech_settings_store');
-      if (s) { const p = JSON.parse(s); if (p.TEAM_MEMBERS_JSON) return JSON.parse(p.TEAM_MEMBERS_JSON); }
-      const t = localStorage.getItem('mastertech_team_members');
-      if (t) return JSON.parse(t);
-    } catch (e) {}
-    return DEFAULT_TEAM;
-  });
-  const [reviews, setReviews] = useState<any[]>(() => {
-    try {
-      const s = localStorage.getItem('mastertech_settings_store');
-      if (s) { const p = JSON.parse(s); if (p.REVIEWS_JSON) return JSON.parse(p.REVIEWS_JSON); }
-    } catch (e) {}
-    return DEFAULT_REVIEWS;
-  });
-  const [services, setServices] = useState<any[]>(() => {
-    try {
-      const s = localStorage.getItem('mastertech_settings_store');
-      if (s) { const p = JSON.parse(s); if (p.SERVICES_JSON) return JSON.parse(p.SERVICES_JSON); }
-    } catch (e) {}
-    return DEFAULT_SERVICES;
-  });
-  const [faqs, setFaqs] = useState<any[]>(() => {
-    try {
-      const s = localStorage.getItem('mastertech_settings_store');
-      if (s) { const p = JSON.parse(s); if (p.FAQS_JSON) return JSON.parse(p.FAQS_JSON); }
-    } catch (e) {}
-    return DEFAULT_FAQS;
-  });
+  // Content States
+  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
+  const [faqs, setFaqs] = useState<any[]>(DEFAULT_FAQS);
+  const [teamMembers, setTeamMembers] = useState<any[]>(DEFAULT_TEAM);
+  const [reviews, setReviews] = useState<any[]>(DEFAULT_REVIEWS);
 
-  // Search & Filter (Leads)
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Todos');
-
-  // Search & Filter (Catalog)
-  const [catalogSearchQuery, setCatalogSearchQuery] = useState('');
-  const [catalogCategoryFilter, setCatalogCategoryFilter] = useState('Todas');
-
-  const filteredCatalogItems = useMemo(() => {
-    return catalogItems.filter(item => {
-      const matchesCategory = catalogCategoryFilter === 'Todas' || item.category === catalogCategoryFilter;
-      const q = catalogSearchQuery.toLowerCase().trim();
-      const matchesSearch = !q || 
-        (item.title && item.title.toLowerCase().includes(q)) ||
-        (item.category && item.category.toLowerCase().includes(q)) ||
-        (item.desc && item.desc.toLowerCase().includes(q)) ||
-        (item.partNumber && item.partNumber.toLowerCase().includes(q)) ||
-        (item.compatibility && item.compatibility.toLowerCase().includes(q));
-      return matchesCategory && matchesSearch;
-    });
-  }, [catalogItems, catalogSearchQuery, catalogCategoryFilter]);
-
-  // Modal States
-  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [noteEdit, setNoteEdit] = useState('');
-  const [statusEdit, setStatusEdit] = useState('');
-  const [isUpdatingLead, setIsUpdatingLead] = useState(false);
-
-  // Catalog Item Edit Modal
-  const [editingProduct, setEditingProduct] = useState<CatalogItem | null>(null);
-  const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
-
-  // AI Part Autofill State
-  const [isAiAutofilling, setIsAiAutofilling] = useState(false);
-  const [aiStatusMsg, setAiStatusMsg] = useState('');
-
-  const handleAiAutofill = async (targetPartNumber?: string) => {
-    const partNum = targetPartNumber || editingProduct?.partNumber || '';
-    if (!partNum || partNum.trim().length < 2) {
-      setAiStatusMsg('⚠️ Ingresa un número de parte OEM para buscar con IA');
-      setTimeout(() => setAiStatusMsg(''), 3500);
-      return;
-    }
-
-    const pClean = partNum.trim();
-    setIsAiAutofilling(true);
-    setAiStatusMsg(`✨ Buscando información técnica con IA para #${pClean}...`);
-
-    let populatedData: any = null;
-
-    // 1. Try Server API Route (/api/ai-autofill)
-    try {
-      const res = await fetch('/api/ai-autofill', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ partNumber: pClean })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.titulo) {
-          populatedData = data;
-        }
-      }
-    } catch (e) {
-      console.warn('Server AI route attempt failed, switching to direct client AI fallback', e);
-    }
-
-    // 2. Direct Client Gemini API call fallback if server API is unavailable
-    if (!populatedData) {
-      const clientApiKey = ['AQ', 'Ab8RN6Lx6TDruzrPfy2PpWA9yLO9PpBklx4LJp1ml1vyWk8ghg'].join('.');
-      try {
-        const promptText = `
-Eres un especialista experto de nivel mundial en catálogo de repuestos automotrices OEM de cualquier marca (Toyota, Nissan, Honda, Mopar, GM, Ford, Bosch, NGK, Denso, etc.).
-Dado el código de parte OEM: "${pClean}", investiga a qué repuesto corresponde exactamente (ej: Sensor TPMS de Presión de Neumáticos, Computadora de Motor ECM/ECU, Kit de Embrague, Sensor de Oxígeno, Sensor MAF, Pastillas Cerámicas, Tapa de Válvulas, etc.), los vehículos exactos donde se instala, su categoría técnica y descripción.
-
-Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
-{
-  "titulo": "Nombre completo y exacto del producto (ej: Sensor TPMS de Presión de Neumáticos Toyota OEM 42607-06030)",
-  "categoria": "Una de estas categorías exactas: Aceites y Lubricantes | Filtros y Consumibles | Frenos y Suspensión | Motor y Encendido | Baterías y Electricidad | Inyección y Sensores | Transmisión y Tren Motriz | Fluidos y Refrigeración | Piezas de Carrocería & Accesorios",
-  "compatibilidad": "Marcas, modelos y años compatibles exactos",
-  "descripcionCorta": "Resumen técnico de 1 a 2 líneas destacando características principales y función.",
-  "descripcionDetallada": "Ficha técnica completa indicando especificación OEM, tolerancia/frecuencia, materiales y garantía."
-}
-`;
-        const geminiModels = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp'];
-        for (const model of geminiModels) {
-          if (populatedData) break;
-          try {
-            const directRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${clientApiKey}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-            });
-
-            if (directRes.ok) {
-              const directData = await directRes.json();
-              const rawText = directData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-              if (rawText) {
-                const cleanText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-                populatedData = JSON.parse(cleanText);
-              }
-            }
-          } catch (mErr) {}
-        }
-      } catch (clientAiErr) {
-        console.warn('Direct client AI call error:', clientAiErr);
-      }
-    }
-
-    // 3. Comprehensive OEM Database Fallback (50+ patterns, 10+ brands)
-    if (!populatedData || !populatedData.titulo) {
-      const upper = pClean.toUpperCase();
-      const cleanUpper = upper.replace(/[\s\-_\.]/g, '');
-
-      // ── TOYOTA brake pads front – Corolla/Matrix
-      if (/^044650[2-3][0-9A-Z]{3}/i.test(cleanUpper))
-        populatedData = { titulo: `Pastillas de Freno Delanteras Toyota Corolla 1.8L OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/2ZR-FAE) 2009-2019, Matrix 2009-2014, Scion xD 2008-2014', descripcionCorta: 'Pastillas cerámicas Toyota Genuine Parts, baja emisión de polvo y frenado silencioso.', descripcionDetallada: `Pastillas OEM Toyota #${upper}. Compuesto cerámico multicapa hasta 550°C. Indicador acústico integrado.` };
-      // ── TOYOTA brake pads front – Fortuner/Hilux/4Runner
-      else if (/^04465[0-9A-Z]{5}/i.test(cleanUpper) && !/^044650[2-3]/i.test(cleanUpper))
-        populatedData = { titulo: `Pastillas de Freno Delanteras Toyota Fortuner/Hilux/4Runner OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Fortuner 2.7L/4.0L, Hilux 4x4, 4Runner 4.0L V6, Land Cruiser Prado 150 (2005-2024)', descripcionCorta: 'Pastillas cerámicas Toyota OEM para SUV/pickup 4x4, frenado progresivo y alta resistencia térmica.', descripcionDetallada: `Pastillas OEM Toyota #${upper}. Sin amianto. Vida útil 40,000-60,000 km.` };
-      // ── TOYOTA brake pads rear
-      else if (/^04466[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Pastillas de Freno Traseras Toyota Camry/RAV4 OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Camry 2.5L/3.5L, RAV4, Highlander & Sienna 3.5L V6 (2006-2024)', descripcionCorta: 'Pastillas traseras cerámicas Toyota Genuine Parts con indicador de desgaste acústico.', descripcionDetallada: `Pastillas traseras OEM Toyota #${upper}. Compuesto cerámico para uso city/highway.` };
-      // ── TOYOTA valve cover Corolla 1.8L
-      else if (/11201[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Tapa de Válvulas Motor Toyota Corolla 1.8L OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/2ZR-FAE) 2009-2019, Matrix 2009-2014, Scion xB/xD 2008-2015', descripcionCorta: 'Tapa de válvulas polímero térmico reforzado con empaque integrado, sello hermético antifiltraciones de aceite.', descripcionDetallada: `Tapa de válvulas OEM Toyota #${upper}. Puertos PCV reforzados. Empaque FKMI resistente a aceites sintéticos.` };
-      // ── TOYOTA cabin air filter (filtro de habitáculo/cabina) – 87139-XXXXX
-      else if (/^87139[0-9A-Z]{4,6}|^8713[0-9A-Z]{5,7}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) Toyota OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Toyota Corolla 2003-2019, Yaris 2006-2021, Camry 2007-2024, RAV4 2006-2024, Hilux, Fortuner, Highlander & Sienna (2000-2024)', descripcionCorta: 'Filtro de cabina Toyota Genuine Parts, retiene polvo, polen, esporas y partículas PM2.5 del aire del habitáculo.', descripcionDetallada: `Filtro de habitáculo OEM Toyota #${upper}. Fibra sintética multicapa electroestática. Filtra partículas ≥0.3 micras con eficiencia ≥95%. Cambio recomendado: cada 15,000-20,000 km o anualmente.` };
-      // ── TOYOTA oil filter
-      else if (/^90915[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite Motor Toyota OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Toyota Corolla 1.8L, Yaris 1.3/1.5L, RAV4, Camry, Tacoma & Hilux 2.7L (2000-2024)', descripcionCorta: 'Filtro Toyota Genuine Parts, celulosa multi-ply retención 99.5% partículas ≥10 micras.', descripcionDetallada: `Filtro OEM Toyota #${upper}. Válvula anti-retorno integrada. Cambio cada 5,000 km.` };
-      // ── ADMISION: Resonador/Manguera Toyota 17752/17750
-      else if (/^17752[0-9A-Z]{5}|^17750[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Manguera / Resonador de Admision de Aire Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/1ZZ-FE) 2000-2019, Yaris 1.5L 2006-2020, Matrix 2003-2014, RAV4 & Camry 2.4/2.5L (2002-2019)', descripcionCorta: 'Manguera/resonador admision Toyota OEM EPDM reforzado, union sin fugas entre caja de filtro y cuerpo de aceleracion.', descripcionDetallada: `Manguera admision OEM Toyota #${upper}. EPDM + tejido metalico. Temperatura -40C a +135C. Diametro 55-70 mm. Abrazaderas acero inox.` };
-      // ── ADMISION: Caja de filtro Toyota 17700/17710
-      else if (/^17700[0-9A-Z]{5}|^17710[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Caja de Filtro de Aire (Air Cleaner Housing) Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Yaris 1.5L 2006-2020, Camry 2.4/2.5L, RAV4 & Matrix (2003-2014)', descripcionCorta: 'Caja del filtro de aire Toyota OEM PA66+GF30, sellado hermetico con clips de acero inoxidable.', descripcionDetallada: `Caja filtro OEM Toyota #${upper}. PA66 reforzado. Camara resonancia integrada. Compatible elemento 17801-XXXXX.` };
-      // ── ADMISION: Tubo MAF Toyota 17760/17761
-      else if (/^17760[0-9A-Z]{5}|^17761[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Manguera MAF / Tubo Admision Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Camry 2.5L 2AR-FE, RAV4 & Yaris (2007-2020)', descripcionCorta: 'Tubo de admision MAF Toyota OEM EPDM antiestatico, protege sensor de flujo de masa de aire.', descripcionDetallada: `Tubo admision OEM Toyota #${upper}. EPDM antiestatico. Diametro 55-65 mm. Abrazaderas torsion.` };
-      // ── ADMISION: Multiple de admision Toyota 17310/17320
-      else if (/^17310[0-9A-Z]{5}|^17320[0-9A-Z]{5}|^17330[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Multiple / Colector de Admision Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Camry 2.5L 2AR-FE 2012-2019, RAV4 & Matrix (2009-2014)', descripcionCorta: 'Multiple de admision Toyota OEM PA66+GF30, colectores longitud variable DVVT, bajo peso y alta rigidez.', descripcionDetallada: `Multiple admision OEM Toyota #${upper}. PA66+GF30. Sistema DVVT longitud variable. Temperatura 140C max.` };
-      // ── SENSORES: Temperatura refrigerante Toyota 89422/83420
-      else if (/^89422[0-9A-Z]{5}|^83420[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor de Temperatura Refrigerante (ECT) Toyota OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/1ZZ-FE) 2000-2019, Camry 2.4/2.5L, RAV4, Yaris & Tacoma (2000-2022)', descripcionCorta: 'Sensor ECT Toyota OEM tipo NTC, rango -40C a +135C, rosca M12x1.5.', descripcionDetallada: `Sensor ECT OEM Toyota #${upper}. NTC termistor. Resistencia 20C: 2.4 kOhm. Resistencia 80C: 300 Ohm. Rosca M12x1.5.` };
-      // ── SENSORES: TPS Toyota 89452/89453
-      else if (/^89452[0-9A-Z]{5}|^89453[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor de Posicion Acelerador (TPS) Toyota OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Toyota Corolla 1.8L (1ZZ-FE) 2000-2008, Camry 2.4L, Tacoma 2.7L, Hilux & 4Runner (2000-2012)', descripcionCorta: 'Sensor TPS Toyota OEM de doble pista resistiva, salida lineal 0.5-4.5V.', descripcionDetallada: `Sensor TPS OEM Toyota #${upper}. Doble pista resistiva. Salida 0.5V-4.5V. Resistencia total 4-6 kOhm. Conector 3 pines.` };
-      // ── ENCENDIDO: Bobina COP Toyota 90919-02XXX
-      else if (/^9091902[0-9A-Z]{3}/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/2ZR-FAE) 2009-2019, Matrix 2009-2014, Scion xD/xB & RAV4 2.5L (2013-2019)', descripcionCorta: 'Bobina de encendido COP Toyota OEM, chispa 35 kV, temperatura -40C a +130C.', descripcionDetallada: `Bobina COP OEM Toyota #${upper}. Tension secundaria 35 kV. Resistencia primaria 0.5-0.7 Ohm. Resistencia secundaria 10-13 kOhm.` };
-      // ── ENCENDIDO: Bujias Toyota 90080
-      else if (/^90080[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bujia de Encendido Toyota OEM / Denso (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Camry 2.5L 2AR-FE, Yaris 1.5L, RAV4 & Tacoma 2.7L (2005-2022)', descripcionCorta: 'Bujia Toyota OEM (Denso), electrodo iridio/platino, vida util 60,000-100,000 km.', descripcionDetallada: `Bujia OEM Toyota/Denso #${upper}. Electrodo central iridio 0.4 mm. Gap 1.1 mm. Rosca M14x1.25. Resistencia 5 kOhm.` };
-      // ── PCV: Valvula PCV Toyota 12204
-      else if (/^12204[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV (Ventilacion Carter) Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/1ZZ-FE) 2000-2019, Camry 2.4/2.5L, Yaris, RAV4 & Tacoma 2.7L (2005-2020)', descripcionCorta: 'Valvula PCV Toyota OEM de diafragma elastomero NBR, regula presion del carter.', descripcionDetallada: `Valvula PCV OEM Toyota #${upper}. Diafragma NBR. Caudal 1.2 L/min. Presion apertura 0.3-0.5 kPa. Reemplazo 40,000-60,000 km.` };
-      // ── TAPA GASOLINA: Toyota 77300/77301
-      else if (/^77300[0-9A-Z]{3}|^77301[0-9A-Z]{3}/i.test(cleanUpper))
-        populatedData = { titulo: `Tapa de Gasolina / Deposito Toyota OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Toyota Corolla 2003-2019, Yaris 2006-2020, Camry, RAV4, Hilux & Tacoma (2000-2024)', descripcionCorta: 'Tapa de tanque Toyota OEM con valvula de alivio de presion y sistema antirrobo.', descripcionDetallada: `Tapa gasolina OEM Toyota #${upper}. PA66. Valvula alivio 1.0-1.5 PSI. Junta FKM. 2 clics cierre.` };
-      // ── ELECTRICO: Motor elevalunas Toyota 85720/85710
-      else if (/^85720[0-9A-Z]{5}|^85710[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Motor de Elevalunas Electrico Toyota OEM (${upper})`, categoria: 'Baterias y Electricidad', compatibilidad: 'Toyota Corolla 2003-2019, Yaris 2006-2020, Camry 2.4/2.5L, RAV4 & Hilux (2005-2022)', descripcionCorta: 'Motor elevalunas electrico Toyota OEM 12V/30W con regulador de plastico reforzado.', descripcionDetallada: `Motor elevalunas OEM Toyota #${upper}. 12V/30W. Velocidad 200 mm/s. Ciclos garantizados 200,000.` };
-      // ── TOYOTA air filter
-      else if (/^17801[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aire Motor Toyota OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Toyota Corolla, Yaris, Fortuner, Hilux, 4Runner, Tacoma & Camry (2000-2024)', descripcionCorta: 'Filtro de aire de panel Toyota Genuine Parts de fibra sintética, flujo óptimo y baja restricción.', descripcionDetallada: `Filtro de aire OEM Toyota #${upper}. Fibra sintética captura polvo ≤10 micras. Eficiencia ≥99%.` };
-      // ── TOYOTA knock / CKP / CMP sensors
-      else if (/^89615[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor de Detonación (Knock Sensor) Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Camry 2.4L/2.5L 2002-2017, RAV4, Tacoma 2.7L & Hilux 2.7L (2002-2020)', descripcionCorta: 'Sensor de detonación piezoeléctrico Toyota OEM, detecta pre-detonación y ajusta avance de encendido.', descripcionDetallada: `Sensor knock OEM Toyota #${upper}. Frecuencia de detección 6-15 kHz. Protege el motor contra daños por detonación.` };
-      else if (/^90919[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor de Posición Cigüeñal/Árbol de Levas Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L, Camry, RAV4, Yaris, Tacoma & Hilux (2000-2022)', descripcionCorta: 'Sensor CKP/CMP efecto Hall Toyota OEM, señal digital para control de inyección y encendido.', descripcionDetallada: `Sensor CKP/CMP OEM Toyota #${upper}. Efecto Hall 3 cables. 360 pulsos/rev. Rango -40°C a +135°C.` };
-      // ── NISSAN cabin air filter – 27277-XXXXX
-      else if (/^27277[0-9A-Z]{5}|^272770[0-9A-Z]{4}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) Nissan/Infiniti OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Nissan Altima 2002-2018, Sentra 2013-2019, Versa 2012-2019, Frontier 2.5L/4.0L & Infiniti G35/G37/QX56 (2003-2018)', descripcionCorta: 'Filtro de cabina Nissan OEM, fibra sintética multicapa, retiene polvo, polen y partículas PM2.5.', descripcionDetallada: `Filtro de habitáculo OEM Nissan #${upper}. Eficiencia ≥95% @ 0.3 micras. Intervalo: 15,000-20,000 km.` };
-      // ── HONDA cabin air filter – 80292-XXXXX
-      else if (/^80292[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) Honda OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Honda Civic 2006-2021, Accord 2008-2022, CR-V 2007-2022, HR-V 1.8L & Pilot 3.5L V6 (2009-2022)', descripcionCorta: 'Filtro de cabina Honda Genuine Parts, fibra de vidrio y carbón activo, elimina polvo, alérgenos y olores.', descripcionDetallada: `Filtro de habitáculo OEM Honda #${upper}. Doble capa: fibra sintética + carbón activo de coco. Intervalo: 15,000 km o anualmente.` };
-      // ── MOPAR/Chrysler cabin air filter
-      else if (/^K1297A$|^CF11175$|^CF10285$|^04596501AA|^68309513AA/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) Mopar OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Jeep Grand Cherokee WK2 2011-2021, Dodge Durango 2011-2021, RAM 1500 2013-2021 & Chrysler 300 2011-2020', descripcionCorta: 'Filtro de cabina Mopar OEM, fibra sintética multicapa, retiene polvo, polen y bacterias del sistema HVAC.', descripcionDetallada: `Filtro de habitáculo OEM Mopar #${upper}. Fibra sintética plisada. Temperatura -40°C a +80°C. Intervalo: 20,000 km o anualmente.` };
-      // ── HYUNDAI/KIA cabin air filter – 97133-XXXXX
-      else if (/^971332E250|^97133[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) Hyundai/Kia OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Hyundai Elantra 2007-2020, Tucson 2005-2020, Sonata 2006-2019 & Kia Cerato, Sportage, Optima (2006-2021)', descripcionCorta: 'Filtro de cabina Hyundai/Kia Mobis OEM, fibra electroestática, retiene polvo, polen y partículas PM2.5.', descripcionDetallada: `Filtro de habitáculo OEM Mobis #${upper}. Eficiencia ≥95% @ 0.3 micras. Intervalo: 15,000 km.` };
-      // ── GM/AC DELCO cabin air filter
-      else if (/^13503909$|^CF3313$|^25896246$|^23435001$|^84184764$/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) AC Delco/GM OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Chevrolet Silverado 2014-2022, Suburban, Tahoe, Equinox 2018-2022, Malibu 2013-2020 & GMC Sierra (2014-2022)', descripcionCorta: 'Filtro de cabina AC Delco OEM, fibra sintética de alta capacidad, retiene polvo, humo y bacterias del HVAC.', descripcionDetallada: `Filtro de habitáculo OEM GM/AC Delco #${upper}. Multi-capa electroestática. Eficiencia PM10: 99%. Intervalo: 20,000 km.` };
-      // ── FORD/MOTORCRAFT cabin air filter
-      else if (/^FP79$|^FP76$|^CF11242$|^FLF501$|^FP82$/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Habitáculo / Cabina (Cabin Air Filter) Motorcraft/Ford OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Ford F-150 2015-2024, Explorer 2011-2022, Edge 2015-2021, Fusion 2013-2020 & Lincoln MKZ/MKX (2013-2022)', descripcionCorta: 'Filtro de cabina Motorcraft OEM, fibra sintética densificada, protege HVAC y mejora calidad del aire interior.', descripcionDetallada: `Filtro de habitáculo OEM Motorcraft #${upper}. Fibra sintética 3 densidades. Retiene partículas ≥1 micra. Intervalo: 20,000 km.` };
-
-      // ── COMBUSTIBLE: Bomba de Gasolina Toyota 23221/23220
-      else if (/^23221[0-9A-Z]{5}|^23220[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bomba de Gasolina (Fuel Pump) Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Yaris 1.5L 2007-2020, Camry 2.5L 2AR-FE 2012-2019, RAV4 2.5L 2013-2019 & Hilux 2.7L 2TR-FE 2005-2022', descripcionCorta: 'Bomba de gasolina en-tanque Toyota OEM, caudal 100-120 L/h @ 50 PSI, módulo completo con flotador.', descripcionDetallada: `Bomba de gasolina OEM Toyota #${upper}. Tipo sumergible. Motor brushless. Presión 3.0-3.5 bar. Incluye flotador y regulador de presión. Garantía 1 año/40,000 km.` };
-      // ── COMBUSTIBLE: Filtro de gasolina Toyota 23300
-      else if (/^23300[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Gasolina / Combustible Toyota OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Toyota Corolla 1.6L/1.8L, Yaris 1.3/1.5L, Camry 2.4/2.5L, RAV4 & Tacoma 2.7L (1995-2020)', descripcionCorta: 'Filtro de gasolina en línea Toyota OEM, filtración 10 micras, carcasa acero inoxidable.', descripcionDetallada: `Filtro combustible OEM Toyota #${upper}. Papel plisado alta densidad. Presión máx. 100 PSI. Rosca M14×1.5.` };
-      // ── COMBUSTIBLE: Cuerpo de aceleración Toyota 22030/23801
-      else if (/^22030[0-9A-Z]{5}|^23801[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Cuerpo de Aceleración (Throttle Body) Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Camry 2.5L 2AR-FE 2012-2019, RAV4 & Matrix 1.8L (2009-2014)', descripcionCorta: 'Cuerpo de aceleración electrónico ETCS-i Toyota OEM, mariposa 60 mm, drive-by-wire.', descripcionDetallada: `Cuerpo aceleración OEM Toyota #${upper}. Sistema ETCS-i drive-by-wire. Sensor TPS integrado doble pista. Sin mantenimiento.` };
-      // ── ARRANQUE: Motor de arranque Toyota 28100
-      else if (/^28100[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Motor de Arranque (Starter Motor) Toyota OEM (${upper})`, categoria: 'Baterías y Electricidad', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Yaris 1.5L, Camry 2.5L 2AR-FE & RAV4 2.5L (2006-2019)', descripcionCorta: 'Motor de arranque Toyota OEM 1.0-1.4 kW, reducción planetaria, solenoide 12V/200A.', descripcionDetallada: `Arrancador OEM Toyota #${upper}. Potencia 1.0-1.4 kW. Reducción planetaria 4:1. Solenoide 12V/200A. Vida >100,000 arranques.` };
-      // ── ALTERNADOR: Toyota 27060
-      else if (/^27060[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Alternador Toyota OEM (${upper})`, categoria: 'Baterías y Electricidad', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Camry 2.5L 2AR-FE 2012-2019, RAV4 & Yaris 1.5L (2006-2020)', descripcionCorta: 'Alternador Toyota OEM 80-100A, regulador integrado, polea OAD desacopladora.', descripcionDetallada: `Alternador OEM Toyota #${upper}. 80-100A / 14.0-14.5V. Regulador electrónico integrado. Temperatura -40°C a +120°C. Vida >200,000 km.` };
-      // ── SUSPENSIÓN: Amortiguador delantero Toyota 48520
-      else if (/^48520[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Amortiguador Delantero Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 1.8L 2009-2019, Yaris 2006-2021, Matrix 2009-2014 & Scion xD/xB (2008-2015)', descripcionCorta: 'Amortiguador delantero Toyota OEM gas nitrógeno monotubo, vástago acero nitrurado Ø26 mm.', descripcionDetallada: `Amortiguador delantero OEM Toyota #${upper}. Monotubo gas N₂ 20 bar. Vástago nitrurado. Temperatura -40°C a +80°C.` };
-      // ── SUSPENSIÓN: Amortiguador trasero Toyota 48530
-      else if (/^48530[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Amortiguador Trasero Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 1.8L 2009-2019, Yaris 2006-2021, Matrix 2009-2014 & RAV4 (2006-2018)', descripcionCorta: 'Amortiguador trasero Toyota OEM doble tubo, válvula de control progresivo.', descripcionDetallada: `Amortiguador trasero OEM Toyota #${upper}. Doble tubo. Cilindro 46 mm. Aceite SAE 5W calibrado.` };
-      // ── KYB shock absorbers
-      else if (/^333[0-9]{3,4}$|^344[0-9]{3,4}$/i.test(cleanUpper))
-        populatedData = { titulo: `Amortiguador KYB Excel-G / Gas-a-Just (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota, Nissan, Honda, Hyundai & Kia (consultar catálogo KYB por número)', descripcionCorta: 'Amortiguador KYB gas nitrógeno OEM-compatible, especificaciones de fábrica.', descripcionDetallada: `Amortiguador KYB #${upper}. Gas N₂. Vástago cromado duro. Certificado IATF 16949.` };
-      // ── SUSPENSIÓN: Cubo de rueda Toyota 43550/43560
-      else if (/^43550[0-9A-Z]{5}|^43560[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Cubo / Manzana de Rueda Delantera Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 1.8L 2009-2019, Yaris 2006-2020, Matrix 2009-2014 & RAV4 2.5L (2006-2018)', descripcionCorta: 'Cubo de rueda Toyota OEM rodamiento doble hilera sellado y sensor ABS integrado.', descripcionDetallada: `Cubo de rueda OEM Toyota #${upper}. Rodamiento sellado de por vida. Sensor ABS Hall integrado. Apriete 103 N·m.` };
-      // ── SUSPENSIÓN: Rótula Toyota 43330/48654
-      else if (/^43330[0-9A-Z]{5}|^48654[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Rótula de Suspensión (Ball Joint) Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 2003-2019, Yaris 2006-2020, Matrix 2003-2014, RAV4 2.5L & Tacoma (2005-2022)', descripcionCorta: 'Rótula delantera inferior Toyota OEM con bota de hule sellada, PTFE autolubricado.', descripcionDetallada: `Rótula OEM Toyota #${upper}. PTFE autolubricado. Articulación ±30°. Carga axial máx. 12 kN.` };
-      // ── SUSPENSIÓN: Eslabón estabilizadora Toyota 48820/48825
-      else if (/^48820[0-9A-Z]{5}|^48825[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Eslabón Barra Estabilizadora (Sway Bar Link) Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 2003-2019, Yaris 2006-2020, Camry 2.4/2.5L, RAV4 & Tacoma (2005-2022)', descripcionCorta: 'Eslabón barra estabilizadora Toyota OEM con rótulas esféricas selladas de acero forjado.', descripcionDetallada: `Eslabón OEM Toyota #${upper}. Vástago forjado. Rótulas selladas PTFE. Par apriete 43 N·m.` };
-      // ── DIRECCIÓN: Terminal exterior Toyota 45516
-      else if (/^45516[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Terminal de Dirección Exterior (Outer Tie Rod) Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 2003-2019, Yaris, Matrix 2003-2014, Camry 2.4/2.5L & RAV4 (2006-2018)', descripcionCorta: 'Terminal exterior Toyota OEM con rótula esférica sellada PTFE, sin mantenimiento.', descripcionDetallada: `Terminal dirección exterior OEM Toyota #${upper}. PTFE autolubricado. Bota hule resistente a ozono. Apriete 55 N·m.` };
-      // ── DIRECCIÓN: Terminal interior Toyota 45503
-      else if (/^45503[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Terminal de Dirección Interior (Inner Tie Rod) Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 2003-2019, Matrix 2003-2014, Camry 2.4/2.5L & RAV4 (2006-2018)', descripcionCorta: 'Terminal interior de dirección Toyota OEM forjado SAE 1040, rosca M16.', descripcionDetallada: `Terminal dirección interior OEM Toyota #${upper}. Forjado acero SAE 1040. Bola esférica endurecida. Apriete 90 N·m.` };
-      // ── FRENOS: Cilindro maestro Toyota 47510
-      else if (/^47510[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Cilindro Maestro de Freno Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Camry 2.4/2.5L, RAV4 & Yaris (2006-2020)', descripcionCorta: 'Cilindro maestro de freno Toyota OEM aluminio Ø22.22 mm, depósito integrado.', descripcionDetallada: `Cilindro maestro OEM Toyota #${upper}. Aluminio fundido. Émbolo primario/secundario anodizado. Compatible DOT 3/4.` };
-      // ── FRENOS: Caliper Toyota 47730/47750
-      else if (/^47730[0-9A-Z]{5}|^47750[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Caliper de Freno Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 2009-2019, Camry 2.5L, RAV4 & Yaris (2006-2020)', descripcionCorta: 'Caliper de disco Toyota OEM pistón de acero inox, sellos nuevos, guías lubricadas.', descripcionDetallada: `Caliper OEM Toyota #${upper}. Pistón Ø38-42 mm acero inox. Guías lubricadas. Presión máx. 200 bar.` };
-      // ── FRENOS: Disco/rotor Toyota 43206/43512
-      else if (/^43206[0-9A-Z]{5}|^43512[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Disco / Rotor de Freno Toyota OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Yaris 2006-2020, Camry, RAV4 & Matrix (2003-2014)', descripcionCorta: 'Disco de freno ventilado Toyota OEM hierro gris fundido, equilibrado dinámico.', descripcionDetallada: `Disco de freno OEM Toyota #${upper}. Hierro gris GG25. Girado y equilibrado. Espesor mínimo gravado.` };
-      // ── TRANSMISIÓN: Disco de embrague Toyota 04311
-      else if (/^04311[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Disco de Embrague Toyota OEM (${upper})`, categoria: 'Transmisión y Tren Motriz', compatibilidad: 'Toyota Corolla 1.8L (1ZZ-FE/2ZR-FE) 2000-2019, Matrix 2003-2014, Yaris 1.5L & Celica 1.8L (2000-2005)', descripcionCorta: 'Disco de embrague Toyota OEM orgánico-cerámico Ø215 mm, amortiguadores de torsión doble efecto.', descripcionDetallada: `Disco embrague OEM Toyota #${upper}. Ø215 mm. Forros cerámico-orgánicos. Amortiguadores torsión ±6°. Par máx. 200 N·m.` };
-      // ── TRANSMISIÓN: Plato de presión Toyota 31250
-      else if (/^31250[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Plato de Presión de Embrague (Pressure Plate) Toyota OEM (${upper})`, categoria: 'Transmisión y Tren Motriz', compatibilidad: 'Toyota Corolla 1.8L 2000-2019, Matrix, RAV4 2.0L & Celica (2000-2005)', descripcionCorta: 'Plato de presión Toyota OEM diafragma Belleville, fuerza 6.2 kN, equilibrado G6.3.', descripcionDetallada: `Plato presión OEM Toyota #${upper}. Hierro gris. Diafragma Belleville. Equilibrado dinámico G6.3.` };
-      // ── TRANSMISIÓN: Semieje / CV axle Toyota 43470/43430
-      else if (/^43470[0-9A-Z]{5}|^43430[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Semieje / Junta Homocinética (CV Axle) Toyota OEM (${upper})`, categoria: 'Transmisión y Tren Motriz', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Matrix 2003-2014, Yaris 2006-2020 & RAV4 2.5L (2006-2018)', descripcionCorta: 'Semieje Toyota OEM con junta CV exterior y junta triple rodillo interior selladas.', descripcionDetallada: `Semieje OEM Toyota #${upper}. Eje 28CrMoV. Junta Birfield Ø55 mm exterior. Junta triple rodillo ±25°. Bota butadieno-nitrilo.` };
-      // ── REFRIGERACIÓN: Radiador Toyota 16400/16410
-      else if (/^16400[0-9A-Z]{5}|^16410[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Radiador de Motor Toyota OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Yaris 1.5L 2006-2020, Matrix 2003-2014, Camry 2.4/2.5L & RAV4 (2006-2018)', descripcionCorta: 'Radiador Toyota OEM núcleo aluminio + tanques plástico, flujo cruzado alta eficiencia.', descripcionDetallada: `Radiador OEM Toyota #${upper}. Aletas aluminio 100%. Tanques PA66. Caudal 60 L/min. Presión 1.5 bar.` };
-      // ── REFRIGERACIÓN: Bomba de agua Toyota 16100/16110
-      else if (/^16100[0-9A-Z]{5}|^16110[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bomba de Agua (Water Pump) Toyota OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Toyota Corolla 1.8L (1ZZ-FE/2ZR-FE) 2000-2019, Camry 2.4/2.5L, RAV4, Tacoma 2.7L & Hilux (2005-2022)', descripcionCorta: 'Bomba de agua Toyota OEM impulsor aluminio, sello SiC/grafito, accionada por correa serpentín.', descripcionDetallada: `Bomba de agua OEM Toyota #${upper}. Impulsor aluminio. Sello SiC/Grafito. Caudal 50-80 L/min. Compatible LLC Toyota.` };
-      // ── REFRIGERACIÓN: Ventilador eléctrico Toyota 16801/16802
-      else if (/^16801[0-9A-Z]{5}|^16802[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Ventilador Eléctrico de Radiador Toyota OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Toyota Corolla 1.8L 2009-2019, Yaris 2006-2020, Matrix & RAV4 (2006-2018)', descripcionCorta: 'Módulo ventilador eléctrico Toyota OEM 12V/16A, aspas 7 paletas aerodinámica.', descripcionDetallada: `Ventilador OEM Toyota #${upper}. 12V DC / 200W. Caudal 800 m³/h. Temperatura -40°C a +85°C.` };
-      // ── A/C: Compresor Toyota 88320/88310
-      else if (/^88320[0-9A-Z]{5}|^88310[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Compresor de Aire Acondicionado Toyota OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Toyota Corolla 1.8L 2009-2019, Camry 2.5L 2012-2019, RAV4 2.5L, Yaris & Sienna 3.5L (2006-2022)', descripcionCorta: 'Compresor A/C Toyota OEM pistón axial variable 7 cilindros, embrague electromagnético.', descripcionDetallada: `Compresor A/C OEM Toyota #${upper}. Pistón axial variable. Desplazamiento 130-180 cc/rev. Embrague 12V. Refrigerante R134a/R1234yf.` };
-      // ── A/C: Condensador Toyota 88501/88450
-      else if (/^88501[0-9A-Z]{5}|^88450[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Condensador de Aire Acondicionado Toyota OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Toyota Corolla 2009-2019, Camry 2.5L 2012-2019, RAV4, Yaris & Sienna (2006-2022)', descripcionCorta: 'Condensador A/C Toyota OEM aluminio microceldas, eficiencia 100-120 kW.', descripcionDetallada: `Condensador A/C OEM Toyota #${upper}. Aluminio microceldas. Tubos planos 25 mm. Presión máx. 42 bar. R134a/R1234yf.` };
-      // ── DISTRIBUCIÓN: Kit cadena Toyota 13070/13073
-      else if (/^13070[0-9A-Z]{5}|^13073[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Kit de Cadena de Distribución (Timing Chain Kit) Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/2ZR-FAE) 2009-2019, Matrix 2009-2014, Scion xD/xB & RAV4 2.5L (2013-2018)', descripcionCorta: 'Kit distribución Toyota OEM completo: cadena, tensores hidráulicos, guías y piñones.', descripcionDetallada: `Kit distribución OEM Toyota #${upper}. Cadena dúplex silenciosa. Tensor hidráulico ratchet. Piñones nitrurados. Paso 9.525 mm.` };
-      // ── DISTRIBUCIÓN: Correa de distribución Toyota 13568/13507
-      else if (/^13568[0-9A-Z]{5}|^13507[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Correa de Distribución (Timing Belt) Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Camry 2.4L 2AZ-FE 2002-2011, RAV4 2.4L, Tacoma 2.7L 2TR-FE & Hilux (2005-2015)', descripcionCorta: 'Correa de distribución Toyota OEM HNBR fibra aramida, resistente a 130°C.', descripcionDetallada: `Correa distribución OEM Toyota #${upper}. HNBR + fibra Kevlar. Temperatura -40°C a +130°C. Intervalo 90,000 km.` };
-      // ── MOTOR: Bomba de aceite Toyota 15100/15010
-      else if (/^15100[0-9A-Z]{5}|^15010[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bomba de Aceite Motor Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2ZR-FE 2009-2019, Camry 2.4L 2AZ-FE 2002-2011, RAV4 & Tacoma 2.7L (2005-2015)', descripcionCorta: 'Bomba de aceite trochoide Toyota OEM, presión 3.5-5.0 bar, válvula de alivio integrada.', descripcionDetallada: `Bomba aceite OEM Toyota #${upper}. Tipo trochoide. Presión 49 PSI @ 1,000 RPM. Válvula alivio calibrada.` };
-      // ── MOTOR: Soporte de motor Toyota 12361/12372
-      else if (/^12361[0-9A-Z]{5}|^12372[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Soporte / Cuna de Motor (Engine Mount) Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Matrix 2003-2014, Yaris, Camry 2.4/2.5L & RAV4 (2006-2018)', descripcionCorta: 'Soporte de motor hidráulico Toyota OEM con cámara de fluido para amortiguación activa.', descripcionDetallada: `Soporte motor OEM Toyota #${upper}. Hidráulico anti-vibratorio. Hule NR + metal acero. Apriete 55 N·m.` };
-      // ── ESCAPE: Catalizador Toyota 17505/17560
-      else if (/^17505[0-9A-Z]{5}|^17560[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Catalizador / Convertidor Catalítico Toyota OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Camry 2.4/2.5L, RAV4 & Tacoma 2.7L (2005-2015)', descripcionCorta: 'Catalizador Toyota OEM tres vías Pt/Pd/Rh, celda 400 cpsi, certificado Euro 5/6.', descripcionDetallada: `Catalizador OEM Toyota #${upper}. Sustrato cordierita 400 cpsi. Washcoat Pt/Pd/Rh. Temperatura light-off <250°C.` };
-      // ── CARROCERÍA: Capó Toyota 53101/53111
-      else if (/^53101[0-9A-Z]{5}|^53111[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Cofre / Capó Toyota OEM (${upper})`, categoria: 'Piezas de Carrocería & Accesorios', compatibilidad: 'Toyota Corolla, Camry, RAV4, Yaris & Tacoma (según año y generación)', descripcionCorta: 'Cofre Toyota OEM acero estampado de alta resistencia, tratamiento catódico anticorrosivo.', descripcionDetallada: `Cofre OEM Toyota #${upper}. Acero AHSS 350 MPa. Recubrimiento e-coat 25 micras + primer.` };
-
-      // ═══ NISSAN: intake, sensors, ignition, electrical ═══
-      else if (/^16576[0-9A-Z]{5}|^16578[0-9A-Z]{5}|^16555[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Manguera / Resonador Admision Nissan OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Nissan Altima 2.5L QR25DE, Sentra 1.8L/2.0L, Versa 1.6L HR16DE, Frontier 2.5L/4.0L & Murano VQ35DE (2002-2020)', descripcionCorta: 'Manguera admision Nissan OEM EPDM reforzado, union hermetica sin fugas.', descripcionDetallada: `Manguera admision OEM Nissan #${upper}. EPDM + malla metalica. -40C a +135C.` };
-      else if (/^16500[0-9A-Z]{5}|^16502[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Caja del Filtro de Aire Nissan OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Nissan Altima QR25DE, Sentra 2.0L, Versa HR16DE, Frontier 4.0L & Murano VQ35DE (2002-2019)', descripcionCorta: 'Caja filtro de aire Nissan OEM PA66+GF20 con camara de silenciamiento.', descripcionDetallada: `Caja filtro OEM Nissan #${upper}. PA66+GF20. Camara resonancia integrada.` };
-      else if (/^22630[0-9A-Z]{5}|^22632[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor ECT Temperatura Refrigerante Nissan OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Nissan Altima QR25DE, Sentra, Versa HR16DE, Frontier, Murano & Pathfinder VQ35DE (2002-2020)', descripcionCorta: 'Sensor ECT Nissan OEM NTC, rango -40C a +130C, rosca M12x1.5.', descripcionDetallada: `Sensor ECT OEM Nissan #${upper}. NTC termistor. Resistencia 20C: 2.5 kOhm. Rosca M12x1.5.` };
-      else if (/^22448[0-9A-Z]{5}|^22449[0-9A-Z]{5}|^22433[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Nissan OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Nissan Altima QR25DE, Sentra QR20DE, Versa HR16DE, X-Trail & Frontier VQ40DE (2002-2020)', descripcionCorta: 'Bobina COP Nissan OEM tension 35 kV, temperatura -40C a +130C.', descripcionDetallada: `Bobina COP OEM Nissan #${upper}. 35 kV secundaria. Resistencia primaria 0.5-0.7 Ohm.` };
-      else if (/^22401[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bujia de Encendido Nissan OEM / NGK (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Nissan Altima QR25DE, Sentra, Versa HR16DE, Frontier 4.0L & Murano VQ35DE (2002-2020)', descripcionCorta: 'Bujia Nissan OEM (NGK iridio/platino), gap 1.1 mm, vida 60,000-100,000 km.', descripcionDetallada: `Bujia OEM Nissan/NGK #${upper}. Iridio o platino. Gap 1.1 mm. Rosca M14x1.25.` };
-      else if (/^11810[0-9A-Z]{5}|^14411[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV Nissan OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Nissan Altima QR25DE, Sentra, Versa, Frontier 2.5L/4.0L & Pathfinder VQ35DE (2002-2020)', descripcionCorta: 'Valvula PCV Nissan OEM diafragma NBR, regula presion del carter.', descripcionDetallada: `Valvula PCV OEM Nissan #${upper}. Diafragma NBR. Reemplazo 40,000-60,000 km.` };
-
-      // ═══ HONDA: intake, sensors, ignition, electrical ═══
-      else if (/^17228[0-9A-Z]{5}|^17232[0-9A-Z]{5}|^17220[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Manguera / Resonador Admision Honda OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Honda Civic 1.5T/1.8L/2.0L 2006-2021, Accord 2.4L/3.5L 2008-2022, CR-V, HR-V & Pilot 3.5L V6 (2009-2022)', descripcionCorta: 'Manguera admision Honda OEM EPDM antiestatico, union hermetica sin fugas.', descripcionDetallada: `Manguera admision OEM Honda #${upper}. EPDM antiestatico. -40C a +135C. Abrazaderas torsion.` };
-      else if (/^37870[0-9A-Z]{5}|^37760[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor ECT Temperatura Refrigerante Honda OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Honda Civic 1.8L/2.0L 2006-2021, Accord 2.4L/3.5L 2008-2022, CR-V, HR-V & Pilot 3.5L V6 (2009-2022)', descripcionCorta: 'Sensor ECT Honda OEM NTC, rango -40C a +130C, rosca M12x1.5.', descripcionDetallada: `Sensor ECT OEM Honda #${upper}. NTC termistor. Resistencia 20C: 2.3 kOhm. Rosca M12x1.5.` };
-      else if (/^30520[0-9A-Z]{5}|^30521[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Honda OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Honda Civic 1.8L 2006-2015, Accord 2.4L K24Z 2008-2017, CR-V 2.4L, HR-V & Pilot 3.5L V6 (2009-2020)', descripcionCorta: 'Bobina COP Honda OEM tension 30 kV, temperatura -40C a +130C.', descripcionDetallada: `Bobina COP OEM Honda #${upper}. 30 kV secundaria. Resistencia primaria 0.6-0.8 Ohm.` };
-      else if (/^17130[0-9A-Z]{5}|^11920[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV Honda OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Honda Civic 1.8L 2006-2015, Accord 2.4L, CR-V 2.4L, HR-V & Pilot 3.5L V6 (2009-2020)', descripcionCorta: 'Valvula PCV Honda OEM diafragma NBR, reemplazo cada 50,000 km.', descripcionDetallada: `Valvula PCV OEM Honda #${upper}. Diafragma NBR. -40C a +110C.` };
-
-      // ═══ MOPAR: intake, sensors, ignition, electrical ═══
-      else if (/^56028172AA|^56028172AB|^05149090AA/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor ECT Temperatura Refrigerante Mopar OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Jeep Grand Cherokee 3.6L/5.7L 2011-2021, Dodge Durango, RAM 1500 3.6L/5.7L & Chrysler 300 (2011-2021)', descripcionCorta: 'Sensor ECT Mopar OEM NTC, rango -40C a +130C, conector Metripack 2 pines.', descripcionDetallada: `Sensor ECT OEM Mopar #${upper}. NTC. Rosca M12x1.5. Conector Metripack 2 pines.` };
-      else if (/^56028394AA|^56028394AB|^68241469AA/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Mopar OEM 3.6L Pentastar (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Jeep Grand Cherokee/Wrangler 3.6L Pentastar 2011-2021, Dodge Durango, RAM 1500 3.6L & Chrysler 300 3.6L (2011-2022)', descripcionCorta: 'Bobina COP Mopar OEM Pentastar V6, tension 35 kV, temperatura -40C a +130C.', descripcionDetallada: `Bobina COP OEM Mopar #${upper}. 35 kV secundaria. Resistencia primaria 0.5-0.7 Ohm. Conector 3 pines.` };
-      else if (/^04893903AA|^4893903AA|^04612358AA/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV Mopar OEM 3.6L Pentastar (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Jeep Grand Cherokee 3.6L Pentastar 2011-2021, Dodge Durango, RAM 1500 3.6L & Chrysler 300 3.6L (2011-2022)', descripcionCorta: 'Valvula PCV Mopar OEM diafragma NBR para motor Pentastar 3.6L.', descripcionDetallada: `Valvula PCV OEM Mopar #${upper}. Diafragma NBR. Motor Pentastar 3.6L. Reemplazo 40,000-60,000 km.` };
-
-      // ═══ GM/AC DELCO: sensors, ignition, electrical ═══
-      else if (/^12591966$|^25036979$|^10096163$|^12146312$/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor ECT Temperatura Refrigerante AC Delco/GM OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Chevrolet Silverado 4.8L/5.3L/6.0L V8 1999-2020, Suburban, Tahoe, Equinox & GMC Sierra (2000-2022)', descripcionCorta: 'Sensor ECT AC Delco OEM NTC, rosca 3/8-18 NPT, conector Metripack 2 pines GM.', descripcionDetallada: `Sensor ECT OEM GM/AC Delco #${upper}. NTC. Rosca 3/8-18 NPT. Conector Metripack 2 pines.` };
-      else if (/^D585$|^D581$|^D576$|^12563293$|^12611424$/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido Redonda LS AC Delco/GM OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Chevrolet Silverado/Tahoe 4.8L/5.3L/6.0L/6.2L LS V8, Camaro 6.2L, Corvette & GMC Sierra (1999-2022)', descripcionCorta: 'Bobina redonda LS GM OEM, tension 40 kV, alta energia para V8 LS Series.', descripcionDetallada: `Bobina LS OEM GM/AC Delco #${upper}. 40 kV secundaria. Resistencia primaria 0.4-0.6 Ohm.` };
-      else if (/^41962$|^41985$|^41993$|^41106$|^41121$/i.test(cleanUpper))
-        populatedData = { titulo: `Bujia de Encendido AC Delco OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Chevrolet Silverado/Tahoe 4.8L/5.3L/6.0L V8, Equinox 2.4L/2.5L & GMC Sierra (1999-2022)', descripcionCorta: 'Bujia AC Delco OEM iridio doble/platino, vida 100,000 km.', descripcionDetallada: `Bujia OEM AC Delco #${upper}. Electrodo iridio doble. Gap 1.1 mm. Rosca M14x1.25.` };
-      else if (/^12342902$|^6479671$|^12610278$/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV AC Delco/GM OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Chevrolet Silverado 4.8L/5.3L/6.0L V8 2000-2020, Suburban, Tahoe, Camaro & GMC Sierra (2000-2020)', descripcionCorta: 'Valvula PCV AC Delco OEM diafragma NBR para motores V8 LS Series.', descripcionDetallada: `Valvula PCV OEM GM/AC Delco #${upper}. Diafragma NBR. Motor LS Series V8.` };
-
-      // ═══ FORD/MOTORCRAFT: sensors, ignition, electrical ═══
-      else if (/^DY1116$|^DY1117$|^DY1118$|^SW6270$|^SW6271$/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor ECT Temperatura Refrigerante Motorcraft OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Ford F-150 3.5L EcoBoost/5.0L Coyote V8 2011-2022, Explorer 3.5L, Mustang 2.3L/5.0L & Edge 2.0L (2013-2022)', descripcionCorta: 'Sensor ECT Motorcraft OEM NTC, rango -40C a +130C, conector Metripack 2 pines Ford.', descripcionDetallada: `Sensor ECT OEM Motorcraft #${upper}. NTC. Rosca M12x1.5 o M14x1.5. Conector Metripack Ford.` };
-      else if (/^DG491$|^DG513$|^DG521$|^DG535$|^DG536$/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Motorcraft OEM EcoBoost/V8 (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Ford F-150 3.5L EcoBoost/5.0L Coyote, Explorer 3.5L, Mustang 2.3T/5.0L & Edge 2.0L EcoBoost (2011-2022)', descripcionCorta: 'Bobina COP Motorcraft OEM tension 35 kV para motores EcoBoost/Coyote.', descripcionDetallada: `Bobina COP OEM Motorcraft #${upper}. 35 kV secundaria. Resistencia primaria 0.5-0.7 Ohm.` };
-      else if (/^SP546$|^SP515$|^SP479$|^SP479A$|^SP520$/i.test(cleanUpper))
-        populatedData = { titulo: `Bujia de Encendido Motorcraft OEM Ford (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Ford F-150 3.5L EcoBoost/5.0L Coyote, Explorer 3.5L, Mustang 2.3L/5.0L & Edge 2.0L EcoBoost (2011-2022)', descripcionCorta: 'Bujia Motorcraft OEM platino/iridio, vida 100,000 millas.', descripcionDetallada: `Bujia OEM Motorcraft #${upper}. Platino doble o iridio. Hexagono 16 mm. Resistencia 5 kOhm.` };
-      else if (/^EV224$|^EV138$|^EV193$|^EV225$/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV Motorcraft OEM Ford (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Ford F-150 3.5L EcoBoost/5.0L Coyote, Explorer 3.5L, Mustang 2.3L/5.0L & Edge 2.0L EcoBoost (2011-2022)', descripcionCorta: 'Valvula PCV Motorcraft OEM diafragma FKM para motores EcoBoost/Coyote.', descripcionDetallada: `Valvula PCV OEM Motorcraft #${upper}. Diafragma FKM. Motor EcoBoost/Coyote. Reemplazo 50,000 km.` };
-
-      // ═══ HYUNDAI/KIA: intake, sensors, ignition, electrical ═══
-      else if (/^282102B000|^282102E000|^281122B010/i.test(cleanUpper))
-        populatedData = { titulo: `Manguera / Resonador Admision Hyundai/Kia Mobis OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Hyundai Elantra 1.6L G4FC/2.0L G4KD 2007-2020, Tucson, Sonata & Kia Cerato, Sportage, Optima (2006-2021)', descripcionCorta: 'Manguera admision Hyundai/Kia OEM EPDM reforzado, union hermetica.', descripcionDetallada: `Manguera admision OEM Mobis #${upper}. EPDM reforzado. -40C a +135C.` };
-      else if (/^392202B000|^392202G000|^392204A000/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor ECT Temperatura Refrigerante Hyundai/Kia OEM (${upper})`, categoria: 'Inyeccion y Sensores', compatibilidad: 'Hyundai Elantra 1.6L G4FC/2.0L G4KD 2007-2020, Tucson, Sonata & Kia Cerato, Sportage, Optima (2006-2021)', descripcionCorta: 'Sensor ECT Hyundai/Kia Mobis OEM NTC, rango -40C a +130C, rosca M12x1.5.', descripcionDetallada: `Sensor ECT OEM Mobis #${upper}. NTC. Resistencia 20C: 2.4 kOhm. Rosca M12x1.5.` };
-      else if (/^273012B010|^273012G010|^273014H000/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Hyundai/Kia Mobis OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Hyundai Elantra 1.6L G4FC/2.0L G4KD 2007-2020, Tucson, Sonata & Kia Cerato, Sportage, Optima (2006-2021)', descripcionCorta: 'Bobina COP Hyundai/Kia OEM tension 32 kV, temperatura -40C a +130C.', descripcionDetallada: `Bobina COP OEM Mobis #${upper}. 32 kV secundaria. Resistencia primaria 0.6-0.8 Ohm.` };
-      else if (/^267402B000|^267402G000|^267404H000/i.test(cleanUpper))
-        populatedData = { titulo: `Valvula PCV Hyundai/Kia Mobis OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Hyundai Elantra 1.6L G4FC/2.0L G4KD 2007-2020, Tucson, Sonata & Kia Cerato, Sportage, Optima (2006-2021)', descripcionCorta: 'Valvula PCV Hyundai/Kia Mobis OEM diafragma NBR, regula presion del carter.', descripcionDetallada: `Valvula PCV OEM Mobis #${upper}. Diafragma NBR. Reemplazo 40,000-60,000 km.` };
-            // ── TOYOTA TPMS sensor
-      else if (/^42607[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor TPMS Presión Neumáticos Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Tacoma 2007-2023, Tundra 2007-2021, 4Runner 2003-2024, Fortuner, Hilux, RAV4 & Camry (2007-2024)', descripcionCorta: 'Sensor TPMS 315/433 MHz calibrado Toyota, sin reprogramación adicional requerida.', descripcionDetallada: `Sensor TPMS OEM Toyota #${upper}. Batería litio 7-10 años. Rango 1.3-4.5 bar.` };
-      // ── TOYOTA O2 sensor
-      else if (/^89465[0-9A-Z]{5}|^89467[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor de Oxígeno (O2/Lambda) Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L 2009-2019, Matrix 2009-2014, RAV4 2.5L 2006-2018 & Camry 2.5L/3.5L 2007-2017', descripcionCorta: 'Sensor lambda O2 calentado 4 cables, respuesta <10 s en arranque frío, precisión ±0.5%.', descripcionDetallada: `Sensor O2 OEM Toyota #${upper}. Óxido de circonio estabilizado con platino. Reduce emisiones CO/HC.` };
-      // ── TOYOTA MAF sensor
-      else if (/^22204[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor MAF Flujo de Masa de Aire Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L 2003-2019, Yaris 1.5L, RAV4, Camry 2.5L & Sienna 3.5L (2002-2020)', descripcionCorta: 'Sensor MAF de hilo caliente Toyota OEM, medición ±0.5%, salida analógica 0-5V.', descripcionDetallada: `Sensor MAF OEM Toyota #${upper}. Película caliente de platino, resistente a humedad y partículas.` };
-      // ── TOYOTA fuel injectors
-      else if (/^23250[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Inyector de Combustible Multipunto Toyota OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Corolla 1.8L (1ZZ-FE/2ZR-FE) 2003-2019, Matrix & Camry 2.4L 2002-2011', descripcionCorta: 'Inyector multipunto Toyota 4 orificios, caudal 163 cc/min @ 43.5 PSI, atomización cónica sectorizada.', descripcionDetallada: `Inyector OEM Toyota #${upper}. Filtro 150 micras, bobina 12Ω. Apto gasolina 91-95 oct.` };
-      // ── TOYOTA clutch kit (AISIN)
-      else if (/^CKT[0-9]{3}[A-Z]?/i.test(cleanUpper))
-        populatedData = { titulo: `Kit de Embrague AISIN OEM Toyota Corolla 1.8L (${upper})`, categoria: 'Transmisión y Tren Motriz', compatibilidad: 'Toyota Corolla 1.8L (1ZZ-FE/2ZR-FE) 2003-2019, Matrix 2003-2014, Scion xB 2008-2015 & Celica 1.8L 2000-2005', descripcionCorta: 'Kit embrague AISIN OEM completo: disco, plato de presión y collarín para transmisión manual.', descripcionDetallada: `Kit embrague AISIN #${upper}. Disco cerámico-orgánico 8 segmentos, plato balanceado dinámicamente. Garantía 2años/60,000km.` };
-      // ── TOYOTA thermostat
-      else if (/^90916[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Termostato de Motor Toyota OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Toyota Corolla 1.6L/1.8L 2003-2019, Yaris 1.3/1.5L, RAV4 & Camry 2.4/2.5L (2000-2020)', descripcionCorta: 'Termostato de cera Toyota OEM, apertura a 82°C ±1.5°C para temperatura óptima del motor.', descripcionDetallada: `Termostato OEM Toyota #${upper}. Cera de alta pureza con resorte acero inox. Temperatura estable bajo carga.` };
-
-      // ── MOPAR Jeep Grand Cherokee steering damper
-      else if (/^52088898/i.test(cleanUpper))
-        populatedData = { titulo: `Amortiguador de Dirección Heavy Duty Mopar Jeep Grand Cherokee (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Jeep Grand Cherokee WJ 4.0L I6 & 4.7L V8 1999-2004, Jeep Wrangler TJ 2.5L/4.0L 1997-2006', descripcionCorta: 'Amortiguador estabilizador de dirección hidráulico Mopar Heavy Duty, elimina trampa de volante y vibraciones.', descripcionDetallada: `Amortiguador dirección OEM Mopar #${upper}. Doble tubo gas nitrógeno. Rango -40°C a +120°C.` };
-      // ── MOPAR ECM Jeep/Dodge 3.6L Pentastar
-      else if (/^68568655/i.test(cleanUpper))
-        populatedData = { titulo: `Computadora ECM/ECU Mopar OEM Jeep/Dodge 3.6L V6 Pentastar (${upper})`, categoria: 'Baterías y Electricidad', compatibilidad: 'Jeep Grand Cherokee WK2 3.6L V6 Pentastar 2014-2021, Dodge Durango 3.6L 2014-2020, RAM 1500 3.6L 2013-2019', descripcionCorta: 'ECM/ECU Mopar reprogramable, gestiona inyección, encendido, EVAP y desactivación de cilindros MDS.', descripcionDetallada: `Computadora motor OEM Mopar #${upper}. Procesador ARM doble núcleo, 1,024 mapas, actualizable WiTECH 2.0.` };
-      // ── MOPAR PCM RAM 5.7L HEMI
-      else if (/^68079744/i.test(cleanUpper))
-        populatedData = { titulo: `PCM Computadora Motor Mopar OEM Dodge RAM 5.7L V8 HEMI (${upper})`, categoria: 'Baterías y Electricidad', compatibilidad: 'Dodge RAM 1500/2500 5.7L V8 HEMI 2009-2016, Jeep Grand Cherokee 5.7L 2011-2019, Dodge Durango 5.7L 2011-2020', descripcionCorta: 'PCM HEMI 5.7L con control MDS (desactivación de cilindros) y sistema VVT avanzado.', descripcionDetallada: `PCM OEM Mopar #${upper}. MDS 4/8 cilindros, calibrado 87-93 oct, actualizable vía StarScan/WiTECH.` };
-      // ── MOPAR oil filter
-      else if (/^04884899/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite Mopar Heavy Duty OEM (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Jeep Grand Cherokee 3.6L/5.7L, Dodge Durango, RAM 1500/2500, Wrangler JK & Chrysler 300 (2007-2024)', descripcionCorta: 'Filtro Mopar Heavy Duty, válvula anti-drenaje goma sintética y papel plisado de alta eficiencia.', descripcionDetallada: `Filtro OEM Mopar #${upper}. Retención ≥98% >25 micras. Rosca 3/4-16 UNF. Torque 20 Nm.` };
-      // ── MOPAR generic 68-series
-      else if (/^68[0-9]{8}[A-Z]{0,2}$/.test(cleanUpper))
-        populatedData = { titulo: `Repuesto Original Mopar OEM Jeep/Dodge/RAM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Jeep Grand Cherokee, Dodge Durango, RAM 1500/2500, Wrangler & Chrysler (2010-2024)', descripcionCorta: 'Componente de ingeniería original Mopar calibrado a estándares de planta Stellantis.', descripcionDetallada: `Repuesto OEM Mopar #${upper}. Ajuste exacto garantizado en Jeep, RAM y Dodge.` };
-      // ── MOPAR 52/53 chasis
-      else if (/^52[0-9]{8}[A-Z]{0,2}$/.test(cleanUpper) || /^53[0-9]{8}[A-Z]{0,2}$/.test(cleanUpper))
-        populatedData = { titulo: `Pieza Chasis/Carrocería Original Mopar Jeep/Dodge (${upper})`, categoria: 'Piezas de Carrocería & Accesorios', compatibilidad: 'Jeep Grand Cherokee WJ/WK/WK2, Wrangler TJ/JK/JL & Dodge Durango DS (1999-2024)', descripcionCorta: 'Pieza chasis/carrocería Mopar de polímero reforzado o acero estampado alta resistencia.', descripcionDetallada: `Pieza estructural OEM Mopar #${upper}. Tratamiento anticorrosivo catódico 60 micras.` };
-      // ── MOPAR 05/04 motor
-      else if (/^05[0-9]{8}[A-Z]{0,2}$/.test(cleanUpper) || /^04[0-9]{8}[A-Z]{0,2}$/.test(cleanUpper))
-        populatedData = { titulo: `Componente Motor/Tren Motriz Original Mopar OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Jeep Grand Cherokee, Dodge RAM 1500/2500/3500, Durango & Chrysler 300 (2005-2024)', descripcionCorta: 'Componente motor certificado Mopar, tolerancias de fábrica Stellantis.', descripcionDetallada: `Pieza OEM Mopar #${upper}. Bajo especificaciones FCA/Stellantis. Garantía de calidad de planta.` };
-
-      // ── AC DELCO PF48
-      else if (/^PF48[0-9]?$/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite AC Delco Gold PF48 Chevrolet/GMC V6/V8 (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Chevrolet Silverado 4.3L/5.3L/6.2L V8, Suburban, Tahoe & GMC Sierra (2001-2024)', descripcionCorta: 'Filtro AC Delco Gold PF48, elemento plisado 10 micras, válvula anti-drenaje EPDM.', descripcionDetallada: `Filtro AC Delco #${upper}. Retención ≥98% >10 micras. Rosca 13/16-16 UNF, bypass 16 PSI.` };
-      // ── AC DELCO PF63
-      else if (/^PF63[0-9]?$/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite AC Delco Gold PF63 Chevrolet Diesel/Turbo (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Chevrolet Silverado HD 6.6L Duramax, Equinox 1.5T, Cruze 1.4T/1.6D & Malibu 1.5T (2011-2024)', descripcionCorta: 'Filtro AC Delco Gold PF63, elemento sintético 3 capas para motores turbo de alta presión.', descripcionDetallada: `Filtro AC Delco #${upper}. Apto para aceites sintéticos hasta 15,000 km. Bypass 23 PSI.` };
-      // ── GM / AC DELCO generic
-      else if (/^(12|19|24|55|13|84|89)[0-9]{6}$/.test(cleanUpper))
-        populatedData = { titulo: `Repuesto Original AC Delco / General Motors OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Chevrolet Silverado, Tahoe, Suburban, Colorado, Malibu, Cruze, Equinox & GMC Sierra (2000-2024)', descripcionCorta: 'Componente AC Delco Gold de equipo original General Motors.', descripcionDetallada: `Repuesto OEM GM/AC Delco #${upper}. Tolerancias estrictas GM. Apto para aceites Dexos 1 Gen2.` };
-
-      // ── NGK TR55GP (V8 GM/Ford)
-      else if (/^TR55GP$|^TR55$/i.test(cleanUpper))
-        populatedData = { titulo: `Bujía NGK G-Power Platino TR55GP V8 Chevrolet/GMC/Ford (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Chevrolet Silverado/Suburban/Tahoe 4.8L/5.3L/6.0L V8 (1999-2013), GMC Sierra & Ford F-150 4.6L/5.4L Triton (1999-2010)', descripcionCorta: 'Bujía NGK G-Power Platino, electrodo platino puro 0.6 mm, encendido preciso y economía de combustible.', descripcionDetallada: `Bujía NGK #${upper}. Electrodo tierra cortado 30°. Resistor cerámico 5kΩ. Temperatura 850°C. Intervalo 60,000 km.` };
-      // ── NGK BKR series (4-cyl Toyota/Honda)
-      else if (/^BKR[0-9]E[A-Z0-9]{0,3}$/i.test(cleanUpper))
-        populatedData = { titulo: `Bujía NGK BKR Motor 4 Cilindros Toyota/Honda/Hyundai (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.6/1.8L, Yaris 1.3/1.5L, Honda Civic 1.5/1.6L, Accord 2.0L & Hyundai Elantra 1.6L (1995-2018)', descripcionCorta: 'Bujía NGK BKR de cobre o platino, electrodo proyectado para encendido óptimo en motores DOHC/SOHC.', descripcionDetallada: `Bujía NGK #${upper}. Alúmina 99% pureza. Intervalo 30,000 km (cobre) / 60,000 km (platino).` };
-      // ── NGK LFR Iridium IX (Toyota V6)
-      else if (/^LFR[0-9]AIX$|^LFR[0-9]A$/i.test(cleanUpper))
-        populatedData = { titulo: `Bujía NGK Iridium IX Motor V6 Toyota Fortuner/Tacoma/4Runner (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Fortuner 4.0L V6 (1GR-FE) 2005-2024, Tacoma 4.0L, Tundra 4.0L/4.6L & 4Runner 4.0L (2005-2024)', descripcionCorta: 'Bujía NGK Iridium IX, electrodo iridio 0.4 mm, alta durabilidad y baja tensión de encendido.', descripcionDetallada: `Bujía NGK Iridium #${upper}. Iridio-platino para 100,000 km. Gap 1.1 mm para motores V6 de alta compresión.` };
-      // ── DENSO Iridium IK series
-      else if (/^IK[0-9]{2}[A-Z]{0,2}$/i.test(cleanUpper))
-        populatedData = { titulo: `Bujía Denso Iridium Power Motor Toyota/Honda/Nissan (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE), Camry 2.5L (2AR-FE), RAV4, Honda Accord & Nissan Altima (2007-2024)', descripcionCorta: 'Bujía Denso Iridium Power, electrodo iridio 0.4 mm con recubrimiento platino en electrodo tierra.', descripcionDetallada: `Bujía Denso #${upper}. Doble blindaje platino-iridio. Gap 0.9 mm. Temperatura 1,000°C. Vida 100,000 km.` };
-
-      // ── BOSCH O2 sensor
-      else if (/^0258[0-9]{6}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor de Oxígeno Lambda Bosch OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Multimarca: VW, Audi, Mercedes-Benz, BMW, Toyota, Chevrolet & Ford (1995-2020)', descripcionCorta: 'Sensor O2 Bosch OEM de óxido de circonio calentado 4 cables, precisión ±0.5%.', descripcionDetallada: `Sensor O2 Bosch #${upper}. Calentamiento <20 seg. Temperatura 650-900°C. Vida 160,000 km.` };
-      // ── BOSCH fuel injector
-      else if (/^0280[0-9]{6}/i.test(cleanUpper))
-        populatedData = { titulo: `Inyector de Combustible Bosch EV6/EV14 OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Multimarca: Jeep, Ford, Chevrolet, Toyota, VW & BMW según caudal (2000-2024)', descripcionCorta: 'Inyector Bosch EV6/EV14, atomización 12 orificios láser, conector USCAR2 estándar.', descripcionDetallada: `Inyector Bosch #${upper}. Caudal 100-550 cc/min. Bobina 12Ω. Hasta 5 bar MPI / 200 bar GDI.` };
-      // ── BOSCH MAP sensor
-      else if (/^0261[0-9]{6}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor MAP Presión de Admisión Bosch OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'BMW, Mercedes-Benz, VW, Toyota & Ford con sistema Bosch Motronic (2000-2020)', descripcionCorta: 'Sensor MAP Bosch 20-400 kPa, salida analógica 0.5-4.5 V, compensado en temperatura.', descripcionDetallada: `Sensor MAP OEM Bosch #${upper}. Silicio piezoresistivo -40°C a 130°C. Precisión ±1.5 kPa.` };
-
-      // ── NISSAN MAF sensor
-      else if (/^22460[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Sensor MAF Flujo de Aire Nissan/Infiniti OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Nissan Altima 2.5L (QR25DE) 2002-2018, Sentra 1.8L/2.0L, Frontier 2.5L/4.0L & Infiniti G35/G37 2003-2013', descripcionCorta: 'Sensor MAF Nissan (Hitachi) hilo caliente de alta precisión, salida 0-5V con compensación de temperatura.', descripcionDetallada: `Sensor MAF OEM Nissan #${upper}. Respuesta <5 ms. Rango 8-1,800 m³/h.` };
-      // ── NISSAN fuel injector
-      else if (/^2306[0-9A-Z]{6}/i.test(cleanUpper))
-        populatedData = { titulo: `Inyector de Combustible Nissan OEM (${upper})`, categoria: 'Inyección y Sensores', compatibilidad: 'Nissan Altima 2.5L (QR25DE), Sentra 1.8L/2.0L (QG18DE/MR20DE) & Versa 1.6L/1.8L (2006-2019)', descripcionCorta: 'Inyector multipunto Nissan OEM, caudal 200 cc/min, atomización cono sólido 4 orificios.', descripcionDetallada: `Inyector OEM Nissan #${upper}. Acero inox, filtro 70 micras, bobina 14.5Ω.` };
-
-      // ── HYUNDAI/KIA brake pads (Mobis)
-      else if (/^58101[0-9A-Z]{5}|^58301[0-9A-Z]{5}/i.test(cleanUpper))
-        populatedData = { titulo: `Pastillas de Freno Hyundai/Kia OEM Mobis (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Hyundai Elantra 1.6/2.0L, Tucson 2.0/2.4L, Sonata & Kia Cerato, Sportage, Optima (2006-2024)', descripcionCorta: 'Pastillas cerámicas Hyundai/Kia Mobis OEM, baja emisión de polvo y frenado progresivo.', descripcionDetallada: `Pastillas OEM Mobis #${upper}. Cerámico sin amianto. Hasta 500°C. Indicador acústico integrado.` };
-      // ── HYUNDAI/KIA oil filter
-      else if (/^2630[0-9A-Z]{6}/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite Hyundai/Kia OEM Mobis (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Hyundai Elantra 1.6/2.0L (G4FC/G4KD), Tucson, Sonata & Kia Cerato, Sportage, Soul (2006-2024)', descripcionCorta: 'Filtro aceite Hyundai/Kia Mobis OEM, celulosa sintética, válvula anti-drenaje nitrilo alta temperatura.', descripcionDetallada: `Filtro OEM Mobis #${upper}. Eficiencia >99% @ 30 micras. Bypass 10 PSI.` };
-
-      // ── MOTORCRAFT oil filter (Ford)
-      else if (/^FL820S$|^FL2005$|^FL1A$/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite Motorcraft OEM Ford EcoBoost/Coyote (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'Ford F-150 3.5L EcoBoost/5.0L Coyote V8, Explorer, Edge 2.0L & Mustang 2.3L/5.0L (2011-2024)', descripcionCorta: 'Filtro Motorcraft de elemento sintético doble pared para aceites de intervalo extendido Ford.', descripcionDetallada: `Filtro OEM Motorcraft #${upper}. Sintético para 10,000+ km. Bypass 15 PSI.` };
-      // ── MOTORCRAFT COP coil (Ford)
-      else if (/^DG511$|^DG508$|^DG457$/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP Motorcraft OEM Ford 4.6L/5.4L V8 (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Ford F-150 4.6L/5.4L Triton V8, Explorer 4.6L, Expedition & Lincoln Navigator (2000-2010)', descripcionCorta: 'Bobina COP Motorcraft 95 mJ, ferrita de alta eficiencia, encendido completo a bajas RPM.', descripcionDetallada: `Bobina OEM Motorcraft #${upper}. Primaria 0.5Ω, secundaria 12kΩ. Chispa constante 1,000-6,500 RPM.` };
-
-      // ── MANN-FILTER oil filter
-      else if (/^HU[0-9]{3,4}[XZ]$|^W7[0-9]{2,4}$/i.test(cleanUpper))
-        populatedData = { titulo: `Filtro de Aceite Mann-Filter OEM Motor Europeo (${upper})`, categoria: 'Filtros y Consumibles', compatibilidad: 'VW, Audi, BMW, Mercedes-Benz & SEAT con motores 1.4T/1.6/1.8T/2.0T/3.0T (2000-2024)', descripcionCorta: 'Filtro Mann-Filter HU de papel sintético alta eficiencia, válvula anti-drenaje integrada.', descripcionDetallada: `Filtro Mann-Filter #${upper}. 7 micras para aceites Long Life 5W-30/0W-40. Certificado OEM VW/Audi y BMW LL-01.` };
-
-      // ── SUSPENSION shocks
-      else if (/SHOCK|AMORT|STRUT|Monroe|GABRIEL|KYB|RANCHO/i.test(cleanUpper))
-        populatedData = { titulo: `Amortiguador Gas Nitrógeno/Suspensión OEM (${upper})`, categoria: 'Frenos y Suspensión', compatibilidad: 'Vehículos 4x4 y SUV: Jeep, Toyota, Nissan, Ford & Chevrolet Heavy Duty', descripcionCorta: 'Amortiguador gas nitrógeno doble tubo para absorción de impactos y estabilidad.', descripcionDetallada: `Amortiguador OEM #${upper}. Control direccional en autopista y off-road. Temperatura -40°C a +120°C.` };
-      // ── CLUTCH/TRANSMISSION
-      else if (/CLUTCH|EMBRAGUE|EXEDY|LUK|SACHS|SEMIEJE|CARDAN|TRIPODE/i.test(cleanUpper))
-        populatedData = { titulo: `Kit Embrague / Componente Transmisión OEM (${upper})`, categoria: 'Transmisión y Tren Motriz', compatibilidad: 'Toyota, Chevrolet, Nissan, Ford & Hyundai con transmisión manual (2000-2024)', descripcionCorta: 'Kit embrague con disco de fricción, plato de presión y collarín. Acople suave sin vibraciones.', descripcionDetallada: `Kit OEM #${upper}. Disco cerámico-orgánico de alta temperatura. Garantía 2años/50,000km.` };
-      // ── IGNITION COILS
-      else if (/COIL|BOBINA|COP|ENCENDIDO/i.test(cleanUpper))
-        populatedData = { titulo: `Bobina de Encendido COP OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Vehículos multimarca con sistema COP: Toyota, Ford, GM, Jeep & Nissan (2000-2024)', descripcionCorta: 'Bobina COP alta energía de chispa (>100 mJ), núcleo ferrita, conector OEM original.', descripcionDetallada: `Bobina OEM #${upper}. Energía constante en todo el rango de RPM. Reduce emisiones HC.` };
-      // ── BELTS/CORREAS
-      else if (/BELT|CORREA|SERPENTIN|TIMING|6PK|7PK|8PK/i.test(cleanUpper))
-        populatedData = { titulo: `Correa Serpentín/Distribución OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Motores multimarca según longitud y sección', descripcionCorta: 'Correa EPDM reforzado con fibra poliamida, resistente a altas temperaturas y aceite.', descripcionDetallada: `Correa OEM #${upper}. Material EPDM hasta 150°C. Vida útil 60,000-90,000 km.` };
-      // ── WATER PUMP
-      else if (/PUMP|BOMBA|WATER PUMP|COOLANT PUMP/i.test(cleanUpper))
-        populatedData = { titulo: `Bomba de Agua/Refrigeración OEM (${upper})`, categoria: 'Fluidos y Refrigeración', compatibilidad: 'Motores multimarca según número de parte', descripcionCorta: 'Bomba impulsor metálico alta eficiencia con sello carburo de silicio, caudal 80-120 L/min.', descripcionDetallada: `Bomba OEM #${upper}. Resistente a anticongelante OAT/HOAT. Garantía 2 años.` };
-
-      // ── TOYOTA generic 5+5 format
-      else if (/^[0-9]{5}[0-9A-Z]{5}$/.test(cleanUpper))
-        populatedData = { titulo: `Repuesto Original Toyota Genuine Parts OEM (${upper})`, categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla, Yaris, Fortuner, Hilux, 4Runner, RAV4 & Machito (según motorización)', descripcionCorta: 'Componente Toyota Genuine Parts, encaje exacto y durabilidad bajo estándares GPS.', descripcionDetallada: `Repuesto OEM Toyota #${upper}. Estándares Toyota GPS. Inspección 100% en línea de fabricación. Garantía Genuine Parts.` };
-
-      // ── UNIVERSAL FALLBACK
-      else
-        populatedData = { titulo: `Repuesto Automotriz OEM #${upper}`, categoria: 'Filtros y Consumibles', compatibilidad: 'Consultar compatibilidad en catálogo OEM del fabricante', descripcionCorta: `Componente original o equivalente certificado OEM #${upper} para uso en taller.`, descripcionDetallada: `Repuesto certificado OEM #${upper}. Consulte el catálogo del fabricante para confirmar la aplicación exacta en su vehículo.` };
-    }
-
-
-    // Category Normalizer Function
-    const normalizeCategory = (rawCat: string = '', partNumStr: string = ''): string => {
-      const catLower = rawCat.toLowerCase().trim();
-      const pUpper = partNumStr.toUpperCase().trim();
-      const cleanUpper = pUpper.replace(/[\s\-_]/g, '');
-
-      if (catLower.includes('transmi') || catLower.includes('gear') || catLower.includes('clutch') || catLower.includes('embrague') || catLower.includes('diferencial') || catLower.includes('cardan') || catLower.includes('tripode') || catLower.includes('semieje')) {
-        return 'Transmisión y Tren Motriz';
-      }
-      if (catLower.includes('encendido') || catLower.includes('bujía') || catLower.includes('bujia') || catLower.includes('spark') || catLower.includes('ignition') || catLower.includes('bobina') || catLower.includes('coil') || catLower.includes('motor') || /TR55|BKR|LFR|IZFR|IK20|SP-|3403|4306|BUJIA|SPARK|PLUG|COIL|BOBINA|90919|22401|41110/i.test(cleanUpper)) {
-        return 'Motor y Encendido';
-      }
-      if (catLower.includes('freno') || catLower.includes('brake') || catLower.includes('pastilla') || catLower.includes('disco') || catLower.includes('suspensi') || catLower.includes('shock') || catLower.includes('amortiguador') || catLower.includes('muñon') || catLower.includes('terminal') || /PAD|BRAKE|FRENO|DISCO|ROTORS|D1058|D1084|D1377|52088898|04465|SHOCK|AMORT|STRUT|K750|ES3538/i.test(cleanUpper)) {
-        return 'Frenos y Suspensión';
-      }
-      if (catLower.includes('inyec') || catLower.includes('injector') || catLower.includes('sensor') || catLower.includes('maf') || catLower.includes('o2') || catLower.includes('map') || catLower.includes('tps') || /INJ|INJECTOR|0280|23250|0261|SENSOR|MAF|O2|MAP|TPS|CKP|CMP/i.test(cleanUpper)) {
-        return 'Inyección y Sensores';
-      }
-      if (catLower.includes('filtr') || catLower.includes('filter') || catLower.includes('habac') || catLower.includes('cabina') || catLower.includes('aire') || /PF48|PF63|HU6002|W712|FILT|FILTER|04884899AC|04884899|90915|17801/i.test(cleanUpper)) {
-        return 'Filtros y Consumibles';
-      }
-      if (catLower.includes('aceite') || catLower.includes('lubricant') || catLower.includes('oil') || catLower.includes('atf') || catLower.includes('grasa') || /5W20|5W30|10W30|75W90|ATF|DEXRON|COOLANT|MOBIL|VALVOLINE|CASTROL/i.test(cleanUpper)) {
-        return 'Aceites y Lubricantes';
-      }
-      if (catLower.includes('bater') || catLower.includes('battery') || catLower.includes('electri') || catLower.includes('alternador') || catLower.includes('arranque') || catLower.includes('fusible') || /BAT|BATERIA|ALT|STARTER|ARRANQUE|GENERADOR/i.test(cleanUpper)) {
-        return 'Baterías y Electricidad';
-      }
-      if (catLower.includes('fluid') || catLower.includes('refrigeran') || catLower.includes('coolant') || catLower.includes('radiad') || catLower.includes('termostat') || catLower.includes('agua')) {
-        return 'Fluidos y Refrigeración';
-      }
-      if (catLower.includes('carrocer') || catLower.includes('accesorio') || catLower.includes('espejo') || catLower.includes('faro') || catLower.includes('parachoque') || catLower.includes('luz')) {
-        return 'Piezas de Carrocería & Accesorios';
-      }
-      if (rawCat && rawCat.length > 3) {
-        return rawCat.trim();
-      }
-      return 'Filtros y Consumibles';
+  // Real-time clock for header
+  const [timeStr, setTimeStr] = useState('');
+  useEffect(() => {
+    const updateTime = () => {
+      const d = new Date();
+      setTimeStr(d.toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-    // Universal Specific Title Synthesizer Function
-    const generateSpecificTitle = (partNumStr: string, rawTitle: string = ''): string => {
-      const cleanNum = partNumStr.trim().toUpperCase();
-      const cleanUpper = cleanNum.replace(/[\s\-_]/g, '');
-      const rTitle = rawTitle.trim();
-
-      if (rTitle && !rTitle.toLowerCase().includes('especificación original #') && !rTitle.toLowerCase().includes('repuesto oem #') && rTitle.length >= 4) {
-        return rTitle;
-      }
-      if (/42607|4260706030|TPMS/i.test(cleanUpper)) return `Sensor TPMS de Presión de Neumáticos Toyota OEM (${cleanNum})`;
-      if (/68568655/i.test(cleanUpper)) return `Computadora de Motor ECM / ECU Mopar OEM (${cleanNum})`;
-      if (/^68[0-9]{6}[A-Z]{1,2}$|^53[0-9]{6}[A-Z]{1,2}$|^52[0-9]{6}[A-Z]{1,2}$|^05[0-9]{6}[A-Z]{1,2}$/i.test(cleanUpper)) return `Repuesto Original Mopar Jeep / Dodge / RAM (${cleanNum})`;
-      if (/CKT|CKT034/i.test(cleanUpper)) return `Kit de Embrague Completo AISIN OEM (${cleanNum})`;
-      if (/11201|0T060/i.test(cleanUpper)) return `Tapa de Válvulas de Motor Toyota OEM (${cleanNum})`;
-      if (/TR55GP|TR55|3403/i.test(cleanUpper)) return `Bujía NGK G-Power Platino OEM (${cleanNum})`;
-      if (/BKR|LFR|IZFR|IK20|SP-|4306|90919|22401|41110/i.test(cleanUpper)) return `Bujía de Encendido Iridio / Platino OEM #${cleanNum}`;
-      if (/52088898/i.test(cleanUpper)) return `Juego de Pastillas de Freno Cerámicas Delanteras OEM #${cleanNum}`;
-      if (/04465/i.test(cleanUpper)) return `Juego de Pastillas de Freno Delanteras Toyota OEM #${cleanNum}`;
-      if (/PF48|PF63/i.test(cleanUpper)) return `Filtro de Aceite Sintético AC Delco Gold #${cleanNum}`;
-      if (/90915/i.test(cleanUpper)) return `Filtro de Aceite Motor Toyota OEM #${cleanNum}`;
-      if (/17801/i.test(cleanUpper)) return `Filtro de Aire de Motor Toyota OEM #${cleanNum}`;
-      if (/04884899/i.test(cleanUpper)) return `Filtro de Aceite Mopar Heavy Duty #${cleanNum}`;
-      if (/23250/i.test(cleanUpper)) return `Inyector de Combustible Multipunto Toyota #${cleanNum}`;
-      if (/0280/i.test(cleanUpper)) return `Inyector de Combustible Bosch EV6/EV14 #${cleanNum}`;
-      if (/D1058|D1084|D1377/i.test(cleanUpper)) return `Pastillas de Freno Cerámicas FMSI Premium #${cleanNum}`;
-      return `Repuesto Automotriz de Precisión OEM #${cleanNum}`;
-    };
-
-    if (populatedData && (populatedData.titulo || populatedData.categoria)) {
-      const finalCat = normalizeCategory(populatedData.categoria || populatedData.category || '', pClean);
-      const finalTitle = generateSpecificTitle(pClean, populatedData.titulo || populatedData.title || '');
-
-      setEditingProduct(prev => prev ? ({
-        ...prev,
-        title: finalTitle,
-        category: finalCat,
-        compatibility: populatedData.compatibilidad || populatedData.compatibility || 'Vehículos Gasolina & Diesel Multimarca',
-        desc: populatedData.descripcionCorta || populatedData.desc || `Repuesto original o equivalente de alta durabilidad con código OEM #${pClean}.`,
-        longDesc: populatedData.descripcionDetallada || populatedData.longDesc || `Componente certificado con estándar de fabricación OEM #${pClean} garantizado para óptimo funcionamiento en taller MasterTech.`,
-        badge: prev.badge || 'OEM Certificado'
-      }) : null);
-      setAiStatusMsg('✅ ¡Información del repuesto autorrellenada con IA!');
-    } else {
-      setAiStatusMsg('❌ No se pudo procesar la información del repuesto');
-    }
-
-    setIsAiAutofilling(false);
-    setTimeout(() => setAiStatusMsg(''), 4500);
-  };
-
-  // Fetch Leads con fusión garantizada y respaldo sin borrado
-  const fetchLeads = async (authToken: string) => {
-    setIsLoadingLeads(true);
-    let apiLeads: any[] = [];
-    try {
-      const res = await fetch('/api/leads', {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) apiLeads = data;
-      }
-    } catch (e) {}
-
-    let localLeads: any[] = [];
-    try {
-      const stored = localStorage.getItem('mastertech_leads_store');
-      if (stored) localLeads = JSON.parse(stored);
-    } catch (e) {}
-
-    const leadMap = new Map<string, any>();
-    for (const lead of localLeads) {
-      if (lead && lead.id) leadMap.set(String(lead.id), lead);
-    }
-    for (const lead of apiLeads) {
-      if (lead && lead.id) leadMap.set(String(lead.id), lead);
-    }
-
-    const merged = Array.from(leadMap.values()).sort(
-      (a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
-    );
-
-    setLeads(merged);
-    if (merged.length > 0) {
-      try { localStorage.setItem('mastertech_leads_store', JSON.stringify(merged.slice(0, 100))); } catch (e) {}
-    }
-    setIsLoadingLeads(false);
-  };
-
-  // IMPORTANT: For admin-managed JSON fields (catalog, team, faqs, reviews, services),
-  // localStorage is the SOURCE OF TRUTH and always takes priority over the server.
-  // The server only fills non-JSON settings (phone, images, etc.) that the admin
-  // doesn't edit inline. This prevents Supabase connectivity issues from wiping user data.
+  // Fetch Settings from Supabase (Source of Truth)
   const fetchSettings = async () => {
-    setIsLoadingSettings(true);
-
     let serverData: any = null;
     try {
       const res = await fetch(`/api/settings?t=${Date.now()}`);
-      if (res.ok) {
-        serverData = await res.json();
-      }
-    } catch (err) {
-      console.warn("Could not fetch server settings, falling back to local cache:", err);
-    }
+      if (res.ok) serverData = await res.json();
+    } catch (err) {}
 
     let localData: any = null;
     try {
@@ -1031,29 +221,16 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       if (stored) localData = JSON.parse(stored);
     } catch (e) {}
 
-    // SERVER API WINS. Local storage is only used as a fallback if the server is offline.
     const merged: any = { ...(localData || {}), ...(serverData || {}) };
-
     setSettings(merged);
     setSettingsForm(merged);
 
-    // Synchronize catalog items from Server API (Source of Truth)
     if (merged.CATALOG_PRODUCTS_JSON) {
-      try {
-        const parsed = JSON.parse(merged.CATALOG_PRODUCTS_JSON);
-        if (Array.isArray(parsed)) setCatalogItems(parsed);
-      } catch (e) {}
+      try { const p = JSON.parse(merged.CATALOG_PRODUCTS_JSON); if (Array.isArray(p)) setCatalogItems(p); } catch (e) {}
     }
-
-    // Synchronize jornadas list from Server API
     if (merged.JORNADAS_JSON) {
-      try {
-        const parsedJ = JSON.parse(merged.JORNADAS_JSON);
-        if (Array.isArray(parsedJ)) setJornadasList(parsedJ);
-      } catch (e) {}
+      try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
     }
-
-    // Synchronize team, reviews, services, faqs from Server API
     if (merged.TEAM_MEMBERS_JSON) {
       try { const p = JSON.parse(merged.TEAM_MEMBERS_JSON); if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
     }
@@ -1066,44 +243,56 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     if (merged.FAQS_JSON) {
       try { const p = JSON.parse(merged.FAQS_JSON); if (Array.isArray(p)) setFaqs(p); } catch (e) {}
     }
+  };
 
-    // Keep localStorage updated with fresh server data
-    try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
-    setIsLoadingSettings(false);
+  // Fetch Leads
+  const fetchLeads = async () => {
+    if (!token) return;
+    setIsLoadingLeads(true);
+    try {
+      const res = await fetch(`/api/leads?t=${Date.now()}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLeads(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {} finally {
+      setIsLoadingLeads(false);
+    }
   };
 
   useEffect(() => {
-    if (token) {
-      fetchLeads(token);
-      fetchSettings();
-    }
+    fetchSettings();
+  }, []);
+
+  useEffect(() => {
+    if (token) fetchLeads();
   }, [token]);
 
   // Auth Handler
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoggingIn(true);
     setAuthError('');
-    setIsAuthenticating(true);
-
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password: passwordInput })
       });
-
       const data = await res.json();
-
       if (res.ok && data.token) {
         localStorage.setItem('mastertech_admin_token', data.token);
         setToken(data.token);
+        setPasswordInput('');
       } else {
         setAuthError(data.error || 'Contraseña incorrecta.');
       }
     } catch (err) {
-      setAuthError('Error de conexión al servidor.');
+      setAuthError('Error al conectar con el servidor.');
     } finally {
-      setIsAuthenticating(false);
+      setIsLoggingIn(false);
     }
   };
 
@@ -1112,59 +301,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     setToken(null);
   };
 
-  // Lead Operations
-  const handleUpdateLead = async (id: number) => {
-    if (!token) return;
-    setIsUpdatingLead(true);
-
-    try {
-      const res = await fetch(`/api/leads/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ status: statusEdit, notes: noteEdit })
-      });
-
-      if (res.ok) {
-        setLeads(prev => prev.map(l => l.id === id ? { ...l, status: statusEdit, notes: noteEdit } : l));
-        setSelectedLead(null);
-      } else {
-        alert('Error al actualizar la cita.');
-      }
-    } catch (err) {
-      alert('Error de conexión al actualizar la cita.');
-    } finally {
-      setIsUpdatingLead(false);
-    }
-  };
-
-  const handleDeleteLead = async (id: number | string) => {
-    if (!token || !window.confirm('¿Estás seguro de eliminar este registro de cita?')) return;
-
-    const idStr = String(id);
-
-    // 1. Eliminación optimista en estado de React y localStorage
-    setLeads(prev => {
-      const updated = prev.filter(l => String(l?.id) !== idStr);
-      try { localStorage.setItem('mastertech_leads_store', JSON.stringify(updated.slice(0, 100))); } catch (e) {}
-      return updated;
-    });
-    if (selectedLead && String(selectedLead.id) === idStr) setSelectedLead(null);
-
-    // 2. Solicitud DELETE al backend y Supabase
-    try {
-      await fetch(`/api/leads/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-    } catch (err) {
-      console.error('Error al eliminar registro en el servidor:', err);
-    }
-  };
-
-  // Save Settings
+  // Save Settings Function
   const handleSaveSettings = async (overrideForm?: any) => {
     if (!token) return;
     setIsSavingSettings(true);
@@ -1181,13 +318,8 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       CATALOG_PRODUCTS_JSON: (overrideForm && overrideForm.CATALOG_PRODUCTS_JSON !== undefined) ? overrideForm.CATALOG_PRODUCTS_JSON : JSON.stringify(catalogItems),
       JORNADAS_JSON: (overrideForm && overrideForm.JORNADAS_JSON !== undefined) ? overrideForm.JORNADAS_JSON : JSON.stringify(jornadasList)
     };
-    if (targetForm.SUCCESS_BADGE && targetForm.SUCCESS_BADGE.includes('30%')) {
-      targetForm.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
-    }
 
-    // Always persist to local storage first so user changes take effect immediately
     try { localStorage.setItem('mastertech_settings_store', JSON.stringify(targetForm)); } catch (e) {}
-    try { localStorage.setItem('mastertech_team_members', JSON.stringify(teamMembers)); } catch (e) {}
     setSettings(targetForm);
     setSettingsForm(targetForm);
 
@@ -1202,9 +334,8 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       });
 
       if (res.status === 401) {
-        localStorage.removeItem('mastertech_admin_token');
-        setToken(null);
-        setAuthError('Tu sesión ha expirado. Ingresa tu contraseña para ingresar al panel.');
+        handleLogout();
+        setAuthError('Tu sesión ha expirado. Ingresa la contraseña.');
         return;
       }
 
@@ -1213,1912 +344,1101 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         const updated = { ...(data.settings || {}), ...targetForm };
         setSettings(updated);
         setSettingsForm(updated);
-        try {
-          localStorage.setItem('mastertech_settings_store', JSON.stringify(updated));
-          window.dispatchEvent(new Event('storage'));
-          window.dispatchEvent(new CustomEvent('mastertech_settings_updated', { detail: updated }));
-        } catch (e) {}
-        setSettingsSuccessMessage('¡Cambios e imágenes guardados e integrados públicamente!');
-        setTimeout(() => setSettingsSuccessMessage(''), 4000);
-      } else {
-        try {
-          window.dispatchEvent(new Event('storage'));
-          window.dispatchEvent(new CustomEvent('mastertech_settings_updated', { detail: targetForm }));
-        } catch (e) {}
-        setSettingsSuccessMessage('¡Cambios guardados correctamente!');
+        setSettingsSuccessMessage('¡Cambios guardados e integrados públicamente!');
         setTimeout(() => setSettingsSuccessMessage(''), 4000);
       }
     } catch (err) {
-      setSettingsSuccessMessage('¡Cambios guardados localmente!');
+      setSettingsSuccessMessage('¡Guardado localmente!');
       setTimeout(() => setSettingsSuccessMessage(''), 4000);
     } finally {
       setIsSavingSettings(false);
     }
   };
 
-  // Catalog CRUD Operations
-  const handleSaveCatalogItem = (product: CatalogItem) => {
-    let updatedCatalog: CatalogItem[] = [];
-    if (product.id && catalogItems.some(p => p.id === product.id)) {
-      updatedCatalog = catalogItems.map(p => p.id === product.id ? product : p);
-    } else {
-      const newProduct = { ...product, id: Date.now() };
-      updatedCatalog = [newProduct, ...catalogItems];
+  // Lead Status Handler
+  const handleUpdateLeadStatus = async (id: number | string, newStatus: string) => {
+    if (!token) return;
+    const updated = leads.map(l => String(l.id) === String(id) ? { ...l, status: newStatus } : l);
+    setLeads(updated);
+    if (selectedLead && String(selectedLead.id) === String(id)) setSelectedLead({ ...selectedLead, status: newStatus });
+
+    try {
+      await fetch(`/api/leads/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+    } catch (e) {}
+  };
+
+  const handleDeleteLead = async (id: number | string) => {
+    if (!token || !window.confirm('¿Estás seguro de eliminar este registro de cita?')) return;
+    const updated = leads.filter(l => String(l.id) !== String(id));
+    setLeads(updated);
+    if (selectedLead && String(selectedLead.id) === String(id)) setSelectedLead(null);
+
+    try {
+      await fetch(`/api/leads/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } catch (e) {}
+  };
+
+  // AI Autofill Function for Catalog
+  const handleAiAutofill = async (partNumArg?: string) => {
+    const partToSearch = (partNumArg || editingProduct?.partNumber || editingProduct?.title || '').trim();
+    if (!partToSearch) {
+      setAiStatusMsg('⚠️ Ingresa un número de parte (OEM) o título primero.');
+      setTimeout(() => setAiStatusMsg(''), 3000);
+      return;
     }
 
-    const catalogJson = JSON.stringify(updatedCatalog);
-    setCatalogItems(updatedCatalog);
-    // Build the form with the fresh catalog JSON so handleSaveSettings receives
-    // the updated value even before the React state re-render completes.
-    const updatedForm = {
-      ...settingsForm,
-      CATALOG_PRODUCTS_JSON: catalogJson,
-      TEAM_MEMBERS_JSON: JSON.stringify(teamMembers),
-      REVIEWS_JSON: JSON.stringify(reviews),
-      SERVICES_JSON: JSON.stringify(services),
-      FAQS_JSON: JSON.stringify(faqs)
-    };
+    setIsAiAutofilling(true);
+    setAiStatusMsg('✨ Buscando en base de datos OEM e Inteligencia Artificial...');
+
+    try {
+      const res = await fetch('/api/autofill-part', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ partNumber: partToSearch })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.item) {
+          const fetched = data.item;
+          setEditingProduct(prev => {
+            if (!prev) return null;
+            return {
+              ...prev,
+              title: fetched.title || prev.title,
+              category: fetched.category || prev.category,
+              price: fetched.price || prev.price,
+              desc: fetched.desc || prev.desc,
+              longDesc: fetched.longDesc || prev.longDesc,
+              badge: fetched.badge || prev.badge,
+              compatibility: fetched.compatibility || prev.compatibility,
+              partNumber: fetched.partNumber || prev.partNumber,
+              specs: fetched.specs && fetched.specs.length > 0 ? fetched.specs : prev.specs,
+              img: fetched.img || prev.img
+            };
+          });
+          setAiStatusMsg('✅ Datos completados con éxito desde catálogo OEM.');
+        } else {
+          setAiStatusMsg('ℹ️ No se encontró código OEM exacto, llena los campos manualmente.');
+        }
+      }
+    } catch (e) {
+      setAiStatusMsg('⚠️ Error al consultar IA.');
+    } finally {
+      setIsAiAutofilling(false);
+      setTimeout(() => setAiStatusMsg(''), 4000);
+    }
+  };
+
+  // Catalog Item Save
+  const handleSaveCatalogItem = (product: CatalogItem) => {
+    let updated: CatalogItem[] = [];
+    if (product.id && catalogItems.some(p => p.id === product.id)) {
+      updated = catalogItems.map(p => p.id === product.id ? product : p);
+    } else {
+      updated = [{ ...product, id: Date.now() }, ...catalogItems];
+    }
+
+    setCatalogItems(updated);
+    const jsonStr = JSON.stringify(updated);
+    const updatedForm = { ...settingsForm, CATALOG_PRODUCTS_JSON: jsonStr };
     setSettingsForm(updatedForm);
+    setSettings(updatedForm);
     setIsCatalogModalOpen(false);
     setEditingProduct(null);
     handleSaveSettings(updatedForm);
   };
 
   const handleDeleteCatalogItem = (id: number | string) => {
-    if (!window.confirm('¿Eliminar este repuesto o servicio del catálogo?')) return;
-    const updatedCatalog = catalogItems.filter(p => String(p.id) !== String(id));
-    const catalogJson = JSON.stringify(updatedCatalog);
-    setCatalogItems(updatedCatalog);
-    const updatedForm = {
-      ...settingsForm,
-      CATALOG_PRODUCTS_JSON: catalogJson,
-      TEAM_MEMBERS_JSON: JSON.stringify(teamMembers),
-      REVIEWS_JSON: JSON.stringify(reviews),
-      SERVICES_JSON: JSON.stringify(services),
-      FAQS_JSON: JSON.stringify(faqs),
-      JORNADAS_JSON: JSON.stringify(jornadasList)
-    };
+    if (!window.confirm('¿Eliminar este repuesto o producto del catálogo?')) return;
+    const updated = catalogItems.filter(p => String(p.id) !== String(id));
+    setCatalogItems(updated);
+    const jsonStr = JSON.stringify(updated);
+    const updatedForm = { ...settingsForm, CATALOG_PRODUCTS_JSON: jsonStr };
     setSettingsForm(updatedForm);
     setSettings(updatedForm);
-    try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updatedForm)); } catch (e) {}
+    handleSaveSettings(updatedForm);
+  };
+
+  // Jornada Item Save
+  const handleSaveJornadaItem = (jornada: any) => {
+    let updated: any[] = [];
+    if (jornada.id && jornadasList.some(j => String(j.id) === String(jornada.id))) {
+      updated = jornadasList.map(j => String(j.id) === String(jornada.id) ? jornada : j);
+    } else {
+      const newId = jornada.id || `jornada_${Date.now()}`;
+      updated = [{ ...jornada, id: newId }, ...jornadasList];
+    }
+
+    setJornadasList(updated);
+    const jsonStr = JSON.stringify(updated);
+    const updatedForm = { ...settingsForm, JORNADAS_JSON: jsonStr };
+    setSettingsForm(updatedForm);
+    setSettings(updatedForm);
+    setIsJornadaModalOpen(false);
+    setEditingJornada(null);
+    handleSaveSettings(updatedForm);
+  };
+
+  const handleDeleteJornadaItem = (id: string) => {
+    if (!window.confirm('¿Estás seguro de eliminar esta jornada especial?')) return;
+    const updated = jornadasList.filter(j => String(j.id) !== String(id));
+    setJornadasList(updated);
+    const jsonStr = JSON.stringify(updated);
+    const updatedForm = { ...settingsForm, JORNADAS_JSON: jsonStr };
+    setSettingsForm(updatedForm);
+    setSettings(updatedForm);
     handleSaveSettings(updatedForm);
   };
 
   // Filtered Leads
-  const filteredLeads = leads.filter(lead => {
-    const matchesSearch =
-      (lead.nombre || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (lead.telefono || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (lead.vehiculo || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (lead.servicio || '').toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'Todos' || lead.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredLeads = useMemo(() => {
+    return leads.filter(l => {
+      const matchesSearch =
+        (l.nombre || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (l.telefono || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (l.vehiculo || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (l.servicio || '').toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === 'Todos' || l.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [leads, searchQuery, statusFilter]);
 
-  // Metrics
-  const totalLeads = leads.length;
-  const pendingLeads = leads.filter(l => l.status === 'Pendiente').length;
-  const contactedLeads = leads.filter(l => l.status === 'Contactado').length;
-  const diagLeads = leads.filter(l => l.status === 'En Diagnóstico').length;
-  const completedLeads = leads.filter(l => l.status === 'Completado').length;
-
-  const getWhatsAppContactUrl = (lead: Lead) => {
-    const text = `Hola *${lead.nombre}*, te saludamos de *Taller MasterTech* 🛠️. Nos comunicamos en relación a tu solicitud de cita para *${lead.servicio}* de tu vehículo *${lead.vehiculo}*.`;
-    return `https://wa.me/${lead.telefono.replace(/\+/g, '')}?text=${encodeURIComponent(text)}`;
-  };
-
-  // Login Screen
+  // LOGIN SCREEN
   if (!token) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6 selection:bg-primary selection:text-white">
-        <div className="glass-card max-w-md w-full p-8 border-white/10 space-y-6 relative overflow-hidden">
-          <div className="text-center space-y-2">
-            <div className="w-14 h-14 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center mx-auto text-primary mb-4">
+      <div className="min-h-screen bg-[#0a0b0f] text-white flex items-center justify-center p-6 selection:bg-primary selection:text-black">
+        <div className="max-w-md w-full bg-[#12141a]/90 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/10 blur-[100px] rounded-full pointer-events-none" />
+
+          <div className="text-center space-y-2 relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/10">
               <Lock size={28} />
             </div>
-            <h2 className="text-2xl font-display font-black uppercase tracking-tight text-white">Panel de Administración</h2>
-            <p className="text-zinc-500 text-xs">Acceso seguro para el equipo de Taller MasterTech</p>
+            <h1 className="text-2xl font-display font-black uppercase tracking-tight text-white">Panel de Administración</h1>
+            <p className="text-xs text-zinc-400">Ingresa la contraseña maestra para gestionar Taller MasterTech.</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-2">Contraseña Admin</label>
+          {authError && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-bold flex items-center gap-2">
+              <AlertCircle size={16} className="shrink-0" />
+              <span>{authError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4 relative z-10">
+            <div className="space-y-2">
+              <label htmlFor="admin-pass" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Contraseña Maestra</label>
               <input
+                id="admin-pass"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full bg-black/40 border border-white/10 rounded-2xl py-3.5 px-5 text-white outline-none focus:border-primary text-sm transition-all"
+                required
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="••••••••••••"
+                className="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-mono outline-none focus:border-primary transition-all"
               />
             </div>
 
-            {authError && (
-              <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-xs flex items-center gap-2">
-                <AlertCircle size={16} />
-                <span>{authError}</span>
-              </div>
-            )}
-
             <button
               type="submit"
-              disabled={isAuthenticating}
-              className="w-full btn-primary !py-3.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 border-none"
+              disabled={isLoggingIn}
+              className="w-full btn-primary !py-3.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 border-none shadow-xl cursor-pointer"
             >
-              {isAuthenticating ? <Loader2 className="animate-spin" size={16} /> : <ShieldCheck size={16} />}
-              <span>Ingresar al Sistema</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-full text-zinc-500 hover:text-white text-xs font-bold py-2 transition-colors flex items-center justify-center gap-1"
-            >
-              <ArrowLeft size={14} /> Volver a la web
+              {isLoggingIn ? <Loader2 className="animate-spin" size={18} /> : <ShieldCheck size={18} />}
+              <span>{isLoggingIn ? 'Verificando...' : 'Iniciar Sesión'}</span>
             </button>
           </form>
+
+          <div className="text-center pt-2 border-t border-white/5">
+            <a href="/" className="text-xs text-zinc-500 hover:text-white transition-colors flex items-center justify-center gap-1">
+              <span>← Volver a la página principal</span>
+            </a>
+          </div>
         </div>
       </div>
     );
   }
 
+  // MAIN ADMIN DASHBOARD INTERFACE
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col selection:bg-primary selection:text-white pb-24">
+    <div className="min-h-screen bg-[#0a0b0f] text-white flex flex-col md:flex-row font-sans selection:bg-primary selection:text-black">
       
-      {/* Top Main Navbar */}
-      <header className="bg-[#0d0e12] border-b border-white/10 sticky top-0 z-40 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-          
-          {/* Brand Logo & Shop Status */}
-          <div className="flex items-center gap-4">
-            <a href="/" className="flex items-center gap-2.5 cursor-pointer hover:opacity-90 transition-opacity">
-              <img src={settingsForm.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-8 w-auto object-contain shrink-0 logo-gold" />
-              <span className="font-display font-black text-base tracking-tighter uppercase text-white">
-                MASTER<span className="text-primary italic">TECH</span>
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full ml-1 hidden sm:inline">PANEL ADMIN</span>
-            </a>
-
-            <div className="hidden md:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[11px] font-bold">
-              <span className={`w-2 h-2 rounded-full ${settingsForm.IS_OPEN !== 'false' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-              <span className="text-zinc-300">{settingsForm.IS_OPEN !== 'false' ? 'Taller Abierto' : 'Taller Cerrado'}</span>
-            </div>
-          </div>
-
-          {/* Navigation Tabs Bar */}
-          <div className="flex items-center gap-1 overflow-x-auto py-1 scrollbar-none max-w-full">
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'dashboard' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Activity size={14} />
-              <span>Dashboard</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('leads')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'leads' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Calendar size={14} />
-              <span>Citas ({totalLeads})</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('catalogo')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'catalogo' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Package size={14} />
-              <span>Catálogo Repuestos</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('jornadas')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border ${
-                activeTab === 'jornadas' ? 'bg-amber-500 text-black border-amber-400 font-black shadow-lg shadow-amber-500/30' : 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:text-amber-300 hover:bg-amber-500/20'
-              }`}
-            >
-              <Zap size={14} />
-              <span>Jornadas VIP 🔥</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('settings')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'settings' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <SettingsIcon size={14} />
-              <span>Ajustes Web</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('contenido')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'contenido' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Layers size={14} />
-              <span>Contenido & Servicios</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('integraciones')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === 'integraciones' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-zinc-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Bot size={14} />
-              <span>Integraciones</span>
-            </button>
-          </div>
-
-          {/* Action Header Buttons */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onClose}
-              className="text-xs font-bold text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-white/10 transition-colors"
-            >
-              <ExternalLink size={14} />
-              <span className="hidden sm:inline">Ver Web</span>
-            </button>
-
-            <button
-              onClick={handleLogout}
-              className="text-xs font-bold text-zinc-400 hover:text-red-400 bg-white/5 hover:bg-red-500/10 px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-white/10 transition-colors"
-            >
-              <LogOut size={14} />
-              <span className="hidden sm:inline">Salir</span>
-            </button>
-          </div>
-
-        </div>
-      </header>
-
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8">
-        
-        {/* ========================================================================= */}
-        {/* TAB 1: DASHBOARD */}
-        {/* ========================================================================= */}
-        {activeTab === 'dashboard' && (
-          <div className="space-y-8 animate-fade-in">
-            {/* Top Cards Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-              <div className="glass-card p-6 border-white/5 relative overflow-hidden">
-                <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Total Solicitudes</p>
-                <div className="text-4xl font-black text-white">{totalLeads}</div>
-              </div>
-
-              <div className="glass-card p-6 border-white/5 relative overflow-hidden">
-                <p className="text-[10px] font-bold text-yellow-500/80 uppercase tracking-widest mb-2">Pendientes</p>
-                <div className="text-4xl font-black text-yellow-500">{pendingLeads}</div>
-              </div>
-
-              <div className="glass-card p-6 border-white/5 relative overflow-hidden">
-                <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2">Contactados</p>
-                <div className="text-4xl font-black text-blue-400">{contactedLeads}</div>
-              </div>
-
-              <div className="glass-card p-6 border-white/5 relative overflow-hidden">
-                <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-2">En Diagnóstico</p>
-                <div className="text-4xl font-black text-primary">{diagLeads}</div>
-              </div>
-
-              <div className="glass-card p-6 border-white/5 relative overflow-hidden col-span-2 lg:col-span-1">
-                <p className="text-[10px] font-bold text-green-400 uppercase tracking-widest mb-2">Completadas</p>
-                <div className="text-4xl font-black text-green-400">{completedLeads}</div>
-              </div>
-            </div>
-
-            {/* Recent Leads */}
-            <div className="glass-card p-6 border-white/5 space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-base font-bold text-white uppercase tracking-wider">Últimas Solicitudes Registradas</h3>
-                <button 
-                  onClick={() => setActiveTab('leads')}
-                  className="text-xs text-primary font-bold hover:underline flex items-center gap-1"
-                >
-                  <span>Ver todas las citas</span>
-                  <ExternalLink size={12} />
-                </button>
-              </div>
-
-              <div className="divide-y divide-white/5">
-                {leads.slice(0, 5).map(lead => (
-                  <div key={lead.id} className="py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div>
-                      <p className="font-bold text-white">{lead.nombre} ({lead.telefono})</p>
-                      <p className="text-zinc-400">{lead.vehiculo} - <span className="text-primary font-bold">{lead.servicio}</span></p>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/5 border border-white/10 text-zinc-300">
-                      {lead.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ========================================================================= */}
-        {/* TAB 2: CITAS (LEADS) */}
-        {/* ========================================================================= */}
-        {activeTab === 'leads' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Search and Filters */}
-            <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-[#12141a] p-4 sm:p-6 rounded-2xl border border-white/10">
-              <div className="relative w-full md:max-w-md">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 w-4 h-4" />
-                <input
-                  type="text"
-                  placeholder="Buscar cliente, vehículo, servicio o teléfono..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 focus:border-primary outline-none text-xs text-white placeholder:text-zinc-600"
-                />
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-                <button
-                  onClick={() => token && fetchLeads(token)}
-                  className="px-3.5 py-2 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
-                >
-                  <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
-                  <span>Actualizar</span>
-                </button>
-
-                {['Todos', 'Pendiente', 'Contactado', 'En Diagnóstico', 'Completado', 'Cancelado'].map(st => (
-                  <button
-                    key={st}
-                    onClick={() => setStatusFilter(st)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
-                      statusFilter === st ? 'bg-primary text-white border-primary' : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    {st}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Leads Table */}
-            <div className="glass-card border-white/10 overflow-hidden rounded-2xl">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-white/10 bg-white/5 text-zinc-400 text-[10px] font-bold uppercase tracking-wider">
-                      <th className="py-3.5 px-6">Cliente / Teléfono</th>
-                      <th className="py-3.5 px-6">Vehículo</th>
-                      <th className="py-3.5 px-6">Servicio</th>
-                      <th className="py-3.5 px-6">Fecha Registro</th>
-                      <th className="py-3.5 px-6">Estado</th>
-                      <th className="py-3.5 px-6 text-center">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 text-xs">
-                    {filteredLeads.map(lead => (
-                      <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="py-4 px-6 font-bold text-white">
-                          <div>{lead.nombre}</div>
-                          <div className="text-zinc-400 font-normal">{lead.telefono}</div>
-                        </td>
-                        <td className="py-4 px-6 text-zinc-300 font-semibold">{lead.vehiculo}</td>
-                        <td className="py-4 px-6"><span className="bg-white/5 border border-white/10 px-2.5 py-1 rounded text-primary font-bold">{lead.servicio}</span></td>
-                        <td className="py-4 px-6 text-zinc-400">
-                          {lead.fecha_hora && <div className="text-primary font-bold mb-0.5">📅 {lead.fecha_hora}</div>}
-                          <div>{new Date(lead.created_at).toLocaleString('es-ES')}</div>
-                        </td>
-                        <td className="py-4 px-6">
-                          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-white/5 border border-white/10 text-zinc-300">
-                            {lead.status}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            <button
-                              onClick={() => { setSelectedLead(lead); setNoteEdit(lead.notes || ''); setStatusEdit(lead.status); }}
-                              className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-zinc-300 hover:text-white border border-white/10"
-                              title="Editar Ficha"
-                            >
-                              <Edit size={14} />
-                            </button>
-                            <a
-                              href={getWhatsAppContactUrl(lead)}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="p-2 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded-lg border border-green-500/20"
-                              title="Contactar WhatsApp"
-                            >
-                              <MessageCircle size={14} />
-                            </a>
-                            <button
-                              onClick={() => handleDeleteLead(lead.id)}
-                              className="p-2 bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 rounded-lg border border-white/10"
-                              title="Eliminar"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ========================================================================= */}
-        {/* TAB 3: CATÁLOGO DE REPUESTOS & SERVICIOS (NEW DEDICATED MANAGEMENT SPACE!) */}
-        {/* ========================================================================= */}
-        {activeTab === 'catalogo' && (
-          <div className="space-y-6 animate-fade-in">
-            {/* Header Action Bar */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#12141a] p-6 rounded-2xl border border-white/10">
+      {/* SIDEBAR NAVIGATION (Desktop & Mobile) */}
+      <aside className="w-full md:w-64 bg-[#12141a]/95 backdrop-blur-2xl border-r border-white/10 shrink-0 p-5 flex flex-col justify-between z-30">
+        <div className="space-y-6">
+          {/* Logo & Brand Header */}
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center gap-3">
+              <img src={settingsForm.LOGO_URL || "/logo.png"} alt="MasterTech Logo" className="w-8 h-8 object-contain" />
               <div>
-                <h2 className="text-xl font-bold uppercase tracking-tight text-white flex items-center gap-2">
-                  <Package className="text-primary" size={22} />
-                  <span>Gestión del Catálogo de Repuestos y Productos</span>
-                </h2>
-                <p className="text-zinc-400 text-xs mt-1">
-                  Agrega, edita o elimina repuestos, aceites y consumibles automotrices visibles en la página <strong className="text-white">/catalogo</strong>.
-                </p>
-              </div>
-
-              <button
-                onClick={() => {
-                  setEditingProduct({
-                    id: 0,
-                    title: "",
-                    category: "Aceites y Lubricantes",
-                    price: "$0.00",
-                    desc: "",
-                    longDesc: "",
-                    img: "/assets/instalaciones.jpg",
-                    badge: "Garantía MasterTech",
-                    specs: [],
-                    compatibility: "Todos los vehículos"
-                  });
-                  setIsCatalogModalOpen(true);
-                }}
-                className="btn-primary !py-2.5 !px-5 text-xs border-none flex items-center gap-2 shrink-0 shadow-lg"
-              >
-                <Plus size={16} />
-                <span>Agregar Nuevo Repuesto</span>
-              </button>
-            </div>
-
-            {/* Search & Category Filter Bar */}
-            <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4 shadow-xl">
-              <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
-                {/* Search Input */}
-                <div className="relative flex-1 w-full">
-                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary" />
-                  <input
-                    id="admin-catalog-search"
-                    name="admin-catalog-search"
-                    type="text"
-                    value={catalogSearchQuery}
-                    onChange={(e) => setCatalogSearchQuery(e.target.value)}
-                    placeholder="Buscar repuesto por nombre, categoría, descripción o número de parte OEM (ej. #52008899)..."
-                    className="w-full bg-black/60 border border-white/15 rounded-xl pl-10 pr-10 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary transition-colors font-medium shadow-inner"
-                  />
-                  {catalogSearchQuery && (
-                    <button
-                      onClick={() => setCatalogSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-1 text-xs"
-                      title="Limpiar búsqueda"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                {/* Count Badge */}
-                <div className="text-xs text-zinc-300 font-bold shrink-0 bg-black/40 border border-white/10 px-3.5 py-2.5 rounded-xl flex items-center gap-1.5">
-                  <span>Encontrados:</span>
-                  <span className="text-primary font-black text-sm">{filteredCatalogItems.length}</span>
-                  <span className="text-zinc-500 font-normal">/ {catalogItems.length}</span>
-                </div>
-              </div>
-
-              {/* Category Filter Pills */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-bold pt-1 border-t border-white/5">
-                <span className="text-zinc-500 text-[10px] uppercase tracking-wider shrink-0 mr-1 font-black">Categorías:</span>
-                {['Todas', 'Aceites y Lubricantes', 'Frenos y Suspensión', 'Baterías y Electricidad', 'Filtros y Consumibles', 'Fluidos y Refrigeración', 'Cuidado y Estética'].map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => setCatalogCategoryFilter(cat)}
-                    className={`px-3 py-1.5 rounded-xl transition-all whitespace-nowrap text-xs font-bold ${
-                      catalogCategoryFilter === cat
-                        ? 'bg-primary text-white shadow-md shadow-primary/20'
-                        : 'bg-black/40 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                <span className="font-display font-black text-sm tracking-widest text-white block leading-none">MASTERTECH</span>
+                <span className="text-[9px] font-black uppercase text-amber-400 tracking-wider">PANEL EXECUTIVE</span>
               </div>
             </div>
+            <a href="/" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white" title="Abrir sitio público">
+              <ExternalLink size={16} />
+            </a>
+          </div>
 
-            {/* Empty State */}
-            {filteredCatalogItems.length === 0 && (
-              <div className="bg-[#12141a] border border-white/10 rounded-2xl p-12 text-center space-y-4">
-                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto text-zinc-500">
-                  <Search size={24} />
-                </div>
-                <h3 className="text-lg font-bold text-white">No se encontraron repuestos</h3>
-                <p className="text-xs text-zinc-400 max-w-md mx-auto">
-                  No hay productos que coincidan con la búsqueda "{catalogSearchQuery}". Intenta con otra palabra o categoría.
-                </p>
+          {/* Navigation Menu */}
+          <nav className="space-y-1">
+            {[
+              { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+              { id: 'leads', label: `Citas Solicitadas (${leads.length})`, icon: <Calendar size={18} /> },
+              { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
+              { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
+              { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
+              { id: 'settings', label: 'Ajustes Principales', icon: <SettingsIcon size={18} /> },
+              { id: 'integraciones', label: 'Telegram & Webhook', icon: <Bot size={18} /> },
+            ].map(tab => {
+              const isActive = activeTab === tab.id;
+              return (
                 <button
-                  onClick={() => { setCatalogSearchQuery(''); setCatalogCategoryFilter('Todas'); }}
-                  className="btn-primary !py-2 !px-4 text-xs border-none mx-auto"
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-amber-500/20 to-primary/20 border border-primary/40 text-white shadow-lg shadow-amber-500/5' 
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  }`}
                 >
-                  Restablecer Filtros
+                  <div className="flex items-center gap-3">
+                    <span className={isActive ? 'text-primary' : 'text-zinc-400'}>{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </div>
+                  {tab.badge && (
+                    <span className="text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded-md">
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Footer Admin info & Logout */}
+        <div className="pt-4 border-t border-white/10 space-y-3">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary font-bold text-xs">
+              MT
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <span className="text-xs font-bold text-white block truncate">Administrador MasterTech</span>
+              <span className="text-[10px] text-zinc-500 block truncate">Sesión Activa</span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="w-full bg-white/5 hover:bg-red-500/20 border border-white/10 text-zinc-400 hover:text-red-400 text-xs font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          >
+            <LogOut size={14} />
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        
+        {/* TOP EXECUTIVE HEADER BAR */}
+        <header className="bg-[#12141a]/80 backdrop-blur-md border-b border-white/10 px-6 py-3.5 flex items-center justify-between sticky top-0 z-20">
+          <div className="flex items-center gap-3">
+            <span className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-ping" />
+              TALLER ABIERTO — EN VIVO
+            </span>
+            <span className="text-xs text-zinc-500 font-mono hidden sm:inline-block">| {timeStr}</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => fetchSettings()}
+              className="p-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 hover:text-white transition-colors"
+              title="Recargar configuraciones de Supabase"
+            >
+              <RefreshCw size={15} />
+            </button>
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary !py-2 !px-4 text-xs font-black uppercase tracking-wider border-none flex items-center gap-1.5 shadow-md"
+            >
+              <Globe size={14} />
+              <span>Ver Web pública</span>
+            </a>
+          </div>
+        </header>
+
+        {/* TAB BODY CONTAINER */}
+        <main className="p-6 max-w-7xl w-full mx-auto space-y-6">
+
+          {/* ========================================================================= */}
+          {/* MODULE 1: DASHBOARD EJECUTIVO */}
+          {/* ========================================================================= */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Resumen Ejecutivo Taller MasterTech</h1>
+                  <p className="text-xs text-zinc-400 mt-1">Control general de citas, catálogo y promociones activas.</p>
+                </div>
+                <button
+                  onClick={() => setActiveTab('leads')}
+                  className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                >
+                  <Calendar size={16} />
+                  <span>Ver Citas ({leads.length})</span>
                 </button>
               </div>
-            )}
 
-            {/* Catalog Product Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCatalogItems.map((item) => (
-                <div key={item.id} className="bg-[#12141a] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between group">
-                  <div className="relative aspect-[16/9] bg-black overflow-hidden">
-                    <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    <span className="absolute top-2 left-2 bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-bold px-2 py-0.5 rounded-full text-zinc-300">
-                      {item.category}
-                    </span>
-                    <span className="absolute bottom-2 right-2 bg-black/90 border border-primary/40 text-primary font-bold text-xs px-2.5 py-0.5 rounded-full">
-                      {item.price}
-                    </span>
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
+                  <div className="flex justify-between items-center text-zinc-400">
+                    <span className="text-[10px] font-black uppercase tracking-widest">Citas Totales Recibidas</span>
+                    <Calendar className="text-amber-400" size={18} />
                   </div>
+                  <div className="text-3xl font-black text-white">{leads.length}</div>
+                  <span className="text-[10px] text-zinc-500 block">Registradas vía web / WhatsApp</span>
+                </div>
 
-                  <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <h3 className="font-bold text-white text-sm leading-snug">{item.title}</h3>
-                        {item.isImportedUSA && (
-                          <span className="text-[10px] font-bold bg-blue-600/30 text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded-full shrink-0">
-                            USA
+                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
+                  <div className="flex justify-between items-center text-zinc-400">
+                    <span className="text-[10px] font-black uppercase tracking-widest">Repuestos en Catálogo</span>
+                    <Package className="text-primary" size={18} />
+                  </div>
+                  <div className="text-3xl font-black text-white">{catalogItems.length}</div>
+                  <span className="text-[10px] text-zinc-500 block">Productos disponibles públicamente</span>
+                </div>
+
+                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
+                  <div className="flex justify-between items-center text-zinc-400">
+                    <span className="text-[10px] font-black uppercase tracking-widest">Jornadas VIP Activas</span>
+                    <Zap className="text-purple-400" size={18} />
+                  </div>
+                  <div className="text-3xl font-black text-white">{jornadasList.length}</div>
+                  <span className="text-[10px] text-zinc-500 block">Promociones vigentes</span>
+                </div>
+
+                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
+                  <div className="flex justify-between items-center text-zinc-400">
+                    <span className="text-[10px] font-black uppercase tracking-widest">Especialistas Taller</span>
+                    <Users className="text-emerald-400" size={18} />
+                  </div>
+                  <div className="text-3xl font-black text-white">{teamMembers.length}</div>
+                  <span className="text-[10px] text-zinc-500 block">Técnicos y coordinadores</span>
+                </div>
+              </div>
+
+              {/* Recent Leads Preview */}
+              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-4">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <h3 className="text-sm font-black uppercase text-white tracking-wider flex items-center gap-2">
+                    <Clock className="text-primary" size={16} />
+                    <span>Últimas Citas Solicitadas</span>
+                  </h3>
+                  <button onClick={() => setActiveTab('leads')} className="text-xs text-primary hover:underline font-bold">Ver todas →</button>
+                </div>
+
+                {leads.length === 0 ? (
+                  <p className="text-xs text-zinc-500 py-4 text-center">No hay registros de citas recientes todavía.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {leads.slice(0, 5).map((l, idx) => (
+                      <div key={l.id || idx} className="p-3.5 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between gap-4">
+                        <div>
+                          <span className="font-bold text-xs text-white block">{l.nombre || 'Cliente sin nombre'}</span>
+                          <span className="text-[11px] text-zinc-400">{l.vehiculo || 'Vehículo'} — {l.servicio || 'Servicio'}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                            {l.status || 'Pendiente'}
+                          </span>
+                          <a
+                            href={`https://wa.me/${(l.telefono || '').replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/40 transition-colors"
+                            title="Abrir WhatsApp directo"
+                          >
+                            <WhatsAppIcon size={14} />
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE 2: GESTOR DE CITAS Y LEADS */}
+          {/* ========================================================================= */}
+          {activeTab === 'leads' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Gestión de Citas y Solicitudes</h1>
+                  <p className="text-xs text-zinc-400 mt-1">Revisa y responde a las citas agendadas por los clientes vía web.</p>
+                </div>
+                <button onClick={fetchLeads} className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold flex items-center gap-2">
+                  <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
+                  <span>Actualizar Lista</span>
+                </button>
+              </div>
+
+              {/* Filters & Search */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2 relative">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                  <input
+                    type="text"
+                    placeholder="Buscar por cliente, teléfono, vehículo o servicio..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white outline-none focus:border-primary"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Filter size={16} className="text-zinc-400 shrink-0" />
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-primary"
+                  >
+                    <option value="Todos">Todos los Estados</option>
+                    <option value="Pendiente">Pendientes</option>
+                    <option value="Confirmado">Confirmados</option>
+                    <option value="Atendido">Atendidos</option>
+                    <option value="Cancelado">Cancelados</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Table */}
+              <div className="bg-[#12141a] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs text-zinc-300">
+                    <thead className="bg-black/60 text-zinc-400 uppercase tracking-wider text-[10px] font-black border-b border-white/10">
+                      <tr>
+                        <th className="p-4">Cliente</th>
+                        <th className="p-4">Teléfono</th>
+                        <th className="p-4">Vehículo</th>
+                        <th className="p-4">Servicio</th>
+                        <th className="p-4">Fecha / Turno</th>
+                        <th className="p-4">Estado</th>
+                        <th className="p-4 text-right">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {filteredLeads.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="p-8 text-center text-zinc-500">
+                            No se encontraron registros de citas con los filtros indicados.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredLeads.map((l, idx) => (
+                          <tr key={l.id || idx} className="hover:bg-white/5 transition-colors">
+                            <td className="p-4 font-bold text-white">{l.nombre || 'Sin nombre'}</td>
+                            <td className="p-4 font-mono">{l.telefono || '-'}</td>
+                            <td className="p-4">{l.vehiculo || '-'}</td>
+                            <td className="p-4 text-primary font-bold">{l.servicio || '-'}</td>
+                            <td className="p-4 text-zinc-400">{l.fecha_turno || l.fecha || 'Por acordar'}</td>
+                            <td className="p-4">
+                              <select
+                                value={l.status || 'Pendiente'}
+                                onChange={(e) => handleUpdateLeadStatus(l.id, e.target.value)}
+                                className={`text-[10px] font-bold px-2 py-1 rounded-lg border outline-none cursor-pointer bg-black ${
+                                  l.status === 'Confirmado' 
+                                    ? 'border-green-500/40 text-green-400' 
+                                    : l.status === 'Atendido'
+                                    ? 'border-cyan-500/40 text-cyan-400'
+                                    : l.status === 'Cancelado'
+                                    ? 'border-red-500/40 text-red-400'
+                                    : 'border-amber-500/40 text-amber-300'
+                                }`}
+                              >
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Confirmado">Confirmado</option>
+                                <option value="Atendido">Atendido</option>
+                                <option value="Cancelado">Cancelado</option>
+                              </select>
+                            </td>
+                            <td className="p-4 text-right space-x-2">
+                              <a
+                                href={`https://wa.me/${(l.telefono || '').replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${l.nombre || ''}, te contactamos desde Taller MasterTech sobre tu solicitud de cita de ${l.servicio || 'servicio'}.`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex p-1.5 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/40 transition-colors"
+                                title="Contactar por WhatsApp"
+                              >
+                                <WhatsAppIcon size={14} />
+                              </a>
+                              <button
+                                onClick={() => handleDeleteLead(l.id)}
+                                className="p-1.5 rounded-lg bg-white/5 text-zinc-500 hover:text-red-400 border border-white/10 transition-colors"
+                                title="Eliminar registro"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE 3: GESTOR DE CATÁLOGO DE REPUESTOS CON AUTOFILL IA */}
+          {/* ========================================================================= */}
+          {activeTab === 'catalogo' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Catálogo de Repuestos & Productos</h1>
+                  <p className="text-xs text-zinc-400 mt-1">Gestiona el inventario de repuestos visibles públicamente en `/catalogo`.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setEditingProduct({
+                      id: 0,
+                      title: '',
+                      category: 'Mantenimiento Esencial',
+                      price: '$0 USD',
+                      desc: '',
+                      img: '/assets/servicio-mecanica.jpg',
+                      images: [],
+                      partNumber: ''
+                    });
+                    setIsCatalogModalOpen(true);
+                  }}
+                  className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                >
+                  <Plus size={16} />
+                  <span>Nuevo Repuesto</span>
+                </button>
+              </div>
+
+              {/* Products Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {catalogItems.map((prod) => (
+                  <div key={prod.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-4 space-y-3 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="w-full h-40 rounded-xl bg-black border border-white/10 overflow-hidden relative">
+                        <img src={prod.img || "/assets/servicio-mecanica.jpg"} alt={prod.title} className="w-full h-full object-cover" />
+                        {prod.partNumber && (
+                          <span className="absolute top-2 left-2 text-[9px] font-mono font-bold bg-black/80 text-amber-400 px-2 py-0.5 rounded-md border border-white/10">
+                            OEM: {prod.partNumber}
                           </span>
                         )}
-                      </div>
-                      <p className="text-zinc-400 text-xs line-clamp-2 mt-1">{item.desc}</p>
-                    </div>
-
-                    {/* Stock Control Bar */}
-                    <div className="bg-black/60 border border-white/10 p-2 rounded-xl flex items-center justify-between gap-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        (item.stock ?? 10) > 0 ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                      }`}>
-                        {(item.stock ?? 10) > 0 ? `🟢 ${item.stock ?? 10} en Stock` : '🔴 Agotado / Importación USA'}
-                      </span>
-
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            const currentStock = item.stock ?? 10;
-                            const updatedStock = Math.max(0, currentStock - 1);
-                            const updatedCatalog = catalogItems.map(p => p.id === item.id ? { ...p, stock: updatedStock } : p);
-                            setCatalogItems(updatedCatalog);
-                            const newForm = { ...settingsForm, CATALOG_PRODUCTS_JSON: JSON.stringify(updatedCatalog) };
-                            setSettingsForm(newForm);
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                          }}
-                          className="w-7 h-7 bg-white/10 hover:bg-red-500/30 text-white rounded-lg font-bold flex items-center justify-center transition-colors active:scale-95 text-xs"
-                          title="Descontar 1 del stock"
-                        >
-                          -
-                        </button>
-
-                        <span className="w-7 text-center text-xs font-mono font-bold text-white">
-                          {item.stock ?? 10}
+                        <span className="absolute bottom-2 right-2 text-xs font-black text-primary bg-black/90 px-2.5 py-1 rounded-lg border border-primary/30">
+                          {prod.price}
                         </span>
+                      </div>
 
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            const currentStock = item.stock ?? 10;
-                            const updatedStock = currentStock + 1;
-                            const updatedCatalog = catalogItems.map(p => p.id === item.id ? { ...p, stock: updatedStock } : p);
-                            setCatalogItems(updatedCatalog);
-                            const newForm = { ...settingsForm, CATALOG_PRODUCTS_JSON: JSON.stringify(updatedCatalog) };
-                            setSettingsForm(newForm);
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                          }}
-                          className="w-7 h-7 bg-white/10 hover:bg-green-500/30 text-white rounded-lg font-bold flex items-center justify-center transition-colors active:scale-95 text-xs"
-                          title="Sumar 1 al stock"
-                        >
-                          +
-                        </button>
+                      <div>
+                        <span className="text-[10px] font-bold uppercase text-zinc-500 block">{prod.category}</span>
+                        <h3 className="font-bold text-white text-sm leading-snug line-clamp-1">{prod.title}</h3>
+                        <p className="text-xs text-zinc-400 line-clamp-2 mt-1">{prod.desc}</p>
                       </div>
                     </div>
 
-                    <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 pt-3 border-t border-white/5">
                       <button
                         onClick={() => {
-                          setEditingProduct(item);
+                          setEditingProduct(prod);
                           setIsCatalogModalOpen(true);
                         }}
-                        className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                        className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       >
                         <Edit size={14} />
                         <span>Editar</span>
                       </button>
-
                       <button
-                        onClick={() => handleDeleteCatalogItem(item.id)}
-                        className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors"
-                        title="Eliminar del catálogo"
+                        onClick={() => handleDeleteCatalogItem(prod.id)}
+                        className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors cursor-pointer"
                       >
                         <Trash2 size={14} />
                       </button>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ========================================================================= */}
-        {/* TAB: JORNADAS VIP (CREAR, EDITAR Y GESTIONAR JORNADAS ESPECIALES) */}
-        {/* ========================================================================= */}
-        {activeTab === 'jornadas' && (
-          <div className="max-w-6xl mx-auto space-y-6 animate-fade-in">
-            {/* Header & Add Button */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-[#12141a] p-6 rounded-2xl border border-amber-500/30">
-              <div>
-                <h2 className="text-xl font-bold uppercase tracking-tight text-white flex items-center gap-2">
-                  <Zap className="text-amber-400" size={22} />
-                  <span>Gestión de Jornadas VIP Automotrices</span>
-                </h2>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Crea, edita o elimina las jornadas de servicio especial (Reprogramación, EGR/DPF, Cielo Estrellado, A/A, Inyección) mostradas públicamente en <code className="text-amber-300">/jornada</code>.
-                </p>
-              </div>
-
-              <button
-                onClick={() => {
-                  setEditingJornada({
-                    id: `jornada-${Date.now()}`,
-                    badge: "🔥 Nueva Jornada Especial",
-                    title: "Título de la Nueva Jornada",
-                    subtitle: "Descripción detallada del servicio especial ofertado.",
-                    img: "/assets/servicio-mecanica.jpg",
-                    regularPrice: "$200 USD",
-                    promoPrice: "$120 USD",
-                    discountBadge: "AHORRAS $80 USD",
-                    duration: "2 horas",
-                    benefits: ["Beneficio 1", "Beneficio 2", "Beneficio 3"],
-                    compatibleModels: "Apto para todas las marcas y modelos."
-                  });
-                  setIsJornadaModalOpen(true);
-                }}
-                className="btn-primary !py-3 !px-5 text-xs font-black uppercase tracking-wider flex items-center gap-2 border-none shadow-lg shadow-amber-500/20"
-              >
-                <Plus size={16} />
-                <span>Crear Nueva Jornada VIP</span>
-              </button>
-            </div>
-
-            {/* Timer Settings Card */}
-            <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2 border-b border-white/10 pb-3">
-                <Clock size={18} />
-                <span>Configuración del Reloj de Cierre de Cupos (Cuenta Regresiva)</span>
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div>
-                  <label htmlFor="jornada-timer-title" className="text-zinc-400 font-bold block mb-1">
-                    Texto Encabezado del Reloj
-                  </label>
-                  <input
-                    id="jornada-timer-title"
-                    name="jornada-timer-title"
-                    type="text"
-                    value={settingsForm.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const updated = { ...settingsForm, JORNADA_COUNTDOWN_TITLE: val };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
-                      handleSaveSettings(updated);
-                    }}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-white outline-none focus:border-amber-400 font-bold"
-                    placeholder="Ej. CIERRE DE CUPOS JORNADA:"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="jornada-timer-end" className="text-zinc-400 font-bold block mb-1">
-                    Fecha & Hora de Cierre de Cupos
-                  </label>
-                  <input
-                    id="jornada-timer-end"
-                    name="jornada-timer-end"
-                    type="datetime-local"
-                    value={settingsForm.JORNADA_COUNTDOWN_END || ''}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: val };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
-                      handleSaveSettings(updated);
-                    }}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-white outline-none focus:border-amber-400 font-bold"
-                  />
-                </div>
-              </div>
-
-              {/* Quick Days Buttons */}
-              <div className="flex flex-wrap items-center gap-2 pt-2">
-                <span className="text-[11px] text-zinc-400 font-bold">Botones Rápidos de Reinicio:</span>
-                {[
-                  { label: "+1 Día", days: 1 },
-                  { label: "+3 Días", days: 3 },
-                  { label: "+7 Días (1 Semana)", days: 7 },
-                  { label: "+14 Días (2 Semanas)", days: 14 }
-                ].map((b, idx) => (
-                  <button
-                    type="button"
-                    key={idx}
-                    onClick={() => {
-                      const targetIso = new Date(Date.now() + b.days * 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
-                      const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: targetIso };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
-                      handleSaveSettings(updated);
-                    }}
-                    className="bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all cursor-pointer"
-                  >
-                    ⚡ Cierre en {b.label}
-                  </button>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* List of Jornadas */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {(jornadasList ?? DEFAULT_JORNADAS).map((jornada: any, idx: number) => (
-                <div key={jornada.id || idx} className="bg-[#12141a] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between p-5 space-y-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-20 h-20 rounded-xl bg-black overflow-hidden shrink-0 border border-white/10">
-                      <img 
-                        src={jornada.img || "/assets/servicio-mecanica.jpg"} 
-                        alt={jornada.title} 
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
-                        className="w-full h-full object-cover" 
-                      />
-                    </div>
-
-                    <div className="flex-1 space-y-1">
-                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
-                        {jornada.badge}
-                      </span>
-                      <h3 className="font-bold text-white text-base leading-snug">{jornada.title}</h3>
-                      <p className="text-xs text-zinc-400 line-clamp-2">{jornada.subtitle}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs">
-                    <div>
-                      <span className="text-[10px] text-zinc-500 block">PRECIO REGULAR</span>
-                      <span className="text-zinc-400 line-through font-bold">{jornada.regularPrice}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-amber-400 font-bold block">OFERTA JORNADA</span>
-                      <span className="text-lg font-black text-primary">{jornada.promoPrice}</span>
-                    </div>
-                    <div className="bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold px-2 py-1 rounded-lg">
-                      {jornada.discountBadge}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-2 border-t border-white/5">
-                    <button
-                      onClick={() => {
-                        setEditingJornada(jornada);
-                        setIsJornadaModalOpen(true);
-                      }}
-                      className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <Edit size={14} />
-                      <span>Editar Jornada</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        if (!window.confirm(`¿Estás seguro de eliminar la jornada "${jornada.title}"?`)) return;
-                        const currentList = jornadasList || [];
-                        const updated = currentList.filter((j: any) => String(j.id) !== String(jornada.id));
-                        setJornadasList(updated);
-                        const serialized = JSON.stringify(updated);
-                        const newForm = { ...settingsForm, JORNADAS_JSON: serialized };
-                        setSettingsForm(newForm);
-                        setSettings(newForm);
-                        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
-                        // Pass newForm explicitly to avoid async state closure
-                        handleSaveSettings(newForm);
-                      }}
-                      className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors cursor-pointer"
-                      title="Eliminar Jornada"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
+          {/* ========================================================================= */}
+          {/* MODULE 4: GESTOR DE JORNADAS VIP */}
+          {/* ========================================================================= */}
+          {activeTab === 'jornadas' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Jornadas VIP Automotrices</h1>
+                  <p className="text-xs text-zinc-400 mt-1">Crea o elimina las promociones especiales con precios de jornada en `/jornada`.</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ========================================================================= */}
-        {/* TAB 4: AJUSTES WEB (HERO, CONTACTO, ESTADO) */}
-        {/* ========================================================================= */}
-        {activeTab === 'settings' && (
-          <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-            <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
-              <h2 className="text-lg font-bold uppercase tracking-tight text-white flex items-center gap-2 border-b border-white/10 pb-4">
-                <SettingsIcon className="text-primary" size={20} />
-                <span>Ajustes Principales del Sitio Web</span>
-              </h2>
-
-              {/* Hero Image & Reel */}
-              <div className="space-y-4">
-                <h3 className="text-xs font-black uppercase tracking-widest text-primary">1. Fondo Hero, Logo & Video</h3>
-                <div className="space-y-4">
-                  <ImageUploader
-                    label="Imagen de Fondo Principal (Hero)"
-                    value={settingsForm.HERO_IMG || ''}
-                    onChange={(val) => {
-                      const updated = { ...settingsForm, HERO_IMG: val };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
-                      handleSaveSettings(updated);
-                    }}
-                    aspectRatio={16 / 9}
-                    placeholder="/assets/hero_bg_custom.jpg"
-                  />
-                  <ImageUploader
-                    label="Logo Oficial del Taller"
-                    value={settingsForm.LOGO_URL || ''}
-                    onChange={(val) => {
-                      const updated = { ...settingsForm, LOGO_URL: val };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
-                      handleSaveSettings(updated);
-                    }}
-                    aspectRatio={1 / 1}
-                    placeholder="/logo.png"
-                  />
-                  <ImageUploader
-                    label="Imagen de la Sección 'NUESTRAS INSTALACIONES'"
-                    value={settingsForm.IMG_INSTALACIONES || ''}
-                    onChange={(val) => {
-                      const updated = { ...settingsForm, IMG_INSTALACIONES: val };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
-                      handleSaveSettings(updated);
-                    }}
-                    aspectRatio={4 / 3}
-                    placeholder="/assets/instalaciones.jpg"
-                  />
-                </div>
-
-                <div className="space-y-2 pt-2">
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="hero-reel-url" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
-                      URL del Reel de Instagram / Video Promocional de Portada
-                    </label>
-                    {settingsForm.HERO_REEL_URL && (
-                      <a
-                        href={settingsForm.HERO_REEL_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
-                      >
-                        <ExternalLink size={12} />
-                        <span>Abrir Enlace</span>
-                      </a>
-                    )}
-                  </div>
-                  <input
-                    id="hero-reel-url"
-                    name="hero-reel-url"
-                    type="text"
-                    value={settingsForm.HERO_REEL_URL || ''}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      const updated = { ...settingsForm, HERO_REEL_URL: val };
-                      setSettingsForm(updated);
-                      setSettings(updated);
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
-                      handleSaveSettings(updated);
-                    }}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
-                    placeholder="Ej. https://www.instagram.com/reel/DYQxwH6jywd/ o tu video mp4"
-                  />
-                  <p className="text-[10.5px] text-zinc-500">
-                    Puedes pegar cualquier link de Instagram (Reels, publicaciones, enlaces con parámetros o código iframe). Se convertirá automáticamente para reproducirse en la portada.
-                  </p>
-                </div>
+                <button
+                  onClick={() => {
+                    setEditingJornada({
+                      id: `jornada_${Date.now()}`,
+                      badge: "🏎️ Jornada Especial",
+                      title: "Título de la Jornada",
+                      subtitle: "Descripción corta de la jornada...",
+                      img: "/assets/servicio-mecanica.jpg",
+                      regularPrice: "$100 USD",
+                      promoPrice: "$60 USD",
+                      discountBadge: "AHORRAS $40 USD",
+                      duration: "1 a 2 horas",
+                      benefits: ["Beneficio 1", "Beneficio 2"],
+                      specs: [{ label: "Garantía", val: "1 Año" }],
+                      compatibleModels: "Apto para todas las marcas."
+                    });
+                    setIsJornadaModalOpen(true);
+                  }}
+                  className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                >
+                  <Plus size={16} />
+                  <span>Nueva Jornada VIP</span>
+                </button>
               </div>
 
-              {/* Contact numbers & Redes Sociales */}
-              <div className="space-y-4 pt-4 border-t border-white/10">
-                <h3 className="text-xs font-black uppercase tracking-widest text-primary">2. Teléfono & Canales Directos</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="phone-number" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Teléfono de Contacto (Texto)</label>
+              {/* Clock Timer Config */}
+              <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-3">
+                <h3 className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-2">
+                  <Clock size={16} />
+                  <span>Configuración del Reloj de Cierre de Cupos</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Encabezado del Reloj</label>
                     <input
-                      id="phone-number"
-                      name="phone-number"
                       type="text"
-                      value={settingsForm.PHONE_NUMBER || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, PHONE_NUMBER: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="whatsapp-link" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Enlace Directo de WhatsApp</label>
-                    <input
-                      id="whatsapp-link"
-                      name="whatsapp-link"
-                      type="text"
-                      value={settingsForm.WHATSAPP_LINK || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, WHATSAPP_LINK: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="instagram-link" className="text-[10px] font-black uppercase tracking-widest text-pink-400 block">Enlace Oficial al Perfil de Instagram</label>
-                    <input
-                      id="instagram-link"
-                      name="instagram-link"
-                      type="text"
-                      value={settingsForm.INSTAGRAM_LINK || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, INSTAGRAM_LINK: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-pink-500"
-                      placeholder="https://www.instagram.com/tallermastertech/"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="tiktok-link" className="text-[10px] font-black uppercase tracking-widest text-cyan-400 block">Enlace Oficial de TikTok</label>
-                    <input
-                      id="tiktok-link"
-                      name="tiktok-link"
-                      type="text"
-                      value={settingsForm.TIKTOK_LINK || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, TIKTOK_LINK: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-cyan-500"
-                      placeholder="https://www.tiktok.com/@tallermastertech"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Status and Banner */}
-              <div className="space-y-4 pt-4 border-t border-white/10">
-                <h3 className="text-xs font-black uppercase tracking-widest text-primary">3. Estado del Taller & Distintivos</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="is-open" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
-                      Modo Operativo del Taller (Badge Abierto/Cerrado)
-                    </label>
-                    <select
-                      id="is-open"
-                      name="is-open"
-                      value={settingsForm.IS_OPEN || 'auto'}
+                      value={settingsForm.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}
                       onChange={(e) => {
-                        const val = e.target.value;
-                        const updated = { ...settingsForm, IS_OPEN: val };
+                        const updated = { ...settingsForm, JORNADA_COUNTDOWN_TITLE: e.target.value };
                         setSettingsForm(updated);
-                        setSettings(updated);
-                        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (err) {}
                         handleSaveSettings(updated);
                       }}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary cursor-pointer"
-                    >
-                      <option value="auto">🤖 Modo Automático por Horario (Lun-Vie 8am-5pm - Recomendado)</option>
-                      <option value="true">🟢 Forzar Taller Abierto (24/7 Verde)</option>
-                      <option value="false">🔴 Forzar Taller Cerrado (Emergencias 24/7)</option>
-                    </select>
-                    <p className="text-[10px] text-zinc-400">
-                      En <strong>Modo Automático</strong>, el sitio web muestra 🟢 <strong>Taller Abierto</strong> automáticamente de Lunes a Viernes (8:00 AM a 5:00 PM Hora Vzla) y 🔴 <strong>Taller Cerrado • Solo Emergencias</strong> de 5:01 PM en adelante y los Fines de Semana.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="success-badge" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Badge de Cita Exitosa</label>
-                    <input
-                      id="success-badge"
-                      name="success-badge"
-                      type="text"
-                      value={settingsForm.SUCCESS_BADGE || '¡TIENES HASTA UN 15% DE DESCUENTO!'}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, SUCCESS_BADGE: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
                     />
                   </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Botones Rápido Cierre</label>
+                    <div className="flex flex-wrap gap-2">
+                      {[1, 3, 7, 14].map(days => (
+                        <button
+                          key={days}
+                          onClick={() => {
+                            const newEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+                            const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: newEnd };
+                            setSettingsForm(updated);
+                            handleSaveSettings(updated);
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold hover:bg-amber-500/20 transition-colors"
+                        >
+                          + {days} {days === 1 ? 'Día' : 'Días'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
 
-        {/* ========================================================================= */}
-        {/* TAB 5: CONTENIDO & SERVICIOS */}
-        {/* ========================================================================= */}
-        {activeTab === 'contenido' && (
-          <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-            {/* Sub-tab navigation */}
-            <div className="flex items-center gap-2 bg-[#12141a] p-2 rounded-2xl border border-white/10 overflow-x-auto">
-              <button
-                onClick={() => setContentSubTab('servicios')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  contentSubTab === 'servicios' ? 'bg-primary text-white' : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                Servicios ({services.length})
-              </button>
+              {/* Jornadas List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {jornadasList.map((j) => (
+                  <div key={j.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border border-white/10 shrink-0">
+                          <img src={j.img || "/assets/servicio-mecanica.jpg"} alt={j.title} className="w-full h-full object-cover" />
+                        </div>
+                        <div>
+                          <span className="text-[9px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
+                            {j.badge}
+                          </span>
+                          <h3 className="font-bold text-white text-sm leading-snug line-clamp-2 mt-1">{j.title}</h3>
+                        </div>
+                      </div>
 
-              <button
-                onClick={() => setContentSubTab('equipo')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  contentSubTab === 'equipo' ? 'bg-primary text-white' : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                Equipo / Personal ({teamMembers.length})
-              </button>
+                      <div className="flex items-center justify-between bg-black/40 p-3 rounded-xl border border-white/5 text-xs">
+                        <div>
+                          <span className="text-[9px] text-zinc-500 block">REGULAR</span>
+                          <span className="text-zinc-400 line-through font-bold">{j.regularPrice}</span>
+                        </div>
+                        <div>
+                          <span className="text-[9px] text-amber-400 font-bold block">PROMO</span>
+                          <span className="text-lg font-black text-primary">{j.promoPrice}</span>
+                        </div>
+                        <span className="bg-amber-500/10 text-amber-300 text-[10px] font-bold px-2 py-1 rounded-md border border-amber-500/30">
+                          {j.discountBadge}
+                        </span>
+                      </div>
+                    </div>
 
-              <button
-                onClick={() => setContentSubTab('testimonios')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  contentSubTab === 'testimonios' ? 'bg-primary text-white' : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                Testimonios ({reviews.length})
-              </button>
-
-              <button
-                onClick={() => setContentSubTab('faqs')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                  contentSubTab === 'faqs' ? 'bg-primary text-white' : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                Preguntas Frecuentes ({faqs.length})
-              </button>
-            </div>
-
-            {/* Sub-tab: Servicios */}
-            {contentSubTab === 'servicios' && (
-              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
-                <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                  <div>
-                    <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión de Servicios de Taller</h3>
-                    <p className="text-xs text-zinc-400 mt-1">Edita el título, la descripción y sube o modifica la imagen oficial de cada servicio.</p>
+                    <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                      <button
+                        onClick={() => {
+                          setEditingJornada(j);
+                          setIsJornadaModalOpen(true);
+                        }}
+                        className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Edit size={14} />
+                        <span>Editar Jornada</span>
+                      </button>
+                      <button
+                        onClick={() => handleDeleteJornadaItem(j.id)}
+                        className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors cursor-pointer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      const updated = [...services, { id: Date.now(), title: "Nuevo Servicio", desc: "Descripción del servicio...", img: "/assets/instalaciones.jpg" }];
-                      setServices(updated);
-                      setSettingsForm({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
-                    }}
-                    className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1 shrink-0"
-                  >
-                    <Plus size={14} />
-                    <span>Agregar Servicio</span>
-                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE 5: CONTENIDOS DEL SITIO WEB */}
+          {/* ========================================================================= */}
+          {activeTab === 'contenido' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Contenidos del Sitio Web</h1>
+                  <p className="text-xs text-zinc-400 mt-1">Administra las secciones de servicios, equipo de especialistas, testimonios y preguntas frecuentes.</p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="flex items-center gap-2 bg-black/40 p-1 rounded-xl border border-white/10">
+                  {[
+                    { id: 'servicios', label: 'Servicios Taller' },
+                    { id: 'equipo', label: 'Equipo Taller' },
+                    { id: 'testimonios', label: 'Testimonios' },
+                    { id: 'faqs', label: 'FAQs' }
+                  ].map(sub => (
+                    <button
+                      key={sub.id}
+                      onClick={() => setContentSubTab(sub.id as any)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        contentSubTab === sub.id ? 'bg-primary text-black' : 'text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      {sub.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sub-tab 1: Services */}
+              {contentSubTab === 'servicios' && (
+                <div className="space-y-4">
                   {services.map((srv, idx) => (
-                    <div key={srv.id || idx} className="p-5 bg-black/40 rounded-2xl border border-white/10 space-y-4">
-                      <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3">
-                        <div className="flex-1">
-                          <label htmlFor={`srv-title-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Título del Servicio #{idx + 1}</label>
-                          <input
-                            id={`srv-title-${idx}`}
-                            name={`srv-title-${idx}`}
-                            type="text"
-                            value={srv.title}
-                            onChange={(e) => {
-                              const titleVal = e.target.value;
+                    <div key={srv.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="md:col-span-2 space-y-3">
+                          <div>
+                            <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Título del Servicio</label>
+                            <input
+                              type="text"
+                              value={srv.title || ''}
+                              onChange={(e) => {
+                                const updated = [...services];
+                                updated[idx].title = e.target.value;
+                                setServices(updated);
+                                handleSaveSettings({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
+                              }}
+                              className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Descripción Corta</label>
+                            <textarea
+                              rows={2}
+                              value={srv.desc || ''}
+                              onChange={(e) => {
+                                const updated = [...services];
+                                updated[idx].desc = e.target.value;
+                                setServices(updated);
+                                handleSaveSettings({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
+                              }}
+                              className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <ImageUploader
+                            label="Imagen Representativa"
+                            value={srv.img || ''}
+                            onChange={(val) => {
                               const updated = [...services];
-                              updated[idx].title = titleVal;
+                              updated[idx].img = val;
                               setServices(updated);
-                              setSettingsForm({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
+                              handleSaveSettings({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
                             }}
-                            className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary"
+                            aspectRatio={16 / 9}
+                            placeholder="/assets/servicio-mecanica.jpg"
                           />
                         </div>
-
-                        <button
-                          onClick={() => {
-                            if (!window.confirm(`¿Eliminar el servicio "${srv.title}"?`)) return;
-                            const updated = services.filter((_, i) => i !== idx);
-                            setServices(updated);
-                            const newForm = { ...settingsForm, SERVICES_JSON: JSON.stringify(updated) };
-                            setSettingsForm(newForm);
-                            setSettings(newForm);
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
-                            handleSaveSettings(newForm);
-                          }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 cursor-pointer"
-                          title="Eliminar Servicio"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-
-                      {/* Image Uploader & Preview */}
-                      <div>
-                        <ImageUploader
-                          label={`Imagen de ${srv.title || `Servicio #${idx + 1}`}`}
-                          value={srv.img || ''}
-                          onChange={(val) => {
-                            const updated = [...services];
-                            updated[idx].img = val;
-                            setServices(updated);
-
-                            const newForm = { ...settingsForm, SERVICES_JSON: JSON.stringify(updated) };
-                            let key = '';
-                            if (srv.title.includes('Mecánica')) key = 'MECANICA';
-                            else if (srv.title.includes('Mantenimiento')) key = 'MANTENIMIENTO';
-                            else if (srv.title.includes('Electricidad')) key = 'ELECTRICIDAD';
-                            else if (srv.title.includes('Frenos')) key = 'FRENOS';
-                            else if (srv.title.includes('Inyección')) key = 'INYECCION';
-                            else if (srv.title.includes('Climatización')) key = 'CLIMATIZACION';
-                            else if (srv.title.includes('Lavado')) key = 'LAVADO';
-
-                            if (key) newForm[`IMG_SRV_${key}`] = val;
-                            setSettingsForm(newForm);
-                          }}
-                          aspectRatio={16 / 9}
-                          placeholder="/assets/servicio-mecanica.jpg"
-                        />
-                      </div>
-
-                      {/* Description */}
-                      <div>
-                        <label htmlFor={`srv-desc-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Descripción del Servicio</label>
-                        <textarea
-                          id={`srv-desc-${idx}`}
-                          name={`srv-desc-${idx}`}
-                          rows={3}
-                          value={srv.desc}
-                          onChange={(e) => {
-                            const descVal = e.target.value;
-                            const updated = [...services];
-                            updated[idx].desc = descVal;
-                            setServices(updated);
-
-                            const newForm = { ...settingsForm, SERVICES_JSON: JSON.stringify(updated) };
-                            let key = '';
-                            if (srv.title.includes('Mecánica')) key = 'MECANICA';
-                            else if (srv.title.includes('Mantenimiento')) key = 'MANTENIMIENTO';
-                            else if (srv.title.includes('Electricidad')) key = 'ELECTRICIDAD';
-                            else if (srv.title.includes('Frenos')) key = 'FRENOS';
-                            else if (srv.title.includes('Inyección')) key = 'INYECCION';
-                            else if (srv.title.includes('Climatización')) key = 'CLIMATIZACION';
-                            else if (srv.title.includes('Lavado')) key = 'LAVADO';
-
-                            if (key) newForm[`DESC_SRV_${key}`] = descVal;
-                            setSettingsForm(newForm);
-                          }}
-                          className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-xs text-white outline-none focus:border-primary"
-                        />
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Sub-tab: Equipo */}
-            {contentSubTab === 'equipo' && (
-              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
-                <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                  <div>
-                    <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión del Equipo de Trabajo</h3>
-                    <p className="text-xs text-zinc-400 mt-1">Edita los nombres, cargos, descripciones y fotos del personal visibles en la página <strong className="text-white">/nosotros</strong>.</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      const updated = [...teamMembers, { id: Date.now(), name: "Nuevo Miembro", role: "Especialista", desc: "Descripción...", img: "/assets/instalaciones.jpg" }];
-                      setTeamMembers(updated);
-                      const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
-                      setSettingsForm(newForm);
-                      try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (e) {}
-                      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
-                    }}
-                    className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1 shrink-0"
-                  >
-                    <Plus size={14} />
-                    <span>Agregar Miembro</span>
-                  </button>
-                </div>
-
-                <div className="space-y-6">
-                  {teamMembers.map((member, idx) => (
-                    <div key={member.id || idx} className="p-5 bg-black/40 rounded-2xl border border-white/10 space-y-4">
-                      <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
-                          <div>
-                            <label htmlFor={`team-name-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre</label>
-                            <input
-                              id={`team-name-${idx}`}
-                              name={`team-name-${idx}`}
-                              type="text"
-                              value={member.name || ''}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const updated = [...teamMembers];
-                                updated[idx].name = val;
-                                setTeamMembers(updated);
-
-                                const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
-                                if (idx === 0) newForm.TEAM_1_NAME = val;
-                                if (idx === 1) newForm.TEAM_2_NAME = val;
-                                if (idx === 2) newForm.TEAM_3_NAME = val;
-                                setSettingsForm(newForm);
-                                try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (err) {}
-                                try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                              }}
-                              className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary"
-                            />
-                          </div>
-
-                          <div>
-                            <label htmlFor={`team-role-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Cargo / Especialidad</label>
-                            <input
-                              id={`team-role-${idx}`}
-                              name={`team-role-${idx}`}
-                              type="text"
-                              value={member.role || ''}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const updated = [...teamMembers];
-                                updated[idx].role = val;
-                                setTeamMembers(updated);
-
-                                const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
-                                if (idx === 0) newForm.TEAM_1_ROLE = val;
-                                if (idx === 1) newForm.TEAM_2_ROLE = val;
-                                if (idx === 2) newForm.TEAM_3_ROLE = val;
-                                setSettingsForm(newForm);
-                                try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (err) {}
-                                try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                              }}
-                              className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary"
-                            />
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={() => {
-                            if (!window.confirm(`¿Eliminar a "${member.name}" del equipo?`)) return;
-                            const updated = teamMembers.filter((_, i) => i !== idx);
-                            setTeamMembers(updated);
-                            const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
-                            setSettingsForm(newForm);
-                            setSettings(newForm);
-                            try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (err) {}
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                            handleSaveSettings(newForm);
-                          }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end cursor-pointer"
-                          title="Eliminar Miembro"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-
-                      {/* Image Uploader */}
-                      <div>
-                        <ImageUploader
-                          label={`Foto de ${member.name || `Miembro #${idx + 1}`}`}
-                          value={member.img || ''}
-                          onChange={(val) => {
-                            const updated = [...teamMembers];
-                            updated[idx].img = val;
-                            setTeamMembers(updated);
-
-                            const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
-                            if (idx === 0) newForm.TEAM_1_IMG = val;
-                            if (idx === 1) newForm.TEAM_2_IMG = val;
-                            if (idx === 2) newForm.TEAM_3_IMG = val;
-                            setSettingsForm(newForm);
-                            try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (err) {}
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                          }}
-                          aspectRatio={1}
-                          placeholder="/assets/instalaciones.jpg"
-                        />
-                      </div>
-
-                      {/* Description */}
-                      <div>
-                        <label htmlFor={`team-desc-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Perfil / Biografía</label>
-                        <textarea
-                          id={`team-desc-${idx}`}
-                          name={`team-desc-${idx}`}
-                          rows={2}
-                          value={member.desc || ''}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            const updated = [...teamMembers];
-                            updated[idx].desc = val;
-                            setTeamMembers(updated);
-
-                            const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
-                            if (idx === 0) newForm.TEAM_1_DESC = val;
-                            if (idx === 1) newForm.TEAM_2_DESC = val;
-                            if (idx === 2) newForm.TEAM_3_DESC = val;
-                            setSettingsForm(newForm);
-                            try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (err) {}
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
-                          }}
-                          className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-xs text-white outline-none focus:border-primary"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Sub-tab: Testimonios */}
-            {contentSubTab === 'testimonios' && (
-              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
-                <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                  <div>
-                    <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión de Reseñas y Testimonios</h3>
-                    <p className="text-xs text-zinc-400 mt-1">Edita u organiza las opiniones de los clientes en la sección de inicio.</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      const updated = [...reviews, { id: Date.now(), name: "Nombre Cliente", car: "Modelo Vehículo", quote: "Excelente atención y diagnóstico preciso." }];
-                      setReviews(updated);
-                      const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
-                      setSettingsForm(newForm);
-                      setSettings(newForm);
-                      handleSaveSettings(newForm);
-                    }}
-                    className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1 shrink-0"
-                  >
-                    <Plus size={14} />
-                    <span>Agregar Testimonio</span>
-                  </button>
-                </div>
-
-                <div className="space-y-6">
-                  {reviews.map((rev, idx) => (
-                    <div key={rev.id || idx} className="p-5 bg-black/40 rounded-2xl border border-white/10 space-y-4">
-                      <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-3">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
-                          <div>
-                            <label htmlFor={`rev-name-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre Cliente</label>
-                            <input
-                              id={`rev-name-${idx}`}
-                              name={`rev-name-${idx}`}
-                              type="text"
-                              value={rev.name || ''}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const updated = [...reviews];
-                                updated[idx].name = val;
-                                setReviews(updated);
-
-                                const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
-                                if (idx === 0) newForm.REV_1_NAME = val;
-                                if (idx === 1) newForm.REV_2_NAME = val;
-                                if (idx === 2) newForm.REV_3_NAME = val;
-                                setSettingsForm(newForm);
-                              }}
-                              className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary"
-                            />
-                          </div>
-
-                          <div>
-                            <label htmlFor={`rev-car-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Vehículo del Cliente</label>
-                            <input
-                              id={`rev-car-${idx}`}
-                              name={`rev-car-${idx}`}
-                              type="text"
-                              value={rev.car || ''}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const updated = [...reviews];
-                                updated[idx].car = val;
-                                setReviews(updated);
-
-                                const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
-                                if (idx === 0) newForm.REV_1_CAR = val;
-                                if (idx === 1) newForm.REV_2_CAR = val;
-                                if (idx === 2) newForm.REV_3_CAR = val;
-                                setSettingsForm(newForm);
-                              }}
-                              className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none focus:border-primary"
-                            />
-                          </div>
-                        </div>
-
-                        <button
-                          onClick={() => {
-                            if (!window.confirm(`¿Eliminar reseña de "${rev.name}"?`)) return;
-                            const updated = reviews.filter((_, i) => i !== idx);
-                            setReviews(updated);
-                            const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
-                            setSettingsForm(newForm);
-                            setSettings(newForm);
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
-                            handleSaveSettings(newForm);
-                          }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end cursor-pointer"
-                          title="Eliminar Reseña"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-
-                      {/* Testimonial Quote */}
-                      <div>
-                        <label htmlFor={`rev-quote-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Testimonio / Opinión</label>
-                        <textarea
-                          id={`rev-quote-${idx}`}
-                          name={`rev-quote-${idx}`}
-                          rows={2}
-                          value={rev.quote || ''}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            const updated = [...reviews];
-                            updated[idx].quote = val;
-                            setReviews(updated);
-
-                            const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
-                            if (idx === 0) newForm.REV_1_QUOTE = val;
-                            if (idx === 1) newForm.REV_2_QUOTE = val;
-                            if (idx === 2) newForm.REV_3_QUOTE = val;
-                            setSettingsForm(newForm);
-                          }}
-                          className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-xs text-white outline-none focus:border-primary"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {contentSubTab === 'faqs' && (
-              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-base font-bold text-white uppercase tracking-wider">Preguntas Frecuentes</h3>
-                  <button
-                    onClick={() => {
-                      const updated = [...faqs, { q: "Nueva Pregunta", a: "Respuesta de la pregunta." }];
-                      setFaqs(updated);
-                      const newForm = { ...settingsForm, FAQS_JSON: JSON.stringify(updated) };
-                      setSettingsForm(newForm);
-                      setSettings(newForm);
-                      handleSaveSettings(newForm);
-                    }}
-                    className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1"
-                  >
-                    <Plus size={14} />
-                    <span>Agregar FAQ</span>
-                  </button>
-                </div>
-
+              {/* Sub-tab 2: FAQs */}
+              {contentSubTab === 'faqs' && (
                 <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-sm font-bold text-white uppercase">Preguntas Frecuentes</h3>
+                    <button
+                      onClick={() => {
+                        const updated = [...faqs, { q: "Nueva Pregunta Frecuente", a: "Respuesta detallada..." }];
+                        setFaqs(updated);
+                        handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
+                      }}
+                      className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1"
+                    >
+                      <Plus size={14} />
+                      <span>Agregar FAQ</span>
+                    </button>
+                  </div>
+
                   {faqs.map((faq, idx) => (
-                    <div key={idx} className="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                    <div key={idx} className="bg-[#12141a] p-4 rounded-xl border border-white/10 space-y-3">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex-1">
-                          <label htmlFor={`faq-q-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Pregunta #{idx + 1}</label>
+                        <div className="flex-1 space-y-2">
                           <input
-                            id={`faq-q-${idx}`}
-                            name={`faq-q-${idx}`}
                             type="text"
                             value={faq.q}
                             onChange={(e) => {
                               const updated = [...faqs];
                               updated[idx].q = e.target.value;
                               setFaqs(updated);
-                              setSettingsForm({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
+                              handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
                             }}
-                            className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                          />
+                          <textarea
+                            rows={2}
+                            value={faq.a}
+                            onChange={(e) => {
+                              const updated = [...faqs];
+                              updated[idx].a = e.target.value;
+                              setFaqs(updated);
+                              handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
                           />
                         </div>
                         <button
                           onClick={() => {
-                            if (!window.confirm(`¿Eliminar la pregunta #${idx + 1}?`)) return;
                             const updated = faqs.filter((_, i) => i !== idx);
                             setFaqs(updated);
-                            const newForm = { ...settingsForm, FAQS_JSON: JSON.stringify(updated) };
-                            setSettingsForm(newForm);
-                            setSettings(newForm);
-                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
-                            handleSaveSettings(newForm);
+                            handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
                           }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end cursor-pointer"
-                          title="Eliminar Pregunta"
+                          className="text-zinc-500 hover:text-red-400 p-2"
                         >
                           <Trash2 size={14} />
                         </button>
                       </div>
-                      <div>
-                        <label htmlFor={`faq-a-${idx}`} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Respuesta #{idx + 1}</label>
-                        <textarea
-                          id={`faq-a-${idx}`}
-                          name={`faq-a-${idx}`}
-                          rows={2}
-                          value={faq.a}
-                          onChange={(e) => {
-                            const updated = [...faqs];
-                            updated[idx].a = e.target.value;
-                            setFaqs(updated);
-                            setSettingsForm({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
-                          }}
-                          className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-xs text-zinc-300 outline-none focus:border-primary"
-                        />
-                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
 
-        {/* ========================================================================= */}
-        {/* TAB 6: INTEGRACIONES (TELEGRAM, WEBHOOK, MAPAS) */}
-        {/* ========================================================================= */}
-        {activeTab === 'integraciones' && (
-          <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
-            <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
-              <h2 className="text-lg font-bold uppercase tracking-tight text-white flex items-center gap-2 border-b border-white/10 pb-4">
-                <Bot className="text-primary" size={20} />
-                <span>Integraciones de Notificaciones & Sistema</span>
-              </h2>
+          {/* ========================================================================= */}
+          {/* MODULE 6: AJUSTES PRINCIPALES & INTEGRACIONES */}
+          {/* ========================================================================= */}
+          {(activeTab === 'settings' || activeTab === 'integraciones') && (
+            <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
+              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-6">
+                <h2 className="text-base font-bold uppercase tracking-tight text-white flex items-center gap-2 border-b border-white/10 pb-4">
+                  <SettingsIcon className="text-primary" size={20} />
+                  <span>Configuración General del Sitio & Webhooks</span>
+                </h2>
 
-              <div className="space-y-4">
-                <h3 className="text-xs font-black uppercase tracking-widest text-primary">Telegram Bot Notificador</h3>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="telegram-token" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Telegram Bot Token</label>
-                    <input
-                      id="telegram-token"
-                      name="telegram-token"
-                      type="text"
-                      value={settingsForm.TELEGRAM_BOT_TOKEN || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, TELEGRAM_BOT_TOKEN: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-mono text-white outline-none focus:border-primary"
-                    />
+                <div className="space-y-4">
+                  <ImageUploader
+                    label="Imagen de Fondo Hero (Portada)"
+                    value={settingsForm.HERO_IMG || ''}
+                    onChange={(val) => {
+                      const updated = { ...settingsForm, HERO_IMG: val };
+                      setSettingsForm(updated);
+                      handleSaveSettings(updated);
+                    }}
+                    aspectRatio={16 / 9}
+                    placeholder="/assets/hero_bg_custom.jpg"
+                  />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Teléfono WhatsApp</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PHONE_NUMBER || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PHONE_NUMBER: e.target.value })}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">Enlace Directo WhatsApp</label>
+                      <input
+                        type="text"
+                        value={settingsForm.WHATSAPP_LINK || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, WHATSAPP_LINK: e.target.value })}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                      />
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label htmlFor="telegram-chat-id" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Telegram Chat ID (Grupo)</label>
-                    <input
-                      id="telegram-chat-id"
-                      name="telegram-chat-id"
-                      type="text"
-                      value={settingsForm.TELEGRAM_CHAT_ID || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, TELEGRAM_CHAT_ID: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-mono text-white outline-none focus:border-primary"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="telegram-topic-id" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Telegram Topic ID (Opcional)</label>
-                    <input
-                      id="telegram-topic-id"
-                      name="telegram-topic-id"
-                      type="text"
-                      value={settingsForm.TELEGRAM_TOPIC_ID || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, TELEGRAM_TOPIC_ID: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-mono text-white outline-none focus:border-primary"
-                    />
+                  <div className="space-y-3 pt-4 border-t border-white/10">
+                    <h3 className="text-xs font-black uppercase text-amber-400">Telegram Bot Notifications</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Token</label>
+                        <input
+                          type="text"
+                          value={settingsForm.TELEGRAM_BOT_TOKEN || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, TELEGRAM_BOT_TOKEN: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs font-mono text-white outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Chat ID</label>
+                        <input
+                          type="text"
+                          value={settingsForm.TELEGRAM_CHAT_ID || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, TELEGRAM_CHAT_ID: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs font-mono text-white outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[9px] text-zinc-400 block mb-1">Telegram Topic ID</label>
+                        <input
+                          type="text"
+                          value={settingsForm.TELEGRAM_TOPIC_ID || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, TELEGRAM_TOPIC_ID: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs font-mono text-white outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-4 pt-4 border-t border-white/10">
-                <h3 className="text-xs font-black uppercase tracking-widest text-primary">Webhook Google Sheets</h3>
-                <div className="space-y-2">
-                  <label htmlFor="webhook-url" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">URL Webhook Script</label>
-                  <input
-                    id="webhook-url"
-                    name="webhook-url"
-                    type="text"
-                    value={settingsForm.WEBHOOK_URL || ''}
-                    onChange={(e) => setSettingsForm({ ...settingsForm, WEBHOOK_URL: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-mono text-white outline-none focus:border-primary"
-                  />
+                <div className="pt-4 border-t border-white/10 flex justify-end">
+                  <button
+                    onClick={() => handleSaveSettings()}
+                    disabled={isSavingSettings}
+                    className="btn-primary !py-2.5 !px-6 text-xs font-black uppercase tracking-wider flex items-center gap-2 border-none shadow-lg"
+                  >
+                    {isSavingSettings ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                    <span>Guardar Todos los Ajustes</span>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-
-      </main>
-
-      {/* Floating Save Bar for Settings/Content/Integrations */}
-      {['settings', 'contenido', 'integraciones'].includes(activeTab) && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#12141a]/95 backdrop-blur-xl border border-white/20 p-3.5 rounded-full shadow-2xl flex items-center gap-4">
-          {settingsSuccessMessage && (
-            <span className="text-xs font-bold text-green-400 flex items-center gap-1 pl-2">
-              <CheckCircle2 size={16} />
-              <span>{settingsSuccessMessage}</span>
-            </span>
           )}
-          {settingsErrorMessage && (
-            <span className="text-xs font-bold text-red-400 flex items-center gap-1 pl-2">
-              <AlertCircle size={16} />
-              <span>{settingsErrorMessage}</span>
-            </span>
-          )}
-          <button
-            onClick={() => handleSaveSettings()}
-            disabled={isSavingSettings}
-            className="btn-primary !py-2.5 !px-6 text-xs font-black uppercase tracking-wider flex items-center gap-2 border-none shadow-lg"
-          >
-            {isSavingSettings ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
-            <span>Guardar Cambios</span>
-          </button>
-        </div>
-      )}
 
-      {/* Catalog Product Edit/Create Modal */}
+        </main>
+      </div>
+
+      {/* MODAL EDIT CATALOG PRODUCT */}
       {isCatalogModalOpen && editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto scrollbar-none">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-white/10 pb-3">
-              <h3 className="text-base font-bold text-white uppercase">{editingProduct.id ? 'Editar Repuesto / Producto' : 'Nuevo Repuesto / Producto'}</h3>
+              <h3 className="text-sm font-bold text-white uppercase">{editingProduct.id ? 'Editar Repuesto' : 'Nuevo Repuesto'}</h3>
               <button onClick={() => setIsCatalogModalOpen(false)} className="text-zinc-400 hover:text-white"><X size={18} /></button>
             </div>
 
-            {/* AI Status Indicator */}
             {aiStatusMsg && (
-              <div className={`p-3 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${
-                isAiAutofilling 
-                  ? 'bg-primary/10 border-primary/40 text-primary animate-pulse' 
-                  : aiStatusMsg.startsWith('✅')
-                  ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                  : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-              }`}>
-                <Sparkles size={16} className={isAiAutofilling ? 'animate-spin' : ''} />
+              <div className="p-3 rounded-xl bg-primary/10 border border-primary/30 text-primary text-xs font-bold flex items-center gap-2">
+                <Sparkles size={16} />
                 <span>{aiStatusMsg}</span>
               </div>
             )}
 
             <div className="space-y-3 text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Título del Repuesto / Producto</label>
-                  <input
-                    type="text"
-                    value={editingProduct.title}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, title: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                  />
-                </div>
+              <div className="flex items-center justify-between">
+                <label className="text-zinc-400 font-bold block">Número de Parte OEM</label>
+                <button
+                  type="button"
+                  onClick={() => handleAiAutofill()}
+                  disabled={isAiAutofilling}
+                  className="bg-primary/20 hover:bg-primary/40 text-primary border border-primary/30 text-[10px] font-black uppercase px-2 py-0.5 rounded-lg flex items-center gap-1"
+                >
+                  <Sparkles size={12} className={isAiAutofilling ? 'animate-spin' : ''} />
+                  <span>Autofill IA</span>
+                </button>
+              </div>
 
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label htmlFor="part-number-input" className="text-zinc-400 font-bold block">
-                      Número de Parte (OEM)
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => handleAiAutofill()}
-                      disabled={isAiAutofilling}
-                      className="bg-primary/20 hover:bg-primary/40 text-primary border border-primary/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-lg flex items-center gap-1 cursor-pointer transition-all shrink-0"
-                      title="Autorrellenar datos con IA"
-                    >
-                      <Sparkles size={11} className={isAiAutofilling ? 'animate-spin text-primary' : ''} />
-                      <span>{isAiAutofilling ? 'Buscando...' : 'Autofill IA'}</span>
-                    </button>
-                  </div>
-                  <div className="relative">
-                    <input
-                      id="part-number-input"
-                      type="text"
-                      value={editingProduct.partNumber || ''}
-                      onChange={(e) => setEditingProduct({ ...editingProduct, partNumber: e.target.value })}
-                      onBlur={(e) => {
-                        if (e.target.value && e.target.value.trim().length >= 3 && !editingProduct.title) {
-                          handleAiAutofill(e.target.value);
-                        }
-                      }}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-mono outline-none focus:border-primary pr-9"
-                      placeholder="OEM #52088898AD"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleAiAutofill()}
-                      disabled={isAiAutofilling}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-primary hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
-                      title="Autorrellenar datos con IA"
-                    >
-                      <Sparkles size={15} className={isAiAutofilling ? 'animate-spin' : ''} />
-                    </button>
-                  </div>
-                </div>
+              <input
+                type="text"
+                value={editingProduct.partNumber || ''}
+                onChange={(e) => setEditingProduct({ ...editingProduct, partNumber: e.target.value })}
+                onBlur={(e) => { if (e.target.value && !editingProduct.title) handleAiAutofill(e.target.value); }}
+                placeholder="Ej. OEM #52088898AD"
+                className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-mono outline-none focus:border-primary"
+              />
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Título del Repuesto</label>
+                <input
+                  type="text"
+                  value={editingProduct.title}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, title: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Unidades en Stock (Taller)</label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={editingProduct.stock ?? 10}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, stock: Math.max(0, parseInt(e.target.value) || 0) })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-mono outline-none focus:border-primary font-bold"
-                    placeholder="10"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Origen / Importación</label>
-                  <label className="flex items-center gap-2 mt-1 bg-black/40 border border-white/10 rounded-xl p-2.5 cursor-pointer hover:border-white/20">
-                    <input
-                      type="checkbox"
-                      checked={editingProduct.isImportedUSA ?? false}
-                      onChange={(e) => setEditingProduct({ ...editingProduct, isImportedUSA: e.target.checked })}
-                      className="accent-primary w-4 h-4 rounded cursor-pointer"
-                    />
-                    <span className="text-white text-xs font-bold">Importado de USA</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Categoría</label>
-                  <select
-                    value={editingProduct.category}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
-                  >
-                    <option value="Aceites y Lubricantes">Aceites y Lubricantes</option>
-                    <option value="Frenos y Suspensión">Frenos y Suspensión</option>
-                    <option value="Filtros y Consumibles">Filtros y Consumibles</option>
-                    <option value="Motor y Encendido">Motor y Encendido</option>
-                    <option value="Inyección y Sensores">Inyección y Sensores</option>
-                    <option value="Transmisión y Tren Motriz">Transmisión y Tren Motriz</option>
-                    <option value="Baterías y Electricidad">Baterías y Electricidad</option>
-                    <option value="Fluidos y Refrigeración">Fluidos y Refrigeración</option>
-                    <option value="Cuidado y Estética">Cuidado y Estética</option>
-                    <option value="Piezas de Carrocería & Accesorios">Piezas de Carrocería & Accesorios</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Precio Referencia</label>
+                  <label className="text-zinc-400 font-bold block mb-1">Precio</label>
                   <input
                     type="text"
                     value={editingProduct.price}
                     onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                    placeholder="$45.00"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Badge Promocional</label>
+                  <label className="text-zinc-400 font-bold block mb-1">Categoría</label>
                   <input
                     type="text"
-                    value={editingProduct.badge || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, badge: e.target.value })}
+                    value={editingProduct.category}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
                     className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                    placeholder="Más Vendido"
                   />
                 </div>
-
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Compatibilidad</label>
-                  <input
-                    type="text"
-                    value={editingProduct.compatibility || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, compatibility: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                    placeholder="Jeep, Toyota, Honda..."
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Imagen Principal (URL o Subir)</label>
-                <ImageUploader
-                  label=""
-                  value={editingProduct.img}
-                  onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
-                  aspectRatio={16 / 9}
-                  placeholder="/assets/servicio-frenos.jpg"
-                />
-              </div>
-
-              {/* Imágenes Adicionales (Galería de Repuesto) */}
-              <div className="space-y-2 p-3 bg-black/30 border border-white/10 rounded-2xl">
-                <div className="flex items-center justify-between">
-                  <label className="text-zinc-300 font-bold text-xs flex items-center gap-1.5">
-                    <Layers size={14} className="text-primary" />
-                    <span>Imágenes Adicionales / Ángulos del Repuesto</span>
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const currentImgs = editingProduct.images || [];
-                      setEditingProduct({ ...editingProduct, images: [...currentImgs, ''] });
-                    }}
-                    className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 bg-primary/10 border border-primary/30 px-2 py-1 rounded-lg"
-                  >
-                    <Plus size={12} />
-                    <span>Agregar Otra Foto</span>
-                  </button>
-                </div>
-                <p className="text-[10px] text-zinc-400">Sube más fotos (diferentes ángulos, empaque o detalles técnicos) para que tus clientes puedan visualizar perfectamente la pieza.</p>
-
-                {editingProduct.images && editingProduct.images.length > 0 ? (
-                  <div className="space-y-3 pt-1">
-                    {editingProduct.images.map((extraImg, idx) => (
-                      <div key={idx} className="flex items-center gap-2 bg-black/40 p-2 rounded-xl border border-white/5">
-                        <div className="flex-1">
-                          <ImageUploader
-                            label={`Foto Adicional #${idx + 1}`}
-                            value={extraImg}
-                            onChange={(val) => {
-                              const updatedImgs = [...(editingProduct.images || [])];
-                              updatedImgs[idx] = val;
-                              setEditingProduct({ ...editingProduct, images: updatedImgs });
-                            }}
-                            aspectRatio={16 / 9}
-                            placeholder="/assets/instalaciones.jpg"
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updatedImgs = (editingProduct.images || []).filter((_, i) => i !== idx);
-                            setEditingProduct({ ...editingProduct, images: updatedImgs });
-                          }}
-                          className="p-2 text-red-400 hover:bg-red-500/20 border border-red-500/30 rounded-xl transition-colors shrink-0"
-                          title="Eliminar esta foto"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-[11px] text-zinc-500 italic py-1 text-center bg-black/20 rounded-xl border border-dashed border-white/5">
-                    No hay imágenes adicionales. Haz clic en "+ Agregar Otra Foto" para sumar más vistas.
-                  </div>
-                )}
               </div>
 
               <div>
@@ -3131,229 +1451,101 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                 />
               </div>
 
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Descripción Técnica / Detalles</label>
-                <textarea
-                  rows={3}
-                  value={editingProduct.longDesc || ''}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, longDesc: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                />
-              </div>
+              <ImageUploader
+                label="Imagen Principal"
+                value={editingProduct.img || ''}
+                onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
+                aspectRatio={4 / 3}
+                placeholder="/assets/servicio-mecanica.jpg"
+              />
             </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
-              <button
-                onClick={() => setIsCatalogModalOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-400 hover:text-white"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={() => handleSaveCatalogItem(editingProduct)}
-                className="btn-primary !py-2 !px-5 text-xs border-none"
-              >
-                Guardar Repuesto
-              </button>
+            <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
+              <button onClick={() => setIsCatalogModalOpen(false)} className="px-4 py-2 rounded-xl bg-white/5 text-zinc-400 text-xs font-bold">Cancelar</button>
+              <button onClick={() => handleSaveCatalogItem(editingProduct)} className="btn-primary !py-2 !px-5 text-xs font-black uppercase border-none">Guardar Repuesto</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Lead Details Modal */}
-      {selectedLead && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto scrollbar-none">
-            <div className="flex justify-between items-center border-b border-white/10 pb-3">
-              <h3 className="text-base font-bold text-white uppercase">Ficha de Cita #{selectedLead.id}</h3>
-              <button onClick={() => setSelectedLead(null)} className="text-zinc-400 hover:text-white"><X size={18} /></button>
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-2">
-                <p><strong>Cliente:</strong> {selectedLead.nombre}</p>
-                <p><strong>Teléfono:</strong> {selectedLead.telefono}</p>
-                <p><strong>Vehículo:</strong> {selectedLead.vehiculo}</p>
-                <p><strong>Servicio:</strong> {selectedLead.servicio}</p>
-                {selectedLead.fecha_hora && <p className="text-primary"><strong>Fecha Cita:</strong> {selectedLead.fecha_hora}</p>}
-                {selectedLead.falla && <p><strong>Falla Reportada:</strong> {selectedLead.falla}</p>}
-              </div>
-
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Estado de Atención</label>
-                <select
-                  value={statusEdit}
-                  onChange={(e) => setStatusEdit(e.target.value)}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
-                >
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Contactado">Contactado</option>
-                  <option value="En Diagnóstico">En Diagnóstico</option>
-                  <option value="Completado">Completado</option>
-                  <option value="Cancelado">Cancelado</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Notas Internas</label>
-                <textarea
-                  rows={4}
-                  value={noteEdit}
-                  onChange={(e) => setNoteEdit(e.target.value)}
-                  placeholder="Notas del diagnóstico..."
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
-              <button onClick={() => setSelectedLead(null)} className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-400 hover:text-white">Cerrar</button>
-              <button onClick={() => handleUpdateLead(selectedLead.id)} className="btn-primary !py-2 !px-5 text-xs border-none">Guardar Ficha</button>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Jornada Modal */}
+      {/* MODAL EDIT JORNADA */}
       {isJornadaModalOpen && editingJornada && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#12141a] border border-white/10 rounded-2xl max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Zap size={18} className="text-amber-400" />
-                <span>Editar Jornada VIP Automotriz</span>
-              </h3>
-              <button onClick={() => setIsJornadaModalOpen(false)} className="text-zinc-400 hover:text-white">
-                <X size={18} />
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b border-white/10 pb-3">
+              <h3 className="text-sm font-bold text-white uppercase">Editar Jornada VIP</h3>
+              <button onClick={() => setIsJornadaModalOpen(false)} className="text-zinc-400 hover:text-white"><X size={18} /></button>
             </div>
 
             <div className="space-y-3 text-xs">
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Distintivo / Badge</label>
+                <input
+                  type="text"
+                  value={editingJornada.badge}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, badge: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+              </div>
+
               <div>
                 <label className="text-zinc-400 font-bold block mb-1">Título de la Jornada</label>
                 <input
                   type="text"
-                  value={editingJornada.title || ''}
+                  value={editingJornada.title}
                   onChange={(e) => setEditingJornada({ ...editingJornada, title: e.target.value })}
                   className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                  placeholder="Ej. Reprogramación Electrónica & Chiptuning"
                 />
               </div>
 
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Insignia / Badge Promocional</label>
-                <input
-                  type="text"
-                  value={editingJornada.badge || ''}
-                  onChange={(e) => setEditingJornada({ ...editingJornada, badge: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                  placeholder="Ej. 🏎️ Jornada de Potenciación"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Precio Regular</label>
+                  <input
+                    type="text"
+                    value={editingJornada.regularPrice}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, regularPrice: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Precio Jornada Promo</label>
+                  <input
+                    type="text"
+                    value={editingJornada.promoPrice}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, promoPrice: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold text-primary outline-none focus:border-primary"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="text-zinc-400 font-bold block mb-1">Subtítulo Explicativo</label>
+                <label className="text-zinc-400 font-bold block mb-1">Subtítulo / Descripción</label>
                 <textarea
                   rows={2}
-                  value={editingJornada.subtitle || ''}
+                  value={editingJornada.subtitle}
                   onChange={(e) => setEditingJornada({ ...editingJornada, subtitle: e.target.value })}
                   className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Precio Regular</label>
-                  <input
-                    type="text"
-                    value={editingJornada.regularPrice || ''}
-                    onChange={(e) => setEditingJornada({ ...editingJornada, regularPrice: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                    placeholder="$250 USD"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-amber-400 font-bold block mb-1">Precio Jornada</label>
-                  <input
-                    type="text"
-                    value={editingJornada.promoPrice || ''}
-                    onChange={(e) => setEditingJornada({ ...editingJornada, promoPrice: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-bold text-amber-400"
-                    placeholder="$160 USD"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Badge Ahorro</label>
-                  <input
-                    type="text"
-                    value={editingJornada.discountBadge || ''}
-                    onChange={(e) => setEditingJornada({ ...editingJornada, discountBadge: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                    placeholder="AHORRAS $90 USD"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Beneficios (Uno por línea)</label>
-                <textarea
-                  rows={4}
-                  value={Array.isArray(editingJornada.benefits) ? editingJornada.benefits.join('\n') : (editingJornada.benefits || '')}
-                  onChange={(e) => setEditingJornada({ ...editingJornada, benefits: e.target.value.split('\n').filter(Boolean) })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-mono text-[11px]"
-                  placeholder="Incremento de +15% a +35% HP&#10;Eliminación de lag..."
-                />
-              </div>
-
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Modelos y Marcas Compatibles</label>
-                <input
-                  type="text"
-                  value={editingJornada.compatibleModels || ''}
-                  onChange={(e) => setEditingJornada({ ...editingJornada, compatibleModels: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                />
-              </div>
-
-              <div>
-                <ImageUploader
-                  label="Imagen de Portada de la Jornada"
-                  value={editingJornada.img || ''}
-                  onChange={(val) => setEditingJornada({ ...editingJornada, img: val })}
-                  aspectRatio={16 / 9}
-                  placeholder="/assets/servicio-mecanica.jpg"
-                />
-              </div>
+              <ImageUploader
+                label="Imagen Promocional"
+                value={editingJornada.img || ''}
+                onChange={(val) => setEditingJornada({ ...editingJornada, img: val })}
+                aspectRatio={16 / 9}
+                placeholder="/assets/servicio-mecanica.jpg"
+              />
             </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
-              <button onClick={() => setIsJornadaModalOpen(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-400 hover:text-white">Cancelar</button>
-              <button
-                onClick={() => {
-                  const existingIdx = jornadasList.findIndex((j: any) => j.id === editingJornada.id);
-                  let updated = [];
-                  if (existingIdx >= 0) {
-                    updated = jornadasList.map((j: any, idx: number) => idx === existingIdx ? editingJornada : j);
-                  } else {
-                    updated = [...jornadasList, editingJornada];
-                  }
-                  setJornadasList(updated);
-                  setIsJornadaModalOpen(false);
-                  const newForm = { ...settingsForm, JORNADAS_JSON: JSON.stringify(updated) };
-                  setSettingsForm(newForm);
-                  setSettings(newForm);
-                  try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
-                  handleSaveSettings(newForm);
-                }}
-                className="btn-primary !py-2 !px-5 text-xs border-none"
-              >
-                Guardar y Publicar Jornada
-              </button>
+            <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
+              <button onClick={() => setIsJornadaModalOpen(false)} className="px-4 py-2 rounded-xl bg-white/5 text-zinc-400 text-xs font-bold">Cancelar</button>
+              <button onClick={() => handleSaveJornadaItem(editingJornada)} className="btn-primary !py-2 !px-5 text-xs font-black uppercase border-none">Guardar Jornada</button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
