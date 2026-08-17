@@ -274,10 +274,10 @@ export default function Jornadas() {
   }, [config.JORNADA_COUNTDOWN_END]);
 
   const currentJornadasList = React.useMemo(() => {
-    if (config && config.JORNADAS_JSON !== undefined && config.JORNADAS_JSON !== null) {
+    if (config && config.JORNADAS_JSON !== undefined && config.JORNADAS_JSON !== null && config.JORNADAS_JSON !== '') {
       try {
         const parsed = JSON.parse(config.JORNADAS_JSON);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       } catch (e) {}
     }
     return JORNADAS_DATA;

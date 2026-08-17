@@ -2045,10 +2045,11 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                     <button
                       onClick={() => {
                         if (!window.confirm(`¿Estás seguro de eliminar la jornada "${jornada.title}"?`)) return;
-                        const currentList = jornadasList || DEFAULT_JORNADAS;
+                        const currentList = jornadasList || [];
                         const updated = currentList.filter((j: any) => String(j.id) !== String(jornada.id));
                         setJornadasList(updated);
-                        const newForm = { ...settingsForm, JORNADAS_JSON: JSON.stringify(updated) };
+                        const serialized = JSON.stringify(updated);
+                        const newForm = { ...settingsForm, JORNADAS_JSON: serialized };
                         setSettingsForm(newForm);
                         setSettings(newForm);
                         try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
