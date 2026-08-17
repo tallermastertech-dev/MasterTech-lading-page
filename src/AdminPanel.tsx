@@ -348,6 +348,10 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
+  const [settingsForm, setSettingsForm] = useState<Partial<Settings>>({});
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
+  const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
   const [isLoadingSettings, setIsLoadingSettings] = useState(false);
   
@@ -962,12 +966,6 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     setIsAiAutofilling(false);
     setTimeout(() => setAiStatusMsg(''), 4500);
   };
-
-  // Settings Edit State
-  const [settingsForm, setSettingsForm] = useState<Partial<Settings>>({});
-  const [isSavingSettings, setIsSavingSettings] = useState(false);
-  const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
-  const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
 
   // Fetch Leads con fusión garantizada y respaldo sin borrado
   const fetchLeads = async (authToken: string) => {
