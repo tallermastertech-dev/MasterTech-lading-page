@@ -415,7 +415,7 @@ export default function Jornadas() {
         </div>
       </section>
 
-      {/* If no active jornadas exist in admin, show elegant VIP notice */}
+      {/* Conditional Rendering: VIP Empty State vs Active Jornadas */}
       {currentJornadasList.length === 0 ? (
         <section className="py-16 px-6 max-w-4xl mx-auto">
           <motion.div
@@ -461,7 +461,7 @@ export default function Jornadas() {
           </motion.div>
         </section>
       ) : (
-        <React.Fragment>
+        <main>
           {/* Jornadas Navigation Tabs Slider */}
           <section className="py-10 px-4 md:px-6 max-w-7xl mx-auto">
             <div className="text-center mb-8">
@@ -525,191 +525,190 @@ export default function Jornadas() {
             </div>
           </section>
 
-      {/* Selected Jornada Detail Display */}
-      <section className="py-8 px-6 max-w-7xl mx-auto">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentJornada.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            className="grid lg:grid-cols-12 gap-8 bg-[#12141a]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden"
-          >
-            {/* Background Ambient Glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
+          {/* Selected Jornada Detail Display */}
+          <section className="py-8 px-6 max-w-7xl mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentJornada.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="grid lg:grid-cols-12 gap-8 bg-[#12141a]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden"
+              >
+                {/* Background Ambient Glow */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
 
-            {/* Left Content (7 cols) */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                  {currentJornada.badge}
-                </span>
-                <span className="px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-bold flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-primary" />
-                  Duración: {currentJornada.duration}
-                </span>
-              </div>
-
-              {currentJornada.img && (
-                <div className="w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-black border border-white/10 relative shadow-xl">
-                  <img
-                    src={currentJornada.img}
-                    alt={currentJornada.title}
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent" />
-                </div>
-              )}
-
-              <h2 className="text-2xl md:text-4xl font-display font-black tracking-tight uppercase text-white leading-tight">
-                {currentJornada.title}
-              </h2>
-
-              <p className="text-zinc-300 text-sm md:text-base leading-relaxed">
-                {currentJornada.subtitle}
-              </p>
-
-              {/* Specs Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                {(currentJornada.specs || []).map((s, idx) => (
-                  <div key={idx} className="bg-black/50 border border-white/10 rounded-2xl p-3 text-center">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-1">{s.label}</span>
-                    <span className="text-xs md:text-sm font-bold text-primary block truncate">{s.val}</span>
+                {/* Left Content (7 cols) */}
+                <div className="lg:col-span-7 space-y-6">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                      {currentJornada.badge}
+                    </span>
+                    <span className="px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-bold flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-primary" />
+                      Duración: {currentJornada.duration}
+                    </span>
                   </div>
-                ))}
-              </div>
 
-              {/* Benefits Checklist */}
-              <div className="space-y-3 pt-4 border-t border-white/10">
-                <h3 className="text-xs font-black uppercase tracking-widest text-amber-400">BENEFICIOS INCLUIDOS EN LA JORNADA:</h3>
-                <div className="space-y-2.5">
-                  {(currentJornada.benefits || []).map((benefit, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-primary" />
-                      </div>
-                      <span className="text-xs md:text-sm text-zinc-300 font-medium leading-normal">{benefit}</span>
+                  {currentJornada.img && (
+                    <div className="w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-black border border-white/10 relative shadow-xl">
+                      <img
+                        src={currentJornada.img}
+                        alt={currentJornada.title}
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent" />
                     </div>
-                  ))}
-                </div>
-              </div>
+                  )}
 
-              {/* Vehicle Compatibility Banner */}
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-start gap-3">
-                <Car className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">VEHÍCULOS Y MARCAS COMPATIBLES:</span>
-                  <p className="text-xs text-zinc-300 leading-relaxed">{currentJornada.compatibleModels}</p>
-                </div>
-              </div>
-            </div>
+                  <h2 className="text-2xl md:text-4xl font-display font-black tracking-tight uppercase text-white leading-tight">
+                    {currentJornada.title}
+                  </h2>
 
-            {/* Right Booking Card & Price (5 cols) */}
-            <div className="lg:col-span-5 flex flex-col justify-between space-y-6 bg-black/60 border border-white/10 rounded-3xl p-6 relative">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block">PRECIO REGULAR</span>
-                    <span className="text-base text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">PRECIO JORNADA</span>
-                    <span className="text-3xl font-display font-black text-primary">{currentJornada.promoPrice}</span>
-                  </div>
-                </div>
-
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
-                    <Flame className="w-4 h-4 text-amber-400" />
-                    {currentJornada.discountBadge}
-                  </span>
-                </div>
-
-                {currentJornada.popularAddon && (
-                  <p className="text-[11px] text-zinc-400 italic text-center">
-                    💡 {currentJornada.popularAddon}
+                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed">
+                    {currentJornada.subtitle}
                   </p>
-                )}
-              </div>
-
-              {/* Interactive Booking Form */}
-              <form onSubmit={handleWhatsAppBooking} className="space-y-4 pt-2 border-t border-white/10">
-                <h4 className="text-xs font-black uppercase tracking-widest text-white flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-primary" />
-                  <span>APARTAR MI CUPO EN LA JORNADA</span>
-                </h4>
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre Completo</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ej. Carlos Pérez"
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
-                    />
+                  {/* Specs Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    {(currentJornada.specs || []).map((s, idx) => (
+                      <div key={idx} className="bg-black/50 border border-white/10 rounded-2xl p-3 text-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-1">{s.label}</span>
+                        <span className="text-xs md:text-sm font-bold text-primary block truncate">{s.val}</span>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Teléfono</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="Ej. 04123565012"
-                        value={clientPhone}
-                        onChange={(e) => setClientPhone(e.target.value)}
-                        className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Vehículo / Modelo</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Ej. Toyota Hilux 2020"
-                        value={clientVehicle}
-                        onChange={(e) => setClientVehicle(e.target.value)}
-                        className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
-                      />
+                  {/* Benefits Checklist */}
+                  <div className="space-y-3 pt-4 border-t border-white/10">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-amber-400">BENEFICIOS INCLUIDOS EN LA JORNADA:</h3>
+                    <div className="space-y-2.5">
+                      {(currentJornada.benefits || []).map((benefit, idx) => (
+                        <div key={idx} className="flex items-start gap-3">
+                          <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-0.5">
+                            <Check className="w-3 h-3 text-primary" />
+                          </div>
+                          <span className="text-xs md:text-sm text-zinc-300 font-medium leading-normal">{benefit}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Slot Picker Integration */}
-                  <div>
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible</label>
-                    <InspectionSlotPicker
-                      onSelectSlot={(slotStr, isValid) => {
-                        setSelectedSlot(slotStr);
-                        setIsSlotValid(isValid);
-                      }}
-                    />
+                  {/* Vehicle Compatibility Banner */}
+                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-start gap-3">
+                    <Car className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">VEHÍCULOS Y MARCAS COMPATIBLES:</span>
+                      <p className="text-xs text-zinc-300 leading-relaxed">{currentJornada.compatibleModels}</p>
+                    </div>
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer"
-                >
-                  <WhatsAppIcon size={18} />
-                  <span>RESERVAR CUPO VÍA WHATSAPP ({currentJornada.promoPrice})</span>
-                </button>
+                {/* Right Booking Card & Price (5 cols) */}
+                <div className="lg:col-span-5 flex flex-col justify-between space-y-6 bg-black/60 border border-white/10 rounded-3xl p-6 relative">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      <div>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block">PRECIO REGULAR</span>
+                        <span className="text-base text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">PRECIO JORNADA</span>
+                        <span className="text-3xl font-display font-black text-primary">{currentJornada.promoPrice}</span>
+                      </div>
+                    </div>
 
-                <p className="text-[10px] text-zinc-500 text-center">
-                  🔒 Reserva directa protegida. Al tocar el botón serás redirigido a nuestro WhatsApp oficial para confirmar tu cupo.
-                </p>
-              </form>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </section>
-      </React.Fragment>
+                    <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
+                      <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
+                        <Flame className="w-4 h-4 text-amber-400" />
+                        {currentJornada.discountBadge}
+                      </span>
+                    </div>
+
+                    {currentJornada.popularAddon && (
+                      <p className="text-[11px] text-zinc-400 italic text-center">
+                        💡 {currentJornada.popularAddon}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Interactive Booking Form */}
+                  <form onSubmit={handleWhatsAppBooking} className="space-y-4 pt-2 border-t border-white/10">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-white flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-primary" />
+                      <span>APARTAR MI CUPO EN LA JORNADA</span>
+                    </h4>
+
+                    <div className="space-y-3">
+                      <div>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre Completo</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ej. Carlos Pérez"
+                          value={clientName}
+                          onChange={(e) => setClientName(e.target.value)}
+                          className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Teléfono</label>
+                          <input
+                            type="tel"
+                            required
+                            placeholder="Ej. 04123565012"
+                            value={clientPhone}
+                            onChange={(e) => setClientPhone(e.target.value)}
+                            className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Vehículo / Modelo</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Ej. Toyota Hilux 2020"
+                            value={clientVehicle}
+                            onChange={(e) => setClientVehicle(e.target.value)}
+                            className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Slot Picker Integration */}
+                      <div>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible</label>
+                        <InspectionSlotPicker
+                          onSelectSlot={(slotStr, isValid) => {
+                            setSelectedSlot(slotStr);
+                            setIsSlotValid(isValid);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer"
+                    >
+                      <WhatsAppIcon size={18} />
+                      <span>RESERVAR CUPO VÍA WHATSAPP ({currentJornada.promoPrice})</span>
+                    </button>
+
+                    <p className="text-[10px] text-zinc-500 text-center">
+                      🔒 Reserva directa protegida. Al tocar el botón serás redirigido a nuestro WhatsApp oficial para confirmar tu cupo.
+                    </p>
+                  </form>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </section>
+        </main>
       )}
 
       {/* Guarantees & Why MasterTech */}
