@@ -277,13 +277,32 @@ export default function Jornadas() {
     if (config && config.JORNADAS_JSON !== undefined && config.JORNADAS_JSON !== null) {
       try {
         const parsed = JSON.parse(config.JORNADAS_JSON);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       } catch (e) {}
     }
     return JORNADAS_DATA;
   }, [config]);
 
-  const currentJornada = currentJornadasList.find((j: any) => j.id === activeJornadaId) || currentJornadasList[0] || JORNADAS_DATA[0];
+  const rawJornada = currentJornadasList.find((j: any) => j.id === activeJornadaId) || currentJornadasList[0] || JORNADAS_DATA[0];
+
+  const currentJornada = React.useMemo(() => {
+    const fallback = JORNADAS_DATA[0];
+    return {
+      id: rawJornada?.id || 'reprogramacion',
+      badge: rawJornada?.badge || fallback.badge,
+      title: rawJornada?.title || fallback.title,
+      subtitle: rawJornada?.subtitle || fallback.subtitle,
+      img: rawJornada?.img || fallback.img,
+      regularPrice: rawJornada?.regularPrice || fallback.regularPrice,
+      promoPrice: rawJornada?.promoPrice || fallback.promoPrice,
+      discountBadge: rawJornada?.discountBadge || fallback.discountBadge,
+      duration: rawJornada?.duration || fallback.duration,
+      benefits: Array.isArray(rawJornada?.benefits) ? rawJornada.benefits : fallback.benefits,
+      specs: Array.isArray(rawJornada?.specs) ? rawJornada.specs : fallback.specs,
+      compatibleModels: rawJornada?.compatibleModels || fallback.compatibleModels,
+      icon: rawJornada?.icon || fallback.icon
+    };
+  }, [rawJornada]);
 
   const handleWhatsAppBooking = (e: React.FormEvent) => {
     e.preventDefault();
@@ -508,7 +527,7 @@ export default function Jornadas() {
 
               {/* Specs Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                {currentJornada.specs.map((s, idx) => (
+                {(currentJornada.specs || []).map((s, idx) => (
                   <div key={idx} className="bg-black/50 border border-white/10 rounded-2xl p-3 text-center">
                     <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-1">{s.label}</span>
                     <span className="text-xs md:text-sm font-bold text-primary block truncate">{s.val}</span>
@@ -520,7 +539,7 @@ export default function Jornadas() {
               <div className="space-y-3 pt-4 border-t border-white/10">
                 <h3 className="text-xs font-black uppercase tracking-widest text-amber-400">BENEFICIOS INCLUIDOS EN LA JORNADA:</h3>
                 <div className="space-y-2.5">
-                  {currentJornada.benefits.map((benefit, idx) => (
+                  {(currentJornada.benefits || []).map((benefit, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-0.5">
                         <Check className="w-3 h-3 text-primary" />
