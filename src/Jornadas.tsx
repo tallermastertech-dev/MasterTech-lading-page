@@ -461,7 +461,7 @@ export default function Jornadas() {
           </motion.div>
         </section>
       ) : (
-        <>
+        <React.Fragment>
           {/* Jornadas Navigation Tabs Slider */}
           <section className="py-10 px-4 md:px-6 max-w-7xl mx-auto">
             <div className="text-center mb-8">
@@ -711,7 +711,7 @@ export default function Jornadas() {
           </motion.div>
         </AnimatePresence>
       </section>
-      </>
+      </React.Fragment>
       )}
 
       {/* Guarantees & Why MasterTech */}
