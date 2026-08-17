@@ -415,68 +415,117 @@ export default function Jornadas() {
         </div>
       </section>
 
-      {/* Jornadas Navigation Tabs Slider */}
-      <section className="py-10 px-4 md:px-6 max-w-7xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-2">
-            SELECCIONA LA JORNADA PARA TU VEHÍCULO
-          </h2>
-          <p className="text-xs md:text-sm text-zinc-400">
-            Desliza o usa las flechas laterales para explorar todas las jornadas disponibles
-          </p>
-        </div>
-
-        <div className="relative flex items-center group/slider">
-          {/* Left Slide Arrow */}
-          <button
-            type="button"
-            onClick={() => scrollTabs('left')}
-            className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
-            title="Deslizar hacia la izquierda"
+      {/* If no active jornadas exist in admin, show elegant VIP notice */}
+      {currentJornadasList.length === 0 ? (
+        <section className="py-16 px-6 max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-b from-[#12141a] via-[#0d0e12] to-black border border-amber-500/30 rounded-3xl p-8 md:p-14 text-center space-y-6 shadow-2xl relative overflow-hidden"
           >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 blur-[130px] rounded-full pointer-events-none" />
 
-          {/* Scrollable Container */}
-          <div
-            ref={tabsRef}
-            className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none snap-x w-full"
-            style={{ scrollSnapType: 'x mandatory' }}
-          >
-            {currentJornadasList.map((j: any) => {
-              const isActive = j.id === activeJornadaId;
-              return (
-                <button
-                  type="button"
-                  key={j.id}
-                  onClick={() => setActiveJornadaId(j.id)}
-                  className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
-                    isActive 
-                      ? 'bg-gradient-to-r from-amber-500/30 to-primary/30 border-primary text-white shadow-[0_10px_30px_rgba(194,164,114,0.3)] scale-105 z-10' 
-                      : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-amber-500/40 hover:bg-white/5'
-                  }`}
-                >
-                  {j.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
-                  <div className="text-left">
-                    <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
-                    <span className="font-bold text-xs whitespace-nowrap">{j.title.split('(')[0]}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500/20 to-primary/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mx-auto shadow-2xl relative z-10">
+              <Sparkles size={36} className="animate-pulse" />
+            </div>
 
-          {/* Right Slide Arrow */}
-          <button
-            type="button"
-            onClick={() => scrollTabs('right')}
-            className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
-            title="Deslizar hacia la derecha"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
-      </section>
+            <div className="space-y-3 max-w-2xl mx-auto relative z-10">
+              <span className="px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-widest inline-block shadow-md">
+                PRÓXIMA APERTURA DE CUPOS
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-display font-black uppercase tracking-tight text-white leading-tight">
+                No hay <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-primary to-amber-400 italic">Jornadas VIP</span> Activas en este momento
+              </h2>
+              <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!
+              </p>
+            </div>
+
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
+              <a
+                href={config.WHATSAPP_LINK || "https://wa.link/xnj37f"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto bg-gradient-to-r from-amber-500 via-primary to-amber-600 hover:scale-105 text-black font-black text-xs uppercase tracking-wider py-4 px-8 rounded-2xl shadow-xl flex items-center justify-center gap-2 border border-amber-300/40 transition-all cursor-pointer"
+              >
+                <WhatsAppIcon size={18} className="text-black fill-current" />
+                <span>Consultar Próxima Fecha por WhatsApp</span>
+              </a>
+              <a
+                href="/servicios"
+                className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-white text-xs font-bold transition-all text-center"
+              >
+                Ver Servicios de Taller Disponibles
+              </a>
+            </div>
+          </motion.div>
+        </section>
+      ) : (
+        <>
+          {/* Jornadas Navigation Tabs Slider */}
+          <section className="py-10 px-4 md:px-6 max-w-7xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-2">
+                SELECCIONA LA JORNADA PARA TU VEHÍCULO
+              </h2>
+              <p className="text-xs md:text-sm text-zinc-400">
+                Desliza o usa las flechas laterales para explorar todas las jornadas disponibles
+              </p>
+            </div>
+
+            <div className="relative flex items-center group/slider">
+              {/* Left Slide Arrow */}
+              <button
+                type="button"
+                onClick={() => scrollTabs('left')}
+                className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+                title="Deslizar hacia la izquierda"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              {/* Scrollable Container */}
+              <div
+                ref={tabsRef}
+                className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none snap-x w-full"
+                style={{ scrollSnapType: 'x mandatory' }}
+              >
+                {currentJornadasList.map((j: any) => {
+                  const isActive = j.id === activeJornadaId;
+                  return (
+                    <button
+                      type="button"
+                      key={j.id}
+                      onClick={() => setActiveJornadaId(j.id)}
+                      className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
+                        isActive 
+                          ? 'bg-gradient-to-r from-amber-500/30 to-primary/30 border-primary text-white shadow-[0_10px_30px_rgba(194,164,114,0.3)] scale-105 z-10' 
+                          : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-amber-500/40 hover:bg-white/5'
+                      }`}
+                    >
+                      {j.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
+                      <div className="text-left">
+                        <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
+                        <span className="font-bold text-xs whitespace-nowrap">{j.title ? j.title.split('(')[0] : 'Jornada'}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Slide Arrow */}
+              <button
+                type="button"
+                onClick={() => scrollTabs('right')}
+                className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+                title="Deslizar hacia la derecha"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+          </section>
+        </>
+      )}
 
       {/* Selected Jornada Detail Display */}
       <section className="py-8 px-6 max-w-7xl mx-auto">
@@ -662,6 +711,8 @@ export default function Jornadas() {
           </motion.div>
         </AnimatePresence>
       </section>
+      </>
+      )}
 
       {/* Guarantees & Why MasterTech */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
