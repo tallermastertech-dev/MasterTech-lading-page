@@ -1174,12 +1174,12 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     const base = overrideForm || settingsForm;
     const targetForm = {
       ...base,
-      TEAM_MEMBERS_JSON: (overrideForm && overrideForm.TEAM_MEMBERS_JSON !== undefined) ? overrideForm.TEAM_MEMBERS_JSON : (base.TEAM_MEMBERS_JSON ?? JSON.stringify(teamMembers)),
-      REVIEWS_JSON: (overrideForm && overrideForm.REVIEWS_JSON !== undefined) ? overrideForm.REVIEWS_JSON : (base.REVIEWS_JSON ?? JSON.stringify(reviews)),
-      SERVICES_JSON: (overrideForm && overrideForm.SERVICES_JSON !== undefined) ? overrideForm.SERVICES_JSON : (base.SERVICES_JSON ?? JSON.stringify(services)),
-      FAQS_JSON: (overrideForm && overrideForm.FAQS_JSON !== undefined) ? overrideForm.FAQS_JSON : (base.FAQS_JSON ?? JSON.stringify(faqs)),
-      CATALOG_PRODUCTS_JSON: (overrideForm && overrideForm.CATALOG_PRODUCTS_JSON !== undefined) ? overrideForm.CATALOG_PRODUCTS_JSON : (base.CATALOG_PRODUCTS_JSON ?? JSON.stringify(catalogItems)),
-      JORNADAS_JSON: (overrideForm && overrideForm.JORNADAS_JSON !== undefined) ? overrideForm.JORNADAS_JSON : (base.JORNADAS_JSON ?? JSON.stringify(jornadasList))
+      TEAM_MEMBERS_JSON: (overrideForm && overrideForm.TEAM_MEMBERS_JSON !== undefined) ? overrideForm.TEAM_MEMBERS_JSON : JSON.stringify(teamMembers),
+      REVIEWS_JSON: (overrideForm && overrideForm.REVIEWS_JSON !== undefined) ? overrideForm.REVIEWS_JSON : JSON.stringify(reviews),
+      SERVICES_JSON: (overrideForm && overrideForm.SERVICES_JSON !== undefined) ? overrideForm.SERVICES_JSON : JSON.stringify(services),
+      FAQS_JSON: (overrideForm && overrideForm.FAQS_JSON !== undefined) ? overrideForm.FAQS_JSON : JSON.stringify(faqs),
+      CATALOG_PRODUCTS_JSON: (overrideForm && overrideForm.CATALOG_PRODUCTS_JSON !== undefined) ? overrideForm.CATALOG_PRODUCTS_JSON : JSON.stringify(catalogItems),
+      JORNADAS_JSON: (overrideForm && overrideForm.JORNADAS_JSON !== undefined) ? overrideForm.JORNADAS_JSON : JSON.stringify(jornadasList)
     };
     if (targetForm.SUCCESS_BADGE && targetForm.SUCCESS_BADGE.includes('30%')) {
       targetForm.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
