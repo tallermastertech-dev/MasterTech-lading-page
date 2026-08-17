@@ -35,10 +35,7 @@ export default function Nosotros() {
         try {
           const parsed = JSON.parse(dataObj.TEAM_MEMBERS_JSON);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            const hasLegacy = parsed.some((m: any) => m.name === 'Miguel A.' || m.name === 'Jesús M.' || m.name === 'Ana P.');
-            if (!hasLegacy) {
-              return parsed;
-            }
+            return parsed;
           }
         } catch (e) {}
       }
@@ -53,32 +50,16 @@ export default function Nosotros() {
 
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/settings');
+        const res = await fetch(`/api/settings?t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json();
-          // Purge legacy "Miguel A." / "Jesús M." from server response if present
-          if (data?.TEAM_MEMBERS_JSON && (data.TEAM_MEMBERS_JSON.includes('Miguel A.') || data.TEAM_MEMBERS_JSON.includes('Jesús M.'))) {
-            delete data.TEAM_MEMBERS_JSON;
-          }
-
           let currentLocal: any = null;
           try {
             const stored = localStorage.getItem('mastertech_settings_store');
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const mergeSmart = (server: any, local: any) => {
-            const res = { ...(server || {}) };
-            if (local) {
-              for (const [k, v] of Object.entries(local)) {
-                if (v !== undefined && v !== null && v !== '') {
-                  res[k] = v;
-                }
-              }
-            }
-            return res;
-          };
-          const merged = mergeSmart(data, currentLocal);
+          const merged = { ...(currentLocal || {}), ...(data || {}) };
           setConfig((prev: any) => ({ ...prev, ...merged }));
           try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
           const team = loadTeam(merged);
