@@ -1736,13 +1736,87 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 />
               </div>
 
-              <ImageUploader
-                label="Imagen Principal"
-                value={editingProduct.img || ''}
-                onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
-                aspectRatio={4 / 3}
-                placeholder="/assets/servicio-mecanica.jpg"
-              />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Distintivo / Badge</label>
+                  <input
+                    type="text"
+                    value={editingProduct.badge || ''}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, badge: e.target.value })}
+                    placeholder="Ej. Mantenimiento Esencial"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                  />
+                </div>
+                <div className="flex items-center pt-5">
+                  <label className="flex items-center gap-2 cursor-pointer text-white font-bold select-none">
+                    <input
+                      type="checkbox"
+                      checked={!!editingProduct.isImportedUSA}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, isImportedUSA: e.target.checked })}
+                      className="w-4 h-4 accent-amber-400 rounded cursor-pointer"
+                    />
+                    <span className="text-xs text-amber-300">🇺🇸 Importado desde EE.UU.</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Compatibilidad (Marca, Modelo, Años)</label>
+                <input
+                  type="text"
+                  value={editingProduct.compatibility || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, compatibility: e.target.value })}
+                  placeholder="Ej. Toyota Hilux / Fortuner 2016-2025, Jeep Grand Cherokee 2012-2022"
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Especificaciones Clave (Una por línea)</label>
+                <textarea
+                  rows={3}
+                  value={Array.isArray(editingProduct.specs) ? editingProduct.specs.join('\n') : (editingProduct.specs || '')}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, specs: e.target.value.split('\n') })}
+                  placeholder="Ej: Aceite Sintético 5W-30 (4L)&#10;Filtro de Aceite Anti-Drenaje&#10;Incluye arandela de cobre"
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-mono text-[11px]"
+                />
+              </div>
+
+              <div className="space-y-3 border-t border-white/10 pt-3">
+                <h4 className="text-xs font-black uppercase text-amber-400">Galería de Imágenes (Principal & Adicionales)</h4>
+                
+                <ImageUploader
+                  label="Imagen Principal (Vista Previa)"
+                  value={editingProduct.img || ''}
+                  onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
+                  aspectRatio={4 / 3}
+                  placeholder="/assets/servicio-mecanica.jpg"
+                />
+
+                <ImageUploader
+                  label="Imagen Secundario #2 (Ángulo Lateral / Empaque)"
+                  value={(editingProduct.images && editingProduct.images[0]) || ''}
+                  onChange={(val) => {
+                    const currentImgs = [...(editingProduct.images || [])];
+                    currentImgs[0] = val;
+                    setEditingProduct({ ...editingProduct, images: currentImgs });
+                  }}
+                  aspectRatio={4 / 3}
+                  placeholder="/assets/servicio-frenos.jpg"
+                />
+
+                <ImageUploader
+                  label="Imagen Secundario #3 (Detalle / Código OEM)"
+                  value={(editingProduct.images && editingProduct.images[1]) || ''}
+                  onChange={(val) => {
+                    const currentImgs = [...(editingProduct.images || [])];
+                    currentImgs[1] = val;
+                    setEditingProduct({ ...editingProduct, images: currentImgs });
+                  }}
+                  aspectRatio={4 / 3}
+                  placeholder="/assets/servicio-electricidad.jpg"
+                />
+              </div>
             </div>
 
             <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
