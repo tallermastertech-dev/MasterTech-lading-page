@@ -374,6 +374,9 @@ const authenticateAdmin = async (req: express.Request, res: express.Response, ne
 // Handler reutilizable para GET /settings
 const handleGetSettings = async (req: express.Request, res: express.Response) => {
   try {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     const settings = await getSettings();
     res.json(settings);
   } catch (error) {
