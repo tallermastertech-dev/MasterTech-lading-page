@@ -1047,7 +1047,17 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       try { if (localData.REVIEWS_JSON) setReviews(JSON.parse(localData.REVIEWS_JSON)); } catch (e) {}
       try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
       try { if (localData.FAQS_JSON) setFaqs(JSON.parse(localData.FAQS_JSON)); } catch (e) {}
-      try { if (localData.JORNADAS_JSON) setJornadasList(JSON.parse(localData.JORNADAS_JSON)); } catch (e) {}
+      try {
+        if (localData.JORNADAS_JSON) {
+          const parsed = JSON.parse(localData.JORNADAS_JSON);
+          if (Array.isArray(parsed) && parsed.length > 0) setJornadasList(parsed);
+          else setJornadasList(DEFAULT_JORNADAS);
+        } else {
+          setJornadasList(DEFAULT_JORNADAS);
+        }
+      } catch (e) {
+        setJornadasList(DEFAULT_JORNADAS);
+      }
     }
 
     try {
@@ -1082,7 +1092,17 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
         try { if (merged.REVIEWS_JSON) setReviews(JSON.parse(merged.REVIEWS_JSON)); } catch (e) {}
         try { if (merged.FAQS_JSON) setFaqs(JSON.parse(merged.FAQS_JSON)); } catch (e) {}
         try { if (merged.SERVICES_JSON) setServices(JSON.parse(merged.SERVICES_JSON)); } catch (e) {}
-        try { if (merged.JORNADAS_JSON) setJornadasList(JSON.parse(merged.JORNADAS_JSON)); } catch (e) {}
+        try {
+          if (merged.JORNADAS_JSON) {
+            const parsed = JSON.parse(merged.JORNADAS_JSON);
+            if (Array.isArray(parsed) && parsed.length > 0) setJornadasList(parsed);
+            else setJornadasList(DEFAULT_JORNADAS);
+          } else {
+            setJornadasList(DEFAULT_JORNADAS);
+          }
+        } catch (e) {
+          setJornadasList(DEFAULT_JORNADAS);
+        }
 
         // If we have good local data for priority fields, push it to the server
         // so Supabase gets updated even if it was out of sync
@@ -2022,7 +2042,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
 
             {/* List of Jornadas */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {jornadasList.map((jornada: any, idx: number) => (
+              {(jornadasList && jornadasList.length > 0 ? jornadasList : DEFAULT_JORNADAS).map((jornada: any, idx: number) => (
                 <div key={jornada.id || idx} className="bg-[#12141a] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between p-5 space-y-4">
                   <div className="flex items-start gap-4">
                     <div className="w-20 h-20 rounded-xl bg-black overflow-hidden shrink-0 border border-white/10">
