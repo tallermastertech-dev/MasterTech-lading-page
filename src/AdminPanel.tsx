@@ -1200,21 +1200,27 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     }
   };
 
-  const handleDeleteLead = async (id: number) => {
+  const handleDeleteLead = async (id: number | string) => {
     if (!token || !window.confirm('¿Estás seguro de eliminar este registro de cita?')) return;
 
+    const idStr = String(id);
+
+    // 1. Eliminación optimista en estado de React y localStorage
+    setLeads(prev => {
+      const updated = prev.filter(l => String(l?.id) !== idStr);
+      try { localStorage.setItem('mastertech_leads_store', JSON.stringify(updated.slice(0, 100))); } catch (e) {}
+      return updated;
+    });
+    if (selectedLead && String(selectedLead.id) === idStr) setSelectedLead(null);
+
+    // 2. Solicitud DELETE al backend y Supabase
     try {
-      const res = await fetch(`/api/leads/${id}`, {
+      await fetch(`/api/leads/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
-      if (res.ok) {
-        setLeads(prev => prev.filter(l => l.id !== id));
-        if (selectedLead?.id === id) setSelectedLead(null);
-      }
     } catch (err) {
-      alert('Error al eliminar el registro.');
+      console.error('Error al eliminar registro en el servidor:', err);
     }
   };
 
@@ -1319,21 +1325,23 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     handleSaveSettings(updatedForm);
   };
 
-  const handleDeleteCatalogItem = (id: number) => {
+  const handleDeleteCatalogItem = (id: number | string) => {
     if (!window.confirm('¿Eliminar este repuesto o servicio del catálogo?')) return;
-    const updatedCatalog = catalogItems.filter(p => p.id !== id);
+    const updatedCatalog = catalogItems.filter(p => String(p.id) !== String(id));
     const catalogJson = JSON.stringify(updatedCatalog);
     setCatalogItems(updatedCatalog);
-    // Same fix: pass a fully-resolved form so the stale closure value is never used.
     const updatedForm = {
       ...settingsForm,
       CATALOG_PRODUCTS_JSON: catalogJson,
       TEAM_MEMBERS_JSON: JSON.stringify(teamMembers),
       REVIEWS_JSON: JSON.stringify(reviews),
       SERVICES_JSON: JSON.stringify(services),
-      FAQS_JSON: JSON.stringify(faqs)
+      FAQS_JSON: JSON.stringify(faqs),
+      JORNADAS_JSON: JSON.stringify(jornadasList)
     };
     setSettingsForm(updatedForm);
+    setSettings(updatedForm);
+    try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updatedForm)); } catch (e) {}
     handleSaveSettings(updatedForm);
   };
 
@@ -2096,7 +2104,9 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
 
                     <button
                       onClick={() => {
-                        const updated = jornadasList.filter((j: any) => j.id !== jornada.id);
+                        if (!window.confirm(`¿Estás seguro de eliminar la jornada "${jornada.title}"?`)) return;
+                        const currentList = jornadasList && jornadasList.length > 0 ? jornadasList : DEFAULT_JORNADAS;
+                        const updated = currentList.filter((j: any) => String(j.id) !== String(jornada.id));
                         setJornadasList(updated);
                         const newForm = { ...settingsForm, JORNADAS_JSON: JSON.stringify(updated) };
                         setSettingsForm(newForm);
@@ -2104,7 +2114,7 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                         try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
                         handleSaveSettings(newForm);
                       }}
-                      className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors"
+                      className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors cursor-pointer"
                       title="Eliminar Jornada"
                     >
                       <Trash2 size={14} />
@@ -2407,9 +2417,13 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                             if (!window.confirm(`¿Eliminar el servicio "${srv.title}"?`)) return;
                             const updated = services.filter((_, i) => i !== idx);
                             setServices(updated);
-                            setSettingsForm({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
+                            const newForm = { ...settingsForm, SERVICES_JSON: JSON.stringify(updated) };
+                            setSettingsForm(newForm);
+                            setSettings(newForm);
+                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
+                            handleSaveSettings(newForm);
                           }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5"
+                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 cursor-pointer"
                           title="Eliminar Servicio"
                         >
                           <Trash2 size={14} />
@@ -2567,10 +2581,12 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                             setTeamMembers(updated);
                             const newForm = { ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) };
                             setSettingsForm(newForm);
+                            setSettings(newForm);
                             try { localStorage.setItem('mastertech_team_members', JSON.stringify(updated)); } catch (err) {}
                             try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (err) {}
+                            handleSaveSettings(newForm);
                           }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end"
+                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end cursor-pointer"
                           title="Eliminar Miembro"
                         >
                           <Trash2 size={14} />
@@ -2709,9 +2725,13 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                             if (!window.confirm(`¿Eliminar reseña de "${rev.name}"?`)) return;
                             const updated = reviews.filter((_, i) => i !== idx);
                             setReviews(updated);
-                            setSettingsForm({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
+                            const newForm = { ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) };
+                            setSettingsForm(newForm);
+                            setSettings(newForm);
+                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
+                            handleSaveSettings(newForm);
                           }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end"
+                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end cursor-pointer"
                           title="Eliminar Reseña"
                         >
                           <Trash2 size={14} />
@@ -2785,11 +2805,16 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                         </div>
                         <button
                           onClick={() => {
+                            if (!window.confirm(`¿Eliminar la pregunta #${idx + 1}?`)) return;
                             const updated = faqs.filter((_, i) => i !== idx);
                             setFaqs(updated);
-                            setSettingsForm({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
+                            const newForm = { ...settingsForm, FAQS_JSON: JSON.stringify(updated) };
+                            setSettingsForm(newForm);
+                            setSettings(newForm);
+                            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(newForm)); } catch (e) {}
+                            handleSaveSettings(newForm);
                           }}
-                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end"
+                          className="text-zinc-500 hover:text-red-400 p-2 border border-white/5 rounded-xl bg-white/5 self-end cursor-pointer"
                           title="Eliminar Pregunta"
                         >
                           <Trash2 size={14} />
