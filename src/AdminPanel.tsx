@@ -140,7 +140,12 @@ const DEFAULT_JORNADAS = [
   { id: "egr-dpf", badge: "⚡ Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
 ];
 
-export default function AdminPanel() {
+interface AdminPanelProps {
+  config?: any;
+  onLogout?: () => void;
+}
+
+export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelProps) {
   // Auth State
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('mastertech_admin_token'));
   const [passwordInput, setPasswordInput] = useState('');
@@ -299,6 +304,7 @@ export default function AdminPanel() {
   const handleLogout = () => {
     localStorage.removeItem('mastertech_admin_token');
     setToken(null);
+    if (onLogout) onLogout();
   };
 
   // Save Settings Function
