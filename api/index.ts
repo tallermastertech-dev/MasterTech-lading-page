@@ -19,8 +19,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // =============================================================
 // PERSISTENT DISK FILE STORAGE (Prevents settings reset after cold start)
 // =============================================================
-const SETTINGS_FILE_PATH = path.join(process.cwd(), 'mastertech_settings_data.json');
-const LEADS_FILE_PATH = path.join(process.cwd(), 'mastertech_leads_data.json');
+const SETTINGS_FILE_PATH = path.join(process.env.VERCEL ? '/tmp' : process.cwd(), 'mastertech_settings_data.json');
+const LEADS_FILE_PATH = path.join(process.env.VERCEL ? '/tmp' : process.cwd(), 'mastertech_leads_data.json');
 
 // In-memory fallback cache for settings, occupied slots, and leads
 const memorySettingsCache: Record<string, string> = {};
