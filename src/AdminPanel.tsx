@@ -1008,7 +1008,6 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     setIsLoadingLeads(false);
   };
 
-  // Fetch Settings
   // IMPORTANT: For admin-managed JSON fields (catalog, team, faqs, reviews, services),
   // localStorage is the SOURCE OF TRUTH and always takes priority over the server.
   // The server only fills non-JSON settings (phone, images, etc.) that the admin
@@ -1016,24 +1015,15 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
   const fetchSettings = async () => {
     setIsLoadingSettings(true);
 
-    // These are the JSON fields that are exclusively managed by the admin UI.
-    // localStorage wins for these fields always.
-    const LOCAL_PRIORITY_FIELDS = [
-      'CATALOG_PRODUCTS_JSON',
-      'TEAM_MEMBERS_JSON',
-      'REVIEWS_JSON',
-      'SERVICES_JSON',
-      'FAQS_JSON',
-      'JORNADAS_JSON',
-      'JORNADA_COUNTDOWN_TITLE',
-      'JORNADA_COUNTDOWN_END',
-      'HERO_IMG',
-      'LOGO_URL',
-      'IMG_INSTALACIONES',
-      'HERO_REEL_URL',
-      'PHONE_NUMBER',
-      'WHATSAPP_LINK'
-    ];
+    let serverData: any = null;
+    try {
+      const res = await fetch(`/api/settings?t=${Date.now()}`);
+      if (res.ok) {
+        serverData = await res.json();
+      }
+    } catch (err) {
+      console.warn("Could not fetch server settings, falling back to local cache:", err);
+    }
 
     let localData: any = null;
     try {
@@ -1041,64 +1031,45 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
       if (stored) localData = JSON.parse(stored);
     } catch (e) {}
 
-    // Apply local data immediately so UI is responsive
-    if (localData) {
-      setSettings(localData);
-      setSettingsForm(localData);
-      try { if (localData.CATALOG_PRODUCTS_JSON) setCatalogItems(JSON.parse(localData.CATALOG_PRODUCTS_JSON)); } catch (e) {}
-      try { if (localData.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(localData.TEAM_MEMBERS_JSON)); } catch (e) {}
-      try { if (localData.REVIEWS_JSON) setReviews(JSON.parse(localData.REVIEWS_JSON)); } catch (e) {}
-      try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
-      try { if (localData.FAQS_JSON) setFaqs(JSON.parse(localData.FAQS_JSON)); } catch (e) {}
+    // SERVER API WINS. Local storage is only used as a fallback if the server is offline.
+    const merged: any = { ...(localData || {}), ...(serverData || {}) };
+
+    setSettings(merged);
+    setSettingsForm(merged);
+
+    // Synchronize catalog items from Server API (Source of Truth)
+    if (merged.CATALOG_PRODUCTS_JSON) {
       try {
-        if (localData.JORNADAS_JSON) {
-          const parsed = JSON.parse(localData.JORNADAS_JSON);
-          if (Array.isArray(parsed)) setJornadasList(parsed);
-        }
+        const parsed = JSON.parse(merged.CATALOG_PRODUCTS_JSON);
+        if (Array.isArray(parsed)) setCatalogItems(parsed);
       } catch (e) {}
     }
 
-    try {
-      const res = await fetch('/api/settings');
-      if (res.ok) {
-        const serverData = await res.json();
-
-        // Merge: server fills non-priority fields; localStorage wins for priority fields
-        const merged: any = { ...serverData };
-        if (localData) {
-          for (const k of LOCAL_PRIORITY_FIELDS) {
-            if (localData[k] !== undefined && localData[k] !== null && localData[k] !== '') {
-              merged[k] = localData[k];
-            }
-          }
-        }
-
-        if (merged.SUCCESS_BADGE && merged.SUCCESS_BADGE.includes('30%')) {
-          merged.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
-        }
-
-        setSettings(merged);
-        setSettingsForm(prev => ({ ...merged, ...prev }));
-        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
-
-        // Apply merged JSON fields to state
-        try { if (merged.CATALOG_PRODUCTS_JSON) setCatalogItems(JSON.parse(merged.CATALOG_PRODUCTS_JSON)); } catch (e) {}
-        try { if (merged.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(merged.TEAM_MEMBERS_JSON)); } catch (e) {}
-        try { if (merged.REVIEWS_JSON) setReviews(JSON.parse(merged.REVIEWS_JSON)); } catch (e) {}
-        try { if (merged.FAQS_JSON) setFaqs(JSON.parse(merged.FAQS_JSON)); } catch (e) {}
-        try { if (merged.SERVICES_JSON) setServices(JSON.parse(merged.SERVICES_JSON)); } catch (e) {}
-        try {
-          if (merged.JORNADAS_JSON) {
-            const parsed = JSON.parse(merged.JORNADAS_JSON);
-            if (Array.isArray(parsed)) setJornadasList(parsed);
-          }
-        } catch (e) {}
-      }
-    } catch (err) {
-      console.error('Error fetching settings:', err);
-    } finally {
-      setIsLoadingSettings(false);
+    // Synchronize jornadas list from Server API
+    if (merged.JORNADAS_JSON) {
+      try {
+        const parsedJ = JSON.parse(merged.JORNADAS_JSON);
+        if (Array.isArray(parsedJ)) setJornadasList(parsedJ);
+      } catch (e) {}
     }
+
+    // Synchronize team, reviews, services, faqs from Server API
+    if (merged.TEAM_MEMBERS_JSON) {
+      try { const p = JSON.parse(merged.TEAM_MEMBERS_JSON); if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
+    }
+    if (merged.REVIEWS_JSON) {
+      try { const p = JSON.parse(merged.REVIEWS_JSON); if (Array.isArray(p)) setReviews(p); } catch (e) {}
+    }
+    if (merged.SERVICES_JSON) {
+      try { const p = JSON.parse(merged.SERVICES_JSON); if (Array.isArray(p)) setServices(p); } catch (e) {}
+    }
+    if (merged.FAQS_JSON) {
+      try { const p = JSON.parse(merged.FAQS_JSON); if (Array.isArray(p)) setFaqs(p); } catch (e) {}
+    }
+
+    // Keep localStorage updated with fresh server data
+    try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
+    setIsLoadingSettings(false);
   };
 
   useEffect(() => {

@@ -70,6 +70,10 @@ app.use((_req, res, next) => {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   // Referrer control
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  // Disable HTTP caching completely for fresh data on all devices
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   // Content Security Policy
   res.setHeader(
     'Content-Security-Policy',
