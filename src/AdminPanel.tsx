@@ -963,6 +963,12 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
     setTimeout(() => setAiStatusMsg(''), 4500);
   };
 
+  // Settings Edit State
+  const [settingsForm, setSettingsForm] = useState<Partial<Settings>>({});
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
+  const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
+
   // Fetch Leads con fusión garantizada y respaldo sin borrado
   const fetchLeads = async (authToken: string) => {
     setIsLoadingLeads(true);
