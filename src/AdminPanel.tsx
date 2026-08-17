@@ -40,7 +40,11 @@ import {
   Sliders,
   ChevronRight,
   Filter,
-  Bot
+  Bot,
+  Phone,
+  MapPin,
+  Instagram,
+  Youtube
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 
