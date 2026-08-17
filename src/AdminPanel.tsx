@@ -2026,7 +2026,12 @@ Devuelve ÚNICAMENTE un objeto JSON estricto sin formato markdown:
                 <div key={jornada.id || idx} className="bg-[#12141a] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between p-5 space-y-4">
                   <div className="flex items-start gap-4">
                     <div className="w-20 h-20 rounded-xl bg-black overflow-hidden shrink-0 border border-white/10">
-                      <img src={jornada.img || "/assets/servicio-mecanica.jpg"} alt={jornada.title} className="w-full h-full object-cover" />
+                      <img 
+                        src={jornada.img || "/assets/servicio-mecanica.jpg"} 
+                        alt={jornada.title} 
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
+                        className="w-full h-full object-cover" 
+                      />
                     </div>
 
                     <div className="flex-1 space-y-1">

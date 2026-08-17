@@ -610,8 +610,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 {/* Product Image Box */}
                 <div className="relative aspect-square bg-black overflow-hidden cursor-pointer" onClick={() => setSelectedProduct(item)}>
                   <img 
-                    src={item.img} 
+                    src={item.img || "/assets/servicio-mecanica.jpg"} 
                     alt={item.title}
+                    onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-black/30" />

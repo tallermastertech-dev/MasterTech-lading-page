@@ -43,7 +43,6 @@ import Nosotros from './Nosotros';
 import Servicios from './Servicios';
 import Catalogo from './Catalogo';
 import Jornadas from './Jornadas';
-import InspectionSlotPicker from './InspectionSlotPicker';
 
 const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg 

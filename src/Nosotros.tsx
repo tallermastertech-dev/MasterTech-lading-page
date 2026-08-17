@@ -129,8 +129,9 @@ export default function Nosotros() {
                   {/* Photo Container with crystal-clear full color display */}
                   <div className="h-64 sm:h-72 overflow-hidden relative shrink-0 bg-[#0D0D0D]">
                     <img 
-                      src={member.img || "/assets/instalaciones.jpg"} 
+                      src={member.img || "/assets/servicio-mecanica.jpg"} 
                       alt={member.name} 
+                      onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#121417] via-[#121417]/20 to-transparent pointer-events-none" />

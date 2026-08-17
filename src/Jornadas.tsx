@@ -486,6 +486,18 @@ export default function Jornadas() {
                 </span>
               </div>
 
+              {currentJornada.img && (
+                <div className="w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-black border border-white/10 relative shadow-xl">
+                  <img
+                    src={currentJornada.img}
+                    alt={currentJornada.title}
+                    onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent" />
+                </div>
+              )}
+
               <h2 className="text-2xl md:text-4xl font-display font-black tracking-tight uppercase text-white leading-tight">
                 {currentJornada.title}
               </h2>
