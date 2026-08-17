@@ -308,22 +308,25 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     if (onLogout) onLogout();
   };
 
-  // Save Settings Function
-  const handleSaveSettings = async (overrideForm?: any) => {
-    if (!token) return;
-    setIsSavingSettings(true);
-    setSettingsSuccessMessage('');
-    setSettingsErrorMessage('');
+  // Section-by-section Independent Save States
+  const [savingSection, setSavingSection] = useState<string | null>(null);
+  const [savedSectionSuccess, setSavedSectionSuccess] = useState<string | null>(null);
 
-    const base = overrideForm || settingsForm;
+  // Dedicated Independent Save Function for each module
+  const handleSaveSection = async (sectionKey: string, customPayload?: any) => {
+    if (!token) return;
+    setSavingSection(sectionKey);
+    setSavedSectionSuccess(null);
+
     const targetForm = {
-      ...base,
-      TEAM_MEMBERS_JSON: (overrideForm && overrideForm.TEAM_MEMBERS_JSON !== undefined) ? overrideForm.TEAM_MEMBERS_JSON : JSON.stringify(teamMembers),
-      REVIEWS_JSON: (overrideForm && overrideForm.REVIEWS_JSON !== undefined) ? overrideForm.REVIEWS_JSON : JSON.stringify(reviews),
-      SERVICES_JSON: (overrideForm && overrideForm.SERVICES_JSON !== undefined) ? overrideForm.SERVICES_JSON : JSON.stringify(services),
-      FAQS_JSON: (overrideForm && overrideForm.FAQS_JSON !== undefined) ? overrideForm.FAQS_JSON : JSON.stringify(faqs),
-      CATALOG_PRODUCTS_JSON: (overrideForm && overrideForm.CATALOG_PRODUCTS_JSON !== undefined) ? overrideForm.CATALOG_PRODUCTS_JSON : JSON.stringify(catalogItems),
-      JORNADAS_JSON: (overrideForm && overrideForm.JORNADAS_JSON !== undefined) ? overrideForm.JORNADAS_JSON : JSON.stringify(jornadasList)
+      ...settingsForm,
+      ...(customPayload || {}),
+      TEAM_MEMBERS_JSON: (customPayload && customPayload.TEAM_MEMBERS_JSON !== undefined) ? customPayload.TEAM_MEMBERS_JSON : JSON.stringify(teamMembers),
+      REVIEWS_JSON: (customPayload && customPayload.REVIEWS_JSON !== undefined) ? customPayload.REVIEWS_JSON : JSON.stringify(reviews),
+      SERVICES_JSON: (customPayload && customPayload.SERVICES_JSON !== undefined) ? customPayload.SERVICES_JSON : JSON.stringify(services),
+      FAQS_JSON: (customPayload && customPayload.FAQS_JSON !== undefined) ? customPayload.FAQS_JSON : JSON.stringify(faqs),
+      CATALOG_PRODUCTS_JSON: (customPayload && customPayload.CATALOG_PRODUCTS_JSON !== undefined) ? customPayload.CATALOG_PRODUCTS_JSON : JSON.stringify(catalogItems),
+      JORNADAS_JSON: (customPayload && customPayload.JORNADAS_JSON !== undefined) ? customPayload.JORNADAS_JSON : JSON.stringify(jornadasList)
     };
 
     try { localStorage.setItem('mastertech_settings_store', JSON.stringify(targetForm)); } catch (e) {}
@@ -351,15 +354,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         const updated = { ...(data.settings || {}), ...targetForm };
         setSettings(updated);
         setSettingsForm(updated);
-        setSettingsSuccessMessage('¡Cambios guardados e integrados públicamente!');
-        setTimeout(() => setSettingsSuccessMessage(''), 4000);
       }
-    } catch (err) {
-      setSettingsSuccessMessage('¡Guardado localmente!');
-      setTimeout(() => setSettingsSuccessMessage(''), 4000);
-    } finally {
-      setIsSavingSettings(false);
+    } catch (err) {} finally {
+      setSavingSection(null);
+      setSavedSectionSuccess(sectionKey);
+      setTimeout(() => setSavedSectionSuccess(null), 3500);
     }
+  };
+
+  // Save Settings Function
+  const handleSaveSettings = async (overrideForm?: any) => {
+    return handleSaveSection('general', overrideForm);
   };
 
   // Lead Status Handler
@@ -926,26 +931,44 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Catálogo de Repuestos & Productos</h1>
                   <p className="text-xs text-zinc-400 mt-1">Gestiona el inventario de repuestos visibles públicamente en `/catalogo`.</p>
                 </div>
-                <button
-                  onClick={() => {
-                    setEditingProduct({
-                      id: 0,
-                      title: '',
-                      category: 'Mantenimiento Esencial',
-                      price: '$0 USD',
-                      desc: '',
-                      img: '/assets/servicio-mecanica.jpg',
-                      images: [],
-                      partNumber: ''
-                    });
-                    setIsCatalogModalOpen(true);
-                  }}
-                  className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
-                >
-                  <Plus size={16} />
-                  <span>Nuevo Repuesto</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: JSON.stringify(catalogItems) })}
+                    disabled={savingSection === 'catalogo'}
+                    className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                  >
+                    {savingSection === 'catalogo' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                    <span>{savedSectionSuccess === 'catalogo' ? '¡Catálogo Guardado!' : 'Guardar Catálogo Completo'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingProduct({
+                        id: 0,
+                        title: '',
+                        category: 'Mantenimiento Esencial',
+                        price: '$0 USD',
+                        desc: '',
+                        img: '/assets/servicio-mecanica.jpg',
+                        images: [],
+                        partNumber: ''
+                      });
+                      setIsCatalogModalOpen(true);
+                    }}
+                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-2 hover:bg-white/10"
+                  >
+                    <Plus size={16} />
+                    <span>Nuevo Repuesto</span>
+                  </button>
+                </div>
               </div>
+
+              {savedSectionSuccess === 'catalogo' && (
+                <div className="p-3.5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-xs font-bold flex items-center gap-2 shadow-lg">
+                  <CheckCircle2 size={18} />
+                  <span>¡El catálogo de repuestos ha sido guardado e integrado públicamente en `/catalogo`!</span>
+                </div>
+              )}
 
               {/* Products Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1235,6 +1258,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {/* Sub-tab 1: Services */}
               {contentSubTab === 'servicios' && (
                 <div className="space-y-4">
+                  <div className="flex justify-between items-center bg-[#12141a] p-4 rounded-2xl border border-white/10">
+                    <div>
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">Servicios del Taller MasterTech</h3>
+                      <p className="text-[11px] text-zinc-400">Modifica títulos, descripciones o imágenes de los servicios principales.</p>
+                    </div>
+                    <button
+                      onClick={() => handleSaveSection('servicios', { SERVICES_JSON: JSON.stringify(services) })}
+                      disabled={savingSection === 'servicios'}
+                      className="btn-primary !py-2 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                    >
+                      {savingSection === 'servicios' ? <Loader2 className="animate-spin" size={15} /> : <Save size={15} />}
+                      <span>{savedSectionSuccess === 'servicios' ? '¡Servicios Guardados!' : 'Guardar Sección Servicios'}</span>
+                    </button>
+                  </div>
+
+                  {savedSectionSuccess === 'servicios' && (
+                    <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                      <CheckCircle2 size={16} />
+                      <span>¡Los cambios en Servicios han sido guardados e integrados públicamente!</span>
+                    </div>
+                  )}
+
                   {services.map((srv, idx) => (
                     <div key={srv.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1248,7 +1293,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 const updated = [...services];
                                 updated[idx].title = e.target.value;
                                 setServices(updated);
-                                handleSaveSettings({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
                               }}
                               className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
                             />
@@ -1263,7 +1307,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 const updated = [...services];
                                 updated[idx].desc = e.target.value;
                                 setServices(updated);
-                                handleSaveSettings({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
                               }}
                               className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
                             />
@@ -1278,7 +1321,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               const updated = [...services];
                               updated[idx].img = val;
                               setServices(updated);
-                              handleSaveSettings({ ...settingsForm, SERVICES_JSON: JSON.stringify(updated) });
                             }}
                             aspectRatio={16 / 9}
                             placeholder="/assets/servicio-mecanica.jpg"
@@ -1293,23 +1335,120 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {/* Sub-tab 2: Equipo Taller */}
               {contentSubTab === 'equipo' && (
                 <div className="space-y-6">
-                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                     <div>
                       <h3 className="text-base font-bold text-white uppercase tracking-wider">Equipo de Especialistas Taller MasterTech</h3>
                       <p className="text-xs text-zinc-400 mt-1">Gestiona los técnicos, ingenieros y coordinadores que aparecen en `/nosotros`.</p>
                     </div>
-                    <button
-                      onClick={() => {
-                        const updated = [...teamMembers, { id: Date.now(), name: "Nuevo Especialista", role: "ESPECIALISTA TECNICO", desc: "Descripción del cargo...", img: "/assets/servicio-mecanica.jpg" }];
-                        setTeamMembers(updated);
-                        handleSaveSettings({ ...settingsForm, TEAM_MEMBERS_JSON: JSON.stringify(updated) });
-                      }}
-                      className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shrink-0 shadow-lg"
-                    >
-                      <Plus size={16} />
-                      <span>Agregar Miembro al Equipo</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          const updated = [...teamMembers, { id: Date.now(), name: "Nuevo Especialista", role: "ESPECIALISTA TECNICO", desc: "Descripción del cargo...", img: "/assets/servicio-mecanica.jpg" }];
+                          setTeamMembers(updated);
+                        }}
+                        className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors"
+                      >
+                        <Plus size={16} />
+                        <span>Añadir Ficha</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleSaveSection('equipo', { TEAM_MEMBERS_JSON: JSON.stringify(teamMembers) })}
+                        disabled={savingSection === 'equipo'}
+                        className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                      >
+                        {savingSection === 'equipo' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                        <span>{savedSectionSuccess === 'equipo' ? '¡Equipo Guardado!' : 'Guardar Equipo de Trabajo'}</span>
+                      </button>
+                    </div>
                   </div>
+
+                  {savedSectionSuccess === 'equipo' && (
+                    <div className="p-3.5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-xs font-bold flex items-center gap-2 shadow-lg">
+                      <CheckCircle2 size={18} />
+                      <span>¡Las fotos y datos del Equipo han sido guardados e integrados públicamente en `/nosotros`!</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {teamMembers.map((member, idx) => (
+                      <div key={member.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4 flex flex-col justify-between">
+                        <div className="space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 space-y-2">
+                              <div>
+                                <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Nombre Completo</label>
+                                <input
+                                  type="text"
+                                  value={member.name || ''}
+                                  onChange={(e) => {
+                                    const updated = [...teamMembers];
+                                    updated[idx].name = e.target.value;
+                                    setTeamMembers(updated);
+                                  }}
+                                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Cargo / Especialidad</label>
+                                <input
+                                  type="text"
+                                  value={member.role || ''}
+                                  onChange={(e) => {
+                                    const updated = [...teamMembers];
+                                    updated[idx].role = e.target.value;
+                                    setTeamMembers(updated);
+                                  }}
+                                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-amber-400 outline-none focus:border-primary"
+                                />
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={() => {
+                                if (!window.confirm(`¿Eliminar a "${member.name}" del equipo?`)) return;
+                                const updated = teamMembers.filter((_, i) => i !== idx);
+                                setTeamMembers(updated);
+                              }}
+                              className="text-zinc-500 hover:text-red-400 p-2 rounded-xl bg-white/5 border border-white/10"
+                              title="Eliminar Miembro"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">Descripción / Experiencia</label>
+                            <textarea
+                              rows={2}
+                              value={member.desc || ''}
+                              onChange={(e) => {
+                                const updated = [...teamMembers];
+                                updated[idx].desc = e.target.value;
+                                setTeamMembers(updated);
+                              }}
+                              className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                            />
+                          </div>
+
+                          <ImageUploader
+                            label={`Foto Oficial de ${member.name || `Miembro #${idx + 1}`}`}
+                            value={member.img || ''}
+                            onChange={(val) => {
+                              const updated = [...teamMembers];
+                              updated[idx].img = val;
+                              setTeamMembers(updated);
+                            }}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/servicio-mecanica.jpg"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {teamMembers.map((member, idx) => (
@@ -1399,23 +1538,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {/* Sub-tab 3: Testimonios */}
               {contentSubTab === 'testimonios' && (
                 <div className="space-y-6">
-                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                     <div>
                       <h3 className="text-base font-bold text-white uppercase tracking-wider">Gestión de Reseñas y Testimonios</h3>
                       <p className="text-xs text-zinc-400 mt-1">Edita u organiza las opiniones de los clientes en la sección de inicio.</p>
                     </div>
-                    <button
-                      onClick={() => {
-                        const updated = [...reviews, { id: Date.now(), name: "Nombre Cliente", car: "Modelo Vehículo", quote: "Excelente atención y diagnóstico preciso." }];
-                        setReviews(updated);
-                        handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
-                      }}
-                      className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shrink-0 shadow-lg"
-                    >
-                      <Plus size={16} />
-                      <span>Agregar Testimonio</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          const updated = [...reviews, { id: Date.now(), name: "Nombre Cliente", car: "Modelo Vehículo", quote: "Excelente atención y diagnóstico preciso." }];
+                          setReviews(updated);
+                        }}
+                        className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors"
+                      >
+                        <Plus size={16} />
+                        <span>Añadir Reseña</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleSaveSection('testimonios', { REVIEWS_JSON: JSON.stringify(reviews) })}
+                        disabled={savingSection === 'testimonios'}
+                        className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                      >
+                        {savingSection === 'testimonios' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                        <span>{savedSectionSuccess === 'testimonios' ? '¡Reseñas Guardadas!' : 'Guardar Testimonios'}</span>
+                      </button>
+                    </div>
                   </div>
+
+                  {savedSectionSuccess === 'testimonios' && (
+                    <div className="p-3.5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-xs font-bold flex items-center gap-2 shadow-lg">
+                      <CheckCircle2 size={18} />
+                      <span>¡Los Testimonios han sido guardados e integrados públicamente!</span>
+                    </div>
+                  )}
 
                   <div className="space-y-4">
                     {reviews.map((rev, idx) => (
@@ -1431,7 +1587,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   const updated = [...reviews];
                                   updated[idx].name = e.target.value;
                                   setReviews(updated);
-                                  handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
                                 }}
                                 className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
                               />
@@ -1446,7 +1601,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   const updated = [...reviews];
                                   updated[idx].car = e.target.value;
                                   setReviews(updated);
-                                  handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
                                 }}
                                 className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
                               />
@@ -1458,7 +1612,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               if (!window.confirm(`¿Eliminar reseña de "${rev.name}"?`)) return;
                               const updated = reviews.filter((_, i) => i !== idx);
                               setReviews(updated);
-                              handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
                             }}
                             className="text-zinc-500 hover:text-red-400 p-2 rounded-xl bg-white/5 border border-white/10"
                             title="Eliminar Reseña"
@@ -1476,7 +1629,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               const updated = [...reviews];
                               updated[idx].quote = e.target.value;
                               setReviews(updated);
-                              handleSaveSettings({ ...settingsForm, REVIEWS_JSON: JSON.stringify(updated) });
                             }}
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-xs text-white outline-none focus:border-primary"
                           />
@@ -1490,20 +1642,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {/* Sub-tab 4: FAQs */}
               {contentSubTab === 'faqs' && (
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-bold text-white uppercase">Preguntas Frecuentes</h3>
-                    <button
-                      onClick={() => {
-                        const updated = [...faqs, { q: "Nueva Pregunta Frecuente", a: "Respuesta detallada..." }];
-                        setFaqs(updated);
-                        handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
-                      }}
-                      className="btn-primary !py-2 !px-4 text-xs border-none flex items-center gap-1"
-                    >
-                      <Plus size={14} />
-                      <span>Agregar FAQ</span>
-                    </button>
+                  <div className="flex justify-between items-center bg-[#12141a] p-4 rounded-2xl border border-white/10">
+                    <div>
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">Preguntas Frecuentes (FAQs)</h3>
+                      <p className="text-[11px] text-zinc-400">Preguntas y respuestas visibles en `/faq`.</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          const updated = [...faqs, { q: "Nueva Pregunta Frecuente", a: "Respuesta detallada..." }];
+                          setFaqs(updated);
+                        }}
+                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1 hover:bg-white/10"
+                      >
+                        <Plus size={14} />
+                        <span>Añadir</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleSaveSection('faqs', { FAQS_JSON: JSON.stringify(faqs) })}
+                        disabled={savingSection === 'faqs'}
+                        className="btn-primary !py-2 !px-4 text-xs font-black uppercase border-none flex items-center gap-1.5 shadow-lg"
+                      >
+                        {savingSection === 'faqs' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                        <span>{savedSectionSuccess === 'faqs' ? '¡FAQs Guardadas!' : 'Guardar FAQs'}</span>
+                      </button>
+                    </div>
                   </div>
+
+                  {savedSectionSuccess === 'faqs' && (
+                    <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                      <CheckCircle2 size={16} />
+                      <span>¡Preguntas frecuentes guardadas e integradas públicamente!</span>
+                    </div>
+                  )}
 
                   {faqs.map((faq, idx) => (
                     <div key={idx} className="bg-[#12141a] p-4 rounded-xl border border-white/10 space-y-3">
@@ -1516,7 +1688,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               const updated = [...faqs];
                               updated[idx].q = e.target.value;
                               setFaqs(updated);
-                              handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
                             }}
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
                           />
@@ -1527,7 +1698,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               const updated = [...faqs];
                               updated[idx].a = e.target.value;
                               setFaqs(updated);
-                              handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
                             }}
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
                           />
@@ -1536,7 +1706,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           onClick={() => {
                             const updated = faqs.filter((_, i) => i !== idx);
                             setFaqs(updated);
-                            handleSaveSettings({ ...settingsForm, FAQS_JSON: JSON.stringify(updated) });
                           }}
                           className="text-zinc-500 hover:text-red-400 p-2"
                         >
