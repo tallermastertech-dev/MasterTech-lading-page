@@ -431,13 +431,13 @@ export default function Jornadas() {
 
             <div className="space-y-4 max-w-2xl mx-auto relative z-10">
               <span className="px-5 py-2 rounded-full bg-amber-400 text-black text-xs font-black uppercase tracking-widest inline-block shadow-lg shadow-amber-400/20">
-                ⚡ PRÓXIMA APERTURA DE CUPOS
+                {config.JORNADA_EMPTY_BADGE || '⚡ PRÓXIMA APERTURA DE CUPOS'}
               </span>
               <h2 className="text-3xl sm:text-5xl font-display font-black uppercase tracking-tight text-white leading-tight">
-                No hay <span className="text-amber-400 italic underline decoration-amber-500/40">Jornadas VIP</span> Activas en este momento
+                {config.JORNADA_EMPTY_TITLE || 'No hay Jornadas VIP Activas en este momento'}
               </h2>
               <p className="text-zinc-200 text-sm sm:text-base leading-relaxed font-medium">
-                Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!
+                {config.JORNADA_EMPTY_DESC || 'Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!'}
               </p>
             </div>
 
@@ -449,13 +449,13 @@ export default function Jornadas() {
                 className="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-black font-black text-sm uppercase tracking-wider py-4 px-8 rounded-2xl shadow-[0_10px_35px_rgba(251,191,36,0.35)] flex items-center justify-center gap-2.5 border border-amber-300 transition-all cursor-pointer hover:scale-105"
               >
                 <WhatsAppIcon size={20} className="text-black fill-current" />
-                <span className="text-black font-black">CONSULTAR PRÓXIMA FECHA POR WHATSAPP</span>
+                <span className="text-black font-black">{config.JORNADA_EMPTY_BTN_WA || 'CONSULTAR PRÓXIMA FECHA POR WHATSAPP'}</span>
               </a>
               <a
                 href="/servicios"
                 className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-black/60 hover:bg-white/10 border border-white/30 text-white text-sm font-bold transition-all text-center"
               >
-                Ver Servicios de Taller Disponibles
+                {config.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}
               </a>
             </div>
           </motion.div>

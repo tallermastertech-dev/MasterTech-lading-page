@@ -1030,44 +1030,116 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </button>
               </div>
 
-              {/* Clock Timer Config */}
-              <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-3">
-                <h3 className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-2">
-                  <Clock size={16} />
-                  <span>Configuración del Reloj de Cierre de Cupos</span>
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Encabezado del Reloj</label>
-                    <input
-                      type="text"
-                      value={settingsForm.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}
-                      onChange={(e) => {
-                        const updated = { ...settingsForm, JORNADA_COUNTDOWN_TITLE: e.target.value };
-                        setSettingsForm(updated);
-                        handleSaveSettings(updated);
-                      }}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                    />
+              {/* Clock Timer & Empty State Config */}
+              <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-5">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <h3 className="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-2">
+                    <Clock size={16} />
+                    <span>Configuración del Reloj & Banner de Apertura de Cupos</span>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveSettings()}
+                    disabled={isSavingSettings}
+                    className="btn-primary !py-1.5 !px-4 text-[11px] font-black uppercase flex items-center gap-1.5 border-none shadow-md"
+                  >
+                    {isSavingSettings ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                    <span>Guardar Banner</span>
+                  </button>
+                </div>
+
+                <div className="space-y-4 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1">Encabezado del Reloj (Reloj Digital)</label>
+                      <input
+                        type="text"
+                        value={settingsForm.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_COUNTDOWN_TITLE: e.target.value })}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
+                        placeholder="Ej. CIERRE DE CUPOS JORNADA:"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1">Botones Rápido Cierre del Reloj</label>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {[1, 3, 7, 14].map(days => (
+                          <button
+                            key={days}
+                            type="button"
+                            onClick={() => {
+                              const newEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+                              const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: newEnd };
+                              setSettingsForm(updated);
+                              handleSaveSettings(updated);
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold hover:bg-amber-500/20 transition-colors"
+                          >
+                            + {days} {days === 1 ? 'Día' : 'Días'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Botones Rápido Cierre</label>
-                    <div className="flex flex-wrap gap-2">
-                      {[1, 3, 7, 14].map(days => (
-                        <button
-                          key={days}
-                          onClick={() => {
-                            const newEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-                            const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: newEnd };
-                            setSettingsForm(updated);
-                            handleSaveSettings(updated);
-                          }}
-                          className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold hover:bg-amber-500/20 transition-colors"
-                        >
-                          + {days} {days === 1 ? 'Día' : 'Días'}
-                        </button>
-                      ))}
+                  <div className="space-y-3 pt-3 border-t border-white/5">
+                    <h4 className="text-[11px] font-black uppercase text-zinc-300">Textos del Banner de Cero Jornadas Activas</h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1">Distintivo / Pill Superior</label>
+                        <input
+                          type="text"
+                          value={settingsForm.JORNADA_EMPTY_BADGE || '⚡ PRÓXIMA APERTURA DE CUPOS'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_EMPTY_BADGE: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-amber-300 font-bold outline-none focus:border-primary"
+                          placeholder="Ej. ⚡ PRÓXIMA APERTURA DE CUPOS"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1">Título Principal</label>
+                        <input
+                          type="text"
+                          value={settingsForm.JORNADA_EMPTY_TITLE || 'No hay Jornadas VIP Activas en este momento'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_EMPTY_TITLE: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
+                          placeholder="Ej. No hay Jornadas VIP Activas en este momento"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1">Mensaje Explicativo / Descripción</label>
+                      <textarea
+                        rows={3}
+                        value={settingsForm.JORNADA_EMPTY_DESC || 'Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!'}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_EMPTY_DESC: e.target.value })}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1">Texto del Botón WhatsApp</label>
+                        <input
+                          type="text"
+                          value={settingsForm.JORNADA_EMPTY_BTN_WA || 'CONSULTAR PRÓXIMA FECHA POR WHATSAPP'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_EMPTY_BTN_WA: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-amber-400 font-black outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1">Texto del Botón Secundario</label>
+                        <input
+                          type="text"
+                          value={settingsForm.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_EMPTY_BTN_SEC: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
