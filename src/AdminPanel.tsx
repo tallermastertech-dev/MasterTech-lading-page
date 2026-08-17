@@ -231,7 +231,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       if (stored) localData = JSON.parse(stored);
     } catch (e) {}
 
-    const merged: any = { ...(localData || {}), ...(serverData || {}) };
+    // Priority: localData (current user edits) overrides serverData
+    const merged: any = { ...(serverData || {}), ...(localData || {}) };
     setSettings(merged);
     setSettingsForm(merged);
 
@@ -366,6 +367,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (err) {} finally {
       setSavingSection(null);
       setSavedSectionSuccess(sectionKey);
+      alert('✅ ¡Cambios guardados e integrados exitosamente en la web pública!');
       setTimeout(() => setSavedSectionSuccess(null), 4000);
     }
   };
