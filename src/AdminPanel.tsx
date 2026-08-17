@@ -39,7 +39,8 @@ import {
   Send,
   Sliders,
   ChevronRight,
-  Filter
+  Filter,
+  Bot
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 
