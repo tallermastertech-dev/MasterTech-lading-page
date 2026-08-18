@@ -14,88 +14,63 @@ const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?
   </svg>
 );
 
-const DEFAULT_SERVICES = [
-  { id: 1, title: "Mecánica General", desc: "Reparación profunda de motores, sustitución de embragues y solución de fallas mecánicas complejas con repuestos de alta calidad.", img: "/assets/servicio-mecanica.jpg" },
-  { id: 2, title: "Mantenimiento Preventivo", desc: "Cambios de aceite sintético, reemplazo de filtros y fluidos esenciales para alargar la vida útil de tu motor.", img: "/24214142.png" },
-  { id: 3, title: "Electricidad y Electrónica", desc: "Diagnóstico computarizado, reparación de alternadores, arranques y corrección de cableado y módulos electrónicos.", img: "/assets/servicio-electricidad.jpg" },
-  { id: 4, title: "Frenos y Suspensión", desc: "Cambio de pastillas, rectificación de discos, reemplazo de amortiguadores y ajuste completo de tren delantero.", img: "/assets/servicio-frenos.jpg" },
-  { id: 5, title: "Inyección Electrónica", desc: "Limpieza ultrasónica de inyectores, diagnóstico de bombas de gasolina y optimización del consumo de combustible.", img: "/assets/servicio-inyeccion.jpg" },
-  { id: 6, title: "Climatización", desc: "Carga de gas refrigerante, detección de fugas y mantenimiento completo del sistema de aire acondicionado.", img: "/assets/servicio-climatizacion.jpg" },
-  { id: 7, title: "Zona de Lavado", desc: "Lavado detallado de carrocería, limpieza profunda de motor e interior para entregar tu vehículo impecable.", img: "/assets/instalaciones.jpg" }
-];
-
 export default function Servicios() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
+  const [services, setServices] = useState<any[]>([]);
 
   useEffect(() => {
-    let localData: any = null;
+    const parseServices = (dataObj: any) => {
+      if (dataObj?.SERVICES_JSON) {
+        try {
+          const parsed = JSON.parse(dataObj.SERVICES_JSON);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
+      }
+      return [];
+    };
+
+    // 1. Initial load from local store
     try {
       const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
+      if (stored) {
+        const localData = JSON.parse(stored);
+        if (localData) {
+          setConfig((prev: any) => ({ ...prev, ...localData }));
+          setServices(parseServices(localData));
+        }
+      }
     } catch (e) {}
 
-    if (localData) {
-      setConfig((prev: any) => ({ ...prev, ...localData }));
-      try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
-    }
-
+    // 2. Fetch authoritative fresh data from Supabase backend
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/settings');
+        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          let currentLocal: any = null;
-          try {
-            const stored = localStorage.getItem('mastertech_settings_store');
-            if (stored) currentLocal = JSON.parse(stored);
-          } catch (e) {}
-
-          const mergeSmart = (server: any, local: any) => {
-            const res = { ...(server || {}) };
-            if (local) {
-              for (const [k, v] of Object.entries(local)) {
-                if (v !== undefined && v !== null && v !== '') {
-                  res[k] = v;
-                }
-              }
-            }
-            return res;
-          };
-          const merged = mergeSmart(data, currentLocal);
-          setConfig((prev: any) => ({ ...prev, ...merged }));
-          try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
-
-          try {
-            if (merged.SERVICES_JSON) {
-              setServices(JSON.parse(merged.SERVICES_JSON));
-            } else {
-              setServices(DEFAULT_SERVICES.map(s => {
-                let key = '';
-                if (s.title.includes('Mecánica')) key = 'MECANICA';
-                else if (s.title.includes('Mantenimiento')) key = 'MANTENIMIENTO';
-                else if (s.title.includes('Electricidad')) key = 'ELECTRICIDAD';
-                else if (s.title.includes('Frenos')) key = 'FRENOS';
-                else if (s.title.includes('Inyección')) key = 'INYECCION';
-                else if (s.title.includes('Climatización')) key = 'CLIMATIZACION';
-                else if (s.title.includes('Lavado')) key = 'LAVADO';
-
-                const customDesc = key ? data[`DESC_SRV_${key}`] : undefined;
-                const customImg = key ? data[`IMG_SRV_${key}`] : undefined;
-                return {
-                  ...s,
-                  desc: customDesc || s.desc,
-                  img: customImg || s.img
-                };
-              }));
-            }
-          } catch (e) {}
+          if (data && typeof data === 'object') {
+            setConfig((prev: any) => ({ ...prev, ...data }));
+            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
+            setServices(parseServices(data));
+          }
         }
       } catch (err) {
-        // silently fallback
+        console.error("Error cargando servicios desde Supabase:", err);
       }
     };
     fetchSettings();
+
+    const handleSettingsUpdated = (e: any) => {
+      const updated = e.detail || e;
+      if (updated && typeof updated === 'object') {
+        setConfig((prev: any) => ({ ...prev, ...updated }));
+        setServices(parseServices(updated));
+      }
+    };
+    window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
+
+    return () => {
+      window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    };
   }, []);
 
   return (

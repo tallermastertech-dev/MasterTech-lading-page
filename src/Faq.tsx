@@ -8,90 +8,64 @@ const CONFIG_DEFAULT = {
   LOGO_URL: "/logo.png",
 };
 
-const DEFAULT_FAQS = [
-  {
-    q: "¿Cuánto tiempo toma un mantenimiento preventivo básico?",
-    a: "El tiempo estimado oscila entre 45 minutos y 1 hora y media, dependiendo del plan de servicio requerido. Durante la intervención, puede esperar cómodamente en nuestra área Lounge VIP, equipada con estación de café y conectividad Wi-Fi de alta velocidad."
-  },
-  {
-    q: "¿Tienen garantía los trabajos que realizan?",
-    a: "Absolutamente. Todos nuestros servicios están respaldados por la Garantía Total MasterTech. Cubrimos la mano de obra calificada y los componentes e insumos OEM suministrados en nuestras instalaciones, asegurando un estándar óptimo de durabilidad y rendimiento."
-  },
-  {
-    q: "¿Cómo agendo una cita para mi vehículo?",
-    a: "Puede gestionar su cita en tiempo real de dos formas: directamente desde nuestra plataforma web haciendo clic en el botón \"Reserva Ahora\", o comunicándose directamente con nuestro equipo de asesores de servicio vía WhatsApp."
-  },
-  {
-    q: "¿Cuáles son los métodos de pago aceptados?",
-    a: "Para su comodidad, disponemos de múltiples canales de pago: Pago Móvil, transferencias bancarias nacionales e internacionales, efectivo (USD/EUR) y Zelle."
-  },
-  {
-    q: "¿Qué tipo de herramientas o tecnología utilizan para el diagnóstico?",
-    a: "Contamos con equipos de diagnóstico computarizado y escáneres multimarca de última generación. Esto nos permite interactuar con los módulos electrónicos del vehículo, analizar datos en tiempo real y detectar fallas con precisión quirúrgica antes de cualquier reparación."
-  },
-  {
-    q: "¿Puedo dejar mi vehículo en el taller si la reparación toma varios días?",
-    a: "Sí. Disponemos de instalaciones cerradas con sistemas de seguridad activa y monitoreo para resguardar su vehículo si requiere procedimientos mecánicos o electrónicos complejos que extiendan el tiempo de entrega."
-  },
-  {
-    q: "¿Me informan antes de realizar algún trabajo adicional en mi vehículo?",
-    a: "Totalmente. Mantenemos una política de cero sorpresas. Si durante la inspección o diagnóstico detectamos alguna anomalía extra, nuestro asesor de servicio le enviará un reporte técnico detallado junto al presupuesto correspondiente para su aprobación previa por WhatsApp antes de proceder."
-  }
-];
-
 export default function Faq() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [faqs, setFaqs] = useState<any[]>(DEFAULT_FAQS);
+  const [faqs, setFaqs] = useState<any[]>([]);
 
   useEffect(() => {
-    let localData: any = null;
+    const parseFaqs = (dataObj: any) => {
+      if (dataObj?.FAQS_JSON) {
+        try {
+          const parsed = JSON.parse(dataObj.FAQS_JSON);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
+      }
+      return [];
+    };
+
+    // 1. Initial load from local store
     try {
       const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
+      if (stored) {
+        const localData = JSON.parse(stored);
+        if (localData) {
+          setConfig((prev: any) => ({ ...prev, ...localData }));
+          setFaqs(parseFaqs(localData));
+        }
+      }
     } catch (e) {}
 
-    if (localData) {
-      setConfig((prev: any) => ({ ...prev, ...localData }));
-      try { if (localData.FAQS_JSON) setFaqs(JSON.parse(localData.FAQS_JSON)); } catch (e) {}
-    }
-
+    // 2. Fetch authoritative fresh data from Supabase backend
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/settings');
+        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          let currentLocal: any = null;
-          try {
-            const stored = localStorage.getItem('mastertech_settings_store');
-            if (stored) currentLocal = JSON.parse(stored);
-          } catch (e) {}
-
-          const mergeSmart = (server: any, local: any) => {
-            const res = { ...(server || {}) };
-            if (local) {
-              for (const [k, v] of Object.entries(local)) {
-                if (v !== undefined && v !== null && v !== '') {
-                  res[k] = v;
-                }
-              }
-            }
-            return res;
-          };
-          const merged = mergeSmart(data, currentLocal);
-          setConfig((prev: any) => ({ ...prev, ...merged }));
-          try {
-            if (merged.FAQS_JSON) {
-              setFaqs(JSON.parse(merged.FAQS_JSON));
-            }
-          } catch (e) {}
-          try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
+          if (data && typeof data === 'object') {
+            setConfig((prev: any) => ({ ...prev, ...data }));
+            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
+            setFaqs(parseFaqs(data));
+          }
         }
       } catch (err) {
-        // silently fallback
+        console.error("Error cargando FAQs desde Supabase:", err);
       }
     };
     fetchSettings();
+
+    const handleSettingsUpdated = (e: any) => {
+      const updated = e.detail || e;
+      if (updated && typeof updated === 'object') {
+        setConfig((prev: any) => ({ ...prev, ...updated }));
+        setFaqs(parseFaqs(updated));
+      }
+    };
+    window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
+
+    return () => {
+      window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    };
   }, []);
 
   return (

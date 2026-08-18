@@ -133,16 +133,6 @@ const CONFIG = {
   SUCCESS_TEXT: "Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita."
 };
 
-const DEFAULT_SERVICES = [
-  { id: 1, title: "Mecánica General", desc: "Reparación profunda de motores, sustitución de embragues y solución de fallas mecánicas complejas con repuestos de alta calidad.", img: "/assets/servicio-mecanica.jpg" },
-  { id: 2, title: "Mantenimiento Preventivo", desc: "Cambios de aceite sintético, reemplazo de filtros y fluidos esenciales para alargar la vida útil de tu motor.", img: "/24214142.png" },
-  { id: 3, title: "Electricidad y Electrónica", desc: "Diagnóstico computarizado, reparación de alternadores, arranques y corrección de cableado y módulos electrónicos.", img: "/assets/servicio-electricidad.jpg" },
-  { id: 4, title: "Frenos y Suspensión", desc: "Cambio de pastillas, rectificación de discos, reemplazo de amortiguadores y ajuste completo de tren delantero.", img: "/assets/servicio-frenos.jpg" },
-  { id: 5, title: "Inyección Electrónica", desc: "Limpieza ultrasónica de inyectores, diagnóstico de bombas de gasolina y optimización del consumo de combustible.", img: "/assets/servicio-inyeccion.jpg" },
-  { id: 6, title: "Climatización", desc: "Carga de gas refrigerante, detección de fugas y mantenimiento completo del sistema de aire acondicionado.", img: "/assets/servicio-climatizacion.jpg" },
-  { id: 7, title: "Zona de Lavado", desc: "Lavado detallado de carrocería, limpieza profunda de motor e interior para entregar tu vehículo impecable.", img: "/assets/instalaciones.jpg" }
-];
-
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -185,25 +175,12 @@ export default function App() {
   );
 
   // Dynamic JSON arrays for team, reviews, and brands
-  const [teamMembers, setTeamMembers] = useState<any[]>([
-    { id: 1, name: 'Jesús Mata', role: 'JEFE DE MECANICA', desc: 'Experto en diagnóstico avanzado y reparación de motores con más de 15 años de experiencia multimarca.', img: '/jesus.jpg' },
-    { id: 2, name: 'J. Vicente Betancourt', role: 'CEO - DIRECTOR', desc: 'Dirección general y gestión estratégica de MasterTech Taller.', img: '/assets/servicio-mecanica.jpg' },
-    { id: 3, name: 'Brenda Santaella', role: 'COORDINADORA LOGISTICA', desc: 'Coordinación y gestión de repuestos e insumos automotrices.', img: '/assets/servicio-electricidad.jpg' },
-    { id: 4, name: 'Ambar Salazar', role: 'ASESORA DE LOGISTICA', desc: 'Atención directa y seguimiento continuo a clientes.', img: '/assets/servicio-inyeccion.jpg' },
-    { id: 5, name: 'Aaron Rivas', role: 'TECNICO ELECTRONICA', desc: 'Especialista en diagnóstico computarizado y reprogramación de módulos.', img: '/assets/servicio-electricidad.jpg' },
-    { id: 6, name: 'Domingo Blandin', role: 'ASESOR DE SERVICIO', desc: 'Asesoría técnica personalizada y recepción de vehículos.', img: '/assets/servicio-frenos.jpg' },
-    { id: 7, name: 'Beltran Lopez', role: 'TECNICO MECANICO', desc: 'Mantenimiento preventivo, correctivo y sistemas de suspensión.', img: '/assets/servicio-mecanica.jpg' },
-    { id: 8, name: 'Jose Vasquez', role: 'MARKETING - DESARROLLADOR WEB', desc: 'Desarrollo tecnológico, presencia digital y comunicación.', img: '/assets/servicio-climatizacion.jpg' }
-  ]);
-  const [reviews, setReviews] = useState<any[]>([
-    { id: 1, name: 'Carlos R.', car: 'Honda Civic 2018', quote: 'Llevé mi carro por una falla eléctrica que nadie encontraba y aquí dieron con el problema el mismo día. Excelente servicio y muy transparentes.' },
-    { id: 2, name: 'María V.', car: 'Toyota Corolla 2020', quote: 'Muy honestos con los precios y el diagnóstico. Me mostraron las piezas desgastadas antes de cambiarlas. Me dieron mucha confianza.' },
-    { id: 3, name: 'José L.', car: 'Jeep Grand Cherokee', quote: 'Tienen equipos de primera. El mantenimiento quedó impecable, resolvieron un ruido en el tren delantero y me entregaron el carro lavado.' }
-  ]);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [brands, setBrands] = useState<string[]>([
     "Jeep", "Toyota", "Honda", "Dodge", "Nissan", "Chrysler", "Lexus"
   ]);
-  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
+  const [services, setServices] = useState<any[]>([]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -233,7 +210,7 @@ export default function App() {
     // 2. Fetch fresh settings from Supabase — server is always authoritative
     const fetchSettings = async () => {
       try {
-        const res = await fetch(`/api/settings`, { cache: 'no-store' });
+        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) return;
         const data = await res.json();
         if (!data || typeof data !== 'object') return;
@@ -253,7 +230,7 @@ export default function App() {
         try { if (data.BRANDS_JSON) setBrands(JSON.parse(data.BRANDS_JSON)); } catch (e) {}
         try {
           if (data.SERVICES_JSON) setServices(JSON.parse(data.SERVICES_JSON));
-          else setServices(DEFAULT_SERVICES);
+          else setServices([]);
         } catch (e) {}
       } catch (err) {
         console.error("Error cargando configuración dinámica:", err);

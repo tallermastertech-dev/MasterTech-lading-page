@@ -23,17 +23,6 @@ const CONFIG_DEFAULT = {
   LOGO_URL: "/logo.png",
 };
 
-const DEFAULT_TEAM = [
-  { id: 1, name: 'Jesús Mata', role: 'JEFE DE MECANICA', desc: 'Experto en diagnóstico avanzado y reparación de motores con más de 15 años de experiencia multimarca.', img: '/jesus.jpg' },
-  { id: 2, name: 'J. Vicente Betancourt', role: 'CEO - DIRECTOR', desc: 'Dirección general y gestión estratégica de MasterTech Taller.', img: '/assets/servicio-mecanica.jpg' },
-  { id: 3, name: 'Brenda Santaella', role: 'COORDINADORA LOGISTICA', desc: 'Coordinación y gestión de repuestos e insumos automotrices.', img: '/assets/servicio-electricidad.jpg' },
-  { id: 4, name: 'Ambar Salazar', role: 'ASESORA DE LOGISTICA', desc: 'Atención directa y seguimiento continuo a clientes.', img: '/assets/servicio-inyeccion.jpg' },
-  { id: 5, name: 'Aaron Rivas', role: 'TECNICO ELECTRONICA', desc: 'Especialista en diagnóstico computarizado y reprogramación de módulos.', img: '/assets/servicio-electricidad.jpg' },
-  { id: 6, name: 'Domingo Blandin', role: 'ASESOR DE SERVICIO', desc: 'Asesoría técnica personalizada y recepción de vehículos.', img: '/assets/servicio-frenos.jpg' },
-  { id: 7, name: 'Beltran Lopez', role: 'TECNICO MECANICO', desc: 'Mantenimiento preventivo, correctivo y sistemas de suspensión.', img: '/assets/servicio-mecanica.jpg' },
-  { id: 8, name: 'Jose Vasquez', role: 'MARKETING - DESARROLLADOR WEB', desc: 'Desarrollo tecnológico, presencia digital y comunicación.', img: '/assets/servicio-climatizacion.jpg' }
-];
-
 const CARGOS_DISPONIBLES = [
   'Mecánica General & Motores',
   'Diagnóstico Computarizado & Electrónica Automotriz',
@@ -55,7 +44,7 @@ const NIVELES_EXPERIENCIA = [
 
 export default function Nosotros() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [teamMembers, setTeamMembers] = useState<any[]>(DEFAULT_TEAM);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
 
   // Recruitment Modal & Form States
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,48 +61,43 @@ export default function Nosotros() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    let localData: any = null;
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
-    } catch (e) {}
-
-    const loadTeam = (dataObj: any) => {
+    const parseTeam = (dataObj: any) => {
       if (dataObj?.TEAM_MEMBERS_JSON) {
         try {
           const parsed = JSON.parse(dataObj.TEAM_MEMBERS_JSON);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
-          }
+          if (Array.isArray(parsed)) return parsed;
         } catch (e) {}
       }
-      return DEFAULT_TEAM;
+      return [];
     };
 
-    if (localData) {
-      setConfig((prev: any) => ({ ...prev, ...localData }));
-      const team = loadTeam(localData);
-      if (team && team.length > 0) setTeamMembers(team);
-    }
+    // 1. Initial load from local store for instant rendering if available
+    try {
+      const stored = localStorage.getItem('mastertech_settings_store');
+      if (stored) {
+        const localData = JSON.parse(stored);
+        if (localData) {
+          setConfig((prev: any) => ({ ...prev, ...localData }));
+          setTeamMembers(parseTeam(localData));
+        }
+      }
+    } catch (e) {}
 
+    // 2. Fetch authoritative fresh data from Supabase backend (no-cache)
     const fetchSettings = async () => {
       try {
         const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          let currentLocal: any = null;
-          try {
-            const stored = localStorage.getItem('mastertech_settings_store');
-            if (stored) currentLocal = JSON.parse(stored);
-          } catch (e) {}
-
-          const merged = { ...(currentLocal || {}), ...(data || {}) };
-          setConfig((prev: any) => ({ ...prev, ...merged }));
-          try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
-          const team = loadTeam(merged);
-          if (team && team.length > 0) setTeamMembers(team);
+          if (data && typeof data === 'object') {
+            setConfig((prev: any) => ({ ...prev, ...data }));
+            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
+            setTeamMembers(parseTeam(data));
+          }
         }
-      } catch (err) {}
+      } catch (err) {
+        console.error("Error cargando equipo desde Supabase:", err);
+      }
     };
     fetchSettings();
 
@@ -121,8 +105,7 @@ export default function Nosotros() {
       const updated = e.detail || e;
       if (updated && typeof updated === 'object') {
         setConfig((prev: any) => ({ ...prev, ...updated }));
-        const team = loadTeam(updated);
-        if (team && team.length > 0) setTeamMembers(team);
+        setTeamMembers(parseTeam(updated));
       }
     };
     window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);

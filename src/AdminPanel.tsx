@@ -54,43 +54,6 @@ const WhatsAppIcon = ({ size = 18, className = "" }: { size?: number; className?
   </svg>
 );
 
-const DEFAULT_SERVICES = [
-  { id: 1, title: "Mecánica General", desc: "Reparación profunda de motores, sustitución de embragues y solución de fallas mecánicas complejas con repuestos de alta calidad.", img: "/assets/servicio-mecanica.jpg" },
-  { id: 2, title: "Mantenimiento Preventivo", desc: "Cambios de aceite sintético, reemplazo de filtros y fluidos esenciales para alargar la vida útil de tu motor.", img: "/24214142.png" },
-  { id: 3, title: "Electricidad y Electrónica", desc: "Diagnóstico computarizado, reparación de alternadores, arranques y corrección de cableado y módulos electrónicos.", img: "/assets/servicio-electricidad.jpg" },
-  { id: 4, title: "Frenos y Suspensión", desc: "Cambio de pastillas, rectificación de discos, reemplazo de amortiguadores y ajuste completo de tren delantero.", img: "/assets/servicio-frenos.jpg" },
-  { id: 5, title: "Inyección Electrónica", desc: "Limpieza ultrasónica de inyectores, diagnóstico de bombas de gasolina y optimización del consumo de combustible.", img: "/assets/servicio-inyeccion.jpg" },
-  { id: 6, title: "Climatización", desc: "Carga de gas refrigerante, detección de fugas y mantenimiento completo del sistema de aire acondicionado.", img: "/assets/servicio-climatizacion.jpg" },
-  { id: 7, title: "Zona de Lavado", desc: "Lavado detallado de carrocería, limpieza profunda de motor e interior para entregar tu vehículo impecable.", img: "/assets/instalaciones.jpg" }
-];
-
-const DEFAULT_FAQS = [
-  { q: "¿Cuánto tiempo toma un mantenimiento preventivo básico?", a: "El tiempo estimado oscila entre 45 minutos y 1 hora y media, dependiendo del plan de servicio requerido. Durante la intervención, puede esperar cómodamente en nuestra área Lounge VIP, equipada con estación de café y conectividad Wi-Fi de alta velocidad." },
-  { q: "¿Tienen garantía los trabajos que realizan?", a: "Absolutamente. Todos nuestros servicios están respaldados por la Garantía Total MasterTech. Cubrimos la mano de obra calificada y los componentes o consumibles suministrados en nuestras instalaciones, asegurando un estándar óptimo de durabilidad y rendimiento." },
-  { q: "¿Cómo agendo una cita para mi vehículo?", a: "Puede gestionar su cita en tiempo real de dos formas: directamente desde nuestra plataforma web haciendo clic en el botón \"Reserva Ahora\", o comunicándose directamente con nuestro equipo de asesores de servicio vía WhatsApp." },
-  { q: "¿Cuáles son los métodos de pago aceptados?", a: "Para su comodidad, disponemos de múltiples canales de pago: Pago Móvil, transferencias bancarias nacionales en bolívares, transferencias internacionales, efectivo (USD/EUR) y Zelle." },
-  { q: "¿Qué tipo de herramientas o tecnología utilizan para el diagnóstico?", a: "Contamos con equipos de diagnóstico computarizado y escáneres multimarca de última generación. Esto nos permite interactuar con los módulos electrónicos del vehículo, analizar datos en tiempo real y detectar fallas con precisión quirúrgica antes de cualquier reparación." },
-  { q: "¿Puedo dejar mi vehículo en el taller si la reparación toma varios días?", a: "Sí. Disponemos de instalaciones cerradas con sistemas de seguridad activa y monitoreo para resguardar su vehículo si requiere procedimientos mecánicos o electrónicos complejos que extiendan el tiempo de entrega." },
-  { q: "¿Me informan antes de realizar algún trabajo adicional en mi vehículo?", a: "Totalmente. Mantenemos una política de cero sorpresas. Si durante la inspección o diagnóstico detectamos alguna anomalía extra, nuestro asesor de servicio le enviará un reporte técnico detallado junto al presupuesto correspondiente para su aprobación previa por WhatsApp antes de proceder." }
-];
-
-const DEFAULT_TEAM = [
-  { id: 1, name: 'Jesús Mata', role: 'JEFE DE MECANICA', desc: 'Experto en diagnóstico avanzado y reparación de motores con más de 15 años de experiencia multimarca.', img: '/jesus.jpg' },
-  { id: 2, name: 'J. Vicente Betancourt', role: 'CEO - DIRECTOR', desc: 'Dirección general y gestión estratégica de MasterTech Taller.', img: '/assets/servicio-mecanica.jpg' },
-  { id: 3, name: 'Brenda Santaella', role: 'COORDINADORA LOGISTICA', desc: 'Coordinación y gestión de repuestos e insumos automotrices.', img: '/assets/servicio-electricidad.jpg' },
-  { id: 4, name: 'Ambar Salazar', role: 'ASESORA DE LOGISTICA', desc: 'Atención directa y seguimiento continuo a clientes.', img: '/assets/servicio-inyeccion.jpg' },
-  { id: 5, name: 'Aaron Rivas', role: 'TECNICO ELECTRONICA', desc: 'Especialista en diagnóstico computarizado y reprogramación de módulos.', img: '/assets/servicio-electricidad.jpg' },
-  { id: 6, name: 'Domingo Blandin', role: 'ASESOR DE SERVICIO', desc: 'Asesoría técnica personalizada y recepción de vehículos.', img: '/assets/servicio-frenos.jpg' },
-  { id: 7, name: 'Beltran Lopez', role: 'TECNICO MECANICO', desc: 'Mantenimiento preventivo, correctivo y sistemas de suspensión.', img: '/assets/servicio-mecanica.jpg' },
-  { id: 8, name: 'Jose Vasquez', role: 'MARKETING - DESARROLLADOR WEB', desc: 'Desarrollo tecnológico, presencia digital y comunicación.', img: '/assets/servicio-climatizacion.jpg' }
-];
-
-const DEFAULT_REVIEWS = [
-  { id: 1, name: 'Carlos R.', car: 'Jeep Grand Cherokee', quote: 'Excelente servicio técnico. Diagnosticaron una falla eléctrica en mi Cherokee que otros talleres no lograban descifrar. Transparencia total.' },
-  { id: 2, name: 'Mariana G.', car: 'Toyota Fortuner', quote: 'El cambio de aceite y mantenimiento de frenos fue rápido y con repuestos 100% originales. La atención de la asesora excelente.' },
-  { id: 3, name: 'Roberto V.', car: 'Honda CR-V', quote: 'Impecable trabajo en la reconstrucción del motor y climatización. Quedó enfriando perfecto. Muy recomendados en Porlamar.' }
-];
-
 export interface CatalogItem {
   id: number;
   title: string;
@@ -98,11 +61,8 @@ export interface CatalogItem {
   price: string;
   desc: string;
   longDesc?: string;
-  img: string;
-  images?: string[];
-  badge?: string;
-  specs?: string[];
-  compatibility?: string;
+  img?: string;
+  isPopular?: boolean;
   partNumber?: string;
   isImportedUSA?: boolean;
 }
@@ -200,10 +160,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [isJornadaModalOpen, setIsJornadaModalOpen] = useState(false);
 
   // Content States
-  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
-  const [faqs, setFaqs] = useState<any[]>(DEFAULT_FAQS);
-  const [teamMembers, setTeamMembers] = useState<any[]>(DEFAULT_TEAM);
-  const [reviews, setReviews] = useState<any[]>(DEFAULT_REVIEWS);
+  const [services, setServices] = useState<any[]>([]);
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
 
   // Real-time clock for header
   const [timeStr, setTimeStr] = useState('');
