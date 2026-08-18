@@ -23,18 +23,6 @@ const CONFIG_DEFAULT = {
   LOGO_URL: "/logo.png",
 };
 
-const CARGOS_DISPONIBLES = [
-  'Mecánica General & Motores',
-  'Diagnóstico Computarizado & Electrónica Automotriz',
-  'Asesoría de Servicio & Atención al Cliente',
-  'Coordinación de Logística & Repuestos',
-  'Detailing, Estética Automotriz & Lavado',
-  'Aire Acondicionado & Climatización',
-  'Inyección Electrónica & Limpieza por Ultrasonido',
-  'Administración, Finanzas & Gestión de Taller',
-  'Otro Perfil / Especialidad Técnica'
-];
-
 const NIVELES_EXPERIENCIA = [
   '1 a 2 años de experiencia',
   '3 a 5 años de experiencia',
@@ -50,7 +38,7 @@ export default function Nosotros() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formNombre, setFormNombre] = useState('');
   const [formTelefono, setFormTelefono] = useState('');
-  const [formCargo, setFormCargo] = useState(CARGOS_DISPONIBLES[0]);
+  const [formCargo, setFormCargo] = useState('');
   const [formExperiencia, setFormExperiencia] = useState(NIVELES_EXPERIENCIA[1]);
   const [formMensaje, setFormMensaje] = useState('');
   const [formCvFile, setFormCvFile] = useState<File | null>(null);
@@ -164,10 +152,11 @@ export default function Nosotros() {
       }
 
       // 2. Formatear mensaje profesional de WhatsApp
+      const cargoTxt = formCargo.trim() || 'Especialidad General / Talento MasterTech';
       let msg = `💼 *POSTULACIÓN LABORAL - MASTERTECH* 🛠️\n\n`;
       msg += `👤 *Candidato:* ${formNombre.trim()}\n`;
       msg += `📱 *WhatsApp de Contacto:* ${formTelefono.trim()}\n`;
-      msg += `🎯 *Cargo de Interés:* ${formCargo}\n`;
+      msg += `🎯 *Área / Especialidad:* ${cargoTxt}\n`;
       msg += `⏳ *Nivel de Experiencia:* ${formExperiencia}\n`;
       
       if (formMensaje.trim()) {
@@ -177,7 +166,7 @@ export default function Nosotros() {
       if (formCvFile) {
         msg += `\n📎 *Currículum Vitae:*\nAdjunto mi archivo de CV: *${formCvFile.name}* (${(formCvFile.size / 1024).toFixed(0)} KB)`;
       } else {
-        msg += `\n📎 *Currículum Vitae:*\nListo para adjuntar mi CV o responder a su solicitud de entrevista.`;
+        msg += `\n📎 *Currículum Vitae:*\nListo para adjuntar mi CV o coordinar una entrevista.`;
       }
 
       const targetPhone = (config.PHONE_NUMBER || '+584123565012').replace(/[^\d]/g, '');
@@ -200,7 +189,7 @@ export default function Nosotros() {
   const resetForm = () => {
     setFormNombre('');
     setFormTelefono('');
-    setFormCargo(CARGOS_DISPONIBLES[0]);
+    setFormCargo('');
     setFormExperiencia(NIVELES_EXPERIENCIA[1]);
     setFormMensaje('');
     setFormCvFile(null);
@@ -409,19 +398,18 @@ export default function Nosotros() {
                     {/* Cargo / Área */}
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
-                        Área o Cargo de Interés
+                        Área o Especialidad <span className="text-zinc-500 font-normal lowercase">(opcional)</span>
                       </label>
-                      <select
-                        value={formCargo}
-                        onChange={(e) => setFormCargo(e.target.value)}
-                        className="w-full bg-[#0A0B0E] border border-white/15 focus:border-primary rounded-xl py-3 px-4 text-sm text-white focus:outline-none transition-colors appearance-none cursor-pointer"
-                      >
-                        {CARGOS_DISPONIBLES.map((c, i) => (
-                          <option key={i} value={c} className="bg-[#101216] text-white">
-                            {c}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="relative">
+                        <Briefcase size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                        <input
+                          type="text"
+                          value={formCargo}
+                          onChange={(e) => setFormCargo(e.target.value)}
+                          placeholder="Ej: Mecánica, Diagnóstico, Asesoría, Detailing..."
+                          className="w-full bg-[#0A0B0E] border border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                        />
+                      </div>
                     </div>
 
                     {/* Experiencia */}
