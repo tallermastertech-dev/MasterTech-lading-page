@@ -227,13 +227,12 @@ export default function App() {
       try { if (localData.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(localData.TEAM_MEMBERS_JSON)); } catch (e) {}
       try { if (localData.REVIEWS_JSON) setReviews(JSON.parse(localData.REVIEWS_JSON)); } catch (e) {}
       try { if (localData.BRANDS_JSON) setBrands(JSON.parse(localData.BRANDS_JSON)); } catch (e) {}
-      try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
     }
 
     // 2. Fetch server settings and sync across devices
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/settings');
+        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           let currentLocal: any = null;
@@ -242,18 +241,7 @@ export default function App() {
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const mergeSmart = (local: any, server: any) => {
-            const res = { ...(server || {}) };
-            if (local) {
-              for (const [k, v] of Object.entries(local)) {
-                if (v !== undefined && v !== null && v !== '') {
-                  res[k] = v;
-                }
-              }
-            }
-            return res;
-          };
-          const merged = mergeSmart(currentLocal, data);
+          const merged = { ...(currentLocal || {}), ...(data || {}) };
           if (merged.SUCCESS_BADGE && merged.SUCCESS_BADGE.includes('30%')) {
             merged.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
           }
@@ -266,24 +254,7 @@ export default function App() {
             if (merged.SERVICES_JSON) {
               setServices(JSON.parse(merged.SERVICES_JSON));
             } else {
-              setServices(DEFAULT_SERVICES.map(s => {
-                let key = '';
-                if (s.title.includes('Mecánica')) key = 'MECANICA';
-                else if (s.title.includes('Mantenimiento')) key = 'MANTENIMIENTO';
-                else if (s.title.includes('Electricidad')) key = 'ELECTRICIDAD';
-                else if (s.title.includes('Frenos')) key = 'FRENOS';
-                else if (s.title.includes('Inyección')) key = 'INYECCION';
-                else if (s.title.includes('Climatización')) key = 'CLIMATIZACION';
-                else if (s.title.includes('Lavado')) key = 'LAVADO';
-
-                const customDesc = key ? merged[`DESC_SRV_${key}`] : undefined;
-                const customImg = key ? merged[`IMG_SRV_${key}`] : undefined;
-                return {
-                  ...s,
-                  desc: customDesc || s.desc,
-                  img: customImg || s.img
-                };
-              }));
+              setServices(DEFAULT_SERVICES);
             }
           } catch (e) {}
         }

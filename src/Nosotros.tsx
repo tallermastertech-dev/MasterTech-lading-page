@@ -50,7 +50,7 @@ export default function Nosotros() {
 
     const fetchSettings = async () => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`);
+        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           let currentLocal: any = null;
@@ -68,6 +68,10 @@ export default function Nosotros() {
       } catch (err) {}
     };
     fetchSettings();
+
+    const handleSettingsUpdated = () => fetchSettings();
+    window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    return () => window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
   }, []);
 
   return (

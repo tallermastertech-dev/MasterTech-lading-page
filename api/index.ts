@@ -858,45 +858,56 @@ const handleDeleteLead = async (req: express.Request, res: express.Response) => 
 
 // Handler reutilizable para PUT /settings (Optimizado a respuesta instantánea y persistencia garantizada)
 const handlePutSettings = async (req: express.Request, res: express.Response) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
+
   const newSettings = req.body;
+  if (!newSettings || typeof newSettings !== 'object') {
+    res.status(400).json({ error: 'Payload de configuración inválido.' });
+    return;
+  }
+
   try {
     const entries = Object.entries(newSettings);
     const upsertRows: { key: string; value: string }[] = [];
 
-    // 1. Instant update in memory cache & prepare batch
     for (const [key, value] of entries) {
       const valStr = value === null || value === undefined ? '' : String(value);
       memorySettingsCache[key] = valStr;
       upsertRows.push({ key, value: valStr });
     }
 
-    // 2. Save to disk file
     saveSettingsToDisk();
 
-    // 3. Await upserts to Supabase database with fallback mechanisms
+    // 1. Strict Await & Explicit Error Handling for Supabase Database Persistence
     if (upsertRows.length > 0) {
-      try {
-        const { error } = await supabase.from('settings').upsert(upsertRows, { onConflict: 'key' });
-        if (error) {
-          console.warn("Supabase batch upsert notice, trying single row sync:", error.message);
-          for (const row of upsertRows) {
-            try {
-              const { error: rowErr } = await supabase.from('settings').upsert([row], { onConflict: 'key' });
-              if (rowErr) {
-                const { data: updatedRows } = await supabase.from('settings').update({ value: row.value }).eq('key', row.key).select();
-                if (!updatedRows || updatedRows.length === 0) {
-                  await supabase.from('settings').insert([row]);
-                }
-              }
-            } catch (e) {}
+      const { error } = await supabase.from('settings').upsert(upsertRows, { onConflict: 'key' });
+      if (error) {
+        console.error("Error estricto en Supabase upsert:", error.message);
+        // Fallback row-by-row with explicit error reporting if batch fails
+        let successCount = 0;
+        let lastErr = error.message;
+        for (const row of upsertRows) {
+          const { error: rowErr } = await supabase.from('settings').upsert([row], { onConflict: 'key' });
+          if (!rowErr) {
+            successCount++;
+          } else {
+            lastErr = rowErr.message;
           }
         }
-      } catch (err) {
-        console.warn("Supabase background sync notice:", err);
+        if (successCount === 0) {
+          res.status(500).json({
+            error: 'Error de persistencia en Supabase (RLS o permisos).',
+            details: lastErr
+          });
+          return;
+        }
       }
     }
 
-    // 4. Return response to Admin UI - GUARANTEE newSettings are preserved in response
+    // 2. Fetch fresh updated data directly from Supabase
     const dbSettings = await getSettings();
     const updated = { ...dbSettings, ...memorySettingsCache, ...newSettings };
 
@@ -906,8 +917,8 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
       dbStatus: 'persisted'
     });
   } catch (error: any) {
-    console.error("Excepción en PUT /settings:", error);
-    res.status(500).json({ error: 'Error al guardar configuraciones.', details: error?.message || String(error) });
+    console.error("Excepción crítica en PUT /settings:", error);
+    res.status(500).json({ error: 'Error al guardar configuraciones en base de datos.', details: error?.message || String(error) });
   }
 };
 

@@ -317,7 +317,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [savingSection, setSavingSection] = useState<string | null>(null);
   const [savedSectionSuccess, setSavedSectionSuccess] = useState<string | null>(null);
 
-  // Dedicated Independent Save Function for each module
+  // Dedicated Independent Save Function for each module with strict Supabase database verification
   const handleSaveSection = async (sectionKey: string, customPayload?: any) => {
     const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || 'admin-token';
     setSavingSection(sectionKey);
@@ -334,12 +334,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       JORNADAS_JSON: (customPayload && customPayload.JORNADAS_JSON !== undefined) ? customPayload.JORNADAS_JSON : JSON.stringify(jornadasList)
     };
 
-    try { localStorage.setItem('mastertech_settings_store', JSON.stringify(targetForm)); } catch (e) {}
-    setSettings(targetForm);
-    setSettingsForm(targetForm);
-    try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
-
     try {
+      // 1. Await server and Supabase persistence response strictly
       const res = await fetch('/api/settings', {
         method: 'PUT',
         headers: {
@@ -349,26 +345,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         body: JSON.stringify(targetForm)
       });
 
-      if (res.status === 401) {
-        // Retry without bearer token if auth header failed
-        await fetch('/api/settings', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(targetForm)
-        }).catch(() => {});
-      } else if (res.ok) {
-        const data = await res.json();
-        const updated = { ...(data.settings || {}), ...targetForm };
-        setSettings(updated);
-        setSettingsForm(updated);
-        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(updated)); } catch (e) {}
-        try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || errData.details || `Error en servidor (HTTP ${res.status})`);
       }
-    } catch (err) {} finally {
-      setSavingSection(null);
+
+      const data = await res.json();
+      const confirmedSettings = { ...(data.settings || {}), ...targetForm };
+
+      // 2. Update local state ONLY AFTER database confirmation
+      setSettings(confirmedSettings);
+      setSettingsForm(confirmedSettings);
+      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(confirmedSettings)); } catch (e) {}
+      try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
+
       setSavedSectionSuccess(sectionKey);
-      alert('✅ ¡Cambios guardados e integrados exitosamente en la web pública!');
+      alert('✅ ¡Cambios guardados y revalidados exitosamente en Supabase y la web pública!');
       setTimeout(() => setSavedSectionSuccess(null), 4000);
+    } catch (err: any) {
+      console.error("Fallo al guardar sección en Supabase:", err);
+      alert(`❌ Error de Persistencia en Base de Datos: ${err.message || 'No se pudo conectar con Supabase'}`);
+    } finally {
+      setSavingSection(null);
     }
   };
 

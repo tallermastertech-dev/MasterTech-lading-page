@@ -222,34 +222,27 @@ export default function Jornadas() {
       metaDesc.setAttribute('content', 'Reserva tu cupo en las Jornadas Especiales MasterTech: Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Cielo Estrellado Rolls-Royce, A/A y Limpieza de Inyectores en Porlamar.');
     }
 
-    let localData: any = null;
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
-    } catch (e) {}
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          let currentLocal: any = null;
+          try {
+            const stored = localStorage.getItem('mastertech_settings_store');
+            if (stored) currentLocal = JSON.parse(stored);
+          } catch (e) {}
 
-    if (localData) setConfig((prev: any) => ({ ...prev, ...localData }));
-
-    fetch('/api/settings')
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          const mergeSmart = (server: any, local: any) => {
-            const res = { ...(server || {}) };
-            if (local) {
-              for (const [k, v] of Object.entries(local)) {
-                if (v !== undefined && v !== null && v !== '') {
-                  res[k] = v;
-                }
-              }
-            }
-            return res;
-          };
-          const merged = mergeSmart(data, localData);
+          const merged = { ...(currentLocal || {}), ...(data || {}) };
           setConfig((prev: any) => ({ ...prev, ...merged }));
+          try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
         }
-      })
-      .catch(() => {});
+      } catch (err) {}
+    };
+    fetchSettings();
+
+    const handleSettingsUpdated = () => fetchSettings();
+    window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
 
     // Dynamic Countdown Timer calculation
     const calculateTimeLeft = () => {
@@ -270,7 +263,10 @@ export default function Jornadas() {
 
     calculateTimeLeft();
     const timer = setInterval(calculateTimeLeft, 1000);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    };
   }, [config.JORNADA_COUNTDOWN_END]);
 
   const currentJornadasList = React.useMemo(() => {
