@@ -314,21 +314,37 @@ async function getSettings() {
       TELEGRAM_TOPIC_ID: '1209'
   };
 
-  const { data, error } = await supabase.from('settings').select('*');
-  const settingsObj: Record<string, string> = { ...defaultSettings };
-  if (!error && data && data.length > 0) {
-    for (const s of data) {
-      if (s.value !== null && s.value !== undefined) settingsObj[s.key] = s.value;
-    }
-  }
-  for (const [k, v] of Object.entries(memorySettingsCache)) {
-    settingsObj[k] = v;
-  }
+  try {
+    const { data, error } = await supabase.from('settings').select('*');
+    console.log(`[Supabase getSettings] Filas obtenidas de BD: ${data?.length || 0} | Error: ${error ? error.message : 'Ninguno'}`);
+    
+    const settingsObj: Record<string, string> = { ...defaultSettings };
 
-  if (!settingsObj['SUCCESS_BADGE'] || settingsObj['SUCCESS_BADGE'].includes('30%')) {
-    settingsObj['SUCCESS_BADGE'] = '¡TIENES HASTA UN 15% DE DESCUENTO!';
+    if (!error && Array.isArray(data) && data.length > 0) {
+      for (const s of data) {
+        if (s.value !== null && s.value !== undefined && s.value !== '') {
+          settingsObj[s.key] = String(s.value);
+          // Sync in-memory cache with authoritative DB rows
+          memorySettingsCache[s.key] = String(s.value);
+        }
+      }
+    } else {
+      // Fallback to memory cache only if DB query is empty/fails
+      for (const [k, v] of Object.entries(memorySettingsCache)) {
+        if (v !== undefined && v !== null && v !== '') {
+          settingsObj[k] = v;
+        }
+      }
+    }
+
+    if (!settingsObj['SUCCESS_BADGE'] || settingsObj['SUCCESS_BADGE'].includes('30%')) {
+      settingsObj['SUCCESS_BADGE'] = '¡TIENES HASTA UN 15% DE DESCUENTO!';
+    }
+    return settingsObj;
+  } catch (err: any) {
+    console.error("[Supabase getSettings Exception]:", err);
+    return { ...defaultSettings, ...memorySettingsCache };
   }
-  return settingsObj;
 }
 
 // Stateless Token Helpers
