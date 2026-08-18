@@ -1829,6 +1829,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     {savingSection === 'settings' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
                     <span>{savedSectionSuccess === 'settings' ? '¡Ajustes Guardados!' : 'Guardar Ajustes Generales'}</span>
                   </button>
+                </div>
               </div>
             </div>
           )}
