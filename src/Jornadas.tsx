@@ -216,7 +216,7 @@ export default function Jornadas() {
   const [timeLeft, setTimeLeft] = useState({ days: 3, hours: 14, mins: 28, secs: 45 });
 
   useEffect(() => {
-    document.title = "Jornadas Especiales & Eventos VIP - Taller MasterTech";
+    document.title = "Jornadas Especiales - Taller MasterTech";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute('content', 'Reserva tu cupo en las Jornadas Especiales MasterTech: Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Cielo Estrellado Rolls-Royce, A/A y Limpieza de Inyectores en Porlamar.');

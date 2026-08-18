@@ -255,7 +255,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             className="btn-primary !py-2 !px-4 xl:!py-2.5 xl:!px-5 text-xs xl:text-sm font-bold flex items-center gap-2 border-none rounded-full shadow-[0_0_20px_rgba(234,179,8,0.25)] transition-transform hover:scale-105 shrink-0 whitespace-nowrap"
           >
             <Sparkles className="w-4 h-4 text-[#0D0D0D] animate-pulse shrink-0" />
-            <span className="font-bold tracking-wide">Jornadas VIP</span>
+            <span className="font-bold tracking-wide">Jornadas</span>
           </a>
         </div>
 
@@ -380,7 +380,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   className="btn-primary w-full text-center py-3 text-sm font-bold border-none flex items-center justify-center gap-2 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.25)]"
                 >
                   <Sparkles size={18} className="animate-pulse" />
-                  <span>Jornadas VIP</span>
+                  <span>Jornadas</span>
                 </a>
               </div>
             </div>
