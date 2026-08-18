@@ -233,7 +233,7 @@ export default function App() {
     // 2. Fetch fresh settings from Supabase — server is always authoritative
     const fetchSettings = async () => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
+        const res = await fetch(`/api/settings`, { cache: 'no-store' });
         if (!res.ok) return;
         const data = await res.json();
         if (!data || typeof data !== 'object') return;

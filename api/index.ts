@@ -486,9 +486,10 @@ const authenticateAdmin = async (req: express.Request, res: express.Response, ne
 // Handler reutilizable para GET /settings
 const handleGetSettings = async (req: express.Request, res: express.Response) => {
   try {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    // CDN edge cache: serve instantly from Vercel's edge, revalidate in background every 30s
+    // stale-while-revalidate=300 means: serve stale up to 5min while fetching fresh data
+    res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=300');
+    res.setHeader('Surrogate-Key', 'mastertech-settings');
     const settings = await getSettings();
     res.json(settings);
   } catch (error) {
