@@ -47,6 +47,7 @@ import {
   Youtube
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
+import { getTallerStatus } from './utils/tallerStatus';
 
 const WhatsAppIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -636,10 +637,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         {/* TOP EXECUTIVE HEADER BAR */}
         <header className="bg-[#12141a]/80 backdrop-blur-md border-b border-white/10 px-6 py-3.5 flex items-center justify-between sticky top-0 z-20">
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-ping" />
-              TALLER ABIERTO — EN VIVO
-            </span>
+            {(() => {
+              const st = getTallerStatus(settings.IS_OPEN);
+              return (
+                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 border ${st.badgeBg} ${st.badgeBorder}`}>
+                  <span className={`w-2 h-2 rounded-full ${st.dotColor} ${st.isOpen ? 'animate-ping' : ''}`} />
+                  {st.isOpen ? 'TALLER ABIERTO — EN VIVO' : 'TALLER CERRADO — EN VIVO'}
+                </span>
+              );
+            })()}
             <span className="text-xs text-zinc-500 font-mono hidden sm:inline-block">| {timeStr}</span>
           </div>
 
