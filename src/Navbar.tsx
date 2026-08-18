@@ -73,42 +73,29 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
         </div>
 
         {/* Desktop Links with Hover Mega Dropdowns */}
-        <div className="hidden lg:flex items-center gap-3 xl:gap-5 text-xs xl:text-sm font-bold text-zinc-400">
+        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs xl:text-sm font-medium text-zinc-300">
           
-          {/* Inicio Link */}
+          {/* 1. Inicio Link */}
           <a 
             href="/" 
             className={`transition-colors py-2 whitespace-nowrap ${
-              activePage === 'inicio' ? 'text-primary font-black uppercase border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              activePage === 'inicio' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
             }`}
           >
             Inicio
           </a>
 
-          {/* Nosotros Direct Link */}
+          {/* 2. Nosotros Direct Link */}
           <a 
             href="/nosotros" 
             className={`transition-colors py-2 whitespace-nowrap ${
-              activePage === 'nosotros' ? 'text-primary font-black uppercase border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              activePage === 'nosotros' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
             }`}
           >
             Nosotros
           </a>
 
-          {/* Jornadas VIP Link */}
-          <a 
-            href="/jornada" 
-            className={`transition-all py-1.5 px-2.5 xl:px-3 rounded-full flex items-center gap-1.5 border text-[11px] xl:text-xs font-black uppercase tracking-wider shadow-lg transition-transform hover:scale-105 whitespace-nowrap ${
-              activePage === ('jornadas' as any) 
-                ? 'bg-amber-500/30 border-amber-400 text-amber-200' 
-                : 'bg-amber-500/15 border-amber-500/40 text-amber-400 hover:bg-amber-500/25 hover:border-amber-400 hover:text-amber-200'
-            }`}
-          >
-            <Sparkles className="w-3 h-3 xl:w-3.5 xl:h-3.5 text-amber-400 animate-pulse shrink-0" />
-            <span>JORNADAS VIP</span>
-          </a>
-
-          {/* Servicios Taller Mega Dropdown Trigger */}
+          {/* 3. Servicios Taller Mega Dropdown Trigger */}
           <div 
             className="relative"
             onMouseEnter={() => setActiveDropdown('servicios')}
@@ -116,12 +103,11 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           >
             <a 
               href="/servicios"
-              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer whitespace-nowrap ${
-                activePage === 'servicios' ? 'text-primary font-black border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              className={`flex items-center gap-1.5 transition-colors py-2 cursor-pointer whitespace-nowrap ${
+                activePage === 'servicios' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
               }`}
             >
-              <span className="hidden xl:inline">Servicios Taller</span>
-              <span className="inline xl:hidden">Servicios</span>
+              <span>Servicios</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'servicios' ? 'rotate-180 text-primary' : ''}`} />
             </a>
 
@@ -173,7 +159,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             </AnimatePresence>
           </div>
 
-          {/* Catálogo Repuestos Mega Dropdown Trigger */}
+          {/* 4. Catálogo Repuestos Mega Dropdown Trigger */}
           <div 
             className="relative"
             onMouseEnter={() => setActiveDropdown('catalogo')}
@@ -181,12 +167,11 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           >
             <a 
               href="/catalogo"
-              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer whitespace-nowrap ${
-                activePage === 'catalogo' ? 'text-primary font-black border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              className={`flex items-center gap-1.5 transition-colors py-2 cursor-pointer whitespace-nowrap ${
+                activePage === 'catalogo' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
               }`}
             >
-              <span className="hidden xl:inline">Catálogo Repuestos</span>
-              <span className="inline xl:hidden">Catálogo</span>
+              <span>Catálogo</span>
               <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'catalogo' ? 'rotate-180 text-primary' : ''}`} />
             </a>
 
@@ -252,70 +237,25 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             </AnimatePresence>
           </div>
 
-          {/* Preguntas Frecuentes Dropdown Trigger */}
-          <div 
-            className="relative"
-            onMouseEnter={() => setActiveDropdown('faq')}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
-            <a 
-              href="/faq"
-              className={`flex items-center gap-1 transition-colors py-2 cursor-pointer whitespace-nowrap ${
-                activePage === 'faq' ? 'text-primary font-black border-b-2 border-primary pb-0.5' : 'hover:text-white'
-              }`}
-            >
-              <span className="hidden xl:inline">Preguntas Frecuentes</span>
-              <span className="inline xl:hidden">FAQ</span>
-              <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'faq' ? 'rotate-180 text-primary' : ''}`} />
-            </a>
-
-            <AnimatePresence>
-              {activeDropdown === 'faq' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.18 }}
-                  className="absolute top-full right-0 w-80 bg-[#12141a]/95 border border-white/15 backdrop-blur-2xl rounded-2xl p-3 shadow-2xl space-y-1 mt-1 z-50"
-                >
-                  <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-primary border-b border-white/10 mb-1 flex items-center gap-1">
-                    <HelpCircle size={12} />
-                    <span>Centro de Ayuda FAQ</span>
-                  </div>
-                  {faqOptions.map((opt, i) => (
-                    <a
-                      key={i}
-                      href={opt.href}
-                      className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/10 transition-colors group/item"
-                    >
-                      <MasterTechIconBadge icon={opt.icon} />
-                      <div>
-                        <div className="text-white font-bold text-xs group-hover/item:text-primary transition-colors">{opt.title}</div>
-                        <div className="text-[11px] text-zinc-400 font-normal leading-tight mt-0.5">{opt.desc}</div>
-                      </div>
-                    </a>
-                  ))}
-                  <div className="pt-2 border-t border-white/10">
-                    <a href="/faq" className="flex items-center justify-between px-3 py-1.5 text-xs text-primary font-bold hover:underline">
-                      <span>Ver todas las preguntas frecuentes</span>
-                      <ArrowRight size={12} />
-                    </a>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* CTA Button */}
+          {/* 5. Preguntas Frecuentes Direct Link (No Chevron / No Dropdown) */}
           <a 
-            href={cfg.WHATSAPP_LINK || "https://wa.link/xnj37f"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary !py-2 !px-3 xl:!py-2.5 xl:!px-5 text-xs font-black !text-[#0D0D0D] flex items-center gap-1.5 border-none ml-1 xl:ml-2 shrink-0 whitespace-nowrap"
+            href="/faq" 
+            className={`transition-colors py-2 whitespace-nowrap ${
+              activePage === 'faq' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
+            }`}
           >
-            <WhatsAppIcon size={16} className="!text-[#0D0D0D] fill-current shrink-0" />
-            <span className="font-black !text-[#0D0D0D] tracking-wide hidden sm:inline">Reserva Ahora</span>
-            <span className="font-black !text-[#0D0D0D] tracking-wide sm:hidden">Reservar</span>
+            Preguntas Frecuentes
+          </a>
+        </div>
+
+        {/* CTA Button: Jornadas VIP */}
+        <div className="hidden lg:flex items-center">
+          <a 
+            href="/jornada" 
+            className="btn-primary !py-2 !px-4 xl:!py-2.5 xl:!px-5 text-xs xl:text-sm font-bold flex items-center gap-2 border-none rounded-full shadow-[0_0_20px_rgba(234,179,8,0.25)] transition-transform hover:scale-105 shrink-0 whitespace-nowrap"
+          >
+            <Sparkles className="w-4 h-4 text-[#0D0D0D] animate-pulse shrink-0" />
+            <span className="font-bold tracking-wide">Jornadas VIP</span>
           </a>
         </div>
 
@@ -338,35 +278,35 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             className="lg:hidden bg-[#0d0e12]/98 border-b border-white/10 overflow-hidden"
           >
             <div className="max-w-7xl mx-auto px-6 py-6 space-y-4 max-h-[80vh] overflow-y-auto">
-              {/* Inicio */}
+              {/* 1. Inicio */}
               <a
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 text-base font-bold text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
               >
                 <Home size={18} className="text-primary" />
                 <span>Inicio</span>
               </a>
 
-              {/* Nosotros Direct Link */}
+              {/* 2. Nosotros Direct Link */}
               <a
                 href="/nosotros"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 text-base font-bold text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
               >
                 <Users size={18} className="text-primary" />
                 <span>Nosotros</span>
               </a>
 
-              {/* Servicios Taller Accordion */}
+              {/* 3. Servicios Taller Accordion */}
               <div className="border-b border-white/5 pb-2">
                 <button
                   onClick={() => setExpandedMobileAccordion(expandedMobileAccordion === 'servicios' ? null : 'servicios')}
-                  className="w-full flex items-center justify-between text-base font-bold text-white py-2"
+                  className="w-full flex items-center justify-between text-base font-medium text-white py-2"
                 >
                   <span className="flex items-center gap-2">
                     <Wrench size={18} className="text-primary" />
-                    <span>Servicios Taller</span>
+                    <span>Servicios</span>
                   </span>
                   <ChevronDown size={18} className={`transition-transform duration-200 ${expandedMobileAccordion === 'servicios' ? 'rotate-180 text-primary' : ''}`} />
                 </button>
@@ -390,15 +330,15 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 )}
               </div>
 
-              {/* Catálogo Repuestos Accordion */}
+              {/* 4. Catálogo Repuestos Accordion */}
               <div className="border-b border-white/5 pb-2">
                 <button
                   onClick={() => setExpandedMobileAccordion(expandedMobileAccordion === 'catalogo' ? null : 'catalogo')}
-                  className="w-full flex items-center justify-between text-base font-bold text-white py-2"
+                  className="w-full flex items-center justify-between text-base font-medium text-white py-2"
                 >
                   <span className="flex items-center gap-2">
                     <Package size={18} className="text-primary" />
-                    <span>Catálogo Repuestos</span>
+                    <span>Catálogo</span>
                   </span>
                   <ChevronDown size={18} className={`transition-transform duration-200 ${expandedMobileAccordion === 'catalogo' ? 'rotate-180 text-primary' : ''}`} />
                 </button>
@@ -422,48 +362,25 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 )}
               </div>
 
-              {/* Preguntas Frecuentes Accordion */}
-              <div className="border-b border-white/5 pb-2">
-                <button
-                  onClick={() => setExpandedMobileAccordion(expandedMobileAccordion === 'faq' ? null : 'faq')}
-                  className="w-full flex items-center justify-between text-base font-bold text-white py-2"
-                >
-                  <span className="flex items-center gap-2">
-                    <HelpCircle size={18} className="text-primary" />
-                    <span>Preguntas Frecuentes</span>
-                  </span>
-                  <ChevronDown size={18} className={`transition-transform duration-200 ${expandedMobileAccordion === 'faq' ? 'rotate-180 text-primary' : ''}`} />
-                </button>
-                {expandedMobileAccordion === 'faq' && (
-                  <div className="pl-2 space-y-2 pt-2 text-xs">
-                    {faqOptions.map((opt, i) => (
-                      <a
-                        key={i}
-                        href={opt.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center gap-3 text-zinc-300 hover:text-white py-1.5 font-medium group/item"
-                      >
-                        <MasterTechIconBadge icon={opt.icon} />
-                        <span>{opt.title}</span>
-                      </a>
-                    ))}
-                    <a href="/faq" onClick={() => setIsMobileMenuOpen(false)} className="block text-primary font-bold pt-1.5 pl-11">
-                      → Ver todas las preguntas frecuentes
-                    </a>
-                  </div>
-                )}
-              </div>
+              {/* 5. Preguntas Frecuentes Direct Link */}
+              <a
+                href="/faq"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+              >
+                <HelpCircle size={18} className="text-primary" />
+                <span>Preguntas Frecuentes</span>
+              </a>
 
               {/* CTA Button */}
-              <div className="pt-2">
+              <div className="pt-3">
                 <a
-                  href={cfg.WHATSAPP_LINK || "https://wa.link/xnj37f"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary w-full text-center py-3 text-sm font-bold border-none flex items-center justify-center gap-2"
+                  href="/jornada"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="btn-primary w-full text-center py-3 text-sm font-bold border-none flex items-center justify-center gap-2 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.25)]"
                 >
-                  <WhatsAppIcon size={18} />
-                  <span>Reserva tu Cita por WhatsApp</span>
+                  <Sparkles size={18} className="animate-pulse" />
+                  <span>Jornadas VIP</span>
                 </a>
               </div>
             </div>
