@@ -227,6 +227,95 @@ function extractSlot(text: string): { dateStr: string; timeStr: string } | null 
   return null;
 }
 
+app.post('/api/seed', async (req, res) => {
+  const defaultSettings = {
+      PHONE_NUMBER: '+584123565012',
+      WHATSAPP_LINK: 'https://wa.link/xnj37f',
+      WEBHOOK_URL: 'https://script.google.com/macros/s/AKfycbxIzUm7itb1hP8BCfbt3tWThExU_jBM9h_-kxJbGb7TlMryGA-zc01OmRnoAASU5AOM/exec',
+      GOOGLE_MAPS_LINK: 'https://maps.app.goo.gl/fybS1jW9buxQD5gv7',
+      GOOGLE_MAPS_EMBED: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15665.5!2d-63.8681155!3d10.9701683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c318fe358d81b01%3A0xf0c67c88a5063093!2sTaller%20MasterTech!5e0!3m2!1ses!2sve!4v1700000000000!5m2!1ses!2sve',
+      GOOGLE_BUSINESS_URL: 'https://maps.app.goo.gl/fybS1jW9buxQD5gv7',
+      HERO_IMG: '/assets/instalaciones.jpg',
+      HERO_REEL_URL: 'https://www.instagram.com/reel/DYQxwH6jywd/',
+      LOGO_URL: '/logo.png',
+      BEFORE_AFTER_1: '/assets/before_after_1.png',
+      BEFORE_AFTER_2: '/assets/before_after_2.png',
+      IMG_INSTALACIONES: '/assets/instalaciones.jpg',
+      IMG_SRV_MECANICA: '/assets/servicio-mecanica.jpg',
+      IMG_SRV_MANTENIMIENTO: '/24214142.png',
+      IMG_SRV_ELECTRICIDAD: '/assets/servicio-electricidad.jpg',
+      IMG_SRV_FRENOS: '/assets/servicio-frenos.jpg',
+      IMG_SRV_INYECCION: '/assets/servicio-inyeccion.jpg',
+      IMG_SRV_CLIMATIZACION: '/assets/servicio-climatizacion.jpg',
+      IMG_SRV_LAVADO: '/assets/instalaciones.jpg',
+      IS_OPEN: 'true',
+      BANNER_TEXT: '',
+      WHATSAPP_MESSAGE_TEMPLATE: 'Hola *{nombre}*, te saludamos desde *Taller MasterTech* 🛠️. Hemos recibido tu solicitud para el servicio de *{servicio}* para tu *{vehiculo}*. Quisiéramos coordinar los detalles de tu cita. ¿En qué horario te resultaría más cómodo asistir?',
+      SUCCESS_BADGE: '¡TIENES HASTA UN 15% DE DESCUENTO!',
+      SUCCESS_TEXT: 'Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita.',
+      DESC_SRV_MECANICA: 'Reparación profunda de motores, sustitución de embragues y solución de fallas mecánicas complejas con repuestos de alta calidad.',
+      DESC_SRV_MANTENIMIENTO: 'Cambios de aceite sintético, reemplazo de filtros y fluidos esenciales para alargar la vida útil de tu motor.',
+      DESC_SRV_ELECTRICIDAD: 'Diagnóstico computarizado, reparación de alternadores, arranques y corrección de cableado y módulos electrónicos.',
+      DESC_SRV_FRENOS: 'Cambio de pastillas, rectificación de discos, reemplazo de amortiguadores y ajuste completo de tren delantero.',
+      DESC_SRV_INYECCION: 'Limpieza ultrasónica de inyectores, diagnóstico de bombas de gasolina y optimización del consumo de combustible.',
+      DESC_SRV_CLIMATIZACION: 'Carga de gas refrigerante, detección de fugas y mantenimiento completo del sistema de aire acondicionado.',
+      DESC_SRV_LAVADO: 'Lavado detallado de carrocería, limpieza profunda de motor e interior para entregar tu vehículo impecable.',
+      TEAM_MEMBERS_JSON: JSON.stringify([
+        { id: 1, name: 'Jesús Mata', role: 'JEFE DE MECANICA', desc: 'Experto en diagnóstico avanzado y reparación de motores con más de 15 años de experiencia multimarca.', img: '/jesus.jpg' },
+        { id: 2, name: 'J. Vicente Betancourt', role: 'CEO - DIRECTOR', desc: 'Dirección general y gestión estratégica de MasterTech Taller.', img: '/assets/servicio-mecanica.jpg' },
+        { id: 3, name: 'Brenda Santaella', role: 'COORDINADORA LOGISTICA', desc: 'Coordinación y gestión de repuestos e insumos automotrices.', img: '/assets/servicio-electricidad.jpg' },
+        { id: 4, name: 'Ambar Salazar', role: 'ASESORA DE LOGISTICA', desc: 'Atención directa y seguimiento continuo a clientes.', img: '/assets/servicio-inyeccion.jpg' },
+        { id: 5, name: 'Aaron Rivas', role: 'TECNICO ELECTRONICA', desc: 'Especialista en diagnóstico computarizado y reprogramación de módulos.', img: '/assets/servicio-electricidad.jpg' },
+        { id: 6, name: 'Domingo Blandin', role: 'ASESOR DE SERVICIO', desc: 'Asesoría técnica personalizada y recepción de vehículos.', img: '/assets/servicio-frenos.jpg' },
+        { id: 7, name: 'Beltran Lopez', role: 'TECNICO MECANICO', desc: 'Mantenimiento preventivo, correctivo y sistemas de suspensión.', img: '/assets/servicio-mecanica.jpg' },
+        { id: 8, name: 'Jose Vasquez', role: 'MARKETING - DESARROLLADOR WEB', desc: 'Desarrollo tecnológico, presencia digital y comunicación.', img: '/assets/servicio-climatizacion.jpg' }
+      ]),
+      REVIEWS_JSON: JSON.stringify([
+        { id: 1, name: 'Carlos R.', car: 'Honda Civic 2018', quote: 'Llevé mi carro por una falla eléctrica que nadie encontraba y aquí dieron con el problema el mismo día. Excelente servicio y muy transparentes.' },
+        { id: 2, name: 'María V.', car: 'Toyota Corolla 2020', quote: 'Muy honestos con los precios y el diagnóstico. Me mostraron las piezas desgastadas antes de cambiarlas. Me dieron mucha confianza.' },
+        { id: 3, name: 'José L.', car: 'Jeep Grand Cherokee', quote: 'Tienen equipos de primera. El mantenimiento quedó impecable, resolvieron un ruido en el tren delantero y me entregaron el carro lavado.' }
+      ]),
+      BRANDS_JSON: JSON.stringify(["Jeep", "Toyota", "Honda", "Dodge", "Nissan", "Chrysler", "Lexus"]),
+      FAQS_JSON: JSON.stringify([
+        { q: "¿Cuánto tiempo toma un mantenimiento preventivo básico?", a: "El tiempo estimado oscila entre 45 minutos y 1 hora y media, dependiendo del plan de servicio requerido. Durante la intervención, puede esperar cómodamente en nuestra área Lounge VIP, equipada con estación de café y conectividad Wi-Fi de alta velocidad." },
+        { q: "¿Tienen garantía los trabajos que realizan?", a: "Absolutamente. Todos nuestros servicios están respaldados por la Garantía Total MasterTech. Cubrimos la mano de obra calificada y los componentes e insumos OEM suministrados en nuestras instalaciones, asegurando un estándar óptimo de durabilidad y rendimiento." },
+        { q: "¿Cómo agendo una cita para mi vehículo?", a: "Puede gestionar su cita en tiempo real de dos formas: directamente desde nuestra plataforma web haciendo clic en el botón \"Reserva Ahora\", o comunicándose directamente con nuestro equipo de asesores de servicio vía WhatsApp." },
+        { q: "¿Cuáles son los métodos de pago aceptados?", a: "Para su comodidad, disponemos de múltiples canales de pago: Pago Móvil, transferencias bancarias nacionales e internacionales, efectivo (USD/EUR) y Zelle." },
+        { q: "¿Qué tipo de herramientas o tecnología utilizan para el diagnóstico?", a: "Contamos con equipos de diagnóstico computarizado y escáneres multimarca de última generación. Esto nos permite interactuar con los módulos electrónicos del vehículo, analizar datos en tiempo real y detectar fallas con precisión quirúrgica antes de cualquier reparación." }
+      ]),
+      JORNADAS_JSON: JSON.stringify([
+        { id: "reprogramacion", badge: "🏎️ Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD" },
+        { id: "egr-dpf", badge: "🛠️ Jornada de Solución Definitiva", title: "Desactivación Electrónica EGR & DPF / AdBlue (Off-Road)", subtitle: "Elimina problemas de regeneración, pérdida de potencia y códigos de falla por obstrucción en sistemas diésel y gasolina.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD" },
+        { id: "cielo-estrellado", badge: "✨ Jornada de Lujo Interior", title: "Instalación de Techo Estrellado Starlight (Efecto Rolls-Royce)", subtitle: "Transforma el habitáculo de tu vehículo con fibras ópticas de alta densidad y control multicolor mediante App & Control.", img: "/assets/instalaciones.jpg", regularPrice: "$350 USD", promoPrice: "$260 USD", discountBadge: "AHORRAS $90 USD" },
+        { id: "climatizacion", badge: "❄️ Jornada de Verano", title: "Jornada de Climatización & Aire Acondicionado Total", subtitle: "Recarga de gas refrigerante R134a, detección de fugas con tinte UV y desinfección de ductos por ozono.", img: "/assets/servicio-climatizacion.jpg", regularPrice: "$85 USD", promoPrice: "$55 USD", discountBadge: "AHORRAS $30 USD" },
+        { id: "inyeccion", badge: "⚡ Jornada de Eficiencia", title: "Jornada de Limpieza Ultra-Sónica de Inyectores & Admisión", subtitle: "Mantenimiento profundo de inyectores con prueba de pulso en banco, microfiltros y o-rings nuevos.", img: "/assets/servicio-inyeccion.jpg", regularPrice: "$75 USD", promoPrice: "$45 USD", discountBadge: "AHORRAS $30 USD" }
+      ]),
+      TELEGRAM_BOT_TOKEN: '8970513614:AAGCdMrJTbIH1QmKCFXcIzv5QxPX86e_23U',
+      TELEGRAM_CHAT_ID: '-1003940815012',
+      TELEGRAM_TOPIC_ID: '1209'
+  };
+  try {
+      // Only insert keys that don't yet exist — NEVER overwrite admin-saved values
+      const { data: existing } = await supabase.from('settings').select('key');
+      const existingKeys = new Set((existing || []).map((r: any) => r.key));
+      const toInsert = Object.entries(defaultSettings)
+        .filter(([key]) => !existingKeys.has(key))
+        .map(([key, value]) => ({ key, value: String(value) }));
+
+      if (toInsert.length > 0) {
+        const { error } = await supabase.from('settings').insert(toInsert);
+        if (error) throw error;
+        console.log(`[Seed] Insertadas ${toInsert.length} filas nuevas en settings.`);
+      } else {
+        console.log('[Seed] Tabla settings ya tiene todos los valores. No se sobreescribió nada.');
+      }
+      res.json({ success: true, message: `Settings seeded: ${toInsert.length} nuevas filas insertadas de ${Object.keys(defaultSettings).length} totales.` });
+  } catch(err: any) {
+      console.error('[Seed Error]', err);
+      res.status(500).json({ error: 'Seed failed', details: err?.message });
+  }
+});
+
 // Helper: Get settings as object
 async function getSettings() {
   const defaultSettings = {
