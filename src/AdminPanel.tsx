@@ -1276,16 +1276,29 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <div className="flex justify-between items-center bg-[#12141a] p-4 rounded-2xl border border-white/10">
                     <div>
                       <h3 className="text-sm font-bold text-white uppercase tracking-wider">Servicios del Taller MasterTech</h3>
-                      <p className="text-[11px] text-zinc-400">Modifica títulos, descripciones o imágenes de los servicios principales.</p>
+                      <p className="text-[11px] text-zinc-400">Modifica títulos, descripciones, imágenes o elimina servicios de la lista.</p>
                     </div>
-                    <button
-                      onClick={() => handleSaveSection('servicios', { SERVICES_JSON: JSON.stringify(services) })}
-                      disabled={savingSection === 'servicios'}
-                      className="btn-primary !py-2 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
-                    >
-                      {savingSection === 'servicios' ? <Loader2 className="animate-spin" size={15} /> : <Save size={15} />}
-                      <span>{savedSectionSuccess === 'servicios' ? '¡Servicios Guardados!' : 'Guardar Sección Servicios'}</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          const updated = [...services, { id: Date.now(), title: "Nuevo Servicio", desc: "Descripción del servicio...", img: "/assets/servicio-mecanica.jpg" }];
+                          setServices(updated);
+                        }}
+                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors"
+                      >
+                        <Plus size={15} />
+                        <span>Añadir Servicio</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleSaveSection('servicios', { SERVICES_JSON: JSON.stringify(services) })}
+                        disabled={savingSection === 'servicios'}
+                        className="btn-primary !py-2 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                      >
+                        {savingSection === 'servicios' ? <Loader2 className="animate-spin" size={15} /> : <Save size={15} />}
+                        <span>{savedSectionSuccess === 'servicios' ? '¡Servicios Guardados!' : 'Guardar Sección Servicios'}</span>
+                      </button>
+                    </div>
                   </div>
 
                   {savedSectionSuccess === 'servicios' && (
@@ -1297,6 +1310,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                   {services.map((srv, idx) => (
                     <div key={srv.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4">
+                      <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">Servicio #{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!window.confirm(`¿Seguro que deseas eliminar el servicio "${srv.title || 'sin nombre'}"?`)) return;
+                            const updated = services.filter((_, i) => i !== idx);
+                            setServices(updated);
+                          }}
+                          className="text-zinc-500 hover:text-red-400 p-1.5 rounded-xl bg-white/5 border border-white/10 transition-colors flex items-center gap-1 text-xs font-bold"
+                          title="Eliminar este servicio"
+                        >
+                          <Trash2 size={14} />
+                          <span>Eliminar</span>
+                        </button>
+                      </div>
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="md:col-span-2 space-y-3">
                           <div>
