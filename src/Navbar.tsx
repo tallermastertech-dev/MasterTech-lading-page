@@ -252,12 +252,12 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
         <div className="hidden lg:flex items-center">
           <a 
             href="/jornada" 
-            className="relative group overflow-hidden rounded-full p-[1.5px] transition-transform hover:scale-105 active:scale-95 shrink-0 whitespace-nowrap shadow-[0_0_25px_rgba(212,175,55,0.5)] hover:shadow-[0_0_35px_rgba(255,215,0,0.8)]"
+            className="relative group overflow-hidden rounded-full p-[1.5px] transition-transform hover:scale-105 active:scale-95 shrink-0 whitespace-nowrap shadow-[0_0_25px_rgba(212,175,55,0.6)] hover:shadow-[0_0_35px_rgba(255,215,0,0.9)]"
           >
             <span className="absolute inset-0 bg-[conic-gradient(from_90deg_at_50%_50%,#FFE57F_0%,#FFB300_50%,#FFE57F_100%)] animate-[spin_4s_linear_infinite]" />
-            <span className="relative flex items-center gap-2 px-4 py-2 xl:px-5 xl:py-2.5 rounded-full bg-gradient-to-r from-[#F3C649] via-[#FFE57F] to-[#D49E24] text-[#0A0B0E] font-black text-xs xl:text-sm tracking-wider uppercase">
-              <Sparkles className="w-4 h-4 text-[#0A0B0E] animate-bounce shrink-0" />
-              <span>Jornadas</span>
+            <span className="relative flex items-center gap-2 px-4 py-2 xl:px-5 xl:py-2.5 rounded-full bg-[#E5B83A] group-hover:bg-[#F3C649] transition-colors">
+              <Sparkles className="w-4 h-4 text-[#0D0D0D] !text-[#0D0D0D] animate-bounce shrink-0" />
+              <span className="font-black text-[#0D0D0D] !text-[#0D0D0D] text-xs xl:text-sm tracking-wider uppercase">Jornadas</span>
             </span>
           </a>
         </div>
@@ -380,12 +380,12 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 <a
                   href="/jornada"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="relative group overflow-hidden rounded-full p-[1.5px] w-full block shadow-[0_0_25px_rgba(212,175,55,0.5)]"
+                  className="relative group overflow-hidden rounded-full p-[1.5px] w-full block shadow-[0_0_25px_rgba(212,175,55,0.6)]"
                 >
                   <span className="absolute inset-0 bg-[conic-gradient(from_90deg_at_50%_50%,#FFE57F_0%,#FFB300_50%,#FFE57F_100%)] animate-[spin_4s_linear_infinite]" />
-                  <span className="relative flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-gradient-to-r from-[#F3C649] via-[#FFE57F] to-[#D49E24] text-[#0A0B0E] font-black text-sm tracking-wider uppercase">
-                    <Sparkles size={18} className="animate-bounce shrink-0 text-[#0A0B0E]" />
-                    <span>Jornadas</span>
+                  <span className="relative flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-[#E5B83A]">
+                    <Sparkles size={18} className="animate-bounce shrink-0 text-[#0D0D0D] !text-[#0D0D0D]" />
+                    <span className="font-black text-[#0D0D0D] !text-[#0D0D0D] text-sm tracking-wider uppercase">Jornadas</span>
                   </span>
                 </a>
               </div>
