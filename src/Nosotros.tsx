@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ArrowRight, Briefcase } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const CONFIG_DEFAULT = {
@@ -147,17 +147,26 @@ export default function Nosotros() {
               ))}
             </div>
 
-            {/* CTA Box */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-10 text-center max-w-xl mx-auto">
-              <h3 className="text-3xl font-black mb-3">¿Listo para atender tu vehículo?</h3>
-              <p className="text-zinc-400 text-sm mb-6 leading-relaxed">Agenda tu cita con nuestro equipo de especialistas y vive la experiencia MasterTech.</p>
+            {/* CTA Box - Unirse al Equipo MasterTech */}
+            <div className="bg-gradient-to-b from-white/10 via-[#16181D] to-[#0E1013] border border-primary/30 rounded-3xl p-8 sm:p-10 text-center max-w-xl mx-auto shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-widest uppercase mb-4">
+                <Briefcase className="w-3.5 h-3.5" />
+                <span>Oportunidades & Talento</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-black mb-3 text-white tracking-tight">
+                ¿Quieres formar parte del <span className="text-primary italic">equipo MasterTech</span>?
+              </h3>
+              <p className="text-zinc-300 text-sm sm:text-base mb-6 leading-relaxed max-w-md mx-auto">
+                Buscamos profesionales apasionados por la precisión, la innovación y la excelencia automotriz. Envíanos tu perfil y da el siguiente paso en tu carrera.
+              </p>
               <a
-                href={config.WHATSAPP_LINK}
+                href={`https://wa.me/${(config.PHONE_NUMBER || '+584123565012').replace(/[^\d]/g, '')}?text=${encodeURIComponent('Hola MasterTech, me gustaría postularme para formar parte de su equipo de trabajo.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary inline-flex items-center gap-3 !py-4 !px-8 text-base border-none mx-auto"
+                className="btn-primary inline-flex items-center justify-center gap-3 !py-4 !px-8 text-sm sm:text-base font-bold border-none mx-auto rounded-full shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:shadow-[0_0_35px_rgba(212,175,55,0.6)] transition-all"
               >
-                AGENDAR CITA VÍA WHATSAPP <ArrowRight className="w-5 h-5" />
+                POSTULARME AL EQUIPO <ArrowRight className="w-5 h-5" />
               </a>
             </div>
           </motion.div>
