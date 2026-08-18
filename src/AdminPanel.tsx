@@ -1751,6 +1751,30 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           placeholder="https://www.instagram.com/tallermastertech/"
                         />
                       </div>
+
+                      <div className="sm:col-span-2 pt-2 border-t border-white/10">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-emerald-400 block mb-1.5">
+                          Estado Operativo del Taller (Insignia Pública)
+                        </label>
+                        <select
+                          value={settingsForm.IS_OPEN || 'auto'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, IS_OPEN: e.target.value })}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary cursor-pointer"
+                        >
+                          <option value="auto" className="bg-[#12141a] text-white">
+                            ⏰ Automático por Horario (Lun-Vie 8:00 AM - 5:00 PM • Hora Venezuela)
+                          </option>
+                          <option value="force_open" className="bg-[#12141a] text-white">
+                            🟢 Forzar Taller Abierto (Guardia Especial / Abierto 24/7)
+                          </option>
+                          <option value="force_closed" className="bg-[#12141a] text-white">
+                            🔴 Forzar Taller Cerrado (Solo Emergencias)
+                          </option>
+                        </select>
+                        <p className="text-[11px] text-zinc-400 mt-1">
+                          En modo automático, la web cambia sola a "Cerrado" a partir de las 5:00 PM y los fines de semana.
+                        </p>
+                      </div>
                     </div>
                   </div>
 

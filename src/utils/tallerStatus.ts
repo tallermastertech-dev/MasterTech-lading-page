@@ -16,34 +16,34 @@ export interface TallerStatusInfo {
 }
 
 export function getTallerStatus(isOpenSetting?: string): TallerStatusInfo {
-  // Manual overrides if explicitly set by admin to 'true' or 'false'
-  if (isOpenSetting === 'true') {
-    return {
-      isOpen: true,
-      isAuto: false,
-      label: 'Taller Abierto',
-      badgeText: 'Taller Abierto',
-      scheduleText: 'Horario Habitual (Atendiendo Ahora)',
-      dotColor: 'bg-emerald-500 shadow-[0_0_10px_#10b981]',
-      badgeBg: 'bg-emerald-500/10 backdrop-blur-md',
-      badgeBorder: 'border-emerald-500/30 text-emerald-400'
-    };
-  }
-
-  if (isOpenSetting === 'false') {
+  // Manual force overrides only if explicitly set to force_closed or force_open
+  if (isOpenSetting === 'force_closed' || isOpenSetting === 'false') {
     return {
       isOpen: false,
       isAuto: false,
       label: 'Taller Cerrado',
-      badgeText: 'Taller Cerrado (Emergencias 24/7)',
-      scheduleText: 'Solo Guardia de Emergencias',
+      badgeText: 'Taller Cerrado • Emergencias 24/7',
+      scheduleText: 'Cerrado Temporalmente (Guardia de Emergencias)',
       dotColor: 'bg-red-500 shadow-[0_0_10px_#ef4444]',
       badgeBg: 'bg-red-500/10 backdrop-blur-md',
       badgeBorder: 'border-red-500/30 text-red-400'
     };
   }
 
-  // Automatic Schedule Mode (Venezuela Time Zone America/Caracas)
+  if (isOpenSetting === 'force_open') {
+    return {
+      isOpen: true,
+      isAuto: false,
+      label: 'Taller Abierto',
+      badgeText: 'Taller Abierto • Guardia Especial',
+      scheduleText: 'Abierto Especialmente',
+      dotColor: 'bg-emerald-500 shadow-[0_0_10px_#10b981]',
+      badgeBg: 'bg-emerald-500/10 backdrop-blur-md',
+      badgeBorder: 'border-emerald-500/30 text-emerald-400'
+    };
+  }
+
+  // Automatic Schedule Mode (Venezuela Time Zone America/Caracas: Lun-Vie 8:00 AM a 5:00 PM)
   try {
     const now = new Date();
     const options: Intl.DateTimeFormatOptions = {

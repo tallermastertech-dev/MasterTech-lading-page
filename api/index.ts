@@ -239,7 +239,7 @@ async function getSettings() {
     LOGO_URL: '/logo.png',
     BEFORE_AFTER_1: '/assets/before_after_1.png',
     BEFORE_AFTER_2: '/assets/before_after_2.png',
-    IS_OPEN: 'true',
+    IS_OPEN: 'auto',
     BANNER_TEXT: '',
     WHATSAPP_MESSAGE_TEMPLATE: 'Hola *{nombre}*, te saludamos desde *Taller MasterTech* 🛠️. Hemos recibido tu solicitud para el servicio de *{servicio}* para tu *{vehiculo}*. Quisiéramos coordinar los detalles de tu cita. ¿En qué horario te resultaría más cómodo asistir?',
     SUCCESS_BADGE: '¡TIENES HASTA UN 15% DE DESCUENTO!',
