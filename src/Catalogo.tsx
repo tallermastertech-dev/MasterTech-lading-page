@@ -1026,7 +1026,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{selectedProduct.category}</span>
                 </div>
                 <button 
-                          {/* Modal Body */}
+                  type="button"
+                  onClick={() => setSelectedProduct(null)}
+                  className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Modal Body */}
               {(() => {
                 const allPhotos = [selectedProduct.img, ...(selectedProduct.images || [])].filter(Boolean);
                 const currentImg = (allPhotos && allPhotos[activeImageIndex]) || selectedProduct.img || '/assets/servicio-mecanica.jpg';
