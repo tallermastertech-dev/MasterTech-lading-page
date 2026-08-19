@@ -82,42 +82,30 @@ export default function ImageUploader({ label, value, onChange, aspectRatio = 4 
           )}
         </div>
         
-        {/* URL Input (read-only if base64, editable if normal URL) */}
-        <input
-          id={fieldId}
-          name={fieldId}
-          type="text"
-          value={value?.startsWith('data:image') ? '[Imagen Recortada y Subida]' : value || ''}
-          onChange={(e) => {
-            if (!value?.startsWith('data:image')) {
-               onChange(e.target.value);
-            }
-          }}
-          disabled={value?.startsWith('data:image')}
-          className={`min-w-0 flex-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-3 focus:border-primary outline-none transition-all text-white text-xs truncate ${value?.startsWith('data:image') ? 'opacity-50 cursor-not-allowed' : ''}`}
-          placeholder={placeholder || "/assets/imagen.jpg"}
-        />
-
-        {/* Edit Crop Button (re-open cropper with current value) */}
-        {value && (
-          <button 
-            type="button" 
+        {/* URL Input */}
+        <div className="relative flex-1">
+          <input
+            id={fieldId}
+            name={fieldId}
+            type="text"
+            value={value?.startsWith('data:image') ? '[Imagen Recortada y Subida]' : value || ''}
+            onChange={(e) => {
+              if (!value?.startsWith('data:image')) {
+                 onChange(e.target.value);
+              }
+            }}
+            disabled={value?.startsWith('data:image')}
+            className={`w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 focus:border-primary outline-none transition-all text-white text-xs truncate ${value?.startsWith('data:image') ? 'opacity-80 cursor-pointer' : ''}`}
+            placeholder={placeholder || "/assets/imagen.jpg"}
             onClick={() => {
-              setImageSrc(value);
-              setCrop({ x: 0, y: 0 });
-              setZoom(1);
-              setIsModalOpen(true);
-            }} 
-            className="bg-primary/20 hover:bg-primary/40 text-primary border border-primary/30 rounded-xl p-2.5 cursor-pointer transition-colors shrink-0 flex items-center justify-center"
-            title="Reajustar / Recortar imagen de nuevo"
-          >
-            <Crop className="w-4 h-4" />
-          </button>
-        )}
-
-        {/* Upload Button */}
-        <label htmlFor={`${fieldId}-file`} className="bg-white/10 hover:bg-white/20 text-white border border-white/15 rounded-xl p-2.5 cursor-pointer transition-colors flex items-center justify-center shrink-0" title="Subir nueva imagen">
-          <Upload className="w-4 h-4" />
+              if (value?.startsWith('data:image')) {
+                setImageSrc(value);
+                setCrop({ x: 0, y: 0 });
+                setZoom(1);
+                setIsModalOpen(true);
+              }
+            }}
+          />
           <input 
             id={`${fieldId}-file`}
             name={`${fieldId}-file`}
@@ -126,14 +114,7 @@ export default function ImageUploader({ label, value, onChange, aspectRatio = 4 
             className="hidden" 
             onChange={handleFileChange}
           />
-        </label>
-        
-        {/* Clear Button */}
-        {value && (
-           <button type="button" onClick={() => onChange('')} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl p-2.5 cursor-pointer transition-colors shrink-0" title="Eliminar imagen">
-             <X className="w-4 h-4" />
-           </button>
-        )}
+        </div>
       </div>
 
       {/* Cropper Modal */}

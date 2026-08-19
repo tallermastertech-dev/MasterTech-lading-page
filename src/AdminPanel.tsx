@@ -648,25 +648,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             })()}
             <span className="text-xs text-zinc-500 font-mono hidden sm:inline-block">| {timeStr}</span>
           </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => fetchSettings()}
-              className="p-2 rounded-xl bg-white/5 border border-white/10 text-zinc-400 hover:text-white transition-colors"
-              title="Recargar configuraciones de Supabase"
-            >
-              <RefreshCw size={15} />
-            </button>
-            <a
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary !py-2 !px-4 text-xs font-black uppercase tracking-wider border-none flex items-center gap-1.5 shadow-md"
-            >
-              <Globe size={14} />
-              <span>Ver Web pública</span>
-            </a>
-          </div>
         </header>
 
         {/* TAB BODY CONTAINER */}
