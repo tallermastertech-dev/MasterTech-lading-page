@@ -44,7 +44,12 @@ import {
   Phone,
   MapPin,
   Instagram,
-  Youtube
+  Youtube,
+  Mail,
+  Eye,
+  EyeOff,
+  UserCheck,
+  Key
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import { getTallerStatus } from './utils/tallerStatus';
@@ -112,14 +117,32 @@ interface AdminPanelProps {
 }
 
 export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelProps) {
-  // Auth State
+  // Auth State (Email & Password Multi-user)
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('mastertech_admin_token'));
+  const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(() => {
+    try {
+      const u = localStorage.getItem('mastertech_admin_user');
+      return u ? JSON.parse(u) : { name: 'Administrador MasterTech', email: 'admin@tallermastertech.com', role: 'Super Administrador' };
+    } catch (e) {
+      return { name: 'Administrador MasterTech', email: 'admin@tallermastertech.com', role: 'Super Administrador' };
+    }
+  });
+
+  // Admin Users Management State
+  const [adminUsersList, setAdminUsersList] = useState<any[]>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const [userModalError, setUserModalError] = useState('');
+  const [isSavingUser, setIsSavingUser] = useState(false);
 
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'integraciones'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'integraciones' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
 
   // Dynamic Data States
@@ -238,11 +261,35 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     fetchSettings();
   }, []);
 
+  // Fetch Admin Users
+  const fetchAdminUsers = async () => {
+    if (!token) return;
+    setIsLoadingUsers(true);
+    try {
+      const res = await fetch('/api/admin/users', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.users && Array.isArray(data.users)) {
+          setAdminUsersList(data.users);
+        }
+      }
+    } catch (e) {
+      console.error("Error fetching admin users:", e);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  };
+
   useEffect(() => {
-    if (token) fetchLeads();
+    if (token) {
+      fetchLeads();
+      fetchAdminUsers();
+    }
   }, [token]);
 
-  // Auth Handler
+  // Auth Handler (Email + Password)
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoggingIn(true);
@@ -251,15 +298,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passwordInput })
+        body: JSON.stringify({
+          email: emailInput.trim(),
+          password: passwordInput.trim()
+        })
       });
       const data = await res.json();
       if (res.ok && data.token) {
         localStorage.setItem('mastertech_admin_token', data.token);
+        if (data.user) {
+          localStorage.setItem('mastertech_admin_user', JSON.stringify(data.user));
+          setCurrentUser(data.user);
+        }
         setToken(data.token);
+        setEmailInput('');
         setPasswordInput('');
       } else {
-        setAuthError(data.error || 'Contraseña incorrecta.');
+        setAuthError(data.error || 'Correo o contraseña incorrectos.');
       }
     } catch (err) {
       setAuthError('Error al conectar con el servidor.');
@@ -270,8 +325,62 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   const handleLogout = () => {
     localStorage.removeItem('mastertech_admin_token');
+    localStorage.removeItem('mastertech_admin_user');
     setToken(null);
     if (onLogout) onLogout();
+  };
+
+  // User CRUD Handlers
+  const handleSaveAdminUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser || !token) return;
+    if (!editingUser.name || !editingUser.email) {
+      setUserModalError('El nombre y el correo son obligatorios.');
+      return;
+    }
+
+    setIsSavingUser(true);
+    setUserModalError('');
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(editingUser)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsUserModalOpen(false);
+        setEditingUser(null);
+        fetchAdminUsers();
+      } else {
+        setUserModalError(data.error || 'Error al guardar el usuario.');
+      }
+    } catch (err) {
+      setUserModalError('Error de conexión al guardar.');
+    } finally {
+      setIsSavingUser(false);
+    }
+  };
+
+  const handleDeleteAdminUser = async (id: string) => {
+    if (!token || !window.confirm('¿Seguro que deseas revocar el acceso a este usuario?')) return;
+    try {
+      const res = await fetch(`/api/admin/users/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        fetchAdminUsers();
+      } else {
+        alert(data.error || 'No se pudo eliminar el usuario.');
+      }
+    } catch (err) {
+      alert('Error de conexión al eliminar usuario.');
+    }
   };
 
   // Section-by-section Independent Save States
@@ -495,19 +604,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     });
   }, [leads, searchQuery, statusFilter]);
 
-  // LOGIN SCREEN
+  // LOGIN SCREEN (Email & Password Multi-user)
   if (!token) {
     return (
       <div className="min-h-screen bg-[#0a0b0f] text-white flex items-center justify-center p-6 selection:bg-primary selection:text-black">
         <div className="max-w-md w-full bg-[#12141a]/90 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl space-y-6 relative overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none" />
 
           <div className="text-center space-y-2 relative z-10">
             <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/10">
               <Lock size={28} />
             </div>
             <h1 className="text-2xl font-display font-black uppercase tracking-tight text-white">Panel de Administración</h1>
-            <p className="text-xs text-zinc-400">Ingresa la contraseña maestra para gestionar Taller MasterTech.</p>
+            <p className="text-xs text-zinc-400">Ingresa tu correo y contraseña autorizada para gestionar Taller MasterTech.</p>
           </div>
 
           {authError && (
@@ -518,17 +627,50 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           )}
 
           <form onSubmit={handleLogin} className="space-y-4 relative z-10">
-            <div className="space-y-2">
-              <label htmlFor="admin-pass" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">Contraseña Maestra</label>
-              <input
-                id="admin-pass"
-                type="password"
-                required
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                placeholder="••••••••••••"
-                className="w-full bg-black/50 border border-white/10 rounded-xl py-3 px-4 text-sm text-white font-mono outline-none focus:border-primary transition-all"
-              />
+            {/* Email Field */}
+            <div className="space-y-1.5">
+              <label htmlFor="admin-email" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                Correo Electrónico
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                <input
+                  id="admin-email"
+                  type="email"
+                  required
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  placeholder="admin@tallermastertech.com"
+                  className="w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-xs text-white outline-none focus:border-amber-400 transition-all placeholder:text-zinc-600"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-1.5">
+              <label htmlFor="admin-pass" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                Contraseña
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                <input
+                  id="admin-pass"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="••••••••••••"
+                  className="w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 pr-11 text-xs text-white font-mono outline-none focus:border-amber-400 transition-all placeholder:text-zinc-600"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 p-1 transition-colors"
+                  title={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
 
             <button
@@ -580,6 +722,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
               { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
               { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
+              { id: 'usuarios', label: 'Equipo & Accesos', icon: <Users size={18} /> },
               { id: 'settings', label: 'Ajustes Principales', icon: <SettingsIcon size={18} /> },
               { id: 'integraciones', label: 'Telegram & Webhook', icon: <Bot size={18} /> },
             ].map(tab => {
@@ -612,12 +755,20 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         {/* Footer Admin info & Logout */}
         <div className="pt-4 border-t border-white/10 space-y-3">
           <div className="flex items-center gap-3 px-2">
-            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary font-bold text-xs">
-              MT
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500/20 to-primary/20 border border-amber-500/40 flex items-center justify-center text-amber-300 font-black text-xs shrink-0 shadow-md">
+              {(() => {
+                const nameParts = (currentUser?.name || 'Admin MasterTech').split(' ');
+                const initials = nameParts.length >= 2 ? `${nameParts[0][0]}${nameParts[1][0]}` : nameParts[0].slice(0, 2);
+                return initials.toUpperCase();
+              })()}
             </div>
             <div className="flex-1 overflow-hidden">
-              <span className="text-xs font-bold text-white block truncate">Administrador MasterTech</span>
-              <span className="text-[10px] text-zinc-500 block truncate">Sesión Activa</span>
+              <span className="text-xs font-bold text-white block truncate">
+                {currentUser?.name || 'Administrador MasterTech'}
+              </span>
+              <span className="text-[10px] text-amber-400 font-semibold block truncate">
+                {currentUser?.role || 'Super Administrador'}
+              </span>
             </div>
           </div>
 
@@ -1621,6 +1772,235 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE: EQUIPO & PERFILES DE ACCESO (MULTIUSUARIO) */}
+          {/* ========================================================================= */}
+          {activeTab === 'usuarios' && (
+            <div className="space-y-6 animate-fade-in max-w-5xl mx-auto">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-xl font-display font-black uppercase tracking-tight text-white flex items-center gap-2.5">
+                    <Users className="text-amber-400" size={24} />
+                    <span>Equipo & Perfiles de Acceso</span>
+                  </h1>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Crea y administra las cuentas de las personas autorizadas con su correo y clave personal para gestionar el taller.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setEditingUser({ name: '', email: '', password: '', role: 'Administrador' });
+                    setUserModalError('');
+                    setIsUserModalOpen(true);
+                  }}
+                  className="btn-primary !py-2.5 !px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 border-none shadow-lg cursor-pointer shrink-0"
+                >
+                  <Plus size={16} />
+                  <span>Crear Nuevo Perfil</span>
+                </button>
+              </div>
+
+              {/* Users Grid */}
+              {isLoadingUsers ? (
+                <div className="py-20 text-center">
+                  <Loader2 className="animate-spin text-amber-400 mx-auto mb-3" size={32} />
+                  <span className="text-xs text-zinc-500">Cargando perfiles del equipo...</span>
+                </div>
+              ) : adminUsersList.length === 0 ? (
+                <div className="p-8 text-center bg-[#12141a] rounded-2xl border border-white/10 text-zinc-500 text-xs">
+                  No hay perfiles adicionales registrados. Haz clic en "Crear Nuevo Perfil".
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {adminUsersList.map(u => {
+                    const nameParts = (u.name || 'Admin').split(' ');
+                    const initials = nameParts.length >= 2 ? `${nameParts[0][0]}${nameParts[1][0]}` : nameParts[0].slice(0, 2);
+                    const isSuper = u.role?.toLowerCase().includes('super');
+                    const isTaller = u.role?.toLowerCase().includes('taller') || u.role?.toLowerCase().includes('jefe');
+                    const isCitas = u.role?.toLowerCase().includes('cita') || u.role?.toLowerCase().includes('venta');
+
+                    return (
+                      <div
+                        key={u.id}
+                        className="bg-[#12141a] border border-white/10 hover:border-amber-400/40 rounded-2xl p-5 space-y-4 shadow-xl transition-all relative flex flex-col justify-between"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 via-primary/20 to-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-300 font-black text-sm shadow-md">
+                              {initials.toUpperCase()}
+                            </div>
+                            <div className="space-y-0.5">
+                              <h3 className="text-sm font-black text-white leading-tight">{u.name}</h3>
+                              <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                                isSuper 
+                                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
+                                  : isTaller 
+                                  ? 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+                                  : isCitas
+                                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                                  : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                              }`}>
+                                {u.role || 'Administrador'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 pt-2 border-t border-white/5 text-xs text-zinc-400">
+                          <div className="flex items-center gap-2">
+                            <Mail size={14} className="text-zinc-500 shrink-0" />
+                            <span className="text-zinc-300 truncate font-mono">{u.email}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Key size={14} className="text-zinc-500 shrink-0" />
+                            <span className="text-zinc-500">Contraseña asignada y encriptada</span>
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingUser({ ...u, password: '' });
+                              setUserModalError('');
+                              setIsUserModalOpen(true);
+                            }}
+                            className="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white text-xs font-bold py-2 px-3 rounded-xl border border-white/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <Edit size={13} />
+                            <span>Editar Perfil / Clave</span>
+                          </button>
+
+                          {adminUsersList.length > 1 && (
+                            <button
+                              onClick={() => handleDeleteAdminUser(u.id)}
+                              className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-colors cursor-pointer"
+                              title="Revocar acceso"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* MODAL CREAR / EDITAR USUARIO */}
+              {isUserModalOpen && editingUser && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+                  <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <div className="flex items-center gap-2">
+                        <UserCheck className="text-amber-400" size={20} />
+                        <h2 className="text-base font-bold text-white uppercase tracking-tight">
+                          {editingUser.id ? 'Editar Perfil de Acceso' : 'Crear Nuevo Perfil'}
+                        </h2>
+                      </div>
+                      <button
+                        onClick={() => { setIsUserModalOpen(false); setEditingUser(null); }}
+                        className="text-zinc-500 hover:text-white p-1"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+
+                    {userModalError && (
+                      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-bold flex items-center gap-2">
+                        <AlertCircle size={16} className="shrink-0" />
+                        <span>{userModalError}</span>
+                      </div>
+                    )}
+
+                    <form onSubmit={handleSaveAdminUser} className="space-y-4">
+                      {/* Name */}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                          Nombre y Apellido *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={editingUser.name || ''}
+                          onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
+                          placeholder="Ej: Carlos Morales"
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* Email */}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                          Correo Electrónico *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={editingUser.email || ''}
+                          onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                          placeholder="Ej: asesor@tallermastertech.com"
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* Password */}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                          {editingUser.id ? 'Nueva Contraseña (dejar vacío si no deseas cambiarla)' : 'Contraseña de Acceso *'}
+                        </label>
+                        <input
+                          type="password"
+                          required={!editingUser.id}
+                          value={editingUser.password || ''}
+                          onChange={(e) => setEditingUser({ ...editingUser, password: e.target.value })}
+                          placeholder="••••••••••••"
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white font-mono outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* Role Selector */}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                          Rol / Cargo en el Taller
+                        </label>
+                        <select
+                          value={editingUser.role || 'Administrador'}
+                          onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
+                        >
+                          <option value="Super Administrador">Super Administrador (Acceso Total)</option>
+                          <option value="Jefe de Taller">Jefe de Taller & Diagnóstico</option>
+                          <option value="Asesor de Citas & Ventas">Asesor de Citas & Ventas</option>
+                          <option value="Recepción & Soporte">Recepción & Soporte</option>
+                          <option value="Administrador">Administrador General</option>
+                        </select>
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-3 border-t border-white/10">
+                        <button
+                          type="button"
+                          onClick={() => { setIsUserModalOpen(false); setEditingUser(null); }}
+                          className="flex-1 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white text-xs font-bold py-2.5 rounded-xl border border-white/10 transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={isSavingUser}
+                          className="flex-1 btn-primary !py-2.5 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 border-none shadow-lg"
+                        >
+                          {isSavingUser ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+                          <span>{isSavingUser ? 'Guardando...' : 'Guardar Perfil'}</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               )}
             </div>

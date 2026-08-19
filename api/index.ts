@@ -590,25 +590,96 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     }
 };
 
-// Handler reutilizable para POST /login
+// Default administrative user profiles
+const DEFAULT_ADMIN_USERS = [
+  {
+    id: 'user-admin-master',
+    name: 'Carlos Morales',
+    email: 'admin@tallermastertech.com',
+    password: 'mastertech2026',
+    role: 'Super Administrador',
+    createdAt: '2026-01-01T00:00:00.000Z'
+  },
+  {
+    id: 'user-taller-jefe',
+    name: 'Jefe de Taller & Diagnóstico',
+    email: 'taller@tallermastertech.com',
+    password: 'mastertech2026',
+    role: 'Jefe de Taller',
+    createdAt: '2026-01-01T00:00:00.000Z'
+  },
+  {
+    id: 'user-citas-asesor',
+    name: 'Asesor de Citas & Repuestos',
+    email: 'citas@tallermastertech.com',
+    password: 'mastertech2026',
+    role: 'Asesor de Citas & Ventas',
+    createdAt: '2026-01-01T00:00:00.000Z'
+  }
+];
+
+// Helper: Get admin users from settings (or fallback)
+async function getAdminUsersList(): Promise<any[]> {
+  try {
+    const settings = await getSettings();
+    if (settings.ADMIN_USERS_JSON) {
+      const parsed = JSON.parse(settings.ADMIN_USERS_JSON);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {}
+  return DEFAULT_ADMIN_USERS;
+}
+
+// Handler reutilizable para POST /login con soporte multiusuario por correo y contraseña
 const handlePostLogin = async (req: express.Request, res: express.Response) => {
+  const email = sanitizeString(req.body.email, 200)?.trim().toLowerCase();
   const password = sanitizeString(req.body.password, 200)?.trim();
   const settings = await getSettings();
-  const validPasswords = [
+
+  const validMasterPasswords = [
     settings.ADMIN_PASSWORD,
     process.env.ADMIN_PASSWORD,
     'admin123',
     'mastertech2026'
   ].filter(Boolean);
 
-  const isMatched = validPasswords.some(p => p === password);
+  const adminUsers = await getAdminUsersList();
 
-  if (isMatched) {
+  let matchedUser = null;
+
+  if (email) {
+    matchedUser = adminUsers.find(u => (u.email || '').toLowerCase() === email && (u.password === password || validMasterPasswords.includes(password)));
+  } else if (password) {
+    // Si no envió email, buscar si la contraseña coincide con algún usuario o la contraseña maestra
+    matchedUser = adminUsers.find(u => u.password === password);
+    if (!matchedUser && validMasterPasswords.includes(password)) {
+      matchedUser = adminUsers[0] || DEFAULT_ADMIN_USERS[0];
+    }
+  }
+
+  if (matchedUser || (password && validMasterPasswords.includes(password))) {
+    const activeUser = matchedUser || {
+      id: 'user-admin-master',
+      name: 'Administrador MasterTech',
+      email: email || 'admin@tallermastertech.com',
+      role: 'Super Administrador'
+    };
+
     const token = generateAdminToken();
-    res.json({ token });
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: activeUser.id,
+        name: activeUser.name,
+        email: activeUser.email,
+        role: activeUser.role,
+        createdAt: activeUser.createdAt
+      }
+    });
   } else {
-    await new Promise(r => setTimeout(r, 500));
-    res.status(401).json({ error: 'Contraseña incorrecta' });
+    await new Promise(r => setTimeout(r, 600));
+    res.status(401).json({ error: 'Correo o contraseña incorrectos. Verifica tus credenciales.' });
   }
 };
 
@@ -959,6 +1030,87 @@ app.delete('/leads/:id', authenticateAdmin, handleDeleteLead);
 // Unlimited admin settings modifications
 app.put('/api/settings', authenticateAdmin, handlePutSettings);
 app.put('/settings', authenticateAdmin, handlePutSettings);
+
+// Admin Users Management Routes
+app.get(['/api/admin/users', '/admin/users'], authenticateAdmin, async (_req, res) => {
+  try {
+    const users = await getAdminUsersList();
+    const safeUsers = users.map(u => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      createdAt: u.createdAt || '2026-01-01T00:00:00.000Z'
+    }));
+    res.json({ success: true, users: safeUsers });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al obtener usuarios', details: err.message });
+  }
+});
+
+app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, res) => {
+  try {
+    const { id, name, email, password, role } = req.body || {};
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Nombre y correo son requeridos.' });
+    }
+
+    const currentUsers = await getAdminUsersList();
+    const cleanEmail = String(email).trim().toLowerCase();
+    
+    let updatedUsers: any[] = [];
+    if (id && currentUsers.some(u => u.id === id)) {
+      updatedUsers = currentUsers.map(u => {
+        if (u.id === id) {
+          return {
+            ...u,
+            name: String(name).trim(),
+            email: cleanEmail,
+            role: role || u.role,
+            ...(password ? { password: String(password).trim() } : {})
+          };
+        }
+        return u;
+      });
+    } else {
+      const newId = `user-${Date.now()}`;
+      const newUser = {
+        id: newId,
+        name: String(name).trim(),
+        email: cleanEmail,
+        password: password ? String(password).trim() : 'mastertech2026',
+        role: role || 'Administrador',
+        createdAt: new Date().toISOString()
+      };
+      updatedUsers = [...currentUsers, newUser];
+    }
+
+    const jsonStr = JSON.stringify(updatedUsers);
+    await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
+    
+    res.json({ success: true, message: 'Usuario guardado correctamente.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al guardar usuario', details: err.message });
+  }
+});
+
+app.delete(['/api/admin/users/:id', '/admin/users/:id'], authenticateAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const currentUsers = await getAdminUsersList();
+    if (currentUsers.length <= 1) {
+      return res.status(400).json({ error: 'No puedes eliminar el único usuario administrador activo.' });
+    }
+
+    const updatedUsers = currentUsers.filter(u => u.id !== id);
+    const jsonStr = JSON.stringify(updatedUsers);
+    await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
+
+    res.json({ success: true, message: 'Usuario eliminado correctamente.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al eliminar usuario', details: err.message });
+  }
+});
 
 // =============================================================
 // AI PART AUTOFILL ROUTE v2 - Comprehensive OEM Database
