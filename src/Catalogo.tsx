@@ -588,13 +588,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
         {/* Products Grid */}
         {filteredItems.length === 0 ? (
-          <div className="text-center py-20 bg-white/5 border border-white/10 rounded-3xl max-w-md mx-auto">
-            <Package size={40} className="mx-auto text-zinc-500 mb-4" />
-            <h3 className="text-lg font-bold text-white mb-2">No encontramos coincidencias</h3>
-            <p className="text-zinc-400 text-xs px-6 mb-6">Prueba seleccionando otra categoría de repuesto o busca un término más general.</p>
+          <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white/5 border border-white/10 rounded-3xl max-w-md mx-auto shadow-2xl">
+            <Package size={44} className="text-zinc-500 mb-4 stroke-[1.5]" />
+            <h3 className="text-xl font-bold text-white mb-2">No encontramos coincidencias</h3>
+            <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
+              Prueba seleccionando otra categoría de repuesto o busca un término más general.
+            </p>
             <button 
+              type="button"
               onClick={() => { setSelectedCategory("Todos"); setSearchQuery(""); }}
-              className="btn-primary !py-2 !px-5 text-xs border-none"
+              className="btn-primary inline-flex items-center justify-center !py-2.5 !px-6 text-xs sm:text-sm font-bold border-none rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer mx-auto"
             >
               Ver Todo el Catálogo
             </button>
