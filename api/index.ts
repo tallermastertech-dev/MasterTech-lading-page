@@ -1184,15 +1184,34 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     if (/^A[0-9]{10}$/i.test(c))
       return { titulo: 'Repuesto Original Mercedes-Benz Genuine OEM (' + raw.toUpperCase() + ')', categoria: 'Motor y Encendido', compatibilidad: 'Mercedes-Benz Clase C/E/GLC/GLE motores M270/M274/M276/OM651/OM654 (2005-2024)', descripcionCorta: 'Componente Mercedes-Benz Genuine, especificacion MBUSI ingenieria Daimler.', descripcionDetallada: 'Repuesto OEM Mercedes-Benz #' + raw.toUpperCase() + '. MB Quality Standards. Garantia de planta.' };
 
-    // WHEEL LOCKS / TUERCAS DE SEGURIDAD — 99910-R0DA0, 08W42-SNA-100, 00276-00900
-    if (/^99910[0-9A-Z]{5}/i.test(c) || /^08W42[0-9A-Z]{5}/i.test(c) || /^00276[0-9A-Z]{5}/i.test(c) || c.includes('99910R0DA0') || c.includes('99910RODAO')) {
+    // KIA / HYUNDAI OEM CONTROL MODULES — 99910-R0DA0 (Kia Carnival 2025-2026)
+    if (c.includes('99910R0DA0') || c.includes('99910RODAO') || /^99910[0-9A-Z]{5}/i.test(c)) {
+      return {
+        titulo: 'Módulo de Control Electrónico (Control Module) Kia Carnival OEM (' + raw.toUpperCase() + ')',
+        categoria: 'Baterías y Electricidad',
+        compatibilidad: 'Kia Carnival 3.5L V6 / Hybrid (2025-2026), Kia / Hyundai Modelos Smartstream',
+        precio: '$1,590 USD',
+        descripcionCorta: 'Módulo de control computarizado original Kia Mobis Genuine Parts para gestión electrónica Kia Carnival 2025-2026.',
+        descripcionDetallada: 'Módulo de control OEM Kia #' + raw.toUpperCase() + '. Unidad electrónica de procesamiento computarizado y control de sistemas de asistencia, carrocería y comunicación CAN-bus / FlexRay para Kia Carnival 2025-2026. Calibración y programación de fábrica Kia Mobis.',
+        specs: [
+          'Módulo de procesamiento electrónico original Kia Mobis',
+          'Comunicación CAN-Bus / Ethernet / FlexRay de alta velocidad',
+          'Carcasa de disipación térmica de aluminio blindado',
+          'Compatible con Kia Carnival 2025-2026'
+        ],
+        badge: 'Importación Directa USA'
+      };
+    }
+
+    // WHEEL LOCKS / TUERCAS DE SEGURIDAD — 08W42-SNA-100, 00276-00900
+    if (/^08W42[0-9A-Z]{5}/i.test(c) || /^00276[0-9A-Z]{5}/i.test(c)) {
       return {
         titulo: 'Juego de Tuercas de Seguridad y Llave Candado de Rueda OEM (' + raw.toUpperCase() + ')',
         categoria: 'Piezas de Carrocería & Accesorios',
         compatibilidad: 'Honda Civic, Accord, CR-V, HR-V, Pilot, Fit / Toyota / Nissan / Mitsubishi (Rosca M12x1.5 / M12x1.25)',
         descripcionCorta: 'Juego de 4 tuercas de seguridad antirrobo cromadas con bocallave maestra estriada de alta precisión.',
-        descripcionDetallada: 'Kit de tuercas de seguridad OEM #' + raw.toUpperCase() + '. Acero endurecido forjado en frío con triple recubrimiento de níquel-cromo anticorrosión. Patrón de estrías inviolable para máxima protección contra robo de rines y cauchos. Incluye tarjeta de código de llave para duplicados.',
-        specs: ['Acero tratado térmicamente grado 10.9', 'Triple cromado anticorrosivo', 'Bocallave estriada computarizada de alta seguridad', 'Compatible con llaves de cruz estándar de 19mm y 21mm']
+        descripcionDetallada: 'Kit de tuercas de seguridad OEM #' + raw.toUpperCase() + '. Acero endurecido forjado en frío con triple recubrimiento de níquel-cromo anticorrosión.',
+        specs: ['Acero tratado térmicamente grado 10.9', 'Triple cromado anticorrosivo', 'Bocallave estriada computarizada de alta seguridad']
       };
     }
 
