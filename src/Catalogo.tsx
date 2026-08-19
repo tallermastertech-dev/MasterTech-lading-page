@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, Search, Tag, Filter, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, Search, Tag, Filter, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const CONFIG_DEFAULT = {
@@ -179,6 +179,7 @@ export default function Catalogo() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   // USA Import Order Form Modal State
   const [isUsaModalOpen, setIsUsaModalOpen] = useState(false);
@@ -1025,126 +1026,130 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{selectedProduct.category}</span>
                 </div>
                 <button 
-                  onClick={() => setSelectedProduct(null)}
-                  className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
-                >
-                  <X size={18} />
-                </button>
-              </div>
+                          {/* Modal Body */}
+              {(() => {
+                const allPhotos = [selectedProduct.img, ...(selectedProduct.images || [])].filter(Boolean);
+                const currentImg = (allPhotos && allPhotos[activeImageIndex]) || selectedProduct.img || '/assets/servicio-mecanica.jpg';
 
-              {/* Modal Body */}
-              <div className="p-6 overflow-y-auto space-y-6 flex-1 scrollbar-none">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
-                  {/* Gallery Viewer */}
-                  <div className="space-y-3">
-                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-xl group">
-                      <img 
-                        src={selectedProduct.images && selectedProduct.images[activeImageIndex || 0] ? selectedProduct.images[activeImageIndex || 0] : selectedProduct.img} 
-                        alt={selectedProduct.title} 
-                        className="w-full h-full object-cover transition-all duration-300" 
-                      />
-                      {selectedProduct.badge && (
-                        <span className="absolute top-3 left-3 bg-primary text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
-                          {selectedProduct.badge}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Thumbnails list if extra images exist */}
-                    {(() => {
-                      const allPhotos = [selectedProduct.img, ...(selectedProduct.images || [])].filter(Boolean);
-                      if (allPhotos.length <= 1) return null;
-                      return (
-                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                          {allPhotos.map((photo, pIdx) => {
-                            const isActive = (activeImageIndex || 0) === pIdx;
-                            return (
-                              <button
-                                key={pIdx}
-                                type="button"
-                                onClick={() => setActiveImageIndex(pIdx)}
-                                className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                                  isActive ? 'border-primary scale-105 shadow-md shadow-primary/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
-                                }`}
-                              >
-                                <img src={photo} alt="" className="w-full h-full object-cover" />
-                              </button>
-                            );
-                          })}
+                return (
+                  <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 max-h-[calc(90vh-135px)] pb-10 scrollbar-thin">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                      {/* Gallery Viewer */}
+                      <div className="space-y-3">
+                        <div 
+                          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-xl group cursor-zoom-in"
+                          onClick={() => setLightboxImage(currentImg)}
+                          title="Haz clic o toca para ver la imagen en pantalla completa"
+                        >
+                          <img 
+                            src={currentImg} 
+                            alt={selectedProduct.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" 
+                          />
+                          {selectedProduct.badge && (
+                            <span className="absolute top-3 left-3 bg-primary text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
+                              {selectedProduct.badge}
+                            </span>
+                          )}
+                          <div className="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity border border-white/20 shadow-lg">
+                            <ZoomIn size={14} className="text-primary" />
+                            <span>Tocar para Ampliar</span>
+                          </div>
                         </div>
-                      );
-                    })()}
-                  </div>
 
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      {selectedProduct.partNumber && (
-                        <span className="text-xs font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full inline-block">
-                          N° OEM: {selectedProduct.partNumber}
-                        </span>
-                      )}
+                        {/* Thumbnails list if extra images exist */}
+                        {allPhotos.length > 1 && (
+                          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                            {allPhotos.map((photo, pIdx) => {
+                              const isActive = (activeImageIndex || 0) === pIdx;
+                              return (
+                                <button
+                                  key={pIdx}
+                                  type="button"
+                                  onClick={() => setActiveImageIndex(pIdx)}
+                                  className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                                    isActive ? 'border-primary scale-105 shadow-md shadow-primary/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                                  }`}
+                                >
+                                  <img src={photo} alt="" className="w-full h-full object-cover" />
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
 
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full inline-block ${
-                        (selectedProduct.stock ?? 10) > 0 
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                          : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                      }`}>
-                        {(selectedProduct.stock ?? 10) > 0 ? `🟢 ${selectedProduct.stock ?? 10} en Stock` : '🔴 Agotado / Importación USA'}
-                      </span>
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          {selectedProduct.partNumber && (
+                            <span className="text-xs font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full inline-block">
+                              N° OEM: {selectedProduct.partNumber}
+                            </span>
+                          )}
+
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full inline-block ${
+                            (selectedProduct.stock ?? 10) > 0 
+                              ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          }`}>
+                            {(selectedProduct.stock ?? 10) > 0 ? `🟢 ${selectedProduct.stock ?? 10} en Stock` : '🔴 Agotado / Importación USA'}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl font-bold text-white leading-snug">{selectedProduct.title}</h3>
+                        <div className="text-2xl font-black text-primary">{selectedProduct.price}</div>
+                        <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.desc}</p>
+                      </div>
                     </div>
 
-                    <h3 className="text-xl font-bold text-white leading-snug">{selectedProduct.title}</h3>
-                    <div className="text-2xl font-black text-primary">{selectedProduct.price}</div>
-                    <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.desc}</p>
-                  </div>
-                </div>
+                    {selectedProduct.isImportedUSA && (
+                      <div className="p-4 bg-blue-950/40 border border-blue-500/30 rounded-2xl text-xs text-blue-200 flex items-center gap-3">
+                        <div>
+                          <strong className="text-white block font-bold">Repuesto Importado Directamente desde EE.UU.</strong>
+                          <p className="text-blue-300/80 text-[11px] mt-0.5">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
+                        </div>
+                      </div>
+                    )}
 
-                {selectedProduct.isImportedUSA && (
-                  <div className="p-4 bg-blue-950/40 border border-blue-500/30 rounded-2xl text-xs text-blue-200 flex items-center gap-3">
-                    <div>
-                      <strong className="text-white block font-bold">Repuesto Importado Directamente desde EE.UU.</strong>
-                      <p className="text-blue-300/80 text-[11px] mt-0.5">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
-                    </div>
-                  </div>
-                )}
+                    {selectedProduct.longDesc && (
+                      <div className="space-y-2 bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Ficha Técnica & Detalles de Calidad</h4>
+                        <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.longDesc}</p>
+                      </div>
+                    )}
 
-                {selectedProduct.longDesc && (
-                  <div className="space-y-2 bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Ficha Técnica & Detalles de Calidad</h4>
-                    <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.longDesc}</p>
-                  </div>
-                )}
+                    {selectedProduct.specs && selectedProduct.specs.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Especificaciones Técnicas:</h4>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {selectedProduct.specs.map((spec, i) => (
+                            <li key={i} className="text-xs text-zinc-300 flex items-center gap-2">
+                              <CheckCircle2 size={14} className="text-primary shrink-0" />
+                              <span>{spec}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
-                {selectedProduct.specs && selectedProduct.specs.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Especificaciones Técnicas:</h4>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {selectedProduct.specs.map((spec, i) => (
-                        <li key={i} className="text-xs text-zinc-300 flex items-center gap-2">
-                          <CheckCircle2 size={14} className="text-primary shrink-0" />
-                          <span>{spec}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {selectedProduct.compatibility && (
+                      <div className="p-3.5 bg-primary/10 border border-primary/20 rounded-2xl text-xs text-zinc-200 flex items-center gap-3 shadow-md mb-2">
+                        <ShieldCheck size={18} className="text-primary shrink-0" />
+                        <span><strong className="text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-
-                {selectedProduct.compatibility && (
-                  <div className="p-3 bg-primary/10 border border-primary/20 rounded-xl text-xs text-zinc-300 flex items-center gap-2">
-                    <ShieldCheck size={16} className="text-primary shrink-0" />
-                    <span><strong>Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
-                  </div>
-                )}
-              </div>
+                );
+              })()}
 
               {/* Modal Footer CTA */}
-              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/40 flex flex-col sm:flex-row gap-3 items-center justify-between">
+              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/40 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
                 <span className="text-xs text-zinc-400">¿Deseas solicitar o cotizar este repuesto?</span>
                 <a
                   href={getWhatsAppMessage(selectedProduct.title, selectedProduct.price, selectedProduct.partNumber, selectedProduct.isImportedUSA, selectedProduct.stock)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto bg-[#25D366] hover:bg-[#20ba5a] text-black text-xs font-black uppercase tracking-wider py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full sm:w-auto bg-[#25D366] hover:bg-[#20ba5a] text-black text-xs font-black uppercase tracking-wider py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer"
                 >
                   <WhatsAppIcon size={18} />
                   <span>{(selectedProduct.stock ?? 10) === 0 ? 'Cotizar Importación USA' : 'Consultar Disponibilidad'}</span>
@@ -1152,6 +1157,47 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* FULLSCREEN IMAGE LIGHTBOX */}
+      <AnimatePresence>
+        {lightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-4 sm:p-8 cursor-zoom-out"
+            onClick={() => setLightboxImage(null)}
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setLightboxImage(null); }}
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-110 cursor-pointer shadow-2xl z-20"
+              title="Cerrar imagen grande"
+            >
+              <X size={26} />
+            </button>
+
+            {/* High Resolution Image Container */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25 }}
+              className="max-w-4xl max-h-[82vh] w-full h-full flex items-center justify-center relative select-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={lightboxImage}
+                alt="Repuesto en Alta Definición"
+                className="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.9)] border border-white/10"
+              />
+            </motion.div>
+            <span className="text-xs text-zinc-400 mt-4 font-medium tracking-wide">
+              Toca o haz clic en cualquier lugar para cerrar
+          </motion.div>
         )}
       </AnimatePresence>
 
