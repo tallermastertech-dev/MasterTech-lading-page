@@ -685,9 +685,7 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
 
   const validMasterPasswords = [
     settings.ADMIN_PASSWORD,
-    process.env.ADMIN_PASSWORD,
-    'admin123',
-    'mastertech2026'
+    process.env.ADMIN_PASSWORD
   ].filter(Boolean);
 
   const adminUsers = await getAdminUsersList();
@@ -695,30 +693,42 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
   let matchedUser = null;
 
   if (email) {
-    matchedUser = adminUsers.find(u => (u.email || '').toLowerCase() === email && (u.password === password || validMasterPasswords.includes(password)));
+    const userByEmail = adminUsers.find(u => (u.email || '').toLowerCase().trim() === email);
+    if (!userByEmail) {
+      await new Promise(r => setTimeout(r, 400));
+      return res.status(401).json({ error: 'No se encontró ningún perfil registrado con este correo electrónico.' });
+    }
+
+    const isCEO = userByEmail.role?.includes('CEO') || 
+                  userByEmail.role?.includes('Director') || 
+                  userByEmail.email === 'jvaask16@gmail.com' || 
+                  userByEmail.email === 'josevbv@gmail.com';
+
+    // Verificación estricta de la contraseña del usuario (o clave maestra para CEOs)
+    const isPasswordCorrect = (userByEmail.password && userByEmail.password === password) ||
+                              (isCEO && validMasterPasswords.includes(password));
+
+    if (!isPasswordCorrect) {
+      await new Promise(r => setTimeout(r, 400));
+      return res.status(401).json({ error: 'Contraseña incorrecta para este usuario. Verifica tu clave actual.' });
+    }
+
+    matchedUser = userByEmail;
   } else if (password) {
-    // Si no envió email, buscar si la contraseña coincide con algún usuario o la contraseña maestra
+    // Si no envió email, buscar si la contraseña coincide con la contraseña asignada a algún usuario
     matchedUser = adminUsers.find(u => u.password === password);
     if (!matchedUser && validMasterPasswords.includes(password)) {
       matchedUser = adminUsers[0] || DEFAULT_ADMIN_USERS[0];
     }
   }
 
-  if (matchedUser || (password && validMasterPasswords.includes(password))) {
-    const isFull = matchedUser ? (
-      matchedUser.accessLevel === 'full' ||
-      matchedUser.email === 'jvaask16@gmail.com' ||
-      matchedUser.email === 'josevbv@gmail.com' ||
-      (matchedUser.role && (matchedUser.role.includes('CEO') || matchedUser.role.includes('Director') || matchedUser.role.includes('Marketing') || matchedUser.role.includes('Super')))
-    ) : true;
+  if (matchedUser) {
+    const isFull = matchedUser.accessLevel === 'full' ||
+                   matchedUser.email === 'jvaask16@gmail.com' ||
+                   matchedUser.email === 'josevbv@gmail.com' ||
+                   (matchedUser.role && (matchedUser.role.includes('CEO') || matchedUser.role.includes('Director') || matchedUser.role.includes('Marketing') || matchedUser.role.includes('Super')));
 
-    const activeUser = matchedUser || {
-      id: 'user-admin-master',
-      name: 'Administrador MasterTech',
-      email: email || 'admin@tallermastertech.com',
-      role: 'CEO - Director',
-      accessLevel: 'full'
-    };
+    const activeUser = matchedUser;
 
     // Registrar inicio de sesión en auditoría
     recordAuditLog({
@@ -731,7 +741,7 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
     }).catch(() => {});
 
     const token = generateAdminToken();
-    res.json({
+    return res.json({
       success: true,
       token,
       user: {
@@ -743,10 +753,10 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
         createdAt: activeUser.createdAt
       }
     });
-  } else {
-    await new Promise(r => setTimeout(r, 600));
-    res.status(401).json({ error: 'Correo o contraseña incorrectos. Verifica tus credenciales.' });
   }
+
+  await new Promise(r => setTimeout(r, 400));
+  return res.status(401).json({ error: 'Credenciales inválidas. Por favor ingresa tu correo y tu contraseña.' });
 };
 
 // Memory cache tracking for permanently deleted lead IDs
