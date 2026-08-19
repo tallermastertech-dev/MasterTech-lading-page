@@ -673,13 +673,17 @@ async function getAllLeads(): Promise<any[]> {
   });
 }
 
-// Helper: Get all occupied slots across leads and settings
-async function getOccupiedSlotsMap(): Promise<Record<string, string[]>> {
+// Helper: Recalculate occupied slots strictly from active non-cancelled leads
+async function rebuildAndPersistOccupiedSlots(): Promise<Record<string, string[]>> {
   const occupied: Record<string, string[]> = {};
-
   const allLeads = await getAllLeads();
+
   for (const lead of allLeads) {
-    if (!lead || lead.status === 'Cancelado') continue;
+    if (!lead) continue;
+    // Strictly skip cancelled leads so their slot is released immediately
+    const isCancelled = String(lead.status || '').toLowerCase() === 'cancelado';
+    if (isCancelled) continue;
+
     const text = `${lead.fecha_hora || ''} ${lead.falla || ''} ${lead.servicio || ''}`;
     const slot = extractSlot(text);
     if (slot) {
@@ -690,28 +694,29 @@ async function getOccupiedSlotsMap(): Promise<Record<string, string[]>> {
     }
   }
 
-  // Merge OCCUPIED_SLOTS_JSON & memoryOccupiedSlots
-  try {
-    const settings = await getSettings();
-    if (settings.OCCUPIED_SLOTS_JSON) {
-      const storedSlots: Record<string, string[]> = JSON.parse(settings.OCCUPIED_SLOTS_JSON);
-      for (const [dateStr, times] of Object.entries(storedSlots)) {
-        if (!occupied[dateStr]) occupied[dateStr] = [];
-        for (const t of times) {
-          if (!occupied[dateStr].includes(t)) occupied[dateStr].push(t);
-        }
-      }
-    }
-  } catch (e) {}
+  // Clear memoryOccupiedSlots and sync with active non-cancelled leads
+  for (const k of Object.keys(memoryOccupiedSlots)) {
+    delete memoryOccupiedSlots[k];
+  }
+  for (const [dateStr, times] of Object.entries(occupied)) {
+    memoryOccupiedSlots[dateStr] = [...times];
+  }
 
-  for (const [dateStr, times] of Object.entries(memoryOccupiedSlots)) {
-    if (!occupied[dateStr]) occupied[dateStr] = [];
-    for (const t of times) {
-      if (!occupied[dateStr].includes(t)) occupied[dateStr].push(t);
-    }
+  const serializedSlots = JSON.stringify(occupied);
+  memorySettingsCache['OCCUPIED_SLOTS_JSON'] = serializedSlots;
+  saveSettingsToDisk();
+  try {
+    await supabase.from('settings').upsert([{ key: 'OCCUPIED_SLOTS_JSON', value: serializedSlots }], { onConflict: 'key' });
+  } catch (e) {
+    console.error("Error updating OCCUPIED_SLOTS_JSON in Supabase:", e);
   }
 
   return occupied;
+}
+
+// Helper: Get all occupied slots across leads and settings
+async function getOccupiedSlotsMap(): Promise<Record<string, string[]>> {
+  return await rebuildAndPersistOccupiedSlots();
 }
 
 // Handler reutilizable para GET /leads
@@ -725,7 +730,7 @@ const handleGetLeads = async (req: express.Request, res: express.Response) => {
   }
 };
 
-// Handler reutilizable para PUT /leads/:id
+// Handler reutilizable para PUT /leads/:id y PATCH /leads/:id
 const handlePutLead = async (req: express.Request, res: express.Response) => {
   const { id } = req.params;
   if (!id) {
@@ -780,7 +785,17 @@ const handlePutLead = async (req: express.Request, res: express.Response) => {
     await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }]);
   } catch (e) {}
 
-  await supabase.from('leads').update(updates).eq('id', Number(id));
+  try {
+    if (!isNaN(Number(id))) {
+      await supabase.from('leads').update(updates).eq('id', Number(id));
+    } else {
+      await supabase.from('leads').update(updates).eq('id', String(id));
+    }
+  } catch (e) {}
+
+  // Recalculate occupied slots immediately to free slot if status is Cancelado
+  await rebuildAndPersistOccupiedSlots();
+
   res.json(targetLead);
 };
 
@@ -824,7 +839,10 @@ const handleDeleteLead = async (req: express.Request, res: express.Response) => 
   saveLeadsToDisk();
   saveSettingsToDisk();
 
-  res.json({ success: true, id: idStr, message: 'Lead eliminado permanentemente.' });
+  // Recalculate occupied slots immediately to free slot on deletion
+  await rebuildAndPersistOccupiedSlots();
+
+  res.json({ success: true, id: idStr, message: 'Lead eliminado permanentemente y cupo liberado.' });
 };
 
 // Handler reutilizable para PUT /settings (Optimizado a respuesta instantánea y persistencia garantizada)
@@ -932,6 +950,8 @@ app.get('/leads', authenticateAdmin, handleGetLeads);
 
 app.put('/api/leads/:id', authenticateAdmin, handlePutLead);
 app.put('/leads/:id', authenticateAdmin, handlePutLead);
+app.patch('/api/leads/:id', authenticateAdmin, handlePutLead);
+app.patch('/leads/:id', authenticateAdmin, handlePutLead);
 
 app.delete('/api/leads/:id', authenticateAdmin, handleDeleteLead);
 app.delete('/leads/:id', authenticateAdmin, handleDeleteLead);
