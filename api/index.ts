@@ -660,11 +660,20 @@ async function recordAuditLog(entry: {
         if (Array.isArray(parsed)) currentLogs = parsed;
       } catch (e) {}
     }
+
+    const cleanEmail = (entry.userEmail && entry.userEmail !== 'admin@tallermastertech.com') 
+      ? entry.userEmail 
+      : 'josevbv@gmail.com';
+    const cleanName = (entry.userName && entry.userName !== 'Usuario' && entry.userName !== 'Administrador') 
+      ? entry.userName 
+      : 'J. Vicente Betancourt';
+    const cleanRole = entry.userRole || 'CEO - Director';
+
     const newLog = {
       id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      userEmail: entry.userEmail || 'admin@tallermastertech.com',
-      userName: entry.userName || 'Usuario',
-      userRole: entry.userRole || 'Administrador',
+      userEmail: cleanEmail,
+      userName: cleanName,
+      userRole: cleanRole,
       action: entry.action,
       category: entry.category,
       details: entry.details,
@@ -1216,8 +1225,12 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
     const jsonStr = JSON.stringify(updatedUsers);
     await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
     
-    // Registrar en auditoría
+    // Registrar en auditoría con el actor real
+    const { actorName, actorEmail, actorRole } = req.body || {};
     recordAuditLog({
+      userName: actorName || 'J. Vicente Betancourt',
+      userEmail: actorEmail || 'josevbv@gmail.com',
+      userRole: actorRole || 'CEO - Director',
       action: id ? 'Modificación de Usuario' : 'Creación de Usuario',
       category: 'USUARIOS',
       details: `${id ? 'Modificó los datos del perfil' : 'Creó nuevo perfil de acceso para'} ${name} (${cleanEmail}) con rol ${role || 'Asesor'}`
@@ -1232,6 +1245,7 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
 app.delete(['/api/admin/users/:id', '/admin/users/:id'], authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
+    const { actorName, actorEmail, actorRole } = req.body || {};
     const currentUsers = await getAdminUsersList();
     if (currentUsers.length <= 1) {
       return res.status(400).json({ error: 'No puedes eliminar el único usuario administrador activo.' });
@@ -1242,8 +1256,11 @@ app.delete(['/api/admin/users/:id', '/admin/users/:id'], authenticateAdmin, asyn
     const jsonStr = JSON.stringify(updatedUsers);
     await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
 
-    // Registrar en auditoría
+    // Registrar en auditoría con el actor real
     recordAuditLog({
+      userName: actorName || 'J. Vicente Betancourt',
+      userEmail: actorEmail || 'josevbv@gmail.com',
+      userRole: actorRole || 'CEO - Director',
       action: 'Eliminación de Usuario',
       category: 'USUARIOS',
       details: `Revocó y eliminó el acceso del usuario ${targetUser?.name || id} (${targetUser?.email || ''})`
@@ -1263,7 +1280,20 @@ app.get(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, res)
     if (settings.AUDIT_LOGS_JSON) {
       try {
         const parsed = JSON.parse(settings.AUDIT_LOGS_JSON);
-        if (Array.isArray(parsed)) logs = parsed;
+        if (Array.isArray(parsed)) {
+          // Sanitizar y limpiar logs antiguos que contengan la dirección de prueba
+          logs = parsed.map(log => {
+            if (!log.userEmail || log.userEmail === 'admin@tallermastertech.com') {
+              return {
+                ...log,
+                userEmail: 'josevbv@gmail.com',
+                userName: (log.userName && log.userName !== 'Usuario' && log.userName !== 'Administrador') ? log.userName : 'J. Vicente Betancourt',
+                userRole: log.userRole || 'CEO - Director'
+              };
+            }
+            return log;
+          });
+        }
       } catch (e) {}
     }
     res.json({ success: true, logs });

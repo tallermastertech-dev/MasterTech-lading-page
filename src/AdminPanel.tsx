@@ -204,9 +204,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           action,
           category,
           details,
-          userName: currentUser?.name || 'Administrador',
-          userEmail: currentUser?.email || 'admin@tallermastertech.com',
-          userRole: currentUser?.role || 'Super Administrador'
+          userName: currentUser?.name || 'J. Vicente Betancourt',
+          userEmail: currentUser?.email || 'josevbv@gmail.com',
+          userRole: currentUser?.role || 'CEO - Director'
         })
       });
     } catch (e) {}
@@ -422,13 +422,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setIsSavingUser(true);
     setUserModalError('');
     try {
+      const payload = {
+        ...editingUser,
+        actorName: currentUser?.name || 'J. Vicente Betancourt',
+        actorEmail: currentUser?.email || 'josevbv@gmail.com',
+        actorRole: currentUser?.role || 'CEO - Director'
+      };
       const res = await fetch('/api/admin/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(editingUser)
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (res.ok && data.success) {
@@ -448,9 +454,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const handleDeleteAdminUser = async (id: string) => {
     if (!token || !window.confirm('¿Seguro que deseas revocar el acceso a este usuario?')) return;
     try {
+      const targetUser = adminUsersList.find(u => u.id === id);
       const res = await fetch(`/api/admin/users/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({
+          actorName: currentUser?.name || 'J. Vicente Betancourt',
+          actorEmail: currentUser?.email || 'josevbv@gmail.com',
+          actorRole: currentUser?.role || 'CEO - Director'
+        })
       });
       const data = await res.json();
       if (res.ok && data.success) {
