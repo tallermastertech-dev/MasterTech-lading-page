@@ -319,17 +319,13 @@ export default function Nosotros() {
                 Buscamos profesionales apasionados por la precisión mecánica, el diagnóstico automotriz y la excelencia en el servicio. Completa tu postulación y adjunta tu currículum.
               </p>
               
-              <button
-                type="button"
-                onClick={() => {
-                  setIsModalOpen(true);
-                  setFormSuccess(false);
-                }}
+              <a
+                href="/postulacion"
                 className="btn-primary inline-flex items-center justify-center gap-3 !py-4 !px-9 text-sm sm:text-base font-black border-none mx-auto rounded-full shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:shadow-[0_0_35px_rgba(212,175,55,0.7)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <span>POSTULARME AL EQUIPO</span>
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </a>
             </div>
           </motion.div>
         </div>
