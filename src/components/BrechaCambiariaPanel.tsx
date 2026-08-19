@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RefreshCw, TrendingUp, Calculator, ShieldCheck, ArrowRightLeft, DollarSign, Euro, Coins, Zap } from 'lucide-react';
 
 interface RateData {
@@ -85,7 +85,8 @@ export default function BrechaCambiariaPanel() {
   };
 
   const parsedAmount = parseFloat(calcAmountUSD) || 0;
-  const totalVES_BCV = parsedAmount * rates.bcv_usd;
+  const totalVES_USD_BCV = parsedAmount * rates.bcv_usd;
+  const totalVES_EUR_BCV = parsedAmount * rates.bcv_eur;
   const totalVES_USDT = parsedAmount * rates.usdt;
 
   return (
@@ -283,15 +284,30 @@ export default function BrechaCambiariaPanel() {
               />
             </div>
 
-            <div className="flex items-center gap-4 bg-black/60 border border-primary/30 rounded-xl px-4 py-2 text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 bg-black/60 border border-primary/30 rounded-xl px-4 py-2 text-xs font-mono">
               <div>
-                <span className="text-[10px] text-zinc-400 block">TASA OFICIAL BCV</span>
-                <span className="text-emerald-400 font-bold">{formatNumber(totalVES_BCV)} Bs.</span>
+                <span className="text-[9px] uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1">
+                  <DollarSign size={10} /> DÓLAR BCV
+                </span>
+                <span className="text-emerald-400 font-black text-xs sm:text-sm">{formatNumber(totalVES_USD_BCV)} Bs.</span>
               </div>
-              <span className="text-zinc-600">|</span>
+
+              <span className="text-zinc-600 hidden sm:inline-block">|</span>
+
               <div>
-                <span className="text-[10px] text-zinc-400 block">TASA USDT P2P</span>
-                <span className="text-amber-400 font-bold">{formatNumber(totalVES_USDT)} Bs.</span>
+                <span className="text-[9px] uppercase tracking-wider text-cyan-400 font-bold flex items-center gap-1">
+                  <Euro size={10} /> EURO BCV
+                </span>
+                <span className="text-cyan-300 font-black text-xs sm:text-sm">{formatNumber(totalVES_EUR_BCV)} Bs.</span>
+              </div>
+
+              <span className="text-zinc-600 hidden sm:inline-block">|</span>
+
+              <div>
+                <span className="text-[9px] uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1">
+                  <Coins size={10} /> USDT P2P
+                </span>
+                <span className="text-amber-300 font-black text-xs sm:text-sm">{formatNumber(totalVES_USDT)} Bs.</span>
               </div>
             </div>
           </div>
