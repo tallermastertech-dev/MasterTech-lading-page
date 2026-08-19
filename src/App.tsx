@@ -43,6 +43,7 @@ import Nosotros from './Nosotros';
 import Servicios from './Servicios';
 import Catalogo from './Catalogo';
 import Jornadas from './Jornadas';
+import TrabajaConNosotros from './TrabajaConNosotros';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 
 const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
@@ -174,6 +175,19 @@ export default function App() {
     window.location.pathname.toLowerCase() === '/jornadas' ||
     window.location.hash === '#jornadas'
   );
+  const [isTrabajaConNosotros, setIsTrabajaConNosotros] = useState(
+    window.location.pathname.toLowerCase() === '/trabaja-con-nosotros' ||
+    window.location.pathname.toLowerCase() === '/empleo' ||
+    window.location.pathname.toLowerCase() === '/postulacion' ||
+    window.location.pathname.toLowerCase() === '/talento' ||
+    window.location.pathname.toLowerCase() === '/vacantes' ||
+    window.location.pathname.toLowerCase() === '/reclutamiento' ||
+    window.location.pathname.toLowerCase() === '/trabajo' ||
+    window.location.hash === '#trabaja-con-nosotros' ||
+    window.location.hash === '#empleo' ||
+    window.location.hash === '#postulacion' ||
+    window.location.hash === '#talento'
+  );
 
   // Dynamic JSON arrays for team, reviews, and brands
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
@@ -273,6 +287,19 @@ export default function App() {
         window.location.pathname.toLowerCase() === '/jornada' ||
         window.location.pathname.toLowerCase() === '/jornadas' ||
         window.location.hash === '#jornadas'
+      );
+      setIsTrabajaConNosotros(
+        window.location.pathname.toLowerCase() === '/trabaja-con-nosotros' ||
+        window.location.pathname.toLowerCase() === '/empleo' ||
+        window.location.pathname.toLowerCase() === '/postulacion' ||
+        window.location.pathname.toLowerCase() === '/talento' ||
+        window.location.pathname.toLowerCase() === '/vacantes' ||
+        window.location.pathname.toLowerCase() === '/reclutamiento' ||
+        window.location.pathname.toLowerCase() === '/trabajo' ||
+        window.location.hash === '#trabaja-con-nosotros' ||
+        window.location.hash === '#empleo' ||
+        window.location.hash === '#postulacion' ||
+        window.location.hash === '#talento'
       );
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -390,6 +417,10 @@ export default function App() {
 
   if (isJornadas) {
     return <Jornadas />;
+  }
+
+  if (isTrabajaConNosotros) {
+    return <TrabajaConNosotros />;
   }
 
   return (
