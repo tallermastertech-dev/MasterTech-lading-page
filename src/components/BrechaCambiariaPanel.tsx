@@ -321,7 +321,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
     </div>
   );
 
-  // If used in Admin Dashboard or embedded mode, render directly
+  // If used in Admin Dashboard or embedded mode, render full panel directly
   if (initialOpen) {
     return (
       <div className="bg-gradient-to-b from-[#090a0d] via-[#0d0e14] to-[#090a0d] p-5 sm:p-6 rounded-2xl border border-white/10">
@@ -330,11 +330,149 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
     );
   }
 
-  // Otherwise, render as interactive floating bubble widget + modal
+  // Otherwise, render as interactive non-intrusive compact floating popover widget
   return (
     <>
-      {/* 1. FLOATING BUBBLE BUTTON (Bottom-Left fixed) */}
-      <div className="fixed bottom-5 left-5 z-40 select-none">
+      {/* 1. NON-INTRUSIVE COMPACT FLOATING POPOVER (Anchored right above the bubble) */}
+      {isOpen && (
+        <div 
+          className="fixed bottom-16 left-4 sm:left-5 z-40 w-[92vw] sm:w-[380px] max-h-[82vh] overflow-y-auto bg-[#12141e]/95 backdrop-blur-2xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
+                <Zap size={14} className="animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[11px] font-black uppercase tracking-wider text-white block leading-none">
+                  Tasas & Brecha Cambiaria
+                </span>
+                <span className="text-[9px] font-mono text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  EN VIVO • BCV / BINANCE
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={fetchRates}
+                disabled={isLoading}
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                title="Actualizar tasas"
+              >
+                <RefreshCw size={13} className={isLoading ? "animate-spin text-amber-400" : ""} />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-lg bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+                title="Ocultar"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          </div>
+
+          {/* Mini 4-Grid Rates */}
+          <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+            {/* Dólar BCV */}
+            <div className="bg-black/50 p-2.5 rounded-xl border border-emerald-500/30">
+              <div className="flex items-center justify-between text-[9px] font-bold text-emerald-400 uppercase">
+                <span>Dólar BCV</span>
+                <span className="text-zinc-500">Oficial</span>
+              </div>
+              <div className="text-base font-black text-white mt-1">
+                {formatNumber(rates.bcv_usd)} <small className="text-[9px] text-emerald-400 font-normal">Bs.</small>
+              </div>
+            </div>
+
+            {/* Euro BCV */}
+            <div className="bg-black/50 p-2.5 rounded-xl border border-cyan-500/30">
+              <div className="flex items-center justify-between text-[9px] font-bold text-cyan-400 uppercase">
+                <span>Euro BCV</span>
+                <span className="text-zinc-500">Oficial</span>
+              </div>
+              <div className="text-base font-black text-white mt-1">
+                {formatNumber(rates.bcv_eur)} <small className="text-[9px] text-cyan-400 font-normal">Bs.</small>
+              </div>
+            </div>
+
+            {/* USDT Binance */}
+            <div className="bg-black/50 p-2.5 rounded-xl border border-amber-500/30">
+              <div className="flex items-center justify-between text-[9px] font-bold text-amber-400 uppercase">
+                <span>USDT P2P</span>
+                <span className="text-zinc-500">Binance</span>
+              </div>
+              <div className="text-base font-black text-white mt-1">
+                {formatNumber(rates.usdt)} <small className="text-[9px] text-amber-400 font-normal">Bs.</small>
+              </div>
+            </div>
+
+            {/* Brecha USDT vs BCV */}
+            <div className="bg-black/50 p-2.5 rounded-xl border border-rose-500/30">
+              <div className="flex items-center justify-between text-[9px] font-bold text-rose-400 uppercase">
+                <span>Brecha $</span>
+                <span className="text-zinc-500">Diferencial</span>
+              </div>
+              <div className="text-base font-black text-rose-400 mt-1">
+                {formatNumber(rates.brecha_usdt_usd)}%
+              </div>
+            </div>
+          </div>
+
+          {/* Compact Workshop Budget Calculator */}
+          <div className="bg-black/40 border border-white/10 rounded-2xl p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-300 flex items-center gap-1">
+                <Calculator size={12} className="text-primary" />
+                <span>Calculadora Presupuesto</span>
+              </span>
+              <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5">
+                <span className="text-[10px] font-bold text-zinc-400">$ USD:</span>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={calcAmountUSD}
+                  onChange={(e) => setCalcAmountUSD(e.target.value)}
+                  className="w-14 bg-transparent text-xs font-mono font-black text-white outline-none text-right"
+                  placeholder="50"
+                />
+              </div>
+            </div>
+
+            {/* Instant conversion outputs */}
+            <div className="space-y-1 text-[11px] font-mono pt-1">
+              <div className="flex justify-between items-center bg-white/5 px-2 py-1 rounded-lg">
+                <span className="text-emerald-400 font-bold">En Dólar BCV:</span>
+                <span className="text-white font-black">{formatNumber(totalVES_USD_BCV)} Bs.</span>
+              </div>
+              <div className="flex justify-between items-center bg-white/5 px-2 py-1 rounded-lg">
+                <span className="text-cyan-400 font-bold">En Euro BCV:</span>
+                <span className="text-white font-black">{formatNumber(totalVES_EUR_BCV)} Bs.</span>
+              </div>
+              <div className="flex justify-between items-center bg-white/5 px-2 py-1 rounded-lg">
+                <span className="text-amber-400 font-bold">En USDT P2P:</span>
+                <span className="text-white font-black">{formatNumber(totalVES_USDT)} Bs.</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between text-[9px] text-zinc-500 pt-1 font-mono">
+            <span>Act: {lastUpdatedFormatted || 'Reciente'}</span>
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="text-amber-400 hover:underline font-bold"
+            >
+              Minimizar ↑
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 2. FLOATING BUBBLE TRIGGER BUTTON (Bottom-Left fixed) */}
+      <div className="fixed bottom-4 left-4 sm:left-5 z-40 select-none">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`group flex items-center gap-2 px-3.5 py-2.5 rounded-full backdrop-blur-xl transition-all duration-300 shadow-2xl cursor-pointer ${
@@ -362,29 +500,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </button>
       </div>
-
-      {/* 2. EXPANDABLE FLOATING MODAL OVERLAY */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-fade-in select-none"
-          onClick={() => setIsOpen(false)}
-        >
-          <div 
-            className="bg-[#0e1017] border border-white/15 rounded-3xl w-full max-w-4xl max-h-[92vh] overflow-y-auto p-5 sm:p-7 shadow-2xl shadow-black/90 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {ContentPanel}
-            <div className="flex justify-end pt-4 border-t border-white/10 mt-6">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="btn-primary !py-2 !px-6 text-xs font-black uppercase border-none cursor-pointer shadow-lg"
-              >
-                Ocultar / Minimizar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
