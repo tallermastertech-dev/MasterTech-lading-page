@@ -504,21 +504,77 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
       }
 
       if (botToken && rawChatId) {
-        const rawMessageLines = [
-          '🔔 *NUEVA CITA REGISTRADA* 🔔',
-          '',
-          `👤 *Nombre:* ${nombre}`,
-          `📞 *Teléfono:* ${telefono}`,
-          `🚗 *Vehículo:* ${vehiculo}`,
-          `🔧 *Servicio:* ${servicio}`,
-          fecha_hora ? `📅 *Fecha/Hora:* ${fecha_hora}` : '',
-          placa ? `🏷️ *Placa:* ${placa}` : '',
-          año ? `📅 *Año:* ${año}` : '',
-          ubicacion ? `📍 *Ubicación:* ${ubicacion}` : '',
-          falla ? `⚠️ *Falla:* ${falla}` : '',
-          '',
-          '*Status:* Pendiente'
-        ].filter(Boolean);
+        const isPostulacion = String(req.body?.tipo || '').toLowerCase() === 'postulacion' ||
+          String(servicio || '').toLowerCase().includes('reclutamiento') ||
+          String(servicio || '').toLowerCase().includes('postul') ||
+          String(vehiculo || '').toLowerCase().includes('postulante') ||
+          String(falla || '').toLowerCase().includes('[experiencia:');
+
+        const isImportacion = String(req.body?.tipo || '').toLowerCase() === 'importacion' ||
+          String(servicio || '').toLowerCase().includes('importaci') ||
+          Boolean(req.body?.serial_vin || req.body?.part_number);
+
+        let rawMessageLines: string[] = [];
+
+        if (isPostulacion) {
+          const area = req.body?.cargo || String(servicio || '').replace(/^Reclutamiento:\s*/i, '').trim() || 'Mecánica y Diagnóstico';
+          const expMatch = String(falla || '').match(/\[Experiencia:\s*([^\]]+)\]/i);
+          const exp = req.body?.experiencia || (expMatch ? expMatch[1] : '1 a 3 años de experiencia');
+          const msgMatch = String(falla || '').match(/Mensaje:\s*([^[\]\n]+)/i);
+          const resumen = req.body?.mensaje || (msgMatch ? msgMatch[1].trim() : 'Especialista automotriz');
+          const cvMatch = String(falla || '').match(/https?:\/\/[^\s\]\)\"]+/i);
+          const cvLink = req.body?.cv_url || (cvMatch ? cvMatch[0] : (req.body?.formCvFile?.name || 'No adjuntado'));
+
+          rawMessageLines = [
+            '💼 *POSTULACIÓN DE TALENTO* 💼',
+            '',
+            `👤 *Postulante:* ${nombre}`,
+            `📞 *WhatsApp:* ${telefono}`,
+            `🎯 *Área/Especialidad:* ${area}`,
+            `⭐ *Experiencia:* ${exp}`,
+            `📝 *Resumen/Habilidades:* ${resumen}`,
+            `📎 *CV Adjunto:* ${cvLink}`,
+            '',
+            '*Status:* Pendiente'
+          ];
+        } else if (isImportacion) {
+          const repuesto = req.body?.repuesto || servicio || 'Repuesto Automotriz';
+          const partNo = req.body?.part_number ? `#${req.body?.part_number}` : '';
+          const vin = req.body?.serial_vin || req.body?.vin || '';
+          const logistica = req.body?.logistica || 'Express Aéreo (7 a 15 días hábiles)';
+          const notas = falla || req.body?.notas || '';
+
+          rawMessageLines = [
+            '✈️ *SOLICITUD DE IMPORTACIÓN EE.UU.* ✈️',
+            '',
+            `👤 *Cliente:* ${nombre}`,
+            `📞 *WhatsApp:* ${telefono}`,
+            `📦 *Repuesto:* ${repuesto}`,
+            partNo ? `🔢 *N° de Parte OEM:* ${partNo}` : '',
+            `🚗 *Vehículo:* ${vehiculo}`,
+            vin ? `🔑 *Serial VIN:* ${vin}` : '',
+            `🚀 *Logística:* ${logistica}`,
+            notas ? `📝 *Notas:* ${notas}` : '',
+            '',
+            '*Status:* Pendiente'
+          ].filter(Boolean);
+        } else {
+          rawMessageLines = [
+            '🔔 *NUEVA CITA REGISTRADA* 🔔',
+            '',
+            `👤 *Nombre:* ${nombre}`,
+            `📞 *Teléfono:* ${telefono}`,
+            `🚗 *Vehículo:* ${vehiculo}`,
+            `🛠️ *Servicio Requerido:* ${servicio}`,
+            fecha_hora ? `📅 *Fecha/Hora:* ${fecha_hora}` : '',
+            placa ? `🏷️ *Placa:* ${placa}` : '',
+            año ? `📅 *Año:* ${año}` : '',
+            ubicacion ? `📍 *Ubicación:* ${ubicacion}` : '',
+            falla ? `⚠️ *Falla:* ${falla}` : '',
+            '',
+            '*Status:* Pendiente'
+          ].filter(Boolean);
+        }
 
         const telegramMessage = rawMessageLines.join('\n');
         const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;

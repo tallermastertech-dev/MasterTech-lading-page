@@ -174,8 +174,13 @@ export default function Nosotros() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            tipo: 'postulacion',
             nombre: formNombre.trim(),
             telefono: formTelefono.trim(),
+            cargo: formCargo.trim() || 'Especialidad General',
+            experiencia: formExperiencia,
+            mensaje: formMensaje.trim(),
+            cv_url: uploadedCvUrl,
             vehiculo: 'Postulante Equipo MasterTech',
             servicio: `Reclutamiento: ${formCargo || 'Especialista General'}`,
             falla: `[Experiencia: ${formExperiencia}] ${formMensaje ? `Mensaje: ${formMensaje}` : ''} ${uploadedCvUrl ? `[CV en la Nube: ${uploadedCvUrl}]` : formCvFile ? `[CV: ${formCvFile.name}]` : '[Sin CV adjunto]'}`
