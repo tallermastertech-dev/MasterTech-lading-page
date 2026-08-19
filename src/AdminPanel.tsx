@@ -958,6 +958,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </button>
               </div>
 
+              {/* Live Automotive Exchange Telemetry & Budget Calculator Panel (Placed First on Top) */}
+              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                <BrechaCambiariaPanel initialOpen={true} />
+              </div>
+
               {/* Metrics Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
@@ -995,11 +1000,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <div className="text-3xl font-black text-white">{teamMembers.length}</div>
                   <span className="text-[10px] text-zinc-500 block">Técnicos y coordinadores</span>
                 </div>
-              </div>
-
-              {/* Live Automotive Exchange Telemetry & Budget Calculator Panel */}
-              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                <BrechaCambiariaPanel initialOpen={true} />
               </div>
 
               {/* Recent Leads Preview */}
