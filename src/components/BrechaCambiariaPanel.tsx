@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, TrendingUp, Calculator, ShieldCheck, DollarSign, Euro, Coins, Zap, X, Minimize2, ArrowRight } from 'lucide-react';
+import { RefreshCw, TrendingUp, Calculator, DollarSign, Euro, Coins, Zap, X, ChevronDown } from 'lucide-react';
 
 interface RateData {
   bcv_usd: number;
@@ -358,7 +358,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
 
           <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-zinc-300 group-hover:text-white transition-colors">
-            {isOpen ? <Minimize2 size={11} /> : <TrendingUp size={11} />}
+            {isOpen ? <X size={11} /> : <TrendingUp size={11} />}
           </div>
         </button>
       </div>
