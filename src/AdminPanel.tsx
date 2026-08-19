@@ -1983,40 +1983,81 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 />
               </div>
 
-              <div className="space-y-3 border-t border-white/10 pt-3">
-                <h4 className="text-xs font-black uppercase text-amber-400">Galería de Imágenes (Principal & Adicionales)</h4>
+              <div className="space-y-4 border-t border-white/10 pt-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-black uppercase text-amber-400 tracking-wider">
+                    Galería de Imágenes (Sin Límite)
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentImgs = [...(editingProduct.images || [])];
+                      currentImgs.push('');
+                      setEditingProduct({ ...editingProduct, images: currentImgs });
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Plus size={13} />
+                    <span>Añadir Foto a la Galería</span>
+                  </button>
+                </div>
                 
+                {/* Imagen Principal */}
                 <ImageUploader
-                  label="Imagen Principal (Vista Previa)"
+                  label="Imagen Principal (Portada / Vista Previa del Catálogo)"
                   value={editingProduct.img || ''}
                   onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
                   aspectRatio={4 / 3}
                   placeholder="/assets/servicio-mecanica.jpg"
                 />
 
-                <ImageUploader
-                  label="Imagen Secundario #2 (Ángulo Lateral / Empaque)"
-                  value={(editingProduct.images && editingProduct.images[0]) || ''}
-                  onChange={(val) => {
-                    const currentImgs = [...(editingProduct.images || [])];
-                    currentImgs[0] = val;
-                    setEditingProduct({ ...editingProduct, images: currentImgs });
-                  }}
-                  aspectRatio={4 / 3}
-                  placeholder="/assets/servicio-frenos.jpg"
-                />
+                {/* Galería Adicional Indefinida */}
+                {(editingProduct.images || []).map((imgUrl, imgIdx) => (
+                  <div key={imgIdx} className="bg-black/30 p-3 rounded-2xl border border-white/5 space-y-2 relative group">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400">
+                        Foto Adicional #{imgIdx + 2}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentImgs = [...(editingProduct.images || [])];
+                          currentImgs.splice(imgIdx, 1);
+                          setEditingProduct({ ...editingProduct, images: currentImgs });
+                        }}
+                        className="text-zinc-500 hover:text-red-400 transition-colors p-1 flex items-center gap-1 text-[10px] font-bold"
+                        title="Eliminar esta foto"
+                      >
+                        <Trash2 size={12} />
+                        <span>Quitar</span>
+                      </button>
+                    </div>
+                    <ImageUploader
+                      label=""
+                      value={imgUrl || ''}
+                      onChange={(val) => {
+                        const currentImgs = [...(editingProduct.images || [])];
+                        currentImgs[imgIdx] = val;
+                        setEditingProduct({ ...editingProduct, images: currentImgs });
+                      }}
+                      aspectRatio={4 / 3}
+                      placeholder="/assets/servicio-frenos.jpg"
+                    />
+                  </div>
+                ))}
 
-                <ImageUploader
-                  label="Imagen Secundario #3 (Detalle / Código OEM)"
-                  value={(editingProduct.images && editingProduct.images[1]) || ''}
-                  onChange={(val) => {
+                <button
+                  type="button"
+                  onClick={() => {
                     const currentImgs = [...(editingProduct.images || [])];
-                    currentImgs[1] = val;
+                    currentImgs.push('');
                     setEditingProduct({ ...editingProduct, images: currentImgs });
                   }}
-                  aspectRatio={4 / 3}
-                  placeholder="/assets/servicio-electricidad.jpg"
-                />
+                  className="w-full py-2.5 rounded-xl border border-dashed border-white/20 hover:border-amber-400/50 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-amber-300 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <Plus size={14} />
+                  <span>+ Añadir Otra Foto a la Galería (Sin Límite)</span>
+                </button>
               </div>
             </div>
 
