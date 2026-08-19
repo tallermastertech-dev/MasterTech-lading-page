@@ -984,7 +984,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
               {/* Live Automotive Exchange Telemetry & Budget Calculator Panel */}
               <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                <BrechaCambiariaPanel />
+                <BrechaCambiariaPanel initialOpen={true} />
               </div>
 
               {/* Recent Leads Preview */}

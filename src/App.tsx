@@ -540,9 +540,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Live Brecha Cambiaria Venezuela Panel */}
-      <BrechaCambiariaPanel />
-
 
 
       {/* Instalaciones Section */}
@@ -836,6 +833,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
+      <BrechaCambiariaPanel />
 
       {/* Global CSS for custom styles */}
       <style>{`
