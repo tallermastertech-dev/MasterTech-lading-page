@@ -112,6 +112,8 @@ export default function TrabajaConNosotros() {
 
       // 1. Si adjuntó archivo, subirlo a la nube primero
       if (formCvFile) {
+        const sanitized = formCvFile.name.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+        const fallbackUrl = `https://www.tallermastertech.com/api/cv/cv_${Date.now()}/${sanitized}`;
         try {
           const base64Data = await new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
@@ -133,12 +135,13 @@ export default function TrabajaConNosotros() {
 
           if (uploadRes.ok) {
             const uploadJson = await uploadRes.json();
-            if (uploadJson.directUrl || uploadJson.url) {
-              uploadedCvUrl = uploadJson.directUrl || uploadJson.url;
-            }
+            uploadedCvUrl = uploadJson.directUrl || uploadJson.url || fallbackUrl;
+          } else {
+            uploadedCvUrl = fallbackUrl;
           }
         } catch (upErr) {
           console.error("Warning uploading CV:", upErr);
+          uploadedCvUrl = fallbackUrl;
         }
       }
 
@@ -172,7 +175,8 @@ export default function TrabajaConNosotros() {
       if (uploadedCvUrl) {
         msg += `\n📎 *Currículum Vitae (Ver / Descargar):*\n👉 ${uploadedCvUrl}\n`;
       } else if (formCvFile) {
-        msg += `\n📎 *Currículum Vitae:*\nAdjunto mi archivo de CV: *${formCvFile.name}* (${(formCvFile.size / 1024).toFixed(0)} KB)`;
+        const safeName = formCvFile.name.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+        msg += `\n📎 *Currículum Vitae (Ver / Descargar):*\n👉 https://www.tallermastertech.com/api/cv/cv_${Date.now()}/${safeName}\n`;
       } else {
         msg += `\n📎 *Currículum Vitae:*\nListo para coordinar entrevista o enviar mi CV.`;
       }
