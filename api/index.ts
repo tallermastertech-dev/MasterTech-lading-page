@@ -1032,8 +1032,20 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     if (/^A[0-9]{10}$/i.test(c))
       return { titulo: 'Repuesto Original Mercedes-Benz Genuine OEM (' + raw.toUpperCase() + ')', categoria: 'Motor y Encendido', compatibilidad: 'Mercedes-Benz Clase C/E/GLC/GLE motores M270/M274/M276/OM651/OM654 (2005-2024)', descripcionCorta: 'Componente Mercedes-Benz Genuine, especificacion MBUSI ingenieria Daimler.', descripcionDetallada: 'Repuesto OEM Mercedes-Benz #' + raw.toUpperCase() + '. MB Quality Standards. Garantia de planta.' };
 
+    // WHEEL LOCKS / TUERCAS DE SEGURIDAD — 99910-R0DA0, 08W42-SNA-100, 00276-00900
+    if (/^99910[0-9A-Z]{5}/i.test(c) || /^08W42[0-9A-Z]{5}/i.test(c) || /^00276[0-9A-Z]{5}/i.test(c) || c.includes('99910R0DA0') || c.includes('99910RODAO')) {
+      return {
+        titulo: 'Juego de Tuercas de Seguridad y Llave Candado de Rueda OEM (' + raw.toUpperCase() + ')',
+        categoria: 'Piezas de Carrocería & Accesorios',
+        compatibilidad: 'Honda Civic, Accord, CR-V, HR-V, Pilot, Fit / Toyota / Nissan / Mitsubishi (Rosca M12x1.5 / M12x1.25)',
+        descripcionCorta: 'Juego de 4 tuercas de seguridad antirrobo cromadas con bocallave maestra estriada de alta precisión.',
+        descripcionDetallada: 'Kit de tuercas de seguridad OEM #' + raw.toUpperCase() + '. Acero endurecido forjado en frío con triple recubrimiento de níquel-cromo anticorrosión. Patrón de estrías inviolable para máxima protección contra robo de rines y cauchos. Incluye tarjeta de código de llave para duplicados.',
+        specs: ['Acero tratado térmicamente grado 10.9', 'Triple cromado anticorrosivo', 'Bocallave estriada computarizada de alta seguridad', 'Compatible con llaves de cruz estándar de 19mm y 21mm']
+      };
+    }
+
     // HONDA ALPHANUMERIC OEM — 50200-SNA-A01, 44306-SNA-A00, 80292-SDA-407
-    if (/^[4-9][0-9]{4}[A-Z][A-Z0-9]{4}$/i.test(c) && !/^(90915|17801|87139|23221|22204|89465|42607|04465|04466)/i.test(c)) {
+    if (/^[4-9][0-9]{4}[A-Z][A-Z0-9]{4}$/i.test(c) && !/^(90915|17801|87139|23221|22204|89465|42607|04465|04466|99910)/i.test(c)) {
       const hSys: Record<string,string> = { '44':'Direccion/CV Axle', '45':'Frenos', '50':'Motor Mount/Suspension', '51':'Brazo Control', '52':'Amortiguador', '53':'Rack Direccion', '80':'AC/Calefaccion' };
       const sys = hSys[c.slice(0,2)] || 'Motor y Accesorios';
       return { titulo: 'Repuesto Honda Genuine Parts ' + sys + ' (' + raw.toUpperCase() + ')', categoria: (sys.includes('Freno')||sys.includes('Susp')||sys.includes('Direcc')) ? 'Frenos y Suspension' : sys.includes('AC') ? 'Fluidos y Refrigeracion' : 'Motor y Encendido', compatibilidad: 'Honda Civic 2006-2021, Accord 2008-2022, CR-V 2007-2022, HR-V & Pilot (segun numero)', descripcionCorta: 'Repuesto Honda Genuine Parts ' + sys + ', encaje exacto y tolerancias OEM Honda R&D.', descripcionDetallada: 'Repuesto OEM Honda #' + raw.toUpperCase() + '. Sistema: ' + sys + '. Bajo estandares Honda R&D. Inspeccion 100% de linea.' };
@@ -1541,14 +1553,34 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
       return 'Filtros y Consumibles';
     };
 
-    const finalCategory = normalizeCategory(parsedJson?.categoria || '');
+    const itemPayload = {
+      title: parsedJson?.titulo || ('Repuesto OEM #' + pNum),
+      category: finalCategory,
+      compatibility: parsedJson?.compatibilidad || 'Consultar compatibilidad en catálogo OEM',
+      desc: parsedJson?.descripcionCorta || ('Componente OEM #' + pNum + ' para uso en taller MasterTech.'),
+      longDesc: parsedJson?.descripcionDetallada || ('Repuesto OEM #' + pNum + '. Verifique aplicación exacta en catálogo del fabricante.'),
+      specs: parsedJson?.specs || [
+        'Repuesto probado bajo estándares OEM',
+        'Fabricación de alta durabilidad',
+        'Garantía de instalación en taller MasterTech'
+      ],
+      badge: 'Repuesto Certificado OEM',
+      price: parsedJson?.precio || '$35 USD',
+      partNumber: pNum
+    };
+
     return res.json({
-      success: true, partNumber: pNum,
-      titulo: parsedJson?.titulo || ('Repuesto OEM #' + pNum),
-      categoria: finalCategory,
-      compatibilidad: parsedJson?.compatibilidad || 'Consultar compatibilidad en catálogo OEM',
-      descripcionCorta: parsedJson?.descripcionCorta || ('Componente OEM #' + pNum + ' para uso en taller MasterTech.'),
-      descripcionDetallada: parsedJson?.descripcionDetallada || ('Repuesto OEM #' + pNum + '. Verifique aplicación exacta en catálogo del fabricante.'),
+      success: true,
+      partNumber: pNum,
+      item: itemPayload,
+      titulo: itemPayload.title,
+      categoria: itemPayload.category,
+      compatibilidad: itemPayload.compatibility,
+      descripcionCorta: itemPayload.desc,
+      descripcionDetallada: itemPayload.longDesc,
+      specs: itemPayload.specs,
+      badge: itemPayload.badge,
+      price: itemPayload.price,
       referencias: parsedJson?.referencias || []
     });
   } catch (err: any) {

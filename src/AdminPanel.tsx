@@ -390,22 +390,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
       if (res.ok) {
         const data = await res.json();
-        if (data.success && data.item) {
-          const fetched = data.item;
+        if (data.success) {
+          const item = data.item || data;
           setEditingProduct(prev => {
             if (!prev) return null;
             return {
               ...prev,
-              title: fetched.title || prev.title,
-              category: fetched.category || prev.category,
-              price: fetched.price || prev.price,
-              desc: fetched.desc || prev.desc,
-              longDesc: fetched.longDesc || prev.longDesc,
-              badge: fetched.badge || prev.badge,
-              compatibility: fetched.compatibility || prev.compatibility,
-              partNumber: fetched.partNumber || prev.partNumber,
-              specs: fetched.specs && fetched.specs.length > 0 ? fetched.specs : prev.specs,
-              img: fetched.img || prev.img
+              title: item.title || item.titulo || prev.title,
+              category: item.category || item.categoria || prev.category,
+              price: item.price || item.precio || prev.price || '$35 USD',
+              desc: item.desc || item.descripcionCorta || item.descripcion || prev.desc,
+              longDesc: item.longDesc || item.descripcionDetallada || item.desc || prev.longDesc,
+              badge: item.badge || prev.badge || 'Repuesto Certificado OEM',
+              compatibility: item.compatibility || item.compatibilidad || prev.compatibility,
+              partNumber: item.partNumber || item.codigo || prev.partNumber,
+              specs: (item.specs && item.specs.length > 0) ? item.specs : (prev.specs || []),
+              img: item.img || prev.img || ''
             };
           });
           setAiStatusMsg('✅ Datos completados con éxito desde catálogo OEM.');
