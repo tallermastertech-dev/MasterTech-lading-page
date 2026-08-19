@@ -1197,6 +1197,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             </motion.div>
             <span className="text-xs text-zinc-400 mt-4 font-medium tracking-wide">
               Toca o haz clic en cualquier lugar para cerrar
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
