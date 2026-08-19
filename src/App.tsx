@@ -176,16 +176,16 @@ export default function App() {
     window.location.hash === '#jornadas'
   );
   const [isTrabajaConNosotros, setIsTrabajaConNosotros] = useState(
+    window.location.pathname.toLowerCase() === '/postulacion' ||
     window.location.pathname.toLowerCase() === '/trabaja-con-nosotros' ||
     window.location.pathname.toLowerCase() === '/empleo' ||
-    window.location.pathname.toLowerCase() === '/postulacion' ||
     window.location.pathname.toLowerCase() === '/talento' ||
     window.location.pathname.toLowerCase() === '/vacantes' ||
     window.location.pathname.toLowerCase() === '/reclutamiento' ||
     window.location.pathname.toLowerCase() === '/trabajo' ||
+    window.location.hash === '#postulacion' ||
     window.location.hash === '#trabaja-con-nosotros' ||
     window.location.hash === '#empleo' ||
-    window.location.hash === '#postulacion' ||
     window.location.hash === '#talento'
   );
 
@@ -289,16 +289,16 @@ export default function App() {
         window.location.hash === '#jornadas'
       );
       setIsTrabajaConNosotros(
+        window.location.pathname.toLowerCase() === '/postulacion' ||
         window.location.pathname.toLowerCase() === '/trabaja-con-nosotros' ||
         window.location.pathname.toLowerCase() === '/empleo' ||
-        window.location.pathname.toLowerCase() === '/postulacion' ||
         window.location.pathname.toLowerCase() === '/talento' ||
         window.location.pathname.toLowerCase() === '/vacantes' ||
         window.location.pathname.toLowerCase() === '/reclutamiento' ||
         window.location.pathname.toLowerCase() === '/trabajo' ||
+        window.location.hash === '#postulacion' ||
         window.location.hash === '#trabaja-con-nosotros' ||
         window.location.hash === '#empleo' ||
-        window.location.hash === '#postulacion' ||
         window.location.hash === '#talento'
       );
     };

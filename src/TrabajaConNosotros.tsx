@@ -108,41 +108,7 @@ export default function TrabajaConNosotros() {
     setFormSubmitting(true);
 
     try {
-      let uploadedCvUrl = '';
-
-      // 1. Si adjuntó archivo, subirlo a la nube primero
-      if (formCvFile) {
-        try {
-          const base64Data = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(formCvFile);
-          });
-
-          const uploadRes = await fetch('/api/upload-cv', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              filename: formCvFile.name,
-              fileData: base64Data,
-              fileType: formCvFile.type,
-              candidateName: formNombre.trim()
-            })
-          });
-
-          if (uploadRes.ok) {
-            const uploadJson = await uploadRes.json();
-            if (uploadJson.url) {
-              uploadedCvUrl = uploadJson.url;
-            }
-          }
-        } catch (upErr) {
-          console.error("Warning uploading CV:", upErr);
-        }
-      }
-
-      // 2. Registrar postulación en la base de datos de MasterTech
+      // 1. Registrar postulación en la base de datos
       try {
         await fetch('/api/leads', {
           method: 'POST',
@@ -152,12 +118,12 @@ export default function TrabajaConNosotros() {
             telefono: formTelefono.trim(),
             vehiculo: 'Postulante Equipo MasterTech',
             servicio: `Reclutamiento: ${formCargo || 'Especialista General'}`,
-            falla: `[Experiencia: ${formExperiencia}] ${formMensaje ? `Mensaje: ${formMensaje}` : ''} ${uploadedCvUrl ? `[CV en la Nube: ${uploadedCvUrl}]` : formCvFile ? `[CV: ${formCvFile.name}]` : '[Sin CV adjunto]'}`
+            falla: `[Experiencia: ${formExperiencia}] ${formMensaje ? `Mensaje: ${formMensaje}` : ''} ${formCvFile ? `[CV Adjunto: ${formCvFile.name} (${(formCvFile.size / 1024).toFixed(0)} KB)]` : '[Sin archivo adjunto previo]'}`
           })
         });
       } catch (err) {}
 
-      // 3. Formatear mensaje profesional de WhatsApp con Link Directo
+      // 2. Formatear mensaje profesional de WhatsApp
       const cargoTxt = formCargo.trim() || 'Especialidad General / Talento MasterTech';
       let msg = `💼 *POSTULACIÓN LABORAL - MASTERTECH* 🛠️\n\n`;
       msg += `👤 *Candidato:* ${formNombre.trim()}\n`;
@@ -169,12 +135,10 @@ export default function TrabajaConNosotros() {
         msg += `\n📝 *Perfil & Habilidades:*\n"${formMensaje.trim()}"\n`;
       }
 
-      if (uploadedCvUrl) {
-        msg += `\n📎 *Currículum Vitae (Ver / Descargar):*\n👉 ${uploadedCvUrl}\n`;
-      } else if (formCvFile) {
+      if (formCvFile) {
         msg += `\n📎 *Currículum Vitae:*\nAdjunto mi archivo de CV: *${formCvFile.name}* (${(formCvFile.size / 1024).toFixed(0)} KB)`;
       } else {
-        msg += `\n📎 *Currículum Vitae:*\nListo para coordinar entrevista o enviar mi CV.`;
+        msg += `\n📎 *Currículum Vitae:*\nListo para adjuntar mi CV o coordinar una entrevista.`;
       }
 
       const targetPhone = (config.PHONE_NUMBER || '+584123565012').replace(/[^\d]/g, '');
