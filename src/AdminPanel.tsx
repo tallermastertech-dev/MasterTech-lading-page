@@ -53,7 +53,8 @@ import {
   History,
   FileText,
   Activity,
-  ShieldAlert
+  ShieldAlert,
+  Crown
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -112,8 +113,8 @@ const DEFAULT_CATALOG: CatalogItem[] = [
 ];
 
 const DEFAULT_JORNADAS = [
-  { id: "reprogramacion", badge: "🏎️ Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
-  { id: "egr-dpf", badge: "⚡ Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
+  { id: "reprogramacion", badge: "Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
+  { id: "egr-dpf", badge: "Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
 ];
 
 interface AdminPanelProps {
@@ -1262,7 +1263,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   onClick={() => {
                     setEditingJornada({
                       id: `jornada_${Date.now()}`,
-                      badge: "🏎️ Jornada Especial",
+                      badge: "Jornada Especial",
                       title: "Título de la Jornada",
                       subtitle: "Descripción corta de la jornada...",
                       img: "/assets/servicio-mecanica.jpg",
@@ -1963,12 +1964,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border bg-white/5 text-zinc-300 border-white/15">
                                   {u.role || 'Asesor Logística'}
                                 </span>
-                                <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                                <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                                   isFull 
                                     ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
                                     : 'bg-blue-500/20 text-blue-300 border-blue-500/40'
                                 }`}>
-                                  {isFull ? '👑 Acceso Total' : '📦 Logística (4 Módulos)'}
+                                  {isFull ? (
+                                    <>
+                                      <Crown size={11} />
+                                      <span>Acceso Total</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Package size={11} />
+                                      <span>Logística (4 Módulos)</span>
+                                    </>
+                                  )}
                                 </span>
                               </div>
                             </div>
@@ -2122,8 +2133,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           onChange={(e) => setEditingUser({ ...editingUser, accessLevel: e.target.value })}
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
                         >
-                          <option value="full">👑 Super Administrador (Acceso Total a todo el Panel, Ajustes y Usuarios)</option>
-                          <option value="logistica">📦 Logística & Almacén (Acceso Limitado a 4 cosas: Dashboard, Citas, Catálogo y Jornadas)</option>
+                          <option value="full">Super Administrador (Acceso Total a todo el Panel, Ajustes y Usuarios)</option>
+                          <option value="logistica">Logística & Almacén (Acceso Limitado a 4 cosas: Dashboard, Citas, Catálogo y Jornadas)</option>
                         </select>
                       </div>
 
@@ -2268,13 +2279,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary cursor-pointer"
                         >
                           <option value="auto" className="bg-[#12141a] text-white">
-                            ⏰ Automático por Horario (Lun-Vie 8:00 AM - 5:00 PM • Hora Venezuela)
+                            Automático por Horario (Lun-Vie 8:00 AM - 5:00 PM • Hora Venezuela)
                           </option>
                           <option value="force_open" className="bg-[#12141a] text-white">
-                            🟢 Forzar Taller Abierto (Guardia Especial / Abierto 24/7)
+                            Forzar Taller Abierto (Guardia Especial / Abierto 24/7)
                           </option>
                           <option value="force_closed" className="bg-[#12141a] text-white">
-                            🔴 Forzar Taller Cerrado (Solo Emergencias)
+                            Forzar Taller Cerrado (Solo Emergencias)
                           </option>
                         </select>
                         <p className="text-[11px] text-zinc-400 mt-1">
@@ -2426,29 +2437,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
                 </div>
 
-                {/* Category Filter Pills */}
-                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                {/* Category Filter Pills (Strict Single Line with Lucide SVG Icons) */}
+                <div className="flex items-center gap-2 pt-1 overflow-x-auto no-scrollbar flex-nowrap whitespace-nowrap pb-1">
                   {[
-                    { id: 'TODOS', label: 'Todos los Eventos' },
-                    { id: 'AUTH', label: 'Inicios de Sesión 🔑' },
-                    { id: 'CATALOGO', label: 'Catálogo Repuestos 📦' },
-                    { id: 'CITAS', label: 'Citas de Taller 📅' },
-                    { id: 'USUARIOS', label: 'Equipo & Usuarios 👥' },
-                    { id: 'JORNADAS', label: 'Jornadas VIP ⚡' },
-                    { id: 'AJUSTES', label: 'Ajustes Web 🛠️' },
-                  ].map(cat => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setLogCategoryFilter(cat.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                        logCategoryFilter === cat.id
-                          ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-md'
-                          : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-transparent'
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
+                    { id: 'TODOS', label: 'Todos los Eventos', icon: <Layers size={13} className="shrink-0" /> },
+                    { id: 'AUTH', label: 'Inicios de Sesión', icon: <Key size={13} className="shrink-0" /> },
+                    { id: 'CATALOGO', label: 'Repuestos', icon: <Package size={13} className="shrink-0" /> },
+                    { id: 'CITAS', label: 'Citas', icon: <Calendar size={13} className="shrink-0" /> },
+                    { id: 'USUARIOS', label: 'Usuarios', icon: <Users size={13} className="shrink-0" /> },
+                    { id: 'JORNADAS', label: 'Jornadas', icon: <Zap size={13} className="shrink-0" /> },
+                    { id: 'AJUSTES', label: 'Ajustes Web', icon: <Sliders size={13} className="shrink-0" /> },
+                  ].map(cat => {
+                    const isSelected = logCategoryFilter === cat.id;
+                    return (
+                      <button
+                        key={cat.id}
+                        onClick={() => setLogCategoryFilter(cat.id)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-amber-400/20 text-amber-300 border border-amber-400/50 shadow-md shadow-amber-500/10'
+                            : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10'
+                        }`}
+                      >
+                        <span className={isSelected ? 'text-amber-300' : 'text-zinc-500'}>{cat.icon}</span>
+                        <span>{cat.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -2665,7 +2680,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       onChange={(e) => setEditingProduct({ ...editingProduct, isImportedUSA: e.target.checked })}
                       className="w-4 h-4 accent-amber-400 rounded cursor-pointer"
                     />
-                    <span className="text-xs text-amber-300">🇺🇸 Importado desde EE.UU.</span>
+                    <span className="text-xs text-amber-300 flex items-center gap-1.5">
+                      <Globe size={13} />
+                      <span>Importado desde EE.UU.</span>
+                    </span>
                   </label>
                 </div>
               </div>
