@@ -397,11 +397,11 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
       const serializedSlots = JSON.stringify(currentOccupiedMap);
       memorySettingsCache['OCCUPIED_SLOTS_JSON'] = serializedSlots;
       saveSettingsToDisk();
-      (async () => {
-        try {
-          await supabase.from('settings').upsert([{ key: 'OCCUPIED_SLOTS_JSON', value: serializedSlots }], { onConflict: 'key' });
-        } catch (e) {}
-      })();
+      try {
+        await supabase.from('settings').upsert([{ key: 'OCCUPIED_SLOTS_JSON', value: serializedSlots }], { onConflict: 'key' });
+      } catch (e) {
+        console.error("Error persisting OCCUPIED_SLOTS_JSON to Supabase:", e);
+      }
     }
   }
 
@@ -870,6 +870,10 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
 
 const handleGetInspectionSlots = async (req: express.Request, res: express.Response) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Surrogate-Control', 'no-store');
     const occupied = await getOccupiedSlotsMap();
     res.json({ occupied });
   } catch (err: any) {

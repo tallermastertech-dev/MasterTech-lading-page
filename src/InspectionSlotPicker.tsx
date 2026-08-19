@@ -27,7 +27,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
   const fetchOccupiedSlots = async () => {
     let occupied: Record<string, string[]> = {};
     try {
-      const res = await fetch('/api/inspection-slots');
+      const res = await fetch(`/api/inspection-slots?t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         occupied = data.occupied || {};
@@ -61,7 +61,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
     setOccupiedSlots(occupied);
   };
 
-  // Generate ONLY upcoming Mondays (6 slots per Monday)
+  // Generate ONLY upcoming Mondays
   const availableDays = useMemo(() => {
     const dates: { dateStr: string; label: string }[] = [];
     const today = new Date();
@@ -118,6 +118,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
   };
 
   const bookedForSelectedDate = selectedDate ? (occupiedSlots[selectedDate] || []) : [];
+  const freeSlotsCount = Math.max(0, INSPECTION_SLOTS.length - bookedForSelectedDate.length);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -136,7 +137,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
           >
             {availableDays.map((d) => {
               const booked = occupiedSlots[d.dateStr] || [];
-              const isFull = booked.length >= 6;
+              const isFull = booked.length >= INSPECTION_SLOTS.length;
               return (
                 <option key={d.dateStr} value={d.dateStr} disabled={isFull} className="bg-[#12141a] text-white">
                   {d.label} {isFull ? '(LLENO)' : ''}
@@ -150,11 +151,11 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
         </div>
       </div>
 
-      {/* Cubículo 2: Hora (6 Turnos) */}
+      {/* Cubículo 2: Hora (5 Turnos) */}
       <div className="space-y-2 text-left">
         <label htmlFor="slot-hora-select" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4 flex items-center justify-between pr-2 whitespace-nowrap h-4">
           <span className="flex items-center gap-1.5"><Clock size={13} className="text-primary shrink-0" /> Hora (Turno)</span>
-          <span className="text-primary font-bold">{Math.max(0, 6 - bookedForSelectedDate.length)}/6 libres</span>
+          <span className="text-primary font-bold">{freeSlotsCount}/{INSPECTION_SLOTS.length} libres</span>
         </label>
         <div className="relative">
           <select 
