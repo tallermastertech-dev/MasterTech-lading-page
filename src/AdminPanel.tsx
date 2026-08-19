@@ -56,6 +56,7 @@ import {
   ShieldAlert
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
+import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { getTallerStatus } from './utils/tallerStatus';
 
 const WhatsAppIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
@@ -978,6 +979,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <div className="text-3xl font-black text-white">{teamMembers.length}</div>
                   <span className="text-[10px] text-zinc-500 block">Técnicos y coordinadores</span>
                 </div>
+              </div>
+
+              {/* Live Automotive Exchange Telemetry & Budget Calculator Panel */}
+              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                <BrechaCambiariaPanel />
               </div>
 
               {/* Recent Leads Preview */}
