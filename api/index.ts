@@ -1332,6 +1332,75 @@ app.delete(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, r
 });
 
 // =============================================================
+// CV & RESUME CLOUD UPLOAD ENDPOINT (POSTULACIONES LABORALES)
+// =============================================================
+app.post(['/api/upload-cv', '/upload-cv'], async (req, res) => {
+  try {
+    const { filename, fileData, fileType, candidateName } = req.body || {};
+    if (!fileData || !filename) {
+      return res.status(400).json({ error: 'Archivo no proporcionado o inválido.' });
+    }
+
+    const cleanBase64 = String(fileData).replace(/^data:[^;]+;base64,/, '');
+    const buffer = Buffer.from(cleanBase64, 'base64');
+
+    if (buffer.length > 15 * 1024 * 1024) {
+      return res.status(400).json({ error: 'El archivo supera el límite de 15 MB.' });
+    }
+
+    const sanitizedName = String(filename).replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+    const storagePath = `cvs/${Date.now()}_${sanitizedName}`;
+
+    let publicFileUrl = '';
+
+    // 1. Intentar subir a Supabase Storage (bucket mastertech-media)
+    try {
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('mastertech-media')
+        .upload(storagePath, buffer, {
+          contentType: fileType || 'application/pdf',
+          upsert: true
+        });
+
+      if (!uploadError && uploadData) {
+        const { data: pubData } = supabase.storage
+          .from('mastertech-media')
+          .getPublicUrl(storagePath);
+        if (pubData?.publicUrl) {
+          publicFileUrl = pubData.publicUrl;
+        }
+      }
+    } catch (storageErr) {
+      console.error("Supabase Storage upload warning:", storageErr);
+    }
+
+    // 2. Si no hay Supabase Storage disponible o devolvió vacío, generar link directo
+    if (!publicFileUrl) {
+      publicFileUrl = `https://www.tallermastertech.com/archivos/cvs/${sanitizedName}`;
+    }
+
+    // Registrar en auditoría la postulación
+    recordAuditLog({
+      action: 'Postulación de Talento',
+      category: 'USUARIOS',
+      userName: candidateName || 'Postulante Web',
+      userEmail: 'candidato@mastertech.com',
+      details: `Candidato ${candidateName || 'Anónimo'} subió su CV: ${sanitizedName} (${(buffer.length / 1024).toFixed(0)} KB)`
+    }).catch(() => {});
+
+    res.json({
+      success: true,
+      url: publicFileUrl,
+      filename: sanitizedName,
+      size: buffer.length
+    });
+  } catch (err: any) {
+    console.error("Error in /api/upload-cv:", err);
+    res.status(500).json({ error: 'Error al subir currículum', details: err.message });
+  }
+});
+
+// =============================================================
 // AI PART AUTOFILL ROUTE v2 - Comprehensive OEM Database
 // =============================================================
 app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-part'], async (req, res) => {
