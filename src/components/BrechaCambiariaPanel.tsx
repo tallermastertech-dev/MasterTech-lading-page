@@ -336,158 +336,162 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       {/* 1. NON-INTRUSIVE COMPACT FLOATING POPOVER (Anchored right above the bubble) */}
       {isOpen && (
         <div 
-          className="fixed bottom-16 left-4 sm:left-5 z-40 w-[92vw] sm:w-[380px] max-h-[82vh] overflow-y-auto bg-[#12141e]/95 backdrop-blur-2xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
+          className="fixed bottom-16 left-3 sm:left-5 z-40 w-[94vw] sm:w-[430px] max-h-[85vh] overflow-y-auto bg-[#0d0f15]/98 backdrop-blur-3xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300">
-                <Zap size={14} className="animate-pulse" />
+          <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 shrink-0">
+                <Zap size={16} className="animate-pulse" />
               </div>
               <div>
-                <span className="text-[11px] font-black uppercase tracking-wider text-white block leading-none">
+                <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-white block leading-tight font-display">
                   Tasas & Brecha Cambiaria
                 </span>
-                <span className="text-[9px] font-mono text-emerald-400 font-bold flex items-center gap-1 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  EN VIVO • BCV / BINANCE
+                <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1.5 mt-0.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  EN VIVO • BCV & BINANCE
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={fetchRates}
                 disabled={isLoading}
-                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer"
                 title="Actualizar tasas"
               >
-                <RefreshCw size={13} className={isLoading ? "animate-spin text-amber-400" : ""} />
+                <RefreshCw size={14} className={isLoading ? "animate-spin text-amber-400" : ""} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+                className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-300 hover:text-red-400 transition-colors cursor-pointer"
                 title="Ocultar"
               >
-                <X size={15} />
+                <X size={16} />
               </button>
             </div>
           </div>
 
-          {/* 3 Currency Rates (3 Columns Grid) */}
-          <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+          {/* 3 Currency Rates (3 Columns Grid - High Legibility) */}
+          <div className="grid grid-cols-3 gap-2.5">
             {/* Dólar BCV */}
-            <div className="bg-black/50 p-2 rounded-xl border border-emerald-500/30">
-              <div className="text-[9px] font-bold text-emerald-400 uppercase truncate">
-                $ BCV
+            <div className="bg-[#131620] p-2.5 sm:p-3 rounded-2xl border border-emerald-500/40 shadow-md">
+              <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black text-emerald-400 uppercase tracking-wide">
+                <span>$ BCV</span>
+                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300">Oficial</span>
               </div>
-              <div className="text-sm font-black text-white mt-0.5">
-                {formatNumber(rates.bcv_usd)} <small className="text-[8px] text-emerald-400">Bs.</small>
+              <div className="text-base sm:text-lg font-black text-white font-mono mt-1 tracking-tight">
+                {formatNumber(rates.bcv_usd)} <small className="text-[9px] text-emerald-400 font-bold">Bs.</small>
               </div>
             </div>
 
             {/* Euro BCV */}
-            <div className="bg-black/50 p-2 rounded-xl border border-cyan-500/30">
-              <div className="text-[9px] font-bold text-cyan-400 uppercase truncate">
-                € BCV
+            <div className="bg-[#131620] p-2.5 sm:p-3 rounded-2xl border border-cyan-500/40 shadow-md">
+              <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black text-cyan-400 uppercase tracking-wide">
+                <span>€ BCV</span>
+                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300">Oficial</span>
               </div>
-              <div className="text-sm font-black text-white mt-0.5">
-                {formatNumber(rates.bcv_eur)} <small className="text-[8px] text-cyan-400">Bs.</small>
+              <div className="text-base sm:text-lg font-black text-white font-mono mt-1 tracking-tight">
+                {formatNumber(rates.bcv_eur)} <small className="text-[9px] text-cyan-400 font-bold">Bs.</small>
               </div>
             </div>
 
             {/* USDT Binance */}
-            <div className="bg-black/50 p-2 rounded-xl border border-amber-500/30">
-              <div className="text-[9px] font-bold text-amber-400 uppercase truncate">
-                USDT
+            <div className="bg-[#131620] p-2.5 sm:p-3 rounded-2xl border border-amber-500/40 shadow-md">
+              <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black text-amber-400 uppercase tracking-wide">
+                <span>USDT</span>
+                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300">P2P</span>
               </div>
-              <div className="text-sm font-black text-white mt-0.5">
-                {formatNumber(rates.usdt)} <small className="text-[8px] text-amber-400">Bs.</small>
+              <div className="text-base sm:text-lg font-black text-white font-mono mt-1 tracking-tight">
+                {formatNumber(rates.usdt)} <small className="text-[9px] text-amber-400 font-bold">Bs.</small>
               </div>
             </div>
           </div>
 
-          {/* All 3 Exchange Rate Gaps / Brechas (3 Columns Grid) */}
-          <div className="space-y-1">
-            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-400 block px-1">
-              Brechas Cambiarias % (Diferenciales)
+          {/* All 3 Exchange Rate Gaps / Brechas (3 Columns Grid - High Legibility) */}
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 block px-1">
+              Brechas Cambiarias (Diferencial %)
             </span>
-            <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+            <div className="grid grid-cols-3 gap-2.5">
               {/* 1. USDT vs $ BCV */}
-              <div className="bg-black/50 p-2 rounded-xl border border-rose-500/30">
-                <div className="text-[8.5px] font-bold text-rose-400 uppercase truncate">
+              <div className="bg-[#131620] p-2.5 rounded-2xl border border-rose-500/40 shadow-md">
+                <div className="text-[9.5px] sm:text-[10px] font-bold text-rose-300 uppercase leading-tight truncate">
                   USDT vs $ BCV
                 </div>
-                <div className="text-sm font-black text-rose-400 mt-0.5">
+                <div className="text-base sm:text-lg font-black text-rose-400 font-mono mt-1">
                   {formatNumber(rates.brecha_usdt_usd)}%
                 </div>
               </div>
 
               {/* 2. USDT vs € BCV */}
-              <div className="bg-black/50 p-2 rounded-xl border border-rose-500/30">
-                <div className="text-[8.5px] font-bold text-rose-400 uppercase truncate">
+              <div className="bg-[#131620] p-2.5 rounded-2xl border border-rose-500/40 shadow-md">
+                <div className="text-[9.5px] sm:text-[10px] font-bold text-rose-300 uppercase leading-tight truncate">
                   USDT vs € BCV
                 </div>
-                <div className="text-sm font-black text-rose-400 mt-0.5">
+                <div className="text-base sm:text-lg font-black text-rose-400 font-mono mt-1">
                   {formatNumber(rates.brecha_usdt_eur)}%
                 </div>
               </div>
 
               {/* 3. € BCV vs $ BCV */}
-              <div className="bg-black/50 p-2 rounded-xl border border-rose-500/30">
-                <div className="text-[8.5px] font-bold text-rose-400 uppercase truncate">
+              <div className="bg-[#131620] p-2.5 rounded-2xl border border-rose-500/40 shadow-md">
+                <div className="text-[9.5px] sm:text-[10px] font-bold text-rose-300 uppercase leading-tight truncate">
                   € BCV vs $ BCV
                 </div>
-                <div className="text-sm font-black text-rose-400 mt-0.5">
+                <div className="text-base sm:text-lg font-black text-rose-400 font-mono mt-1">
                   {formatNumber(rates.brecha_eur_usd)}%
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Compact Workshop Budget Calculator */}
-          <div className="bg-black/40 border border-white/10 rounded-2xl p-3 space-y-2">
+          {/* Compact Workshop Budget Calculator (High Legibility) */}
+          <div className="bg-[#131620] border border-white/15 rounded-2xl p-3.5 space-y-2.5 shadow-lg">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-300 flex items-center gap-1">
-                <Calculator size={12} className="text-primary" />
-                <span>Calculadora Presupuesto</span>
+              <span className="text-[11px] font-black uppercase tracking-wider text-white flex items-center gap-1.5">
+                <Calculator size={14} className="text-primary" />
+                <span>Calculadora de Presupuesto</span>
               </span>
-              <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5">
-                <span className="text-[10px] font-bold text-zinc-400">$ USD:</span>
+              <div className="flex items-center gap-1.5 bg-black/80 border border-amber-500/40 rounded-xl px-2.5 py-1">
+                <span className="text-xs font-bold text-zinc-400">$ USD:</span>
                 <input
                   type="number"
                   min="1"
                   step="any"
                   value={calcAmountUSD}
                   onChange={(e) => setCalcAmountUSD(e.target.value)}
-                  className="w-14 bg-transparent text-xs font-mono font-black text-white outline-none text-right"
+                  className="w-16 bg-transparent text-sm font-mono font-black text-white outline-none text-right"
                   placeholder="50"
                 />
               </div>
             </div>
 
-            {/* Instant conversion outputs */}
-            <div className="space-y-1 text-[11px] font-mono pt-1">
-              <div className="flex justify-between items-center bg-white/5 px-2 py-1 rounded-lg">
-                <span className="text-emerald-400 font-bold">En Dólar BCV:</span>
-                <span className="text-white font-black">{formatNumber(totalVES_USD_BCV)} Bs.</span>
+            {/* Instant conversion outputs (Clear and Bold) */}
+            <div className="space-y-1.5 text-xs font-mono pt-1">
+              <div className="flex justify-between items-center bg-black/50 px-3 py-2 rounded-xl border border-emerald-500/20">
+                <span className="text-emerald-400 font-bold text-xs">En Dólar BCV:</span>
+                <span className="text-white font-black text-sm sm:text-base">{formatNumber(totalVES_USD_BCV)} <small className="text-[10px] text-emerald-400">Bs.</small></span>
               </div>
-              <div className="flex justify-between items-center bg-white/5 px-2 py-1 rounded-lg">
-                <span className="text-cyan-400 font-bold">En Euro BCV:</span>
-                <span className="text-white font-black">{formatNumber(totalVES_EUR_BCV)} Bs.</span>
+              <div className="flex justify-between items-center bg-black/50 px-3 py-2 rounded-xl border border-cyan-500/20">
+                <span className="text-cyan-400 font-bold text-xs">En Euro BCV:</span>
+                <span className="text-white font-black text-sm sm:text-base">{formatNumber(totalVES_EUR_BCV)} <small className="text-[10px] text-cyan-400">Bs.</small></span>
               </div>
-              <div className="flex justify-between items-center bg-white/5 px-2 py-1 rounded-lg">
-                <span className="text-amber-400 font-bold">En USDT P2P:</span>
-                <span className="text-white font-black">{formatNumber(totalVES_USDT)} Bs.</span>
+              <div className="flex justify-between items-center bg-black/50 px-3 py-2 rounded-xl border border-amber-500/20">
+                <span className="text-amber-400 font-bold text-xs">En USDT P2P:</span>
+                <span className="text-white font-black text-sm sm:text-base">{formatNumber(totalVES_USDT)} <small className="text-[10px] text-amber-400">Bs.</small></span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-[9px] text-zinc-500 pt-1 font-mono">
-            <span>Act: {lastUpdatedFormatted || 'Reciente'}</span>
+          {/* Footer Info */}
+          <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-0.5 font-mono px-1">
+            <span>Actualizado: <strong className="text-zinc-200">{lastUpdatedFormatted || 'Reciente'}</strong></span>
             <button 
               onClick={() => setIsOpen(false)}
-              className="text-amber-400 hover:underline font-bold"
+              className="text-amber-400 hover:text-amber-300 font-bold cursor-pointer transition-colors"
             >
               Minimizar ↑
             </button>
@@ -496,7 +500,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       )}
 
       {/* 2. FLOATING BUBBLE TRIGGER BUTTON (Bottom-Left fixed) */}
-      <div className="fixed bottom-4 left-4 sm:left-5 z-40 select-none">
+      <div className="fixed bottom-4 left-3 sm:left-5 z-40 select-none">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`group flex items-center gap-2 px-3.5 py-2.5 rounded-full backdrop-blur-xl transition-all duration-300 shadow-2xl cursor-pointer ${
@@ -512,11 +516,11 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
 
-          <div className="flex items-center gap-1.5 text-xs font-black tracking-tight">
-            <span className="text-zinc-400 group-hover:text-amber-300 transition-colors uppercase font-mono text-[10px] hidden sm:inline">TASAS:</span>
-            <span className="text-emerald-400 font-mono">BCV ${formatNumber(rates.bcv_usd, 2)}</span>
+          <div className="flex items-center gap-1.5 text-xs font-black tracking-tight font-mono">
+            <span className="text-zinc-400 group-hover:text-amber-300 transition-colors uppercase text-[10px] hidden sm:inline">TASAS:</span>
+            <span className="text-emerald-400">BCV ${formatNumber(rates.bcv_usd, 2)}</span>
             <span className="text-zinc-600 hidden md:inline">|</span>
-            <span className="text-amber-400 font-mono hidden md:inline">USDT {formatNumber(rates.usdt, 2)}</span>
+            <span className="text-amber-400 hidden md:inline">USDT {formatNumber(rates.usdt, 2)}</span>
           </div>
 
           <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-zinc-300 group-hover:text-white transition-colors">
