@@ -159,8 +159,8 @@ export default function Nosotros() {
 
           if (uploadRes.ok) {
             const uploadJson = await uploadRes.json();
-            if (uploadJson.url) {
-              uploadedCvUrl = uploadJson.url;
+            if (uploadJson.directUrl || uploadJson.url) {
+              uploadedCvUrl = uploadJson.directUrl || uploadJson.url;
             }
           }
         } catch (upErr) {

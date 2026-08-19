@@ -1332,8 +1332,10 @@ app.delete(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, r
 });
 
 // =============================================================
-// CV & RESUME CLOUD UPLOAD ENDPOINT (POSTULACIONES LABORALES)
+// CV & RESUME CLOUD UPLOAD & SERVING ENDPOINTS
 // =============================================================
+const memoryCvCache = new Map<string, { filename: string; contentType: string; dataBase64: string; size: number }>();
+
 app.post(['/api/upload-cv', '/upload-cv'], async (req, res) => {
   try {
     const { filename, fileData, fileType, candidateName } = req.body || {};
@@ -1349,37 +1351,65 @@ app.post(['/api/upload-cv', '/upload-cv'], async (req, res) => {
     }
 
     const sanitizedName = String(filename).replace(/[^a-zA-Z0-9_\-\.]/g, '_');
-    const storagePath = `cvs/${Date.now()}_${sanitizedName}`;
+    const fileId = `cv_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    
+    // Detect content type
+    let determinedType = fileType;
+    if (!determinedType || determinedType === 'application/octet-stream') {
+      const lower = sanitizedName.toLowerCase();
+      if (lower.endsWith('.pdf')) determinedType = 'application/pdf';
+      else if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) determinedType = 'image/jpeg';
+      else if (lower.endsWith('.png')) determinedType = 'image/png';
+      else if (lower.endsWith('.webp')) determinedType = 'image/webp';
+      else if (lower.endsWith('.doc')) determinedType = 'application/msword';
+      else if (lower.endsWith('.docx')) determinedType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      else determinedType = 'application/pdf';
+    }
 
-    let publicFileUrl = '';
+    const fileRecord = {
+      id: fileId,
+      filename: sanitizedName,
+      contentType: determinedType,
+      dataBase64: cleanBase64,
+      size: buffer.length,
+      uploaded_at: new Date().toISOString()
+    };
 
-    // 1. Intentar subir a Supabase Storage (bucket mastertech-media)
+    // 1. Guardar en caché RAM
+    memoryCvCache.set(fileId, fileRecord);
+    memoryCvCache.set(sanitizedName, fileRecord);
+
+    // 2. Guardar en Base de Datos Supabase (tabla settings) para persistencia total
     try {
+      await supabase.from('settings').upsert([
+        { key: `CV_FILE_${fileId}`, value: JSON.stringify(fileRecord) },
+        { key: `CV_FILE_${sanitizedName}`, value: JSON.stringify(fileRecord) }
+      ], { onConflict: 'key' });
+    } catch (dbErr) {
+      console.error("Warning saving CV file in database:", dbErr);
+    }
+
+    // 3. Intentar subir también a Supabase Storage bucket si existe
+    let supabaseStorageUrl = '';
+    try {
+      const storagePath = `cvs/${Date.now()}_${sanitizedName}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('mastertech-media')
-        .upload(storagePath, buffer, {
-          contentType: fileType || 'application/pdf',
-          upsert: true
-        });
+        .upload(storagePath, buffer, { contentType: determinedType, upsert: true });
 
       if (!uploadError && uploadData) {
-        const { data: pubData } = supabase.storage
-          .from('mastertech-media')
-          .getPublicUrl(storagePath);
+        const { data: pubData } = supabase.storage.from('mastertech-media').getPublicUrl(storagePath);
         if (pubData?.publicUrl) {
-          publicFileUrl = pubData.publicUrl;
+          supabaseStorageUrl = pubData.publicUrl;
         }
       }
-    } catch (storageErr) {
-      console.error("Supabase Storage upload warning:", storageErr);
-    }
+    } catch (e) {}
 
-    // 2. Si no hay Supabase Storage disponible o devolvió vacío, generar link directo
-    if (!publicFileUrl) {
-      publicFileUrl = `https://www.tallermastertech.com/archivos/cvs/${sanitizedName}`;
-    }
+    // La URL directa infalible servida por nuestra API
+    const directApiUrl = `https://www.tallermastertech.com/api/cv/${fileId}/${sanitizedName}`;
+    const publicFileUrl = supabaseStorageUrl || directApiUrl;
 
-    // Registrar en auditoría la postulación
+    // Registrar en auditoría
     recordAuditLog({
       action: 'Postulación de Talento',
       category: 'USUARIOS',
@@ -1391,12 +1421,82 @@ app.post(['/api/upload-cv', '/upload-cv'], async (req, res) => {
     res.json({
       success: true,
       url: publicFileUrl,
+      directUrl: directApiUrl,
+      fileId,
       filename: sanitizedName,
       size: buffer.length
     });
   } catch (err: any) {
     console.error("Error in /api/upload-cv:", err);
     res.status(500).json({ error: 'Error al subir currículum', details: err.message });
+  }
+});
+
+// Endpoint GET para servir el CV directamente en el navegador (PDF, Imagen, Documento)
+app.get([
+  '/api/cv/:id',
+  '/api/cv/:id/:name',
+  '/api/archivos/cvs/:name',
+  '/archivos/cvs/:name'
+], async (req, res) => {
+  try {
+    const rawParam = req.params.id || req.params.name || '';
+    const lookupKey = String(rawParam).trim();
+
+    if (!lookupKey) {
+      return res.status(404).send('Archivo no especificado.');
+    }
+
+    // 1. Buscar en caché RAM
+    let fileRecord = memoryCvCache.get(lookupKey);
+
+    // 2. Si no está en RAM, buscar en Base de Datos Supabase
+    if (!fileRecord) {
+      try {
+        const { data, error } = await supabase
+          .from('settings')
+          .select('value')
+          .or(`key.eq.CV_FILE_${lookupKey},key.eq.CV_FILE_cv_${lookupKey}`)
+          .limit(1);
+
+        if (!error && data && data.length > 0 && data[0].value) {
+          fileRecord = JSON.parse(data[0].value);
+          if (fileRecord && fileRecord.dataBase64) {
+            memoryCvCache.set(lookupKey, fileRecord);
+          }
+        }
+      } catch (dbErr) {
+        console.error("Error fetching CV from DB:", dbErr);
+      }
+    }
+
+    if (!fileRecord || !fileRecord.dataBase64) {
+      return res.status(404).send(`
+        <!DOCTYPE html>
+        <html>
+        <head><title>Currículum no encontrado - MasterTech</title></head>
+        <body style="background:#0a0b0f;color:#fff;font-family:sans-serif;text-align:center;padding:50px;">
+          <h2>⚠️ Archivo de Currículum no encontrado</h2>
+          <p style="color:#aaa;">Es posible que el archivo haya expirado o el enlace sea incorrecto.</p>
+          <a href="/" style="color:#f59e0b;text-decoration:none;font-weight:bold;">← Volver al sitio principal</a>
+        </body>
+        </html>
+      `);
+    }
+
+    const fileBuffer = Buffer.from(fileRecord.dataBase64, 'base64');
+    const safeName = fileRecord.filename || 'curriculum.pdf';
+    const cType = fileRecord.contentType || (safeName.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
+
+    res.setHeader('Content-Type', cType);
+    res.setHeader('Content-Length', fileBuffer.length);
+    res.setHeader('Content-Disposition', `inline; filename="${safeName}"`);
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+
+    return res.status(200).send(fileBuffer);
+  } catch (err: any) {
+    console.error("Error serving CV file:", err);
+    res.status(500).send("Error al abrir el archivo.");
   }
 });
 
