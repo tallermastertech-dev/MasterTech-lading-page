@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
+import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 
 const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -759,6 +760,9 @@ export default function Jornadas() {
           <p className="text-[11px] text-zinc-600">Porlamar, Isla de Margarita — Venezuela.</p>
         </div>
       </footer>
+
+      {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
+      <BrechaCambiariaPanel />
     </div>
   );
 }

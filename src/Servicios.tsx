@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { ChevronLeft, Wrench, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 
 const CONFIG_DEFAULT = {
   WHATSAPP_LINK: "https://wa.link/xnj37f",
@@ -154,6 +155,9 @@ export default function Servicios() {
       <footer className="py-5 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
         © 2026 MASTERTECH AUTOMOTRIZ. Todos los derechos reservados.
       </footer>
+
+      {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
+      <BrechaCambiariaPanel />
     </div>
   );
 }

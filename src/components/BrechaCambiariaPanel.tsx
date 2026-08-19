@@ -92,7 +92,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
   };
 
   const parsedAmount = parseFloat(calcAmountUSD) || 0;
-  const parsedAmount = parseFloat(calcAmountUSD) || 0;
   const totalVES_USD_BCV = parsedAmount * rates.bcv_usd;
   const totalVES_EUR_BCV = parsedAmount * rates.bcv_eur;
   const totalVES_USDT = parsedAmount * rates.usdt;

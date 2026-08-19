@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './Navbar';
 import { ChevronLeft, Search, Tag, Filter, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
@@ -1441,6 +1442,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           <p>© {new Date().getFullYear()} Taller MasterTech. Todos los derechos reservados. Repuestos y Tecnología Automotriz.</p>
         </div>
       </footer>
+
+      {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
+      <BrechaCambiariaPanel />
     </div>
   );
 }
