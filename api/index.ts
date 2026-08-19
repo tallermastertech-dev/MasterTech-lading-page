@@ -205,6 +205,8 @@ function escapeHtml(text: any): string {
 function extractSlot(text: string): { dateStr: string; timeStr: string } | null {
   if (!text) return null;
   let dateStr = '';
+  
+  // 1. Direct YYYY-MM-DD or [YYYY-MM-DD]
   const ymdMatch = text.match(/\b(20\d{2})[-/](\d{2})[-/](\d{2})\b/);
   const dmyMatch = text.match(/\b(\d{2})[-/](\d{2})[-/](20\d{2})\b/);
   
@@ -212,6 +214,20 @@ function extractSlot(text: string): { dateStr: string; timeStr: string } | null 
     dateStr = `${ymdMatch[1]}-${ymdMatch[2]}-${ymdMatch[3]}`;
   } else if (dmyMatch) {
     dateStr = `${dmyMatch[3]}-${dmyMatch[2]}-${dmyMatch[1]}`;
+  } else {
+    // 2. Spanish text date e.g. "24 ago", "24 de agosto", "Lunes 24 ago"
+    const esMatch = text.match(/\b(\d{1,2})\s+(?:de\s+)?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)[a-z]*\b/i);
+    if (esMatch) {
+      const day = esMatch[1].padStart(2, '0');
+      const monthMap: Record<string, string> = {
+        ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06',
+        jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12'
+      };
+      const monthPrefix = esMatch[2].toLowerCase().slice(0, 3);
+      const month = monthMap[monthPrefix] || '08';
+      const year = new Date().getFullYear();
+      dateStr = `${year}-${month}-${day}`;
+    }
   }
 
   const timeMatch = text.match(/\b(0?8:30|0?9:00|0?9:30|10:00|10:30)\s*(AM|PM)?\b/i);

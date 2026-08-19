@@ -45,11 +45,27 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
       for (const lead of localLeads) {
         if (!lead || lead.status === 'Cancelado') continue;
         const text = `${lead.fecha_hora || ''} ${lead.falla || ''} ${lead.servicio || ''}`;
-        const dateMatch = text.match(/\b(20\d{2}-\d{2}-\d{2})\b/);
-        const timeMatch = text.match(/\b(08:30|09:00|09:30|10:00|10:30)\b/i);
-        if (dateMatch && dateMatch[1] && timeMatch && timeMatch[1]) {
-          const dateStr = dateMatch[1];
-          const timeStr = `${timeMatch[1]} AM`;
+        let dateStr = '';
+        const ymdMatch = text.match(/\b(20\d{2})[-/](\d{2})[-/](\d{2})\b/);
+        const esMatch = text.match(/\b(\d{1,2})\s+(?:de\s+)?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)[a-z]*\b/i);
+        
+        if (ymdMatch) {
+          dateStr = `${ymdMatch[1]}-${ymdMatch[2]}-${ymdMatch[3]}`;
+        } else if (esMatch) {
+          const monthMap: Record<string, string> = {
+            ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06',
+            jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12'
+          };
+          const month = monthMap[esMatch[2].toLowerCase().slice(0, 3)] || '08';
+          dateStr = `${new Date().getFullYear()}-${month}-${esMatch[1].padStart(2, '0')}`;
+        }
+
+        const timeMatch = text.match(/\b(0?8:30|0?9:00|0?9:30|10:00|10:30)\s*(AM|PM)?\b/i);
+        if (dateStr && timeMatch && timeMatch[1]) {
+          let t = timeMatch[1].toUpperCase();
+          if (t.startsWith('8:')) t = '0' + t;
+          if (t.startsWith('9:')) t = '0' + t;
+          const timeStr = `${t} AM`;
           if (!occupied[dateStr]) occupied[dateStr] = [];
           if (!occupied[dateStr].includes(timeStr)) {
             occupied[dateStr].push(timeStr);
@@ -102,7 +118,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
       }
       const isTaken = booked.includes(activeTime);
       const formattedLabel = availableDays.find(d => d.dateStr === activeDate)?.label || activeDate;
-      onSelectSlot(`Cita Inspección: ${formattedLabel} a las ${activeTime}`, !isTaken);
+      onSelectSlot(`Cita Inspección: [${activeDate}] ${formattedLabel} a las ${activeTime}`, !isTaken);
     }
   }, [availableDays, selectedDate, selectedTime, occupiedSlots, onSelectSlot]);
 
