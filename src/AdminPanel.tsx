@@ -54,7 +54,9 @@ import {
   FileText,
   Activity,
   ShieldAlert,
-  Crown
+  Crown,
+  Briefcase,
+  ShoppingCart
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -232,12 +234,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
   const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
 
-  // Leads State
+  // Leads State & Segregated Categories (Trabajo, Catálogo, Inspección, Taller)
   const [leads, setLeads] = useState<any[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(false);
   const [selectedLead, setSelectedLead] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('Todos');
+  const [leadCategoryFilter, setLeadCategoryFilter] = useState<'TODOS' | 'TRABAJO' | 'CATALOGO' | 'INSPECCION' | 'TALLER'>('TODOS');
+
+  // Helper: Clasificar tipo de solicitud
+  const getLeadCategory = (l: any): 'trabajo' | 'catalogo' | 'inspeccion' | 'taller' => {
+    if (!l) return 'taller';
+    const s = String(l.servicio || '').toLowerCase();
+    const v = String(l.vehiculo || '').toLowerCase();
+    const f = String(l.falla || '').toLowerCase();
+
+    if (s.includes('reclutamiento') || s.includes('postul') || v.includes('postulante') || f.includes('[experiencia:') || f.includes('[cv') || f.includes('cv:')) {
+      return 'trabajo';
+    }
+    if (s.includes('catálogo') || s.includes('catalogo') || s.includes('pedido') || f.includes('piezas') || f.includes('carrito')) {
+      return 'catalogo';
+    }
+    if (s.includes('línea de inspección') || s.includes('inspeccion') || s.includes('inspección') || l.fecha_hora || l.fecha_turno) {
+      return 'inspeccion';
+    }
+    return 'taller';
+  };
+
+  // Helper: Extraer enlace de CV si existe
+  const getCvDownloadUrl = (l: any): string | null => {
+    if (!l) return null;
+    const text = `${l.falla || ''} ${l.detalles || ''} ${l.cv_url || ''}`;
+    const match = text.match(/https?:\/\/[^\s\]\)\"]+(?:\.pdf|\.doc|\.docx|\.jpg|\.png|cvs\/[^\s\]\)\"]+)/i);
+    return match ? match[0] : (l.cv_url || null);
+  };
 
   // Catalog State
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(() => {
@@ -717,18 +747,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     logClientAction('Eliminación de Jornada VIP', 'JORNADAS', `Eliminó la jornada VIP "${targetJor?.title || id}".`);
   };
 
-  // Filtered Leads
+  // Filtered Leads with category segregation
   const filteredLeads = useMemo(() => {
     return leads.filter(l => {
       const matchesSearch =
         (l.nombre || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
         (l.telefono || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
         (l.vehiculo || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (l.servicio || '').toLowerCase().includes(searchQuery.toLowerCase());
+        (l.servicio || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (l.falla || '').toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === 'Todos' || l.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      
+      const cat = getLeadCategory(l);
+      let matchesCategory = true;
+      if (leadCategoryFilter === 'TRABAJO') matchesCategory = (cat === 'trabajo');
+      else if (leadCategoryFilter === 'CATALOGO') matchesCategory = (cat === 'catalogo');
+      else if (leadCategoryFilter === 'INSPECCION') matchesCategory = (cat === 'inspeccion');
+      else if (leadCategoryFilter === 'TALLER') matchesCategory = (cat === 'taller');
+
+      return matchesSearch && matchesStatus && matchesCategory;
     });
-  }, [leads, searchQuery, statusFilter]);
+  }, [leads, searchQuery, statusFilter, leadCategoryFilter]);
 
   // LOGIN SCREEN (Email & Password Multi-user)
   if (!token) {
@@ -963,81 +1002,181 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 <BrechaCambiariaPanel initialOpen={true} />
               </div>
 
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
-                  <div className="flex justify-between items-center text-zinc-400">
-                    <span className="text-[10px] font-black uppercase tracking-widest">Citas Totales Recibidas</span>
-                    <Calendar className="text-amber-400" size={18} />
-                  </div>
-                  <div className="text-3xl font-black text-white">{leads.length}</div>
-                  <span className="text-[10px] text-zinc-500 block">Registradas vía web / WhatsApp</span>
-                </div>
+              {/* Segregated Metrics Grid */}
+              {(() => {
+                const jobApps = leads.filter(l => getLeadCategory(l) === 'trabajo');
+                const catalogOrders = leads.filter(l => getLeadCategory(l) === 'catalogo');
+                const inspectionLeads = leads.filter(l => getLeadCategory(l) === 'inspeccion');
+                const workshopLeads = leads.filter(l => getLeadCategory(l) === 'taller');
 
-                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
-                  <div className="flex justify-between items-center text-zinc-400">
-                    <span className="text-[10px] font-black uppercase tracking-widest">Repuestos en Catálogo</span>
-                    <Package className="text-primary" size={18} />
-                  </div>
-                  <div className="text-3xl font-black text-white">{catalogItems.length}</div>
-                  <span className="text-[10px] text-zinc-500 block">Productos disponibles públicamente</span>
-                </div>
+                return (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                    {/* 1. Postulaciones de Trabajo */}
+                    <div 
+                      onClick={() => { setActiveTab('leads'); setLeadCategoryFilter('TRABAJO'); }}
+                      className="bg-[#12141a] hover:bg-[#181a24] transition-all p-4 rounded-2xl border border-purple-500/30 space-y-1.5 cursor-pointer shadow-lg group"
+                    >
+                      <div className="flex justify-between items-center text-purple-400">
+                        <span className="text-[9px] font-black uppercase tracking-wider">Postulaciones</span>
+                        <Briefcase size={16} className="group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black text-white">{jobApps.length}</div>
+                      <span className="text-[9px] text-zinc-500 block truncate">Talentos & CVs</span>
+                    </div>
 
-                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
-                  <div className="flex justify-between items-center text-zinc-400">
-                    <span className="text-[10px] font-black uppercase tracking-widest">Jornadas VIP Activas</span>
-                    <Zap className="text-purple-400" size={18} />
-                  </div>
-                  <div className="text-3xl font-black text-white">{jornadasList.length}</div>
-                  <span className="text-[10px] text-zinc-500 block">Promociones vigentes</span>
-                </div>
+                    {/* 2. Pedidos Catálogo */}
+                    <div 
+                      onClick={() => { setActiveTab('leads'); setLeadCategoryFilter('CATALOGO'); }}
+                      className="bg-[#12141a] hover:bg-[#181a24] transition-all p-4 rounded-2xl border border-blue-500/30 space-y-1.5 cursor-pointer shadow-lg group"
+                    >
+                      <div className="flex justify-between items-center text-blue-400">
+                        <span className="text-[9px] font-black uppercase tracking-wider">Pedidos Catálogo</span>
+                        <ShoppingCart size={16} className="group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black text-white">{catalogOrders.length}</div>
+                      <span className="text-[9px] text-zinc-500 block truncate">Repuestos pedidos</span>
+                    </div>
 
-                <div className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-2">
-                  <div className="flex justify-between items-center text-zinc-400">
-                    <span className="text-[10px] font-black uppercase tracking-widest">Especialistas Taller</span>
-                    <Users className="text-emerald-400" size={18} />
-                  </div>
-                  <div className="text-3xl font-black text-white">{teamMembers.length}</div>
-                  <span className="text-[10px] text-zinc-500 block">Técnicos y coordinadores</span>
-                </div>
-              </div>
+                    {/* 3. Línea Inspección */}
+                    <div 
+                      onClick={() => { setActiveTab('leads'); setLeadCategoryFilter('INSPECCION'); }}
+                      className="bg-[#12141a] hover:bg-[#181a24] transition-all p-4 rounded-2xl border border-amber-500/30 space-y-1.5 cursor-pointer shadow-lg group"
+                    >
+                      <div className="flex justify-between items-center text-amber-400">
+                        <span className="text-[9px] font-black uppercase tracking-wider">Inspección</span>
+                        <Calendar size={16} className="group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black text-white">{inspectionLeads.length}</div>
+                      <span className="text-[9px] text-zinc-500 block truncate">Línea gratuita</span>
+                    </div>
 
-              {/* Recent Leads Preview */}
+                    {/* 4. Citas Taller */}
+                    <div 
+                      onClick={() => { setActiveTab('leads'); setLeadCategoryFilter('TALLER'); }}
+                      className="bg-[#12141a] hover:bg-[#181a24] transition-all p-4 rounded-2xl border border-cyan-500/30 space-y-1.5 cursor-pointer shadow-lg group"
+                    >
+                      <div className="flex justify-between items-center text-cyan-400">
+                        <span className="text-[9px] font-black uppercase tracking-wider">Citas Taller</span>
+                        <Wrench size={16} className="group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black text-white">{workshopLeads.length}</div>
+                      <span className="text-[9px] text-zinc-500 block truncate">Servicio general</span>
+                    </div>
+
+                    {/* 5. Repuestos en Catálogo */}
+                    <div 
+                      onClick={() => setActiveTab('catalogo')}
+                      className="bg-[#12141a] hover:bg-[#181a24] transition-all p-4 rounded-2xl border border-white/10 space-y-1.5 cursor-pointer shadow-lg group"
+                    >
+                      <div className="flex justify-between items-center text-primary">
+                        <span className="text-[9px] font-black uppercase tracking-wider">Catálogo</span>
+                        <Package size={16} className="group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black text-white">{catalogItems.length}</div>
+                      <span className="text-[9px] text-zinc-500 block truncate">Items en stock</span>
+                    </div>
+
+                    {/* 6. Especialistas Taller */}
+                    <div 
+                      onClick={() => { setActiveTab('contenido'); setContentSubTab('equipo'); }}
+                      className="bg-[#12141a] hover:bg-[#181a24] transition-all p-4 rounded-2xl border border-emerald-500/30 space-y-1.5 cursor-pointer shadow-lg group"
+                    >
+                      <div className="flex justify-between items-center text-emerald-400">
+                        <span className="text-[9px] font-black uppercase tracking-wider">Equipo</span>
+                        <Users size={16} className="group-hover:scale-110 transition-transform" />
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-black text-white">{teamMembers.length}</div>
+                      <span className="text-[9px] text-zinc-500 block truncate">Técnicos activos</span>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Recent Solicitudes / Leads Preview with Category Badges */}
               <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-4">
                 <div className="flex items-center justify-between border-b border-white/10 pb-3">
                   <h3 className="text-sm font-black uppercase text-white tracking-wider flex items-center gap-2">
                     <Clock className="text-primary" size={16} />
-                    <span>Últimas Citas Solicitadas</span>
+                    <span>Últimas Solicitudes Recibidas (Clasificadas)</span>
                   </h3>
-                  <button onClick={() => setActiveTab('leads')} className="text-xs text-primary hover:underline font-bold">Ver todas →</button>
+                  <button onClick={() => setActiveTab('leads')} className="text-xs text-primary hover:underline font-bold">Ver todas ({leads.length}) →</button>
                 </div>
 
                 {leads.length === 0 ? (
-                  <p className="text-xs text-zinc-500 py-4 text-center">No hay registros de citas recientes todavía.</p>
+                  <p className="text-xs text-zinc-500 py-4 text-center">No hay registros de solicitudes recientes todavía.</p>
                 ) : (
                   <div className="space-y-3">
-                    {leads.slice(0, 5).map((l, idx) => (
-                      <div key={l.id || idx} className="p-3.5 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between gap-4">
-                        <div>
-                          <span className="font-bold text-xs text-white block">{l.nombre || 'Cliente sin nombre'}</span>
-                          <span className="text-[11px] text-zinc-400">{l.vehiculo || 'Vehículo'} — {l.servicio || 'Servicio'}</span>
+                    {leads.slice(0, 6).map((l, idx) => {
+                      const cat = getLeadCategory(l);
+                      const cvUrl = getCvDownloadUrl(l);
+
+                      return (
+                        <div key={l.id || idx} className="p-3.5 bg-black/40 rounded-xl border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-xs text-white">{l.nombre || 'Sin nombre'}</span>
+                              
+                              {/* Category Badge */}
+                              {cat === 'trabajo' && (
+                                <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                                  <Briefcase size={10} /> POSTULANTE
+                                </span>
+                              )}
+                              {cat === 'catalogo' && (
+                                <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1">
+                                  <ShoppingCart size={10} /> PEDIDO CATÁLOGO
+                                </span>
+                              )}
+                              {cat === 'inspeccion' && (
+                                <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                  <Calendar size={10} /> INSPECCIÓN
+                                </span>
+                              )}
+                              {cat === 'taller' && (
+                                <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+                                  <Wrench size={10} /> TALLER
+                                </span>
+                              )}
+                            </div>
+
+                            <span className="text-[11px] text-zinc-400 block">
+                              {l.vehiculo && l.vehiculo !== 'Postulante Equipo MasterTech' ? `${l.vehiculo} — ` : ''}
+                              {l.servicio || 'Servicio'}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2 self-end sm:self-auto">
+                            {/* Ver CV Button if exists */}
+                            {cvUrl && (
+                              <a
+                                href={cvUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-[10px] font-bold flex items-center gap-1 transition-colors"
+                                title="Ver / Descargar Currículum Vitae"
+                              >
+                                <FileText size={12} />
+                                <span>Ver CV</span>
+                              </a>
+                            )}
+
+                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                              {l.status || 'Pendiente'}
+                            </span>
+
+                            <a
+                              href={`https://wa.me/${(l.telefono || '').replace(/\D/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/40 transition-colors"
+                              title="Abrir WhatsApp directo"
+                            >
+                              <WhatsAppIcon size={14} />
+                            </a>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
-                            {l.status || 'Pendiente'}
-                          </span>
-                          <a
-                            href={`https://wa.me/${(l.telefono || '').replace(/\D/g, '')}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/40 transition-colors"
-                            title="Abrir WhatsApp directo"
-                          >
-                            <WhatsAppIcon size={14} />
-                          </a>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -1045,125 +1184,285 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           )}
 
           {/* ========================================================================= */}
-          {/* MODULE 2: GESTOR DE CITAS Y LEADS */}
+          {/* MODULE 2: GESTOR DE CITAS Y SOLICITUDES (SEGREGADAS POR ÁREA) */}
           {/* ========================================================================= */}
           {activeTab === 'leads' && (
             <div className="space-y-6 animate-fade-in">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                <div>
-                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Gestión de Citas y Solicitudes</h1>
-                  <p className="text-xs text-zinc-400 mt-1">Revisa y responde a las citas agendadas por los clientes vía web.</p>
-                </div>
-                <button onClick={fetchLeads} className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold flex items-center gap-2">
-                  <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
-                  <span>Actualizar Lista</span>
-                </button>
-              </div>
+              {(() => {
+                const jobAppsCount = leads.filter(l => getLeadCategory(l) === 'trabajo').length;
+                const catalogOrdersCount = leads.filter(l => getLeadCategory(l) === 'catalogo').length;
+                const inspectionCount = leads.filter(l => getLeadCategory(l) === 'inspeccion').length;
+                const workshopCount = leads.filter(l => getLeadCategory(l) === 'taller').length;
 
-              {/* Filters & Search */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="sm:col-span-2 relative">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
-                  <input
-                    type="text"
-                    placeholder="Buscar por cliente, teléfono, vehículo o servicio..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white outline-none focus:border-primary"
-                  />
-                </div>
+                return (
+                  <>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                      <div>
+                        <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Gestión de Solicitudes y Citas</h1>
+                        <p className="text-xs text-zinc-400 mt-1">Clasificación separada para Trabajo / CVs, Pedidos de Catálogo, Inspecciones y Citas de Taller.</p>
+                      </div>
+                      <button onClick={fetchLeads} className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold flex items-center gap-2 hover:bg-white/10 transition-colors">
+                        <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
+                        <span>Actualizar ({leads.length})</span>
+                      </button>
+                    </div>
 
-                <div className="flex items-center gap-2">
-                  <Filter size={16} className="text-zinc-400 shrink-0" />
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-primary"
-                  >
-                    <option value="Todos">Todos los Estados</option>
-                    <option value="Pendiente">Pendientes</option>
-                    <option value="Confirmado">Confirmados</option>
-                    <option value="Atendido">Atendidos</option>
-                    <option value="Cancelado">Cancelados</option>
-                  </select>
-                </div>
-              </div>
+                    {/* Category Tabs / Pills */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={() => setLeadCategoryFilter('TODOS')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                          leadCategoryFilter === 'TODOS'
+                            ? 'bg-primary text-black shadow-lg font-black'
+                            : 'bg-[#12141a] text-zinc-400 hover:text-white border border-white/10'
+                        }`}
+                      >
+                        <Layers size={14} />
+                        <span>Todas las Solicitudes ({leads.length})</span>
+                      </button>
 
-              {/* Table */}
-              <div className="bg-[#12141a] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-zinc-300">
-                    <thead className="bg-black/60 text-zinc-400 uppercase tracking-wider text-[10px] font-black border-b border-white/10">
-                      <tr>
-                        <th className="p-4">Cliente</th>
-                        <th className="p-4">Teléfono</th>
-                        <th className="p-4">Vehículo</th>
-                        <th className="p-4">Servicio</th>
-                        <th className="p-4">Fecha / Turno</th>
-                        <th className="p-4">Estado</th>
-                        <th className="p-4 text-right">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {filteredLeads.length === 0 ? (
-                        <tr>
-                          <td colSpan={7} className="p-8 text-center text-zinc-500">
-                            No se encontraron registros de citas con los filtros indicados.
-                          </td>
-                        </tr>
-                      ) : (
-                        filteredLeads.map((l, idx) => (
-                          <tr key={l.id || idx} className="hover:bg-white/5 transition-colors">
-                            <td className="p-4 font-bold text-white">{l.nombre || 'Sin nombre'}</td>
-                            <td className="p-4 font-mono">{l.telefono || '-'}</td>
-                            <td className="p-4">{l.vehiculo || '-'}</td>
-                            <td className="p-4 text-primary font-bold">{l.servicio || '-'}</td>
-                            <td className="p-4 text-zinc-400">{l.fecha_turno || l.fecha || 'Por acordar'}</td>
-                            <td className="p-4">
-                              <select
-                                value={l.status || 'Pendiente'}
-                                onChange={(e) => handleUpdateLeadStatus(l.id, e.target.value)}
-                                className={`text-[10px] font-bold px-2 py-1 rounded-lg border outline-none cursor-pointer bg-black ${
-                                  l.status === 'Confirmado' 
-                                    ? 'border-green-500/40 text-green-400' 
-                                    : l.status === 'Atendido'
-                                    ? 'border-cyan-500/40 text-cyan-400'
-                                    : l.status === 'Cancelado'
-                                    ? 'border-red-500/40 text-red-400'
-                                    : 'border-amber-500/40 text-amber-300'
-                                }`}
-                              >
-                                <option value="Pendiente">Pendiente</option>
-                                <option value="Confirmado">Confirmado</option>
-                                <option value="Atendido">Atendido</option>
-                                <option value="Cancelado">Cancelado</option>
-                              </select>
-                            </td>
-                            <td className="p-4 text-right space-x-2">
-                              <a
-                                href={`https://wa.me/${(l.telefono || '').replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${l.nombre || ''}, te contactamos desde Taller MasterTech sobre tu solicitud de cita de ${l.servicio || 'servicio'}.`)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex p-1.5 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/40 transition-colors"
-                                title="Contactar por WhatsApp"
-                              >
-                                <WhatsAppIcon size={14} />
-                              </a>
-                              <button
-                                onClick={() => handleDeleteLead(l.id)}
-                                className="p-1.5 rounded-lg bg-white/5 text-zinc-500 hover:text-red-400 border border-white/10 transition-colors"
-                                title="Eliminar registro"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                      <button
+                        onClick={() => setLeadCategoryFilter('TRABAJO')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                          leadCategoryFilter === 'TRABAJO'
+                            ? 'bg-purple-500 text-white shadow-lg font-black'
+                            : 'bg-[#12141a] text-purple-400 hover:text-white border border-purple-500/30'
+                        }`}
+                      >
+                        <Briefcase size={14} />
+                        <span>Postulaciones & CVs ({jobAppsCount})</span>
+                      </button>
+
+                      <button
+                        onClick={() => setLeadCategoryFilter('CATALOGO')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                          leadCategoryFilter === 'CATALOGO'
+                            ? 'bg-blue-500 text-white shadow-lg font-black'
+                            : 'bg-[#12141a] text-blue-400 hover:text-white border border-blue-500/30'
+                        }`}
+                      >
+                        <ShoppingCart size={14} />
+                        <span>Pedidos Catálogo ({catalogOrdersCount})</span>
+                      </button>
+
+                      <button
+                        onClick={() => setLeadCategoryFilter('INSPECCION')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                          leadCategoryFilter === 'INSPECCION'
+                            ? 'bg-amber-500 text-black shadow-lg font-black'
+                            : 'bg-[#12141a] text-amber-400 hover:text-white border border-amber-500/30'
+                        }`}
+                      >
+                        <Calendar size={14} />
+                        <span>Línea de Inspección ({inspectionCount})</span>
+                      </button>
+
+                      <button
+                        onClick={() => setLeadCategoryFilter('TALLER')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                          leadCategoryFilter === 'TALLER'
+                            ? 'bg-cyan-500 text-black shadow-lg font-black'
+                            : 'bg-[#12141a] text-cyan-400 hover:text-white border border-cyan-500/30'
+                        }`}
+                      >
+                        <Wrench size={14} />
+                        <span>Citas de Taller ({workshopCount})</span>
+                      </button>
+                    </div>
+
+                    {/* Filters & Search */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="sm:col-span-2 relative">
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                        <input
+                          type="text"
+                          placeholder="Buscar por nombre, teléfono, vehículo, especialidad o repuesto..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Filter size={16} className="text-zinc-400 shrink-0" />
+                        <select
+                          value={statusFilter}
+                          onChange={(e) => setStatusFilter(e.target.value)}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-primary cursor-pointer"
+                        >
+                          <option value="Todos">Todos los Estados</option>
+                          <option value="Pendiente">Pendientes</option>
+                          <option value="Contactado">Contactados</option>
+                          <option value="Entrevistado">Entrevistados</option>
+                          <option value="Confirmado">Confirmados</option>
+                          <option value="Atendido">Atendidos</option>
+                          <option value="Cancelado">Cancelados</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Table */}
+                    <div className="bg-[#12141a] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs text-zinc-300">
+                          <thead className="bg-black/60 text-zinc-400 uppercase tracking-wider text-[10px] font-black border-b border-white/10">
+                            <tr>
+                              <th className="p-4">Tipo</th>
+                              <th className="p-4">Solicitante</th>
+                              <th className="p-4">Teléfono</th>
+                              <th className="p-4">Detalle / Vehículo</th>
+                              <th className="p-4">Servicio / Cargo</th>
+                              <th className="p-4">CV / Turno</th>
+                              <th className="p-4">Estado</th>
+                              <th className="p-4 text-right">Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-white/5">
+                            {filteredLeads.length === 0 ? (
+                              <tr>
+                                <td colSpan={8} className="p-10 text-center text-zinc-500">
+                                  No se encontraron registros para la categoría o búsqueda seleccionada.
+                                </td>
+                              </tr>
+                            ) : (
+                              filteredLeads.map((l, idx) => {
+                                const cat = getLeadCategory(l);
+                                const cvUrl = getCvDownloadUrl(l);
+
+                                // Formatear saludo personalizado de WhatsApp según el tipo de solicitud
+                                let waMsg = `Hola ${l.nombre || ''}, te contactamos desde Taller MasterTech.`;
+                                if (cat === 'trabajo') {
+                                  waMsg = `Hola ${l.nombre || ''}, te contactamos desde la Coordinación de Recursos Humanos de Taller MasterTech sobre tu postulación laboral para el área de ${l.servicio || 'especialista'}.`;
+                                } else if (cat === 'catalogo') {
+                                  waMsg = `Hola ${l.nombre || ''}, te contactamos desde el Departamento de Repuestos de Taller MasterTech sobre tu pedido de catálogo (${l.servicio || 'piezas'}).`;
+                                } else if (cat === 'inspeccion') {
+                                  waMsg = `Hola ${l.nombre || ''}, te contactamos de Taller MasterTech para confirmar tu cita en la Línea de Inspección Gratuita para tu ${l.vehiculo || 'vehículo'}.`;
+                                }
+
+                                return (
+                                  <tr key={l.id || idx} className="hover:bg-white/5 transition-colors">
+                                    {/* Tipo Badge */}
+                                    <td className="p-4">
+                                      {cat === 'trabajo' && (
+                                        <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-purple-500/20 text-purple-300 border border-purple-500/40 inline-flex items-center gap-1">
+                                          <Briefcase size={11} /> TRABAJO
+                                        </span>
+                                      )}
+                                      {cat === 'catalogo' && (
+                                        <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-blue-500/20 text-blue-300 border border-blue-500/40 inline-flex items-center gap-1">
+                                          <ShoppingCart size={11} /> CATÁLOGO
+                                        </span>
+                                      )}
+                                      {cat === 'inspeccion' && (
+                                        <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 inline-flex items-center gap-1">
+                                          <Calendar size={11} /> INSPECCIÓN
+                                        </span>
+                                      )}
+                                      {cat === 'taller' && (
+                                        <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 inline-flex items-center gap-1">
+                                          <Wrench size={11} /> TALLER
+                                        </span>
+                                      )}
+                                    </td>
+
+                                    {/* Solicitante */}
+                                    <td className="p-4 font-bold text-white whitespace-nowrap">
+                                      {l.nombre || 'Sin nombre'}
+                                    </td>
+
+                                    {/* Teléfono */}
+                                    <td className="p-4 font-mono text-zinc-300 whitespace-nowrap">
+                                      {l.telefono || '-'}
+                                    </td>
+
+                                    {/* Detalle / Vehículo */}
+                                    <td className="p-4 text-zinc-300">
+                                      {cat === 'trabajo' ? (
+                                        <span className="text-purple-300 font-semibold">{l.vehiculo || 'Postulante'}</span>
+                                      ) : (
+                                        <span>{l.vehiculo || '-'}</span>
+                                      )}
+                                    </td>
+
+                                    {/* Servicio / Cargo */}
+                                    <td className="p-4 text-primary font-bold">
+                                      {l.servicio || '-'}
+                                    </td>
+
+                                    {/* CV / Turno */}
+                                    <td className="p-4">
+                                      {cvUrl ? (
+                                        <a
+                                          href={cvUrl}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-[10px] font-bold transition-colors shadow-sm"
+                                          title="Ver / Descargar Currículum"
+                                        >
+                                          <FileText size={12} />
+                                          <span>Descargar CV</span>
+                                        </a>
+                                      ) : (
+                                        <span className="text-zinc-400 text-[11px]">
+                                          {l.fecha_turno || l.fecha || l.fecha_hora || 'Por acordar'}
+                                        </span>
+                                      )}
+                                    </td>
+
+                                    {/* Estado */}
+                                    <td className="p-4">
+                                      <select
+                                        value={l.status || 'Pendiente'}
+                                        onChange={(e) => handleUpdateLeadStatus(l.id, e.target.value)}
+                                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border outline-none cursor-pointer bg-black ${
+                                          l.status === 'Confirmado' || l.status === 'Entrevistado'
+                                            ? 'border-green-500/40 text-green-400' 
+                                            : l.status === 'Contactado' || l.status === 'Atendido'
+                                            ? 'border-cyan-500/40 text-cyan-400'
+                                            : l.status === 'Cancelado'
+                                            ? 'border-red-500/40 text-red-400'
+                                            : 'border-amber-500/40 text-amber-300'
+                                        }`}
+                                      >
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="Contactado">Contactado</option>
+                                        <option value="Entrevistado">Entrevistado</option>
+                                        <option value="Confirmado">Confirmado</option>
+                                        <option value="Atendido">Atendido</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                      </select>
+                                    </td>
+
+                                    {/* Acciones */}
+                                    <td className="p-4 text-right space-x-2 whitespace-nowrap">
+                                      <a
+                                        href={`https://wa.me/${(l.telefono || '').replace(/\D/g, '')}?text=${encodeURIComponent(waMsg)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex p-1.5 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/40 transition-colors"
+                                        title="Contactar por WhatsApp"
+                                      >
+                                        <WhatsAppIcon size={14} />
+                                      </a>
+                                      <button
+                                        onClick={() => handleDeleteLead(l.id)}
+                                        className="p-1.5 rounded-lg bg-white/5 text-zinc-500 hover:text-red-400 border border-white/10 transition-colors cursor-pointer"
+                                        title="Eliminar registro"
+                                      >
+                                        <Trash2 size={14} />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           )}
 
