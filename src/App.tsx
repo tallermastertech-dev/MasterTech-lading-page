@@ -177,16 +177,7 @@ export default function App() {
   );
   const [isTrabajaConNosotros, setIsTrabajaConNosotros] = useState(
     window.location.pathname.toLowerCase() === '/postulacion' ||
-    window.location.pathname.toLowerCase() === '/trabaja-con-nosotros' ||
-    window.location.pathname.toLowerCase() === '/empleo' ||
-    window.location.pathname.toLowerCase() === '/talento' ||
-    window.location.pathname.toLowerCase() === '/vacantes' ||
-    window.location.pathname.toLowerCase() === '/reclutamiento' ||
-    window.location.pathname.toLowerCase() === '/trabajo' ||
-    window.location.hash === '#postulacion' ||
-    window.location.hash === '#trabaja-con-nosotros' ||
-    window.location.hash === '#empleo' ||
-    window.location.hash === '#talento'
+    window.location.hash === '#postulacion'
   );
 
   // Dynamic JSON arrays for team, reviews, and brands
@@ -290,16 +281,7 @@ export default function App() {
       );
       setIsTrabajaConNosotros(
         window.location.pathname.toLowerCase() === '/postulacion' ||
-        window.location.pathname.toLowerCase() === '/trabaja-con-nosotros' ||
-        window.location.pathname.toLowerCase() === '/empleo' ||
-        window.location.pathname.toLowerCase() === '/talento' ||
-        window.location.pathname.toLowerCase() === '/vacantes' ||
-        window.location.pathname.toLowerCase() === '/reclutamiento' ||
-        window.location.pathname.toLowerCase() === '/trabajo' ||
-        window.location.hash === '#postulacion' ||
-        window.location.hash === '#trabaja-con-nosotros' ||
-        window.location.hash === '#empleo' ||
-        window.location.hash === '#talento'
+        window.location.hash === '#postulacion'
       );
     };
     window.addEventListener('hashchange', handleHashChange);
