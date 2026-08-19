@@ -43,6 +43,7 @@ import Nosotros from './Nosotros';
 import Servicios from './Servicios';
 import Catalogo from './Catalogo';
 import Jornadas from './Jornadas';
+import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 
 const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg 
@@ -538,6 +539,9 @@ export default function App() {
           ))}
         </div>
       </section>
+
+      {/* Live Brecha Cambiaria Venezuela Panel */}
+      <BrechaCambiariaPanel />
 
 
 

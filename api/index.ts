@@ -994,6 +994,49 @@ app.get('/settings', handleGetSettings);
 app.get('/api/inspection-slots', handleGetInspectionSlots);
 app.get('/inspection-slots', handleGetInspectionSlots);
 
+// Live Brecha Cambiaria proxy endpoint
+let brechaCache: { data: any; lastFetch: number } = {
+  data: {
+    bcv_usd: 775.34,
+    bcv_eur: 897.82,
+    usdt: 922.43,
+    brecha_usdt_usd: 18.88,
+    brecha_usdt_eur: 2.66,
+    brecha_eur_usd: 15.80,
+    timestamp: new Date().toISOString()
+  },
+  lastFetch: 0
+};
+
+app.get(['/api/brecha-cambiaria', '/brecha-cambiaria'], async (_req, res) => {
+  const now = Date.now();
+  if (now - brechaCache.lastFetch < 45000 && brechaCache.data) {
+    return res.json({ success: true, ...brechaCache.data, cached: true });
+  }
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const response = await fetch('https://brecha-cambiaria.com/api/latest', {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'MasterTech-App/2.0' }
+    });
+    clearTimeout(timeout);
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data && (data.bcv_usd || data.usdt)) {
+        brechaCache = { data, lastFetch: now };
+        return res.json({ success: true, ...data });
+      }
+    }
+  } catch (e) {
+    console.error("Error fetching brecha-cambiaria.com:", e);
+  }
+
+  return res.json({ success: true, ...brechaCache.data, fallback: true });
+});
+
 // Lead submission (standard limit to prevent spam)
 app.post('/api/leads', standardLimit, handlePostLeads);
 app.post('/leads', standardLimit, handlePostLeads);
