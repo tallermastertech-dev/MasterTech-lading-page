@@ -374,49 +374,73 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             </div>
           </div>
 
-          {/* Mini 4-Grid Rates */}
-          <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+          {/* 3 Currency Rates (3 Columns Grid) */}
+          <div className="grid grid-cols-3 gap-2 text-xs font-mono">
             {/* Dólar BCV */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-emerald-500/30">
-              <div className="flex items-center justify-between text-[9px] font-bold text-emerald-400 uppercase">
-                <span>Dólar BCV</span>
-                <span className="text-zinc-500">Oficial</span>
+            <div className="bg-black/50 p-2 rounded-xl border border-emerald-500/30">
+              <div className="text-[9px] font-bold text-emerald-400 uppercase truncate">
+                $ BCV
               </div>
-              <div className="text-base font-black text-white mt-1">
-                {formatNumber(rates.bcv_usd)} <small className="text-[9px] text-emerald-400 font-normal">Bs.</small>
+              <div className="text-sm font-black text-white mt-0.5">
+                {formatNumber(rates.bcv_usd)} <small className="text-[8px] text-emerald-400">Bs.</small>
               </div>
             </div>
 
             {/* Euro BCV */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-cyan-500/30">
-              <div className="flex items-center justify-between text-[9px] font-bold text-cyan-400 uppercase">
-                <span>Euro BCV</span>
-                <span className="text-zinc-500">Oficial</span>
+            <div className="bg-black/50 p-2 rounded-xl border border-cyan-500/30">
+              <div className="text-[9px] font-bold text-cyan-400 uppercase truncate">
+                € BCV
               </div>
-              <div className="text-base font-black text-white mt-1">
-                {formatNumber(rates.bcv_eur)} <small className="text-[9px] text-cyan-400 font-normal">Bs.</small>
+              <div className="text-sm font-black text-white mt-0.5">
+                {formatNumber(rates.bcv_eur)} <small className="text-[8px] text-cyan-400">Bs.</small>
               </div>
             </div>
 
             {/* USDT Binance */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-amber-500/30">
-              <div className="flex items-center justify-between text-[9px] font-bold text-amber-400 uppercase">
-                <span>USDT P2P</span>
-                <span className="text-zinc-500">Binance</span>
+            <div className="bg-black/50 p-2 rounded-xl border border-amber-500/30">
+              <div className="text-[9px] font-bold text-amber-400 uppercase truncate">
+                USDT
               </div>
-              <div className="text-base font-black text-white mt-1">
-                {formatNumber(rates.usdt)} <small className="text-[9px] text-amber-400 font-normal">Bs.</small>
+              <div className="text-sm font-black text-white mt-0.5">
+                {formatNumber(rates.usdt)} <small className="text-[8px] text-amber-400">Bs.</small>
               </div>
             </div>
+          </div>
 
-            {/* Brecha USDT vs BCV */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-rose-500/30">
-              <div className="flex items-center justify-between text-[9px] font-bold text-rose-400 uppercase">
-                <span>Brecha $</span>
-                <span className="text-zinc-500">Diferencial</span>
+          {/* All 3 Exchange Rate Gaps / Brechas (3 Columns Grid) */}
+          <div className="space-y-1">
+            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-400 block px-1">
+              Brechas Cambiarias % (Diferenciales)
+            </span>
+            <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+              {/* 1. USDT vs $ BCV */}
+              <div className="bg-black/50 p-2 rounded-xl border border-rose-500/30">
+                <div className="text-[8.5px] font-bold text-rose-400 uppercase truncate">
+                  USDT vs $ BCV
+                </div>
+                <div className="text-sm font-black text-rose-400 mt-0.5">
+                  {formatNumber(rates.brecha_usdt_usd)}%
+                </div>
               </div>
-              <div className="text-base font-black text-rose-400 mt-1">
-                {formatNumber(rates.brecha_usdt_usd)}%
+
+              {/* 2. USDT vs € BCV */}
+              <div className="bg-black/50 p-2 rounded-xl border border-rose-500/30">
+                <div className="text-[8.5px] font-bold text-rose-400 uppercase truncate">
+                  USDT vs € BCV
+                </div>
+                <div className="text-sm font-black text-rose-400 mt-0.5">
+                  {formatNumber(rates.brecha_usdt_eur)}%
+                </div>
+              </div>
+
+              {/* 3. € BCV vs $ BCV */}
+              <div className="bg-black/50 p-2 rounded-xl border border-rose-500/30">
+                <div className="text-[8.5px] font-bold text-rose-400 uppercase truncate">
+                  € BCV vs $ BCV
+                </div>
+                <div className="text-sm font-black text-rose-400 mt-0.5">
+                  {formatNumber(rates.brecha_eur_usd)}%
+                </div>
               </div>
             </div>
           </div>
