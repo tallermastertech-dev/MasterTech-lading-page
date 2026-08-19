@@ -642,6 +642,41 @@ async function getAdminUsersList(): Promise<any[]> {
   return DEFAULT_ADMIN_USERS;
 }
 
+// Helper: Audit Logging System (Auditoría de Actividades de Usuarios)
+async function recordAuditLog(entry: {
+  userEmail?: string;
+  userName?: string;
+  userRole?: string;
+  action: string;
+  category: 'AUTH' | 'CATALOGO' | 'JORNADAS' | 'CITAS' | 'USUARIOS' | 'AJUSTES' | 'CONTENIDO';
+  details: string;
+}) {
+  try {
+    const settings = await getSettings();
+    let currentLogs: any[] = [];
+    if (settings.AUDIT_LOGS_JSON) {
+      try {
+        const parsed = JSON.parse(settings.AUDIT_LOGS_JSON);
+        if (Array.isArray(parsed)) currentLogs = parsed;
+      } catch (e) {}
+    }
+    const newLog = {
+      id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      userEmail: entry.userEmail || 'admin@tallermastertech.com',
+      userName: entry.userName || 'Usuario',
+      userRole: entry.userRole || 'Administrador',
+      action: entry.action,
+      category: entry.category,
+      details: entry.details,
+      timestamp: new Date().toISOString()
+    };
+    const updated = [newLog, ...currentLogs].slice(0, 300);
+    await supabase.from('settings').upsert({ key: 'AUDIT_LOGS_JSON', value: JSON.stringify(updated) });
+  } catch (e) {
+    console.error("Error recording audit log:", e);
+  }
+}
+
 // Handler reutilizable para POST /login con soporte multiusuario por correo y contraseña
 const handlePostLogin = async (req: express.Request, res: express.Response) => {
   const email = sanitizeString(req.body.email, 200)?.trim().toLowerCase();
@@ -684,6 +719,16 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
       role: 'CEO - Director',
       accessLevel: 'full'
     };
+
+    // Registrar inicio de sesión en auditoría
+    recordAuditLog({
+      userEmail: activeUser.email,
+      userName: activeUser.name,
+      userRole: activeUser.role,
+      action: 'Inicio de Sesión',
+      category: 'AUTH',
+      details: `Inició sesión exitosamente desde el panel de control.`
+    }).catch(() => {});
 
     const token = generateAdminToken();
     res.json({
@@ -1161,6 +1206,13 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
     const jsonStr = JSON.stringify(updatedUsers);
     await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
     
+    // Registrar en auditoría
+    recordAuditLog({
+      action: id ? 'Modificación de Usuario' : 'Creación de Usuario',
+      category: 'USUARIOS',
+      details: `${id ? 'Modificó los datos del perfil' : 'Creó nuevo perfil de acceso para'} ${name} (${cleanEmail}) con rol ${role || 'Asesor'}`
+    }).catch(() => {});
+
     res.json({ success: true, message: 'Usuario guardado correctamente.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al guardar usuario', details: err.message });
@@ -1175,13 +1227,67 @@ app.delete(['/api/admin/users/:id', '/admin/users/:id'], authenticateAdmin, asyn
       return res.status(400).json({ error: 'No puedes eliminar el único usuario administrador activo.' });
     }
 
+    const targetUser = currentUsers.find(u => u.id === id);
     const updatedUsers = currentUsers.filter(u => u.id !== id);
     const jsonStr = JSON.stringify(updatedUsers);
     await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
 
+    // Registrar en auditoría
+    recordAuditLog({
+      action: 'Eliminación de Usuario',
+      category: 'USUARIOS',
+      details: `Revocó y eliminó el acceso del usuario ${targetUser?.name || id} (${targetUser?.email || ''})`
+    }).catch(() => {});
+
     res.json({ success: true, message: 'Usuario eliminado correctamente.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al eliminar usuario', details: err.message });
+  }
+});
+
+// Admin Audit Logs Routes
+app.get(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, res) => {
+  try {
+    const settings = await getSettings();
+    let logs: any[] = [];
+    if (settings.AUDIT_LOGS_JSON) {
+      try {
+        const parsed = JSON.parse(settings.AUDIT_LOGS_JSON);
+        if (Array.isArray(parsed)) logs = parsed;
+      } catch (e) {}
+    }
+    res.json({ success: true, logs });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al obtener registros de auditoría', details: err.message });
+  }
+});
+
+app.post(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (req, res) => {
+  try {
+    const { action, category, details, userName, userEmail, userRole } = req.body || {};
+    if (!action || !details) {
+      return res.status(400).json({ error: 'Acción y detalles son requeridos.' });
+    }
+    await recordAuditLog({
+      action: String(action),
+      category: category || 'AJUSTES',
+      details: String(details),
+      userName: userName ? String(userName) : undefined,
+      userEmail: userEmail ? String(userEmail) : undefined,
+      userRole: userRole ? String(userRole) : undefined
+    });
+    res.json({ success: true, message: 'Log registrado.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al registrar log', details: err.message });
+  }
+});
+
+app.delete(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, res) => {
+  try {
+    await supabase.from('settings').upsert({ key: 'AUDIT_LOGS_JSON', value: '[]' });
+    res.json({ success: true, message: 'Historial de auditoría vaciado correctamente.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al limpiar logs', details: err.message });
   }
 });
 

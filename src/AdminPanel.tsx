@@ -49,7 +49,11 @@ import {
   Eye,
   EyeOff,
   UserCheck,
-  Key
+  Key,
+  History,
+  FileText,
+  Activity,
+  ShieldAlert
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import { getTallerStatus } from './utils/tallerStatus';
@@ -156,8 +160,55 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'integraciones' | 'usuarios'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
+
+  // Audit Logs State (Registro de Actividad y Cambios de Usuarios)
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [isLoadingLogs, setIsLoadingLogs] = useState(false);
+  const [logCategoryFilter, setLogCategoryFilter] = useState<string>('TODOS');
+  const [logSearchQuery, setLogSearchQuery] = useState('');
+
+  // Fetch Audit Logs
+  const fetchAuditLogs = async () => {
+    if (!token) return;
+    setIsLoadingLogs(true);
+    try {
+      const res = await fetch(`/api/admin/logs?t=${Date.now()}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAuditLogs(Array.isArray(data.logs) ? data.logs : []);
+      }
+    } catch (e) {
+      console.error("Error fetching audit logs:", e);
+    } finally {
+      setIsLoadingLogs(false);
+    }
+  };
+
+  // Helper: Log Client-Side Actions to Audit Logs
+  const logClientAction = async (action: string, category: 'AUTH' | 'CATALOGO' | 'JORNADAS' | 'CITAS' | 'USUARIOS' | 'AJUSTES' | 'CONTENIDO', details: string) => {
+    if (!token) return;
+    try {
+      await fetch('/api/admin/logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          action,
+          category,
+          details,
+          userName: currentUser?.name || 'Administrador',
+          userEmail: currentUser?.email || 'admin@tallermastertech.com',
+          userRole: currentUser?.role || 'Super Administrador'
+        })
+      });
+    } catch (e) {}
+  };
 
   // Route guard: auto redirect limited users to dashboard if they attempt restricted tab
   useEffect(() => {
@@ -166,6 +217,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       if (!allowed.includes(activeTab)) {
         setActiveTab('dashboard');
       }
+    }
+    if (activeTab === 'auditoria') {
+      fetchAuditLogs();
     }
   }, [activeTab, currentUser]);
 
@@ -454,6 +508,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
 
       setSavedSectionSuccess(sectionKey);
+      logClientAction('Modificación de Ajustes', 'AJUSTES', `Guardó cambios en el módulo "${sectionKey}" del sitio web.`);
       alert('✅ ¡Cambios guardados y revalidados exitosamente en Supabase y la web pública!');
       setTimeout(() => setSavedSectionSuccess(null), 4000);
     } catch (err: any) {
@@ -472,9 +527,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   // Lead Status Handler
   const handleUpdateLeadStatus = async (id: number | string, newStatus: string) => {
     if (!token) return;
+    const targetLead = leads.find(l => String(l.id) === String(id));
     const updated = leads.map(l => String(l.id) === String(id) ? { ...l, status: newStatus } : l);
     setLeads(updated);
     if (selectedLead && String(selectedLead.id) === String(id)) setSelectedLead({ ...selectedLead, status: newStatus });
+
+    logClientAction('Actualizó Estado de Cita', 'CITAS', `Marcó la cita de ${targetLead?.nombre || 'Cliente'} (${targetLead?.telefono || ''}) como "${newStatus}".`);
 
     try {
       await fetch(`/api/leads/${id}`, {
@@ -490,14 +548,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   const handleDeleteLead = async (id: number | string) => {
     if (!token || !window.confirm('¿Estás seguro de eliminar este registro de cita?')) return;
+    const targetLead = leads.find(l => String(l.id) === String(id));
     const updated = leads.filter(l => String(l.id) !== String(id));
     setLeads(updated);
     if (selectedLead && String(selectedLead.id) === String(id)) setSelectedLead(null);
 
+    logClientAction('Eliminación de Cita', 'CITAS', `Eliminó la cita de ${targetLead?.nombre || 'Cliente'} (${targetLead?.servicio || 'Servicio'}).`);
+
     try {
       await fetch(`/api/leads/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ id })
       });
     } catch (e) {}
   };
@@ -556,8 +621,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Catalog Item Save
   const handleSaveCatalogItem = (product: CatalogItem) => {
+    const isEdit = product.id && catalogItems.some(p => p.id === product.id);
     let updated: CatalogItem[] = [];
-    if (product.id && catalogItems.some(p => p.id === product.id)) {
+    if (isEdit) {
       updated = catalogItems.map(p => p.id === product.id ? product : p);
     } else {
       updated = [{ ...product, id: Date.now() }, ...catalogItems];
@@ -571,10 +637,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setIsCatalogModalOpen(false);
     setEditingProduct(null);
     handleSaveSettings(updatedForm);
+
+    logClientAction(
+      isEdit ? 'Modificación de Repuesto' : 'Creación de Repuesto',
+      'CATALOGO',
+      `${isEdit ? 'Modificó datos del repuesto' : 'Añadió nuevo repuesto'} "${product.title}" (${product.category || 'General'}, ${product.price || '$0'}).`
+    );
   };
 
   const handleDeleteCatalogItem = (id: number | string) => {
     if (!window.confirm('¿Eliminar este repuesto o producto del catálogo?')) return;
+    const targetProd = catalogItems.find(p => String(p.id) === String(id));
     const updated = catalogItems.filter(p => String(p.id) !== String(id));
     setCatalogItems(updated);
     const jsonStr = JSON.stringify(updated);
@@ -582,12 +655,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setSettingsForm(updatedForm);
     setSettings(updatedForm);
     handleSaveSettings(updatedForm);
+
+    logClientAction('Eliminación de Repuesto', 'CATALOGO', `Eliminó el repuesto "${targetProd?.title || id}" del catálogo.`);
   };
 
   // Jornada Item Save
   const handleSaveJornadaItem = (jornada: any) => {
+    const isEdit = jornada.id && jornadasList.some(j => String(j.id) === String(jornada.id));
     let updated: any[] = [];
-    if (jornada.id && jornadasList.some(j => String(j.id) === String(jornada.id))) {
+    if (isEdit) {
       updated = jornadasList.map(j => String(j.id) === String(jornada.id) ? jornada : j);
     } else {
       const newId = jornada.id || `jornada_${Date.now()}`;
@@ -602,10 +678,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setIsJornadaModalOpen(false);
     setEditingJornada(null);
     handleSaveSettings(updatedForm);
+
+    logClientAction(
+      isEdit ? 'Modificación de Jornada VIP' : 'Creación de Jornada VIP',
+      'JORNADAS',
+      `${isEdit ? 'Actualizó la jornada' : 'Publicó nueva jornada'} "${jornada.title}" (Promo: ${jornada.promoPrice}).`
+    );
   };
 
   const handleDeleteJornadaItem = (id: string) => {
     if (!window.confirm('¿Estás seguro de eliminar esta jornada especial?')) return;
+    const targetJor = jornadasList.find(j => String(j.id) === String(id));
     const updated = jornadasList.filter(j => String(j.id) !== String(id));
     setJornadasList(updated);
     const jsonStr = JSON.stringify(updated);
@@ -613,6 +696,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setSettingsForm(updatedForm);
     setSettings(updatedForm);
     handleSaveSettings(updatedForm);
+
+    logClientAction('Eliminación de Jornada VIP', 'JORNADAS', `Eliminó la jornada VIP "${targetJor?.title || id}".`);
   };
 
   // Filtered Leads
@@ -750,7 +835,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
                 { id: 'usuarios', label: 'Equipo & Accesos', icon: <Users size={18} /> },
                 { id: 'settings', label: 'Ajustes Principales', icon: <SettingsIcon size={18} /> },
-                { id: 'integraciones', label: 'Telegram & Webhook', icon: <Bot size={18} /> },
+                { id: 'auditoria', label: 'Registro de Actividad', icon: <History size={18} /> },
               ];
 
               const allowedTabs = isFull 
@@ -2266,6 +2351,209 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE: REGISTRO DE ACTIVIDAD & AUDITORÍA DE USUARIOS */}
+          {/* ========================================================================= */}
+          {activeTab === 'auditoria' && (
+            <div className="space-y-6 animate-fade-in max-w-5xl mx-auto">
+              
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-xl font-display font-black uppercase tracking-tight text-white flex items-center gap-2.5">
+                    <History className="text-amber-400" size={24} />
+                    <span>Registro de Actividad & Auditoría</span>
+                  </h1>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Historial cronológico en tiempo real de cada inicio de sesión, cambios, modificaciones y eliminaciones por usuario.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={fetchAuditLogs}
+                    disabled={isLoadingLogs}
+                    className="bg-white/5 hover:bg-white/10 border border-white/15 text-zinc-300 hover:text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                    title="Actualizar registro"
+                  >
+                    <RefreshCw size={14} className={isLoadingLogs ? "animate-spin text-amber-400" : "text-zinc-400"} />
+                    <span>{isLoadingLogs ? "Cargando..." : "Actualizar"}</span>
+                  </button>
+
+                  {auditLogs.length > 0 && isFullAdminUser(currentUser) && (
+                    <button
+                      onClick={async () => {
+                        if (!window.confirm('¿Seguro que deseas vaciar el historial de auditoría? Esta acción es irreversible.')) return;
+                        try {
+                          await fetch('/api/admin/logs', {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                          });
+                          fetchAuditLogs();
+                        } catch (e) {}
+                      }}
+                      className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                      title="Limpiar registro"
+                    >
+                      <Trash2 size={14} />
+                      <span>Limpiar Historial</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Filters & Search Controls */}
+              <div className="bg-[#12141a] border border-white/10 rounded-2xl p-4 space-y-3">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                    <input
+                      type="text"
+                      placeholder="Buscar por usuario, correo, acción o detalle..."
+                      value={logSearchQuery}
+                      onChange={(e) => setLogSearchQuery(e.target.value)}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs text-white placeholder:text-zinc-600 outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                {/* Category Filter Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  {[
+                    { id: 'TODOS', label: 'Todos los Eventos' },
+                    { id: 'AUTH', label: 'Inicios de Sesión 🔑' },
+                    { id: 'CATALOGO', label: 'Catálogo Repuestos 📦' },
+                    { id: 'CITAS', label: 'Citas de Taller 📅' },
+                    { id: 'USUARIOS', label: 'Equipo & Usuarios 👥' },
+                    { id: 'JORNADAS', label: 'Jornadas VIP ⚡' },
+                    { id: 'AJUSTES', label: 'Ajustes Web 🛠️' },
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setLogCategoryFilter(cat.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        logCategoryFilter === cat.id
+                          ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-md'
+                          : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-transparent'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Logs Timeline List */}
+              {isLoadingLogs ? (
+                <div className="py-20 text-center">
+                  <Loader2 className="animate-spin text-amber-400 mx-auto mb-3" size={32} />
+                  <span className="text-xs text-zinc-500">Cargando registros de auditoría...</span>
+                </div>
+              ) : (() => {
+                const filtered = auditLogs.filter(log => {
+                  const matchesCategory = logCategoryFilter === 'TODOS' || log.category === logCategoryFilter;
+                  const q = logSearchQuery.toLowerCase().trim();
+                  const matchesSearch = !q || 
+                    (log.userName || '').toLowerCase().includes(q) ||
+                    (log.userEmail || '').toLowerCase().includes(q) ||
+                    (log.action || '').toLowerCase().includes(q) ||
+                    (log.details || '').toLowerCase().includes(q);
+                  return matchesCategory && matchesSearch;
+                });
+
+                if (filtered.length === 0) {
+                  return (
+                    <div className="bg-[#12141a] border border-white/10 rounded-2xl p-12 text-center space-y-2">
+                      <ShieldAlert size={32} className="text-zinc-600 mx-auto" />
+                      <p className="text-sm font-bold text-white">No hay registros de actividad aún</p>
+                      <p className="text-xs text-zinc-500">Las acciones que realice cada usuario (inicios de sesión, cambios de repuestos, citas o usuarios) aparecerán aquí registradas al instante.</p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="space-y-2.5">
+                    {filtered.map(log => {
+                      const nameParts = (log.userName || 'Admin').split(' ');
+                      const initials = nameParts.length >= 2 ? `${nameParts[0][0]}${nameParts[1][0]}` : nameParts[0].slice(0, 2);
+                      const isAuth = log.category === 'AUTH';
+                      const isCat = log.category === 'CATALOGO';
+                      const isCitas = log.category === 'CITAS';
+                      const isUsers = log.category === 'USUARIOS';
+                      const isJor = log.category === 'JORNADAS';
+
+                      let dateFormatted = '';
+                      try {
+                        dateFormatted = new Date(log.timestamp).toLocaleString('es-VE', {
+                          day: 'numeric',
+                          month: 'numeric',
+                          year: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          second: '2-digit',
+                          hour12: true
+                        });
+                      } catch (e) {
+                        dateFormatted = log.timestamp || '';
+                      }
+
+                      return (
+                        <div
+                          key={log.id}
+                          className="bg-[#12141a] border border-white/10 hover:border-amber-400/30 rounded-2xl p-4 transition-all shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        >
+                          <div className="flex items-start sm:items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 via-primary/20 to-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-300 font-black text-xs shrink-0 shadow-md">
+                              {initials.toUpperCase()}
+                            </div>
+
+                            <div className="space-y-0.5">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-xs font-black text-white">{log.userName || 'Usuario'}</span>
+                                <span className="text-[10px] text-zinc-500 font-mono">({log.userEmail})</span>
+                                <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-zinc-400">
+                                  {log.userRole || 'Administrador'}
+                                </span>
+                              </div>
+
+                              <p className="text-xs text-zinc-300 leading-snug">
+                                {log.details}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-1.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                            <span className={`inline-block text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border ${
+                              isAuth 
+                                ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' 
+                                : isCat 
+                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                                : isCitas
+                                ? 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+                                : isUsers
+                                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                                : isJor
+                                ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
+                                : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                            }`}>
+                              {log.action}
+                            </span>
+
+                            <span className="text-[10px] font-mono text-zinc-500 flex items-center gap-1">
+                              <Clock size={11} />
+                              <span>{dateFormatted}</span>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+
             </div>
           )}
 
