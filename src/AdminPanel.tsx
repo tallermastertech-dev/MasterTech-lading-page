@@ -141,9 +141,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [userModalError, setUserModalError] = useState('');
   const [isSavingUser, setIsSavingUser] = useState(false);
 
+  // Permission Checker: Full Access (CEO, Director, Super Admin, Marketing) vs Limited Access (Logística & Ventas 4 tabs)
+  const isFullAdminUser = (user: any) => {
+    if (!user) return false;
+    const email = (user.email || '').toLowerCase().trim();
+    const role = (user.role || '').toLowerCase().trim();
+    const access = (user.accessLevel || '').toLowerCase().trim();
+
+    // J. Vasquez y J. Vicente Betancourt tienen acceso total siempre
+    if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com') return true;
+    if (access === 'full') return true;
+    if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) return true;
+    return false;
+  };
+
   // Active Navigation Tab
   const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'integraciones' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
+
+  // Route guard: auto redirect limited users to dashboard if they attempt restricted tab
+  useEffect(() => {
+    if (currentUser && !isFullAdminUser(currentUser)) {
+      const allowed = ['dashboard', 'leads', 'catalogo', 'jornadas'];
+      if (!allowed.includes(activeTab)) {
+        setActiveTab('dashboard');
+      }
+    }
+  }, [activeTab, currentUser]);
 
   // Dynamic Data States
   const [settings, setSettings] = useState<any>({});
@@ -714,41 +738,50 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             </a>
           </div>
 
-          {/* Navigation Menu */}
+          {/* Navigation Menu (Filtered by User Access Level) */}
           <nav className="space-y-1">
-            {[
-              { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-              { id: 'leads', label: `Citas Solicitadas (${leads.length})`, icon: <Calendar size={18} /> },
-              { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
-              { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
-              { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
-              { id: 'usuarios', label: 'Equipo & Accesos', icon: <Users size={18} /> },
-              { id: 'settings', label: 'Ajustes Principales', icon: <SettingsIcon size={18} /> },
-              { id: 'integraciones', label: 'Telegram & Webhook', icon: <Bot size={18} /> },
-            ].map(tab => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    isActive 
-                      ? 'bg-gradient-to-r from-amber-500/20 to-primary/20 border border-primary/40 text-white shadow-lg shadow-amber-500/5' 
-                      : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className={isActive ? 'text-primary' : 'text-zinc-400'}>{tab.icon}</span>
-                    <span>{tab.label}</span>
-                  </div>
-                  {tab.badge && (
-                    <span className="text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded-md">
-                      {tab.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            {(() => {
+              const isFull = isFullAdminUser(currentUser);
+              const allTabs = [
+                { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+                { id: 'leads', label: `Citas Solicitadas (${leads.length})`, icon: <Calendar size={18} /> },
+                { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
+                { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
+                { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
+                { id: 'usuarios', label: 'Equipo & Accesos', icon: <Users size={18} /> },
+                { id: 'settings', label: 'Ajustes Principales', icon: <SettingsIcon size={18} /> },
+                { id: 'integraciones', label: 'Telegram & Webhook', icon: <Bot size={18} /> },
+              ];
+
+              const allowedTabs = isFull 
+                ? allTabs 
+                : allTabs.filter(t => ['dashboard', 'leads', 'catalogo', 'jornadas'].includes(t.id));
+
+              return allowedTabs.map(tab => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      isActive 
+                        ? 'bg-gradient-to-r from-amber-500/20 to-primary/20 border border-primary/40 text-white shadow-lg shadow-amber-500/5' 
+                        : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={isActive ? 'text-primary' : 'text-zinc-400'}>{tab.icon}</span>
+                      <span>{tab.label}</span>
+                    </div>
+                    {tab.badge && (
+                      <span className="text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded-md">
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              });
+            })()}
           </nav>
         </div>
 
@@ -1821,9 +1854,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   {adminUsersList.map(u => {
                     const nameParts = (u.name || 'Admin').split(' ');
                     const initials = nameParts.length >= 2 ? `${nameParts[0][0]}${nameParts[1][0]}` : nameParts[0].slice(0, 2);
-                    const isSuper = u.role?.toLowerCase().includes('super');
-                    const isTaller = u.role?.toLowerCase().includes('taller') || u.role?.toLowerCase().includes('jefe');
-                    const isCitas = u.role?.toLowerCase().includes('cita') || u.role?.toLowerCase().includes('venta');
+                    const isFull = isFullAdminUser(u);
 
                     return (
                       <div
@@ -1835,19 +1866,20 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 via-primary/20 to-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-300 font-black text-sm shadow-md">
                               {initials.toUpperCase()}
                             </div>
-                            <div className="space-y-0.5">
+                            <div className="space-y-1">
                               <h3 className="text-sm font-black text-white leading-tight">{u.name}</h3>
-                              <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                                isSuper 
-                                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
-                                  : isTaller 
-                                  ? 'bg-blue-500/20 text-blue-300 border-blue-500/40'
-                                  : isCitas
-                                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                                  : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                              }`}>
-                                {u.role || 'Administrador'}
-                              </span>
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border bg-white/5 text-zinc-300 border-white/15">
+                                  {u.role || 'Asesor Logística'}
+                                </span>
+                                <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                                  isFull 
+                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
+                                    : 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+                                }`}>
+                                  {isFull ? '👑 Acceso Total' : '📦 Logística (4 Módulos)'}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1866,7 +1898,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
                           <button
                             onClick={() => {
-                              setEditingUser({ ...u, password: '' });
+                              setEditingUser({ ...u, password: '', accessLevel: isFull ? 'full' : 'logistica' });
                               setUserModalError('');
                               setIsUserModalOpen(true);
                             }}
@@ -1929,7 +1961,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           required
                           value={editingUser.name || ''}
                           onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
-                          placeholder="Ej: Carlos Morales"
+                          placeholder="Ej: Brenda Santaella"
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
                         />
                       </div>
@@ -1944,7 +1976,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           required
                           value={editingUser.email || ''}
                           onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
-                          placeholder="Ej: asesor@tallermastertech.com"
+                          placeholder="Ej: bresantaella@gmail.com"
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
                         />
                       </div>
@@ -1952,7 +1984,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       {/* Password */}
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
-                          {editingUser.id ? 'Nueva Contraseña (dejar vacío si no deseas cambiarla)' : 'Contraseña de Acceso *'}
+                          {editingUser.id ? 'Nueva Contraseña (dejar vacío para no cambiarla)' : 'Contraseña de Acceso *'}
                         </label>
                         <input
                           type="password"
@@ -1967,18 +1999,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       {/* Role Selector */}
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
-                          Rol / Cargo en el Taller
+                          Cargo / Función en el Taller
                         </label>
                         <select
-                          value={editingUser.role || 'Administrador'}
-                          onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
+                          value={editingUser.role || 'Asesor Logística'}
+                          onChange={(e) => {
+                            const newRole = e.target.value;
+                            const isFull = newRole.includes('CEO') || newRole.includes('Director') || newRole.includes('Marketing') || newRole.includes('Super');
+                            setEditingUser({ 
+                              ...editingUser, 
+                              role: newRole,
+                              accessLevel: isFull ? 'full' : 'logistica'
+                            });
+                          }}
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
                         >
-                          <option value="Super Administrador">Super Administrador (Acceso Total)</option>
-                          <option value="Jefe de Taller">Jefe de Taller & Diagnóstico</option>
-                          <option value="Asesor de Citas & Ventas">Asesor de Citas & Ventas</option>
-                          <option value="Recepción & Soporte">Recepción & Soporte</option>
-                          <option value="Administrador">Administrador General</option>
+                          <option value="CEO - Director">CEO - Director</option>
+                          <option value="Marketing">Marketing</option>
+                          <option value="Asesor Logística">Asesor Logística</option>
+                          <option value="Coordinadora Logística">Coordinadora Logística</option>
+                        </select>
+                      </div>
+
+                      {/* Access Level Selector */}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
+                          Nivel de Permisos en el Panel
+                        </label>
+                        <select
+                          value={editingUser.accessLevel || (isFullAdminUser(editingUser) ? 'full' : 'logistica')}
+                          onChange={(e) => setEditingUser({ ...editingUser, accessLevel: e.target.value })}
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
+                        >
+                          <option value="full">👑 Super Administrador (Acceso Total a todo el Panel, Ajustes y Usuarios)</option>
+                          <option value="logistica">📦 Logística & Almacén (Acceso Limitado a 4 cosas: Dashboard, Citas, Catálogo y Jornadas)</option>
                         </select>
                       </div>
 

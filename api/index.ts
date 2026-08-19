@@ -590,30 +590,42 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     }
 };
 
-// Default administrative user profiles
+// Default administrative user profiles with role-based access control
 const DEFAULT_ADMIN_USERS = [
   {
-    id: 'user-admin-master',
-    name: 'Carlos Morales',
-    email: 'admin@tallermastertech.com',
+    id: 'user-jose-vicente',
+    name: 'J. Vicente Betancourt',
+    email: 'josevbv@gmail.com',
     password: 'mastertech2026',
-    role: 'Super Administrador',
+    role: 'CEO - Director',
+    accessLevel: 'full',
     createdAt: '2026-01-01T00:00:00.000Z'
   },
   {
-    id: 'user-taller-jefe',
-    name: 'Jefe de Taller & Diagnóstico',
-    email: 'taller@tallermastertech.com',
+    id: 'user-j-vasquez',
+    name: 'J. Vasquez',
+    email: 'jvaask16@gmail.com',
     password: 'mastertech2026',
-    role: 'Jefe de Taller',
+    role: 'CEO - Director',
+    accessLevel: 'full',
     createdAt: '2026-01-01T00:00:00.000Z'
   },
   {
-    id: 'user-citas-asesor',
-    name: 'Asesor de Citas & Repuestos',
-    email: 'citas@tallermastertech.com',
+    id: 'user-brenda-santaella',
+    name: 'Brenda Santaella',
+    email: 'bresantaella@gmail.com',
     password: 'mastertech2026',
-    role: 'Asesor de Citas & Ventas',
+    role: 'Asesor Logística',
+    accessLevel: 'logistica',
+    createdAt: '2026-01-01T00:00:00.000Z'
+  },
+  {
+    id: 'user-ambar-salazar',
+    name: 'Ambar Salazar',
+    email: 'salferambar@gmail.com',
+    password: 'mastertech2026',
+    role: 'Coordinadora Logística',
+    accessLevel: 'logistica',
     createdAt: '2026-01-01T00:00:00.000Z'
   }
 ];
@@ -658,11 +670,19 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
   }
 
   if (matchedUser || (password && validMasterPasswords.includes(password))) {
+    const isFull = matchedUser ? (
+      matchedUser.accessLevel === 'full' ||
+      matchedUser.email === 'jvaask16@gmail.com' ||
+      matchedUser.email === 'josevbv@gmail.com' ||
+      (matchedUser.role && (matchedUser.role.includes('CEO') || matchedUser.role.includes('Director') || matchedUser.role.includes('Marketing') || matchedUser.role.includes('Super')))
+    ) : true;
+
     const activeUser = matchedUser || {
       id: 'user-admin-master',
       name: 'Administrador MasterTech',
       email: email || 'admin@tallermastertech.com',
-      role: 'Super Administrador'
+      role: 'CEO - Director',
+      accessLevel: 'full'
     };
 
     const token = generateAdminToken();
@@ -674,6 +694,7 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
         name: activeUser.name,
         email: activeUser.email,
         role: activeUser.role,
+        accessLevel: isFull ? 'full' : (activeUser.accessLevel || 'logistica'),
         createdAt: activeUser.createdAt
       }
     });
@@ -1078,13 +1099,20 @@ app.put('/settings', authenticateAdmin, handlePutSettings);
 app.get(['/api/admin/users', '/admin/users'], authenticateAdmin, async (_req, res) => {
   try {
     const users = await getAdminUsersList();
-    const safeUsers = users.map(u => ({
-      id: u.id,
-      name: u.name,
-      email: u.email,
-      role: u.role,
-      createdAt: u.createdAt || '2026-01-01T00:00:00.000Z'
-    }));
+    const safeUsers = users.map(u => {
+      const isFull = u.accessLevel === 'full' || 
+                     u.email === 'jvaask16@gmail.com' || 
+                     u.email === 'josevbv@gmail.com' ||
+                     (u.role && (u.role.includes('CEO') || u.role.includes('Director') || u.role.includes('Marketing') || u.role.includes('Super')));
+      return {
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        accessLevel: isFull ? 'full' : (u.accessLevel || 'logistica'),
+        createdAt: u.createdAt || '2026-01-01T00:00:00.000Z'
+      };
+    });
     res.json({ success: true, users: safeUsers });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al obtener usuarios', details: err.message });
@@ -1093,7 +1121,7 @@ app.get(['/api/admin/users', '/admin/users'], authenticateAdmin, async (_req, re
 
 app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, res) => {
   try {
-    const { id, name, email, password, role } = req.body || {};
+    const { id, name, email, password, role, accessLevel } = req.body || {};
     if (!name || !email) {
       return res.status(400).json({ error: 'Nombre y correo son requeridos.' });
     }
@@ -1110,6 +1138,7 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
             name: String(name).trim(),
             email: cleanEmail,
             role: role || u.role,
+            accessLevel: accessLevel || u.accessLevel || 'logistica',
             ...(password ? { password: String(password).trim() } : {})
           };
         }
@@ -1122,7 +1151,8 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
         name: String(name).trim(),
         email: cleanEmail,
         password: password ? String(password).trim() : 'mastertech2026',
-        role: role || 'Administrador',
+        role: role || 'Asesor Logística',
+        accessLevel: accessLevel || 'logistica',
         createdAt: new Date().toISOString()
       };
       updatedUsers = [...currentUsers, newUser];
