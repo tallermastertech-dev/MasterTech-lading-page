@@ -65,7 +65,9 @@ import {
   QrCode,
   Truck,
   PhoneCall,
-  FileCheck
+  FileCheck,
+  Sun,
+  Moon
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -317,6 +319,23 @@ interface AdminPanelProps {
 }
 
 export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelProps) {
+  // Theme State: Dark & Light Mode
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    try {
+      return (localStorage.getItem('mastertech_admin_theme') as 'dark' | 'light') || 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    try {
+      localStorage.setItem('mastertech_admin_theme', next);
+    } catch (e) {}
+  };
+
   // Auth State (Email & Password Multi-user)
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('mastertech_admin_token'));
   const [emailInput, setEmailInput] = useState('');
@@ -1194,10 +1213,104 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // MAIN ADMIN DASHBOARD INTERFACE
   return (
-    <div className="min-h-screen bg-[#0a0b0f] text-white flex flex-col md:flex-row font-sans selection:bg-primary selection:text-black">
+    <div className={`min-h-screen flex flex-col md:flex-row font-sans selection:bg-primary selection:text-black transition-colors duration-200 ${
+      theme === 'light' 
+        ? 'bg-[#f4f6f9] text-zinc-900 admin-theme-light' 
+        : 'bg-[#0a0b0f] text-white admin-theme-dark'
+    }`}>
+      {/* Light Mode CSS Overrides Scope */}
+      <style>{`
+        .admin-theme-light {
+          --bg-main: #f4f6f9;
+          --card-bg: #ffffff;
+          --card-border: #e2e8f0;
+          --text-main: #0f172a;
+          --text-muted: #64748b;
+          --input-bg: #f8fafc;
+          --input-border: #cbd5e1;
+        }
+        .admin-theme-light aside {
+          background-color: #ffffff !important;
+          border-color: #e2e8f0 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .admin-theme-light header {
+          background-color: rgba(255, 255, 255, 0.92) !important;
+          border-color: #e2e8f0 !important;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .admin-theme-light .bg-\[\#12141a\],
+        .admin-theme-light .bg-\[\#101216\],
+        .admin-theme-light .bg-\[\#181a24\] {
+          background-color: #ffffff !important;
+          border-color: #e2e8f0 !important;
+          color: #0f172a !important;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .admin-theme-light .bg-black\/30,
+        .admin-theme-light .bg-black\/40,
+        .admin-theme-light .bg-black\/50,
+        .admin-theme-light .bg-black\/60 {
+          background-color: #f8fafc !important;
+          border-color: #e2e8f0 !important;
+          color: #0f172a !important;
+        }
+        .admin-theme-light input,
+        .admin-theme-light select,
+        .admin-theme-light textarea {
+          background-color: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          color: #0f172a !important;
+        }
+        .admin-theme-light input::placeholder,
+        .admin-theme-light textarea::placeholder {
+          color: #94a3b8 !important;
+        }
+        .admin-theme-light .text-white {
+          color: #0f172a !important;
+        }
+        .admin-theme-light .text-zinc-400,
+        .admin-theme-light .text-zinc-500 {
+          color: #64748b !important;
+        }
+        .admin-theme-light .text-zinc-300 {
+          color: #334155 !important;
+        }
+        .admin-theme-light .border-white\/5,
+        .admin-theme-light .border-white\/10,
+        .admin-theme-light .border-white\/20 {
+          border-color: #e2e8f0 !important;
+        }
+        .admin-theme-light .bg-white\/5 {
+          background-color: #f1f5f9 !important;
+          color: #334155 !important;
+          border-color: #e2e8f0 !important;
+        }
+        .admin-theme-light .bg-white\/10 {
+          background-color: #e2e8f0 !important;
+          color: #0f172a !important;
+        }
+        .admin-theme-light .hover\:bg-white\/5:hover {
+          background-color: #f1f5f9 !important;
+        }
+        .admin-theme-light .hover\:bg-white\/10:hover {
+          background-color: #e2e8f0 !important;
+        }
+        .admin-theme-light .fixed.inset-0 .bg-\[\#12141a\],
+        .admin-theme-light .fixed.inset-0 .bg-\[\#101216\] {
+          background-color: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          color: #0f172a !important;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+        }
+        .admin-theme-light .btn-primary {
+          background: linear-gradient(135deg, #eab308, #ca8a04) !important;
+          color: #000000 !important;
+        }
+      `}</style>
       
       {/* SIDEBAR NAVIGATION (Desktop & Mobile) */}
-      <aside className="w-full md:w-64 bg-[#12141a]/95 backdrop-blur-2xl border-r border-white/10 shrink-0 p-5 flex flex-col justify-between z-30">
+      <aside className="w-full md:w-64 bg-[#12141a]/95 backdrop-blur-2xl border-r border-white/10 shrink-0 p-5 flex flex-col justify-between z-30 transition-colors">
         <div className="space-y-6">
           {/* Logo & Brand Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
@@ -1260,8 +1373,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           </nav>
         </div>
 
-        {/* Footer Admin info & Logout */}
+        {/* Footer Admin info, Theme Toggle & Logout */}
         <div className="pt-4 border-t border-white/10 space-y-3">
+          {/* Theme Quick Switcher in Sidebar */}
+          <button
+            onClick={toggleTheme}
+            className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-between transition-all cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              {theme === 'dark' ? <Moon size={14} className="text-blue-400" /> : <Sun size={14} className="text-amber-500" />}
+              <span>{theme === 'dark' ? 'Modo Oscuro' : 'Modo Claro'}</span>
+            </div>
+            <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-white/10 text-amber-300">
+              {theme === 'dark' ? '🌙 Activo' : '☀️ Activo'}
+            </span>
+          </button>
+
           <div className="flex items-center gap-3 px-2">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500/20 to-primary/20 border border-amber-500/40 flex items-center justify-center text-amber-300 font-black text-xs shrink-0 shadow-md">
               {(() => {
@@ -1294,7 +1421,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         
         {/* TOP EXECUTIVE HEADER BAR */}
-        <header className="bg-[#12141a]/80 backdrop-blur-md border-b border-white/10 px-6 py-3.5 flex items-center justify-between sticky top-0 z-20">
+        <header className="bg-[#12141a]/80 backdrop-blur-md border-b border-white/10 px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 transition-colors">
           <div className="flex items-center gap-3">
             {(() => {
               const st = getTallerStatus(settings.IS_OPEN);
@@ -1306,6 +1433,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               );
             })()}
             <span className="text-xs text-zinc-500 font-mono hidden sm:inline-block">| {timeStr}</span>
+          </div>
+
+          {/* Header Action Controls: Theme Switcher */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm"
+              title={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun size={15} className="text-amber-400" />
+                  <span className="hidden sm:inline">Modo Claro</span>
+                </>
+              ) : (
+                <>
+                  <Moon size={15} className="text-blue-500" />
+                  <span className="hidden sm:inline">Modo Oscuro</span>
+                </>
+              )}
+            </button>
           </div>
         </header>
 
