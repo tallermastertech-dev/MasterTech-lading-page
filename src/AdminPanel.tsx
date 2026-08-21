@@ -4185,245 +4185,451 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               </div>
 
-              {/* Section 2: Cuentas Bancarias Nacionales (Bs / $) */}
-              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase text-blue-400 block tracking-wider">
-                    2. Cuentas Bancarias Nacionales (Transferencias)
+              {/* Section 2: Selector de Métodos de Pago Activos */}
+              <div className="bg-black/40 border border-white/10 p-4 rounded-2xl space-y-3">
+                <div>
+                  <span className="text-[10px] font-black uppercase text-amber-400 block tracking-wider">
+                    2. ¿Qué Métodos de Pago Acepta este Proveedor?
                   </span>
+                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                    Selecciona únicamente los métodos que utiliza para desplegar solo las casillas necesarias:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {/* Option 1: Transferencia Bancaria */}
                   <button
                     type="button"
                     onClick={() => {
-                      const newBancos = [
-                        ...(editingProveedor.bancos || []),
-                        {
-                          id: `b_${Date.now()}`,
-                          banco: 'Banesco',
-                          tipoCuenta: 'Corriente' as const,
-                          numeroCuenta: '',
-                          titular: editingProveedor.nombreComercial || '',
-                          documento: editingProveedor.rif || ''
-                        }
-                      ];
-                      setEditingProveedor({ ...editingProveedor, bancos: newBancos });
+                      const hasBancos = editingProveedor.bancos && editingProveedor.bancos.length > 0;
+                      if (hasBancos) {
+                        setEditingProveedor({ ...editingProveedor, bancos: [] });
+                      } else {
+                        setEditingProveedor({
+                          ...editingProveedor,
+                          bancos: [{
+                            id: `b_${Date.now()}`,
+                            banco: 'Banesco',
+                            tipoCuenta: 'Corriente' as const,
+                            numeroCuenta: '',
+                            titular: editingProveedor.nombreComercial || '',
+                            documento: editingProveedor.rif || ''
+                          }]
+                        });
+                      }
                     }}
-                    className="text-[10px] font-bold bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 px-2.5 py-1 rounded-lg border border-blue-500/30 flex items-center gap-1 cursor-pointer"
+                    className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 cursor-pointer select-none ${
+                      editingProveedor.bancos && editingProveedor.bancos.length > 0
+                        ? 'bg-blue-500/20 border-blue-500/60 text-white shadow-lg shadow-blue-500/10'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:text-white hover:border-white/25'
+                    }`}
                   >
-                    <Plus size={12} />
-                    <span>Agregar Otra Cuenta</span>
-                  </button>
-                </div>
-
-                {(editingProveedor.bancos || []).map((b, bIdx) => (
-                  <div key={bIdx} className="bg-black/60 border border-white/10 p-3 rounded-xl space-y-2 relative">
                     <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold uppercase text-zinc-500">Cuenta #{bIdx + 1}</span>
-                      {(editingProveedor.bancos || []).length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const newB = editingProveedor.bancos.filter((_, idx) => idx !== bIdx);
-                            setEditingProveedor({ ...editingProveedor, bancos: newB });
-                          }}
-                          className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
-                        >
-                          <Trash2 size={12} />
-                          <span>Quitar</span>
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
-                        <input
-                          type="text"
-                          placeholder="Ej: Banesco, Mercantil, BDV, Bancamiga, Provincial"
-                          value={b.banco}
-                          onChange={(e) => {
-                            const newB = [...editingProveedor.bancos];
-                            newB[bIdx].banco = e.target.value;
-                            setEditingProveedor({ ...editingProveedor, bancos: newB });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
-                        />
+                      <div className={`p-1.5 rounded-lg ${editingProveedor.bancos && editingProveedor.bancos.length > 0 ? 'bg-blue-500 text-black' : 'bg-white/5 text-zinc-400'}`}>
+                        <Building2 size={16} />
                       </div>
-
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Tipo de Cuenta</label>
-                        <select
-                          value={b.tipoCuenta || 'Corriente'}
-                          onChange={(e) => {
-                            const newB = [...editingProveedor.bancos];
-                            newB[bIdx].tipoCuenta = e.target.value as any;
-                            setEditingProveedor({ ...editingProveedor, bancos: newB });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs cursor-pointer"
-                        >
-                          <option value="Corriente">Cuenta Corriente</option>
-                          <option value="Ahorro">Cuenta de Ahorro</option>
-                        </select>
-                      </div>
+                      <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] font-black ${
+                        editingProveedor.bancos && editingProveedor.bancos.length > 0
+                          ? 'bg-blue-500 text-black border-blue-400'
+                          : 'border-zinc-700 bg-black/40'
+                      }`}>
+                        {editingProveedor.bancos && editingProveedor.bancos.length > 0 ? '✓' : ''}
+                      </span>
                     </div>
-
                     <div>
-                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Número de Cuenta (20 dígitos)</label>
-                      <input
-                        type="text"
-                        placeholder="0134 0000 00 0000000000"
-                        value={b.numeroCuenta}
-                        onChange={(e) => {
-                          const newB = [...editingProveedor.bancos];
-                          newB[bIdx].numeroCuenta = e.target.value.replace(/[^\d]/g, '').slice(0, 20);
-                          setEditingProveedor({ ...editingProveedor, bancos: newB });
-                        }}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-amber-400 font-mono font-bold tracking-wider outline-none focus:border-primary text-xs"
-                      />
+                      <span className="text-xs font-bold block text-white">Transferencia</span>
+                      <span className="text-[9px] text-zinc-400">Bancos Nacionales</span>
                     </div>
+                  </button>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Nombre del Titular</label>
-                        <input
-                          type="text"
-                          placeholder="Nombre o Razón Social"
-                          value={b.titular}
-                          onChange={(e) => {
-                            const newB = [...editingProveedor.bancos];
-                            newB[bIdx].titular = e.target.value;
-                            setEditingProveedor({ ...editingProveedor, bancos: newB });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">RIF / Cédula del Titular</label>
-                        <input
-                          type="text"
-                          placeholder="J-00000000-0 o V-00000000"
-                          value={b.documento}
-                          onChange={(e) => {
-                            const newB = [...editingProveedor.bancos];
-                            newB[bIdx].documento = e.target.value;
-                            setEditingProveedor({ ...editingProveedor, bancos: newB });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono outline-none focus:border-primary text-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Section 3: Pago Móvil */}
-              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase text-cyan-400 block tracking-wider">
-                    3. Pago Móvil
-                  </span>
+                  {/* Option 2: Pago Móvil */}
                   <button
                     type="button"
                     onClick={() => {
-                      const newPm = [
-                        ...(editingProveedor.pagoMovil || []),
-                        {
-                          id: `pm_${Date.now()}`,
-                          banco: 'Banesco (0134)',
-                          telefono: editingProveedor.telefono || '',
-                          documento: editingProveedor.rif || '',
-                          titular: editingProveedor.nombreComercial || ''
-                        }
-                      ];
-                      setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                      const hasPm = editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0;
+                      if (hasPm) {
+                        setEditingProveedor({ ...editingProveedor, pagoMovil: [] });
+                      } else {
+                        setEditingProveedor({
+                          ...editingProveedor,
+                          pagoMovil: [{
+                            id: `pm_${Date.now()}`,
+                            banco: 'Banesco (0134)',
+                            telefono: editingProveedor.telefono || '',
+                            documento: editingProveedor.rif || '',
+                            titular: editingProveedor.nombreComercial || ''
+                          }]
+                        });
+                      }
                     }}
-                    className="text-[10px] font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 px-2.5 py-1 rounded-lg border border-cyan-500/30 flex items-center gap-1 cursor-pointer"
+                    className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 cursor-pointer select-none ${
+                      editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0
+                        ? 'bg-cyan-500/20 border-cyan-500/60 text-white shadow-lg shadow-cyan-500/10'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:text-white hover:border-white/25'
+                    }`}
                   >
-                    <Plus size={12} />
-                    <span>Agregar Pago Móvil</span>
+                    <div className="flex items-center justify-between">
+                      <div className={`p-1.5 rounded-lg ${editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0 ? 'bg-cyan-500 text-black' : 'bg-white/5 text-zinc-400'}`}>
+                        <CreditCard size={16} />
+                      </div>
+                      <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] font-black ${
+                        editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0
+                          ? 'bg-cyan-500 text-black border-cyan-400'
+                          : 'border-zinc-700 bg-black/40'
+                      }`}>
+                        {editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0 ? '✓' : ''}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold block text-white">Pago Móvil</span>
+                      <span className="text-[9px] text-zinc-400">Banca Móvil Vzla</span>
+                    </div>
+                  </button>
+
+                  {/* Option 3: Zelle */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const hasZelle = Boolean(editingProveedor.zelle?.correoTelefono);
+                      if (hasZelle || editingProveedor.zelle !== undefined) {
+                        setEditingProveedor({ ...editingProveedor, zelle: undefined });
+                      } else {
+                        setEditingProveedor({
+                          ...editingProveedor,
+                          zelle: {
+                            correoTelefono: '',
+                            titular: editingProveedor.nombreComercial || ''
+                          }
+                        });
+                      }
+                    }}
+                    className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 cursor-pointer select-none ${
+                      editingProveedor.zelle !== undefined
+                        ? 'bg-emerald-500/20 border-emerald-500/60 text-white shadow-lg shadow-emerald-500/10'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:text-white hover:border-white/25'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className={`p-1.5 rounded-lg ${editingProveedor.zelle !== undefined ? 'bg-emerald-500 text-black' : 'bg-white/5 text-zinc-400'}`}>
+                        <DollarSign size={16} />
+                      </div>
+                      <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] font-black ${
+                        editingProveedor.zelle !== undefined
+                          ? 'bg-emerald-500 text-black border-emerald-400'
+                          : 'border-zinc-700 bg-black/40'
+                      }`}>
+                        {editingProveedor.zelle !== undefined ? '✓' : ''}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold block text-white">Zelle ($ USA)</span>
+                      <span className="text-[9px] text-zinc-400">Dólares EE.UU.</span>
+                    </div>
+                  </button>
+
+                  {/* Option 4: Binance Pay */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const hasBinance = Boolean(editingProveedor.binance?.payId || editingProveedor.binance?.walletUsdt);
+                      if (hasBinance || editingProveedor.binance !== undefined) {
+                        setEditingProveedor({ ...editingProveedor, binance: undefined });
+                      } else {
+                        setEditingProveedor({
+                          ...editingProveedor,
+                          binance: {
+                            payId: '',
+                            correoBinance: '',
+                            walletUsdt: '',
+                            titular: editingProveedor.nombreComercial || ''
+                          }
+                        });
+                      }
+                    }}
+                    className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between gap-2 cursor-pointer select-none ${
+                      editingProveedor.binance !== undefined
+                        ? 'bg-amber-500/20 border-amber-500/60 text-white shadow-lg shadow-amber-500/10'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:text-white hover:border-white/25'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className={`p-1.5 rounded-lg ${editingProveedor.binance !== undefined ? 'bg-amber-500 text-black' : 'bg-white/5 text-zinc-400'}`}>
+                        <Wallet size={16} />
+                      </div>
+                      <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] font-black ${
+                        editingProveedor.binance !== undefined
+                          ? 'bg-amber-500 text-black border-amber-400'
+                          : 'border-zinc-700 bg-black/40'
+                      }`}>
+                        {editingProveedor.binance !== undefined ? '✓' : ''}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold block text-white">Binance Pay</span>
+                      <span className="text-[9px] text-zinc-400">USDT / Cripto</span>
+                    </div>
                   </button>
                 </div>
-
-                {(editingProveedor.pagoMovil || []).map((pm, pmIdx) => (
-                  <div key={pmIdx} className="bg-black/60 border border-white/10 p-3 rounded-xl space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold uppercase text-zinc-500">Pago Móvil #{pmIdx + 1}</span>
-                      {(editingProveedor.pagoMovil || []).length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const newPm = editingProveedor.pagoMovil.filter((_, idx) => idx !== pmIdx);
-                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
-                          }}
-                          className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
-                        >
-                          <Trash2 size={12} />
-                          <span>Quitar</span>
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
-                        <input
-                          type="text"
-                          placeholder="Ej: Banesco (0134)"
-                          value={pm.banco}
-                          onChange={(e) => {
-                            const newPm = [...editingProveedor.pagoMovil];
-                            newPm[pmIdx].banco = e.target.value;
-                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Teléfono Pago Móvil</label>
-                        <input
-                          type="text"
-                          placeholder="Ej: 04141234567"
-                          value={pm.telefono}
-                          onChange={(e) => {
-                            const newPm = [...editingProveedor.pagoMovil];
-                            newPm[pmIdx].telefono = e.target.value;
-                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-cyan-300 font-mono font-bold outline-none focus:border-primary text-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">C.I. / RIF</label>
-                        <input
-                          type="text"
-                          placeholder="Ej: J-31456789-0 o V-18765432"
-                          value={pm.documento}
-                          onChange={(e) => {
-                            const newPm = [...editingProveedor.pagoMovil];
-                            newPm[pmIdx].documento = e.target.value;
-                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
-                          }}
-                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono outline-none focus:border-primary text-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
 
-              {/* Section 4: Zelle & Binance (Divisas Digitales) */}
-              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
-                <span className="text-[10px] font-black uppercase text-emerald-400 block tracking-wider">
-                  4. Divisas Digitales (Zelle & Binance Pay)
-                </span>
+              {/* Mensaje de Ayuda si no hay métodos seleccionados */}
+              {!((editingProveedor.bancos && editingProveedor.bancos.length > 0) || (editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0) || editingProveedor.zelle !== undefined || editingProveedor.binance !== undefined) && (
+                <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 text-center space-y-1">
+                  <span className="text-xs font-bold text-amber-300 block">💡 Selecciona uno o más métodos de pago arriba</span>
+                  <span className="text-[11px] text-zinc-400 block">Por ejemplo, activa <strong>"Transferencia"</strong> y <strong>"Pago Móvil"</strong> para completar sus datos bancarios.</span>
+                </div>
+              )}
 
-                {/* Zelle */}
-                <div className="p-3 bg-emerald-950/20 border border-emerald-500/30 rounded-xl space-y-2">
-                  <div className="flex items-center gap-2">
-                    <DollarSign size={14} className="text-emerald-400" />
-                    <span className="font-bold text-white text-xs">Datos Zelle ($ USA)</span>
+              {/* Section 3: Cuentas Bancarias Nacionales (Bs / $) - Condicional */}
+              {(editingProveedor.bancos && editingProveedor.bancos.length > 0) && (
+                <div className="bg-black/30 border border-blue-500/30 p-4 rounded-2xl space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase text-blue-400 block tracking-wider flex items-center gap-1.5">
+                      <Building2 size={13} />
+                      <span>Cuentas Bancarias Nacionales (Transferencias)</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newBancos = [
+                          ...(editingProveedor.bancos || []),
+                          {
+                            id: `b_${Date.now()}`,
+                            banco: 'Banesco',
+                            tipoCuenta: 'Corriente' as const,
+                            numeroCuenta: '',
+                            titular: editingProveedor.nombreComercial || '',
+                            documento: editingProveedor.rif || ''
+                          }
+                        ];
+                        setEditingProveedor({ ...editingProveedor, bancos: newBancos });
+                      }}
+                      className="text-[10px] font-bold bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 px-2.5 py-1 rounded-lg border border-blue-500/30 flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus size={12} />
+                      <span>Agregar Otra Cuenta</span>
+                    </button>
+                  </div>
+
+                  {(editingProveedor.bancos || []).map((b, bIdx) => (
+                    <div key={bIdx} className="bg-black/60 border border-white/10 p-3 rounded-xl space-y-2 relative">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] font-bold uppercase text-zinc-500">Cuenta #{bIdx + 1}</span>
+                        {(editingProveedor.bancos || []).length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newB = editingProveedor.bancos.filter((_, idx) => idx !== bIdx);
+                              setEditingProveedor({ ...editingProveedor, bancos: newB });
+                            }}
+                            className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                          >
+                            <Trash2 size={12} />
+                            <span>Quitar</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
+                          <input
+                            type="text"
+                            placeholder="Ej: Banesco, Mercantil, BDV, Bancamiga, Provincial"
+                            value={b.banco}
+                            onChange={(e) => {
+                              const newB = [...editingProveedor.bancos];
+                              newB[bIdx].banco = e.target.value;
+                              setEditingProveedor({ ...editingProveedor, bancos: newB });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Tipo de Cuenta</label>
+                          <select
+                            value={b.tipoCuenta || 'Corriente'}
+                            onChange={(e) => {
+                              const newB = [...editingProveedor.bancos];
+                              newB[bIdx].tipoCuenta = e.target.value as any;
+                              setEditingProveedor({ ...editingProveedor, bancos: newB });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs cursor-pointer"
+                          >
+                            <option value="Corriente">Cuenta Corriente</option>
+                            <option value="Ahorro">Cuenta de Ahorro</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Número de Cuenta (20 dígitos)</label>
+                        <input
+                          type="text"
+                          placeholder="0134 0000 00 0000000000"
+                          value={b.numeroCuenta}
+                          onChange={(e) => {
+                            const newB = [...editingProveedor.bancos];
+                            newB[bIdx].numeroCuenta = e.target.value.replace(/[^\d]/g, '').slice(0, 20);
+                            setEditingProveedor({ ...editingProveedor, bancos: newB });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-amber-400 font-mono font-bold tracking-wider outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Nombre del Titular</label>
+                          <input
+                            type="text"
+                            placeholder="Nombre o Razón Social"
+                            value={b.titular}
+                            onChange={(e) => {
+                              const newB = [...editingProveedor.bancos];
+                              newB[bIdx].titular = e.target.value;
+                              setEditingProveedor({ ...editingProveedor, bancos: newB });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">RIF / Cédula del Titular</label>
+                          <input
+                            type="text"
+                            placeholder="J-00000000-0 o V-00000000"
+                            value={b.documento}
+                            onChange={(e) => {
+                              const newB = [...editingProveedor.bancos];
+                              newB[bIdx].documento = e.target.value;
+                              setEditingProveedor({ ...editingProveedor, bancos: newB });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono outline-none focus:border-primary text-xs"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Section 4: Pago Móvil - Condicional */}
+              {(editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0) && (
+                <div className="bg-black/30 border border-cyan-500/30 p-4 rounded-2xl space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase text-cyan-400 block tracking-wider flex items-center gap-1.5">
+                      <CreditCard size={13} />
+                      <span>Pago Móvil</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newPm = [
+                          ...(editingProveedor.pagoMovil || []),
+                          {
+                            id: `pm_${Date.now()}`,
+                            banco: 'Banesco (0134)',
+                            telefono: editingProveedor.telefono || '',
+                            documento: editingProveedor.rif || '',
+                            titular: editingProveedor.nombreComercial || ''
+                          }
+                        ];
+                        setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                      }}
+                      className="text-[10px] font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 px-2.5 py-1 rounded-lg border border-cyan-500/30 flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus size={12} />
+                      <span>Agregar Pago Móvil</span>
+                    </button>
+                  </div>
+
+                  {(editingProveedor.pagoMovil || []).map((pm, pmIdx) => (
+                    <div key={pmIdx} className="bg-black/60 border border-white/10 p-3 rounded-xl space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] font-bold uppercase text-zinc-500">Pago Móvil #{pmIdx + 1}</span>
+                        {(editingProveedor.pagoMovil || []).length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newPm = editingProveedor.pagoMovil.filter((_, idx) => idx !== pmIdx);
+                              setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                            }}
+                            className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                          >
+                            <Trash2 size={12} />
+                            <span>Quitar</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
+                          <input
+                            type="text"
+                            placeholder="Ej: Banesco (0134)"
+                            value={pm.banco}
+                            onChange={(e) => {
+                              const newPm = [...editingProveedor.pagoMovil];
+                              newPm[pmIdx].banco = e.target.value;
+                              setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Teléfono Pago Móvil</label>
+                          <input
+                            type="text"
+                            placeholder="Ej: 04141234567"
+                            value={pm.telefono}
+                            onChange={(e) => {
+                              const newPm = [...editingProveedor.pagoMovil];
+                              newPm[pmIdx].telefono = e.target.value;
+                              setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-cyan-300 font-mono font-bold outline-none focus:border-primary text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">C.I. / RIF</label>
+                          <input
+                            type="text"
+                            placeholder="Ej: J-31456789-0 o V-18765432"
+                            value={pm.documento}
+                            onChange={(e) => {
+                              const newPm = [...editingProveedor.pagoMovil];
+                              newPm[pmIdx].documento = e.target.value;
+                              setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono outline-none focus:border-primary text-xs"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Section 5: Zelle - Condicional */}
+              {editingProveedor.zelle !== undefined && (
+                <div className="p-4 bg-emerald-950/20 border border-emerald-500/40 rounded-2xl space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <DollarSign size={15} className="text-emerald-400" />
+                      <span className="font-bold text-white text-xs">Datos Zelle ($ USA)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setEditingProveedor({ ...editingProveedor, zelle: undefined })}
+                      className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                    >
+                      <Trash2 size={12} />
+                      <span>Desactivar Zelle</span>
+                    </button>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -4462,12 +4668,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </div>
                   </div>
                 </div>
+              )}
 
-                {/* Binance */}
-                <div className="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Wallet size={14} className="text-amber-400" />
-                    <span className="font-bold text-white text-xs">Binance Pay / USDT</span>
+              {/* Section 6: Binance Pay - Condicional */}
+              {editingProveedor.binance !== undefined && (
+                <div className="p-4 bg-amber-950/20 border border-amber-500/40 rounded-2xl space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Wallet size={15} className="text-amber-400" />
+                      <span className="font-bold text-white text-xs">Binance Pay / USDT</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setEditingProveedor({ ...editingProveedor, binance: undefined })}
+                      className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                    >
+                      <Trash2 size={12} />
+                      <span>Desactivar Binance</span>
+                    </button>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -4525,7 +4743,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Modal Actions */}
