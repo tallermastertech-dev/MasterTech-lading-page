@@ -1386,7 +1386,84 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           font-weight: 700 !important;
         }
 
-        /* 8. Tables, Grids & Lists */
+        /* 8. Light Mode Badges & Chips (100% Solid Contrast) */
+        .admin-theme-light [class*="bg-blue-100"],
+        .admin-theme-light [class*="bg-blue-50"] {
+          background-color: #dbeafe !important;
+          border-color: #93c5fd !important;
+          color: #1e3a8a !important;
+        }
+        .admin-theme-light [class*="bg-blue-100"] *,
+        .admin-theme-light [class*="bg-blue-50"] * {
+          color: #1e3a8a !important;
+          font-weight: 800 !important;
+        }
+
+        .admin-theme-light [class*="bg-emerald-100"],
+        .admin-theme-light [class*="bg-emerald-50"],
+        .admin-theme-light [class*="bg-green-100"] {
+          background-color: #dcfce7 !important;
+          border-color: #86efac !important;
+          color: #14532d !important;
+        }
+        .admin-theme-light [class*="bg-emerald-100"] *,
+        .admin-theme-light [class*="bg-emerald-50"] *,
+        .admin-theme-light [class*="bg-green-100"] * {
+          color: #14532d !important;
+          font-weight: 800 !important;
+        }
+
+        .admin-theme-light [class*="bg-amber-100"],
+        .admin-theme-light [class*="bg-amber-50"],
+        .admin-theme-light [class*="bg-yellow-100"] {
+          background-color: #fef3c7 !important;
+          border-color: #fcd34d !important;
+          color: #78350f !important;
+        }
+        .admin-theme-light [class*="bg-amber-100"] *,
+        .admin-theme-light [class*="bg-amber-50"] *,
+        .admin-theme-light [class*="bg-yellow-100"] * {
+          color: #78350f !important;
+          font-weight: 800 !important;
+        }
+
+        .admin-theme-light [class*="bg-purple-100"],
+        .admin-theme-light [class*="bg-purple-50"] {
+          background-color: #f3e8ff !important;
+          border-color: #d8b4fe !important;
+          color: #581c87 !important;
+        }
+        .admin-theme-light [class*="bg-purple-100"] *,
+        .admin-theme-light [class*="bg-purple-50"] * {
+          color: #581c87 !important;
+          font-weight: 800 !important;
+        }
+
+        .admin-theme-light [class*="bg-rose-100"],
+        .admin-theme-light [class*="bg-red-100"] {
+          background-color: #ffe4e6 !important;
+          border-color: #fca5a5 !important;
+          color: #881337 !important;
+        }
+        .admin-theme-light [class*="bg-rose-100"] *,
+        .admin-theme-light [class*="bg-red-100"] * {
+          color: #881337 !important;
+          font-weight: 800 !important;
+        }
+
+        .admin-theme-light [class*="bg-cyan-100"],
+        .admin-theme-light [class*="bg-cyan-50"] {
+          background-color: #cffafe !important;
+          border-color: #67e8f9 !important;
+          color: #164e63 !important;
+        }
+        .admin-theme-light [class*="bg-cyan-100"] *,
+        .admin-theme-light [class*="bg-cyan-50"] * {
+          color: #164e63 !important;
+          font-weight: 800 !important;
+        }
+
+        /* 9. Tables, Grids & Lists */
         .admin-theme-light table {
           background-color: #ffffff !important;
           color: #0f172a !important;
