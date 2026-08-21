@@ -169,6 +169,7 @@ export interface Proveedor {
   telefono?: string;
   correo?: string;
   direccion?: string;
+  aceptaCredito?: boolean;
   diasCredito?: string;
   notas?: string;
   bancos: MetodoPagoBanco[];
@@ -190,6 +191,7 @@ export const DEFAULT_PROVEEDORES: Proveedor[] = [
     telefono: "+584123565012",
     correo: "ventas@moparoriente.com",
     direccion: "Av. 4 de Mayo, Edif. Centro Automotriz, Porlamar",
+    aceptaCredito: true,
     diasCredito: "15 días crédito",
     notas: "Descuento del 10% para Taller MasterTech en compras mayores a $300. Código cliente: MT-104.",
     bancos: [
@@ -543,7 +545,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [isProveedorModalOpen, setIsProveedorModalOpen] = useState(false);
   const [selectedProveedorFicha, setSelectedProveedorFicha] = useState<Proveedor | null>(null);
   const [proveedorSearch, setProveedorSearch] = useState('');
-  const [proveedorMetodoFilter, setProveedorMetodoFilter] = useState<'TODOS' | 'ZELLE' | 'BINANCE' | 'PAGO_MOVIL' | 'BANCOS'>('TODOS');
+  const [proveedorMetodoFilter, setProveedorMetodoFilter] = useState<'TODOS' | 'CREDITO' | 'CONTADO' | 'ZELLE' | 'BINANCE' | 'PAGO_MOVIL' | 'BANCOS'>('TODOS');
   const [proveedorCategoriaFilter, setProveedorCategoriaFilter] = useState<string>('TODAS');
   const [copiedFieldId, setCopiedFieldId] = useState<string | null>(null);
   const [isSavingProveedor, setIsSavingProveedor] = useState(false);
@@ -590,7 +592,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       text += `\n`;
     }
 
-    if (prov.diasCredito) text += `⏳ *Condición:* ${prov.diasCredito}\n`;
+    if (prov.aceptaCredito) {
+      text += `⏳ *Condición:* Acepta Crédito (${prov.diasCredito || 'Plazo acordado'})\n`;
+    } else {
+      text += `💵 *Condición:* Solo Contado / Pago Inmediato\n`;
+    }
     if (prov.notas) text += `📝 *Notas:* ${prov.notas}\n`;
 
     copyToClipboard(text, `full-${prov.id}`);
@@ -2600,7 +2606,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                 <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase text-zinc-400">Aceptan Zelle</span>
+                    <span className="text-[10px] font-bold uppercase text-amber-400">Otorgan Crédito</span>
+                    <Clock size={16} className="text-amber-400" />
+                  </div>
+                  <span className="text-2xl font-black text-amber-400 mt-1 block">
+                    {proveedoresList.filter(p => p.aceptaCredito || (p.diasCredito && !p.diasCredito.toLowerCase().includes('contado'))).length}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-medium">Plazos & Facturación</span>
+                </div>
+
+                <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase text-emerald-400">Aceptan Zelle</span>
                     <DollarSign size={16} className="text-emerald-400" />
                   </div>
                   <span className="text-2xl font-black text-emerald-400 mt-1 block">
@@ -2611,18 +2628,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                 <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase text-zinc-400">Binance Pay USDT</span>
-                    <Wallet size={16} className="text-amber-400" />
-                  </div>
-                  <span className="text-2xl font-black text-amber-400 mt-1 block">
-                    {proveedoresList.filter(p => p.binance?.payId || p.binance?.walletUsdt).length}
-                  </span>
-                  <span className="text-[10px] text-zinc-500 font-medium">Criptoactivos / USDT</span>
-                </div>
-
-                <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase text-zinc-400">Pago Móvil & Bs</span>
+                    <span className="text-[10px] font-bold uppercase text-blue-400">Pago Móvil & Bs</span>
                     <CreditCard size={16} className="text-blue-400" />
                   </div>
                   <span className="text-2xl font-black text-blue-400 mt-1 block">
@@ -2640,7 +2646,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
                     <input
                       type="text"
-                      placeholder="Buscar por nombre, RIF, banco, Zelle, Binance Pay ID, repuesto o contacto..."
+                      placeholder="Buscar por nombre, RIF, banco, Zelle, Binance Pay ID, crédito o contacto..."
                       value={proveedorSearch}
                       onChange={(e) => setProveedorSearch(e.target.value)}
                       className="w-full bg-black/50 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder:text-zinc-600 outline-none focus:border-primary transition-colors"
@@ -2677,9 +2683,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                 {/* Method Pills Filter */}
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-                  <span className="text-[10px] font-bold uppercase text-zinc-500 shrink-0">Filtrar Método:</span>
+                  <span className="text-[10px] font-bold uppercase text-zinc-500 shrink-0">Filtrar:</span>
                   {[
                     { id: 'TODOS', label: `Todos (${proveedoresList.length})` },
+                    { id: 'CREDITO', label: `⏳ Con Crédito (${proveedoresList.filter(p => p.aceptaCredito || (p.diasCredito && !p.diasCredito.toLowerCase().includes('contado'))).length})` },
+                    { id: 'CONTADO', label: `💵 Solo Contado (${proveedoresList.filter(p => !p.aceptaCredito && (!p.diasCredito || p.diasCredito.toLowerCase().includes('contado'))).length})` },
                     { id: 'ZELLE', label: `💵 Zelle (${proveedoresList.filter(p => p.zelle?.correoTelefono).length})` },
                     { id: 'BINANCE', label: `🟡 Binance Pay (${proveedoresList.filter(p => p.binance?.payId || p.binance?.walletUsdt).length})` },
                     { id: 'PAGO_MOVIL', label: `📱 Pago Móvil (${proveedoresList.filter(p => p.pagoMovil && p.pagoMovil.length > 0).length})` },
@@ -2716,6 +2724,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     (p.contactoNombre || '').toLowerCase().includes(q) ||
                     (p.telefono || '').toLowerCase().includes(q) ||
                     (p.notas || '').toLowerCase().includes(q) ||
+                    (p.diasCredito || '').toLowerCase().includes(q) ||
                     (p.zelle?.correoTelefono || '').toLowerCase().includes(q) ||
                     (p.binance?.payId || '').toLowerCase().includes(q) ||
                     (p.bancos || []).some(b => b.banco.toLowerCase().includes(q) || b.numeroCuenta.includes(q) || b.titular.toLowerCase().includes(q)) ||
@@ -2724,7 +2733,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   const matchesCat = proveedorCategoriaFilter === 'TODAS' || p.categoria === proveedorCategoriaFilter;
 
                   let matchesMetodo = true;
-                  if (proveedorMetodoFilter === 'ZELLE') matchesMetodo = Boolean(p.zelle?.correoTelefono);
+                  if (proveedorMetodoFilter === 'CREDITO') matchesMetodo = Boolean(p.aceptaCredito || (p.diasCredito && !p.diasCredito.toLowerCase().includes('contado')));
+                  else if (proveedorMetodoFilter === 'CONTADO') matchesMetodo = !p.aceptaCredito && (!p.diasCredito || p.diasCredito.toLowerCase().includes('contado'));
+                  else if (proveedorMetodoFilter === 'ZELLE') matchesMetodo = Boolean(p.zelle?.correoTelefono);
                   else if (proveedorMetodoFilter === 'BINANCE') matchesMetodo = Boolean(p.binance?.payId || p.binance?.walletUsdt);
                   else if (proveedorMetodoFilter === 'PAGO_MOVIL') matchesMetodo = Boolean(p.pagoMovil && p.pagoMovil.length > 0);
                   else if (proveedorMetodoFilter === 'BANCOS') matchesMetodo = Boolean(p.bancos && p.bancos.length > 0);
@@ -2758,9 +2769,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
                                   {prov.categoria || 'Repuestos'}
                                 </span>
-                                {prov.diasCredito && (
-                                  <span className="text-[10px] font-bold text-zinc-300 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
-                                    ⏳ {prov.diasCredito}
+                                {prov.aceptaCredito ? (
+                                  <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 rounded-md flex items-center gap-1">
+                                    <Clock size={11} className="text-amber-300" />
+                                    <span>Crédito: {prov.diasCredito || 'Activo'}</span>
+                                  </span>
+                                ) : (
+                                  <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                    <span>💵 Solo Contado</span>
                                   </span>
                                 )}
                               </div>
@@ -4568,19 +4584,57 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     />
                   </div>
 
-                  {/* Condición de Pago */}
+                  {/* Selector ¿Acepta Crédito? */}
                   <div className="space-y-1.5">
                     <label className="text-[11px] text-zinc-300 font-bold block">
-                      Condición Comercial / Crédito
+                      ¿Otorga Crédito Comercial? <span className="text-amber-400">*</span>
                     </label>
-                    <input
-                      type="text"
-                      placeholder="Ej: Contado / Inmediato, 15 días crédito"
-                      value={editingProveedor.diasCredito || ''}
-                      onChange={(e) => setEditingProveedor({ ...editingProveedor, diasCredito: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white outline-none focus:border-primary text-xs"
-                    />
+                    <select
+                      value={editingProveedor.aceptaCredito ? 'si' : 'no'}
+                      onChange={(e) => {
+                        const isCredit = e.target.value === 'si';
+                        setEditingProveedor({
+                          ...editingProveedor,
+                          aceptaCredito: isCredit,
+                          diasCredito: isCredit 
+                            ? (editingProveedor.diasCredito && !editingProveedor.diasCredito.toLowerCase().includes('contado') ? editingProveedor.diasCredito : '15 Días de Crédito') 
+                            : 'Contado / Inmediato'
+                        });
+                      }}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white font-bold outline-none focus:border-primary cursor-pointer text-xs"
+                    >
+                      <option value="no">💵 No — Solo Contado / Pago Inmediato</option>
+                      <option value="si">⏳ Sí — Acepta Crédito Comercial</option>
+                    </select>
                   </div>
+
+                  {/* Días de Crédito Acordados */}
+                  {editingProveedor.aceptaCredito ? (
+                    <div className="space-y-1.5 animate-fade-in">
+                      <label className="text-[11px] text-amber-400 font-bold block">
+                        Plazo / Días de Crédito Acordados *
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Ej: 15 Días, 30 Días, Fin de Mes"
+                        value={editingProveedor.diasCredito || ''}
+                        onChange={(e) => setEditingProveedor({ ...editingProveedor, diasCredito: e.target.value })}
+                        className="w-full bg-black/50 border border-amber-500/40 rounded-xl py-2.5 px-3.5 text-amber-300 font-bold outline-none focus:border-primary text-xs"
+                      />
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5 opacity-60">
+                      <label className="text-[11px] text-zinc-400 font-bold block">
+                        Condición de Pago
+                      </label>
+                      <input
+                        type="text"
+                        disabled
+                        value="Contado / Pago Inmediato"
+                        className="w-full bg-black/30 border border-white/5 rounded-xl py-2.5 px-3.5 text-zinc-400 text-xs cursor-not-allowed"
+                      />
+                    </div>
+                  )}
 
                   {/* Dirección */}
                   <div className="space-y-1.5 md:col-span-2">
@@ -5231,10 +5285,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           <div className="bg-[#101216] border border-amber-500/40 rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl relative">
             <div className="flex justify-between items-start border-b border-white/10 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
-                  ⚡ Ficha de Pago Rápida
-                </span>
-                <h2 className="text-lg font-display font-black text-white mt-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+                    ⚡ Ficha de Pago Rápida
+                  </span>
+                  {selectedProveedorFicha.aceptaCredito ? (
+                    <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 rounded">
+                      ⏳ Crédito: {selectedProveedorFicha.diasCredito || 'Activo'}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">
+                      💵 Solo Contado
+                    </span>
+                  )}
+                </div>
+                <h2 className="text-lg font-display font-black text-white mt-1.5">
                   {selectedProveedorFicha.nombreComercial}
                 </h2>
                 {selectedProveedorFicha.rif && (
@@ -5243,7 +5308,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               </div>
               <button
                 onClick={() => setSelectedProveedorFicha(null)}
-                className="text-zinc-400 hover:text-white p-1 rounded-lg bg-white/5"
+                className="text-zinc-400 hover:text-white p-1 rounded-lg bg-white/5 cursor-pointer"
               >
                 <X size={18} />
               </button>
