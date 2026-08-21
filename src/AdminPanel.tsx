@@ -341,7 +341,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [userModalError, setUserModalError] = useState('');
   const [isSavingUser, setIsSavingUser] = useState(false);
 
-  // Permission Checker: Full Access (CEO, Director, Super Admin, Marketing) vs Limited Access (Logística & Ventas 4 tabs)
+  // Permission Checker: Full Access (CEO, Director, Super Admin, Marketing), Administración (Dashboard + Proveedores), Logística (Dashboard + Citas + Catálogo + Jornadas + Proveedores)
   const isFullAdminUser = (user: any) => {
     if (!user) return false;
     const email = (user.email || '').toLowerCase().trim();
@@ -353,6 +353,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     if (access === 'full') return true;
     if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) return true;
     return false;
+  };
+
+  const getAllowedTabsForUser = (user: any): string[] => {
+    if (!user) return ['dashboard'];
+    const email = (user.email || '').toLowerCase().trim();
+    const role = (user.role || '').toLowerCase().trim();
+    const access = (user.accessLevel || '').toLowerCase().trim();
+
+    // 1. Acceso Total
+    if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com' || access === 'full') {
+      return ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+    }
+    if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) {
+      return ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+    }
+
+    // 2. Rol Administración (Solo Dashboard para ver la tasa y Admin Proveedores)
+    if (access === 'administracion' || role === 'administración' || role === 'administracion') {
+      return ['dashboard', 'proveedores'];
+    }
+
+    // 3. Rol Logística (Dashboard, Citas, Catálogo, Jornadas y Admin Proveedores)
+    if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
+      return ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores'];
+    }
+
+    return ['dashboard', 'proveedores'];
   };
 
   // Active Navigation Tab
@@ -406,12 +433,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (e) {}
   };
 
-  // Route guard: auto redirect limited users to dashboard if they attempt restricted tab
+  // Route guard: auto redirect limited users to allowed tab if they attempt restricted tab
   useEffect(() => {
-    if (currentUser && !isFullAdminUser(currentUser)) {
-      const allowed = ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores'];
+    if (currentUser) {
+      const allowed = getAllowedTabsForUser(currentUser);
       if (!allowed.includes(activeTab)) {
-        setActiveTab('dashboard');
+        setActiveTab(allowed[0] as any || 'dashboard');
       }
     }
     if (activeTab === 'auditoria') {
@@ -1185,9 +1212,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 { id: 'auditoria', label: 'Registro de Actividad', icon: <History size={18} /> },
               ];
 
-              const allowedTabs = isFull 
-                ? allTabs 
-                : allTabs.filter(t => ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores'].includes(t.id));
+              const allowedTabsIds = getAllowedTabsForUser(currentUser);
+              const allowedTabs = allTabs.filter(t => allowedTabsIds.includes(t.id));
 
               return allowedTabs.map(tab => {
                 const isActive = activeTab === tab.id;
@@ -3109,6 +3135,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                                   isFull 
                                     ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
+                                    : (u.accessLevel === 'administracion' || u.role === 'Administración')
+                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                                     : 'bg-blue-500/20 text-blue-300 border-blue-500/40'
                                 }`}>
                                   {isFull ? (
@@ -3116,10 +3144,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       <Crown size={11} />
                                       <span>Acceso Total</span>
                                     </>
+                                  ) : (u.accessLevel === 'administracion' || u.role === 'Administración') ? (
+                                    <>
+                                      <Building2 size={11} />
+                                      <span>Administración (Dashboard + Proveedores)</span>
+                                    </>
                                   ) : (
                                     <>
                                       <Package size={11} />
-                                      <span>Logística (4 Módulos)</span>
+                                      <span>Logística & Taller (5 Módulos)</span>
                                     </>
                                   )}
                                 </span>
@@ -3250,16 +3283,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           onChange={(e) => {
                             const newRole = e.target.value;
                             const isFull = newRole.includes('CEO') || newRole.includes('Director') || newRole.includes('Marketing') || newRole.includes('Super');
+                            const isAdmin = newRole.includes('Administra') || newRole.includes('Admin');
                             setEditingUser({ 
                               ...editingUser, 
                               role: newRole,
-                              accessLevel: isFull ? 'full' : 'logistica'
+                              accessLevel: isFull ? 'full' : isAdmin ? 'administracion' : 'logistica'
                             });
                           }}
-                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400 cursor-pointer"
                         >
                           <option value="CEO - Director">CEO - Director</option>
                           <option value="Marketing">Marketing</option>
+                          <option value="Administración">Administración</option>
                           <option value="Asesor Logística">Asesor Logística</option>
                           <option value="Coordinadora Logística">Coordinadora Logística</option>
                         </select>
@@ -3271,12 +3306,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           Nivel de Permisos en el Panel
                         </label>
                         <select
-                          value={editingUser.accessLevel || (isFullAdminUser(editingUser) ? 'full' : 'logistica')}
+                          value={editingUser.accessLevel || (editingUser.role === 'Administración' ? 'administracion' : isFullAdminUser(editingUser) ? 'full' : 'logistica')}
                           onChange={(e) => setEditingUser({ ...editingUser, accessLevel: e.target.value })}
-                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400"
+                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400 cursor-pointer"
                         >
-                          <option value="full">Super Administrador (Acceso Total a todo el Panel, Ajustes y Usuarios)</option>
-                          <option value="logistica">Logística & Almacén (Acceso Limitado a 4 cosas: Dashboard, Citas, Catálogo y Jornadas)</option>
+                          <option value="full">Super Administrador (Acceso Total: Todas las 9 pestañas del Panel)</option>
+                          <option value="administracion">Administración (Acceso exclusivo a Dashboard y Admin Proveedores)</option>
+                          <option value="logistica">Logística & Almacén (Dashboard, Citas, Catálogo, Jornadas y Admin Proveedores)</option>
                         </select>
                       </div>
 
