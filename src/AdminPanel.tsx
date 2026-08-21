@@ -1349,14 +1349,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       {/* Light Mode CSS Overrides Scope */}
       <style>{`
         /* ========================================================================= */
-        /* GLOBAL LIGHT THEME ARCHITECTURE (WARM SOFT GRAY - ANTI-FATIGUE UX) */
+        /* GLOBAL LIGHT THEME ARCHITECTURE (WARM SOFT GRAY - ANTI-FATIGUE HIGH CONTRAST) */
         /* ========================================================================= */
         .admin-theme-light {
           background-color: #e5e8ed !important;
           color: #0f172a !important;
         }
 
-        /* 1. Reset all Dark Hex & Gradient Backgrounds to Soft Gray Card */
+        /* 1. Main Backgrounds and Cards */
         .admin-theme-light [class*="bg-[#"],
         .admin-theme-light [class*="from-[#"],
         .admin-theme-light [class*="via-[#"],
@@ -1365,16 +1365,20 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           background-color: #f1f4f8 !important;
           border-color: #cbd5e1 !important;
           color: #0f172a !important;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
 
-        /* 2. Reset all Black Translucent Containers & Sub-cards to Muted Gray */
+        /* 2. Sub-cards, Containers & Contact Boxes */
         .admin-theme-light [class*="bg-black"],
         .admin-theme-light [class*="bg-zinc-9"],
         .admin-theme-light [class*="bg-slate-9"],
         .admin-theme-light [class*="bg-gray-9"] {
-          background-color: #e2e7ec !important;
+          background-color: #ffffff !important;
           border-color: #cbd5e1 !important;
+          color: #0f172a !important;
+        }
+        .admin-theme-light [class*="bg-black"] *,
+        .admin-theme-light [class*="bg-zinc-9"] * {
           color: #0f172a !important;
         }
 
@@ -1390,21 +1394,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
         }
         .admin-theme-light header {
-          background-color: rgba(237, 240, 245, 0.96) !important;
+          background-color: rgba(237, 240, 245, 0.98) !important;
           border-color: #cbd5e1 !important;
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
         }
 
         /* 5. Navigation Sidebar Buttons */
         .admin-theme-light nav button {
-          color: #334155 !important;
+          color: #1e293b !important;
         }
         .admin-theme-light nav button:hover {
           background-color: #dde2e8 !important;
           color: #0f172a !important;
         }
         .admin-theme-light nav button span {
-          color: #334155 !important;
+          color: #1e293b !important;
         }
         .admin-theme-light nav button:hover span {
           color: #0f172a !important;
@@ -1427,22 +1431,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light input,
         .admin-theme-light select,
         .admin-theme-light textarea {
-          background-color: #f8fafc !important;
-          border: 1px solid #94a3b8 !important;
+          background-color: #ffffff !important;
+          border: 1.5px solid #94a3b8 !important;
           color: #0f172a !important;
+          font-weight: 600 !important;
         }
         .admin-theme-light input::placeholder,
         .admin-theme-light textarea::placeholder {
           color: #64748b !important;
+          font-weight: 500 !important;
         }
         .admin-theme-light input:focus,
         .admin-theme-light select:focus,
         .admin-theme-light textarea:focus {
-          border-color: #f59e0b !important;
-          outline: 2px solid rgba(245, 158, 11, 0.2) !important;
+          border-color: #d97706 !important;
+          outline: 2px solid rgba(217, 119, 6, 0.2) !important;
         }
 
-        /* 7. Typography Hierarchy & Contrast (WCAG AAA Compliant) */
+        /* 7. Typography Hierarchy & High Contrast (Crystal Clear) */
         .admin-theme-light h1,
         .admin-theme-light h2,
         .admin-theme-light h3,
@@ -1454,144 +1460,92 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light [class*="text-zinc-200"],
         .admin-theme-light [class*="text-zinc-300"] {
           color: #0f172a !important;
+          font-weight: 600;
         }
         .admin-theme-light [class*="text-zinc-400"],
         .admin-theme-light [class*="text-zinc-500"],
         .admin-theme-light [class*="text-zinc-600"],
         .admin-theme-light [class*="text-slate-400"],
         .admin-theme-light [class*="text-slate-500"] {
-          color: #334155 !important;
-          font-weight: 500;
+          color: #1e293b !important;
+          font-weight: 600;
         }
-        .admin-theme-light [class*="text-amber-950"],
-        .admin-theme-light [class*="text-amber-900"],
-        .admin-theme-light [class*="text-amber-800"] {
-          color: #451a03 !important;
-          font-weight: 800 !important;
-        }
-        .admin-theme-light [class*="text-emerald-950"],
-        .admin-theme-light [class*="text-emerald-900"],
-        .admin-theme-light [class*="text-emerald-800"] {
-          color: #022c22 !important;
-          font-weight: 800 !important;
-        }
-        .admin-theme-light [class*="text-cyan-950"],
-        .admin-theme-light [class*="text-cyan-900"],
-        .admin-theme-light [class*="text-cyan-800"] {
-          color: #083344 !important;
-          font-weight: 800 !important;
-        }
-        .admin-theme-light [class*="text-rose-950"],
-        .admin-theme-light [class*="text-rose-900"],
-        .admin-theme-light [class*="text-rose-800"] {
-          color: #4c0519 !important;
-          font-weight: 800 !important;
-        }
+
+        /* 8. Colored Highlight Texts */
         .admin-theme-light .text-primary,
         .admin-theme-light [class*="text-amber-400"],
         .admin-theme-light [class*="text-amber-300"] {
           color: #92400e !important;
           font-weight: 800 !important;
         }
-        .admin-theme-light .text-purple-300,
-        .admin-theme-light .text-purple-400 {
-          color: #581c87 !important;
-          font-weight: 700 !important;
+        .admin-theme-light [class*="text-blue-300"],
+        .admin-theme-light [class*="text-blue-400"] {
+          color: #1e40af !important;
+          font-weight: 800 !important;
         }
-        .admin-theme-light .text-blue-300,
-        .admin-theme-light .text-blue-400 {
-          color: #1e3a8a !important;
-          font-weight: 700 !important;
+        .admin-theme-light [class*="text-emerald-300"],
+        .admin-theme-light [class*="text-emerald-400"] {
+          color: #166534 !important;
+          font-weight: 800 !important;
         }
-        .admin-theme-light .text-emerald-300,
-        .admin-theme-light .text-emerald-400 {
-          color: #064e3b !important;
-          font-weight: 700 !important;
-        }
-        .admin-theme-light .text-cyan-300,
-        .admin-theme-light .text-cyan-400 {
-          color: #164e63 !important;
-          font-weight: 700 !important;
+        .admin-theme-light [class*="text-cyan-300"],
+        .admin-theme-light [class*="text-cyan-400"] {
+          color: #0e7490 !important;
+          font-weight: 800 !important;
         }
 
-        /* 8. Light Mode Badges & Chips (100% Solid Contrast) */
-        .admin-theme-light [class*="bg-blue-100"],
-        .admin-theme-light [class*="bg-blue-50"] {
+        /* 9. Light Mode Badges, Chips & Filters (Solid High Contrast) */
+        .admin-theme-light [class*="bg-blue-950"],
+        .admin-theme-light [class*="bg-blue-500/"],
+        .admin-theme-light [class*="bg-cyan-500/"] {
           background-color: #dbeafe !important;
-          border-color: #93c5fd !important;
-          color: #1e3a8a !important;
+          border: 1px solid #93c5fd !important;
         }
-        .admin-theme-light [class*="bg-blue-100"] *,
-        .admin-theme-light [class*="bg-blue-50"] * {
-          color: #1e3a8a !important;
+        .admin-theme-light [class*="bg-blue-950"] *,
+        .admin-theme-light [class*="bg-blue-500/"] *,
+        .admin-theme-light [class*="bg-cyan-500/"] * {
+          color: #1e40af !important;
           font-weight: 800 !important;
         }
 
-        .admin-theme-light [class*="bg-emerald-100"],
-        .admin-theme-light [class*="bg-emerald-50"],
-        .admin-theme-light [class*="bg-green-100"] {
+        .admin-theme-light [class*="bg-emerald-950"],
+        .admin-theme-light [class*="bg-emerald-500/"] {
           background-color: #dcfce7 !important;
-          border-color: #86efac !important;
-          color: #14532d !important;
+          border: 1px solid #86efac !important;
         }
-        .admin-theme-light [class*="bg-emerald-100"] *,
-        .admin-theme-light [class*="bg-emerald-50"] *,
-        .admin-theme-light [class*="bg-green-100"] * {
-          color: #14532d !important;
+        .admin-theme-light [class*="bg-emerald-950"] *,
+        .admin-theme-light [class*="bg-emerald-500/"] * {
+          color: #166534 !important;
           font-weight: 800 !important;
         }
 
-        .admin-theme-light [class*="bg-amber-100"],
-        .admin-theme-light [class*="bg-amber-50"],
-        .admin-theme-light [class*="bg-yellow-100"] {
+        .admin-theme-light [class*="bg-amber-950"],
+        .admin-theme-light [class*="bg-amber-500/"] {
           background-color: #fef3c7 !important;
-          border-color: #fcd34d !important;
-          color: #78350f !important;
+          border: 1px solid #fcd34d !important;
         }
-        .admin-theme-light [class*="bg-amber-100"] *,
-        .admin-theme-light [class*="bg-amber-50"] *,
-        .admin-theme-light [class*="bg-yellow-100"] * {
+        .admin-theme-light [class*="bg-amber-950"] *,
+        .admin-theme-light [class*="bg-amber-500/"] * {
           color: #78350f !important;
           font-weight: 800 !important;
         }
 
-        .admin-theme-light [class*="bg-purple-100"],
-        .admin-theme-light [class*="bg-purple-50"] {
-          background-color: #f3e8ff !important;
-          border-color: #d8b4fe !important;
-          color: #581c87 !important;
+        /* 10. Secondary Buttons & Badges (White / Gray translucent overrides) */
+        .admin-theme-light [class*="bg-white/"] {
+          background-color: #ffffff !important;
+          color: #0f172a !important;
+          border: 1px solid #cbd5e1 !important;
+          font-weight: 700 !important;
         }
-        .admin-theme-light [class*="bg-purple-100"] *,
-        .admin-theme-light [class*="bg-purple-50"] * {
-          color: #581c87 !important;
-          font-weight: 800 !important;
+        .admin-theme-light [class*="bg-white/"] * {
+          color: #0f172a !important;
         }
-
-        .admin-theme-light [class*="bg-rose-100"],
-        .admin-theme-light [class*="bg-red-100"] {
-          background-color: #ffe4e6 !important;
-          border-color: #fca5a5 !important;
-          color: #881337 !important;
-        }
-        .admin-theme-light [class*="bg-rose-100"] *,
-        .admin-theme-light [class*="bg-red-100"] * {
-          color: #881337 !important;
-          font-weight: 800 !important;
+        .admin-theme-light [class*="hover:bg-white/"]:hover {
+          background-color: #e2e8f0 !important;
+          color: #000000 !important;
         }
 
-        .admin-theme-light [class*="bg-cyan-100"],
-        .admin-theme-light [class*="bg-cyan-50"] {
-          background-color: #cffafe !important;
-          border-color: #67e8f9 !important;
-          color: #164e63 !important;
-        }
-        .admin-theme-light [class*="bg-cyan-100"] *,
-        .admin-theme-light [class*="bg-cyan-50"] * {
-          color: #164e63 !important;
-          font-weight: 800 !important;
-        }
-
-        /* 9. Tables, Grids & Lists */
+        /* 11. Tables */
         .admin-theme-light table {
           background-color: #f1f4f8 !important;
           color: #0f172a !important;
@@ -1599,12 +1553,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light th,
         .admin-theme-light thead th {
           background-color: #e2e7ec !important;
-          color: #1e293b !important;
+          color: #0f172a !important;
           border-bottom: 2px solid #cbd5e1 !important;
           font-weight: 800 !important;
         }
         .admin-theme-light td {
-          background-color: #f1f4f8 !important;
+          background-color: #ffffff !important;
           color: #0f172a !important;
           border-bottom: 1px solid #cbd5e1 !important;
         }
@@ -1615,18 +1569,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           font-weight: 600;
         }
         .admin-theme-light tr:hover td {
-          background-color: #e5e9ee !important;
-        }
-
-        /* 10. Light Mode Soft Buttons & Secondary Elements */
-        .admin-theme-light [class*="bg-white/"] {
-          background-color: #e2e7ec !important;
-          color: #334155 !important;
-          border-color: #cbd5e1 !important;
-        }
-        .admin-theme-light [class*="hover:bg-white/"]:hover {
-          background-color: #d6dbe2 !important;
-          color: #0f172a !important;
+          background-color: #f1f5f9 !important;
         }
         .admin-theme-light .btn-primary {
           background: linear-gradient(135deg, #eab308, #ca8a04) !important;
@@ -2799,7 +2742,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
                           isSelected
                             ? 'bg-amber-500 text-black shadow-md font-black'
-                            : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/5'
+                            : 'bg-slate-200/90 dark:bg-white/5 text-slate-800 dark:text-zinc-400 hover:text-black dark:hover:text-white hover:bg-slate-300 dark:hover:bg-white/10 border border-slate-300 dark:border-white/5'
                         }`}
                       >
                         {tab.icon}
@@ -2894,29 +2837,29 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
                               <div className="space-y-1">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
+                                  <span className="text-[10px] font-black uppercase text-amber-800 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 px-2.5 py-0.5 rounded-md">
                                     {prov.categoria || 'Repuestos'}
                                   </span>
                                   {prov.aceptaCredito ? (
-                                    <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 rounded-md flex items-center gap-1">
-                                      <Clock size={11} className="text-amber-300" />
+                                    <span className="text-[10px] font-black text-amber-900 dark:text-amber-300 bg-amber-200/80 dark:bg-amber-500/20 border border-amber-400 dark:border-amber-500/40 px-2.5 py-0.5 rounded-md flex items-center gap-1">
+                                      <Clock size={11} className="text-amber-800 dark:text-amber-300" />
                                       <span>Crédito: {prov.diasCredito || 'Activo'}</span>
                                     </span>
                                   ) : (
-                                    <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                      <Banknote size={11} className="text-zinc-400" />
+                                    <span className="text-[10px] font-bold text-slate-800 dark:text-zinc-400 bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                      <Banknote size={11} className="text-slate-700 dark:text-zinc-400" />
                                       <span>Solo Contado</span>
                                     </span>
                                   )}
                                 </div>
-                                <h3 className="font-display font-black text-white text-base tracking-wide leading-tight mt-1">
+                                <h3 className="font-display font-black text-slate-900 dark:text-white text-base tracking-wide leading-tight mt-1">
                                   {prov.nombreComercial}
                                 </h3>
                                 {prov.razonSocial && prov.razonSocial !== prov.nombreComercial && (
-                                  <p className="text-[11px] text-zinc-400">{prov.razonSocial}</p>
+                                  <p className="text-[11px] font-semibold text-slate-600 dark:text-zinc-400">{prov.razonSocial}</p>
                                 )}
                                 {prov.rif && (
-                                  <span className="text-[10px] font-mono font-bold text-zinc-400 bg-black/40 px-2 py-0.5 rounded border border-white/5 inline-block">
+                                  <span className="text-[10px] font-mono font-bold text-slate-800 dark:text-zinc-400 bg-slate-200/70 dark:bg-black/40 px-2 py-0.5 rounded border border-slate-300 dark:border-white/5 inline-block">
                                     RIF: {prov.rif}
                                   </span>
                                 )}
@@ -2928,7 +2871,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                     setEditingProveedor({ ...prov });
                                     setIsProveedorModalOpen(true);
                                   }}
-                                  className="p-2 rounded-xl bg-white/5 hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+                                  className="p-2 rounded-xl bg-slate-200/80 dark:bg-white/5 hover:bg-amber-500/20 text-slate-700 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
                                   title="Editar Proveedor"
                                 >
                                   <Edit size={14} />
@@ -2940,7 +2883,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       handleSaveProveedores(updated, `Eliminó el proveedor ${prov.nombreComercial}`);
                                     }
                                   }}
-                                  className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+                                  className="p-2 rounded-xl bg-slate-200/80 dark:bg-white/5 hover:bg-red-500/20 text-slate-700 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
                                   title="Eliminar Proveedor"
                                 >
                                   <Trash2 size={14} />
@@ -2951,22 +2894,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                               {prov.contactoNombre && (
-                                <div className="flex items-center gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
-                                  <User size={14} className="text-zinc-500 shrink-0" />
+                                <div className="flex items-center gap-2 text-slate-900 dark:text-zinc-300 font-bold bg-slate-100 dark:bg-black/30 p-2 rounded-xl border border-slate-300 dark:border-white/5">
+                                  <User size={14} className="text-slate-600 dark:text-zinc-500 shrink-0" />
                                   <span className="truncate">{prov.contactoNombre}</span>
                                 </div>
                               )}
                               {prov.telefono && (
-                                <div className="flex items-center justify-between gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
+                                <div className="flex items-center justify-between gap-2 text-slate-900 dark:text-zinc-300 font-bold bg-slate-100 dark:bg-black/30 p-2 rounded-xl border border-slate-300 dark:border-white/5">
                                   <div className="flex items-center gap-2 truncate">
-                                    <Phone size={14} className="text-zinc-500 shrink-0" />
+                                    <Phone size={14} className="text-slate-600 dark:text-zinc-500 shrink-0" />
                                     <span className="font-mono">{prov.telefono}</span>
                                   </div>
                                   <a
                                     href={`https://wa.me/${prov.telefono.replace(/[^\d]/g, '')}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-emerald-400 hover:text-emerald-300 shrink-0"
+                                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 shrink-0"
                                     title="Abrir WhatsApp"
                                   >
                                     <WhatsAppIcon size={14} />
@@ -2976,41 +2919,41 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             </div>
 
                             {prov.notas && (
-                              <div className="bg-amber-500/5 border border-amber-500/20 p-2.5 rounded-xl text-xs text-amber-200/90 flex items-start gap-2">
-                                <Tag size={13} className="text-amber-400 shrink-0 mt-0.5" />
+                              <div className="bg-amber-100/70 dark:bg-amber-500/5 border border-amber-300 dark:border-amber-500/20 p-2.5 rounded-xl text-xs text-amber-950 dark:text-amber-200/90 font-bold flex items-start gap-2">
+                                <Tag size={13} className="text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
                                 <span className="leading-snug">{prov.notas}</span>
                               </div>
                             )}
 
                             {/* Payment Methods Badges Summary */}
                             <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                              <span className="text-[10px] font-bold text-zinc-500 uppercase shrink-0 mr-1">Acepta:</span>
+                              <span className="text-[10px] font-black text-slate-700 dark:text-zinc-500 uppercase shrink-0 mr-1">Acepta:</span>
                               {prov.bancos && prov.bancos.length > 0 && (
-                                <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <span className="text-[10px] font-black text-blue-900 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/10 border border-blue-300 dark:border-blue-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <Building2 size={11} />
                                   <span>{prov.bancos.length} {prov.bancos.length === 1 ? 'Banco' : 'Bancos'}</span>
                                 </span>
                               )}
                               {prov.pagoMovil && prov.pagoMovil.length > 0 && (
-                                <span className="text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <span className="text-[10px] font-black text-cyan-900 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-500/10 border border-cyan-300 dark:border-cyan-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <Smartphone size={11} />
                                   <span>{prov.pagoMovil.length} Pago Móvil</span>
                                 </span>
                               )}
                               {prov.zelle?.correoTelefono && (
-                                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <span className="text-[10px] font-black text-emerald-900 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <DollarSign size={11} />
                                   <span>Zelle</span>
                                 </span>
                               )}
                               {prov.binance?.payId && (
-                                <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <span className="text-[10px] font-black text-amber-900 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <Wallet size={11} />
                                   <span>Binance Pay</span>
                                 </span>
                               )}
                               {prov.aceptaEfectivoDivisas && (
-                                <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <span className="text-[10px] font-black text-slate-800 dark:text-zinc-400 bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <Banknote size={11} />
                                   <span>Efectivo $</span>
                                 </span>
@@ -5505,32 +5448,32 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     const isCopiedAccount = copiedFieldId === `quick-banco-${i}`;
                     const isCopiedDoc = copiedFieldId === `quick-doc-${i}`;
                     return (
-                      <div key={i} className="p-3.5 bg-black/40 border border-white/10 rounded-2xl space-y-2">
+                      <div key={i} className="p-3.5 bg-slate-100 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-2xl space-y-2">
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-white">{b.banco}</span>
-                            <span className="text-[9px] text-zinc-400 uppercase bg-white/5 px-1.5 py-0.5 rounded">
+                            <span className="text-xs font-black text-slate-900 dark:text-white">{b.banco}</span>
+                            <span className="text-[9px] font-bold text-slate-700 dark:text-zinc-400 uppercase bg-slate-200 dark:bg-white/5 px-1.5 py-0.5 rounded">
                               {b.tipoCuenta || 'Corriente'}
                             </span>
                           </div>
                           <button
                             onClick={() => copyToClipboard(b.numeroCuenta, `quick-banco-${i}`)}
-                            className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                            className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-black text-[11px] font-black rounded-lg flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
                           >
-                            {isCopiedAccount ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                            {isCopiedAccount ? <Check size={12} className="text-black" /> : <Copy size={12} />}
                             <span>{isCopiedAccount ? '¡Copiada!' : 'Copiar Cuenta'}</span>
                           </button>
                         </div>
 
-                        <div className="bg-black/60 p-2 rounded-xl border border-white/5 font-mono text-xs text-amber-400 font-bold tracking-wider select-all">
+                        <div className="bg-slate-200/90 dark:bg-black/60 p-2 rounded-xl border border-slate-300 dark:border-white/5 font-mono text-xs text-amber-900 dark:text-amber-400 font-black tracking-wider select-all">
                           {b.numeroCuenta}
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-0.5">
-                          <span className="truncate">Titular: <strong className="text-zinc-200">{b.titular}</strong></span>
+                        <div className="flex items-center justify-between text-[11px] text-slate-700 dark:text-zinc-400 pt-0.5 font-bold">
+                          <span className="truncate">Titular: <strong className="text-slate-900 dark:text-zinc-200 font-black">{b.titular}</strong></span>
                           <button
                             onClick={() => copyToClipboard(b.documento, `quick-doc-${i}`)}
-                            className="text-zinc-400 hover:text-amber-300 font-mono text-[10px] bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded transition-colors cursor-pointer shrink-0 ml-2"
+                            className="text-slate-900 dark:text-amber-300 font-mono text-[10px] font-bold bg-slate-200 dark:bg-white/5 hover:bg-slate-300 dark:hover:bg-white/10 px-2 py-0.5 rounded transition-colors cursor-pointer shrink-0 ml-2 border border-slate-300 dark:border-transparent"
                             title="Copiar Documento"
                           >
                             {isCopiedDoc ? '¡Doc Copiado!' : `Doc: ${b.documento}`}
@@ -5550,10 +5493,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     const isCopiedTel = copiedFieldId === `quick-pm-tel-${i}`;
                     const isCopiedDoc = copiedFieldId === `quick-pm-doc-${i}`;
                     return (
-                      <div key={i} className="p-3.5 bg-blue-950/20 border border-blue-500/20 rounded-2xl space-y-3">
+                      <div key={i} className="p-3.5 bg-blue-100/80 dark:bg-blue-950/20 border border-blue-300 dark:border-blue-500/20 rounded-2xl space-y-3">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-blue-300 flex items-center gap-1.5">
-                            <Smartphone size={13} className="text-blue-400" />
+                          <span className="text-xs font-black text-blue-950 dark:text-blue-300 flex items-center gap-1.5">
+                            <Smartphone size={14} className="text-blue-700 dark:text-blue-400" />
                             <span>{pm.banco}</span>
                           </span>
                           <button
@@ -5561,9 +5504,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               const txt = `📱 PAGO MÓVIL\r\nBanco: ${pm.banco}\r\nTeléfono: ${pm.telefono}\r\nC.I./RIF: ${pm.documento}${pm.titular ? `\r\nTitular: ${pm.titular}` : ''}`;
                               copyToClipboard(txt, `quick-pm-${i}`);
                             }}
-                            className="px-2.5 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                            className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-black rounded-lg flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
                           >
-                            {isCopiedAll ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                            {isCopiedAll ? <Check size={12} className="text-white" /> : <Copy size={12} />}
                             <span>{isCopiedAll ? '¡Copiado Completo!' : 'Copiar Todo el PM'}</span>
                           </button>
                         </div>
@@ -5571,41 +5514,41 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         {/* Campos individuales con botón de copiado 1-clic */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                           {/* Teléfono */}
-                          <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 flex items-center justify-between gap-2">
+                          <div className="bg-white dark:bg-black/50 p-2.5 rounded-xl border border-slate-300 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm">
                             <div className="min-w-0">
-                              <span className="text-[9px] uppercase font-bold text-zinc-400 block">Teléfono</span>
-                              <span className="font-mono text-blue-300 font-bold text-xs">{pm.telefono}</span>
+                              <span className="text-[9px] uppercase font-black text-slate-600 dark:text-zinc-400 block">Teléfono</span>
+                              <span className="font-mono text-blue-950 dark:text-blue-300 font-black text-xs">{pm.telefono}</span>
                             </div>
                             <button
                               onClick={() => copyToClipboard(pm.telefono, `quick-pm-tel-${i}`)}
-                              className="px-2 py-1 bg-white/5 hover:bg-white/10 text-zinc-300 text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-900 dark:text-zinc-300 text-[10px] font-black rounded-lg flex items-center gap-1 cursor-pointer transition-colors shrink-0 border border-slate-300 dark:border-transparent"
                               title="Copiar solo teléfono"
                             >
-                              {isCopiedTel ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                              {isCopiedTel ? <Check size={11} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={11} />}
                               <span>{isCopiedTel ? '¡Listo!' : 'Copiar'}</span>
                             </button>
                           </div>
 
                           {/* Cédula / RIF */}
-                          <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 flex items-center justify-between gap-2">
+                          <div className="bg-white dark:bg-black/50 p-2.5 rounded-xl border border-slate-300 dark:border-white/5 flex items-center justify-between gap-2 shadow-sm">
                             <div className="min-w-0">
-                              <span className="text-[9px] uppercase font-bold text-zinc-400 block">C.I. / RIF</span>
-                              <span className="font-mono text-white font-bold text-xs">{pm.documento}</span>
+                              <span className="text-[9px] uppercase font-black text-slate-600 dark:text-zinc-400 block">C.I. / RIF</span>
+                              <span className="font-mono text-slate-900 dark:text-white font-black text-xs">{pm.documento}</span>
                             </div>
                             <button
                               onClick={() => copyToClipboard(pm.documento, `quick-pm-doc-${i}`)}
-                              className="px-2 py-1 bg-white/5 hover:bg-white/10 text-zinc-300 text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-900 dark:text-zinc-300 text-[10px] font-black rounded-lg flex items-center gap-1 cursor-pointer transition-colors shrink-0 border border-slate-300 dark:border-transparent"
                               title="Copiar solo C.I. o RIF"
                             >
-                              {isCopiedDoc ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                              {isCopiedDoc ? <Check size={11} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={11} />}
                               <span>{isCopiedDoc ? '¡Listo!' : 'Copiar'}</span>
                             </button>
                           </div>
                         </div>
 
                         {pm.titular && (
-                          <p className="text-[11px] text-zinc-400 truncate pt-0.5">
-                            Titular: <strong className="text-zinc-200">{pm.titular}</strong>
+                          <p className="text-[11px] text-slate-700 dark:text-zinc-400 font-bold truncate pt-0.5">
+                            Titular: <strong className="text-slate-900 dark:text-zinc-200 font-black">{pm.titular}</strong>
                           </p>
                         )}
                       </div>
@@ -5616,28 +5559,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
               {/* 3. Tab Zelle */}
               {selectedFichaTab === 'zelle' && selectedProveedorFicha.zelle?.correoTelefono && (
-                <div className="p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-2xl space-y-3 animate-fade-in">
+                <div className="p-4 bg-emerald-100/80 dark:bg-emerald-950/20 border border-emerald-300 dark:border-emerald-500/20 rounded-2xl space-y-3 animate-fade-in">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                      <DollarSign size={14} className="text-emerald-400" />
+                    <span className="text-xs font-black text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
+                      <DollarSign size={14} className="text-emerald-700 dark:text-emerald-400" />
                       <span>Zelle ($ USA)</span>
                     </span>
                     <button
                       onClick={() => copyToClipboard(selectedProveedorFicha.zelle!.correoTelefono, 'quick-zelle')}
-                      className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                      className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-black rounded-lg flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
                     >
-                      {copiedFieldId === 'quick-zelle' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                      {copiedFieldId === 'quick-zelle' ? <Check size={12} className="text-white" /> : <Copy size={12} />}
                       <span>{copiedFieldId === 'quick-zelle' ? '¡Copiado!' : 'Copiar Correo'}</span>
                     </button>
                   </div>
 
-                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-xs text-emerald-400 font-bold text-center select-all">
+                  <div className="bg-white dark:bg-black/50 p-2.5 rounded-xl border border-slate-300 dark:border-white/5 font-mono text-xs text-emerald-950 dark:text-emerald-400 font-black text-center select-all shadow-sm">
                     {selectedProveedorFicha.zelle.correoTelefono}
                   </div>
 
                   {selectedProveedorFicha.zelle.titular && (
-                    <p className="text-[11px] text-zinc-400 text-center">
-                      Titular: <strong className="text-zinc-200">{selectedProveedorFicha.zelle.titular}</strong>
+                    <p className="text-[11px] text-slate-700 dark:text-zinc-400 font-bold text-center">
+                      Titular: <strong className="text-slate-900 dark:text-zinc-200 font-black">{selectedProveedorFicha.zelle.titular}</strong>
                     </p>
                   )}
                 </div>
@@ -5645,28 +5588,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
               {/* 4. Tab Binance */}
               {selectedFichaTab === 'binance' && selectedProveedorFicha.binance?.payId && (
-                <div className="p-4 bg-amber-950/20 border border-amber-500/20 rounded-2xl space-y-3 animate-fade-in">
+                <div className="p-4 bg-amber-100/80 dark:bg-amber-950/20 border border-amber-300 dark:border-amber-500/20 rounded-2xl space-y-3 animate-fade-in">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                      <Wallet size={14} className="text-amber-400" />
+                    <span className="text-xs font-black text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+                      <Wallet size={14} className="text-amber-700 dark:text-amber-400" />
                       <span>Binance Pay (USDT)</span>
                     </span>
                     <button
                       onClick={() => copyToClipboard(selectedProveedorFicha.binance!.payId, 'quick-binance')}
-                      className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                      className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-black text-[11px] font-black rounded-lg flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
                     >
-                      {copiedFieldId === 'quick-binance' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                      {copiedFieldId === 'quick-binance' ? <Check size={12} className="text-black" /> : <Copy size={12} />}
                       <span>{copiedFieldId === 'quick-binance' ? '¡Copiado!' : 'Copiar Pay ID'}</span>
                     </button>
                   </div>
 
-                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-xs text-amber-400 font-bold text-center select-all">
+                  <div className="bg-white dark:bg-black/50 p-2.5 rounded-xl border border-slate-300 dark:border-white/5 font-mono text-xs text-amber-950 dark:text-amber-400 font-black text-center select-all shadow-sm">
                     Pay ID: {selectedProveedorFicha.binance.payId}
                   </div>
 
                   {selectedProveedorFicha.binance.correoBinance && (
-                    <p className="text-[11px] text-zinc-400 text-center">
-                      Correo Binance: <strong className="text-zinc-200">{selectedProveedorFicha.binance.correoBinance}</strong>
+                    <p className="text-[11px] text-slate-700 dark:text-zinc-400 font-bold text-center">
+                      Correo Binance: <strong className="text-slate-900 dark:text-zinc-200 font-black">{selectedProveedorFicha.binance.correoBinance}</strong>
                     </p>
                   )}
                 </div>
@@ -5677,9 +5620,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             <div className="pt-3 border-t border-white/10 flex items-center gap-2">
               <button
                 onClick={() => copyFullProveedorPaymentInfo(selectedProveedorFicha)}
-                className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                className="flex-1 bg-slate-200 dark:bg-white/5 hover:bg-slate-300 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-zinc-300 hover:text-black dark:hover:text-white font-black py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
               >
-                {copiedFieldId === `full-${selectedProveedorFicha.id}` ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                {copiedFieldId === `full-${selectedProveedorFicha.id}` ? <Check size={13} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={13} />}
                 <span>{copiedFieldId === `full-${selectedProveedorFicha.id}` ? '¡Ficha Completa Copiada!' : 'Copiar Toda la Ficha'}</span>
               </button>
 
@@ -5688,7 +5631,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   href={`https://wa.me/${selectedProveedorFicha.telefono.replace(/[^\d]/g, '')}?text=${encodeURIComponent(`Hola ${selectedProveedorFicha.contactoNombre || selectedProveedorFicha.nombreComercial}, un gusto saludarte. Te escribo de parte del Taller MasterTech para coordinar un pago / pedido de repuestos.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 px-4 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-lg"
+                  className="bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 px-4 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-lg cursor-pointer"
                 >
                   <WhatsAppIcon size={16} />
                   <span>WhatsApp</span>
