@@ -1221,13 +1221,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       {/* Light Mode CSS Overrides Scope */}
       <style>{`
         .admin-theme-light {
-          --bg-main: #f4f6f9;
-          --card-bg: #ffffff;
-          --card-border: #e2e8f0;
-          --text-main: #0f172a;
-          --text-muted: #64748b;
-          --input-bg: #f8fafc;
-          --input-border: #cbd5e1;
+          background-color: #f4f6f9 !important;
+          color: #0f172a !important;
         }
         .admin-theme-light aside {
           background-color: #ffffff !important;
@@ -1235,25 +1230,54 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         .admin-theme-light header {
-          background-color: rgba(255, 255, 255, 0.92) !important;
+          background-color: rgba(255, 255, 255, 0.96) !important;
           border-color: #e2e8f0 !important;
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
         .admin-theme-light .bg-\[\#12141a\],
         .admin-theme-light .bg-\[\#101216\],
-        .admin-theme-light .bg-\[\#181a24\] {
+        .admin-theme-light .bg-\[\#181a24\],
+        .admin-theme-light .bg-\[\#0a0b0f\],
+        .admin-theme-light .bg-\[\#0f1117\] {
           background-color: #ffffff !important;
           border-color: #e2e8f0 !important;
           color: #0f172a !important;
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
+        .admin-theme-light .bg-black\/20,
         .admin-theme-light .bg-black\/30,
         .admin-theme-light .bg-black\/40,
         .admin-theme-light .bg-black\/50,
-        .admin-theme-light .bg-black\/60 {
+        .admin-theme-light .bg-black\/60,
+        .admin-theme-light .bg-black\/70,
+        .admin-theme-light .bg-black {
           background-color: #f8fafc !important;
           border-color: #e2e8f0 !important;
           color: #0f172a !important;
+        }
+        .admin-theme-light nav button {
+          color: #334155 !important;
+        }
+        .admin-theme-light nav button:hover {
+          background-color: #f1f5f9 !important;
+          color: #0f172a !important;
+        }
+        .admin-theme-light nav button span {
+          color: #334155 !important;
+        }
+        .admin-theme-light nav button:hover span {
+          color: #0f172a !important;
+        }
+        .admin-theme-light .bg-gradient-to-r.from-amber-500\/20.to-primary\/20 {
+          background: #fef3c7 !important;
+          border-color: #f59e0b !important;
+          color: #78350f !important;
+          font-weight: 800 !important;
+          box-shadow: 0 2px 4px rgba(245, 158, 11, 0.15) !important;
+        }
+        .admin-theme-light .bg-gradient-to-r.from-amber-500\/20.to-primary\/20 span {
+          color: #78350f !important;
+          font-weight: 800 !important;
         }
         .admin-theme-light input,
         .admin-theme-light select,
@@ -1266,18 +1290,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light textarea::placeholder {
           color: #94a3b8 !important;
         }
+        .admin-theme-light h1,
+        .admin-theme-light h2,
+        .admin-theme-light h3,
+        .admin-theme-light h4 {
+          color: #0f172a !important;
+        }
         .admin-theme-light .text-white {
           color: #0f172a !important;
         }
-        .admin-theme-light .text-zinc-400,
+        .admin-theme-light .text-zinc-400 {
+          color: #475569 !important;
+        }
         .admin-theme-light .text-zinc-500 {
           color: #64748b !important;
         }
         .admin-theme-light .text-zinc-300 {
-          color: #334155 !important;
+          color: #1e293b !important;
         }
         .admin-theme-light .border-white\/5,
         .admin-theme-light .border-white\/10,
+        .admin-theme-light .border-white\/15,
         .admin-theme-light .border-white\/20 {
           border-color: #e2e8f0 !important;
         }
@@ -1306,6 +1339,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light .btn-primary {
           background: linear-gradient(135deg, #eab308, #ca8a04) !important;
           color: #000000 !important;
+          box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.3) !important;
         }
       `}</style>
       
