@@ -1342,56 +1342,56 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   return (
     <div className={`min-h-screen flex flex-col md:flex-row font-sans selection:bg-primary selection:text-black transition-colors duration-200 ${
       theme === 'light' 
-        ? 'bg-[#f4f6f9] text-zinc-900 admin-theme-light' 
+        ? 'bg-[#e5e8ed] text-slate-900 admin-theme-light' 
         : 'bg-[#0a0b0f] text-white admin-theme-dark'
     }`}>
       {/* Light Mode CSS Overrides Scope */}
       <style>{`
         /* ========================================================================= */
-        /* GLOBAL LIGHT THEME ARCHITECTURE FOR SAAS ADMIN */
+        /* GLOBAL LIGHT THEME ARCHITECTURE (WARM SOFT GRAY - ANTI-FATIGUE UX) */
         /* ========================================================================= */
         .admin-theme-light {
-          background-color: #f8fafc !important;
+          background-color: #e5e8ed !important;
           color: #0f172a !important;
         }
 
-        /* 1. Reset all Dark Hex & Gradient Backgrounds */
+        /* 1. Reset all Dark Hex & Gradient Backgrounds to Soft Gray Card */
         .admin-theme-light [class*="bg-[#"],
         .admin-theme-light [class*="from-[#"],
         .admin-theme-light [class*="via-[#"],
         .admin-theme-light [class*="to-[#"] {
-          background: #ffffff !important;
-          background-color: #ffffff !important;
-          border-color: #e2e8f0 !important;
+          background: #f1f4f8 !important;
+          background-color: #f1f4f8 !important;
+          border-color: #cbd5e1 !important;
           color: #0f172a !important;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
         }
 
-        /* 2. Reset all Black Translucent Containers & Sub-cards */
+        /* 2. Reset all Black Translucent Containers & Sub-cards to Muted Gray */
         .admin-theme-light [class*="bg-black"],
         .admin-theme-light [class*="bg-zinc-9"],
         .admin-theme-light [class*="bg-slate-9"],
         .admin-theme-light [class*="bg-gray-9"] {
-          background-color: #f8fafc !important;
-          border-color: #e2e8f0 !important;
+          background-color: #e2e7ec !important;
+          border-color: #cbd5e1 !important;
           color: #0f172a !important;
         }
 
         /* 3. Border Harmonization */
         .admin-theme-light [class*="border-white"] {
-          border-color: #e2e8f0 !important;
+          border-color: #cbd5e1 !important;
         }
 
-        /* 4. Sidebar & Header */
+        /* 4. Sidebar & Header in Matte Soft Gray */
         .admin-theme-light aside {
-          background-color: #ffffff !important;
-          border-color: #e2e8f0 !important;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+          background-color: #edf0f4 !important;
+          border-color: #cbd5e1 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
         }
         .admin-theme-light header {
-          background-color: rgba(255, 255, 255, 0.96) !important;
-          border-color: #e2e8f0 !important;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+          background-color: rgba(237, 240, 245, 0.96) !important;
+          border-color: #cbd5e1 !important;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
         }
 
         /* 5. Navigation Sidebar Buttons */
@@ -1399,7 +1399,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           color: #334155 !important;
         }
         .admin-theme-light nav button:hover {
-          background-color: #f1f5f9 !important;
+          background-color: #dde2e8 !important;
           color: #0f172a !important;
         }
         .admin-theme-light nav button span {
@@ -1426,13 +1426,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light input,
         .admin-theme-light select,
         .admin-theme-light textarea {
-          background-color: #ffffff !important;
-          border: 1px solid #cbd5e1 !important;
+          background-color: #f8fafc !important;
+          border: 1px solid #94a3b8 !important;
           color: #0f172a !important;
         }
         .admin-theme-light input::placeholder,
         .admin-theme-light textarea::placeholder {
-          color: #94a3b8 !important;
+          color: #64748b !important;
         }
         .admin-theme-light input:focus,
         .admin-theme-light select:focus,
@@ -1592,20 +1592,20 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
         /* 9. Tables, Grids & Lists */
         .admin-theme-light table {
-          background-color: #ffffff !important;
+          background-color: #f1f4f8 !important;
           color: #0f172a !important;
         }
         .admin-theme-light th,
         .admin-theme-light thead th {
-          background-color: #f1f5f9 !important;
-          color: #334155 !important;
-          border-bottom: 2px solid #e2e8f0 !important;
+          background-color: #e2e7ec !important;
+          color: #1e293b !important;
+          border-bottom: 2px solid #cbd5e1 !important;
           font-weight: 800 !important;
         }
         .admin-theme-light td {
-          background-color: #ffffff !important;
+          background-color: #f1f4f8 !important;
           color: #0f172a !important;
-          border-bottom: 1px solid #e2e8f0 !important;
+          border-bottom: 1px solid #cbd5e1 !important;
         }
         .admin-theme-light td span,
         .admin-theme-light td p,
@@ -1614,17 +1614,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           font-weight: 600;
         }
         .admin-theme-light tr:hover td {
-          background-color: #f8fafc !important;
+          background-color: #e5e9ee !important;
         }
 
-        /* 9. Light Mode Badges & Buttons */
+        /* 10. Light Mode Soft Buttons & Secondary Elements */
         .admin-theme-light [class*="bg-white/"] {
-          background-color: #f1f5f9 !important;
+          background-color: #e2e7ec !important;
           color: #334155 !important;
-          border-color: #e2e8f0 !important;
+          border-color: #cbd5e1 !important;
         }
         .admin-theme-light [class*="hover:bg-white/"]:hover {
-          background-color: #e2e8f0 !important;
+          background-color: #d6dbe2 !important;
           color: #0f172a !important;
         }
         .admin-theme-light .btn-primary {
