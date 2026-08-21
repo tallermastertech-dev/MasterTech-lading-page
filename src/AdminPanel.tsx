@@ -2429,15 +2429,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     className="bg-black/50 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-zinc-300 font-bold outline-none focus:border-primary cursor-pointer"
                   >
                     <option value="TODAS">Categoría: Todas</option>
+                    <option value="Autopartes & Repuestos Generales">Autopartes & Repuestos Generales</option>
+                    <option value="Caucheras, Neumáticos & Rines">Caucheras, Neumáticos & Rines</option>
+                    <option value="Lubricantes, Aceites & Filtros">Lubricantes, Aceites & Filtros</option>
+                    <option value="Baterías & Electroauto">Baterías & Electroauto</option>
+                    <option value="Frenos, Suspensión & Tren Delantero">Frenos, Suspensión & Tren Delantero</option>
                     <option value="Repuestos Motor & OEM">Repuestos Motor & OEM</option>
-                    <option value="Lubricantes & Filtros">Lubricantes & Filtros</option>
-                    <option value="Frenos & Suspensión">Frenos & Suspensión</option>
-                    <option value="Electricidad & Baterías">Electricidad & Baterías</option>
-                    <option value="Torno & Mecanizado">Torno & Mecanizado</option>
-                    <option value="Pintura & Detailing">Pintura & Detailing</option>
-                    <option value="Herramientas & Consumibles">Herramientas & Consumibles</option>
-                    <option value="Servicios Externos">Servicios Externos</option>
-                    <option value="Otros">Otros</option>
+                    <option value="Tornos, Rectificadoras & Mecanizado">Tornos, Rectificadoras & Mecanizado</option>
+                    <option value="Auto Periquitos & Accesorios">Auto Periquitos & Accesorios</option>
+                    <option value="Pintura, Latonería & Detailing">Pintura, Latonería & Detailing</option>
+                    <option value="Herramientas, Tornillería & Consumibles">Herramientas, Tornillería & Consumibles</option>
+                    <option value="Talleres Aliados & Servicios Externos">Talleres Aliados & Servicios Externos</option>
+                    <option value="Otros Comercios Aliados">Otros Comercios Aliados</option>
                   </select>
                 </div>
 
@@ -4260,21 +4263,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
 
                   <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Categoría de Repuestos / Insumos</label>
+                    <label className="text-zinc-400 font-bold block mb-1">Categoría del Comercio / Proveedor</label>
                     <select
                       value={editingProveedor.categoria}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, categoria: e.target.value })}
                       className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary cursor-pointer"
                     >
+                      <option value="Autopartes & Repuestos Generales">Autopartes & Repuestos Generales</option>
+                      <option value="Caucheras, Neumáticos & Rines">Caucheras, Neumáticos & Rines</option>
+                      <option value="Lubricantes, Aceites & Filtros">Lubricantes, Aceites & Filtros</option>
+                      <option value="Baterías & Electroauto">Baterías & Electroauto</option>
+                      <option value="Frenos, Suspensión & Tren Delantero">Frenos, Suspensión & Tren Delantero</option>
                       <option value="Repuestos Motor & OEM">Repuestos Motor & OEM</option>
-                      <option value="Lubricantes & Filtros">Lubricantes & Filtros</option>
-                      <option value="Frenos & Suspensión">Frenos & Suspensión</option>
-                      <option value="Electricidad & Baterías">Electricidad & Baterías</option>
-                      <option value="Torno & Mecanizado">Torno & Mecanizado</option>
-                      <option value="Pintura & Detailing">Pintura & Detailing</option>
-                      <option value="Herramientas & Consumibles">Herramientas & Consumibles</option>
-                      <option value="Servicios Externos">Servicios Externos</option>
-                      <option value="Otros">Otros</option>
+                      <option value="Tornos, Rectificadoras & Mecanizado">Tornos, Rectificadoras & Mecanizado</option>
+                      <option value="Auto Periquitos & Accesorios">Auto Periquitos & Accesorios</option>
+                      <option value="Pintura, Latonería & Detailing">Pintura, Latonería & Detailing</option>
+                      <option value="Herramientas, Tornillería & Consumibles">Herramientas, Tornillería & Consumibles</option>
+                      <option value="Talleres Aliados & Servicios Externos">Talleres Aliados & Servicios Externos</option>
+                      <option value="Otros Comercios Aliados">Otros Comercios Aliados</option>
                     </select>
                   </div>
                 </div>
