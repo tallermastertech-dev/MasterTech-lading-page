@@ -2637,48 +2637,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <button
                     onClick={() => {
-                      const allInfo = proveedoresList.map(p => {
-                        let str = `🏢 ${p.nombreComercial.toUpperCase()} (${p.categoria})\n`;
-                        if (p.rif) str += `RIF: ${p.rif} | Contacto: ${p.contactoNombre || 'N/A'} (${p.telefono || ''})\n`;
-                        if (p.zelle?.correoTelefono) str += `Zelle: ${p.zelle.correoTelefono} (${p.zelle.titular})\n`;
-                        if (p.binance?.payId) str += `Binance Pay ID: ${p.binance.payId}\n`;
-                        if (p.pagoMovil && p.pagoMovil.length > 0) {
-                          str += `Pago Móvil: ${p.pagoMovil.map(pm => `${pm.banco} - ${pm.telefono} - ${pm.documento}`).join(' | ')}\n`;
-                        }
-                        if (p.bancos && p.bancos.length > 0) {
-                          str += `Bancos: ${p.bancos.map(b => `${b.banco} (${b.numeroCuenta}) - ${b.titular}`).join(' | ')}\n`;
-                        }
-                        return str;
-                      }).join('\n----------------------------------------\n');
-                      copyToClipboard(allInfo, 'directorio-global');
-                    }}
-                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-2 hover:bg-white/10 transition-colors cursor-pointer"
-                    title="Copiar resumen de todos los proveedores"
-                  >
-                    {copiedFieldId === 'directorio-global' ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
-                    <span>{copiedFieldId === 'directorio-global' ? '¡Directorio Copiado!' : 'Copiar Directorio'}</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      const demoExists = proveedoresList.some(p => p.id === 'prov-demo-master');
-                      let updated = proveedoresList;
-                      if (!demoExists) {
-                        updated = [DEFAULT_PROVEEDORES[0], ...proveedoresList];
-                      } else {
-                        updated = DEFAULT_PROVEEDORES;
-                      }
-                      handleSaveProveedores(updated, 'Cargó proveedor de prueba demo con todos los métodos de pago.');
-                    }}
-                    className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:text-amber-300 text-xs font-bold flex items-center gap-2 hover:bg-amber-500/20 transition-colors cursor-pointer"
-                    title="Cargar o restaurar proveedor de prueba con todos los métodos de pago"
-                  >
-                    <Sparkles size={16} />
-                    <span>Cargar Proveedor Demo</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
                       setEditingProveedor({
                         id: `prov_${Date.now()}`,
                         nombreComercial: '',
@@ -2896,12 +2854,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       {!proveedorSearch && (
                         <button
                           onClick={() => {
-                            handleSaveProveedores(DEFAULT_PROVEEDORES, 'Cargó proveedores de prueba iniciales.');
+                            setEditingProveedor({
+                              id: `prov_${Date.now()}`,
+                              nombreComercial: '',
+                              razonSocial: '',
+                              rif: '',
+                              categoria: 'Repuestos Motor & OEM',
+                              contactoNombre: '',
+                              telefono: '',
+                              correo: '',
+                              direccion: '',
+                              diasCredito: 'Contado / Inmediato',
+                              notas: '',
+                              bancos: [],
+                              pagoMovil: [],
+                              aceptaEfectivoDivisas: true
+                            });
+                            setIsProveedorModalOpen(true);
                           }}
                           className="btn-primary !py-2 !px-4 text-xs font-black rounded-xl inline-flex items-center gap-2 mx-auto cursor-pointer"
                         >
-                          <Sparkles size={14} />
-                          <span>Cargar Proveedor de Prueba Demo</span>
+                          <Plus size={14} />
+                          <span>Registrar Proveedor</span>
                         </button>
                       )}
                     </div>
