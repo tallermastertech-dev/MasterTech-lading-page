@@ -3445,35 +3445,35 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 via-primary/20 to-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-300 font-black text-sm shadow-md">
+                            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/30 flex items-center justify-center text-amber-950 dark:text-amber-300 font-black text-sm shadow-xs shrink-0">
                               {initials.toUpperCase()}
                             </div>
                             <div className="space-y-1">
-                              <h3 className="text-sm font-black text-white leading-tight">{u.name}</h3>
+                              <h3 className="text-sm font-black text-slate-900 dark:text-white leading-tight">{u.name}</h3>
                               <div className="flex flex-wrap items-center gap-1.5">
-                                <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border bg-white/5 text-zinc-300 border-white/15">
+                                <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full border bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-zinc-300 border-slate-300 dark:border-white/15">
                                   {u.role || 'Asesor Logística'}
                                 </span>
-                                <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                                <span className={`inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-0.5 rounded-full border ${
                                   isFull 
-                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' 
+                                    ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-500/40' 
                                     : (u.accessLevel === 'administracion' || u.role === 'Administración')
-                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                                    : 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+                                    ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-950 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40'
+                                    : 'bg-blue-100 dark:bg-blue-500/20 text-blue-950 dark:text-blue-300 border-blue-300 dark:border-blue-500/40'
                                 }`}>
                                   {isFull ? (
                                     <>
-                                      <Crown size={11} />
+                                      <Crown size={11} className="text-amber-700 dark:text-amber-300" />
                                       <span>Acceso Total</span>
                                     </>
                                   ) : (u.accessLevel === 'administracion' || u.role === 'Administración') ? (
                                     <>
-                                      <Building2 size={11} />
+                                      <Building2 size={11} className="text-emerald-700 dark:text-emerald-300" />
                                       <span>Administración (Dashboard + Proveedores)</span>
                                     </>
                                   ) : (
                                     <>
-                                      <Package size={11} />
+                                      <Package size={11} className="text-blue-700 dark:text-blue-300" />
                                       <span>Logística & Taller (5 Módulos)</span>
                                     </>
                                   )}
@@ -3483,25 +3483,25 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           </div>
                         </div>
 
-                        <div className="space-y-2 pt-2 border-t border-white/5 text-xs text-zinc-400">
+                        <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-white/5 text-xs">
                           <div className="flex items-center gap-2">
-                            <Mail size={14} className="text-zinc-500 shrink-0" />
-                            <span className="text-zinc-300 truncate font-mono">{u.email}</span>
+                            <Mail size={14} className="text-slate-500 dark:text-zinc-500 shrink-0" />
+                            <span className="text-slate-900 dark:text-zinc-300 truncate font-mono font-bold">{u.email}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Key size={14} className="text-zinc-500 shrink-0" />
-                            <span className="text-zinc-500">Contraseña asignada y encriptada</span>
+                            <Key size={14} className="text-slate-500 dark:text-zinc-500 shrink-0" />
+                            <span className="text-slate-700 dark:text-zinc-500 font-medium">Contraseña asignada y encriptada</span>
                           </div>
                         </div>
 
-                        <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                        <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between gap-2">
                           <button
                             onClick={() => {
                               setEditingUser({ ...u, password: '', accessLevel: isFull ? 'full' : 'logistica' });
                               setUserModalError('');
                               setIsUserModalOpen(true);
                             }}
-                            className="flex-1 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white text-xs font-bold py-2 px-3 rounded-xl border border-white/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-900 dark:text-zinc-300 hover:text-black dark:hover:text-white text-xs font-black py-2 px-3 rounded-xl border border-slate-300 dark:border-white/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                           >
                             <Edit size={13} />
                             <span>Editar Perfil / Clave</span>
@@ -3510,7 +3510,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           {adminUsersList.length > 1 && (
                             <button
                               onClick={() => handleDeleteAdminUser(u.id)}
-                              className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl bg-red-100 hover:bg-red-200 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-500/20 transition-colors cursor-pointer shadow-xs"
                               title="Revocar acceso"
                             >
                               <Trash2 size={14} />
