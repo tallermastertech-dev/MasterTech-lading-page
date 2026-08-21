@@ -183,6 +183,35 @@ export interface Proveedor {
   actualizadoEn?: string;
 }
 
+export const BANCOS_VENEZUELA = [
+  { codigo: "0102", nombre: "Banco de Venezuela (0102)" },
+  { codigo: "0104", nombre: "Banco Venezolano de Crédito (0104)" },
+  { codigo: "0105", nombre: "Banco Mercantil (0105)" },
+  { codigo: "0108", nombre: "Banco Provincial BBVA (0108)" },
+  { codigo: "0114", nombre: "Bancaribe (0114)" },
+  { codigo: "0115", nombre: "Banco Exterior (0115)" },
+  { codigo: "0128", nombre: "Banco Caroní (0128)" },
+  { codigo: "0134", nombre: "Banesco Banco Universal (0134)" },
+  { codigo: "0137", nombre: "Banco Sofitasa (0137)" },
+  { codigo: "0138", nombre: "Banco Plaza (0138)" },
+  { codigo: "0146", nombre: "Bangente (0146)" },
+  { codigo: "0151", nombre: "BFC Banco Fondo Común (0151)" },
+  { codigo: "0156", nombre: "100% Banco (0156)" },
+  { codigo: "0157", nombre: "DelSur Banco Universal (0157)" },
+  { codigo: "0163", nombre: "Banco del Tesoro (0163)" },
+  { codigo: "0166", nombre: "Banco Agrícola de Venezuela (0166)" },
+  { codigo: "0168", nombre: "Bancrecer (0168)" },
+  { codigo: "0169", nombre: "Mi Banco (0169)" },
+  { codigo: "0171", nombre: "Banco Activo (0171)" },
+  { codigo: "0172", nombre: "Bancamiga Banco Universal (0172)" },
+  { codigo: "0173", nombre: "Banco Internacional de Desarrollo (0173)" },
+  { codigo: "0174", nombre: "Banplus Banco Universal (0174)" },
+  { codigo: "0175", nombre: "Banco Bicentenario del Pueblo (0175)" },
+  { codigo: "0177", nombre: "BANFANB (0177)" },
+  { codigo: "0191", nombre: "BNC - Banco Nacional de Crédito (0191)" },
+  { codigo: "0601", nombre: "Instituto Municipal de Crédito Popular (0601)" }
+];
+
 export const DEFAULT_PROVEEDORES: Proveedor[] = [
   {
     id: "prov-demo-master",
@@ -4994,18 +5023,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
-                          <input
-                            type="text"
-                            placeholder="Ej: Banesco, Mercantil, BDV, Bancamiga, Provincial"
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco Nacional & Código</label>
+                          <select
                             value={b.banco}
                             onChange={(e) => {
                               const newB = [...editingProveedor.bancos];
-                              newB[bIdx].banco = e.target.value;
+                              const selectedBank = e.target.value;
+                              newB[bIdx].banco = selectedBank;
+                              const found = BANCOS_VENEZUELA.find(bk => bk.nombre === selectedBank || bk.codigo === selectedBank);
+                              if (found && (!newB[bIdx].numeroCuenta || newB[bIdx].numeroCuenta.length <= 4)) {
+                                newB[bIdx].numeroCuenta = found.codigo;
+                              }
                               setEditingProveedor({ ...editingProveedor, bancos: newB });
                             }}
-                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
-                          />
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs cursor-pointer"
+                          >
+                            <option value="">-- Selecciona el Banco --</option>
+                            {BANCOS_VENEZUELA.map((bk) => (
+                              <option key={bk.codigo} value={bk.nombre}>
+                                {bk.codigo} - {bk.nombre}
+                              </option>
+                            ))}
+                          </select>
                         </div>
 
                         <div>
@@ -5091,7 +5130,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           ...(editingProveedor.pagoMovil || []),
                           {
                             id: `pm_${Date.now()}`,
-                            banco: 'Banesco (0134)',
+                            banco: 'Banesco Banco Universal (0134)',
                             telefono: editingProveedor.telefono || '',
                             documento: editingProveedor.rif || '',
                             titular: editingProveedor.nombreComercial || ''
@@ -5127,18 +5166,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div>
-                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
-                          <input
-                            type="text"
-                            placeholder="Ej: Banesco (0134)"
+                          <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco & Código</label>
+                          <select
                             value={pm.banco}
                             onChange={(e) => {
                               const newPm = [...editingProveedor.pagoMovil];
                               newPm[pmIdx].banco = e.target.value;
                               setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
                             }}
-                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
-                          />
+                            className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs cursor-pointer"
+                          >
+                            <option value="">-- Selecciona el Banco --</option>
+                            {BANCOS_VENEZUELA.map((bk) => (
+                              <option key={bk.codigo} value={bk.nombre}>
+                                {bk.codigo} - {bk.nombre}
+                              </option>
+                            ))}
+                          </select>
                         </div>
 
                         <div>
