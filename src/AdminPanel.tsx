@@ -732,6 +732,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         localStorage.setItem('mastertech_settings_store', JSON.stringify(parsed));
       } catch (e) {}
 
+      // Sincronizar estados React para evitar sobreescritura accidental
+      setSettings(prev => ({ ...prev, PROVEEDORES_JSON: jsonStr }));
+      setSettingsForm(prev => ({ ...prev, PROVEEDORES_JSON: jsonStr }));
+
       // 2. Persistir en Supabase vía endpoints seguros
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -804,16 +808,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     if (merged.JORNADAS_JSON) {
       try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
     }
-    if (merged.PROVEEDORES_JSON) {
+    if (merged.PROVEEDORES_JSON !== undefined && merged.PROVEEDORES_JSON !== null) {
       try { 
-        const p = JSON.parse(merged.PROVEEDORES_JSON); 
+        const p = typeof merged.PROVEEDORES_JSON === 'string' ? JSON.parse(merged.PROVEEDORES_JSON) : merged.PROVEEDORES_JSON; 
         if (Array.isArray(p)) {
-          if (p.length > 0) setProveedoresList(p);
-          else setProveedoresList(DEFAULT_PROVEEDORES);
+          setProveedoresList(p);
         }
       } catch (e) {}
-    } else {
-      setProveedoresList(DEFAULT_PROVEEDORES);
     }
     if (merged.TEAM_MEMBERS_JSON) {
       try { const p = JSON.parse(merged.TEAM_MEMBERS_JSON); if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
