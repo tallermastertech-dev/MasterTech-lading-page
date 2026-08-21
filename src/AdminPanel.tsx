@@ -5113,7 +5113,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <button
                       type="button"
                       onClick={() => setEditingProveedor({ ...editingProveedor, zelle: undefined })}
-                      className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                      className="px-2.5 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
                     >
                       <Trash2 size={12} />
                       <span>Desactivar Zelle</span>
@@ -5169,14 +5169,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <button
                       type="button"
                       onClick={() => setEditingProveedor({ ...editingProveedor, binance: undefined })}
-                      className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                      className="px-2.5 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
                     >
                       <Trash2 size={12} />
                       <span>Desactivar Binance</span>
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
                       <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Binance Pay ID</label>
                       <input
@@ -5209,24 +5209,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           }
                         })}
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Wallet USDT (Red)</label>
-                      <input
-                        type="text"
-                        placeholder="TYd... (TRC20 / BEP20)"
-                        value={editingProveedor.binance?.walletUsdt || ''}
-                        onChange={(e) => setEditingProveedor({
-                          ...editingProveedor,
-                          binance: {
-                            ...editingProveedor.binance,
-                            payId: editingProveedor.binance?.payId || '',
-                            walletUsdt: e.target.value
-                          }
-                        })}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono text-[11px] outline-none focus:border-primary"
                       />
                     </div>
                   </div>
