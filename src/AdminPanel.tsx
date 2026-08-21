@@ -1329,8 +1329,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }
         .admin-theme-light [class*="text-zinc-400"],
         .admin-theme-light [class*="text-zinc-500"],
-        .admin-theme-light [class*="text-zinc-600"] {
+        .admin-theme-light [class*="text-zinc-600"],
+        .admin-theme-light [class*="text-slate-400"],
+        .admin-theme-light [class*="text-slate-500"] {
           color: #334155 !important;
+          font-weight: 500;
         }
         .admin-theme-light [class*="text-amber-950"],
         .admin-theme-light [class*="text-amber-900"],
@@ -1359,7 +1362,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light .text-primary,
         .admin-theme-light [class*="text-amber-400"],
         .admin-theme-light [class*="text-amber-300"] {
-          color: #b45309 !important;
+          color: #92400e !important;
+          font-weight: 800 !important;
+        }
+        .admin-theme-light .text-purple-300,
+        .admin-theme-light .text-purple-400 {
+          color: #581c87 !important;
+          font-weight: 700 !important;
+        }
+        .admin-theme-light .text-blue-300,
+        .admin-theme-light .text-blue-400 {
+          color: #1e3a8a !important;
+          font-weight: 700 !important;
+        }
+        .admin-theme-light .text-emerald-300,
+        .admin-theme-light .text-emerald-400 {
+          color: #064e3b !important;
+          font-weight: 700 !important;
+        }
+        .admin-theme-light .text-cyan-300,
+        .admin-theme-light .text-cyan-400 {
+          color: #164e63 !important;
           font-weight: 700 !important;
         }
 
@@ -1368,16 +1391,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           background-color: #ffffff !important;
           color: #0f172a !important;
         }
-        .admin-theme-light th {
+        .admin-theme-light th,
+        .admin-theme-light thead th {
           background-color: #f1f5f9 !important;
-          color: #475569 !important;
-          border-bottom: 1px solid #e2e8f0 !important;
+          color: #334155 !important;
+          border-bottom: 2px solid #e2e8f0 !important;
           font-weight: 800 !important;
         }
         .admin-theme-light td {
           background-color: #ffffff !important;
           color: #0f172a !important;
-          border-bottom: 1px solid #f1f5f9 !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+        }
+        .admin-theme-light td span,
+        .admin-theme-light td p,
+        .admin-theme-light td div {
+          color: #0f172a !important;
+          font-weight: 600;
         }
         .admin-theme-light tr:hover td {
           background-color: #f8fafc !important;
@@ -1971,26 +2001,26 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                     </td>
 
                                     {/* Solicitante */}
-                                    <td className="p-4 font-bold text-white whitespace-nowrap">
+                                    <td className="p-4 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                                       {l.nombre || 'Sin nombre'}
                                     </td>
 
                                     {/* Teléfono */}
-                                    <td className="p-4 font-mono text-zinc-300 whitespace-nowrap">
+                                    <td className="p-4 font-mono font-bold text-slate-800 dark:text-zinc-300 whitespace-nowrap">
                                       {l.telefono || '-'}
                                     </td>
 
                                     {/* Detalle / Vehículo */}
-                                    <td className="p-4 text-zinc-300">
+                                    <td className="p-4 font-semibold text-slate-900 dark:text-zinc-300">
                                       {cat === 'trabajo' ? (
-                                        <span className="text-purple-300 font-semibold">{l.vehiculo || 'Postulante'}</span>
+                                        <span className="text-purple-900 dark:text-purple-300 font-bold">{l.vehiculo || 'Postulante'}</span>
                                       ) : (
-                                        <span>{l.vehiculo || '-'}</span>
+                                        <span className="text-slate-900 dark:text-zinc-200">{l.vehiculo || '-'}</span>
                                       )}
                                     </td>
 
                                     {/* Servicio / Cargo */}
-                                    <td className="p-4 text-primary font-bold">
+                                    <td className="p-4 text-amber-900 dark:text-primary font-black">
                                       {l.servicio || '-'}
                                     </td>
 
@@ -2001,14 +2031,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           href={cvUrl}
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-[10px] font-bold transition-colors shadow-sm"
+                                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-100 dark:bg-purple-500/20 hover:bg-purple-200 dark:hover:bg-purple-500/30 text-purple-900 dark:text-purple-300 border border-purple-300 dark:border-purple-500/40 text-[10px] font-black transition-colors shadow-xs"
                                           title="Ver / Descargar Currículum"
                                         >
                                           <FileText size={12} />
                                           <span>Descargar CV</span>
                                         </a>
                                       ) : (
-                                        <span className="text-zinc-400 text-[11px]">
+                                        <span className="text-slate-800 dark:text-zinc-400 font-medium text-[11px]">
                                           {l.fecha_turno || l.fecha || l.fecha_hora || 'Por acordar'}
                                         </span>
                                       )}
