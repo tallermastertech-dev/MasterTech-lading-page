@@ -2937,7 +2937,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                                         <button
                                           onClick={() => {
-                                            const txt = `Banco: ${pm.banco}\nTeléfono: ${pm.telefono}\nC.I./RIF: ${pm.documento}\nTitular: ${pm.titular || prov.nombreComercial}`;
+                                            const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
                                             copyToClipboard(txt, fieldKey);
                                           }}
                                           className="px-2.5 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
