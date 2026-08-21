@@ -39,6 +39,7 @@ import {
   Send,
   Sliders,
   ChevronRight,
+  ChevronDown,
   Filter,
   Bot,
   Phone,
@@ -609,6 +610,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [proveedorCategoriaFilter, setProveedorCategoriaFilter] = useState<string>('TODAS');
   const [copiedFieldId, setCopiedFieldId] = useState<string | null>(null);
   const [isSavingProveedor, setIsSavingProveedor] = useState(false);
+  const [expandedProvIds, setExpandedProvIds] = useState<string[]>([]);
+
+  const toggleExpandProv = (id: string) => {
+    setExpandedProvIds(prev => 
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
 
   // Helper para copiar al portapapeles con confirmación visual
   const copyToClipboard = (text: string, fieldId: string) => {
@@ -2857,290 +2865,261 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                 return (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {filtered.map(prov => (
-                      <div key={prov.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-5 space-y-4 flex flex-col justify-between hover:border-white/20 transition-all shadow-xl">
-                        <div className="space-y-3.5">
-                          {/* Card Header: Name, Category, RIF & Quick Actions */}
-                          <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
-                                  {prov.categoria || 'Repuestos'}
-                                </span>
-                                {prov.aceptaCredito ? (
-                                  <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 rounded-md flex items-center gap-1">
-                                    <Clock size={11} className="text-amber-300" />
-                                    <span>Crédito: {prov.diasCredito || 'Activo'}</span>
+                    {filtered.map(prov => {
+                      const isExpanded = expandedProvIds.includes(prov.id);
+                      return (
+                        <div key={prov.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-5 space-y-3.5 flex flex-col justify-between hover:border-white/20 transition-all shadow-xl">
+                          <div className="space-y-3">
+                            {/* Card Header: Name, Category, RIF & Quick Actions */}
+                            <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
+                                    {prov.categoria || 'Repuestos'}
                                   </span>
-                                ) : (
-                                  <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                    <Banknote size={11} className="text-zinc-400" />
-                                    <span>Solo Contado</span>
+                                  {prov.aceptaCredito ? (
+                                    <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2.5 py-0.5 rounded-md flex items-center gap-1">
+                                      <Clock size={11} className="text-amber-300" />
+                                      <span>Crédito: {prov.diasCredito || 'Activo'}</span>
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                      <Banknote size={11} className="text-zinc-400" />
+                                      <span>Solo Contado</span>
+                                    </span>
+                                  )}
+                                </div>
+                                <h3 className="font-display font-black text-white text-base tracking-wide leading-tight mt-1">
+                                  {prov.nombreComercial}
+                                </h3>
+                                {prov.razonSocial && prov.razonSocial !== prov.nombreComercial && (
+                                  <p className="text-[11px] text-zinc-400">{prov.razonSocial}</p>
+                                )}
+                                {prov.rif && (
+                                  <span className="text-[10px] font-mono font-bold text-zinc-400 bg-black/40 px-2 py-0.5 rounded border border-white/5 inline-block">
+                                    RIF: {prov.rif}
                                   </span>
                                 )}
                               </div>
-                              <h3 className="font-display font-black text-white text-base tracking-wide leading-tight">
-                                {prov.nombreComercial}
-                              </h3>
-                              {prov.razonSocial && prov.razonSocial !== prov.nombreComercial && (
-                                <p className="text-[11px] text-zinc-400">{prov.razonSocial}</p>
+
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => {
+                                    setEditingProveedor({ ...prov });
+                                    setIsProveedorModalOpen(true);
+                                  }}
+                                  className="p-2 rounded-xl bg-white/5 hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+                                  title="Editar Proveedor"
+                                >
+                                  <Edit size={14} />
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm(`¿Seguro que deseas eliminar al proveedor "${prov.nombreComercial}"?`)) {
+                                      const updated = proveedoresList.filter(p => p.id !== prov.id);
+                                      handleSaveProveedores(updated, `Eliminó el proveedor ${prov.nombreComercial}`);
+                                    }
+                                  }}
+                                  className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+                                  title="Eliminar Proveedor"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Contact Info */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                              {prov.contactoNombre && (
+                                <div className="flex items-center gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
+                                  <User size={14} className="text-zinc-500 shrink-0" />
+                                  <span className="truncate">{prov.contactoNombre}</span>
+                                </div>
                               )}
-                              {prov.rif && (
-                                <span className="text-[10px] font-mono font-bold text-zinc-400 bg-black/40 px-2 py-0.5 rounded border border-white/5 inline-block">
-                                  RIF: {prov.rif}
+                              {prov.telefono && (
+                                <div className="flex items-center justify-between gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
+                                  <div className="flex items-center gap-2 truncate">
+                                    <Phone size={14} className="text-zinc-500 shrink-0" />
+                                    <span className="font-mono">{prov.telefono}</span>
+                                  </div>
+                                  <a
+                                    href={`https://wa.me/${prov.telefono.replace(/[^\d]/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-emerald-400 hover:text-emerald-300 shrink-0"
+                                    title="Abrir WhatsApp"
+                                  >
+                                    <WhatsAppIcon size={14} />
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+
+                            {prov.notas && (
+                              <div className="bg-amber-500/5 border border-amber-500/20 p-2.5 rounded-xl text-xs text-amber-200/90 flex items-start gap-2">
+                                <Tag size={13} className="text-amber-400 shrink-0 mt-0.5" />
+                                <span className="leading-snug">{prov.notas}</span>
+                              </div>
+                            )}
+
+                            {/* Payment Methods Badges Summary */}
+                            <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                              <span className="text-[10px] font-bold text-zinc-500 uppercase shrink-0 mr-1">Acepta:</span>
+                              {prov.bancos && prov.bancos.length > 0 && (
+                                <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                  <Building2 size={11} />
+                                  <span>{prov.bancos.length} {prov.bancos.length === 1 ? 'Banco' : 'Bancos'}</span>
+                                </span>
+                              )}
+                              {prov.pagoMovil && prov.pagoMovil.length > 0 && (
+                                <span className="text-[10px] font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                  <Smartphone size={11} />
+                                  <span>{prov.pagoMovil.length} Pago Móvil</span>
+                                </span>
+                              )}
+                              {prov.zelle?.correoTelefono && (
+                                <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                  <DollarSign size={11} />
+                                  <span>Zelle</span>
+                                </span>
+                              )}
+                              {prov.binance?.payId && (
+                                <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                  <Wallet size={11} />
+                                  <span>Binance Pay</span>
+                                </span>
+                              )}
+                              {prov.aceptaEfectivoDivisas && (
+                                <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                  <Banknote size={11} />
+                                  <span>Efectivo $</span>
                                 </span>
                               )}
                             </div>
 
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => {
-                                  setEditingProveedor({ ...prov });
-                                  setIsProveedorModalOpen(true);
-                                }}
-                                className="p-2 rounded-xl bg-white/5 hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
-                                title="Editar Proveedor"
-                              >
-                                <Edit size={14} />
-                              </button>
-                              <button
-                                onClick={() => {
-                                  if (window.confirm(`¿Seguro que deseas eliminar al proveedor "${prov.nombreComercial}"?`)) {
-                                    const updated = proveedoresList.filter(p => p.id !== prov.id);
-                                    handleSaveProveedores(updated, `Eliminó el proveedor ${prov.nombreComercial}`);
-                                  }
-                                }}
-                                className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
-                                title="Eliminar Proveedor"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            </div>
-                          </div>
+                            {/* Collapsible Payment Details In-Place */}
+                            {isExpanded && (
+                              <div className="space-y-2 pt-2 border-t border-white/10 animate-fade-in">
+                                {/* 1. Bancos */}
+                                {prov.bancos && prov.bancos.map((b, bIdx) => (
+                                  <div key={bIdx} className="bg-black/50 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                    <div className="space-y-0.5 min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5">
+                                        <Building2 size={12} className="text-primary" />
+                                        <span className="font-bold text-white">{b.banco}</span>
+                                        <span className="text-[9px] text-zinc-400 uppercase bg-white/5 px-1 rounded">{b.tipoCuenta || 'Cta'}</span>
+                                      </div>
+                                      <p className="font-mono text-amber-400 text-xs tracking-wider select-all font-bold">{b.numeroCuenta}</p>
+                                      <p className="text-[10px] text-zinc-400 truncate">Titular: {b.titular} ({b.documento})</p>
+                                    </div>
+                                    <button
+                                      onClick={() => copyToClipboard(b.numeroCuenta, `banco-${prov.id}-${bIdx}`)}
+                                      className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500/20 text-white hover:text-amber-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                    >
+                                      {copiedFieldId === `banco-${prov.id}-${bIdx}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                      <span>Cuenta</span>
+                                    </button>
+                                  </div>
+                                ))}
 
-                          {/* Contact Info & Notes */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                            {prov.contactoNombre && (
-                              <div className="flex items-center gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
-                                <User size={14} className="text-zinc-500 shrink-0" />
-                                <span className="truncate">{prov.contactoNombre}</span>
+                                {/* 2. Pago Móvil */}
+                                {prov.pagoMovil && prov.pagoMovil.map((pm, pmIdx) => (
+                                  <div key={pmIdx} className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                    <div className="space-y-0.5 min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5 text-blue-300 font-bold">
+                                        <Smartphone size={12} />
+                                        <span>PM: {pm.banco}</span>
+                                      </div>
+                                      <p className="font-mono text-blue-300 text-xs font-bold">{pm.telefono} | {pm.documento}</p>
+                                      {pm.titular && <p className="text-[10px] text-zinc-400 truncate">Titular: {pm.titular}</p>}
+                                    </div>
+                                    <button
+                                      onClick={() => {
+                                        const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
+                                        copyToClipboard(txt, `pm-${prov.id}-${pmIdx}`);
+                                      }}
+                                      className="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                    >
+                                      {copiedFieldId === `pm-${prov.id}-${pmIdx}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                      <span>Copiar PM</span>
+                                    </button>
+                                  </div>
+                                ))}
+
+                                {/* 3. Zelle */}
+                                {prov.zelle?.correoTelefono && (
+                                  <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                    <div className="space-y-0.5 min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5 text-emerald-300 font-bold">
+                                        <DollarSign size={12} />
+                                        <span>Zelle ($ USA)</span>
+                                      </div>
+                                      <p className="font-mono text-emerald-300 text-xs font-bold truncate">{prov.zelle.correoTelefono}</p>
+                                      <p className="text-[10px] text-zinc-400 truncate">Titular: {prov.zelle.titular}</p>
+                                    </div>
+                                    <button
+                                      onClick={() => copyToClipboard(prov.zelle!.correoTelefono, `zelle-${prov.id}`)}
+                                      className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                    >
+                                      {copiedFieldId === `zelle-${prov.id}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                      <span>Zelle</span>
+                                    </button>
+                                  </div>
+                                )}
+
+                                {/* 4. Binance */}
+                                {prov.binance?.payId && (
+                                  <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                    <div className="space-y-0.5 min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5 text-amber-400 font-bold">
+                                        <Wallet size={12} />
+                                        <span>Binance Pay</span>
+                                      </div>
+                                      <p className="font-mono text-amber-300 text-xs font-bold">Pay ID: {prov.binance.payId}</p>
+                                    </div>
+                                    <button
+                                      onClick={() => copyToClipboard(prov.binance!.payId, `binance-${prov.id}`)}
+                                      className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                    >
+                                      {copiedFieldId === `binance-${prov.id}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                      <span>Pay ID</span>
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             )}
-                            {prov.telefono && (
-                              <div className="flex items-center justify-between gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
-                                <div className="flex items-center gap-2 truncate">
-                                  <Phone size={14} className="text-zinc-500 shrink-0" />
-                                  <span className="font-mono">{prov.telefono}</span>
-                                </div>
-                                <a
-                                  href={`https://wa.me/${prov.telefono.replace(/[^\d]/g, '')}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-emerald-400 hover:text-emerald-300 shrink-0"
-                                  title="Abrir WhatsApp"
-                                >
-                                  <WhatsAppIcon size={14} />
-                                </a>
-                              </div>
-                            )}
                           </div>
 
-                          {prov.notas && (
-                            <div className="bg-amber-500/5 border border-amber-500/20 p-2.5 rounded-xl text-xs text-amber-200/90 flex items-start gap-2">
-                              <Tag size={13} className="text-amber-400 shrink-0 mt-0.5" />
-                              <span className="leading-snug">{prov.notas}</span>
-                            </div>
-                          )}
-
-                          {/* Payment Methods Section */}
-                          <div className="space-y-2.5 pt-1">
-                            <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider block">
-                              Métodos de Pago & Cuentas:
-                            </span>
-
-                            <div className="space-y-2">
-                              {/* 1. Bancos Nacionales */}
-                              {prov.bancos && prov.bancos.length > 0 && (
-                                <div className="space-y-1.5">
-                                  {prov.bancos.map((b, bIdx) => {
-                                    const fieldKey = `banco-${prov.id}-${bIdx}`;
-                                    const isCopied = copiedFieldId === fieldKey;
-                                    return (
-                                      <div key={bIdx} className="bg-black/50 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
-                                        <div className="space-y-0.5 min-w-0 flex-1">
-                                          <div className="flex items-center gap-2">
-                                            <span className="font-bold text-white">{b.banco}</span>
-                                            <span className="text-[9px] text-zinc-400 uppercase bg-white/5 px-1.5 py-0.5 rounded">
-                                              {b.tipoCuenta || 'Cta Corriente'}
-                                            </span>
-                                          </div>
-                                          <p className="font-mono text-amber-400 text-xs tracking-wider truncate select-all font-bold">
-                                            {b.numeroCuenta}
-                                          </p>
-                                          <p className="text-[10px] text-zinc-400 truncate">
-                                            Titular: <strong className="text-zinc-200">{b.titular}</strong> ({b.documento})
-                                          </p>
-                                        </div>
-
-                                        <div className="flex flex-col gap-1 shrink-0">
-                                          <button
-                                            onClick={() => copyToClipboard(b.numeroCuenta, fieldKey)}
-                                            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500/20 text-white hover:text-amber-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
-                                            title="Copiar número de cuenta"
-                                          >
-                                            {isCopied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                                            <span>{isCopied ? '¡Copiada!' : 'Cuenta'}</span>
-                                          </button>
-                                          <button
-                                            onClick={() => copyToClipboard(b.documento, `${fieldKey}-doc`)}
-                                            className="px-2.5 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 text-[9px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
-                                            title="Copiar RIF o Cédula"
-                                          >
-                                            {copiedFieldId === `${fieldKey}-doc` ? <Check size={10} className="text-emerald-400" /> : <Copy size={10} />}
-                                            <span>{copiedFieldId === `${fieldKey}-doc` ? '¡Doc!' : 'RIF'}</span>
-                                          </button>
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              )}
-
-                              {/* 2. Pago Móvil */}
-                              {prov.pagoMovil && prov.pagoMovil.length > 0 && (
-                                <div className="space-y-1.5">
-                                  {prov.pagoMovil.map((pm, pmIdx) => {
-                                    const fieldKey = `pm-${prov.id}-${pmIdx}`;
-                                    const isCopied = copiedFieldId === fieldKey;
-                                    return (
-                                      <div key={pmIdx} className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
-                                        <div className="space-y-0.5 min-w-0 flex-1">
-                                          <div className="flex items-center gap-2">
-                                            <span className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded flex items-center gap-1">
-                                              <Smartphone size={11} />
-                                              <span>PAGO MÓVIL</span>
-                                            </span>
-                                            <span className="font-bold text-white">{pm.banco}</span>
-                                          </div>
-                                          <p className="font-mono text-blue-300 text-xs font-bold tracking-wider">
-                                            {pm.telefono} <span className="text-zinc-400">|</span> {pm.documento}
-                                          </p>
-                                          {pm.titular && (
-                                            <p className="text-[10px] text-zinc-400 truncate">Titular: {pm.titular}</p>
-                                          )}
-                                        </div>
-
-                                        <button
-                                          onClick={() => {
-                                            const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
-                                            copyToClipboard(txt, fieldKey);
-                                          }}
-                                          className="px-2.5 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
-                                          title="Copiar datos de pago móvil"
-                                        >
-                                          {isCopied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                                          <span>{isCopied ? '¡Copiado!' : 'Copiar PM'}</span>
-                                        </button>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              )}
-
-                              {/* 3. Zelle */}
-                              {prov.zelle?.correoTelefono && (
-                                <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
-                                  <div className="space-y-0.5 min-w-0 flex-1">
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded flex items-center gap-1">
-                                        <DollarSign size={11} />
-                                        <span>ZELLE ($ USA)</span>
-                                      </span>
-                                    </div>
-                                    <p className="font-mono text-emerald-300 text-xs font-bold truncate">
-                                      {prov.zelle.correoTelefono}
-                                    </p>
-                                    <p className="text-[10px] text-zinc-400 truncate">
-                                      Titular: <strong className="text-zinc-200">{prov.zelle.titular}</strong>
-                                    </p>
-                                  </div>
-
-                                  <button
-                                    onClick={() => copyToClipboard(prov.zelle!.correoTelefono, `zelle-${prov.id}`)}
-                                    className="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
-                                    title="Copiar correo Zelle"
-                                  >
-                                    {copiedFieldId === `zelle-${prov.id}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                                    <span>{copiedFieldId === `zelle-${prov.id}` ? '¡Copiado!' : 'Copiar Zelle'}</span>
-                                  </button>
-                                </div>
-                              )}
-
-                              {/* 4. Binance Pay / USDT */}
-                              {prov.binance?.payId && (
-                                <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
-                                  <div className="space-y-0.5 min-w-0 flex-1">
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded flex items-center gap-1">
-                                        <Wallet size={11} />
-                                        <span>BINANCE PAY (USDT)</span>
-                                      </span>
-                                    </div>
-                                    <p className="font-mono text-amber-300 text-xs font-bold">
-                                      Pay ID: {prov.binance.payId}
-                                    </p>
-                                    {prov.binance.correoBinance && (
-                                      <p className="text-[10px] text-zinc-400 truncate">Correo: {prov.binance.correoBinance}</p>
-                                    )}
-                                  </div>
-
-                                  <button
-                                    onClick={() => copyToClipboard(prov.binance!.payId, `binance-${prov.id}`)}
-                                    className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
-                                    title="Copiar Pay ID de Binance"
-                                  >
-                                    {copiedFieldId === `binance-${prov.id}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                                    <span>{copiedFieldId === `binance-${prov.id}` ? '¡Copiado!' : 'Pay ID'}</span>
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Card Footer Actions */}
-                        <div className="pt-3 border-t border-white/10 flex items-center gap-2 flex-wrap">
-                          <button
-                            onClick={() => setSelectedProveedorFicha(prov)}
-                            className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                          >
-                            <Zap size={14} className="text-primary" />
-                            <span>Ficha Rápida de Pago</span>
-                          </button>
-
-                          <button
-                            onClick={() => copyFullProveedorPaymentInfo(prov)}
-                            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                            title="Copiar todos los datos de pago al portapapeles"
-                          >
-                            {copiedFieldId === `full-${prov.id}` ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                            <span>{copiedFieldId === `full-${prov.id}` ? '¡Todo Copiado!' : 'Copiar Ficha'}</span>
-                          </button>
-
-                          {prov.telefono && (
-                            <a
-                              href={`https://wa.me/${prov.telefono.replace(/[^\d]/g, '')}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:text-emerald-300 transition-colors"
-                              title="Escribir por WhatsApp"
+                          {/* Card Footer Actions */}
+                          <div className="pt-3 border-t border-white/10 flex items-center gap-2">
+                            <button
+                              onClick={() => setSelectedProveedorFicha(prov)}
+                              className="btn-primary !py-2.5 !px-3.5 text-xs font-black uppercase flex items-center justify-center gap-1.5 rounded-xl shadow-md cursor-pointer flex-1"
                             >
-                              <WhatsAppIcon size={16} />
-                            </a>
-                          )}
+                              <Zap size={14} />
+                              <span>Ver Cuentas & Pagar</span>
+                            </button>
+
+                            <button
+                              onClick={() => copyFullProveedorPaymentInfo(prov)}
+                              className="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                              title="Copiar todos los datos de pago"
+                            >
+                              {copiedFieldId === `full-${prov.id}` ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                              <span>{copiedFieldId === `full-${prov.id}` ? '¡Copiado!' : 'Copiar'}</span>
+                            </button>
+
+                            <button
+                              onClick={() => toggleExpandProv(prov.id)}
+                              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white text-xs transition-colors cursor-pointer"
+                              title={isExpanded ? 'Ocultar detalles' : 'Desplegar cuentas en tarjeta'}
+                            >
+                              <ChevronDown size={16} className={`transform transition-transform duration-200 ${isExpanded ? 'rotate-180 text-amber-400' : ''}`} />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 );
               })()}
