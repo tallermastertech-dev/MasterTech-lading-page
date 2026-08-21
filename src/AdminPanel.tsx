@@ -634,12 +634,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [editingProveedor, setEditingProveedor] = useState<Proveedor | null>(null);
   const [isProveedorModalOpen, setIsProveedorModalOpen] = useState(false);
   const [selectedProveedorFicha, setSelectedProveedorFicha] = useState<Proveedor | null>(null);
+  const [selectedFichaTab, setSelectedFichaTab] = useState<'bancos' | 'pagoMovil' | 'zelle' | 'binance'>('bancos');
   const [proveedorSearch, setProveedorSearch] = useState('');
   const [proveedorMetodoFilter, setProveedorMetodoFilter] = useState<'TODOS' | 'CREDITO' | 'CONTADO' | 'ZELLE' | 'BINANCE' | 'PAGO_MOVIL' | 'BANCOS'>('TODOS');
   const [proveedorCategoriaFilter, setProveedorCategoriaFilter] = useState<string>('TODAS');
   const [copiedFieldId, setCopiedFieldId] = useState<string | null>(null);
   const [isSavingProveedor, setIsSavingProveedor] = useState(false);
   const [expandedProvIds, setExpandedProvIds] = useState<string[]>([]);
+
+  const openFichaModal = (prov: Proveedor) => {
+    setSelectedProveedorFicha(prov);
+    if (prov.bancos && prov.bancos.length > 0) {
+      setSelectedFichaTab('bancos');
+    } else if (prov.pagoMovil && prov.pagoMovil.length > 0) {
+      setSelectedFichaTab('pagoMovil');
+    } else if (prov.zelle?.correoTelefono) {
+      setSelectedFichaTab('zelle');
+    } else if (prov.binance?.payId) {
+      setSelectedFichaTab('binance');
+    } else {
+      setSelectedFichaTab('bancos');
+    }
+  };
 
   const toggleExpandProv = (id: string) => {
     setExpandedProvIds(prev => 
@@ -3122,7 +3138,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           {/* Card Footer Actions */}
                           <div className="pt-3 border-t border-white/10 flex items-center gap-2">
                             <button
-                              onClick={() => setSelectedProveedorFicha(prov)}
+                              onClick={() => openFichaModal(prov)}
                               className="btn-primary !py-2.5 !px-3.5 text-xs font-black uppercase flex items-center justify-center gap-1.5 rounded-xl shadow-md cursor-pointer flex-1"
                             >
                               <Zap size={14} />
@@ -5385,169 +5401,266 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL: FICHA RÁPIDA DE PAGO (PANTALLA LIMPIA PARA TRANSFERENCIAS TALLER) */}
+      {/* MODAL: FICHA RÁPIDA DE PAGO (DISEÑO FINTECH LIMPIO CON PESTAÑAS) */}
       {/* ========================================================================= */}
       {selectedProveedorFicha && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-[#101216] border border-amber-500/40 rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl relative">
-            <div className="flex justify-between items-start border-b border-white/10 pb-3">
-              <div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#12141a] border border-white/15 rounded-3xl max-w-lg w-full p-5 space-y-4 shadow-2xl relative">
+            {/* Modal Header */}
+            <div className="flex justify-between items-start border-b border-white/10 pb-3.5">
+              <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 flex items-center gap-1">
-                    <Zap size={11} className="text-primary" />
-                    <span>Ficha de Pago Rápida</span>
+                  <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                    {selectedProveedorFicha.categoria || 'Proveedor'}
                   </span>
                   {selectedProveedorFicha.aceptaCredito ? (
-                    <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 rounded flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-amber-300 bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 rounded-md flex items-center gap-1">
                       <Clock size={11} className="text-amber-300" />
                       <span>Crédito: {selectedProveedorFicha.diasCredito || 'Activo'}</span>
                     </span>
                   ) : (
-                    <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded flex items-center gap-1">
+                    <span className="text-[10px] font-medium text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
                       <Banknote size={11} className="text-zinc-400" />
                       <span>Solo Contado</span>
                     </span>
                   )}
                 </div>
-                <h2 className="text-lg font-display font-black text-white mt-1.5">
+
+                <h2 className="text-base font-display font-black text-white leading-tight mt-1">
                   {selectedProveedorFicha.nombreComercial}
                 </h2>
                 {selectedProveedorFicha.rif && (
-                  <p className="text-xs font-mono text-zinc-400">RIF: {selectedProveedorFicha.rif}</p>
+                  <span className="text-[10px] font-mono text-zinc-400">
+                    RIF: <strong className="text-zinc-300">{selectedProveedorFicha.rif}</strong>
+                  </span>
                 )}
               </div>
+
               <button
                 onClick={() => setSelectedProveedorFicha(null)}
-                className="text-zinc-400 hover:text-white p-1 rounded-lg bg-white/5 cursor-pointer"
+                className="text-zinc-400 hover:text-white p-1.5 rounded-xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                title="Cerrar Ficha"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
-            <p className="text-xs text-zinc-300 leading-relaxed">
-              Toca cualquier dato a continuación para copiarlo instantáneamente en tu portapapeles y pegarlo en el portal bancario o WhatsApp.
-            </p>
+            {/* Tabs de Selección de Método (Evita saturar la pantalla) */}
+            <div className="flex items-center gap-1.5 p-1 bg-black/40 border border-white/10 rounded-2xl overflow-x-auto">
+              {selectedProveedorFicha.bancos && selectedProveedorFicha.bancos.length > 0 && (
+                <button
+                  onClick={() => setSelectedFichaTab('bancos')}
+                  className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    selectedFichaTab === 'bancos'
+                      ? 'bg-amber-500 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <Building2 size={13} />
+                  <span>Bancos ({selectedProveedorFicha.bancos.length})</span>
+                </button>
+              )}
 
-            <div className="space-y-3">
-              {/* Bancos */}
-              {selectedProveedorFicha.bancos && selectedProveedorFicha.bancos.map((b, i) => (
-                <div key={i} className="p-3 bg-black/60 border border-white/10 rounded-2xl space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <Building2 size={14} className="text-primary" />
-                      {b.banco} ({b.tipoCuenta || 'Corriente'})
-                    </span>
-                    <button
-                      onClick={() => copyToClipboard(b.numeroCuenta, `quick-banco-${i}`)}
-                      className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
-                    >
-                      {copiedFieldId === `quick-banco-${i}` ? <Check size={12} /> : <Copy size={12} />}
-                      <span>{copiedFieldId === `quick-banco-${i}` ? '¡Copiado!' : 'Copiar Cuenta'}</span>
-                    </button>
-                  </div>
+              {selectedProveedorFicha.pagoMovil && selectedProveedorFicha.pagoMovil.length > 0 && (
+                <button
+                  onClick={() => setSelectedFichaTab('pagoMovil')}
+                  className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    selectedFichaTab === 'pagoMovil'
+                      ? 'bg-blue-500 text-white shadow-md'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <Smartphone size={13} />
+                  <span>Pago Móvil ({selectedProveedorFicha.pagoMovil.length})</span>
+                </button>
+              )}
 
-                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-sm text-amber-400 font-black tracking-wider text-center select-all">
-                    {b.numeroCuenta}
-                  </div>
-
-                  <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
-                    <span>Titular: <strong className="text-white">{b.titular}</strong></span>
-                    <button
-                      onClick={() => copyToClipboard(b.documento, `quick-doc-${i}`)}
-                      className="text-zinc-400 hover:text-amber-300 font-mono underline"
-                    >
-                      {copiedFieldId === `quick-doc-${i}` ? '¡Doc Copiado!' : `Doc: ${b.documento}`}
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              {/* Pago Móvil */}
-              {selectedProveedorFicha.pagoMovil && selectedProveedorFicha.pagoMovil.map((pm, i) => (
-                <div key={i} className="p-3 bg-blue-950/30 border border-blue-500/40 rounded-2xl space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-blue-300 flex items-center gap-1.5">
-                      <CreditCard size={14} className="text-blue-400" />
-                      Pago Móvil: {pm.banco}
-                    </span>
-                    <button
-                      onClick={() => {
-                        const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
-                        copyToClipboard(txt, `quick-pm-${i}`);
-                      }}
-                      className="px-3 py-1 bg-blue-500 hover:bg-blue-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
-                    >
-                      {copiedFieldId === `quick-pm-${i}` ? <Check size={12} /> : <Copy size={12} />}
-                      <span>{copiedFieldId === `quick-pm-${i}` ? '¡Copiado!' : 'Copiar PM'}</span>
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 text-center">
-                    <div className="bg-black/50 p-2 rounded-xl border border-white/5 font-mono text-xs text-blue-300 font-bold">
-                      {pm.telefono}
-                    </div>
-                    <div className="bg-black/50 p-2 rounded-xl border border-white/5 font-mono text-xs text-white font-bold">
-                      {pm.documento}
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {/* Zelle */}
               {selectedProveedorFicha.zelle?.correoTelefono && (
-                <div className="p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-2xl space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                      <DollarSign size={14} className="text-emerald-400" />
-                      Zelle ($ USA)
-                    </span>
-                    <button
-                      onClick={() => copyToClipboard(selectedProveedorFicha.zelle!.correoTelefono, 'quick-zelle')}
-                      className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
-                    >
-                      {copiedFieldId === 'quick-zelle' ? <Check size={12} /> : <Copy size={12} />}
-                      <span>{copiedFieldId === 'quick-zelle' ? '¡Copiado!' : 'Copiar Zelle'}</span>
-                    </button>
-                  </div>
+                <button
+                  onClick={() => setSelectedFichaTab('zelle')}
+                  className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    selectedFichaTab === 'zelle'
+                      ? 'bg-emerald-500 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <DollarSign size={13} />
+                  <span>Zelle</span>
+                </button>
+              )}
 
-                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-sm text-emerald-400 font-bold text-center select-all">
-                    {selectedProveedorFicha.zelle.correoTelefono}
-                  </div>
-                  <p className="text-[11px] text-zinc-400 text-center">Titular: <strong className="text-white">{selectedProveedorFicha.zelle.titular}</strong></p>
+              {selectedProveedorFicha.binance?.payId && (
+                <button
+                  onClick={() => setSelectedFichaTab('binance')}
+                  className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                    selectedFichaTab === 'binance'
+                      ? 'bg-amber-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <Wallet size={13} />
+                  <span>Binance</span>
+                </button>
+              )}
+            </div>
+
+            {/* Tab Content */}
+            <div className="min-h-[140px] space-y-3">
+              {/* 1. Tab Bancos */}
+              {selectedFichaTab === 'bancos' && selectedProveedorFicha.bancos && (
+                <div className="space-y-2.5 animate-fade-in">
+                  {selectedProveedorFicha.bancos.map((b, i) => {
+                    const isCopiedAccount = copiedFieldId === `quick-banco-${i}`;
+                    const isCopiedDoc = copiedFieldId === `quick-doc-${i}`;
+                    return (
+                      <div key={i} className="p-3.5 bg-black/40 border border-white/10 rounded-2xl space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-white">{b.banco}</span>
+                            <span className="text-[9px] text-zinc-400 uppercase bg-white/5 px-1.5 py-0.5 rounded">
+                              {b.tipoCuenta || 'Corriente'}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(b.numeroCuenta, `quick-banco-${i}`)}
+                            className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                          >
+                            {isCopiedAccount ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                            <span>{isCopiedAccount ? '¡Copiada!' : 'Copiar Cuenta'}</span>
+                          </button>
+                        </div>
+
+                        <div className="bg-black/60 p-2 rounded-xl border border-white/5 font-mono text-xs text-amber-400 font-bold tracking-wider select-all">
+                          {b.numeroCuenta}
+                        </div>
+
+                        <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-0.5">
+                          <span className="truncate">Titular: <strong className="text-zinc-200">{b.titular}</strong></span>
+                          <button
+                            onClick={() => copyToClipboard(b.documento, `quick-doc-${i}`)}
+                            className="text-zinc-400 hover:text-amber-300 font-mono text-[10px] bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded transition-colors cursor-pointer shrink-0 ml-2"
+                            title="Copiar Documento"
+                          >
+                            {isCopiedDoc ? '¡Doc Copiado!' : `Doc: ${b.documento}`}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
-              {/* Binance */}
-              {selectedProveedorFicha.binance?.payId && (
-                <div className="p-3 bg-amber-950/30 border border-amber-500/40 rounded-2xl space-y-2">
-                  <div className="flex items-center justify-between">
+              {/* 2. Tab Pago Móvil */}
+              {selectedFichaTab === 'pagoMovil' && selectedProveedorFicha.pagoMovil && (
+                <div className="space-y-2.5 animate-fade-in">
+                  {selectedProveedorFicha.pagoMovil.map((pm, i) => {
+                    const isCopied = copiedFieldId === `quick-pm-${i}`;
+                    return (
+                      <div key={i} className="p-3.5 bg-blue-950/20 border border-blue-500/20 rounded-2xl space-y-2.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-bold text-blue-300 flex items-center gap-1.5">
+                            <Smartphone size={13} className="text-blue-400" />
+                            <span>{pm.banco}</span>
+                          </span>
+                          <button
+                            onClick={() => {
+                              const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
+                              copyToClipboard(txt, `quick-pm-${i}`);
+                            }}
+                            className="px-2.5 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                          >
+                            {isCopied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                            <span>{isCopied ? '¡Copiado!' : 'Copiar Datos PM'}</span>
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                          <div className="bg-black/50 p-2 rounded-xl border border-white/5 text-blue-300 font-bold text-center">
+                            {pm.telefono}
+                          </div>
+                          <div className="bg-black/50 p-2 rounded-xl border border-white/5 text-white font-bold text-center">
+                            {pm.documento}
+                          </div>
+                        </div>
+
+                        {pm.titular && (
+                          <p className="text-[11px] text-zinc-400 truncate">
+                            Titular: <strong className="text-zinc-200">{pm.titular}</strong>
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* 3. Tab Zelle */}
+              {selectedFichaTab === 'zelle' && selectedProveedorFicha.zelle?.correoTelefono && (
+                <div className="p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-2xl space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      <DollarSign size={14} className="text-emerald-400" />
+                      <span>Zelle ($ USA)</span>
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(selectedProveedorFicha.zelle!.correoTelefono, 'quick-zelle')}
+                      className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      {copiedFieldId === 'quick-zelle' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                      <span>{copiedFieldId === 'quick-zelle' ? '¡Copiado!' : 'Copiar Correo'}</span>
+                    </button>
+                  </div>
+
+                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-xs text-emerald-400 font-bold text-center select-all">
+                    {selectedProveedorFicha.zelle.correoTelefono}
+                  </div>
+
+                  {selectedProveedorFicha.zelle.titular && (
+                    <p className="text-[11px] text-zinc-400 text-center">
+                      Titular: <strong className="text-zinc-200">{selectedProveedorFicha.zelle.titular}</strong>
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* 4. Tab Binance */}
+              {selectedFichaTab === 'binance' && selectedProveedorFicha.binance?.payId && (
+                <div className="p-4 bg-amber-950/20 border border-amber-500/20 rounded-2xl space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                       <Wallet size={14} className="text-amber-400" />
-                      Binance Pay ID (USDT)
+                      <span>Binance Pay (USDT)</span>
                     </span>
                     <button
                       onClick={() => copyToClipboard(selectedProveedorFicha.binance!.payId, 'quick-binance')}
-                      className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
+                      className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                     >
-                      {copiedFieldId === 'quick-binance' ? <Check size={12} /> : <Copy size={12} />}
+                      {copiedFieldId === 'quick-binance' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
                       <span>{copiedFieldId === 'quick-binance' ? '¡Copiado!' : 'Copiar Pay ID'}</span>
                     </button>
                   </div>
 
-                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-sm text-amber-400 font-black text-center select-all">
-                    {selectedProveedorFicha.binance.payId}
+                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-xs text-amber-400 font-bold text-center select-all">
+                    Pay ID: {selectedProveedorFicha.binance.payId}
                   </div>
+
+                  {selectedProveedorFicha.binance.correoBinance && (
+                    <p className="text-[11px] text-zinc-400 text-center">
+                      Correo Binance: <strong className="text-zinc-200">{selectedProveedorFicha.binance.correoBinance}</strong>
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
-            <div className="pt-2 flex items-center gap-2">
+            {/* Modal Footer */}
+            <div className="pt-3 border-t border-white/10 flex items-center gap-2">
               <button
                 onClick={() => copyFullProveedorPaymentInfo(selectedProveedorFicha)}
-                className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
               >
-                {copiedFieldId === `full-${selectedProveedorFicha.id}` ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                <span>Copiar Ficha Completa en Texto</span>
+                {copiedFieldId === `full-${selectedProveedorFicha.id}` ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                <span>{copiedFieldId === `full-${selectedProveedorFicha.id}` ? '¡Ficha Completa Copiada!' : 'Copiar Toda la Ficha'}</span>
               </button>
 
               {selectedProveedorFicha.telefono && (
