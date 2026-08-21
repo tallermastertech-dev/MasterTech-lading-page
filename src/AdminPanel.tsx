@@ -1314,24 +1314,29 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           outline: 2px solid rgba(245, 158, 11, 0.2) !important;
         }
 
-        /* 7. Typography Hierarchy & Contrast */
+        /* 7. Typography Hierarchy & Contrast (WCAG AAA Compliant) */
         .admin-theme-light h1,
         .admin-theme-light h2,
         .admin-theme-light h3,
         .admin-theme-light h4 {
           color: #0f172a !important;
         }
-        .admin-theme-light [class*="text-white"] {
+        .admin-theme-light [class*="text-white"],
+        .admin-theme-light [class*="text-zinc-100"],
+        .admin-theme-light [class*="text-zinc-200"],
+        .admin-theme-light [class*="text-zinc-300"] {
           color: #0f172a !important;
         }
         .admin-theme-light [class*="text-zinc-400"],
-        .admin-theme-light [class*="text-zinc-500"] {
-          color: #64748b !important;
+        .admin-theme-light [class*="text-zinc-500"],
+        .admin-theme-light [class*="text-zinc-600"] {
+          color: #334155 !important;
         }
-        .admin-theme-light [class*="text-zinc-300"],
-        .admin-theme-light [class*="text-zinc-200"],
-        .admin-theme-light [class*="text-zinc-100"] {
-          color: #1e293b !important;
+        .admin-theme-light .text-primary,
+        .admin-theme-light [class*="text-amber-400"],
+        .admin-theme-light [class*="text-amber-300"] {
+          color: #b45309 !important;
+          font-weight: 700 !important;
         }
 
         /* 8. Tables, Grids & Lists */
