@@ -56,7 +56,16 @@ import {
   ShieldAlert,
   Crown,
   Briefcase,
-  ShoppingCart
+  ShoppingCart,
+  Building2,
+  CreditCard,
+  Copy,
+  DollarSign,
+  Wallet,
+  QrCode,
+  Truck,
+  PhoneCall,
+  FileCheck
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -119,6 +128,189 @@ const DEFAULT_JORNADAS = [
   { id: "egr-dpf", badge: "Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
 ];
 
+export interface MetodoPagoBanco {
+  id?: string;
+  banco: string;
+  tipoCuenta: 'Corriente' | 'Ahorro';
+  numeroCuenta: string;
+  titular: string;
+  documento: string;
+}
+
+export interface MetodoPagoMovil {
+  id?: string;
+  banco: string;
+  telefono: string;
+  documento: string;
+  titular?: string;
+}
+
+export interface MetodoZelle {
+  correoTelefono: string;
+  titular: string;
+}
+
+export interface MetodoBinance {
+  payId: string;
+  correoBinance?: string;
+  walletUsdt?: string;
+  titular?: string;
+}
+
+export interface Proveedor {
+  id: string;
+  nombreComercial: string;
+  razonSocial?: string;
+  rif?: string;
+  categoria: string;
+  contactoNombre?: string;
+  telefono?: string;
+  correo?: string;
+  direccion?: string;
+  diasCredito?: string;
+  notas?: string;
+  bancos: MetodoPagoBanco[];
+  pagoMovil: MetodoPagoMovil[];
+  zelle?: MetodoZelle;
+  binance?: MetodoBinance;
+  aceptaEfectivoDivisas?: boolean;
+  actualizadoEn?: string;
+}
+
+export const DEFAULT_PROVEEDORES: Proveedor[] = [
+  {
+    id: "prov-1",
+    nombreComercial: "Distribuidora Mopar & Jeep Oriente",
+    razonSocial: "Inversiones Mopar Oriente C.A.",
+    rif: "J-31456789-0",
+    categoria: "Repuestos Motor & OEM",
+    contactoNombre: "Ing. Carlos Mendoza (Ventas)",
+    telefono: "+584123565012",
+    correo: "ventas@moparoriente.com",
+    direccion: "Av. 4 de Mayo, Edif. Centro Automotriz, Porlamar",
+    diasCredito: "15 días crédito",
+    notas: "Descuento del 10% para Taller MasterTech en compras mayores a $300. Código cliente: MT-104.",
+    bancos: [
+      {
+        id: "b1",
+        banco: "Banesco",
+        tipoCuenta: "Corriente",
+        numeroCuenta: "01340055123456789012",
+        titular: "Inversiones Mopar Oriente C.A.",
+        documento: "J-31456789-0"
+      },
+      {
+        id: "b2",
+        banco: "Mercantil",
+        tipoCuenta: "Corriente",
+        numeroCuenta: "01050022987654321098",
+        titular: "Inversiones Mopar Oriente C.A.",
+        documento: "J-31456789-0"
+      }
+    ],
+    pagoMovil: [
+      {
+        id: "pm1",
+        banco: "Banesco (0134)",
+        telefono: "04141234567",
+        documento: "J-31456789-0",
+        titular: "Inversiones Mopar Oriente C.A."
+      }
+    ],
+    zelle: {
+      correoTelefono: "pagos@moparoriente.com",
+      titular: "Mopar Oriente USA LLC"
+    },
+    binance: {
+      payId: "84729104",
+      correoBinance: "crypto@moparoriente.com",
+      walletUsdt: "TYdNG78sV29xK9... (TRC20)",
+      titular: "Mopar Oriente Crypto"
+    },
+    aceptaEfectivoDivisas: true
+  },
+  {
+    id: "prov-2",
+    nombreComercial: "Lubricantes & Filtros Margarita",
+    razonSocial: "Lubricentro Insular S.R.L.",
+    rif: "J-40123987-1",
+    categoria: "Lubricantes & Filtros",
+    contactoNombre: "Marcos Suárez (Despacho)",
+    telefono: "+584149876543",
+    correo: "pedidos@lubrimargarita.com",
+    direccion: "Sector Conejeros, Galpón 14, Porlamar",
+    diasCredito: "Contado / Entrega Inmediata",
+    notas: "Distribuidor oficial Motul, Mobil 1 y filtros Mann Filter. Despacho a taller sin costo adicional.",
+    bancos: [
+      {
+        id: "b3",
+        banco: "Banco de Venezuela (BDV)",
+        tipoCuenta: "Corriente",
+        numeroCuenta: "01020112345678901234",
+        titular: "Lubricentro Insular S.R.L.",
+        documento: "J-40123987-1"
+      }
+    ],
+    pagoMovil: [
+      {
+        id: "pm2",
+        banco: "Bancamiga (0172)",
+        telefono: "04249876543",
+        documento: "J-40123987-1",
+        titular: "Lubricentro Insular S.R.L."
+      }
+    ],
+    zelle: {
+      correoTelefono: "lubrimargarita@gmail.com",
+      titular: "Marcos Suarez"
+    },
+    binance: {
+      payId: "59103847",
+      correoBinance: "lubri_crypto@hotmail.com"
+    },
+    aceptaEfectivoDivisas: true
+  },
+  {
+    id: "prov-3",
+    nombreComercial: "Frenos & Suspensiones del Caribe",
+    razonSocial: "Caribe Brakes C.A.",
+    rif: "J-29876543-2",
+    categoria: "Frenos & Suspensión",
+    contactoNombre: "Lcda. Andrea Peña",
+    telefono: "+584245550011",
+    direccion: "Av. Juan Bautista Arismendi, La Asunción",
+    diasCredito: "7 días crédito",
+    notas: "Pastillas cerámicas Wagner, discos Raybestos y amortiguadores KYB.",
+    bancos: [
+      {
+        id: "b4",
+        banco: "Bancaribe",
+        tipoCuenta: "Corriente",
+        numeroCuenta: "01140011223344556677",
+        titular: "Caribe Brakes C.A.",
+        documento: "J-29876543-2"
+      }
+    ],
+    pagoMovil: [
+      {
+        id: "pm3",
+        banco: "Mercantil (0105)",
+        telefono: "04125550011",
+        documento: "V-18765432",
+        titular: "Andrea Pena"
+      }
+    ],
+    zelle: {
+      correoTelefono: "andrea_brakes@yahoo.com",
+      titular: "Andrea Pena"
+    },
+    binance: {
+      payId: "39201948"
+    },
+    aceptaEfectivoDivisas: true
+  }
+];
+
 interface AdminPanelProps {
   config?: any;
   onLogout?: () => void;
@@ -164,7 +356,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
 
   // Audit Logs State (Registro de Actividad y Cambios de Usuarios)
@@ -217,7 +409,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   // Route guard: auto redirect limited users to dashboard if they attempt restricted tab
   useEffect(() => {
     if (currentUser && !isFullAdminUser(currentUser)) {
-      const allowed = ['dashboard', 'leads', 'catalogo', 'jornadas'];
+      const allowed = ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores'];
       if (!allowed.includes(activeTab)) {
         setActiveTab('dashboard');
       }
@@ -293,6 +485,101 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [editingJornada, setEditingJornada] = useState<any>(null);
   const [isJornadaModalOpen, setIsJornadaModalOpen] = useState(false);
 
+  // Proveedores & Comercios Aliados (Control de Métodos de Pago y Datos Bancarios)
+  const [proveedoresList, setProveedoresList] = useState<Proveedor[]>(() => {
+    try {
+      const s = localStorage.getItem('mastertech_settings_store');
+      if (s) { const p = JSON.parse(s); if (p.PROVEEDORES_JSON) return JSON.parse(p.PROVEEDORES_JSON); }
+    } catch (e) {}
+    return DEFAULT_PROVEEDORES;
+  });
+  const [editingProveedor, setEditingProveedor] = useState<Proveedor | null>(null);
+  const [isProveedorModalOpen, setIsProveedorModalOpen] = useState(false);
+  const [selectedProveedorFicha, setSelectedProveedorFicha] = useState<Proveedor | null>(null);
+  const [proveedorSearch, setProveedorSearch] = useState('');
+  const [proveedorMetodoFilter, setProveedorMetodoFilter] = useState<'TODOS' | 'ZELLE' | 'BINANCE' | 'PAGO_MOVIL' | 'BANCOS'>('TODOS');
+  const [proveedorCategoriaFilter, setProveedorCategoriaFilter] = useState<string>('TODAS');
+  const [copiedFieldId, setCopiedFieldId] = useState<string | null>(null);
+  const [isSavingProveedor, setIsSavingProveedor] = useState(false);
+
+  // Helper para copiar al portapapeles con confirmación visual
+  const copyToClipboard = (text: string, fieldId: string) => {
+    try {
+      navigator.clipboard.writeText(text);
+      setCopiedFieldId(fieldId);
+      setTimeout(() => setCopiedFieldId(null), 2000);
+    } catch (e) {}
+  };
+
+  // Helper para copiar ficha bancaria completa
+  const copyFullProveedorPaymentInfo = (prov: Proveedor) => {
+    let text = `🏢 *DATOS DE PAGO - ${prov.nombreComercial.toUpperCase()}*\n`;
+    if (prov.rif) text += `📄 *RIF / Identificación:* ${prov.rif}\n`;
+    if (prov.contactoNombre) text += `👤 *Contacto:* ${prov.contactoNombre} (${prov.telefono || ''})\n`;
+    text += `\n`;
+
+    if (prov.bancos && prov.bancos.length > 0) {
+      text += `🏦 *CUENTAS BANCARIAS NACIONALES:*\n`;
+      prov.bancos.forEach((b) => {
+        text += `• ${b.banco} (${b.tipoCuenta || 'Corriente'})\n  N° Cuenta: ${b.numeroCuenta}\n  Titular: ${b.titular}\n  Doc: ${b.documento}\n\n`;
+      });
+    }
+
+    if (prov.pagoMovil && prov.pagoMovil.length > 0) {
+      text += `📱 *PAGO MÓVIL:*\n`;
+      prov.pagoMovil.forEach((pm) => {
+        text += `• Banco: ${pm.banco}\n  Teléfono: ${pm.telefono}\n  C.I./RIF: ${pm.documento}\n  ${pm.titular ? `Titular: ${pm.titular}\n` : ''}\n`;
+      });
+    }
+
+    if (prov.zelle && prov.zelle.correoTelefono) {
+      text += `💵 *ZELLE:*\n• Correo/Tlf: ${prov.zelle.correoTelefono}\n• Titular: ${prov.zelle.titular}\n\n`;
+    }
+
+    if (prov.binance && (prov.binance.payId || prov.binance.walletUsdt)) {
+      text += `🟡 *BINANCE / CRYPTO:*\n`;
+      if (prov.binance.payId) text += `• Binance Pay ID: ${prov.binance.payId}\n`;
+      if (prov.binance.correoBinance) text += `• Correo Binance: ${prov.binance.correoBinance}\n`;
+      if (prov.binance.walletUsdt) text += `• USDT Wallet: ${prov.binance.walletUsdt}\n`;
+      text += `\n`;
+    }
+
+    if (prov.diasCredito) text += `⏳ *Condición:* ${prov.diasCredito}\n`;
+    if (prov.notas) text += `📝 *Notas:* ${prov.notas}\n`;
+
+    copyToClipboard(text, `full-${prov.id}`);
+  };
+
+  // Helper para guardar lista de proveedores en Base de Datos & Caché
+  const handleSaveProveedores = async (updatedList: Proveedor[], logMsg?: string) => {
+    setProveedoresList(updatedList);
+    setIsSavingProveedor(true);
+    try {
+      const jsonStr = JSON.stringify(updatedList);
+      
+      try {
+        const stored = localStorage.getItem('mastertech_settings_store') || '{}';
+        const parsed = JSON.parse(stored);
+        parsed.PROVEEDORES_JSON = jsonStr;
+        localStorage.setItem('mastertech_settings_store', JSON.stringify(parsed));
+      } catch (e) {}
+
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ PROVEEDORES_JSON: jsonStr })
+      });
+
+      if (logMsg) {
+        logClientAction('Gestión Proveedores', 'AJUSTES', logMsg);
+      }
+    } catch (e) {
+      console.error("Error guardando proveedores:", e);
+    } finally {
+      setIsSavingProveedor(false);
+    }
+  };
+
   // Content States
   const [services, setServices] = useState<any[]>([]);
   const [faqs, setFaqs] = useState<any[]>([]);
@@ -335,6 +622,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
     if (merged.JORNADAS_JSON) {
       try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
+    }
+    if (merged.PROVEEDORES_JSON) {
+      try { const p = JSON.parse(merged.PROVEEDORES_JSON); if (Array.isArray(p)) setProveedoresList(p); } catch (e) {}
     }
     if (merged.TEAM_MEMBERS_JSON) {
       try { const p = JSON.parse(merged.TEAM_MEMBERS_JSON); if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
@@ -888,6 +1178,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 { id: 'leads', label: `Citas Solicitadas (${leads.length})`, icon: <Calendar size={18} /> },
                 { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
                 { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
+                { id: 'proveedores', label: `Admin Proveedores (${proveedoresList.length})`, icon: <Building2 size={18} /> },
                 { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
                 { id: 'usuarios', label: 'Equipo & Accesos', icon: <Users size={18} /> },
                 { id: 'settings', label: 'Ajustes Principales', icon: <SettingsIcon size={18} /> },
@@ -896,7 +1187,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
               const allowedTabs = isFull 
                 ? allTabs 
-                : allTabs.filter(t => ['dashboard', 'leads', 'catalogo', 'jornadas'].includes(t.id));
+                : allTabs.filter(t => ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores'].includes(t.id));
 
               return allowedTabs.map(tab => {
                 const isActive = activeTab === tab.id;
@@ -1773,6 +2064,543 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE: ADMINISTRACIÓN DE PROVEEDORES & MÉTODOS DE PAGO */}
+          {/* ========================================================================= */}
+          {activeTab === 'proveedores' && (
+            <div className="space-y-6 animate-fade-in">
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-primary">
+                      <Building2 size={20} />
+                    </div>
+                    <div>
+                      <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Administración de Proveedores</h1>
+                      <p className="text-xs text-zinc-400">Control de comercios aliados, cuentas bancarias nacionales, Pago Móvil, Zelle y Binance Pay para pagos del taller.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <button
+                    onClick={() => {
+                      const allInfo = proveedoresList.map(p => {
+                        let str = `🏢 ${p.nombreComercial.toUpperCase()} (${p.categoria})\n`;
+                        if (p.rif) str += `RIF: ${p.rif} | Contacto: ${p.contactoNombre || 'N/A'} (${p.telefono || ''})\n`;
+                        if (p.zelle?.correoTelefono) str += `Zelle: ${p.zelle.correoTelefono} (${p.zelle.titular})\n`;
+                        if (p.binance?.payId) str += `Binance Pay ID: ${p.binance.payId}\n`;
+                        if (p.pagoMovil && p.pagoMovil.length > 0) {
+                          str += `Pago Móvil: ${p.pagoMovil.map(pm => `${pm.banco} - ${pm.telefono} - ${pm.documento}`).join(' | ')}\n`;
+                        }
+                        if (p.bancos && p.bancos.length > 0) {
+                          str += `Bancos: ${p.bancos.map(b => `${b.banco} (${b.numeroCuenta}) - ${b.titular}`).join(' | ')}\n`;
+                        }
+                        return str;
+                      }).join('\n----------------------------------------\n');
+                      copyToClipboard(allInfo, 'directorio-global');
+                    }}
+                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-2 hover:bg-white/10 transition-colors cursor-pointer"
+                    title="Copiar resumen de todos los proveedores"
+                  >
+                    {copiedFieldId === 'directorio-global' ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
+                    <span>{copiedFieldId === 'directorio-global' ? '¡Directorio Copiado!' : 'Copiar Directorio'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingProveedor({
+                        id: `prov_${Date.now()}`,
+                        nombreComercial: '',
+                        razonSocial: '',
+                        rif: '',
+                        categoria: 'Repuestos Motor & OEM',
+                        contactoNombre: '',
+                        telefono: '',
+                        correo: '',
+                        direccion: '',
+                        diasCredito: 'Contado / Inmediato',
+                        notas: '',
+                        bancos: [
+                          {
+                            id: `b_${Date.now()}`,
+                            banco: 'Banesco',
+                            tipoCuenta: 'Corriente',
+                            numeroCuenta: '',
+                            titular: '',
+                            documento: ''
+                          }
+                        ],
+                        pagoMovil: [
+                          {
+                            id: `pm_${Date.now()}`,
+                            banco: 'Banesco (0134)',
+                            telefono: '',
+                            documento: '',
+                            titular: ''
+                          }
+                        ],
+                        zelle: {
+                          correoTelefono: '',
+                          titular: ''
+                        },
+                        binance: {
+                          payId: '',
+                          correoBinance: '',
+                          walletUsdt: '',
+                          titular: ''
+                        },
+                        aceptaEfectivoDivisas: true
+                      });
+                      setIsProveedorModalOpen(true);
+                    }}
+                    className="btn-primary !py-2.5 !px-4 text-xs font-black uppercase flex items-center gap-2 rounded-xl shadow-lg border-none cursor-pointer"
+                  >
+                    <Plus size={16} />
+                    <span>Registrar Proveedor</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Metric Summary Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase text-zinc-400">Total Proveedores</span>
+                    <Building2 size={16} className="text-primary" />
+                  </div>
+                  <span className="text-2xl font-black text-white mt-1 block">{proveedoresList.length}</span>
+                  <span className="text-[10px] text-zinc-500 font-medium">Comercios Aliados</span>
+                </div>
+
+                <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase text-zinc-400">Aceptan Zelle</span>
+                    <DollarSign size={16} className="text-emerald-400" />
+                  </div>
+                  <span className="text-2xl font-black text-emerald-400 mt-1 block">
+                    {proveedoresList.filter(p => p.zelle?.correoTelefono).length}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-medium">Pagos en Dólares USA</span>
+                </div>
+
+                <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase text-zinc-400">Binance Pay USDT</span>
+                    <Wallet size={16} className="text-amber-400" />
+                  </div>
+                  <span className="text-2xl font-black text-amber-400 mt-1 block">
+                    {proveedoresList.filter(p => p.binance?.payId || p.binance?.walletUsdt).length}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-medium">Criptoactivos / USDT</span>
+                </div>
+
+                <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase text-zinc-400">Pago Móvil & Bs</span>
+                    <CreditCard size={16} className="text-blue-400" />
+                  </div>
+                  <span className="text-2xl font-black text-blue-400 mt-1 block">
+                    {proveedoresList.filter(p => (p.pagoMovil && p.pagoMovil.length > 0) || (p.bancos && p.bancos.length > 0)).length}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-medium">Banca Nacional Vzla</span>
+                </div>
+              </div>
+
+              {/* Filters & Search Toolbar */}
+              <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl space-y-3">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {/* Search bar */}
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                    <input
+                      type="text"
+                      placeholder="Buscar por nombre, RIF, banco, Zelle, Binance Pay ID, repuesto o contacto..."
+                      value={proveedorSearch}
+                      onChange={(e) => setProveedorSearch(e.target.value)}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder:text-zinc-600 outline-none focus:border-primary transition-colors"
+                    />
+                    {proveedorSearch && (
+                      <button onClick={() => setProveedorSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white">
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Category Filter */}
+                  <select
+                    value={proveedorCategoriaFilter}
+                    onChange={(e) => setProveedorCategoriaFilter(e.target.value)}
+                    className="bg-black/50 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-zinc-300 font-bold outline-none focus:border-primary cursor-pointer"
+                  >
+                    <option value="TODAS">Categoría: Todas</option>
+                    <option value="Repuestos Motor & OEM">Repuestos Motor & OEM</option>
+                    <option value="Lubricantes & Filtros">Lubricantes & Filtros</option>
+                    <option value="Frenos & Suspensión">Frenos & Suspensión</option>
+                    <option value="Electricidad & Baterías">Electricidad & Baterías</option>
+                    <option value="Torno & Mecanizado">Torno & Mecanizado</option>
+                    <option value="Pintura & Detailing">Pintura & Detailing</option>
+                    <option value="Herramientas & Consumibles">Herramientas & Consumibles</option>
+                    <option value="Servicios Externos">Servicios Externos</option>
+                    <option value="Otros">Otros</option>
+                  </select>
+                </div>
+
+                {/* Method Pills Filter */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+                  <span className="text-[10px] font-bold uppercase text-zinc-500 shrink-0">Filtrar Método:</span>
+                  {[
+                    { id: 'TODOS', label: `Todos (${proveedoresList.length})` },
+                    { id: 'ZELLE', label: `💵 Zelle (${proveedoresList.filter(p => p.zelle?.correoTelefono).length})` },
+                    { id: 'BINANCE', label: `🟡 Binance Pay (${proveedoresList.filter(p => p.binance?.payId || p.binance?.walletUsdt).length})` },
+                    { id: 'PAGO_MOVIL', label: `📱 Pago Móvil (${proveedoresList.filter(p => p.pagoMovil && p.pagoMovil.length > 0).length})` },
+                    { id: 'BANCOS', label: `🏦 Bancos Bs (${proveedoresList.filter(p => p.bancos && p.bancos.length > 0).length})` }
+                  ].map(tab => {
+                    const isSelected = proveedorMetodoFilter === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setProveedorMetodoFilter(tab.id as any)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-amber-500 text-black shadow-md'
+                            : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/5'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Proveedores Cards List */}
+              {(() => {
+                const filtered = proveedoresList.filter(p => {
+                  const q = proveedorSearch.toLowerCase();
+                  const matchesSearch =
+                    !q ||
+                    p.nombreComercial.toLowerCase().includes(q) ||
+                    (p.razonSocial || '').toLowerCase().includes(q) ||
+                    (p.rif || '').toLowerCase().includes(q) ||
+                    (p.categoria || '').toLowerCase().includes(q) ||
+                    (p.contactoNombre || '').toLowerCase().includes(q) ||
+                    (p.telefono || '').toLowerCase().includes(q) ||
+                    (p.notas || '').toLowerCase().includes(q) ||
+                    (p.zelle?.correoTelefono || '').toLowerCase().includes(q) ||
+                    (p.binance?.payId || '').toLowerCase().includes(q) ||
+                    (p.bancos || []).some(b => b.banco.toLowerCase().includes(q) || b.numeroCuenta.includes(q) || b.titular.toLowerCase().includes(q)) ||
+                    (p.pagoMovil || []).some(pm => pm.banco.toLowerCase().includes(q) || pm.telefono.includes(q) || pm.documento.includes(q));
+
+                  const matchesCat = proveedorCategoriaFilter === 'TODAS' || p.categoria === proveedorCategoriaFilter;
+
+                  let matchesMetodo = true;
+                  if (proveedorMetodoFilter === 'ZELLE') matchesMetodo = Boolean(p.zelle?.correoTelefono);
+                  else if (proveedorMetodoFilter === 'BINANCE') matchesMetodo = Boolean(p.binance?.payId || p.binance?.walletUsdt);
+                  else if (proveedorMetodoFilter === 'PAGO_MOVIL') matchesMetodo = Boolean(p.pagoMovil && p.pagoMovil.length > 0);
+                  else if (proveedorMetodoFilter === 'BANCOS') matchesMetodo = Boolean(p.bancos && p.bancos.length > 0);
+
+                  return matchesSearch && matchesCat && matchesMetodo;
+                });
+
+                if (filtered.length === 0) {
+                  return (
+                    <div className="text-center py-16 bg-[#12141a] border border-white/10 rounded-3xl space-y-3">
+                      <Building2 size={40} className="mx-auto text-zinc-600" />
+                      <h3 className="text-base font-bold text-white">No se encontraron proveedores</h3>
+                      <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+                        {proveedorSearch 
+                          ? 'No hay comercios aliados que coincidan con tu búsqueda. Intenta con otro término.' 
+                          : 'Comienza registrando los comercios aliados y sus cuentas bancarias.'}
+                      </p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {filtered.map(prov => (
+                      <div key={prov.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-5 space-y-4 flex flex-col justify-between hover:border-white/20 transition-all shadow-xl">
+                        <div className="space-y-3.5">
+                          {/* Card Header: Name, Category, RIF & Quick Actions */}
+                          <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-md">
+                                  {prov.categoria || 'Repuestos'}
+                                </span>
+                                {prov.diasCredito && (
+                                  <span className="text-[10px] font-bold text-zinc-300 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
+                                    ⏳ {prov.diasCredito}
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="font-display font-black text-white text-base tracking-wide leading-tight">
+                                {prov.nombreComercial}
+                              </h3>
+                              {prov.razonSocial && prov.razonSocial !== prov.nombreComercial && (
+                                <p className="text-[11px] text-zinc-400">{prov.razonSocial}</p>
+                              )}
+                              {prov.rif && (
+                                <span className="text-[10px] font-mono font-bold text-zinc-400 bg-black/40 px-2 py-0.5 rounded border border-white/5 inline-block">
+                                  RIF: {prov.rif}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => {
+                                  setEditingProveedor({ ...prov });
+                                  setIsProveedorModalOpen(true);
+                                }}
+                                className="p-2 rounded-xl bg-white/5 hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+                                title="Editar Proveedor"
+                              >
+                                <Edit size={14} />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`¿Seguro que deseas eliminar al proveedor "${prov.nombreComercial}"?`)) {
+                                    const updated = proveedoresList.filter(p => p.id !== prov.id);
+                                    handleSaveProveedores(updated, `Eliminó el proveedor ${prov.nombreComercial}`);
+                                  }
+                                }}
+                                className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+                                title="Eliminar Proveedor"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Contact Info & Notes */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            {prov.contactoNombre && (
+                              <div className="flex items-center gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
+                                <User size={14} className="text-zinc-500 shrink-0" />
+                                <span className="truncate">{prov.contactoNombre}</span>
+                              </div>
+                            )}
+                            {prov.telefono && (
+                              <div className="flex items-center justify-between gap-2 text-zinc-300 bg-black/30 p-2 rounded-xl border border-white/5">
+                                <div className="flex items-center gap-2 truncate">
+                                  <Phone size={14} className="text-zinc-500 shrink-0" />
+                                  <span className="font-mono">{prov.telefono}</span>
+                                </div>
+                                <a
+                                  href={`https://wa.me/${prov.telefono.replace(/[^\d]/g, '')}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-emerald-400 hover:text-emerald-300 shrink-0"
+                                  title="Abrir WhatsApp"
+                                >
+                                  <WhatsAppIcon size={14} />
+                                </a>
+                              </div>
+                            )}
+                          </div>
+
+                          {prov.notas && (
+                            <div className="bg-amber-500/5 border border-amber-500/20 p-2.5 rounded-xl text-xs text-amber-200/90 flex items-start gap-2">
+                              <Tag size={13} className="text-amber-400 shrink-0 mt-0.5" />
+                              <span className="leading-snug">{prov.notas}</span>
+                            </div>
+                          )}
+
+                          {/* Payment Methods Section */}
+                          <div className="space-y-2.5 pt-1">
+                            <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider block">
+                              Métodos de Pago & Cuentas:
+                            </span>
+
+                            <div className="space-y-2">
+                              {/* 1. Bancos Nacionales */}
+                              {prov.bancos && prov.bancos.length > 0 && (
+                                <div className="space-y-1.5">
+                                  {prov.bancos.map((b, bIdx) => {
+                                    const fieldKey = `banco-${prov.id}-${bIdx}`;
+                                    const isCopied = copiedFieldId === fieldKey;
+                                    return (
+                                      <div key={bIdx} className="bg-black/50 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                        <div className="space-y-0.5 min-w-0 flex-1">
+                                          <div className="flex items-center gap-2">
+                                            <span className="font-bold text-white">{b.banco}</span>
+                                            <span className="text-[9px] text-zinc-400 uppercase bg-white/5 px-1.5 py-0.5 rounded">
+                                              {b.tipoCuenta || 'Cta Corriente'}
+                                            </span>
+                                          </div>
+                                          <p className="font-mono text-amber-400 text-xs tracking-wider truncate select-all font-bold">
+                                            {b.numeroCuenta}
+                                          </p>
+                                          <p className="text-[10px] text-zinc-400 truncate">
+                                            Titular: <strong className="text-zinc-200">{b.titular}</strong> ({b.documento})
+                                          </p>
+                                        </div>
+
+                                        <div className="flex flex-col gap-1 shrink-0">
+                                          <button
+                                            onClick={() => copyToClipboard(b.numeroCuenta, fieldKey)}
+                                            className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-amber-500/20 text-white hover:text-amber-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                            title="Copiar número de cuenta"
+                                          >
+                                            {isCopied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                            <span>{isCopied ? '¡Copiada!' : 'Cuenta'}</span>
+                                          </button>
+                                          <button
+                                            onClick={() => copyToClipboard(b.documento, `${fieldKey}-doc`)}
+                                            className="px-2.5 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 text-[9px] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                                            title="Copiar RIF o Cédula"
+                                          >
+                                            {copiedFieldId === `${fieldKey}-doc` ? <Check size={10} className="text-emerald-400" /> : <Copy size={10} />}
+                                            <span>{copiedFieldId === `${fieldKey}-doc` ? '¡Doc!' : 'RIF'}</span>
+                                          </button>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              {/* 2. Pago Móvil */}
+                              {prov.pagoMovil && prov.pagoMovil.length > 0 && (
+                                <div className="space-y-1.5">
+                                  {prov.pagoMovil.map((pm, pmIdx) => {
+                                    const fieldKey = `pm-${prov.id}-${pmIdx}`;
+                                    const isCopied = copiedFieldId === fieldKey;
+                                    return (
+                                      <div key={pmIdx} className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                        <div className="space-y-0.5 min-w-0 flex-1">
+                                          <div className="flex items-center gap-2">
+                                            <span className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded">
+                                              📱 PAGO MÓVIL
+                                            </span>
+                                            <span className="font-bold text-white">{pm.banco}</span>
+                                          </div>
+                                          <p className="font-mono text-blue-300 text-xs font-bold tracking-wider">
+                                            {pm.telefono} <span className="text-zinc-400">|</span> {pm.documento}
+                                          </p>
+                                          {pm.titular && (
+                                            <p className="text-[10px] text-zinc-400 truncate">Titular: {pm.titular}</p>
+                                          )}
+                                        </div>
+
+                                        <button
+                                          onClick={() => {
+                                            const txt = `Banco: ${pm.banco}\nTeléfono: ${pm.telefono}\nC.I./RIF: ${pm.documento}\nTitular: ${pm.titular || prov.nombreComercial}`;
+                                            copyToClipboard(txt, fieldKey);
+                                          }}
+                                          className="px-2.5 py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
+                                          title="Copiar datos de pago móvil"
+                                        >
+                                          {isCopied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                          <span>{isCopied ? '¡Copiado!' : 'Copiar PM'}</span>
+                                        </button>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              {/* 3. Zelle */}
+                              {prov.zelle?.correoTelefono && (
+                                <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                  <div className="space-y-0.5 min-w-0 flex-1">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded">
+                                        💵 ZELLE ($ USA)
+                                      </span>
+                                    </div>
+                                    <p className="font-mono text-emerald-300 text-xs font-bold truncate">
+                                      {prov.zelle.correoTelefono}
+                                    </p>
+                                    <p className="text-[10px] text-zinc-400 truncate">
+                                      Titular: <strong className="text-zinc-200">{prov.zelle.titular}</strong>
+                                    </p>
+                                  </div>
+
+                                  <button
+                                    onClick={() => copyToClipboard(prov.zelle!.correoTelefono, `zelle-${prov.id}`)}
+                                    className="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
+                                    title="Copiar correo Zelle"
+                                  >
+                                    {copiedFieldId === `zelle-${prov.id}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                    <span>{copiedFieldId === `zelle-${prov.id}` ? '¡Copiado!' : 'Copiar Zelle'}</span>
+                                  </button>
+                                </div>
+                              )}
+
+                              {/* 4. Binance Pay / USDT */}
+                              {prov.binance?.payId && (
+                                <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
+                                  <div className="space-y-0.5 min-w-0 flex-1">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded">
+                                        🟡 BINANCE PAY (USDT)
+                                      </span>
+                                    </div>
+                                    <p className="font-mono text-amber-300 text-xs font-bold">
+                                      Pay ID: {prov.binance.payId}
+                                    </p>
+                                    {prov.binance.correoBinance && (
+                                      <p className="text-[10px] text-zinc-400 truncate">Correo: {prov.binance.correoBinance}</p>
+                                    )}
+                                  </div>
+
+                                  <button
+                                    onClick={() => copyToClipboard(prov.binance!.payId, `binance-${prov.id}`)}
+                                    className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[10px] font-bold flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
+                                    title="Copiar Pay ID de Binance"
+                                  >
+                                    {copiedFieldId === `binance-${prov.id}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                                    <span>{copiedFieldId === `binance-${prov.id}` ? '¡Copiado!' : 'Pay ID'}</span>
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Card Footer Actions */}
+                        <div className="pt-3 border-t border-white/10 flex items-center gap-2 flex-wrap">
+                          <button
+                            onClick={() => setSelectedProveedorFicha(prov)}
+                            className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <Zap size={14} className="text-primary" />
+                            <span>Ficha Rápida de Pago</span>
+                          </button>
+
+                          <button
+                            onClick={() => copyFullProveedorPaymentInfo(prov)}
+                            className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                            title="Copiar todos los datos de pago al portapapeles"
+                          >
+                            {copiedFieldId === `full-${prov.id}` ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                            <span>{copiedFieldId === `full-${prov.id}` ? '¡Todo Copiado!' : 'Copiar Ficha'}</span>
+                          </button>
+
+                          {prov.telefono && (
+                            <a
+                              href={`https://wa.me/${prov.telefono.replace(/[^\d]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:text-emerald-300 transition-colors"
+                              title="Escribir por WhatsApp"
+                            >
+                              <WhatsAppIcon size={16} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
           )}
 
@@ -3183,6 +4011,700 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
               <button onClick={() => setIsJornadaModalOpen(false)} className="px-4 py-2 rounded-xl bg-white/5 text-zinc-400 text-xs font-bold">Cancelar</button>
               <button onClick={() => handleSaveJornadaItem(editingJornada)} className="btn-primary !py-2 !px-5 text-xs font-black uppercase border-none">Guardar Jornada</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL: EDITAR / REGISTRAR PROVEEDOR */}
+      {/* ========================================================================= */}
+      {isProveedorModalOpen && editingProveedor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-2xl w-full p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-amber-500/10 text-primary">
+                  <Building2 size={18} />
+                </div>
+                <h3 className="text-sm font-bold text-white uppercase">
+                  {editingProveedor.id && proveedoresList.some(p => p.id === editingProveedor.id)
+                    ? `Editar Proveedor: ${editingProveedor.nombreComercial}`
+                    : 'Registrar Nuevo Comercio Aliado / Proveedor'}
+                </h3>
+              </div>
+              <button onClick={() => setIsProveedorModalOpen(false)} className="text-zinc-400 hover:text-white">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              {/* Section 1: Datos Comerciales */}
+              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
+                <span className="text-[10px] font-black uppercase text-amber-400 block tracking-wider">
+                  1. Información Comercial & Contacto
+                </span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Nombre Comercial / Tienda *</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: AutoRepuestos El Oriental"
+                      value={editingProveedor.nombreComercial}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, nombreComercial: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Categoría de Repuestos / Insumos</label>
+                    <select
+                      value={editingProveedor.categoria}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, categoria: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary cursor-pointer"
+                    >
+                      <option value="Repuestos Motor & OEM">Repuestos Motor & OEM</option>
+                      <option value="Lubricantes & Filtros">Lubricantes & Filtros</option>
+                      <option value="Frenos & Suspensión">Frenos & Suspensión</option>
+                      <option value="Electricidad & Baterías">Electricidad & Baterías</option>
+                      <option value="Torno & Mecanizado">Torno & Mecanizado</option>
+                      <option value="Pintura & Detailing">Pintura & Detailing</option>
+                      <option value="Herramientas & Consumibles">Herramientas & Consumibles</option>
+                      <option value="Servicios Externos">Servicios Externos</option>
+                      <option value="Otros">Otros</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">RIF / Identificación</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: J-12345678-9"
+                      value={editingProveedor.rif || ''}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, rif: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Persona de Contacto / Vendedor</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Carlos Mendoza (Asesor)"
+                      value={editingProveedor.contactoNombre || ''}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, contactoNombre: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Teléfono / WhatsApp</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: +58 412 1234567"
+                      value={editingProveedor.telefono || ''}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, telefono: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Condición Comercial / Crédito</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Contado / Inmediato, 15 días crédito, etc."
+                      value={editingProveedor.diasCredito || ''}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, diasCredito: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Ubicación / Dirección</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Av. 4 de Mayo, Porlamar"
+                      value={editingProveedor.direccion || ''}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, direccion: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Notas Internas / Descuentos Acordados</label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Descuento del 10% para MasterTech. Código cliente: MT-104."
+                    value={editingProveedor.notas || ''}
+                    onChange={(e) => setEditingProveedor({ ...editingProveedor, notas: e.target.value })}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-amber-200 outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+
+              {/* Section 2: Cuentas Bancarias Nacionales (Bs / $) */}
+              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase text-blue-400 block tracking-wider">
+                    2. Cuentas Bancarias Nacionales (Transferencias)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newBancos = [
+                        ...(editingProveedor.bancos || []),
+                        {
+                          id: `b_${Date.now()}`,
+                          banco: 'Banesco',
+                          tipoCuenta: 'Corriente' as const,
+                          numeroCuenta: '',
+                          titular: editingProveedor.nombreComercial || '',
+                          documento: editingProveedor.rif || ''
+                        }
+                      ];
+                      setEditingProveedor({ ...editingProveedor, bancos: newBancos });
+                    }}
+                    className="text-[10px] font-bold bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 px-2.5 py-1 rounded-lg border border-blue-500/30 flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus size={12} />
+                    <span>Agregar Otra Cuenta</span>
+                  </button>
+                </div>
+
+                {(editingProveedor.bancos || []).map((b, bIdx) => (
+                  <div key={bIdx} className="bg-black/60 border border-white/10 p-3 rounded-xl space-y-2 relative">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-bold uppercase text-zinc-500">Cuenta #{bIdx + 1}</span>
+                      {(editingProveedor.bancos || []).length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newB = editingProveedor.bancos.filter((_, idx) => idx !== bIdx);
+                            setEditingProveedor({ ...editingProveedor, bancos: newB });
+                          }}
+                          className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                        >
+                          <Trash2 size={12} />
+                          <span>Quitar</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
+                        <input
+                          type="text"
+                          placeholder="Ej: Banesco, Mercantil, BDV, Bancamiga, Provincial"
+                          value={b.banco}
+                          onChange={(e) => {
+                            const newB = [...editingProveedor.bancos];
+                            newB[bIdx].banco = e.target.value;
+                            setEditingProveedor({ ...editingProveedor, bancos: newB });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Tipo de Cuenta</label>
+                        <select
+                          value={b.tipoCuenta || 'Corriente'}
+                          onChange={(e) => {
+                            const newB = [...editingProveedor.bancos];
+                            newB[bIdx].tipoCuenta = e.target.value as any;
+                            setEditingProveedor({ ...editingProveedor, bancos: newB });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs cursor-pointer"
+                        >
+                          <option value="Corriente">Cuenta Corriente</option>
+                          <option value="Ahorro">Cuenta de Ahorro</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Número de Cuenta (20 dígitos)</label>
+                      <input
+                        type="text"
+                        placeholder="0134 0000 00 0000000000"
+                        value={b.numeroCuenta}
+                        onChange={(e) => {
+                          const newB = [...editingProveedor.bancos];
+                          newB[bIdx].numeroCuenta = e.target.value.replace(/[^\d]/g, '').slice(0, 20);
+                          setEditingProveedor({ ...editingProveedor, bancos: newB });
+                        }}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-amber-400 font-mono font-bold tracking-wider outline-none focus:border-primary text-xs"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Nombre del Titular</label>
+                        <input
+                          type="text"
+                          placeholder="Nombre o Razón Social"
+                          value={b.titular}
+                          onChange={(e) => {
+                            const newB = [...editingProveedor.bancos];
+                            newB[bIdx].titular = e.target.value;
+                            setEditingProveedor({ ...editingProveedor, bancos: newB });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">RIF / Cédula del Titular</label>
+                        <input
+                          type="text"
+                          placeholder="J-00000000-0 o V-00000000"
+                          value={b.documento}
+                          onChange={(e) => {
+                            const newB = [...editingProveedor.bancos];
+                            newB[bIdx].documento = e.target.value;
+                            setEditingProveedor({ ...editingProveedor, bancos: newB });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Section 3: Pago Móvil */}
+              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase text-cyan-400 block tracking-wider">
+                    3. Pago Móvil
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newPm = [
+                        ...(editingProveedor.pagoMovil || []),
+                        {
+                          id: `pm_${Date.now()}`,
+                          banco: 'Banesco (0134)',
+                          telefono: editingProveedor.telefono || '',
+                          documento: editingProveedor.rif || '',
+                          titular: editingProveedor.nombreComercial || ''
+                        }
+                      ];
+                      setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                    }}
+                    className="text-[10px] font-bold bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 px-2.5 py-1 rounded-lg border border-cyan-500/30 flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus size={12} />
+                    <span>Agregar Pago Móvil</span>
+                  </button>
+                </div>
+
+                {(editingProveedor.pagoMovil || []).map((pm, pmIdx) => (
+                  <div key={pmIdx} className="bg-black/60 border border-white/10 p-3 rounded-xl space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-bold uppercase text-zinc-500">Pago Móvil #{pmIdx + 1}</span>
+                      {(editingProveedor.pagoMovil || []).length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newPm = editingProveedor.pagoMovil.filter((_, idx) => idx !== pmIdx);
+                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                          }}
+                          className="text-red-400 hover:text-red-300 text-[10px] flex items-center gap-0.5"
+                        >
+                          <Trash2 size={12} />
+                          <span>Quitar</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Banco</label>
+                        <input
+                          type="text"
+                          placeholder="Ej: Banesco (0134)"
+                          value={pm.banco}
+                          onChange={(e) => {
+                            const newPm = [...editingProveedor.pagoMovil];
+                            newPm[pmIdx].banco = e.target.value;
+                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-bold outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Teléfono Pago Móvil</label>
+                        <input
+                          type="text"
+                          placeholder="Ej: 04141234567"
+                          value={pm.telefono}
+                          onChange={(e) => {
+                            const newPm = [...editingProveedor.pagoMovil];
+                            newPm[pmIdx].telefono = e.target.value;
+                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-cyan-300 font-mono font-bold outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">C.I. / RIF</label>
+                        <input
+                          type="text"
+                          placeholder="Ej: J-31456789-0 o V-18765432"
+                          value={pm.documento}
+                          onChange={(e) => {
+                            const newPm = [...editingProveedor.pagoMovil];
+                            newPm[pmIdx].documento = e.target.value;
+                            setEditingProveedor({ ...editingProveedor, pagoMovil: newPm });
+                          }}
+                          className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono outline-none focus:border-primary text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Section 4: Zelle & Binance (Divisas Digitales) */}
+              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
+                <span className="text-[10px] font-black uppercase text-emerald-400 block tracking-wider">
+                  4. Divisas Digitales (Zelle & Binance Pay)
+                </span>
+
+                {/* Zelle */}
+                <div className="p-3 bg-emerald-950/20 border border-emerald-500/30 rounded-xl space-y-2">
+                  <div className="flex items-center gap-2">
+                    <DollarSign size={14} className="text-emerald-400" />
+                    <span className="font-bold text-white text-xs">Datos Zelle ($ USA)</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Correo o Teléfono Zelle</label>
+                      <input
+                        type="text"
+                        placeholder="pagos@empresa.com o +1 305..."
+                        value={editingProveedor.zelle?.correoTelefono || ''}
+                        onChange={(e) => setEditingProveedor({
+                          ...editingProveedor,
+                          zelle: {
+                            correoTelefono: e.target.value,
+                            titular: editingProveedor.zelle?.titular || editingProveedor.nombreComercial || ''
+                          }
+                        })}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-emerald-300 font-mono font-bold outline-none focus:border-primary text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Nombre del Titular Zelle</label>
+                      <input
+                        type="text"
+                        placeholder="Nombre completo / Empresa USA"
+                        value={editingProveedor.zelle?.titular || ''}
+                        onChange={(e) => setEditingProveedor({
+                          ...editingProveedor,
+                          zelle: {
+                            correoTelefono: editingProveedor.zelle?.correoTelefono || '',
+                            titular: e.target.value
+                          }
+                        })}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Binance */}
+                <div className="p-3 bg-amber-950/20 border border-amber-500/30 rounded-xl space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Wallet size={14} className="text-amber-400" />
+                    <span className="font-bold text-white text-xs">Binance Pay / USDT</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <div>
+                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Binance Pay ID</label>
+                      <input
+                        type="text"
+                        placeholder="Ej: 84729104"
+                        value={editingProveedor.binance?.payId || ''}
+                        onChange={(e) => setEditingProveedor({
+                          ...editingProveedor,
+                          binance: {
+                            ...editingProveedor.binance,
+                            payId: e.target.value
+                          }
+                        })}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-amber-300 font-mono font-bold outline-none focus:border-primary text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Correo Binance</label>
+                      <input
+                        type="text"
+                        placeholder="usuario@binance.com"
+                        value={editingProveedor.binance?.correoBinance || ''}
+                        onChange={(e) => setEditingProveedor({
+                          ...editingProveedor,
+                          binance: {
+                            ...editingProveedor.binance,
+                            payId: editingProveedor.binance?.payId || '',
+                            correoBinance: e.target.value
+                          }
+                        })}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-primary text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-500 font-bold block text-[10px] mb-0.5">Wallet USDT (Red)</label>
+                      <input
+                        type="text"
+                        placeholder="TYd... (TRC20 / BEP20)"
+                        value={editingProveedor.binance?.walletUsdt || ''}
+                        onChange={(e) => setEditingProveedor({
+                          ...editingProveedor,
+                          binance: {
+                            ...editingProveedor.binance,
+                            payId: editingProveedor.binance?.payId || '',
+                            walletUsdt: e.target.value
+                          }
+                        })}
+                        className="w-full bg-black/40 border border-white/10 rounded-lg p-2 text-white font-mono text-[11px] outline-none focus:border-primary"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-3 border-t border-white/10 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsProveedorModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-white/5 text-zinc-400 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (!editingProveedor.nombreComercial.trim()) {
+                    alert('Por favor ingresa el nombre comercial del proveedor.');
+                    return;
+                  }
+
+                  const isEdit = proveedoresList.some(p => p.id === editingProveedor.id);
+                  let updated: Proveedor[] = [];
+
+                  if (isEdit) {
+                    updated = proveedoresList.map(p => p.id === editingProveedor.id ? { ...editingProveedor, actualizadoEn: new Date().toISOString() } : p);
+                  } else {
+                    const newProv: Proveedor = {
+                      ...editingProveedor,
+                      id: editingProveedor.id || `prov_${Date.now()}`,
+                      actualizadoEn: new Date().toISOString()
+                    };
+                    updated = [newProv, ...proveedoresList];
+                  }
+
+                  handleSaveProveedores(
+                    updated,
+                    `${isEdit ? 'Actualizó datos del proveedor' : 'Registró nuevo proveedor'} "${editingProveedor.nombreComercial}".`
+                  );
+                  setIsProveedorModalOpen(false);
+                  setEditingProveedor(null);
+                }}
+                disabled={isSavingProveedor}
+                className="btn-primary !py-2.5 !px-6 text-xs font-black uppercase border-none rounded-xl flex items-center gap-2 cursor-pointer shadow-lg"
+              >
+                {isSavingProveedor ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                <span>{isSavingProveedor ? 'Guardando...' : 'Guardar Proveedor'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL: FICHA RÁPIDA DE PAGO (PANTALLA LIMPIA PARA TRANSFERENCIAS TALLER) */}
+      {/* ========================================================================= */}
+      {selectedProveedorFicha && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="bg-[#101216] border border-amber-500/40 rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+            <div className="flex justify-between items-start border-b border-white/10 pb-3">
+              <div>
+                <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+                  ⚡ Ficha de Pago Rápida
+                </span>
+                <h2 className="text-lg font-display font-black text-white mt-1">
+                  {selectedProveedorFicha.nombreComercial}
+                </h2>
+                {selectedProveedorFicha.rif && (
+                  <p className="text-xs font-mono text-zinc-400">RIF: {selectedProveedorFicha.rif}</p>
+                )}
+              </div>
+              <button
+                onClick={() => setSelectedProveedorFicha(null)}
+                className="text-zinc-400 hover:text-white p-1 rounded-lg bg-white/5"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              Toca cualquier dato a continuación para copiarlo instantáneamente en tu portapapeles y pegarlo en el portal bancario o WhatsApp.
+            </p>
+
+            <div className="space-y-3">
+              {/* Bancos */}
+              {selectedProveedorFicha.bancos && selectedProveedorFicha.bancos.map((b, i) => (
+                <div key={i} className="p-3 bg-black/60 border border-white/10 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <Building2 size={14} className="text-primary" />
+                      {b.banco} ({b.tipoCuenta || 'Corriente'})
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(b.numeroCuenta, `quick-banco-${i}`)}
+                      className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
+                    >
+                      {copiedFieldId === `quick-banco-${i}` ? <Check size={12} /> : <Copy size={12} />}
+                      <span>{copiedFieldId === `quick-banco-${i}` ? '¡Copiado!' : 'Copiar Cuenta'}</span>
+                    </button>
+                  </div>
+
+                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-sm text-amber-400 font-black tracking-wider text-center select-all">
+                    {b.numeroCuenta}
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
+                    <span>Titular: <strong className="text-white">{b.titular}</strong></span>
+                    <button
+                      onClick={() => copyToClipboard(b.documento, `quick-doc-${i}`)}
+                      className="text-zinc-400 hover:text-amber-300 font-mono underline"
+                    >
+                      {copiedFieldId === `quick-doc-${i}` ? '¡Doc Copiado!' : `Doc: ${b.documento}`}
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {/* Pago Móvil */}
+              {selectedProveedorFicha.pagoMovil && selectedProveedorFicha.pagoMovil.map((pm, i) => (
+                <div key={i} className="p-3 bg-blue-950/30 border border-blue-500/40 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-blue-300 flex items-center gap-1.5">
+                      <CreditCard size={14} className="text-blue-400" />
+                      Pago Móvil: {pm.banco}
+                    </span>
+                    <button
+                      onClick={() => {
+                        const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
+                        copyToClipboard(txt, `quick-pm-${i}`);
+                      }}
+                      className="px-3 py-1 bg-blue-500 hover:bg-blue-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
+                    >
+                      {copiedFieldId === `quick-pm-${i}` ? <Check size={12} /> : <Copy size={12} />}
+                      <span>{copiedFieldId === `quick-pm-${i}` ? '¡Copiado!' : 'Copiar PM'}</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-center">
+                    <div className="bg-black/50 p-2 rounded-xl border border-white/5 font-mono text-xs text-blue-300 font-bold">
+                      {pm.telefono}
+                    </div>
+                    <div className="bg-black/50 p-2 rounded-xl border border-white/5 font-mono text-xs text-white font-bold">
+                      {pm.documento}
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Zelle */}
+              {selectedProveedorFicha.zelle?.correoTelefono && (
+                <div className="p-3 bg-emerald-950/30 border border-emerald-500/40 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      <DollarSign size={14} className="text-emerald-400" />
+                      Zelle ($ USA)
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(selectedProveedorFicha.zelle!.correoTelefono, 'quick-zelle')}
+                      className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
+                    >
+                      {copiedFieldId === 'quick-zelle' ? <Check size={12} /> : <Copy size={12} />}
+                      <span>{copiedFieldId === 'quick-zelle' ? '¡Copiado!' : 'Copiar Zelle'}</span>
+                    </button>
+                  </div>
+
+                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-sm text-emerald-400 font-bold text-center select-all">
+                    {selectedProveedorFicha.zelle.correoTelefono}
+                  </div>
+                  <p className="text-[11px] text-zinc-400 text-center">Titular: <strong className="text-white">{selectedProveedorFicha.zelle.titular}</strong></p>
+                </div>
+              )}
+
+              {/* Binance */}
+              {selectedProveedorFicha.binance?.payId && (
+                <div className="p-3 bg-amber-950/30 border border-amber-500/40 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                      <Wallet size={14} className="text-amber-400" />
+                      Binance Pay ID (USDT)
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(selectedProveedorFicha.binance!.payId, 'quick-binance')}
+                      className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black text-xs font-black rounded-lg flex items-center gap-1 transition-all cursor-pointer"
+                    >
+                      {copiedFieldId === 'quick-binance' ? <Check size={12} /> : <Copy size={12} />}
+                      <span>{copiedFieldId === 'quick-binance' ? '¡Copiado!' : 'Copiar Pay ID'}</span>
+                    </button>
+                  </div>
+
+                  <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 font-mono text-sm text-amber-400 font-black text-center select-all">
+                    {selectedProveedorFicha.binance.payId}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-2 flex items-center gap-2">
+              <button
+                onClick={() => copyFullProveedorPaymentInfo(selectedProveedorFicha)}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                {copiedFieldId === `full-${selectedProveedorFicha.id}` ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                <span>Copiar Ficha Completa en Texto</span>
+              </button>
+
+              {selectedProveedorFicha.telefono && (
+                <a
+                  href={`https://wa.me/${selectedProveedorFicha.telefono.replace(/[^\d]/g, '')}?text=${encodeURIComponent(`Hola ${selectedProveedorFicha.contactoNombre || selectedProveedorFicha.nombreComercial}, un gusto saludarte. Te escribo de parte del Taller MasterTech para coordinar un pago / pedido de repuestos.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 px-4 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-lg"
+                >
+                  <WhatsAppIcon size={16} />
+                  <span>WhatsApp</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
