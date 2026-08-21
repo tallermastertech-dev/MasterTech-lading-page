@@ -184,6 +184,64 @@ export interface Proveedor {
 
 export const DEFAULT_PROVEEDORES: Proveedor[] = [
   {
+    id: "prov-demo-master",
+    nombreComercial: "Distribuidora Automotriz Total C.A. (Demo Proveedor)",
+    razonSocial: "Inversiones & Repuestos Automotriz Total C.A.",
+    rif: "J-30987654-2",
+    categoria: "Autopartes & Repuestos Generales",
+    contactoNombre: "Lcdo. Alejandro Rivas (Ventas & Cobranzas)",
+    telefono: "+584141234567",
+    correo: "ventas@repuestostotal.com",
+    direccion: "Av. 4 de Mayo, Edif. Centro Automotriz, Local 4, Porlamar",
+    aceptaCredito: true,
+    diasCredito: "30 Días de Crédito",
+    notas: "Proveedor de prueba completo con todos los métodos de pago activos: Cuentas Bancarias Banesco y Mercantil, Pago Móvil, Zelle, Binance Pay y Crédito 30 días.",
+    bancos: [
+      {
+        id: "b1_demo",
+        banco: "Banesco",
+        tipoCuenta: "Corriente",
+        numeroCuenta: "01340055123456789012",
+        titular: "Distribuidora Automotriz Total C.A.",
+        documento: "J-30987654-2"
+      },
+      {
+        id: "b2_demo",
+        banco: "Banco Mercantil",
+        tipoCuenta: "Corriente",
+        numeroCuenta: "01050024987654321098",
+        titular: "Distribuidora Automotriz Total C.A.",
+        documento: "J-30987654-2"
+      }
+    ],
+    pagoMovil: [
+      {
+        id: "pm1_demo",
+        banco: "Banesco (0134)",
+        telefono: "04141234567",
+        documento: "J-30987654-2",
+        titular: "Distribuidora Automotriz Total C.A."
+      },
+      {
+        id: "pm2_demo",
+        banco: "Banco de Venezuela (0102)",
+        telefono: "04129876543",
+        documento: "J-30987654-2",
+        titular: "Distribuidora Automotriz Total C.A."
+      }
+    ],
+    zelle: {
+      correoTelefono: "pagos@repuestostotalusa.com",
+      titular: "Auto Parts Total LLC"
+    },
+    binance: {
+      payId: "83920184",
+      correoBinance: "crypto@repuestostotal.com"
+    },
+    aceptaEfectivoDivisas: true,
+    actualizadoEn: new Date().toISOString()
+  },
+  {
     id: "prov-1",
     nombreComercial: "Distribuidora Mopar & Jeep Oriente",
     razonSocial: "Inversiones Mopar Oriente C.A.",
@@ -694,7 +752,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
     }
     if (merged.PROVEEDORES_JSON) {
-      try { const p = JSON.parse(merged.PROVEEDORES_JSON); if (Array.isArray(p)) setProveedoresList(p); } catch (e) {}
+      try { 
+        const p = JSON.parse(merged.PROVEEDORES_JSON); 
+        if (Array.isArray(p)) {
+          if (p.length > 0) setProveedoresList(p);
+          else setProveedoresList(DEFAULT_PROVEEDORES);
+        }
+      } catch (e) {}
+    } else {
+      setProveedoresList(DEFAULT_PROVEEDORES);
     }
     if (merged.TEAM_MEMBERS_JSON) {
       try { const p = JSON.parse(merged.TEAM_MEMBERS_JSON); if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
@@ -2542,6 +2608,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                   <button
                     onClick={() => {
+                      const demoExists = proveedoresList.some(p => p.id === 'prov-demo-master');
+                      let updated = proveedoresList;
+                      if (!demoExists) {
+                        updated = [DEFAULT_PROVEEDORES[0], ...proveedoresList];
+                      } else {
+                        updated = DEFAULT_PROVEEDORES;
+                      }
+                      handleSaveProveedores(updated, 'Cargó proveedor de prueba demo con todos los métodos de pago.');
+                    }}
+                    className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:text-amber-300 text-xs font-bold flex items-center gap-2 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                    title="Cargar o restaurar proveedor de prueba con todos los métodos de pago"
+                  >
+                    <Sparkles size={16} />
+                    <span>Cargar Proveedor Demo</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
                       setEditingProveedor({
                         id: `prov_${Date.now()}`,
                         nombreComercial: '',
@@ -2754,8 +2838,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <p className="text-xs text-zinc-400 max-w-sm mx-auto">
                         {proveedorSearch 
                           ? 'No hay comercios aliados que coincidan con tu búsqueda. Intenta con otro término.' 
-                          : 'Comienza registrando los comercios aliados y sus cuentas bancarias.'}
+                          : 'Comienza registrando los comercios aliados o carga el proveedor de prueba demo.'}
                       </p>
+                      {!proveedorSearch && (
+                        <button
+                          onClick={() => {
+                            handleSaveProveedores(DEFAULT_PROVEEDORES, 'Cargó proveedores de prueba iniciales.');
+                          }}
+                          className="btn-primary !py-2 !px-4 text-xs font-black rounded-xl inline-flex items-center gap-2 mx-auto cursor-pointer"
+                        >
+                          <Sparkles size={14} />
+                          <span>Cargar Proveedor de Prueba Demo</span>
+                        </button>
+                      )}
                     </div>
                   );
                 }
