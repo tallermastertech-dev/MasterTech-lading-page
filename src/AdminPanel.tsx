@@ -2437,6 +2437,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <option value="Repuestos Motor & OEM">Repuestos Motor & OEM</option>
                     <option value="Tornos, Rectificadoras & Mecanizado">Tornos, Rectificadoras & Mecanizado</option>
                     <option value="Auto Periquitos & Accesorios">Auto Periquitos & Accesorios</option>
+                    <option value="Autolavado, Car Wash & Detailing">Autolavado, Car Wash & Detailing</option>
                     <option value="Pintura, Latonería & Detailing">Pintura, Latonería & Detailing</option>
                     <option value="Herramientas, Tornillería & Consumibles">Herramientas, Tornillería & Consumibles</option>
                     <option value="Talleres Aliados & Servicios Externos">Talleres Aliados & Servicios Externos</option>
@@ -4277,6 +4278,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <option value="Repuestos Motor & OEM">Repuestos Motor & OEM</option>
                       <option value="Tornos, Rectificadoras & Mecanizado">Tornos, Rectificadoras & Mecanizado</option>
                       <option value="Auto Periquitos & Accesorios">Auto Periquitos & Accesorios</option>
+                      <option value="Autolavado, Car Wash & Detailing">Autolavado, Car Wash & Detailing</option>
                       <option value="Pintura, Latonería & Detailing">Pintura, Latonería & Detailing</option>
                       <option value="Herramientas, Tornillería & Consumibles">Herramientas, Tornillería & Consumibles</option>
                       <option value="Talleres Aliados & Servicios Externos">Talleres Aliados & Servicios Externos</option>
