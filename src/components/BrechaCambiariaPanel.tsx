@@ -161,100 +161,100 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       {/* 6 Technical Telemetry Rate Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         {/* 1. USDT BINANCE */}
-        <div className="bg-white dark:bg-[#12141a] border-2 border-amber-400/80 dark:border-amber-500/20 hover:border-amber-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-[#12141a] border-2 border-amber-400 dark:border-amber-500/20 hover:border-amber-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-amber-900 dark:text-amber-400 flex items-center gap-1">
-              <Coins size={12} className="text-amber-600 dark:text-amber-400" />
-              <span>USDT BINANCE</span>
+            <span className="text-[11px] font-black uppercase tracking-wider text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+              <Coins size={13} className="text-amber-600 dark:text-amber-400" />
+              <span className="font-extrabold text-amber-950 dark:text-amber-300">USDT BINANCE</span>
             </span>
           </div>
           <div className="font-mono text-xl sm:text-2xl font-black text-amber-800 dark:text-amber-300 tracking-tight">
             {formatNumber(rates.usdt)}
           </div>
-          <div className="text-[10px] font-mono text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/5 font-semibold">
+          <div className="text-[10px] font-mono text-slate-700 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/5 font-bold">
             <span>VES / USDT</span>
-            <span className="text-amber-900 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/10 px-1.5 py-0.5 rounded font-black">P2P</span>
+            <span className="text-amber-950 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/10 px-1.5 py-0.5 rounded font-black">P2P</span>
           </div>
         </div>
 
         {/* 2. DÓLAR BCV */}
-        <div className="bg-white dark:bg-[#12141a] border-2 border-emerald-400/80 dark:border-emerald-500/20 hover:border-emerald-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-[#12141a] border-2 border-emerald-400 dark:border-emerald-500/20 hover:border-emerald-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-900 dark:text-emerald-400 flex items-center gap-1">
-              <DollarSign size={12} className="text-emerald-600 dark:text-emerald-400" />
-              <span>DÓLAR BCV</span>
+            <span className="text-[11px] font-black uppercase tracking-wider text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
+              <DollarSign size={13} className="text-emerald-600 dark:text-emerald-400" />
+              <span className="font-extrabold text-emerald-950 dark:text-emerald-300">DÓLAR BCV</span>
             </span>
           </div>
           <div className="font-mono text-xl sm:text-2xl font-black text-emerald-800 dark:text-emerald-400 tracking-tight">
             {formatNumber(rates.bcv_usd)}
           </div>
-          <div className="text-[10px] font-mono text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/5 font-semibold">
+          <div className="text-[10px] font-mono text-slate-700 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/5 font-bold">
             <span>VES / USD</span>
-            <span className="text-emerald-900 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded font-black">Oficial</span>
+            <span className="text-emerald-950 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded font-black">Oficial</span>
           </div>
         </div>
 
         {/* 3. EURO BCV */}
-        <div className="bg-white dark:bg-[#12141a] border-2 border-cyan-400/80 dark:border-cyan-500/20 hover:border-cyan-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-[#12141a] border-2 border-cyan-400 dark:border-cyan-500/20 hover:border-cyan-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-cyan-900 dark:text-cyan-400 flex items-center gap-1">
-              <Euro size={12} className="text-cyan-600 dark:text-cyan-400" />
-              <span>EURO BCV</span>
+            <span className="text-[11px] font-black uppercase tracking-wider text-cyan-950 dark:text-cyan-300 flex items-center gap-1.5">
+              <Euro size={13} className="text-cyan-600 dark:text-cyan-400" />
+              <span className="font-extrabold text-cyan-950 dark:text-cyan-300">EURO BCV</span>
             </span>
           </div>
           <div className="font-mono text-xl sm:text-2xl font-black text-cyan-800 dark:text-cyan-300 tracking-tight">
             {formatNumber(rates.bcv_eur)}
           </div>
-          <div className="text-[10px] font-mono text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/5 font-semibold">
+          <div className="text-[10px] font-mono text-slate-700 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/5 font-bold">
             <span>VES / EUR</span>
-            <span className="text-cyan-900 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-500/10 px-1.5 py-0.5 rounded font-black">Oficial</span>
+            <span className="text-cyan-950 dark:text-cyan-400 bg-cyan-100 dark:bg-cyan-500/10 px-1.5 py-0.5 rounded font-black">Oficial</span>
           </div>
         </div>
 
         {/* 4. USDT VS $ BCV */}
-        <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400/80 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-rose-900 dark:text-rose-400 flex items-center gap-1 truncate">
-              <span>USDT vs $</span>
+            <span className="text-[11px] font-black uppercase tracking-wider text-rose-950 dark:text-rose-300 flex items-center gap-1.5 truncate">
+              <span className="font-extrabold text-rose-950 dark:text-rose-300">USDT vs $</span>
             </span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-500/20 text-rose-900 dark:text-rose-300 font-mono font-black">Brecha</span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-500/20 text-rose-950 dark:text-rose-300 font-mono font-black">Brecha</span>
           </div>
           <div className="font-mono text-xl sm:text-2xl font-black text-rose-800 dark:text-rose-400 tracking-tight">
             {formatNumber(rates.brecha_usdt_usd)}%
           </div>
-          <div className="text-[10px] font-mono text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/5 font-semibold">
+          <div className="text-[10px] font-mono text-slate-700 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/5 font-bold">
             <span>Diferencial</span>
           </div>
         </div>
 
         {/* 5. USDT VS € BCV */}
-        <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400/80 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-rose-900 dark:text-rose-400 flex items-center gap-1 truncate">
-              <span>USDT vs €</span>
+            <span className="text-[11px] font-black uppercase tracking-wider text-rose-950 dark:text-rose-300 flex items-center gap-1.5 truncate">
+              <span className="font-extrabold text-rose-950 dark:text-rose-300">USDT vs €</span>
             </span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-500/20 text-rose-900 dark:text-rose-300 font-mono font-black">Brecha</span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-500/20 text-rose-950 dark:text-rose-300 font-mono font-black">Brecha</span>
           </div>
           <div className="font-mono text-xl sm:text-2xl font-black text-rose-800 dark:text-rose-400 tracking-tight">
             {formatNumber(rates.brecha_usdt_eur)}%
           </div>
-          <div className="text-[10px] font-mono text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/5 font-semibold">
+          <div className="text-[10px] font-mono text-slate-700 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/5 font-bold">
             <span>Diferencial</span>
           </div>
         </div>
 
         {/* 6. € BCV VS $ BCV */}
-        <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400/80 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-rose-900 dark:text-rose-400 flex items-center gap-1 truncate">
-              <span>€ vs $</span>
+            <span className="text-[11px] font-black uppercase tracking-wider text-rose-950 dark:text-rose-300 flex items-center gap-1.5 truncate">
+              <span className="font-extrabold text-rose-950 dark:text-rose-300">€ vs $</span>
             </span>
-            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-500/20 text-rose-900 dark:text-rose-300 font-mono font-black">Brecha</span>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 dark:bg-rose-500/20 text-rose-950 dark:text-rose-300 font-mono font-black">Brecha</span>
           </div>
           <div className="font-mono text-xl sm:text-2xl font-black text-rose-800 dark:text-rose-400 tracking-tight">
             {formatNumber(rates.brecha_eur_usd)}%
           </div>
-          <div className="text-[10px] font-mono text-slate-600 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-white/5 font-semibold">
+          <div className="text-[10px] font-mono text-slate-700 dark:text-zinc-400 flex items-center justify-between pt-1 border-t border-slate-200 dark:border-white/5 font-bold">
             <span>Diferencial</span>
           </div>
         </div>

@@ -1332,6 +1332,30 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light [class*="text-zinc-600"] {
           color: #334155 !important;
         }
+        .admin-theme-light [class*="text-amber-950"],
+        .admin-theme-light [class*="text-amber-900"],
+        .admin-theme-light [class*="text-amber-800"] {
+          color: #451a03 !important;
+          font-weight: 800 !important;
+        }
+        .admin-theme-light [class*="text-emerald-950"],
+        .admin-theme-light [class*="text-emerald-900"],
+        .admin-theme-light [class*="text-emerald-800"] {
+          color: #022c22 !important;
+          font-weight: 800 !important;
+        }
+        .admin-theme-light [class*="text-cyan-950"],
+        .admin-theme-light [class*="text-cyan-900"],
+        .admin-theme-light [class*="text-cyan-800"] {
+          color: #083344 !important;
+          font-weight: 800 !important;
+        }
+        .admin-theme-light [class*="text-rose-950"],
+        .admin-theme-light [class*="text-rose-900"],
+        .admin-theme-light [class*="text-rose-800"] {
+          color: #4c0519 !important;
+          font-weight: 800 !important;
+        }
         .admin-theme-light .text-primary,
         .admin-theme-light [class*="text-amber-400"],
         .admin-theme-light [class*="text-amber-300"] {
