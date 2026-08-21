@@ -4476,29 +4476,39 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
             <div className="space-y-4 text-xs">
               {/* Section 1: Datos Comerciales */}
-              <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-3">
-                <span className="text-[10px] font-black uppercase text-amber-400 block tracking-wider">
-                  1. Información Comercial & Contacto
-                </span>
+              <div className="bg-black/30 border border-white/10 p-5 rounded-2xl space-y-4">
+                <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+                  <span className="text-[11px] font-black uppercase text-amber-400 block tracking-wider flex items-center gap-1.5">
+                    <Building2 size={14} />
+                    <span>1. Información Comercial & Contacto</span>
+                  </span>
+                  <span className="text-[10px] text-zinc-500 font-medium">Campos principales del aliado</span>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Nombre Comercial / Tienda *</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Nombre Comercial */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Nombre Comercial / Tienda <span className="text-amber-400">*</span>
+                    </label>
                     <input
                       type="text"
                       placeholder="Ej: AutoRepuestos El Oriental"
                       value={editingProveedor.nombreComercial}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, nombreComercial: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white font-bold outline-none focus:border-primary text-xs"
                     />
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Categoría del Comercio / Proveedor</label>
+                  {/* Categoría */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Categoría de Especialidad <span className="text-amber-400">*</span>
+                    </label>
                     <select
                       value={editingProveedor.categoria}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, categoria: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary cursor-pointer"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white font-bold outline-none focus:border-primary cursor-pointer text-xs"
                     >
                       <option value="Autopartes & Repuestos Generales">Autopartes & Repuestos Generales</option>
                       <option value="Caucheras, Neumáticos & Rines">Caucheras, Neumáticos & Rines</option>
@@ -4515,76 +4525,90 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <option value="Otros Comercios Aliados">Otros Comercios Aliados</option>
                     </select>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">RIF / Identificación</label>
+                  {/* RIF o Documento */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      RIF o Cédula Fiscal
+                    </label>
                     <input
                       type="text"
                       placeholder="Ej: J-12345678-9"
                       value={editingProveedor.rif || ''}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, rif: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white outline-none focus:border-primary text-xs"
                     />
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Persona de Contacto / Vendedor</label>
+                  {/* Persona de Contacto */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Persona de Contacto / Asesor
+                    </label>
                     <input
                       type="text"
-                      placeholder="Ej: Carlos Mendoza (Asesor)"
+                      placeholder="Ej: Carlos Mendoza (Ventas)"
                       value={editingProveedor.contactoNombre || ''}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, contactoNombre: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white outline-none focus:border-primary text-xs"
                     />
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Teléfono / WhatsApp</label>
+                  {/* Teléfono / WhatsApp */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Teléfono / WhatsApp Directo
+                    </label>
                     <input
                       type="text"
                       placeholder="Ej: +58 412 1234567"
                       value={editingProveedor.telefono || ''}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, telefono: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-mono"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white outline-none focus:border-primary font-mono text-xs"
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Condición Comercial / Crédito</label>
+                  {/* Condición de Pago */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Condición Comercial / Crédito
+                    </label>
                     <input
                       type="text"
-                      placeholder="Ej: Contado / Inmediato, 15 días crédito, etc."
+                      placeholder="Ej: Contado / Inmediato, 15 días crédito"
                       value={editingProveedor.diasCredito || ''}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, diasCredito: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white outline-none focus:border-primary text-xs"
                     />
                   </div>
 
-                  <div>
-                    <label className="text-zinc-400 font-bold block mb-1">Ubicación / Dirección</label>
+                  {/* Dirección */}
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Dirección o Ubicación del Comercio
+                    </label>
                     <input
                       type="text"
-                      placeholder="Ej: Av. 4 de Mayo, Porlamar"
+                      placeholder="Ej: Av. 4 de Mayo, Edif. Central, Porlamar"
                       value={editingProveedor.direccion || ''}
                       onChange={(e) => setEditingProveedor({ ...editingProveedor, direccion: e.target.value })}
-                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white outline-none focus:border-primary text-xs"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Notas Internas / Descuentos Acordados</label>
-                  <input
-                    type="text"
-                    placeholder="Ej: Descuento del 10% para MasterTech. Código cliente: MT-104."
-                    value={editingProveedor.notas || ''}
-                    onChange={(e) => setEditingProveedor({ ...editingProveedor, notas: e.target.value })}
-                    className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-amber-200 outline-none focus:border-primary"
-                  />
+                  {/* Notas Internas */}
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label className="text-[11px] text-zinc-300 font-bold block">
+                      Notas Internas & Descuentos Acordados
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Descuento del 10% para MasterTech. Código cliente: MT-104."
+                      value={editingProveedor.notas || ''}
+                      onChange={(e) => setEditingProveedor({ ...editingProveedor, notas: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-amber-200 outline-none focus:border-primary text-xs"
+                    />
+                  </div>
                 </div>
               </div>
 
