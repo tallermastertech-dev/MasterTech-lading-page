@@ -3069,25 +3069,42 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                                 {/* 2. Pago Móvil */}
                                 {prov.pagoMovil && prov.pagoMovil.map((pm, pmIdx) => (
-                                  <div key={pmIdx} className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
-                                    <div className="space-y-0.5 min-w-0 flex-1">
+                                  <div key={pmIdx} className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 space-y-2 text-xs">
+                                    <div className="flex items-center justify-between gap-2">
                                       <div className="flex items-center gap-1.5 text-blue-300 font-bold">
                                         <Smartphone size={12} />
                                         <span>PM: {pm.banco}</span>
                                       </div>
-                                      <p className="font-mono text-blue-300 text-xs font-bold">{pm.telefono} | {pm.documento}</p>
-                                      {pm.titular && <p className="text-[10px] text-zinc-400 truncate">Titular: {pm.titular}</p>}
+                                      <button
+                                        onClick={() => {
+                                          const txt = `📱 PAGO MÓVIL\r\nBanco: ${pm.banco}\r\nTeléfono: ${pm.telefono}\r\nC.I./RIF: ${pm.documento}${pm.titular ? `\r\nTitular: ${pm.titular}` : ''}`;
+                                          copyToClipboard(txt, `pm-${prov.id}-${pmIdx}`);
+                                        }}
+                                        className="px-2 py-0.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                      >
+                                        {copiedFieldId === `pm-${prov.id}-${pmIdx}` ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                                        <span>{copiedFieldId === `pm-${prov.id}-${pmIdx}` ? '¡Copiado!' : 'Copiar Todo'}</span>
+                                      </button>
                                     </div>
-                                    <button
-                                      onClick={() => {
-                                        const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
-                                        copyToClipboard(txt, `pm-${prov.id}-${pmIdx}`);
-                                      }}
-                                      className="px-2.5 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
-                                    >
-                                      {copiedFieldId === `pm-${prov.id}-${pmIdx}` ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                                      <span>Copiar PM</span>
-                                    </button>
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <button
+                                        onClick={() => copyToClipboard(pm.telefono, `pm-tel-${prov.id}-${pmIdx}`)}
+                                        className="bg-black/40 hover:bg-black/60 p-1.5 rounded-lg border border-white/5 text-left flex items-center justify-between gap-1 transition-colors cursor-pointer"
+                                        title="Copiar solo teléfono"
+                                      >
+                                        <span className="font-mono text-blue-300 font-bold text-[11px] truncate">{pm.telefono}</span>
+                                        <span className="text-[9px] text-zinc-400 font-sans">{copiedFieldId === `pm-tel-${prov.id}-${pmIdx}` ? '¡OK!' : 'Tlf'}</span>
+                                      </button>
+                                      <button
+                                        onClick={() => copyToClipboard(pm.documento, `pm-doc-${prov.id}-${pmIdx}`)}
+                                        className="bg-black/40 hover:bg-black/60 p-1.5 rounded-lg border border-white/5 text-left flex items-center justify-between gap-1 transition-colors cursor-pointer"
+                                        title="Copiar solo C.I. o RIF"
+                                      >
+                                        <span className="font-mono text-white font-bold text-[11px] truncate">{pm.documento}</span>
+                                        <span className="text-[9px] text-zinc-400 font-sans">{copiedFieldId === `pm-doc-${prov.id}-${pmIdx}` ? '¡OK!' : 'Doc'}</span>
+                                      </button>
+                                    </div>
+                                    {pm.titular && <p className="text-[10px] text-zinc-400 truncate">Titular: {pm.titular}</p>}
                                   </div>
                                 ))}
 
@@ -5554,9 +5571,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {selectedFichaTab === 'pagoMovil' && selectedProveedorFicha.pagoMovil && (
                 <div className="space-y-2.5 animate-fade-in">
                   {selectedProveedorFicha.pagoMovil.map((pm, i) => {
-                    const isCopied = copiedFieldId === `quick-pm-${i}`;
+                    const isCopiedAll = copiedFieldId === `quick-pm-${i}`;
+                    const isCopiedTel = copiedFieldId === `quick-pm-tel-${i}`;
+                    const isCopiedDoc = copiedFieldId === `quick-pm-doc-${i}`;
                     return (
-                      <div key={i} className="p-3.5 bg-blue-950/20 border border-blue-500/20 rounded-2xl space-y-2.5">
+                      <div key={i} className="p-3.5 bg-blue-950/20 border border-blue-500/20 rounded-2xl space-y-3">
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-xs font-bold text-blue-300 flex items-center gap-1.5">
                             <Smartphone size={13} className="text-blue-400" />
@@ -5564,27 +5583,53 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           </span>
                           <button
                             onClick={() => {
-                              const txt = `${pm.banco}\n${pm.telefono}\n${pm.documento}`;
+                              const txt = `📱 PAGO MÓVIL\r\nBanco: ${pm.banco}\r\nTeléfono: ${pm.telefono}\r\nC.I./RIF: ${pm.documento}${pm.titular ? `\r\nTitular: ${pm.titular}` : ''}`;
                               copyToClipboard(txt, `quick-pm-${i}`);
                             }}
                             className="px-2.5 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[11px] font-bold rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                           >
-                            {isCopied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
-                            <span>{isCopied ? '¡Copiado!' : 'Copiar Datos PM'}</span>
+                            {isCopiedAll ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                            <span>{isCopiedAll ? '¡Copiado Completo!' : 'Copiar Todo el PM'}</span>
                           </button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                          <div className="bg-black/50 p-2 rounded-xl border border-white/5 text-blue-300 font-bold text-center">
-                            {pm.telefono}
+                        {/* Campos individuales con botón de copiado 1-clic */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                          {/* Teléfono */}
+                          <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 flex items-center justify-between gap-2">
+                            <div className="min-w-0">
+                              <span className="text-[9px] uppercase font-bold text-zinc-400 block">Teléfono</span>
+                              <span className="font-mono text-blue-300 font-bold text-xs">{pm.telefono}</span>
+                            </div>
+                            <button
+                              onClick={() => copyToClipboard(pm.telefono, `quick-pm-tel-${i}`)}
+                              className="px-2 py-1 bg-white/5 hover:bg-white/10 text-zinc-300 text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+                              title="Copiar solo teléfono"
+                            >
+                              {isCopiedTel ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                              <span>{isCopiedTel ? '¡Listo!' : 'Copiar'}</span>
+                            </button>
                           </div>
-                          <div className="bg-black/50 p-2 rounded-xl border border-white/5 text-white font-bold text-center">
-                            {pm.documento}
+
+                          {/* Cédula / RIF */}
+                          <div className="bg-black/50 p-2.5 rounded-xl border border-white/5 flex items-center justify-between gap-2">
+                            <div className="min-w-0">
+                              <span className="text-[9px] uppercase font-bold text-zinc-400 block">C.I. / RIF</span>
+                              <span className="font-mono text-white font-bold text-xs">{pm.documento}</span>
+                            </div>
+                            <button
+                              onClick={() => copyToClipboard(pm.documento, `quick-pm-doc-${i}`)}
+                              className="px-2 py-1 bg-white/5 hover:bg-white/10 text-zinc-300 text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors shrink-0"
+                              title="Copiar solo C.I. o RIF"
+                            >
+                              {isCopiedDoc ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                              <span>{isCopiedDoc ? '¡Listo!' : 'Copiar'}</span>
+                            </button>
                           </div>
                         </div>
 
                         {pm.titular && (
-                          <p className="text-[11px] text-zinc-400 truncate">
+                          <p className="text-[11px] text-zinc-400 truncate pt-0.5">
                             Titular: <strong className="text-zinc-200">{pm.titular}</strong>
                           </p>
                         )}
