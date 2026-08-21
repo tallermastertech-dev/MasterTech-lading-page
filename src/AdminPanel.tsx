@@ -1220,10 +1220,42 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }`}>
       {/* Light Mode CSS Overrides Scope */}
       <style>{`
+        /* ========================================================================= */
+        /* GLOBAL LIGHT THEME ARCHITECTURE FOR SAAS ADMIN */
+        /* ========================================================================= */
         .admin-theme-light {
-          background-color: #f4f6f9 !important;
+          background-color: #f8fafc !important;
           color: #0f172a !important;
         }
+
+        /* 1. Reset all Dark Hex & Gradient Backgrounds */
+        .admin-theme-light [class*="bg-[#"],
+        .admin-theme-light [class*="from-[#"],
+        .admin-theme-light [class*="via-[#"],
+        .admin-theme-light [class*="to-[#"] {
+          background: #ffffff !important;
+          background-color: #ffffff !important;
+          border-color: #e2e8f0 !important;
+          color: #0f172a !important;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* 2. Reset all Black Translucent Containers & Sub-cards */
+        .admin-theme-light [class*="bg-black"],
+        .admin-theme-light [class*="bg-zinc-9"],
+        .admin-theme-light [class*="bg-slate-9"],
+        .admin-theme-light [class*="bg-gray-9"] {
+          background-color: #f8fafc !important;
+          border-color: #e2e8f0 !important;
+          color: #0f172a !important;
+        }
+
+        /* 3. Border Harmonization */
+        .admin-theme-light [class*="border-white"] {
+          border-color: #e2e8f0 !important;
+        }
+
+        /* 4. Sidebar & Header */
         .admin-theme-light aside {
           background-color: #ffffff !important;
           border-color: #e2e8f0 !important;
@@ -1234,27 +1266,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           border-color: #e2e8f0 !important;
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
-        .admin-theme-light .bg-\[\#12141a\],
-        .admin-theme-light .bg-\[\#101216\],
-        .admin-theme-light .bg-\[\#181a24\],
-        .admin-theme-light .bg-\[\#0a0b0f\],
-        .admin-theme-light .bg-\[\#0f1117\] {
-          background-color: #ffffff !important;
-          border-color: #e2e8f0 !important;
-          color: #0f172a !important;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-        }
-        .admin-theme-light .bg-black\/20,
-        .admin-theme-light .bg-black\/30,
-        .admin-theme-light .bg-black\/40,
-        .admin-theme-light .bg-black\/50,
-        .admin-theme-light .bg-black\/60,
-        .admin-theme-light .bg-black\/70,
-        .admin-theme-light .bg-black {
-          background-color: #f8fafc !important;
-          border-color: #e2e8f0 !important;
-          color: #0f172a !important;
-        }
+
+        /* 5. Navigation Sidebar Buttons */
         .admin-theme-light nav button {
           color: #334155 !important;
         }
@@ -1268,78 +1281,125 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         .admin-theme-light nav button:hover span {
           color: #0f172a !important;
         }
-        .admin-theme-light .bg-gradient-to-r.from-amber-500\/20.to-primary\/20 {
+        .admin-theme-light .bg-gradient-to-r.from-amber-500\/20.to-primary\/20,
+        .admin-theme-light nav button.bg-gradient-to-r {
           background: #fef3c7 !important;
           border-color: #f59e0b !important;
           color: #78350f !important;
           font-weight: 800 !important;
           box-shadow: 0 2px 4px rgba(245, 158, 11, 0.15) !important;
         }
-        .admin-theme-light .bg-gradient-to-r.from-amber-500\/20.to-primary\/20 span {
+        .admin-theme-light .bg-gradient-to-r.from-amber-500\/20.to-primary\/20 span,
+        .admin-theme-light nav button.bg-gradient-to-r span {
           color: #78350f !important;
           font-weight: 800 !important;
         }
+
+        /* 6. Inputs, Selects & Textareas */
         .admin-theme-light input,
         .admin-theme-light select,
         .admin-theme-light textarea {
           background-color: #ffffff !important;
-          border-color: #cbd5e1 !important;
+          border: 1px solid #cbd5e1 !important;
           color: #0f172a !important;
         }
         .admin-theme-light input::placeholder,
         .admin-theme-light textarea::placeholder {
           color: #94a3b8 !important;
         }
+        .admin-theme-light input:focus,
+        .admin-theme-light select:focus,
+        .admin-theme-light textarea:focus {
+          border-color: #f59e0b !important;
+          outline: 2px solid rgba(245, 158, 11, 0.2) !important;
+        }
+
+        /* 7. Typography Hierarchy & Contrast */
         .admin-theme-light h1,
         .admin-theme-light h2,
         .admin-theme-light h3,
         .admin-theme-light h4 {
           color: #0f172a !important;
         }
-        .admin-theme-light .text-white {
+        .admin-theme-light [class*="text-white"] {
           color: #0f172a !important;
         }
-        .admin-theme-light .text-zinc-400 {
-          color: #475569 !important;
-        }
-        .admin-theme-light .text-zinc-500 {
+        .admin-theme-light [class*="text-zinc-400"],
+        .admin-theme-light [class*="text-zinc-500"] {
           color: #64748b !important;
         }
-        .admin-theme-light .text-zinc-300 {
+        .admin-theme-light [class*="text-zinc-300"],
+        .admin-theme-light [class*="text-zinc-200"],
+        .admin-theme-light [class*="text-zinc-100"] {
           color: #1e293b !important;
         }
-        .admin-theme-light .border-white\/5,
-        .admin-theme-light .border-white\/10,
-        .admin-theme-light .border-white\/15,
-        .admin-theme-light .border-white\/20 {
-          border-color: #e2e8f0 !important;
+
+        /* 8. Tables, Grids & Lists */
+        .admin-theme-light table {
+          background-color: #ffffff !important;
+          color: #0f172a !important;
         }
-        .admin-theme-light .bg-white\/5 {
+        .admin-theme-light th {
+          background-color: #f1f5f9 !important;
+          color: #475569 !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+          font-weight: 800 !important;
+        }
+        .admin-theme-light td {
+          background-color: #ffffff !important;
+          color: #0f172a !important;
+          border-bottom: 1px solid #f1f5f9 !important;
+        }
+        .admin-theme-light tr:hover td {
+          background-color: #f8fafc !important;
+        }
+
+        /* 9. Light Mode Badges & Buttons */
+        .admin-theme-light [class*="bg-white/"] {
           background-color: #f1f5f9 !important;
           color: #334155 !important;
           border-color: #e2e8f0 !important;
         }
-        .admin-theme-light .bg-white\/10 {
+        .admin-theme-light [class*="hover:bg-white/"]:hover {
           background-color: #e2e8f0 !important;
           color: #0f172a !important;
-        }
-        .admin-theme-light .hover\:bg-white\/5:hover {
-          background-color: #f1f5f9 !important;
-        }
-        .admin-theme-light .hover\:bg-white\/10:hover {
-          background-color: #e2e8f0 !important;
-        }
-        .admin-theme-light .fixed.inset-0 .bg-\[\#12141a\],
-        .admin-theme-light .fixed.inset-0 .bg-\[\#101216\] {
-          background-color: #ffffff !important;
-          border-color: #cbd5e1 !important;
-          color: #0f172a !important;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
         }
         .admin-theme-light .btn-primary {
           background: linear-gradient(135deg, #eab308, #ca8a04) !important;
           color: #000000 !important;
           box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.3) !important;
+        }
+        .admin-theme-light [class*="bg-amber-500/10"],
+        .admin-theme-light [class*="bg-amber-500/20"] {
+          background-color: #fef3c7 !important;
+          color: #92400e !important;
+          border-color: #fde68a !important;
+        }
+        .admin-theme-light [class*="bg-emerald-500/10"],
+        .admin-theme-light [class*="bg-emerald-500/20"] {
+          background-color: #dcfce7 !important;
+          color: #166534 !important;
+          border-color: #bbf7d0 !important;
+        }
+        .admin-theme-light [class*="bg-cyan-500/10"],
+        .admin-theme-light [class*="bg-cyan-500/20"] {
+          background-color: #ecfeff !important;
+          color: #0e7490 !important;
+          border-color: #a5f3fc !important;
+        }
+        .admin-theme-light [class*="bg-rose-500/10"],
+        .admin-theme-light [class*="bg-rose-500/20"] {
+          background-color: #fee2e2 !important;
+          color: #991b1b !important;
+          border-color: #fecaca !important;
+        }
+
+        /* 10. Modals & Overlays */
+        .admin-theme-light .fixed.inset-0 [class*="bg-[#"] {
+          background-color: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          color: #0f172a !important;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
         }
       `}</style>
       
