@@ -265,7 +265,8 @@ async function getSettings() {
     REVIEWS_JSON: '[]',
     BRANDS_JSON: '["Jeep","Toyota","Honda","Dodge","Nissan","Chrysler","Lexus"]',
     FAQS_JSON: '[]',
-    JORNADAS_JSON: '[]'
+    JORNADAS_JSON: '[]',
+    PROVEEDORES_JSON: '[]'
   };
 
   try {
@@ -1211,9 +1212,41 @@ app.patch('/leads/:id', authenticateAdmin, handlePutLead);
 app.delete('/api/leads/:id', authenticateAdmin, handleDeleteLead);
 app.delete('/leads/:id', authenticateAdmin, handleDeleteLead);
 
-// Unlimited admin settings modifications
+// Unlimited admin settings modifications (PUT & POST supported)
 app.put('/api/settings', authenticateAdmin, handlePutSettings);
 app.put('/settings', authenticateAdmin, handlePutSettings);
+app.post('/api/settings', authenticateAdmin, handlePutSettings);
+app.post('/settings', authenticateAdmin, handlePutSettings);
+
+// Admin Proveedores Dedicated Endpoints
+app.get(['/api/admin/proveedores', '/admin/proveedores'], async (_req, res) => {
+  try {
+    const s = await getSettings();
+    let proveedores: any[] = [];
+    if (s.PROVEEDORES_JSON) {
+      try { proveedores = JSON.parse(s.PROVEEDORES_JSON); } catch (e) {}
+    }
+    res.json({ success: true, proveedores });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al obtener proveedores', details: err.message });
+  }
+});
+
+app.post(['/api/admin/proveedores', '/admin/proveedores'], authenticateAdmin, async (req, res) => {
+  try {
+    const { proveedores } = req.body;
+    if (!Array.isArray(proveedores)) {
+      return res.status(400).json({ error: 'Formato de proveedores inválido.' });
+    }
+    const jsonStr = JSON.stringify(proveedores);
+    memorySettingsCache['PROVEEDORES_JSON'] = jsonStr;
+    await supabase.from('settings').upsert([{ key: 'PROVEEDORES_JSON', value: jsonStr }], { onConflict: 'key' });
+    saveSettingsToDisk();
+    res.json({ success: true, message: 'Proveedores guardados correctamente en Supabase.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al guardar proveedores en Supabase', details: err.message });
+  }
+});
 
 // Admin Users Management Routes
 app.get(['/api/admin/users', '/admin/users'], authenticateAdmin, async (_req, res) => {

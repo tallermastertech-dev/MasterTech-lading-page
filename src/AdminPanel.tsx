@@ -577,13 +577,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     copyToClipboard(text, `full-${prov.id}`);
   };
 
-  // Helper para guardar lista de proveedores en Base de Datos & Caché
+  // Helper para guardar lista de proveedores en Base de Datos Supabase & Caché
   const handleSaveProveedores = async (updatedList: Proveedor[], logMsg?: string) => {
     setProveedoresList(updatedList);
     setIsSavingProveedor(true);
+    const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || 'mastertech2026';
+
     try {
       const jsonStr = JSON.stringify(updatedList);
       
+      // 1. Guardar en localStorage de inmediato
       try {
         const stored = localStorage.getItem('mastertech_settings_store') || '{}';
         const parsed = JSON.parse(stored);
@@ -591,17 +594,30 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         localStorage.setItem('mastertech_settings_store', JSON.stringify(parsed));
       } catch (e) {}
 
-      await fetch('/api/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ PROVEEDORES_JSON: jsonStr })
-      });
+      // 2. Persistir en Supabase vía endpoints seguros
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${activeAuthToken}`
+      };
+
+      await Promise.allSettled([
+        fetch('/api/admin/proveedores', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ proveedores: updatedList })
+        }),
+        fetch('/api/settings', {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify({ PROVEEDORES_JSON: jsonStr })
+        })
+      ]);
 
       if (logMsg) {
         logClientAction('Gestión Proveedores', 'AJUSTES', logMsg);
       }
     } catch (e) {
-      console.error("Error guardando proveedores:", e);
+      console.error("Error guardando proveedores en Supabase:", e);
     } finally {
       setIsSavingProveedor(false);
     }
@@ -843,7 +859,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       SERVICES_JSON: (customPayload && customPayload.SERVICES_JSON !== undefined) ? customPayload.SERVICES_JSON : JSON.stringify(services),
       FAQS_JSON: (customPayload && customPayload.FAQS_JSON !== undefined) ? customPayload.FAQS_JSON : JSON.stringify(faqs),
       CATALOG_PRODUCTS_JSON: (customPayload && customPayload.CATALOG_PRODUCTS_JSON !== undefined) ? customPayload.CATALOG_PRODUCTS_JSON : JSON.stringify(catalogItems),
-      JORNADAS_JSON: (customPayload && customPayload.JORNADAS_JSON !== undefined) ? customPayload.JORNADAS_JSON : JSON.stringify(jornadasList)
+      JORNADAS_JSON: (customPayload && customPayload.JORNADAS_JSON !== undefined) ? customPayload.JORNADAS_JSON : JSON.stringify(jornadasList),
+      PROVEEDORES_JSON: (customPayload && customPayload.PROVEEDORES_JSON !== undefined) ? customPayload.PROVEEDORES_JSON : JSON.stringify(proveedoresList)
     };
 
     try {
