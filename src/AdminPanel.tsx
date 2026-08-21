@@ -67,7 +67,9 @@ import {
   PhoneCall,
   FileCheck,
   Sun,
-  Moon
+  Moon,
+  Banknote,
+  Smartphone
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -1621,7 +1623,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               <span>{theme === 'dark' ? 'Modo Oscuro' : 'Modo Claro'}</span>
             </div>
             <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-white/10 text-amber-300">
-              {theme === 'dark' ? '🌙 Activo' : '☀️ Activo'}
+              {theme === 'dark' ? 'Oscuro' : 'Claro'}
             </span>
           </button>
 
@@ -2685,26 +2687,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
                   <span className="text-[10px] font-bold uppercase text-zinc-500 shrink-0">Filtrar:</span>
                   {[
-                    { id: 'TODOS', label: `Todos (${proveedoresList.length})` },
-                    { id: 'CREDITO', label: `⏳ Con Crédito (${proveedoresList.filter(p => p.aceptaCredito || (p.diasCredito && !p.diasCredito.toLowerCase().includes('contado'))).length})` },
-                    { id: 'CONTADO', label: `💵 Solo Contado (${proveedoresList.filter(p => !p.aceptaCredito && (!p.diasCredito || p.diasCredito.toLowerCase().includes('contado'))).length})` },
-                    { id: 'ZELLE', label: `💵 Zelle (${proveedoresList.filter(p => p.zelle?.correoTelefono).length})` },
-                    { id: 'BINANCE', label: `🟡 Binance Pay (${proveedoresList.filter(p => p.binance?.payId || p.binance?.walletUsdt).length})` },
-                    { id: 'PAGO_MOVIL', label: `📱 Pago Móvil (${proveedoresList.filter(p => p.pagoMovil && p.pagoMovil.length > 0).length})` },
-                    { id: 'BANCOS', label: `🏦 Bancos Bs (${proveedoresList.filter(p => p.bancos && p.bancos.length > 0).length})` }
+                    { id: 'TODOS', label: `Todos (${proveedoresList.length})`, icon: <Layers size={13} /> },
+                    { id: 'CREDITO', label: `Con Crédito (${proveedoresList.filter(p => p.aceptaCredito || (p.diasCredito && !p.diasCredito.toLowerCase().includes('contado'))).length})`, icon: <Clock size={13} className="text-amber-500" /> },
+                    { id: 'CONTADO', label: `Solo Contado (${proveedoresList.filter(p => !p.aceptaCredito && (!p.diasCredito || p.diasCredito.toLowerCase().includes('contado'))).length})`, icon: <Banknote size={13} className="text-emerald-500" /> },
+                    { id: 'ZELLE', label: `Zelle (${proveedoresList.filter(p => p.zelle?.correoTelefono).length})`, icon: <DollarSign size={13} className="text-emerald-500" /> },
+                    { id: 'BINANCE', label: `Binance Pay (${proveedoresList.filter(p => p.binance?.payId || p.binance?.walletUsdt).length})`, icon: <Wallet size={13} className="text-amber-500" /> },
+                    { id: 'PAGO_MOVIL', label: `Pago Móvil (${proveedoresList.filter(p => p.pagoMovil && p.pagoMovil.length > 0).length})`, icon: <Smartphone size={13} className="text-cyan-500" /> },
+                    { id: 'BANCOS', label: `Bancos Bs (${proveedoresList.filter(p => p.bancos && p.bancos.length > 0).length})`, icon: <Building2 size={13} className="text-blue-500" /> }
                   ].map(tab => {
                     const isSelected = proveedorMetodoFilter === tab.id;
                     return (
                       <button
                         key={tab.id}
                         onClick={() => setProveedorMetodoFilter(tab.id as any)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
                           isSelected
-                            ? 'bg-amber-500 text-black shadow-md'
+                            ? 'bg-amber-500 text-black shadow-md font-black'
                             : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/5'
                         }`}
                       >
-                        {tab.label}
+                        {tab.icon}
+                        <span>{tab.label}</span>
                       </button>
                     );
                   })}
@@ -2776,7 +2779,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   </span>
                                 ) : (
                                   <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                    <span>💵 Solo Contado</span>
+                                    <Banknote size={11} className="text-zinc-400" />
+                                    <span>Solo Contado</span>
                                   </span>
                                 )}
                               </div>
@@ -2917,8 +2921,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       <div key={pmIdx} className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
                                         <div className="space-y-0.5 min-w-0 flex-1">
                                           <div className="flex items-center gap-2">
-                                            <span className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded">
-                                              📱 PAGO MÓVIL
+                                            <span className="text-[10px] font-black uppercase text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                              <Smartphone size={11} />
+                                              <span>PAGO MÓVIL</span>
                                             </span>
                                             <span className="font-bold text-white">{pm.banco}</span>
                                           </div>
@@ -2952,8 +2957,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
                                   <div className="space-y-0.5 min-w-0 flex-1">
                                     <div className="flex items-center gap-1.5">
-                                      <span className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded">
-                                        💵 ZELLE ($ USA)
+                                      <span className="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                        <DollarSign size={11} />
+                                        <span>ZELLE ($ USA)</span>
                                       </span>
                                     </div>
                                     <p className="font-mono text-emerald-300 text-xs font-bold truncate">
@@ -2980,8 +2986,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-2.5 flex items-center justify-between gap-2 text-xs">
                                   <div className="space-y-0.5 min-w-0 flex-1">
                                     <div className="flex items-center gap-1.5">
-                                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded">
-                                        🟡 BINANCE PAY (USDT)
+                                      <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                        <Wallet size={11} />
+                                        <span>BINANCE PAY (USDT)</span>
                                       </span>
                                     </div>
                                     <p className="font-mono text-amber-300 text-xs font-bold">
@@ -4603,8 +4610,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       }}
                       className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3.5 text-white font-bold outline-none focus:border-primary cursor-pointer text-xs"
                     >
-                      <option value="no">💵 No — Solo Contado / Pago Inmediato</option>
-                      <option value="si">⏳ Sí — Acepta Crédito Comercial</option>
+                      <option value="no">No — Solo Contado (Pago Inmediato)</option>
+                      <option value="si">Sí — Acepta Crédito Comercial</option>
                     </select>
                   </div>
 
@@ -5286,16 +5293,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             <div className="flex justify-between items-start border-b border-white/10 pb-3">
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
-                    ⚡ Ficha de Pago Rápida
+                  <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 flex items-center gap-1">
+                    <Zap size={11} className="text-primary" />
+                    <span>Ficha de Pago Rápida</span>
                   </span>
                   {selectedProveedorFicha.aceptaCredito ? (
-                    <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 rounded">
-                      ⏳ Crédito: {selectedProveedorFicha.diasCredito || 'Activo'}
+                    <span className="text-[10px] font-black text-amber-300 bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 rounded flex items-center gap-1">
+                      <Clock size={11} className="text-amber-300" />
+                      <span>Crédito: {selectedProveedorFicha.diasCredito || 'Activo'}</span>
                     </span>
                   ) : (
-                    <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded">
-                      💵 Solo Contado
+                    <span className="text-[10px] font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded flex items-center gap-1">
+                      <Banknote size={11} className="text-zinc-400" />
+                      <span>Solo Contado</span>
                     </span>
                   )}
                 </div>
