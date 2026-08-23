@@ -1494,55 +1494,88 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           font-weight: 800 !important;
         }
 
-        /* 9. Light Mode Badges, Chips & Filters (Solid High Contrast) */
-        .admin-theme-light [class*="bg-blue-950"],
-        .admin-theme-light [class*="bg-blue-500/"],
-        .admin-theme-light [class*="bg-cyan-500/"] {
+        /* 9. Light Mode Badges & Chips (Pills) */
+        .admin-theme-light span[class*="bg-blue-500/"],
+        .admin-theme-light span[class*="bg-cyan-500/"] {
           background-color: #dbeafe !important;
-          border: 1px solid #93c5fd !important;
-        }
-        .admin-theme-light [class*="bg-blue-950"] *,
-        .admin-theme-light [class*="bg-blue-500/"] *,
-        .admin-theme-light [class*="bg-cyan-500/"] * {
+          border-color: #93c5fd !important;
           color: #1e40af !important;
-          font-weight: 800 !important;
+        }
+        .admin-theme-light span[class*="bg-blue-500/"] span,
+        .admin-theme-light span[class*="bg-cyan-500/"] span {
+          color: #1e40af !important;
         }
 
-        .admin-theme-light [class*="bg-emerald-950"],
-        .admin-theme-light [class*="bg-emerald-500/"] {
+        .admin-theme-light span[class*="bg-emerald-500/"] {
           background-color: #dcfce7 !important;
-          border: 1px solid #86efac !important;
-        }
-        .admin-theme-light [class*="bg-emerald-950"] *,
-        .admin-theme-light [class*="bg-emerald-500/"] * {
+          border-color: #86efac !important;
           color: #166534 !important;
-          font-weight: 800 !important;
+        }
+        .admin-theme-light span[class*="bg-emerald-500/"] span {
+          color: #166534 !important;
         }
 
-        .admin-theme-light [class*="bg-amber-950"],
-        .admin-theme-light [class*="bg-amber-500/"] {
+        .admin-theme-light span[class*="bg-amber-500/"] {
           background-color: #fef3c7 !important;
-          border: 1px solid #fcd34d !important;
-        }
-        .admin-theme-light [class*="bg-amber-950"] *,
-        .admin-theme-light [class*="bg-amber-500/"] * {
+          border-color: #fcd34d !important;
           color: #78350f !important;
+        }
+        .admin-theme-light span[class*="bg-amber-500/"] span {
+          color: #78350f !important;
+        }
+
+        /* 10. Solid Action Buttons (Crisp White/Black text) */
+        .admin-theme-light button[class*="bg-blue-600"],
+        .admin-theme-light button[class*="bg-blue-500"] {
+          background-color: #2563eb !important;
+          color: #ffffff !important;
+          border: none !important;
+        }
+        .admin-theme-light button[class*="bg-blue-600"] *,
+        .admin-theme-light button[class*="bg-blue-500"] * {
+          color: #ffffff !important;
           font-weight: 800 !important;
         }
 
-        /* 10. Secondary Buttons & Badges (White / Gray translucent overrides) */
-        .admin-theme-light [class*="bg-white/"] {
+        .admin-theme-light button[class*="bg-emerald-600"],
+        .admin-theme-light button[class*="bg-emerald-500"],
+        .admin-theme-light a[class*="bg-emerald-500"] {
+          background-color: #16a34a !important;
+          color: #ffffff !important;
+          border: none !important;
+        }
+        .admin-theme-light button[class*="bg-emerald-600"] *,
+        .admin-theme-light button[class*="bg-emerald-500"] *,
+        .admin-theme-light a[class*="bg-emerald-500"] * {
+          color: #ffffff !important;
+          font-weight: 800 !important;
+        }
+
+        .admin-theme-light button[class*="bg-amber-500"] {
+          background-color: #f59e0b !important;
+          color: #000000 !important;
+          border: none !important;
+        }
+        .admin-theme-light button[class*="bg-amber-500"] * {
+          color: #000000 !important;
+          font-weight: 900 !important;
+        }
+
+        /* 11. Secondary & Ghost Buttons (Light background, dark text) */
+        .admin-theme-light button[class*="bg-white/"],
+        .admin-theme-light button[class*="bg-slate-200"] {
           background-color: #ffffff !important;
           color: #0f172a !important;
           border: 1px solid #cbd5e1 !important;
+        }
+        .admin-theme-light button[class*="bg-white/"] *,
+        .admin-theme-light button[class*="bg-slate-200"] * {
+          color: #0f172a !important;
           font-weight: 700 !important;
         }
-        .admin-theme-light [class*="bg-white/"] * {
-          color: #0f172a !important;
-        }
-        .admin-theme-light [class*="hover:bg-white/"]:hover {
+        .admin-theme-light button[class*="bg-white/"]:hover,
+        .admin-theme-light button[class*="bg-slate-200"]:hover {
           background-color: #e2e8f0 !important;
-          color: #000000 !important;
         }
 
         /* 11. Tables */
