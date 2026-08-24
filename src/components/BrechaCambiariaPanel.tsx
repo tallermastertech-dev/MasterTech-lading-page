@@ -99,27 +99,27 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
   const ContentPanel = (
     <div className="space-y-6 select-none">
       {/* MasterTech Automotive Exchange Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-300 dark:border-white/10 pb-4">
         <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 text-[10px] font-black uppercase tracking-widest text-amber-900 dark:text-primary shadow-xs">
-            <Zap size={12} className="animate-pulse text-amber-600 dark:text-primary" />
-            <span>Telemetría Cambiaria Automotriz MasterTech</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-200/90 dark:bg-amber-500/20 border border-amber-400 dark:border-amber-500/40 text-[11px] font-black uppercase tracking-wider text-amber-950 dark:text-amber-300 shadow-sm">
+            <Zap size={13} className="animate-pulse text-amber-900 dark:text-amber-300 shrink-0" />
+            <span className="text-amber-950 dark:text-amber-300 font-black">Telemetría Cambiaria Automotriz MasterTech</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-display font-black tracking-tight text-slate-900 dark:text-white uppercase">
-            Tasas & Brecha Cambiaria <span className="text-amber-600 dark:text-primary italic">En Vivo</span>
+            Tasas & Brecha Cambiaria <span className="text-amber-800 dark:text-primary italic">En Vivo</span>
           </h2>
-          <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-2xl leading-relaxed font-medium">
+          <p className="text-xs text-slate-700 dark:text-zinc-400 max-w-2xl leading-relaxed font-bold">
             Referencia cambiaria en tiempo real para presupuestos de taller, repuestos importados y conversiones en Bolívares.
           </p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <div className="flex items-center gap-2 bg-emerald-50 dark:bg-[#12141a] border border-emerald-300 dark:border-white/10 rounded-xl px-3.5 py-2 shadow-xs">
+          <div className="flex items-center gap-2 bg-emerald-100 dark:bg-[#12141a] border border-emerald-400 dark:border-white/10 rounded-xl px-3.5 py-2 shadow-xs">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
             </span>
-            <span className="text-[11px] font-mono font-black text-emerald-800 dark:text-emerald-400 tracking-tight">
+            <span className="text-[11px] font-mono font-black text-emerald-950 dark:text-emerald-400 tracking-tight">
               EN VIVO
             </span>
           </div>
@@ -127,17 +127,17 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           <button
             onClick={fetchRates}
             disabled={isLoading}
-            className="bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-primary/20 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white px-4 py-2 rounded-xl text-xs font-bold font-mono flex items-center gap-2 transition-all cursor-pointer shadow-xs active:scale-95"
+            className="bg-slate-200 hover:bg-slate-300 dark:bg-white/5 dark:hover:bg-primary/20 border border-slate-400 dark:border-white/10 text-slate-900 dark:text-zinc-300 hover:text-black dark:hover:text-white px-4 py-2 rounded-xl text-xs font-black font-mono flex items-center gap-2 transition-all cursor-pointer shadow-xs active:scale-95"
             title="Refrescar tasas"
           >
-            <RefreshCw size={14} className={isLoading ? "animate-spin text-amber-600 dark:text-primary" : "text-slate-600 dark:text-zinc-400"} />
+            <RefreshCw size={14} className={isLoading ? "animate-spin text-amber-700 dark:text-primary" : "text-slate-700 dark:text-zinc-400"} />
             <span className="font-black">{isLoading ? "Sincronizando..." : "Sincronizar"}</span>
           </button>
 
           {!initialOpen && (
             <button
               onClick={() => setIsOpen(false)}
-              className="bg-slate-100 hover:bg-red-500/10 dark:bg-white/5 dark:hover:bg-red-500/20 border border-slate-300 dark:border-white/10 text-slate-600 hover:text-red-600 p-2 rounded-xl transition-colors cursor-pointer"
+              className="bg-slate-200 hover:bg-red-500/20 dark:bg-white/5 dark:hover:bg-red-500/20 border border-slate-400 dark:border-white/10 text-slate-800 hover:text-red-700 p-2 rounded-xl transition-colors cursor-pointer"
               title="Ocultar panel"
             >
               <X size={16} />
@@ -147,14 +147,14 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       </div>
 
       {/* Status Bar */}
-      <div className="bg-slate-50 dark:bg-[#12141a]/90 backdrop-blur-md border border-slate-200 dark:border-white/10 border-l-4 border-l-amber-500 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs shadow-xs">
-        <div className="flex items-center gap-2 text-slate-700 dark:text-zinc-300 font-mono text-[11px]">
-          <span className="text-slate-600 font-semibold">Última actualización:</span>
-          <strong className="text-slate-900 dark:text-white font-black text-xs">{lastUpdatedFormatted || 'Sincronizando...'}</strong>
+      <div className="bg-slate-100 dark:bg-[#12141a]/90 backdrop-blur-md border border-slate-300 dark:border-white/10 border-l-4 border-l-amber-500 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs shadow-sm">
+        <div className="flex items-center gap-2 text-slate-900 dark:text-zinc-300 font-mono text-[11px]">
+          <span className="text-slate-700 font-bold">Última actualización:</span>
+          <strong className="text-slate-950 dark:text-white font-black text-xs">{lastUpdatedFormatted || 'Sincronizando...'}</strong>
         </div>
-        <div className="flex items-center gap-2 text-[10px] text-slate-600 dark:text-zinc-400 font-mono font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-          <span>Fuentes: Binance P2P • Banco Central de Venezuela (BCV)</span>
+        <div className="flex items-center gap-2 text-[11px] text-slate-900 dark:text-zinc-300 font-mono font-bold">
+          <span className="w-2 h-2 rounded-full bg-slate-700 dark:bg-slate-400"></span>
+          <span className="text-slate-900 dark:text-zinc-200 font-black">Fuentes: Binance P2P • Banco Central de Venezuela (BCV)</span>
         </div>
       </div>
 

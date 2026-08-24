@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  ChevronDown, Wrench, Package, Users, HelpCircle, ShieldCheck, ArrowRight, X, Menu, Phone, Sparkles, Filter, Zap, Disc, Droplet, Clock, CreditCard, Globe, Plane, Cpu, Home
+  ChevronDown, Wrench, Package, Users, HelpCircle, ShieldCheck, ArrowRight, X, Menu, Phone, Sparkles, Filter, Zap, Disc, Droplet, Clock, CreditCard, Globe, Plane, Cpu, Home, Sun, Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -37,6 +37,30 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedMobileAccordion, setExpandedMobileAccordion] = useState<string | null>(null);
+
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mastertech_public_theme') || localStorage.getItem('mastertech_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('theme-light');
+      document.body.classList.add('theme-light');
+    } else {
+      document.documentElement.classList.remove('theme-light');
+      document.body.classList.remove('theme-light');
+    }
+    localStorage.setItem('mastertech_public_theme', theme);
+    localStorage.setItem('mastertech_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const cfg = { ...DEFAULT_CONFIG, ...(config || {}) };
   const statusInfo = getTallerStatus(cfg.IS_OPEN);
@@ -248,8 +272,21 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           </a>
         </div>
 
-        {/* CTA Button: Jornadas */}
-        <div className="hidden lg:flex items-center">
+        {/* Desktop Controls: Theme Switcher & CTA Button */}
+        <div className="hidden lg:flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="p-2.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-all cursor-pointer shadow-sm hover:scale-105"
+            title={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
+            aria-label="Cambiar tema"
+          >
+            {theme === 'dark' ? (
+              <Sun size={17} className="text-amber-400" />
+            ) : (
+              <Moon size={17} className="text-blue-500" />
+            )}
+          </button>
+
           <a 
             href="/jornada" 
             className="relative group overflow-hidden rounded-full p-[1.5px] transition-transform hover:scale-105 active:scale-95 shrink-0 whitespace-nowrap shadow-[0_0_25px_rgba(212,175,55,0.6)] hover:shadow-[0_0_35px_rgba(255,215,0,0.9)]"
@@ -262,13 +299,24 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           </a>
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <button 
-          className="lg:hidden text-white p-2 hover:bg-white/10 rounded-xl transition-colors"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
-        </button>
+        {/* Mobile Hamburger & Theme Button */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 transition-colors"
+            title={theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+            aria-label="Cambiar tema"
+          >
+            {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-blue-500" />}
+          </button>
+
+          <button 
+            className="text-white p-2 hover:bg-white/10 rounded-xl transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer Menu with Accordions */}
@@ -375,8 +423,22 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 <span>Preguntas Frecuentes</span>
               </a>
 
+              {/* Theme Toggle Button (Mobile) */}
+              <button
+                onClick={toggleTheme}
+                className="w-full flex items-center justify-between p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-blue-500" />}
+                  <span className="text-sm font-bold">{theme === 'dark' ? 'Activar Modo Claro' : 'Activar Modo Oscuro'}</span>
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10 text-zinc-300">
+                  {theme === 'dark' ? 'CLARO ☀️' : 'OSCURO 🌙'}
+                </span>
+              </button>
+
               {/* CTA Button */}
-              <div className="pt-3">
+              <div className="pt-2">
                 <a
                   href="/jornada"
                   onClick={() => setIsMobileMenuOpen(false)}

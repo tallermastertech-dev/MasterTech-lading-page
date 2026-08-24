@@ -1515,13 +1515,29 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           color: #166534 !important;
         }
 
-        .admin-theme-light span[class*="bg-amber-500/"] {
+        .admin-theme-light span[class*="bg-amber-"],
+        .admin-theme-light div[class*="bg-amber-100"],
+        .admin-theme-light div[class*="bg-amber-200"] {
           background-color: #fef3c7 !important;
           border-color: #fcd34d !important;
           color: #78350f !important;
         }
-        .admin-theme-light span[class*="bg-amber-500/"] span {
+        .admin-theme-light span[class*="bg-amber-"] *,
+        .admin-theme-light div[class*="bg-amber-100"] *,
+        .admin-theme-light div[class*="bg-amber-200"] * {
           color: #78350f !important;
+          font-weight: 900 !important;
+        }
+
+        /* Status bar & Sources text */
+        .admin-theme-light div[class*="border-l-amber-500"] {
+          background-color: #f1f4f8 !important;
+          border-color: #cbd5e1 !important;
+          border-left-color: #f59e0b !important;
+        }
+        .admin-theme-light div[class*="border-l-amber-500"] * {
+          color: #0f172a !important;
+          font-weight: 700 !important;
         }
 
         /* 10. Solid Action Buttons (Crisp White/Black text) */

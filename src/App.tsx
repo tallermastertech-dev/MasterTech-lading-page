@@ -195,6 +195,19 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    try {
+      const saved = localStorage.getItem('mastertech_public_theme') || localStorage.getItem('mastertech_theme');
+      if (saved === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.body.classList.add('theme-light');
+      } else {
+        document.documentElement.classList.remove('theme-light');
+        document.body.classList.remove('theme-light');
+      }
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
     // 1. Instant load from localStorage cache — zero-delay first render
     let localData: any = null;
     try {
