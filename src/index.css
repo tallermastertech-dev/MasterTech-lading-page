@@ -678,6 +678,28 @@ body.theme-light {
   color: #334155 !important;
 }
 
+/* Shopping Cart Modal in Light Mode */
+.theme-light div[class*="bg-[#1c262e]"],
+.theme-light div[class*="from-[#202D36]"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light div[class*="bg-[#1c262e]"] h2,
+.theme-light div[class*="bg-[#1c262e]"] h3,
+.theme-light div[class*="bg-[#1c262e]"] h4,
+.theme-light div[class*="bg-[#1c262e]"] span.text-white {
+  color: #0f172a !important;
+}
+.theme-light div[class*="bg-[#1c262e]"] p,
+.theme-light div[class*="bg-[#1c262e]"] .text-zinc-400 {
+  color: #334155 !important;
+}
+.theme-light div[class*="bg-[#1c262e]"] input {
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
 .theme-light [class*="bg-[#12141a]"],
 .theme-light [class*="bg-[#131620]"],
 .theme-light [class*="bg-[#0f1117]"],

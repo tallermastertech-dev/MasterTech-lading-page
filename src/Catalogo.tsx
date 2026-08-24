@@ -1297,14 +1297,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </div>
                     </div>
                   ) : cart.length === 0 ? (
-                    <div className="text-center py-12 space-y-3">
-                      <ShoppingBag size={48} className="mx-auto text-zinc-600 mb-2" />
-                      <h3 className="text-lg font-bold text-white">Tu carrito está vacío</h3>
-                      <p className="text-zinc-400 text-xs max-w-xs mx-auto">Navega por nuestro catálogo y presiona "+ Agregar al Carrito" en las piezas que necesites.</p>
+                    <div className="text-center py-12 space-y-4 flex flex-col items-center justify-center">
+                      <ShoppingBag size={48} className="mx-auto text-zinc-500 mb-1" />
+                      <h3 className="text-lg font-black text-white">Tu carrito está vacío</h3>
+                      <p className="text-zinc-400 text-xs max-w-xs mx-auto leading-relaxed">
+                        Navega por nuestro catálogo y presiona "+ Agregar al Carrito" en las piezas que necesites.
+                      </p>
                       <button
                         type="button"
                         onClick={() => setIsCartOpen(false)}
-                        className="btn-primary !py-2 !px-5 text-xs border-none mt-2"
+                        className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform"
                       >
                         Explorar Catálogo
                       </button>
