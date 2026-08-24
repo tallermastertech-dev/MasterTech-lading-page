@@ -218,9 +218,16 @@ body.theme-light {
   border-bottom: 1px solid #cbd5e1 !important;
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08) !important;
 }
-.theme-light nav a {
+.theme-light nav a:not(.btn-primary) {
   color: #0f172a !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
+}
+.theme-light nav a:not(.btn-primary) span {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+.theme-light nav a:not(.btn-primary) svg {
+  color: #0f172a !important;
 }
 .theme-light nav a:hover {
   color: #C2A472 !important;
@@ -228,7 +235,7 @@ body.theme-light {
 .theme-light nav a.text-primary,
 .theme-light nav span.text-primary {
   color: #92400e !important;
-  font-weight: 800 !important;
+  font-weight: 900 !important;
 }
 .theme-light nav .text-white {
   color: #0f172a !important;
@@ -331,12 +338,19 @@ body.theme-light {
   background-color: #f1f4f8 !important;
 }
 .theme-light #instalaciones h2,
-.theme-light #instalaciones h3 {
+.theme-light #instalaciones h3,
+.theme-light #instalaciones h3 span,
+.theme-light section[id="instalaciones"] h2,
+.theme-light section[id="instalaciones"] h3,
+.theme-light section[id="instalaciones"] h3 span {
   color: #0f172a !important;
+  font-weight: 900 !important;
 }
 .theme-light #instalaciones p,
-.theme-light #instalaciones .text-zinc-400 {
-  color: #334155 !important;
+.theme-light #instalaciones .text-zinc-400,
+.theme-light section[id="instalaciones"] p {
+  color: #1e293b !important;
+  font-weight: 500 !important;
 }
 .theme-light #instalaciones div.group\/inst {
   background-color: #ffffff !important;
@@ -350,16 +364,22 @@ body.theme-light {
 /* 5. TEAM MEMBERS CARDS (Nosotros) */
 .theme-light div[class*="bg-[#121417]"],
 .theme-light div[class*="bg-[#16181D]"],
-.theme-light div[class*="bg-[#0E1013]"] {
+.theme-light div[class*="bg-[#0E1013]"],
+.theme-light div[class*="from-white/10"] {
   background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
 }
 .theme-light div[class*="bg-[#121417]"] h3,
-.theme-light div[class*="bg-[#121417]"] .text-white {
+.theme-light div[class*="bg-[#121417]"] .text-white,
+.theme-light div[class*="from-white/10"] h3,
+.theme-light div[class*="from-white/10"] .text-white {
   color: #0f172a !important;
+  font-weight: 900 !important;
 }
-.theme-light div[class*="bg-[#121417]"] p {
-  color: #475569 !important;
+.theme-light div[class*="bg-[#121417]"] p,
+.theme-light div[class*="from-white/10"] p {
+  color: #334155 !important;
+  font-weight: 500 !important;
 }
 .theme-light div[class*="bg-[#121417]"] span[class*="bg-[#0D0D0D]/80"] {
   background-color: #fef3c7 !important;
@@ -367,7 +387,7 @@ body.theme-light {
   color: #78350f !important;
 }
 
-/* 6. GLASS CARDS & GENERAL BOXES */
+/* 6. GLASS CARDS, SERVICES & FIX OVERLAY SCRIMS */
 .theme-light .glass-card {
   background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
@@ -378,6 +398,21 @@ body.theme-light {
   border-color: #C2A472 !important;
   box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.12) !important;
 }
+
+/* CRITICAL: Keep image overlay scrims transparent so photos are never blocked! */
+.theme-light div.absolute[class*="inset-0"][class*="bg-black"],
+.theme-light .glass-card div.absolute[class*="inset-0"] {
+  background-color: transparent !important;
+}
+.theme-light .glass-card img {
+  opacity: 1 !important;
+  display: block !important;
+}
+.theme-light .glass-card div[class*="top-4 left-4"] {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
 .theme-light .glass-card h1,
 .theme-light .glass-card h2,
 .theme-light .glass-card h3,
@@ -390,6 +425,22 @@ body.theme-light {
 .theme-light .glass-card .text-zinc-400,
 .theme-light .glass-card .text-zinc-300 {
   color: #334155 !important;
+}
+
+/* Service Card WhatsApp button in Light Mode */
+.theme-light .glass-card a[href*="whatsapp"],
+.theme-light .glass-card a[href*="wa.me"],
+.theme-light .glass-card a[class*="group/btn"] {
+  background-color: #25D366 !important;
+  border: 1px solid #16a34a !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+.theme-light .glass-card a[href*="whatsapp"] *,
+.theme-light .glass-card a[href*="wa.me"] *,
+.theme-light .glass-card a[class*="group/btn"] * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
 /* FAQ Accordions */
@@ -445,22 +496,6 @@ body.theme-light {
   border-color: #cbd5e1 !important;
 }
 
-.theme-light [class*="bg-black/40"],
-.theme-light [class*="bg-black/50"],
-.theme-light [class*="bg-black/30"],
-.theme-light [class*="bg-black/20"],
-.theme-light [class*="bg-white/5"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-
-.theme-light [class*="border-white/5"],
-.theme-light [class*="border-white/10"],
-.theme-light [class*="border-white/15"],
-.theme-light [class*="border-white/20"] {
-  border-color: #cbd5e1 !important;
-}
-
 .theme-light section:not(:first-of-type) [class*="text-zinc-300"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-400"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-500"],
@@ -477,7 +512,7 @@ body.theme-light {
 .theme-light section:not(:first-of-type) [class*="text-slate-200"],
 .theme-light main [class*="text-zinc-100"],
 .theme-light main [class*="text-zinc-200"],
-.theme-light main [class*="text-white"]:not(.btn-primary *):not([class*="bg-blue-"] *):not([class*="bg-emerald-"] *) {
+.theme-light main [class*="text-white"]:not(.btn-primary *):not([class*="bg-blue-"] *):not([class*="bg-emerald-"] *):not([class*="bg-[#25D366]"] *):not([class*="bg-green-"] *) {
   color: #0f172a !important;
 }
 
@@ -543,9 +578,20 @@ body.theme-light {
 
 /* 10. MODALS & FOOTER */
 .theme-light footer {
-  background-color: #e2e8f0 !important;
+  background-color: #f1f4f8 !important;
   border-top: 1px solid #cbd5e1 !important;
 }
-.theme-light footer .text-white {
+.theme-light footer h4,
+.theme-light footer [class*="uppercase"] {
   color: #0f172a !important;
+  font-weight: 900 !important;
+}
+.theme-light footer a,
+.theme-light footer p,
+.theme-light footer span {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+.theme-light footer a:hover {
+  color: #000000 !important;
 }
