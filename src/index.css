@@ -289,7 +289,7 @@ body.theme-light {
 
 /* 6. GLASS CARDS & GENERAL BOXES */
 .theme-light .glass-card {
-  background: rgba(255, 255, 255, 0.96) !important;
+  background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
 }
@@ -297,6 +297,61 @@ body.theme-light {
   background: #ffffff !important;
   border-color: #C2A472 !important;
   box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.12) !important;
+}
+.theme-light .glass-card h1,
+.theme-light .glass-card h2,
+.theme-light .glass-card h3,
+.theme-light .glass-card h4,
+.theme-light .glass-card span.text-white,
+.theme-light .glass-card button span {
+  color: #0f172a !important;
+}
+.theme-light .glass-card p,
+.theme-light .glass-card .text-zinc-400,
+.theme-light .glass-card .text-zinc-300 {
+  color: #334155 !important;
+}
+
+/* FAQ Accordions */
+.theme-light .glass-card button {
+  color: #0f172a !important;
+}
+.theme-light .glass-card button span {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* Catalogo Filters & Search Toolbar */
+.theme-light div[class*="overflow-x-auto"] button {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 800 !important;
+}
+.theme-light div[class*="overflow-x-auto"] button span {
+  color: #1e293b !important;
+}
+.theme-light div[class*="overflow-x-auto"] button[class*="bg-primary"] {
+  background-color: #C2A472 !important;
+  border-color: #b3935a !important;
+  color: #000000 !important;
+}
+.theme-light div[class*="overflow-x-auto"] button[class*="bg-primary"] span {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+/* USA Import Banner in Catalogo */
+.theme-light div[class*="from-red-950/40"] {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08) !important;
+}
+.theme-light div[class*="from-red-950/40"] h2 {
+  color: #0f172a !important;
+}
+.theme-light div[class*="from-red-950/40"] p {
+  color: #334155 !important;
 }
 
 .theme-light [class*="bg-[#12141a]"],
@@ -315,7 +370,7 @@ body.theme-light {
 .theme-light [class*="bg-black/30"],
 .theme-light [class*="bg-black/20"],
 .theme-light [class*="bg-white/5"] {
-  background-color: #f1f4f8 !important;
+  background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
 }
 
@@ -329,14 +384,20 @@ body.theme-light {
 .theme-light section:not(:first-of-type) [class*="text-zinc-300"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-400"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-500"],
-.theme-light section:not(:first-of-type) [class*="text-slate-400"] {
+.theme-light section:not(:first-of-type) [class*="text-slate-400"],
+.theme-light main [class*="text-zinc-300"],
+.theme-light main [class*="text-zinc-400"],
+.theme-light main [class*="text-zinc-500"] {
   color: #334155 !important;
 }
 
 .theme-light section:not(:first-of-type) [class*="text-zinc-100"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-200"],
 .theme-light section:not(:first-of-type) [class*="text-slate-100"],
-.theme-light section:not(:first-of-type) [class*="text-slate-200"] {
+.theme-light section:not(:first-of-type) [class*="text-slate-200"],
+.theme-light main [class*="text-zinc-100"],
+.theme-light main [class*="text-zinc-200"],
+.theme-light main [class*="text-white"]:not(.btn-primary *):not([class*="bg-blue-"] *):not([class*="bg-emerald-"] *) {
   color: #0f172a !important;
 }
 
