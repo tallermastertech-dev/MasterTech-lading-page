@@ -160,6 +160,13 @@ body.theme-light {
   border: 1px solid #cbd5e1 !important;
 }
 
+/* Page Root Wrapper Transparency */
+.theme-light div.min-h-screen,
+.theme-light main {
+  background-color: transparent !important;
+  color: #0f172a !important;
+}
+
 .theme-light h1,
 .theme-light h2,
 .theme-light h3,
@@ -221,11 +228,9 @@ body.theme-light {
 }
 
 /* Generic Section Boxes & Overrides in Light Mode */
-.theme-light [class*="bg-[#0D0D0D]"],
 .theme-light [class*="bg-[#12141a]"],
 .theme-light [class*="bg-[#131620]"],
 .theme-light [class*="bg-[#0f1117]"],
-.theme-light [class*="bg-[#0a0a0c]"],
 .theme-light [class*="bg-[#181a24]"],
 .theme-light [class*="bg-black/60"],
 .theme-light [class*="bg-black/70"],
@@ -237,7 +242,8 @@ body.theme-light {
 
 .theme-light [class*="bg-black/40"],
 .theme-light [class*="bg-black/50"],
-.theme-light [class*="bg-black/30"] {
+.theme-light [class*="bg-black/30"],
+.theme-light [class*="bg-black/20"] {
   background-color: #f1f4f8 !important;
   border-color: #cbd5e1 !important;
 }
@@ -263,6 +269,18 @@ body.theme-light {
   color: #0f172a !important;
 }
 
+/* Badges and Highlights */
+.theme-light span[class*="bg-primary/10"],
+.theme-light div[class*="bg-primary/10"] {
+  background-color: #fef3c7 !important;
+  border-color: #fcd34d !important;
+  color: #78350f !important;
+}
+.theme-light span[class*="bg-primary/10"] *,
+.theme-light div[class*="bg-primary/10"] * {
+  color: #78350f !important;
+}
+
 /* Inputs & Form Fields in Light Mode */
 .theme-light input,
 .theme-light select,
@@ -276,7 +294,14 @@ body.theme-light {
   color: #94a3b8 !important;
 }
 
-/* Secondary Buttons in Light Mode */
+/* Primary and Secondary Buttons */
+.theme-light .btn-primary {
+  background-color: #C2A472 !important;
+  color: #0D0D0D !important;
+}
+.theme-light .btn-primary * {
+  color: #0D0D0D !important;
+}
 .theme-light .btn-secondary {
   background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
@@ -286,6 +311,13 @@ body.theme-light {
   background: #e2e8f0 !important;
   color: #000000 !important;
   border-color: #94a3b8 !important;
+}
+
+/* Inspection Picker & Modals in Light Mode */
+.theme-light [class*="bg-black/90"],
+.theme-light [class*="bg-black/95"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
 }
 
 /* Footer in Light Mode */
