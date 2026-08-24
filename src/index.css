@@ -329,12 +329,12 @@ body.theme-light {
   font-weight: 900 !important;
 }
 
-/* Brecha Cambiaria Floating Modal & Trigger in Light Mode */
+/* Brecha Cambiaria Floating Modal & Trigger in Light Mode (Anti-Glare / Soft Matte) */
 .theme-light .brecha-telemetria-popup,
 .theme-light div[class*="brecha-telemetria-popup"] {
-  background-color: #ffffff !important;
+  background-color: #f1f4f8 !important;
   border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.25) !important;
+  box-shadow: 0 20px 45px -5px rgba(15, 23, 42, 0.18) !important;
   color: #0f172a !important;
 }
 
@@ -343,20 +343,22 @@ body.theme-light {
 .theme-light .brecha-telemetria-popup h3,
 .theme-light .brecha-telemetria-popup span[class*="font-display"] {
   color: #0f172a !important;
+  font-weight: 900 !important;
 }
 .theme-light .brecha-telemetria-popup .text-zinc-400,
 .theme-light .brecha-telemetria-popup .text-zinc-300 {
-  color: #475569 !important;
+  color: #334155 !important;
+  font-weight: 600 !important;
 }
 .theme-light .brecha-telemetria-popup button {
-  background-color: #f1f4f8 !important;
+  background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   color: #0f172a !important;
 }
 
 /* 3 Currency Rate Cards ($ BCV, € BCV, USDT) */
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div {
-  background-color: #f8fafc !important;
+  background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div div[class*="font-mono"] {
@@ -365,47 +367,71 @@ body.theme-light {
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) {
   border-color: #86efac !important;
-  background-color: #f0fdf4 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) span:first-child {
-  color: #166534 !important;
+  color: #14532d !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) span[class*="bg-emerald-"] {
+  background-color: #dcfce7 !important;
+  color: #14532d !important;
+  font-weight: 800 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) {
-  border-color: #a5f3fc !important;
-  background-color: #ecfeff !important;
+  border-color: #93c5fd !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) span:first-child {
-  color: #155e75 !important;
+  color: #1e3a8a !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) span[class*="bg-cyan-"] {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+  font-weight: 800 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) {
-  border-color: #fde68a !important;
-  background-color: #fffbeb !important;
+  border-color: #fcd34d !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) span:first-child {
-  color: #92400e !important;
+  color: #78350f !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) span[class*="bg-amber-"] {
+  background-color: #fef3c7 !important;
+  color: #78350f !important;
+  font-weight: 800 !important;
 }
 
 /* Brecha Cards (Diferencial %) */
 .theme-light .brecha-telemetria-popup div[class*="border-rose-500"] {
-  background-color: #fff1f2 !important;
-  border-color: #fecdd3 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #fca5a5 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="border-rose-500"] div:first-child {
-  color: #9f1239 !important;
+  color: #881337 !important;
+  font-weight: 800 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="border-rose-500"] div[class*="font-mono"] {
-  color: #e11d48 !important;
+  color: #be123c !important;
   font-weight: 900 !important;
 }
 
 /* Calculator Section */
 .theme-light .brecha-telemetria-popup div[class*="border-white/15"] {
-  background-color: #f1f4f8 !important;
-  border-color: #cbd5e1 !important;
+  background-color: #e2e8f0 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="border-white/15"] span {
+  color: #0f172a !important;
+  font-weight: 900 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] {
   background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] span {
+  color: #334155 !important;
+  font-weight: 800 !important;
 }
 .theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] input {
   color: #0f172a !important;
@@ -418,6 +444,18 @@ body.theme-light {
 }
 .theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-white {
   color: #0f172a !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-emerald-400 {
+  color: #14532d !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-cyan-400 {
+  color: #1e40af !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-amber-400 {
+  color: #78350f !important;
   font-weight: 900 !important;
 }
 
