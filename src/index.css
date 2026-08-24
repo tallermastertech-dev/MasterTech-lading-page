@@ -529,23 +529,29 @@ body.theme-light {
   border-color: #cbd5e1 !important;
 }
 
-/* 5. TEAM MEMBERS CARDS (Nosotros) */
+/* 5. TEAM MEMBERS CARDS & RECRUITMENT CTA (Nosotros) */
 .theme-light div[class*="bg-[#121417]"],
 .theme-light div[class*="bg-[#16181D]"],
 .theme-light div[class*="bg-[#0E1013]"],
-.theme-light div[class*="from-white/10"] {
+.theme-light div[class*="from-white/10"],
+.theme-light div[class*="from-white/10"][class*="via-[#16181D]"] {
+  background: #ffffff !important;
   background-color: #ffffff !important;
+  background-image: none !important;
   border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08) !important;
 }
 .theme-light div[class*="bg-[#121417]"] h3,
 .theme-light div[class*="bg-[#121417]"] .text-white,
 .theme-light div[class*="from-white/10"] h3,
-.theme-light div[class*="from-white/10"] .text-white {
+.theme-light div[class*="from-white/10"] .text-white,
+.theme-light div[class*="from-white/10"] h3 span:not(.text-primary) {
   color: #0f172a !important;
   font-weight: 900 !important;
 }
 .theme-light div[class*="bg-[#121417]"] p,
-.theme-light div[class*="from-white/10"] p {
+.theme-light div[class*="from-white/10"] p,
+.theme-light div[class*="from-white/10"] .text-zinc-300 {
   color: #334155 !important;
   font-weight: 500 !important;
 }
@@ -748,7 +754,7 @@ body.theme-light {
   font-weight: 900 !important;
 }
 
-/* 8. FORMS & INPUTS (Booking / Contact) */
+/* 8. FORMS, INPUTS, SELECT OPTIONS & POSTULACIÓN */
 .theme-light #contacto .glass-card,
 .theme-light #contacto div[class*="bg-white/5"] {
   background-color: #ffffff !important;
@@ -763,16 +769,72 @@ body.theme-light {
   color: #334155 !important;
   font-weight: 700;
 }
+
+/* Postulación Form & Modal in Light Mode */
+.theme-light div[class*="bg-[#101216]"],
+.theme-light div[class*="bg-[#0c0e12]"],
+.theme-light div[class*="bg-[#07080a]"],
+.theme-light div[class*="bg-[#0A0B0E]"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light div[class*="bg-[#101216]"] h2,
+.theme-light div[class*="bg-[#101216]"] h3,
+.theme-light div[class*="bg-[#0c0e12]"] h2,
+.theme-light div[class*="bg-[#0c0e12]"] h3,
+.theme-light div[class*="bg-[#101216]"] span.text-white,
+.theme-light div[class*="bg-[#0c0e12]"] span.text-white {
+  color: #0f172a !important;
+}
+.theme-light div[class*="bg-[#101216]"] label,
+.theme-light div[class*="bg-[#0c0e12]"] label {
+  color: #1e293b !important;
+  font-weight: 800 !important;
+}
+.theme-light div[class*="bg-[#101216]"] p,
+.theme-light div[class*="bg-[#0c0e12]"] p {
+  color: #475569 !important;
+}
+.theme-light div[class*="bg-[#0c0e12]"] button[class*="bg-white/5"],
+.theme-light div[class*="bg-[#101216]"] button[class*="bg-white/5"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+.theme-light div[class*="bg-[#0c0e12]"] label[class*="border-dashed"],
+.theme-light div[class*="bg-[#101216]"] label[class*="border-dashed"] {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light div[class*="bg-[#0c0e12]"] label[class*="border-dashed"] span,
+.theme-light div[class*="bg-[#101216]"] label[class*="border-dashed"] span {
+  color: #0f172a !important;
+}
+
+/* Universal Inputs & Select Dropdowns */
 .theme-light input,
 .theme-light select,
 .theme-light textarea {
   background-color: #f8fafc !important;
   color: #0f172a !important;
   border: 1px solid #cbd5e1 !important;
-  font-weight: 600;
+  font-weight: 700;
 }
 .theme-light input::placeholder,
 .theme-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* CRITICAL: Native Select Dropdown Options */
+.theme-light select option,
+.theme-light option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+.theme-light select option:disabled,
+.theme-light option:disabled {
+  background-color: #f1f5f9 !important;
   color: #94a3b8 !important;
 }
 

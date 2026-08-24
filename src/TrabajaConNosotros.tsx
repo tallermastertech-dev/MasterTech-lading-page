@@ -372,7 +372,7 @@ export default function TrabajaConNosotros() {
                         className="w-full bg-[#07080a] border border-white/15 focus:border-primary rounded-xl py-3 px-4 text-sm text-white focus:outline-none transition-colors appearance-none cursor-pointer"
                       >
                         {NIVELES_EXPERIENCIA.map((exp, i) => (
-                          <option key={i} value={exp} className="bg-[#101216] text-white">
+                          <option key={i} value={exp}>
                             {exp}
                           </option>
                         ))}

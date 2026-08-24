@@ -155,7 +155,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
               const booked = occupiedSlots[d.dateStr] || [];
               const isFull = booked.length >= INSPECTION_SLOTS.length;
               return (
-                <option key={d.dateStr} value={d.dateStr} disabled={isFull} className="bg-[#12141a] text-white">
+                <option key={d.dateStr} value={d.dateStr} disabled={isFull}>
                   {d.label} {isFull ? '(LLENO)' : ''}
                 </option>
               );
@@ -184,7 +184,7 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
             {INSPECTION_SLOTS.map((slot) => {
               const isTaken = bookedForSelectedDate.includes(slot);
               return (
-                <option key={slot} value={slot} disabled={isTaken} className="bg-[#12141a] text-white">
+                <option key={slot} value={slot} disabled={isTaken}>
                   {slot} {isTaken ? '(OCUPADO)' : ''}
                 </option>
               );
