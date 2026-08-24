@@ -330,63 +330,95 @@ body.theme-light {
 }
 
 /* Brecha Cambiaria Floating Modal & Trigger in Light Mode */
-.brecha-telemetria-popup,
 .theme-light .brecha-telemetria-popup,
 .theme-light div[class*="brecha-telemetria-popup"] {
-  background-color: #0a0b0f !important;
-  border: 1px solid rgba(245, 158, 11, 0.5) !important;
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.95) !important;
-  color: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.25) !important;
+  color: #0f172a !important;
 }
-.brecha-telemetria-popup *,
-.theme-light .brecha-telemetria-popup * {
-  /* Prevent generic light mode text override from making white numbers black or white boxes */
-}
-.brecha-telemetria-popup div[class*="bg-[#131620]"],
-.theme-light .brecha-telemetria-popup div[class*="bg-[#131620]"],
-.theme-light div[class*="brecha-telemetria-popup"] div[class*="bg-[#131620]"] {
-  background-color: #131620 !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-}
-.brecha-telemetria-popup div[class*="border-emerald-500"],
-.theme-light .brecha-telemetria-popup div[class*="border-emerald-500"] {
-  border-color: rgba(16, 185, 129, 0.5) !important;
-}
-.brecha-telemetria-popup div[class*="border-cyan-500"],
-.theme-light .brecha-telemetria-popup div[class*="border-cyan-500"] {
-  border-color: rgba(6, 182, 212, 0.5) !important;
-}
-.brecha-telemetria-popup div[class*="border-amber-500"],
-.theme-light .brecha-telemetria-popup div[class*="border-amber-500"] {
-  border-color: rgba(245, 158, 11, 0.5) !important;
-}
-.brecha-telemetria-popup div[class*="border-rose-500"],
-.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] {
-  border-color: rgba(244, 63, 94, 0.5) !important;
-}
-.brecha-telemetria-popup h2,
+
+/* Header & General Text */
 .theme-light .brecha-telemetria-popup h2,
-.brecha-telemetria-popup h3,
 .theme-light .brecha-telemetria-popup h3,
-.brecha-telemetria-popup .text-white,
-.theme-light .brecha-telemetria-popup .text-white {
-  color: #ffffff !important;
+.theme-light .brecha-telemetria-popup span[class*="font-display"] {
+  color: #0f172a !important;
 }
-.brecha-telemetria-popup .text-zinc-400,
-.theme-light .brecha-telemetria-popup .text-zinc-400 {
-  color: #a1a1aa !important;
+.theme-light .brecha-telemetria-popup .text-zinc-400,
+.theme-light .brecha-telemetria-popup .text-zinc-300 {
+  color: #475569 !important;
 }
-.brecha-telemetria-popup div[class*="bg-black/50"],
-.theme-light .brecha-telemetria-popup div[class*="bg-black/50"],
-.brecha-telemetria-popup div[class*="bg-black/80"],
-.theme-light .brecha-telemetria-popup div[class*="bg-black/80"] {
-  background-color: rgba(0, 0, 0, 0.65) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+.theme-light .brecha-telemetria-popup button {
+  background-color: #f1f4f8 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
 }
-.brecha-telemetria-popup input,
-.theme-light .brecha-telemetria-popup input {
+
+/* 3 Currency Rate Cards ($ BCV, € BCV, USDT) */
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div {
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div div[class*="font-mono"] {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) {
+  border-color: #86efac !important;
+  background-color: #f0fdf4 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) span:first-child {
+  color: #166534 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) {
+  border-color: #a5f3fc !important;
+  background-color: #ecfeff !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) span:first-child {
+  color: #155e75 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) {
+  border-color: #fde68a !important;
+  background-color: #fffbeb !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) span:first-child {
+  color: #92400e !important;
+}
+
+/* Brecha Cards (Diferencial %) */
+.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] div:first-child {
+  color: #9f1239 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] div[class*="font-mono"] {
+  color: #e11d48 !important;
+  font-weight: 900 !important;
+}
+
+/* Calculator Section */
+.theme-light .brecha-telemetria-popup div[class*="border-white/15"] {
+  background-color: #f1f4f8 !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] input {
+  color: #0f172a !important;
+  font-weight: 900 !important;
   background-color: transparent !important;
-  color: #ffffff !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-white {
+  color: #0f172a !important;
+  font-weight: 900 !important;
 }
 
 /* Floating Rates Trigger Pill (bottom-left) in Light Mode */
@@ -394,21 +426,6 @@ body.theme-light {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
-}
-.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-400 {
-  color: #475569 !important;
-  font-weight: 800 !important;
-}
-.theme-light div[class*="fixed bottom-4 left-"] button .text-emerald-400 {
-  color: #166534 !important;
-  font-weight: 900 !important;
-}
-.theme-light div[class*="fixed bottom-4 left-"] button .text-amber-400 {
-  color: #92400e !important;
-  font-weight: 900 !important;
-}
-.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-600 {
-  color: #94a3b8 !important;
 }
 .theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-400 {
   color: #475569 !important;
