@@ -732,15 +732,20 @@ body.theme-light {
 }
 
 /* 7. BADGES AND HIGHLIGHTS */
-.theme-light span[class*="bg-primary/10"],
-.theme-light div[class*="bg-primary/10"] {
+.theme-light span[class*="bg-primary/"],
+.theme-light div[class*="bg-primary/"],
+.theme-light [class*="rounded-full"][class*="bg-primary/"],
+.theme-light [class*="rounded-full"][class*="border-primary"] {
   background-color: #fef3c7 !important;
-  border-color: #fcd34d !important;
+  border: 1px solid #fcd34d !important;
   color: #78350f !important;
 }
-.theme-light span[class*="bg-primary/10"] *,
-.theme-light div[class*="bg-primary/10"] * {
+.theme-light span[class*="bg-primary/"] *,
+.theme-light div[class*="bg-primary/"] *,
+.theme-light [class*="rounded-full"][class*="bg-primary/"] *,
+.theme-light [class*="rounded-full"][class*="border-primary"] * {
   color: #78350f !important;
+  font-weight: 900 !important;
 }
 
 /* 8. FORMS & INPUTS (Booking / Contact) */
