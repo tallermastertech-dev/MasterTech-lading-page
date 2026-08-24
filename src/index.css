@@ -160,27 +160,59 @@ body.theme-light {
   border: 1px solid #cbd5e1 !important;
 }
 
-/* Page Root Wrapper Transparency */
+/* Page Root Wrapper & Main */
 .theme-light div.min-h-screen,
 .theme-light main {
   background-color: transparent !important;
   color: #0f172a !important;
 }
 
-.theme-light h1,
-.theme-light h2,
-.theme-light h3,
-.theme-light h4,
-.theme-light h5,
-.theme-light h6 {
+/* 1. HERO SECTION (Dark photographic background -> Text MUST stay white) */
+.theme-light section:first-of-type {
+  color: #ffffff !important;
+}
+.theme-light section:first-of-type h1 {
+  color: #ffffff !important;
+}
+.theme-light section:first-of-type h1 span:first-child {
+  color: #ffffff !important;
+}
+.theme-light section:first-of-type p,
+.theme-light section:first-of-type .text-zinc-300 {
+  color: #e2e8f0 !important;
+}
+.theme-light section:first-of-type span.text-primary {
+  color: #C2A472 !important;
+}
+.theme-light section:first-of-type .btn-secondary {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+}
+.theme-light section:first-of-type .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* 2. GENERAL TYPOGRAPHY (Outside Hero) */
+.theme-light section:not(:first-of-type) h1,
+.theme-light section:not(:first-of-type) h2,
+.theme-light section:not(:first-of-type) h3,
+.theme-light section:not(:first-of-type) h4,
+.theme-light section:not(:first-of-type) h5,
+.theme-light section:not(:first-of-type) h6,
+.theme-light main h1,
+.theme-light main h2,
+.theme-light main h3 {
   color: #0f172a !important;
 }
 
-.theme-light p {
+.theme-light section:not(:first-of-type) p,
+.theme-light main p {
   color: #334155 !important;
 }
 
-/* Navbar in Light Mode */
+/* 3. NAVBAR IN LIGHT MODE */
 .theme-light nav {
   background-color: rgba(241, 244, 248, 0.96) !important;
   border-bottom: 1px solid #cbd5e1 !important;
@@ -203,8 +235,6 @@ body.theme-light {
 .theme-light nav .text-zinc-400 {
   color: #334155 !important;
 }
-
-/* Dropdown Menus in Light Mode */
 .theme-light nav [class*="bg-[#12141a]"],
 .theme-light nav [class*="bg-[#0d0e12]"] {
   background-color: rgba(255, 255, 255, 0.98) !important;
@@ -215,9 +245,51 @@ body.theme-light {
   border-color: #e2e8f0 !important;
 }
 
-/* Glass Cards in Light Mode */
+/* 4. INSTALACIONES SECTION */
+.theme-light #instalaciones,
+.theme-light section[id="instalaciones"] {
+  background-color: #f1f4f8 !important;
+}
+.theme-light #instalaciones h2,
+.theme-light #instalaciones h3 {
+  color: #0f172a !important;
+}
+.theme-light #instalaciones p,
+.theme-light #instalaciones .text-zinc-400 {
+  color: #334155 !important;
+}
+.theme-light #instalaciones div.group\/inst {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light #instalaciones div[class*="bg-white/5"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* 5. TEAM MEMBERS CARDS (Nosotros) */
+.theme-light div[class*="bg-[#121417]"],
+.theme-light div[class*="bg-[#16181D]"],
+.theme-light div[class*="bg-[#0E1013]"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light div[class*="bg-[#121417]"] h3,
+.theme-light div[class*="bg-[#121417]"] .text-white {
+  color: #0f172a !important;
+}
+.theme-light div[class*="bg-[#121417]"] p {
+  color: #475569 !important;
+}
+.theme-light div[class*="bg-[#121417]"] span[class*="bg-[#0D0D0D]/80"] {
+  background-color: #fef3c7 !important;
+  border-color: #fcd34d !important;
+  color: #78350f !important;
+}
+
+/* 6. GLASS CARDS & GENERAL BOXES */
 .theme-light .glass-card {
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
 }
@@ -227,15 +299,13 @@ body.theme-light {
   box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.12) !important;
 }
 
-/* Generic Section Boxes & Overrides in Light Mode */
 .theme-light [class*="bg-[#12141a]"],
 .theme-light [class*="bg-[#131620]"],
 .theme-light [class*="bg-[#0f1117]"],
 .theme-light [class*="bg-[#181a24]"],
 .theme-light [class*="bg-black/60"],
 .theme-light [class*="bg-black/70"],
-.theme-light [class*="bg-black/80"],
-.theme-light [class*="bg-black/90"] {
+.theme-light [class*="bg-black/80"] {
   background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
 }
@@ -243,7 +313,8 @@ body.theme-light {
 .theme-light [class*="bg-black/40"],
 .theme-light [class*="bg-black/50"],
 .theme-light [class*="bg-black/30"],
-.theme-light [class*="bg-black/20"] {
+.theme-light [class*="bg-black/20"],
+.theme-light [class*="bg-white/5"] {
   background-color: #f1f4f8 !important;
   border-color: #cbd5e1 !important;
 }
@@ -255,21 +326,21 @@ body.theme-light {
   border-color: #cbd5e1 !important;
 }
 
-.theme-light [class*="text-zinc-300"],
-.theme-light [class*="text-zinc-400"],
-.theme-light [class*="text-zinc-500"],
-.theme-light [class*="text-slate-400"] {
+.theme-light section:not(:first-of-type) [class*="text-zinc-300"],
+.theme-light section:not(:first-of-type) [class*="text-zinc-400"],
+.theme-light section:not(:first-of-type) [class*="text-zinc-500"],
+.theme-light section:not(:first-of-type) [class*="text-slate-400"] {
   color: #334155 !important;
 }
 
-.theme-light [class*="text-zinc-100"],
-.theme-light [class*="text-zinc-200"],
-.theme-light [class*="text-slate-100"],
-.theme-light [class*="text-slate-200"] {
+.theme-light section:not(:first-of-type) [class*="text-zinc-100"],
+.theme-light section:not(:first-of-type) [class*="text-zinc-200"],
+.theme-light section:not(:first-of-type) [class*="text-slate-100"],
+.theme-light section:not(:first-of-type) [class*="text-slate-200"] {
   color: #0f172a !important;
 }
 
-/* Badges and Highlights */
+/* 7. BADGES AND HIGHLIGHTS */
 .theme-light span[class*="bg-primary/10"],
 .theme-light div[class*="bg-primary/10"] {
   background-color: #fef3c7 !important;
@@ -281,46 +352,55 @@ body.theme-light {
   color: #78350f !important;
 }
 
-/* Inputs & Form Fields in Light Mode */
+/* 8. FORMS & INPUTS (Booking / Contact) */
+.theme-light #contacto .glass-card,
+.theme-light #contacto div[class*="bg-white/5"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light #contacto h2,
+.theme-light #contacto h3 {
+  color: #0f172a !important;
+}
+.theme-light #contacto p,
+.theme-light #contacto label {
+  color: #334155 !important;
+  font-weight: 700;
+}
 .theme-light input,
 .theme-light select,
 .theme-light textarea {
-  background-color: #ffffff !important;
+  background-color: #f8fafc !important;
   color: #0f172a !important;
-  border-color: #cbd5e1 !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 600;
 }
 .theme-light input::placeholder,
 .theme-light textarea::placeholder {
   color: #94a3b8 !important;
 }
 
-/* Primary and Secondary Buttons */
+/* 9. PRIMARY AND SECONDARY BUTTONS */
 .theme-light .btn-primary {
   background-color: #C2A472 !important;
   color: #0D0D0D !important;
+  font-weight: 900 !important;
 }
 .theme-light .btn-primary * {
   color: #0D0D0D !important;
 }
-.theme-light .btn-secondary {
+.theme-light section:not(:first-of-type) .btn-secondary {
   background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   color: #0f172a !important;
 }
-.theme-light .btn-secondary:hover {
+.theme-light section:not(:first-of-type) .btn-secondary:hover {
   background: #e2e8f0 !important;
   color: #000000 !important;
   border-color: #94a3b8 !important;
 }
 
-/* Inspection Picker & Modals in Light Mode */
-.theme-light [class*="bg-black/90"],
-.theme-light [class*="bg-black/95"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-
-/* Footer in Light Mode */
+/* 10. MODALS & FOOTER */
 .theme-light footer {
   background-color: #e2e8f0 !important;
   border-top: 1px solid #cbd5e1 !important;
