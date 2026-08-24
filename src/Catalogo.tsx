@@ -552,7 +552,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
             <button
               onClick={() => setIsCartOpen(true)}
-              className="w-full sm:w-auto bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xl shrink-0"
+              className="catalogo-cart-btn w-full sm:w-auto bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xl shrink-0"
             >
               <div className="relative">
                 <ShoppingCart size={16} />

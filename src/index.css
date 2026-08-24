@@ -640,6 +640,31 @@ body.theme-light {
   font-weight: 900 !important;
 }
 
+/* Mi Carrito Button in Catalogo */
+.theme-light .catalogo-cart-btn,
+.theme-light button.catalogo-cart-btn,
+.theme-light button[class*="catalogo-cart-btn"] {
+  background-color: #fef3c7 !important;
+  border: 1px solid #fcd34d !important;
+  color: #78350f !important;
+}
+.theme-light .catalogo-cart-btn span,
+.theme-light .catalogo-cart-btn svg,
+.theme-light button.catalogo-cart-btn span,
+.theme-light button.catalogo-cart-btn svg {
+  color: #78350f !important;
+  font-weight: 900 !important;
+}
+.theme-light .catalogo-cart-btn:hover,
+.theme-light button.catalogo-cart-btn:hover {
+  background-color: #fde68a !important;
+  color: #000000 !important;
+}
+.theme-light .catalogo-cart-btn:hover span,
+.theme-light .catalogo-cart-btn:hover svg {
+  color: #000000 !important;
+}
+
 /* USA Import Banner in Catalogo */
 .theme-light div[class*="from-red-950/40"] {
   background: #ffffff !important;
