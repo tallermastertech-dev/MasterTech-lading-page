@@ -330,36 +330,63 @@ body.theme-light {
 }
 
 /* Brecha Cambiaria Floating Modal & Trigger in Light Mode */
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.25) !important;
+.brecha-telemetria-popup,
+.theme-light .brecha-telemetria-popup,
+.theme-light div[class*="brecha-telemetria-popup"] {
+  background-color: #0a0b0f !important;
+  border: 1px solid rgba(245, 158, 11, 0.5) !important;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.95) !important;
+  color: #ffffff !important;
 }
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] h2,
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] h3,
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] span.text-white {
-  color: #0f172a !important;
+.brecha-telemetria-popup *,
+.theme-light .brecha-telemetria-popup * {
+  /* Prevent generic light mode text override from making white numbers black or white boxes */
 }
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] .text-zinc-400 {
-  color: #475569 !important;
+.brecha-telemetria-popup div[class*="bg-[#131620]"],
+.theme-light .brecha-telemetria-popup div[class*="bg-[#131620]"],
+.theme-light div[class*="brecha-telemetria-popup"] div[class*="bg-[#131620]"] {
+  background-color: #131620 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-[#131620]"] {
-  background-color: #f8fafc !important;
-  border: 1px solid #cbd5e1 !important;
+.brecha-telemetria-popup div[class*="border-emerald-500"],
+.theme-light .brecha-telemetria-popup div[class*="border-emerald-500"] {
+  border-color: rgba(16, 185, 129, 0.5) !important;
 }
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-[#131620]"] .text-white {
-  color: #0f172a !important;
-  font-weight: 900 !important;
+.brecha-telemetria-popup div[class*="border-cyan-500"],
+.theme-light .brecha-telemetria-popup div[class*="border-cyan-500"] {
+  border-color: rgba(6, 182, 212, 0.5) !important;
 }
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/50"],
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/80"] {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
+.brecha-telemetria-popup div[class*="border-amber-500"],
+.theme-light .brecha-telemetria-popup div[class*="border-amber-500"] {
+  border-color: rgba(245, 158, 11, 0.5) !important;
 }
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/50"] .text-white,
-.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/80"] input {
-  color: #0f172a !important;
-  font-weight: 900 !important;
+.brecha-telemetria-popup div[class*="border-rose-500"],
+.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] {
+  border-color: rgba(244, 63, 94, 0.5) !important;
+}
+.brecha-telemetria-popup h2,
+.theme-light .brecha-telemetria-popup h2,
+.brecha-telemetria-popup h3,
+.theme-light .brecha-telemetria-popup h3,
+.brecha-telemetria-popup .text-white,
+.theme-light .brecha-telemetria-popup .text-white {
+  color: #ffffff !important;
+}
+.brecha-telemetria-popup .text-zinc-400,
+.theme-light .brecha-telemetria-popup .text-zinc-400 {
+  color: #a1a1aa !important;
+}
+.brecha-telemetria-popup div[class*="bg-black/50"],
+.theme-light .brecha-telemetria-popup div[class*="bg-black/50"],
+.brecha-telemetria-popup div[class*="bg-black/80"],
+.theme-light .brecha-telemetria-popup div[class*="bg-black/80"] {
+  background-color: rgba(0, 0, 0, 0.65) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.brecha-telemetria-popup input,
+.theme-light .brecha-telemetria-popup input {
+  background-color: transparent !important;
+  color: #ffffff !important;
 }
 
 /* Floating Rates Trigger Pill (bottom-left) in Light Mode */
@@ -367,6 +394,21 @@ body.theme-light {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-400 {
+  color: #475569 !important;
+  font-weight: 800 !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-emerald-400 {
+  color: #166534 !important;
+  font-weight: 900 !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-amber-400 {
+  color: #92400e !important;
+  font-weight: 900 !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-600 {
+  color: #94a3b8 !important;
 }
 .theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-400 {
   color: #475569 !important;

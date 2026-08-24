@@ -336,7 +336,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       {/* 1. NON-INTRUSIVE COMPACT FLOATING POPOVER (Anchored right above the bubble) */}
       {isOpen && (
         <div 
-          className="fixed bottom-16 left-3 sm:left-5 z-40 w-[94vw] sm:w-[430px] max-h-[85vh] overflow-y-auto bg-[#0d0f15]/98 backdrop-blur-3xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
+          className="brecha-telemetria-popup fixed bottom-16 left-3 sm:left-5 z-40 w-[94vw] sm:w-[430px] max-h-[85vh] overflow-y-auto bg-[#0d0f15]/98 backdrop-blur-3xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
