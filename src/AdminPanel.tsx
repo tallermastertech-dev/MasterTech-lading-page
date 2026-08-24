@@ -672,6 +672,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (e) {}
   };
 
+  // Helper para copiar Pago Móvil en formato puro (Código de Banco, Teléfono, C.I./RIF en líneas limpias)
+  const formatCleanPagoMovil = (pm: { banco?: string; telefono?: string; documento?: string }) => {
+    let bankCode = '';
+    if (pm.banco) {
+      const match = pm.banco.match(/\b(\d{4})\b/) || pm.banco.match(/\((\d{4})\)/);
+      if (match) {
+        bankCode = match[1];
+      } else {
+        bankCode = pm.banco.trim();
+      }
+    }
+    const cleanPhone = (pm.telefono || '').trim();
+    const cleanDoc = (pm.documento || '').trim();
+
+    return `${bankCode}\r\n${cleanPhone}\r\n${cleanDoc}`.trim();
+  };
+
   // Helper para copiar ficha bancaria completa
   const copyFullProveedorPaymentInfo = (prov: Proveedor) => {
     let text = `🏢 *DATOS DE PAGO - ${prov.nombreComercial.toUpperCase()}*\n`;
@@ -3044,8 +3061,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       </div>
                                       <button
                                         onClick={() => {
-                                          const txt = `📱 PAGO MÓVIL\r\nBanco: ${pm.banco}\r\nTeléfono: ${pm.telefono}\r\nC.I./RIF: ${pm.documento}${pm.titular ? `\r\nTitular: ${pm.titular}` : ''}`;
-                                          copyToClipboard(txt, `pm-${prov.id}-${pmIdx}`);
+                                          copyToClipboard(formatCleanPagoMovil(pm), `pm-${prov.id}-${pmIdx}`);
                                         }}
                                         className="px-2 py-0.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 text-[10px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
                                       >
@@ -5550,8 +5566,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           </span>
                           <button
                             onClick={() => {
-                              const txt = `📱 PAGO MÓVIL\r\nBanco: ${pm.banco}\r\nTeléfono: ${pm.telefono}\r\nC.I./RIF: ${pm.documento}${pm.titular ? `\r\nTitular: ${pm.titular}` : ''}`;
-                              copyToClipboard(txt, `quick-pm-${i}`);
+                              copyToClipboard(formatCleanPagoMovil(pm), `quick-pm-${i}`);
                             }}
                             className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-black rounded-lg flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
                           >
