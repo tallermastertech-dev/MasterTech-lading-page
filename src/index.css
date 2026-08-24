@@ -303,6 +303,22 @@ body.theme-light {
   font-weight: 900 !important;
 }
 
+/* Icon Badges in Dropdown */
+.theme-light nav a[class*="group/item"] div[class*="rounded-xl"] {
+  background-color: #f1f4f8 !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-light nav a[class*="group/item"] div[class*="rounded-xl"] svg {
+  color: #78350f !important;
+}
+.theme-light nav a[class*="from-blue-950"] div[class*="rounded-xl"] {
+  background-color: #dbeafe !important;
+  border-color: #93c5fd !important;
+}
+.theme-light nav a[class*="from-blue-950"] div[class*="rounded-xl"] svg {
+  color: #1d4ed8 !important;
+}
+
 /* Dropdown Footer Links */
 .theme-light nav div[class*="border-t"] span {
   color: #0f172a !important;
@@ -311,6 +327,61 @@ body.theme-light {
 .theme-light nav div[class*="border-t"] a {
   color: #92400e !important;
   font-weight: 900 !important;
+}
+
+/* Brecha Cambiaria Floating Modal & Trigger in Light Mode */
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.25) !important;
+}
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] h2,
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] h3,
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] span.text-white {
+  color: #0f172a !important;
+}
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] .text-zinc-400 {
+  color: #475569 !important;
+}
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-[#131620]"] {
+  background-color: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-[#131620]"] .text-white {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/50"],
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/80"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/50"] .text-white,
+.theme-light div[class*="fixed bottom-16"][class*="z-50"] [class*="bg-black/80"] input {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+/* Floating Rates Trigger Pill (bottom-left) in Light Mode */
+.theme-light div[class*="fixed bottom-4 left-"] button {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-400 {
+  color: #475569 !important;
+  font-weight: 800 !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-emerald-400 {
+  color: #166534 !important;
+  font-weight: 900 !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-amber-400 {
+  color: #92400e !important;
+  font-weight: 900 !important;
+}
+.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-600 {
+  color: #94a3b8 !important;
 }
 
 /* Brands Ticker in Light Mode */
