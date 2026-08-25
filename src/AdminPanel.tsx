@@ -1835,7 +1835,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               const isFull = isFullAdminUser(currentUser);
               const allTabs = [
                 { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-                { id: 'leads', label: `Citas Solicitadas (${leads.length})`, icon: <Calendar size={18} /> },
+                { id: 'leads', label: `Calendario & Citas (${leads.length})`, icon: <Calendar size={18} /> },
                 { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
                 { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
                 { id: 'proveedores', label: `Admin Proveedores (${proveedoresList.length})`, icon: <Building2 size={18} /> },
