@@ -696,6 +696,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
   };
 
+  // Helper: Capitalizar nombres (ej. "carlos perez" -> "Carlos Perez")
+  const formatName = (str: string): string => {
+    if (!str) return 'Cliente';
+    return str.split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : '').join(' ');
+  };
+
   // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo (Incluye 3 días y 1 día antes)
   useEffect(() => {
     const checkReminderInterval = setInterval(() => {
@@ -708,9 +714,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       reminders.forEach(r => {
         if (!r.completado && r.fecha === todayStr && r.hora === nowTime && !r.notified) {
           try {
-            new Notification('🔔 Taller MasterTech - Recordatorio Operativo', {
-              body: `${r.titulo} ${r.clienteNombre ? `(${r.clienteNombre})` : ''}`,
-              icon: '/logo.png',
+            new Notification('🔔 Recordatorio Operativo Taller', {
+              body: `📌 ${r.titulo}${r.clienteNombre ? `\n👤 Cliente: ${formatName(r.clienteNombre)}` : ''}`,
+              icon: '/favicon.ico',
               tag: r.id
             });
             r.notified = true;
@@ -726,12 +732,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         const daysDiff = getDaysUntilDate(leadDate);
         const notifKey3Days = `notified_3d_${l.id}`;
         const notifKey1Day = `notified_1d_${l.id}`;
+        const clientName = formatName(l.nombre);
+        const leadTime = getLeadTimeStr(l);
 
         if (daysDiff === 3 && !sessionStorage.getItem(notifKey3Days)) {
           try {
-            new Notification('📢 Recordatorio (Faltan 3 Días para Cita)', {
-              body: `Cita de ${l.nombre || 'Cliente'} programada para el ${leadDate} (${l.servicio})`,
-              icon: '/logo.png',
+            new Notification('📢 Cita Agendada en 3 Días', {
+              body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (📅 ${leadDate})`,
+              icon: '/favicon.ico',
               tag: `lead-3d-${l.id}`
             });
             sessionStorage.setItem(notifKey3Days, 'true');
@@ -740,9 +748,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
         if (daysDiff === 1 && !sessionStorage.getItem(notifKey1Day)) {
           try {
-            new Notification('⏰ Recordatorio (Cita MAÑANA)', {
-              body: `Cita MAÑANA de ${l.nombre || 'Cliente'} (${l.servicio})`,
-              icon: '/logo.png',
+            new Notification('⏰ Cita Agendada para Mañana', {
+              body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (⏰ ${leadTime})`,
+              icon: '/favicon.ico',
               tag: `lead-1d-${l.id}`
             });
             sessionStorage.setItem(notifKey1Day, 'true');
