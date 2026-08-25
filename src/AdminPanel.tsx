@@ -22,7 +22,9 @@ import {
   Loader2, 
   Plus, 
   Tag, 
-  Package, 
+  Package,
+  ChevronLeft,
+  List, 
   Layers, 
   HelpCircle, 
   Users, 
@@ -589,6 +591,122 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('Todos');
   const [leadCategoryFilter, setLeadCategoryFilter] = useState<'TODOS' | 'TRABAJO' | 'CATALOGO' | 'INSPECCION' | 'TALLER'>('TODOS');
+
+  // Citas View Mode & Manual Appointment Modal State
+  const [citasViewMode, setCitasViewMode] = useState<'calendar' | 'list'>('calendar');
+  const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+  const [selectedDayCita, setSelectedDayCita] = useState<any | null>(null);
+  const [isManualCitaModalOpen, setIsManualCitaModalOpen] = useState(false);
+  const [manualCitaData, setManualCitaData] = useState<{
+    nombre: string;
+    telefono: string;
+    vehiculo: string;
+    fecha: string;
+    hora: string;
+    servicio: string;
+    notas: string;
+    status: string;
+  }>({
+    nombre: '',
+    telefono: '',
+    vehiculo: '',
+    fecha: new Date().toISOString().split('T')[0],
+    hora: '09:00',
+    servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+    notas: '',
+    status: 'Confirmado'
+  });
+  const [isSavingManualCita, setIsSavingManualCita] = useState(false);
+  const [manualCitaError, setManualCitaError] = useState('');
+
+  // Helper: Extraer Fecha YYYY-MM-DD de una Cita/Lead
+  const getLeadDateStr = (l: any): string => {
+    if (!l) return '';
+    if (l.fecha_hora) {
+      const matchYMD = String(l.fecha_hora).match(/\d{4}-\d{2}-\d{2}/);
+      if (matchYMD) return matchYMD[0];
+      const matchDMY = String(l.fecha_hora).match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if (matchDMY) {
+        const [, d, m, y] = matchDMY;
+        return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+      }
+    }
+    if (l.created_at) {
+      const match = String(l.created_at).match(/\d{4}-\d{2}-\d{2}/);
+      if (match) return match[0];
+    }
+    return '';
+  };
+
+  // Helper: Extraer Hora Format de una Cita/Lead
+  const getLeadTimeStr = (l: any): string => {
+    if (!l) return '09:00 AM';
+    if (l.fecha_hora) {
+      const timeMatch = String(l.fecha_hora).match(/\b(\d{1,2}:\d{2}\s*(?:AM|PM|am|pm)?)\b/);
+      if (timeMatch) return timeMatch[1].toUpperCase();
+    }
+    if (l.created_at) {
+      try {
+        const d = new Date(l.created_at);
+        return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      } catch (e) {}
+    }
+    return '09:00 AM';
+  };
+
+  // Handler: Guardar Cita Manual
+  const handleSaveManualCita = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualCitaData.nombre.trim() || !manualCitaData.telefono.trim() || !manualCitaData.fecha) {
+      setManualCitaError('Por favor completa el nombre, teléfono y fecha de la cita.');
+      return;
+    }
+    setIsSavingManualCita(true);
+    setManualCitaError('');
+
+    try {
+      const fechaHoraFormatted = `${manualCitaData.fecha} ${manualCitaData.hora || '09:00'}`;
+      const payload = {
+        nombre: manualCitaData.nombre.trim(),
+        telefono: manualCitaData.telefono.trim(),
+        vehiculo: manualCitaData.vehiculo.trim() || 'Vehículo no especificado',
+        servicio: manualCitaData.servicio || 'Servicio General Taller',
+        fecha_hora: fechaHoraFormatted,
+        falla: manualCitaData.notas ? `[Agendado por Logística - ${currentUser?.name || 'Asesor'}] ${manualCitaData.notas}` : `[Agendado por Logística - ${currentUser?.name || 'Asesor'}]`,
+        status: manualCitaData.status || 'Confirmado',
+        tipo: 'manual'
+      };
+
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        await logClientAction('Agendó Cita Manual', 'CITAS', `Agendó cita para ${manualCitaData.nombre} (${manualCitaData.vehiculo}) el ${fechaHoraFormatted}`);
+        setIsManualCitaModalOpen(false);
+        setManualCitaData({
+          nombre: '',
+          telefono: '',
+          vehiculo: '',
+          fecha: new Date().toISOString().split('T')[0],
+          hora: '09:00',
+          servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+          notas: '',
+          status: 'Confirmado'
+        });
+        await fetchLeads();
+      } else {
+        const errData = await res.json();
+        setManualCitaError(errData.error || 'Error al guardar la cita.');
+      }
+    } catch (err: any) {
+      setManualCitaError('Error de conexión al registrar la cita.');
+    } finally {
+      setIsSavingManualCita(false);
+    }
+  };
 
   // Helper: Clasificar tipo de solicitud
   const getLeadCategory = (l: any): 'trabajo' | 'catalogo' | 'inspeccion' | 'taller' => {
@@ -2063,15 +2181,62 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                 return (
                   <>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
                       <div>
                         <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Gestión de Solicitudes y Citas</h1>
-                        <p className="text-xs text-zinc-400 mt-1">Clasificación separada para Trabajo / CVs, Pedidos de Catálogo, Inspecciones y Citas de Taller.</p>
+                        <p className="text-xs text-zinc-400 mt-1">Agenda visual interactiva y clasificación para Citas de Vehículos, Inspecciones, Catálogo y Talento.</p>
                       </div>
-                      <button onClick={fetchLeads} className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold flex items-center gap-2 hover:bg-white/10 transition-colors">
-                        <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
-                        <span>Actualizar ({leads.length})</span>
-                      </button>
+                      
+                      <div className="flex flex-wrap items-center gap-2">
+                        {/* Selector Vista Calendario vs Tabla */}
+                        <div className="flex items-center bg-[#12141a] p-1 rounded-xl border border-white/10 shadow-inner">
+                          <button
+                            onClick={() => setCitasViewMode('calendar')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                              citasViewMode === 'calendar' ? 'bg-primary text-black font-black shadow-md' : 'text-zinc-400 hover:text-white'
+                            }`}
+                          >
+                            <Calendar size={14} />
+                            <span>Calendario</span>
+                          </button>
+                          <button
+                            onClick={() => setCitasViewMode('list')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                              citasViewMode === 'list' ? 'bg-white/15 text-white font-black' : 'text-zinc-400 hover:text-white'
+                            }`}
+                          >
+                            <List size={14} />
+                            <span>Tabla</span>
+                          </button>
+                        </div>
+
+                        {/* Botón Agendar Cita Manual */}
+                        <button
+                          onClick={() => {
+                            setManualCitaData({
+                              nombre: '',
+                              telefono: '',
+                              vehiculo: '',
+                              fecha: new Date().toISOString().split('T')[0],
+                              hora: '09:00',
+                              servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+                              notas: '',
+                              status: 'Confirmado'
+                            });
+                            setManualCitaError('');
+                            setIsManualCitaModalOpen(true);
+                          }}
+                          className="px-3.5 py-2 rounded-xl bg-primary hover:bg-amber-400 text-black text-xs font-black uppercase tracking-tight flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
+                        >
+                          <Plus size={15} />
+                          <span>Agendar Cita Manual</span>
+                        </button>
+
+                        <button onClick={fetchLeads} className="p-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors">
+                          <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
+                          <span>Actualizar</span>
+                        </button>
+                      </div>
                     </div>
 
                     {/* Category Tabs / Pills */}
@@ -2168,10 +2333,210 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       </div>
                     </div>
 
-                    {/* Table */}
-                    <div className="bg-[#12141a] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left text-xs text-zinc-300">
+                    {/* Conditional Display: Calendar Mode vs Table Mode */}
+                    {citasViewMode === 'calendar' ? (
+                      <div className="bg-[#12141a] border border-white/10 rounded-3xl p-5 space-y-5 shadow-2xl">
+                        {/* Month Header & Controls */}
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-white/10 pb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2.5 rounded-2xl bg-primary/10 border border-primary/30 text-primary">
+                              <Calendar size={22} />
+                            </div>
+                            <div>
+                              <h2 className="text-lg font-black text-white capitalize tracking-tight flex items-center gap-2">
+                                <span>{calendarDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}</span>
+                              </h2>
+                              <p className="text-[11px] text-zinc-400">
+                                Haz clic en cualquier día o en el botón <strong>+</strong> para agendar una cita rápida
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => {
+                                const prev = new Date(calendarDate);
+                                prev.setMonth(prev.getMonth() - 1);
+                                setCalendarDate(prev);
+                              }}
+                              className="p-2 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                              title="Mes Anterior"
+                            >
+                              <ChevronLeft size={18} />
+                            </button>
+
+                            <button
+                              onClick={() => setCalendarDate(new Date())}
+                              className="px-3.5 py-2 rounded-xl bg-white/10 border border-white/15 text-xs font-bold text-white hover:bg-white/20 transition-colors cursor-pointer"
+                            >
+                              Hoy
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                const next = new Date(calendarDate);
+                                next.setMonth(next.getMonth() + 1);
+                                setCalendarDate(next);
+                              }}
+                              className="p-2 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                              title="Mes Siguiente"
+                            >
+                              <ChevronRight size={18} />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Calendar Grid */}
+                        {(() => {
+                          const year = calendarDate.getFullYear();
+                          const month = calendarDate.getMonth();
+                          const firstDayOfMonth = new Date(year, month, 1);
+                          let startOffset = firstDayOfMonth.getDay() - 1;
+                          if (startOffset === -1) startOffset = 6; // Monday start
+                          const daysInMonth = new Date(year, month + 1, 0).getDate();
+                          const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+                          const todayStr = new Date().toISOString().split('T')[0];
+                          const weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+
+                          const cells: Array<{ day: number; dateStr: string; isCurrentMonth: boolean }> = [];
+
+                          for (let i = startOffset - 1; i >= 0; i--) {
+                            const d = daysInPrevMonth - i;
+                            const prevMonthDate = new Date(year, month - 1, d);
+                            const y = prevMonthDate.getFullYear();
+                            const m = String(prevMonthDate.getMonth() + 1).padStart(2, '0');
+                            const dayFormatted = String(d).padStart(2, '0');
+                            cells.push({ day: d, dateStr: `${y}-${m}-${dayFormatted}`, isCurrentMonth: false });
+                          }
+
+                          for (let d = 1; d <= daysInMonth; d++) {
+                            const m = String(month + 1).padStart(2, '0');
+                            const dayFormatted = String(d).padStart(2, '0');
+                            cells.push({ day: d, dateStr: `${year}-${m}-${dayFormatted}`, isCurrentMonth: true });
+                          }
+
+                          const totalSoFar = cells.length;
+                          const totalCellsNeeded = totalSoFar > 35 ? 42 : 35;
+                          for (let d = 1; d <= totalCellsNeeded - totalSoFar; d++) {
+                            const nextMonthDate = new Date(year, month + 1, d);
+                            const y = nextMonthDate.getFullYear();
+                            const m = String(nextMonthDate.getMonth() + 1).padStart(2, '0');
+                            const dayFormatted = String(d).padStart(2, '0');
+                            cells.push({ day: d, dateStr: `${y}-${m}-${dayFormatted}`, isCurrentMonth: false });
+                          }
+
+                          return (
+                            <div className="space-y-2">
+                              {/* Header Days of Week */}
+                              <div className="grid grid-cols-7 gap-1.5 text-center text-[10px] font-black uppercase tracking-wider text-zinc-400 pb-1 border-b border-white/5">
+                                {weekDays.map((wd, i) => (
+                                  <div key={i} className="py-1">{wd}</div>
+                                ))}
+                              </div>
+
+                              {/* Cells */}
+                              <div className="grid grid-cols-7 gap-1.5">
+                                {cells.map((cell, idx) => {
+                                  const dayLeads = filteredLeads.filter(l => getLeadDateStr(l) === cell.dateStr);
+                                  const isToday = cell.dateStr === todayStr;
+
+                                  return (
+                                    <div
+                                      key={idx}
+                                      className={`min-h-[105px] md:min-h-[125px] p-2 rounded-2xl border transition-all flex flex-col justify-between group/cell ${
+                                        !cell.isCurrentMonth
+                                          ? 'bg-black/20 border-white/5 opacity-40'
+                                          : isToday
+                                          ? 'bg-primary/10 border-primary/50 ring-1 ring-primary/30'
+                                          : 'bg-black/40 border-white/10 hover:border-white/20'
+                                      }`}
+                                    >
+                                      {/* Top Header inside day cell */}
+                                      <div className="flex items-center justify-between">
+                                        <span className={`text-xs font-black px-1.5 py-0.5 rounded-md ${
+                                          isToday ? 'bg-primary text-black font-black' : cell.isCurrentMonth ? 'text-white' : 'text-zinc-500'
+                                        }`}>
+                                          {cell.day}
+                                        </span>
+
+                                        {cell.isCurrentMonth && (
+                                          <button
+                                            onClick={() => {
+                                              setManualCitaData({
+                                                nombre: '',
+                                                telefono: '',
+                                                vehiculo: '',
+                                                fecha: cell.dateStr,
+                                                hora: '09:00',
+                                                servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+                                                notas: '',
+                                                status: 'Confirmado'
+                                              });
+                                              setManualCitaError('');
+                                              setIsManualCitaModalOpen(true);
+                                            }}
+                                            className="opacity-0 group-hover/cell:opacity-100 p-1 rounded-md bg-primary/20 hover:bg-primary text-primary hover:text-black transition-all cursor-pointer"
+                                            title={`Agendar Cita para el ${cell.dateStr}`}
+                                          >
+                                            <Plus size={12} />
+                                          </button>
+                                        )}
+                                      </div>
+
+                                      {/* Day Appointments List */}
+                                      <div className="space-y-1 my-1 overflow-y-auto max-h-[85px] scrollbar-thin">
+                                        {dayLeads.slice(0, 3).map((l, lIdx) => {
+                                          const st = (l.status || 'Pendiente').toLowerCase();
+                                          const statusColor = 
+                                            st === 'confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
+                                            st === 'contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
+                                            st === 'atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
+                                            st === 'cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
+                                            'bg-amber-500/20 text-amber-300 border-amber-500/40';
+
+                                          return (
+                                            <div
+                                              key={l.id || lIdx}
+                                              onClick={() => setSelectedDayCita(l)}
+                                              className={`p-1.5 rounded-lg border text-[10px] cursor-pointer transition-all hover:scale-[1.02] shadow-sm ${statusColor}`}
+                                            >
+                                              <div className="flex items-center justify-between font-mono font-bold">
+                                                <span className="truncate">{getLeadTimeStr(l)}</span>
+                                                <span className="text-[8px] uppercase font-black px-1 rounded bg-black/40">{l.status || 'Pendiente'}</span>
+                                              </div>
+                                              <div className="font-black text-white truncate">{l.nombre || 'Cliente'}</div>
+                                              <div className="text-[9px] text-zinc-300 truncate">{l.vehiculo || l.servicio}</div>
+                                            </div>
+                                          );
+                                        })}
+
+                                        {dayLeads.length > 3 && (
+                                          <div className="text-[9px] font-bold text-center text-primary italic pt-0.5">
+                                            +{dayLeads.length - 3} citas más
+                                          </div>
+                                        )}
+                                      </div>
+
+                                      {/* Bottom badge */}
+                                      {dayLeads.length > 0 && (
+                                        <div className="text-[9px] font-bold text-zinc-400 text-right">
+                                          {dayLeads.length} {dayLeads.length === 1 ? 'cita' : 'citas'}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    ) : (
+                      /* Table View */
+                      <div className="bg-[#12141a] rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left text-xs text-zinc-300">
                           <thead className="bg-black/60 text-zinc-400 uppercase tracking-wider text-[10px] font-black border-b border-white/10">
                             <tr>
                               <th className="p-4">Tipo</th>
@@ -2327,6 +2692,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </table>
                       </div>
                     </div>
+                  )}
                   </>
                 );
               })()}
@@ -5719,6 +6085,270 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <span>WhatsApp</span>
                 </a>
               )}
+            </div>
+          </div>
+        </div>
+      {/* MODAL AGENDAR CITA MANUAL */}
+      {isManualCitaModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="text-primary" size={20} />
+                <h3 className="text-base font-bold text-white uppercase tracking-tight">Agendar Cita Manual</h3>
+              </div>
+              <button onClick={() => setIsManualCitaModalOpen(false)} className="text-zinc-400 hover:text-white p-1 cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            {manualCitaError && (
+              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-bold flex items-center gap-2">
+                <AlertCircle size={16} className="shrink-0" />
+                <span>{manualCitaError}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveManualCita} className="space-y-4 text-xs">
+              {/* Nombre Cliente */}
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Nombre del Cliente *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej. Juan Pérez"
+                  value={manualCitaData.nombre}
+                  onChange={(e) => setManualCitaData({ ...manualCitaData, nombre: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              {/* Teléfono y Vehículo Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Número de Teléfono / WhatsApp *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ej. +58 412 1234567"
+                    value={manualCitaData.telefono}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, telefono: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-mono outline-none focus:border-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Vehículo (Marca, Modelo, Año)</label>
+                  <input
+                    type="text"
+                    placeholder="Ej. Toyota Fortuner 2.7L 2018"
+                    value={manualCitaData.vehiculo}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, vehiculo: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+
+              {/* Fecha y Hora Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Fecha de la Cita *</label>
+                  <input
+                    type="date"
+                    required
+                    value={manualCitaData.fecha}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, fecha: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Hora de la Cita *</label>
+                  <input
+                    type="time"
+                    required
+                    value={manualCitaData.hora}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, hora: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              {/* Servicio Requerido */}
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Servicio / Motivo de Cita</label>
+                <select
+                  value={manualCitaData.servicio}
+                  onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
+                >
+                  <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
+                  <option value="Mecánica General & Mantenimiento Preventivo">Mecánica General & Mantenimiento Preventivo</option>
+                  <option value="Diagnóstico Electrónico & Ultrasonido Inyectores">Diagnóstico Electrónico & Ultrasonido Inyectores</option>
+                  <option value="Frenos, Amortiguadores & Suspensión">Frenos, Amortiguadores & Suspensión</option>
+                  <option value="Climatización A/A (Carga Gas R134a)">Climatización A/A (Carga Gas R134a)</option>
+                  <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
+                  <option value="Instalación de Repuestos Adquiridos">Instalación de Repuestos Adquiridos</option>
+                </select>
+              </div>
+
+              {/* Estado Cita */}
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Estado Inicial de la Cita</label>
+                <select
+                  value={manualCitaData.status}
+                  onChange={(e) => setManualCitaData({ ...manualCitaData, status: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
+                >
+                  <option value="Confirmado">Confirmado</option>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Contactado">Contactado</option>
+                </select>
+              </div>
+
+              {/* Observaciones */}
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">Notas u Observaciones Adicionales</label>
+                <textarea
+                  rows={2}
+                  placeholder="Ej. Trae repuesto propio / Solicita revisión adicional..."
+                  value={manualCitaData.notas}
+                  onChange={(e) => setManualCitaData({ ...manualCitaData, notas: e.target.value })}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-2 pt-2 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setIsManualCitaModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-white/5 text-zinc-400 hover:text-white font-bold cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingManualCita}
+                  className="px-5 py-2.5 rounded-xl bg-primary hover:bg-amber-400 text-black font-black flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  {isSavingManualCita ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                  <span>Guardar Cita</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DETALLE DE CITA SELECCIONADA DESDE CALENDARIO */}
+      {selectedDayCita && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="text-primary" size={20} />
+                <h3 className="text-base font-bold text-white uppercase tracking-tight">Detalle de la Cita</h3>
+              </div>
+              <button onClick={() => setSelectedDayCita(null)} className="text-zinc-400 hover:text-white p-1 cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3 bg-black/40 border border-white/10 rounded-2xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-black text-zinc-400">Cliente</span>
+                  <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
+                    selectedDayCita.status === 'Confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
+                    selectedDayCita.status === 'Contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
+                    selectedDayCita.status === 'Atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
+                    selectedDayCita.status === 'Cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
+                    'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  }`}>
+                    {selectedDayCita.status || 'Pendiente'}
+                  </span>
+                </div>
+                <div className="text-sm font-black text-white">{selectedDayCita.nombre || 'Sin nombre'}</div>
+                <div className="font-mono text-zinc-300 font-bold flex items-center gap-1.5">
+                  <Phone size={13} className="text-primary" />
+                  <span>{selectedDayCita.telefono || 'Sin teléfono'}</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Vehículo</span>
+                  <span className="font-bold text-white block truncate">{selectedDayCita.vehiculo || 'No especificado'}</span>
+                </div>
+
+                <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Fecha y Hora</span>
+                  <span className="font-mono font-bold text-amber-400 block truncate">
+                    {getLeadDateStr(selectedDayCita)} {getLeadTimeStr(selectedDayCita)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Servicio Requerido</span>
+                <span className="font-black text-primary block">{selectedDayCita.servicio || 'Servicio General'}</span>
+              </div>
+
+              {selectedDayCita.falla && (
+                <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Notas / Detalles</span>
+                  <p className="text-zinc-300 text-[11px] leading-relaxed">{selectedDayCita.falla}</p>
+                </div>
+              )}
+
+              {/* Cambiar Estado Rápido */}
+              <div>
+                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Cambiar Estado</label>
+                <select
+                  value={selectedDayCita.status || 'Pendiente'}
+                  onChange={async (e) => {
+                    const newSt = e.target.value;
+                    setSelectedDayCita({ ...selectedDayCita, status: newSt });
+                    await handleUpdateLeadStatus(selectedDayCita.id, newSt);
+                  }}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-white font-bold outline-none focus:border-primary cursor-pointer"
+                >
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Contactado">Contactado</option>
+                  <option value="Entrevistado">Entrevistado</option>
+                  <option value="Confirmado">Confirmado</option>
+                  <option value="Atendido">Atendido</option>
+                  <option value="Cancelado">Cancelado</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+              {selectedDayCita.telefono && (
+                <a
+                  href={`https://wa.me/${selectedDayCita.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${selectedDayCita.nombre || ''}, te escribimos desde Taller MasterTech para confirmar tu cita agendada para el ${getLeadDateStr(selectedDayCita)} a las ${getLeadTimeStr(selectedDayCita)}.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg cursor-pointer"
+                >
+                  <WhatsAppIcon size={16} />
+                  <span>WhatsApp</span>
+                </a>
+              )}
+
+              <button
+                onClick={() => {
+                  const id = selectedDayCita.id;
+                  setSelectedDayCita(null);
+                  handleDeleteLead(id);
+                }}
+                className="p-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors cursor-pointer"
+                title="Eliminar Cita"
+              >
+                <Trash2 size={16} />
+              </button>
             </div>
           </div>
         </div>
