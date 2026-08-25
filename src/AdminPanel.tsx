@@ -841,7 +841,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         fecha_hora: fechaHoraFormatted,
         falla: manualCitaData.notas ? `[Agendado por Logística - ${currentUser?.name || 'Asesor'}] ${manualCitaData.notas}` : `[Agendado por Logística - ${currentUser?.name || 'Asesor'}]`,
         status: manualCitaData.status || 'Confirmado',
-        tipo: 'manual'
+        tipo: 'manual',
+        origen: 'admin',
+        is_manual: true
       };
 
       const res = await fetch('/api/leads', {

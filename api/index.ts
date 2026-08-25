@@ -504,7 +504,12 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
         }
       }
 
-      if (botToken && rawChatId) {
+      const isManual = String(req.body?.tipo || '').toLowerCase() === 'manual' ||
+        String(req.body?.origen || '').toLowerCase() === 'admin' ||
+        Boolean(req.body?.is_manual) ||
+        String(req.body?.falla || '').includes('[Agendado por Logística');
+
+      if (botToken && rawChatId && !isManual) {
         const isPostulacion = String(req.body?.tipo || '').toLowerCase() === 'postulacion' ||
           String(servicio || '').toLowerCase().includes('reclutamiento') ||
           String(servicio || '').toLowerCase().includes('postul') ||
