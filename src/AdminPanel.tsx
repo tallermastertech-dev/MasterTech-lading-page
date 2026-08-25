@@ -2931,29 +2931,48 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       {/* Day Appointments List */}
                                       <div className="space-y-1 my-1 overflow-y-auto max-h-[85px] scrollbar-thin">
                                         {dayLeads.slice(0, 3).map((l, lIdx) => {
-                                          const st = (l.status || 'Pendiente').toLowerCase();
-                                          const statusColor = 
-                                            st === 'confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
-                                            st === 'contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
-                                            st === 'atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
-                                            st === 'cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
-                                            'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                                          const prio = l.prioridad === 'alta' || String(l.falla || '').toLowerCase().includes('[prioridad: alta]') ? 'alta'
+                                            : l.prioridad === 'baja' || String(l.falla || '').toLowerCase().includes('[prioridad: baja]') ? 'baja'
+                                            : 'media';
+
+                                          const priorityStyle = 
+                                            prio === 'alta' ? 'bg-red-950/70 border-red-500/60 text-red-200 hover:border-red-400' :
+                                            prio === 'baja' ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-200 hover:border-emerald-400' :
+                                            'bg-amber-950/70 border-amber-500/60 text-amber-200 hover:border-amber-400';
+
+                                          const prioLabel = prio === 'alta' ? '🔴 Alta' : prio === 'baja' ? '🟢 Baja' : '🟡 Media';
+                                          const clientNameFormatted = formatName(l.nombre);
+                                          const tooltipText = `⏰ Hora: ${getLeadTimeStr(l)}\n👤 Cliente: ${clientNameFormatted}\n🚗 Vehículo: ${l.vehiculo || 'No especificado'}\n🛠️ Servicio: ${l.servicio}\n📌 Estado: ${l.status || 'Pendiente'}\nPrioridad: ${prio === 'alta' ? 'Alta (Urgente)' : prio === 'baja' ? 'Baja (Rutina)' : 'Media (Normal)'}`;
 
                                           return (
                                             <div
                                               key={l.id || lIdx}
+                                              title={tooltipText}
                                               onClick={(e) => {
                                                 e.stopPropagation();
                                                 setSelectedDayCita(l);
                                               }}
-                                              className={`p-1.5 rounded-lg border text-[10px] cursor-pointer transition-all hover:scale-[1.02] shadow-sm ${statusColor}`}
+                                              className={`p-1.5 rounded-lg border text-[10px] cursor-pointer transition-all hover:scale-[1.02] shadow-sm relative group ${priorityStyle}`}
                                             >
-                                              <div className="flex items-center justify-between font-mono font-bold">
+                                              <div className="flex items-center justify-between font-mono font-bold leading-tight">
                                                 <span className="truncate">{getLeadTimeStr(l)}</span>
-                                                <span className="text-[8px] uppercase font-black px-1 rounded bg-black/40">{l.status || 'Pendiente'}</span>
+                                                <span className="text-[8px] font-black px-1 rounded bg-black/50">{prioLabel}</span>
                                               </div>
-                                              <div className="font-black text-white truncate">{l.nombre || 'Cliente'}</div>
-                                              <div className="text-[9px] text-zinc-300 truncate">{l.vehiculo || l.servicio}</div>
+                                              <div className="font-black text-white text-[11px] truncate mt-0.5 leading-tight">
+                                                {clientNameFormatted}
+                                              </div>
+
+                                              {/* Hover pestañita tooltip flotante personalizada */}
+                                              <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-50 w-48 p-2.5 bg-[#181a20] border border-white/20 rounded-xl shadow-2xl text-[10px] text-white pointer-events-none backdrop-blur-md">
+                                                <div className="font-black text-amber-400 border-b border-white/10 pb-1 mb-1 flex items-center justify-between">
+                                                  <span>⏰ {getLeadTimeStr(l)}</span>
+                                                  <span className="text-[8px] px-1 rounded bg-white/10 font-bold">{prioLabel}</span>
+                                                </div>
+                                                <div className="font-bold text-white truncate">👤 {clientNameFormatted}</div>
+                                                <div className="text-zinc-300 truncate">🚗 {l.vehiculo || 'Vehículo s/e'}</div>
+                                                <div className="text-zinc-400 truncate">🛠️ {l.servicio}</div>
+                                                <div className="text-primary font-bold text-[9px] mt-1 pt-1 border-t border-white/10">Haz clic para abrir detalle completo</div>
+                                              </div>
                                             </div>
                                           );
                                         })}
