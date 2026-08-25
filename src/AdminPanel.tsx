@@ -2189,11 +2189,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       
                       <div className="flex flex-wrap items-center gap-2">
                         {/* Selector Vista Calendario vs Tabla */}
-                        <div className="flex items-center bg-[#12141a] p-1 rounded-xl border border-white/10 shadow-inner">
+                        <div className="flex items-center bg-slate-200 dark:bg-[#12141a] p-1 rounded-xl border border-slate-300 dark:border-white/10 shadow-inner">
                           <button
                             onClick={() => setCitasViewMode('calendar')}
                             className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              citasViewMode === 'calendar' ? 'bg-primary text-black font-black shadow-md' : 'text-zinc-400 hover:text-white'
+                              citasViewMode === 'calendar' ? '!bg-primary !text-black font-black shadow-md' : 'text-slate-700 dark:text-zinc-400 hover:text-black dark:hover:text-white'
                             }`}
                           >
                             <Calendar size={14} />
@@ -2202,7 +2202,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <button
                             onClick={() => setCitasViewMode('list')}
                             className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              citasViewMode === 'list' ? 'bg-white/15 text-white font-black' : 'text-zinc-400 hover:text-white'
+                              citasViewMode === 'list' ? '!bg-slate-800 dark:!bg-white/20 !text-white font-black shadow-md' : 'text-slate-700 dark:text-zinc-400 hover:text-black dark:hover:text-white'
                             }`}
                           >
                             <List size={14} />
@@ -2226,13 +2226,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             setManualCitaError('');
                             setIsManualCitaModalOpen(true);
                           }}
-                          className="px-3.5 py-2 rounded-xl bg-primary hover:bg-amber-400 text-black text-xs font-black uppercase tracking-tight flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
+                          className="px-3.5 py-2 rounded-xl !bg-primary hover:!bg-amber-400 !text-black text-xs font-black uppercase tracking-tight flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
                         >
                           <Plus size={15} />
                           <span>Agendar Cita Manual</span>
                         </button>
 
-                        <button onClick={fetchLeads} className="p-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors">
+                        <button onClick={fetchLeads} className="p-2 rounded-xl bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-800 dark:text-zinc-300 flex items-center gap-1.5 hover:bg-slate-300 dark:hover:bg-white/10 transition-colors cursor-pointer">
                           <RefreshCw size={14} className={isLoadingLeads ? 'animate-spin' : ''} />
                           <span>Actualizar</span>
                         </button>
@@ -2245,8 +2245,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         onClick={() => setLeadCategoryFilter('TODOS')}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                           leadCategoryFilter === 'TODOS'
-                            ? 'bg-primary text-black shadow-lg font-black'
-                            : 'bg-[#12141a] text-zinc-400 hover:text-white border border-white/10'
+                            ? '!bg-primary !text-black shadow-lg font-black'
+                            : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-zinc-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-white/10 shadow-sm'
                         }`}
                       >
                         <Layers size={14} />
@@ -2257,8 +2257,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         onClick={() => setLeadCategoryFilter('TRABAJO')}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                           leadCategoryFilter === 'TRABAJO'
-                            ? 'bg-purple-500 text-white shadow-lg font-black'
-                            : 'bg-[#12141a] text-purple-400 hover:text-white border border-purple-500/30'
+                            ? 'bg-purple-600 text-white shadow-lg font-black'
+                            : 'bg-white dark:bg-[#12141a] text-purple-700 dark:text-purple-400 hover:text-purple-900 dark:hover:text-white border border-purple-300 dark:border-purple-500/30 shadow-sm'
                         }`}
                       >
                         <Briefcase size={14} />
@@ -2269,8 +2269,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         onClick={() => setLeadCategoryFilter('CATALOGO')}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                           leadCategoryFilter === 'CATALOGO'
-                            ? 'bg-blue-500 text-white shadow-lg font-black'
-                            : 'bg-[#12141a] text-blue-400 hover:text-white border border-blue-500/30'
+                            ? 'bg-blue-600 text-white shadow-lg font-black'
+                            : 'bg-white dark:bg-[#12141a] text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-white border border-blue-300 dark:border-blue-500/30 shadow-sm'
                         }`}
                       >
                         <ShoppingCart size={14} />
@@ -2281,8 +2281,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         onClick={() => setLeadCategoryFilter('INSPECCION')}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                           leadCategoryFilter === 'INSPECCION'
-                            ? 'bg-amber-500 text-black shadow-lg font-black'
-                            : 'bg-[#12141a] text-amber-400 hover:text-white border border-amber-500/30'
+                            ? '!bg-amber-500 !text-black shadow-lg font-black'
+                            : 'bg-white dark:bg-[#12141a] text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-white border border-amber-300 dark:border-amber-500/30 shadow-sm'
                         }`}
                       >
                         <Calendar size={14} />
@@ -2293,8 +2293,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         onClick={() => setLeadCategoryFilter('TALLER')}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                           leadCategoryFilter === 'TALLER'
-                            ? 'bg-cyan-500 text-black shadow-lg font-black'
-                            : 'bg-[#12141a] text-cyan-400 hover:text-white border border-cyan-500/30'
+                            ? '!bg-cyan-500 !text-black shadow-lg font-black'
+                            : 'bg-white dark:bg-[#12141a] text-cyan-700 dark:text-cyan-400 hover:text-cyan-900 dark:hover:text-white border border-cyan-300 dark:border-cyan-500/30 shadow-sm'
                         }`}
                       >
                         <Wrench size={14} />

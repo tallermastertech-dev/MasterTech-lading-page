@@ -945,3 +945,83 @@ html.dark .fixed.inset-0 h2,
 html.dark .fixed.inset-0 h3 {
   color: #ffffff !important;
 }
+
+/* ========================================================================= */
+/* LIGHT THEME HIGH-CONTRAST OVERRIDES FOR ADMIN PANEL BUTTONS & PILLS */
+/* ========================================================================= */
+.theme-light .bg-primary,
+.theme-light [class*="bg-primary"] {
+  background-color: #C2A472 !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  border-color: #a88956 !important;
+}
+
+.theme-light .bg-primary *,
+.theme-light [class*="bg-primary"] * {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+/* Inactive Buttons & Switchers in Light Mode */
+.theme-light button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.theme-light button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) * {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* Category Filter Inactive Pills in Light Mode */
+.theme-light div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+.theme-light div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) span,
+.theme-light div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) svg {
+  color: #334155 !important;
+  font-weight: 800 !important;
+}
+
+/* Active Category Pills in Light Mode */
+.theme-light button.bg-purple-500,
+.theme-light button.bg-blue-500,
+.theme-light button.bg-amber-500,
+.theme-light button.bg-cyan-500 {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+.theme-light button.bg-purple-500 *,
+.theme-light button.bg-blue-500 * {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+.theme-light button.bg-amber-500,
+.theme-light button.bg-amber-500 * {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+/* Calendar Container & Day Cells in Light Mode */
+.theme-light main div[class*="bg-[#12141a]"] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01) !important;
+}
+
+.theme-light main div[class*="min-h-"][class*="rounded-2xl"] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+.theme-light main div[class*="min-h-"][class*="rounded-2xl"]:hover {
+  border-color: #cbd5e1 !important;
+  background-color: #f1f5f9 !important;
+}
+
