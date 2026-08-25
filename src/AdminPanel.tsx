@@ -2370,11 +2370,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           }}
                           className="w-full bg-slate-200 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-xl py-2.5 px-3 text-xs text-slate-900 dark:text-white outline-none focus:border-primary cursor-pointer font-bold"
                         >
-                          <option value="TODOS">📅 Todas las Fechas</option>
-                          <option value="HOY">⭐ Citas de Hoy</option>
-                          <option value="MANANA">⏩ Citas de Mañana</option>
-                          <option value="ESTA_SEMANA">📆 Esta Semana</option>
-                          <option value="DIA_ESPECIFICO">🎯 Seleccionar Día Específico...</option>
+                          <option value="TODOS">Todas las Fechas</option>
+                          <option value="HOY">Citas de Hoy</option>
+                          <option value="MANANA">Citas de Mañana</option>
+                          <option value="ESTA_SEMANA">Esta Semana</option>
+                          <option value="DIA_ESPECIFICO">Seleccionar Día Específico...</option>
                         </select>
 
                         {dateFilter === 'DIA_ESPECIFICO' && (
