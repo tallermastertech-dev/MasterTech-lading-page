@@ -6088,6 +6088,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             </div>
           </div>
         </div>
+      )}
+
       {/* MODAL AGENDAR CITA MANUAL */}
       {isManualCitaModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
