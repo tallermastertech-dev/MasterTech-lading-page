@@ -591,6 +591,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('Todos');
   const [leadCategoryFilter, setLeadCategoryFilter] = useState<'TODOS' | 'TRABAJO' | 'CATALOGO' | 'INSPECCION' | 'TALLER'>('TODOS');
+  const [dateFilter, setDateFilter] = useState<string>('TODOS');
+  const [customDateFilter, setCustomDateFilter] = useState<string>('');
 
   // Citas View Mode & Manual Appointment Modal State
   const [citasViewMode, setCitasViewMode] = useState<'calendar' | 'list'>('calendar');
@@ -1382,7 +1384,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     logClientAction('Eliminación de Jornada VIP', 'JORNADAS', `Eliminó la jornada VIP "${targetJor?.title || id}".`);
   };
 
-  // Filtered Leads with category segregation
+  // Filtered Leads with category segregation and date classification
   const filteredLeads = useMemo(() => {
     return leads.filter(l => {
       const matchesSearch =
@@ -1400,9 +1402,48 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       else if (leadCategoryFilter === 'INSPECCION') matchesCategory = (cat === 'inspeccion');
       else if (leadCategoryFilter === 'TALLER') matchesCategory = (cat === 'taller');
 
-      return matchesSearch && matchesStatus && matchesCategory;
+      const matchesDate = (() => {
+        if (dateFilter === 'TODOS') return true;
+        const leadDate = getLeadDateStr(l);
+        if (!leadDate) return false;
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        if (dateFilter === 'HOY') return leadDate === todayStr;
+
+        if (dateFilter === 'MANANA') {
+          const tomorrow = new Date();
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          const tomorrowStr = tomorrow.toISOString().split('T')[0];
+          return leadDate === tomorrowStr;
+        }
+
+        if (dateFilter === 'ESTA_SEMANA') {
+          const now = new Date();
+          const startOfWeek = new Date(now);
+          const day = now.getDay();
+          const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+          startOfWeek.setDate(diff);
+          startOfWeek.setHours(0, 0, 0, 0);
+
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+          endOfWeek.setHours(23, 59, 59, 999);
+
+          const lDate = new Date(leadDate + 'T00:00:00');
+          return lDate >= startOfWeek && lDate <= endOfWeek;
+        }
+
+        if (dateFilter === 'DIA_ESPECIFICO') {
+          if (!customDateFilter) return true;
+          return leadDate === customDateFilter;
+        }
+
+        return true;
+      })();
+
+      return matchesSearch && matchesStatus && matchesCategory && matchesDate;
     });
-  }, [leads, searchQuery, statusFilter, leadCategoryFilter]);
+  }, [leads, searchQuery, statusFilter, leadCategoryFilter, dateFilter, customDateFilter]);
 
   // LOGIN SCREEN (Email & Password Multi-user)
   if (!token) {
@@ -2303,25 +2344,56 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       </button>
                     </div>
 
-                    {/* Filters & Search */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-2 relative">
+                    {/* Filters & Search Row (Search + Date Filter + Status Filter) */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                      {/* Búsqueda por Texto */}
+                      <div className="md:col-span-5 relative">
                         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
                         <input
                           type="text"
                           placeholder="Buscar por nombre, teléfono, vehículo, especialidad o repuesto..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white outline-none focus:border-primary"
+                          className="w-full bg-slate-200 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-900 dark:text-white outline-none focus:border-primary font-bold"
                         />
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      {/* Clasificación por Fecha / Día */}
+                      <div className="md:col-span-4 flex items-center gap-2">
+                        <Calendar size={16} className="text-amber-500 shrink-0" />
+                        <select
+                          value={dateFilter}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setDateFilter(val);
+                            if (val !== 'DIA_ESPECIFICO') setCustomDateFilter('');
+                          }}
+                          className="w-full bg-slate-200 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-xl py-2.5 px-3 text-xs text-slate-900 dark:text-white outline-none focus:border-primary cursor-pointer font-bold"
+                        >
+                          <option value="TODOS">📅 Todas las Fechas</option>
+                          <option value="HOY">⭐ Citas de Hoy</option>
+                          <option value="MANANA">⏩ Citas de Mañana</option>
+                          <option value="ESTA_SEMANA">📆 Esta Semana</option>
+                          <option value="DIA_ESPECIFICO">🎯 Seleccionar Día Específico...</option>
+                        </select>
+
+                        {dateFilter === 'DIA_ESPECIFICO' && (
+                          <input
+                            type="date"
+                            value={customDateFilter}
+                            onChange={(e) => setCustomDateFilter(e.target.value)}
+                            className="bg-slate-200 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-xl py-2.5 px-3 text-xs text-slate-900 dark:text-white outline-none focus:border-primary cursor-pointer font-mono font-bold shrink-0"
+                          />
+                        )}
+                      </div>
+
+                      {/* Filtro por Estado */}
+                      <div className="md:col-span-3 flex items-center gap-2">
                         <Filter size={16} className="text-zinc-400 shrink-0" />
                         <select
                           value={statusFilter}
                           onChange={(e) => setStatusFilter(e.target.value)}
-                          className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-primary cursor-pointer"
+                          className="w-full bg-slate-200 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-xl py-2.5 px-3 text-xs text-slate-900 dark:text-white outline-none focus:border-primary cursor-pointer font-bold"
                         >
                           <option value="Todos">Todos los Estados</option>
                           <option value="Pendiente">Pendientes</option>
