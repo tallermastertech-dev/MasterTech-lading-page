@@ -6176,22 +6176,26 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               </div>
 
-              {/* Servicio Requerido */}
+              {/* Servicio Requerido (Input de Texto Libre + Datalist de Sugerencias) */}
               <div>
-                <label className="text-zinc-400 font-bold block mb-1">Servicio / Motivo de Cita</label>
-                <select
+                <label className="text-zinc-400 font-bold block mb-1">Servicio / Motivo de Cita (Escribe o Selecciona)</label>
+                <input
+                  type="text"
+                  list="servicios-preset-list"
+                  placeholder="Ej. Inspección Diagnóstica, Revisión de Frenos, Cambio de Aceite..."
                   value={manualCitaData.servicio}
                   onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
-                >
-                  <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
-                  <option value="Mecánica General & Mantenimiento Preventivo">Mecánica General & Mantenimiento Preventivo</option>
-                  <option value="Diagnóstico Electrónico & Ultrasonido Inyectores">Diagnóstico Electrónico & Ultrasonido Inyectores</option>
-                  <option value="Frenos, Amortiguadores & Suspensión">Frenos, Amortiguadores & Suspensión</option>
-                  <option value="Climatización A/A (Carga Gas R134a)">Climatización A/A (Carga Gas R134a)</option>
-                  <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
-                  <option value="Instalación de Repuestos Adquiridos">Instalación de Repuestos Adquiridos</option>
-                </select>
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                />
+                <datalist id="servicios-preset-list">
+                  <option value="Inspección Diagnóstica 25 Puntos Gratuita" />
+                  <option value="Mecánica General & Mantenimiento Preventivo" />
+                  <option value="Diagnóstico Electrónico & Ultrasonido Inyectores" />
+                  <option value="Frenos, Amortiguadores & Suspensión" />
+                  <option value="Climatización A/A (Carga Gas R134a)" />
+                  <option value="Jornada Preventiva Especial VIP" />
+                  <option value="Instalación de Repuestos Adquiridos" />
+                </datalist>
               </div>
 
               {/* Estado Cita */}
