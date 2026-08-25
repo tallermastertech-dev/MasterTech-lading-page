@@ -6357,4 +6357,4 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     </div>
   );
 }
-}
+
