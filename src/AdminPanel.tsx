@@ -2940,14 +2940,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             prio === 'baja' ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-200 hover:border-emerald-400' :
                                             'bg-amber-950/70 border-amber-500/60 text-amber-200 hover:border-amber-400';
 
-                                          const prioLabel = prio === 'alta' ? '🔴 Alta' : prio === 'baja' ? '🟢 Baja' : '🟡 Media';
+                                          const prioLabel = prio === 'alta' ? 'Alta' : prio === 'baja' ? 'Baja' : 'Media';
                                           const clientNameFormatted = formatName(l.nombre);
-                                          const tooltipText = `⏰ Hora: ${getLeadTimeStr(l)}\n👤 Cliente: ${clientNameFormatted}\n🚗 Vehículo: ${l.vehiculo || 'No especificado'}\n🛠️ Servicio: ${l.servicio}\n📌 Estado: ${l.status || 'Pendiente'}\nPrioridad: ${prio === 'alta' ? 'Alta (Urgente)' : prio === 'baja' ? 'Baja (Rutina)' : 'Media (Normal)'}`;
 
                                           return (
                                             <div
                                               key={l.id || lIdx}
-                                              title={tooltipText}
                                               onClick={(e) => {
                                                 e.stopPropagation();
                                                 setSelectedDayCita(l);
@@ -2956,22 +2954,54 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             >
                                               <div className="flex items-center justify-between font-mono font-bold leading-tight">
                                                 <span className="truncate">{getLeadTimeStr(l)}</span>
-                                                <span className="text-[8px] font-black px-1 rounded bg-black/50">{prioLabel}</span>
+                                                <span className={`text-[8px] font-black px-1 rounded ${
+                                                  prio === 'alta' ? 'bg-red-900/80 text-red-200' :
+                                                  prio === 'baja' ? 'bg-emerald-900/80 text-emerald-200' :
+                                                  'bg-amber-900/80 text-amber-200'
+                                                }`}>{prioLabel}</span>
                                               </div>
                                               <div className="font-black text-white text-[11px] truncate mt-0.5 leading-tight">
                                                 {clientNameFormatted}
                                               </div>
 
-                                              {/* Hover pestañita tooltip flotante personalizada */}
-                                              <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-50 w-48 p-2.5 bg-[#181a20] border border-white/20 rounded-xl shadow-2xl text-[10px] text-white pointer-events-none backdrop-blur-md">
-                                                <div className="font-black text-amber-400 border-b border-white/10 pb-1 mb-1 flex items-center justify-between">
-                                                  <span>⏰ {getLeadTimeStr(l)}</span>
-                                                  <span className="text-[8px] px-1 rounded bg-white/10 font-bold">{prioLabel}</span>
+                                              {/* Hover pestañita tooltip flotante personalizada con iconos Lucide (sin emojis) */}
+                                              <div className="hidden group-hover:flex flex-col gap-1.5 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 w-56 p-3 bg-[#12141a]/95 border border-amber-500/30 rounded-2xl shadow-2xl text-xs text-white pointer-events-none backdrop-blur-xl transition-all">
+                                                <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                                                  <div className="flex items-center gap-1.5 font-mono text-amber-400 font-bold text-[11px]">
+                                                    <Clock size={13} className="text-amber-400 shrink-0" />
+                                                    <span>{getLeadTimeStr(l)}</span>
+                                                  </div>
+                                                  <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
+                                                    prio === 'alta' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
+                                                    prio === 'baja' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
+                                                    'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                                                  }`}>
+                                                    Prioridad {prioLabel}
+                                                  </span>
                                                 </div>
-                                                <div className="font-bold text-white truncate">👤 {clientNameFormatted}</div>
-                                                <div className="text-zinc-300 truncate">🚗 {l.vehiculo || 'Vehículo s/e'}</div>
-                                                <div className="text-zinc-400 truncate">🛠️ {l.servicio}</div>
-                                                <div className="text-primary font-bold text-[9px] mt-1 pt-1 border-t border-white/10">Haz clic para abrir detalle completo</div>
+
+                                                <div className="flex items-center gap-2 text-white font-bold text-xs">
+                                                  <User size={13} className="text-primary shrink-0" />
+                                                  <span className="truncate">{clientNameFormatted}</span>
+                                                </div>
+
+                                                <div className="flex items-center gap-2 text-zinc-300 text-[11px]">
+                                                  <Car size={13} className="text-zinc-400 shrink-0" />
+                                                  <span className="truncate">{l.vehiculo || 'No especificado'}</span>
+                                                </div>
+
+                                                <div className="flex items-start gap-2 text-zinc-300 text-[11px]">
+                                                  <Wrench size={13} className="text-amber-500 shrink-0 mt-0.5" />
+                                                  <span className="truncate leading-snug">{l.servicio}</span>
+                                                </div>
+
+                                                <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-1 border-t border-white/10 mt-0.5">
+                                                  <div className="flex items-center gap-1 font-semibold">
+                                                    <Tag size={11} className="text-zinc-500 shrink-0" />
+                                                    <span>Estado: {l.status || 'Pendiente'}</span>
+                                                  </div>
+                                                  <span className="text-primary font-bold text-[9px]">Clic para abrir</span>
+                                                </div>
                                               </div>
                                             </div>
                                           );
