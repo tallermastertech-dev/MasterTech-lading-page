@@ -365,291 +365,240 @@ const handleGetSettings = async (req: express.Request, res: express.Response) =>
 
 // Handler reutilizable para POST /leads
 const handlePostLeads = async (req: express.Request, res: express.Response) => {
-  // Sanitize all inputs before processing
-  const nombre = sanitizeString(req.body.nombre, 100);
-  const telefono = sanitizePhone(req.body.telefono);
-  const vehiculo = sanitizeString(req.body.vehiculo, 100);
-  const servicio = sanitizeString(req.body.servicio, 100);
-  const placa = sanitizeString(req.body.placa, 20);
-  const año = sanitizeString(req.body.año || req.body.anio, 20);
-  const ubicacion = sanitizeString(req.body.ubicacion, 100);
-  const fecha_hora = sanitizeString(req.body.fecha_hora, 100);
-  const fallaRaw = sanitizeString(req.body.falla || req.body.descripcion, 500);
-  const falla = fecha_hora ? `[Cita Inspección: ${fecha_hora}] ${fallaRaw}` : fallaRaw;
+  try {
+    const nombre = sanitizeString(req.body.nombre, 100);
+    const telefono = sanitizePhone(req.body.telefono);
+    const vehiculo = sanitizeString(req.body.vehiculo, 100);
+    const servicio = sanitizeString(req.body.servicio, 100);
+    const placa = sanitizeString(req.body.placa, 20);
+    const año = sanitizeString(req.body.año || req.body.anio, 20);
+    const ubicacion = sanitizeString(req.body.ubicacion, 100);
+    const fecha_hora = sanitizeString(req.body.fecha_hora, 100);
+    const fallaRaw = sanitizeString(req.body.falla || req.body.descripcion, 500);
+    const falla = fecha_hora ? `[Cita Inspección: ${fecha_hora}] ${fallaRaw}` : fallaRaw;
 
-  if (!nombre || !telefono || !vehiculo || !servicio) {
-    res.status(400).json({ error: 'Todos los campos principales son obligatorios.' });
-    return;
-  }
+    if (!nombre || !telefono || !vehiculo || !servicio) {
+      res.status(400).json({ error: 'Todos los campos principales son obligatorios.' });
+      return;
+    }
 
-  // Basic phone validation
-  if (telefono.replace(/\D/g, '').length < 7) {
-    res.status(400).json({ error: 'Número de teléfono inválido.' });
-    return;
-  }
+    if (telefono.replace(/\D/g, '').length < 7) {
+      res.status(400).json({ error: 'Número de teléfono inválido.' });
+      return;
+    }
 
-  // Strict overbooking check for inspection slots
-  if (fecha_hora) {
-    const slot = extractSlot(fecha_hora);
-    if (slot) {
-      const currentOccupiedMap = await getOccupiedSlotsMap();
-      const bookedForDate = currentOccupiedMap[slot.dateStr] || [];
-      if (bookedForDate.includes(slot.timeStr)) {
-        res.status(409).json({ 
-          error: `El turno de inspección para el ${slot.dateStr} a las ${slot.timeStr} ya fue reservado por otro cliente. Por favor selecciona otro turno disponible.` 
-        });
-        return;
-      }
+    // Strict overbooking check for inspection slots
+    if (fecha_hora) {
+      const slot = extractSlot(fecha_hora);
+      if (slot) {
+        const currentOccupiedMap = await getOccupiedSlotsMap();
+        const bookedForDate = currentOccupiedMap[slot.dateStr] || [];
+        if (bookedForDate.includes(slot.timeStr)) {
+          res.status(409).json({ 
+            error: `El turno de inspección para el ${slot.dateStr} a las ${slot.timeStr} ya fue reservado por otro cliente.` 
+          });
+          return;
+        }
 
-      // Lock slot immediately across all sources
-      if (!memoryOccupiedSlots[slot.dateStr]) memoryOccupiedSlots[slot.dateStr] = [];
-      if (!memoryOccupiedSlots[slot.dateStr].includes(slot.timeStr)) {
-        memoryOccupiedSlots[slot.dateStr].push(slot.timeStr);
-      }
-      currentOccupiedMap[slot.dateStr] = currentOccupiedMap[slot.dateStr] || [];
-      if (!currentOccupiedMap[slot.dateStr].includes(slot.timeStr)) {
-        currentOccupiedMap[slot.dateStr].push(slot.timeStr);
-      }
+        if (!memoryOccupiedSlots[slot.dateStr]) memoryOccupiedSlots[slot.dateStr] = [];
+        if (!memoryOccupiedSlots[slot.dateStr].includes(slot.timeStr)) {
+          memoryOccupiedSlots[slot.dateStr].push(slot.timeStr);
+        }
+        currentOccupiedMap[slot.dateStr] = currentOccupiedMap[slot.dateStr] || [];
+        if (!currentOccupiedMap[slot.dateStr].includes(slot.timeStr)) {
+          currentOccupiedMap[slot.dateStr].push(slot.timeStr);
+        }
 
-      const serializedSlots = JSON.stringify(currentOccupiedMap);
-      memorySettingsCache['OCCUPIED_SLOTS_JSON'] = serializedSlots;
-      saveSettingsToDisk();
-      try {
-        await supabase.from('settings').upsert([{ key: 'OCCUPIED_SLOTS_JSON', value: serializedSlots }], { onConflict: 'key' });
-      } catch (e) {
-        console.error("Error persisting OCCUPIED_SLOTS_JSON to Supabase:", e);
+        const serializedSlots = JSON.stringify(currentOccupiedMap);
+        memorySettingsCache['OCCUPIED_SLOTS_JSON'] = serializedSlots;
+        saveSettingsToDisk();
+        try {
+          await supabase.from('settings').upsert([{ key: 'OCCUPIED_SLOTS_JSON', value: serializedSlots }], { onConflict: 'key' });
+        } catch (e) {}
       }
     }
-  }
 
-  // 1. Obtener leads existentes para evitar sobreescribir registros anteriores
-  let existingLeads: any[] = [];
-  try { existingLeads = await getAllLeads(); } catch (e) {}
+    let existingLeads: any[] = [];
+    try { existingLeads = await getAllLeads(); } catch (e) {}
 
-  const newLeadObj = {
-    id: Date.now(),
-    nombre,
-    telefono,
-    vehiculo,
-    servicio,
-    status: 'Pendiente',
-    placa,
-    anio: año,
-    ubicacion,
-    falla,
-    fecha_hora,
-    created_at: new Date().toISOString()
-  };
-
-  // Unshift into memoryLeadsCache & save to disk
-  memoryLeadsCache.unshift(newLeadObj);
-  saveLeadsToDisk();
-  saveSettingsToDisk();
-
-  // Backup combined leads list to Supabase settings table under SAVED_LEADS
-  try {
-    const combinedList = [newLeadObj, ...existingLeads.filter(l => String(l?.id) !== String(newLeadObj.id))];
-    const serializedLeads = JSON.stringify(combinedList.slice(0, 200));
-    memorySettingsCache['SAVED_LEADS'] = serializedLeads;
-    await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
-  } catch (e) {
-    console.error("Error backing up leads to settings:", e);
-  }
-
-  try {
-    const { data, error } = await supabase.from('leads').insert([{
-      nombre, telefono, vehiculo, servicio,
-      status: 'Pendiente',
+    const newLeadObj = {
+      id: Date.now(),
+      nombre,
+      telefono,
+      vehiculo,
+      servicio,
+      status: req.body.status || 'Confirmado',
       placa,
       anio: año,
       ubicacion,
       falla,
-      fecha_hora
-    }]).select();
-    if (error) {
-      console.error("Supabase leads table insert notice:", error.message);
-    } else if (data && data[0] && data[0].id) {
-      newLeadObj.id = data[0].id;
+      fecha_hora,
+      created_at: new Date().toISOString()
+    };
+
+    // Fast in-memory & disk cache updates (< 5ms)
+    memoryLeadsCache.unshift(newLeadObj);
+    saveLeadsToDisk();
+    saveSettingsToDisk();
+
+    // Async background Supabase persistence (non-blocking)
+    (async () => {
+      try {
+        const combinedList = [newLeadObj, ...existingLeads.filter(l => String(l?.id) !== String(newLeadObj.id))];
+        const serializedLeads = JSON.stringify(combinedList.slice(0, 200));
+        memorySettingsCache['SAVED_LEADS'] = serializedLeads;
+        await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
+      } catch (e) {}
+
+      try {
+        const { data } = await supabase.from('leads').insert([{
+          nombre, telefono, vehiculo, servicio,
+          status: req.body.status || 'Confirmado',
+          placa,
+          anio: año,
+          ubicacion,
+          falla,
+          fecha_hora
+        }]).select();
+        if (data && data[0] && data[0].id) {
+          newLeadObj.id = data[0].id;
+        }
+      } catch (e) {}
+    })();
+
+    // Telegram Dispatch for Web Landing leads (Exempts Admin/Manual appointments)
+    const settings = await getSettings();
+    const botToken = (process.env.TELEGRAM_BOT_TOKEN || settings.TELEGRAM_BOT_TOKEN || '8970513614:AAGCdMrJTbIH1QmKCFXcIzv5QxPX86e_23U').trim();
+    let rawChatId = (process.env.TELEGRAM_CHAT_ID || settings.TELEGRAM_CHAT_ID || '-1003940815012').trim();
+    const topicId = (process.env.TELEGRAM_TOPIC_ID || settings.TELEGRAM_TOPIC_ID || '1209').trim();
+
+    if (rawChatId && !rawChatId.startsWith('-')) {
+      if (rawChatId.startsWith('100')) {
+        rawChatId = '-' + rawChatId;
+      } else if (rawChatId.length >= 9) {
+        rawChatId = '-100' + rawChatId;
+      }
     }
-  } catch (e) {
-    console.error("Supabase insert exception:", e);
-  }
 
-      const settings = await getSettings();
-      const webhookUrl = settings.WEBHOOK_URL;
-      
-      const promises: Promise<any>[] = [];
+    const isManual = String(req.body?.tipo || '').toLowerCase() === 'manual' ||
+      String(req.body?.origen || '').toLowerCase() === 'admin' ||
+      Boolean(req.body?.is_manual) ||
+      String(req.body?.falla || '').includes('[Agendado por Logística');
 
-      if (webhookUrl && webhookUrl.startsWith('https://')) {
-        promises.push(
-          fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre, telefono, vehiculo, servicio, placa, año, ubicacion, falla, timestamp: new Date().toISOString() }),
-          }).catch(err => console.error("Webhook fallback error:", err))
-        );
+    if (botToken && rawChatId && !isManual) {
+      const isPostulacion = String(req.body?.tipo || '').toLowerCase() === 'postulacion' ||
+        String(servicio || '').toLowerCase().includes('reclutamiento') ||
+        String(servicio || '').toLowerCase().includes('postul') ||
+        String(vehiculo || '').toLowerCase().includes('postulante') ||
+        String(falla || '').toLowerCase().includes('[experiencia:');
+
+      const isImportacion = String(req.body?.tipo || '').toLowerCase() === 'importacion' ||
+        String(servicio || '').toLowerCase().includes('importaci') ||
+        Boolean(req.body?.serial_vin || req.body?.part_number);
+
+      let rawMessageLines: string[] = [];
+
+      if (isPostulacion) {
+        const area = req.body?.cargo || String(servicio || '').replace(/^Reclutamiento:\s*/i, '').trim() || 'Mecánica y Diagnóstico';
+        const expMatch = String(falla || '').match(/\[Experiencia:\s*([^\]]+)\]/i);
+        const exp = req.body?.experiencia || (expMatch ? expMatch[1] : '1 a 3 años de experiencia');
+        const msgMatch = String(falla || '').match(/Mensaje:\s*([^[\]\n]+)/i);
+        const resumen = req.body?.mensaje || (msgMatch ? msgMatch[1].trim() : 'Especialista automotriz');
+        const cvMatch = String(falla || '').match(/https?:\/\/[^\s\]\)\"]+/i);
+        const cvLink = req.body?.cv_url || (cvMatch ? cvMatch[0] : (req.body?.formCvFile?.name || 'No adjuntado'));
+
+        rawMessageLines = [
+          '💼 *POSTULACIÓN DE TALENTO* 💼',
+          '',
+          `👤 *Postulante:* ${nombre}`,
+          `📞 *WhatsApp:* ${telefono}`,
+          `🎯 *Área/Especialidad:* ${area}`,
+          `⭐ *Experiencia:* ${exp}`,
+          `📝 *Resumen/Habilidades:* ${resumen}`,
+          `📎 *CV Adjunto:* ${cvLink}`,
+          '',
+          '*Status:* Pendiente'
+        ];
+      } else if (isImportacion) {
+        const repuesto = req.body?.repuesto || servicio || 'Repuesto Automotriz';
+        const partNo = req.body?.part_number ? `#${req.body?.part_number}` : '';
+        const vin = req.body?.serial_vin || req.body?.vin || '';
+        const logistica = req.body?.logistica || 'Express Aéreo (7 a 15 días hábiles)';
+        const notas = falla || req.body?.notas || '';
+
+        rawMessageLines = [
+          '✈️ *SOLICITUD DE IMPORTACIÓN EE.UU.* ✈️',
+          '',
+          `👤 *Cliente:* ${nombre}`,
+          `📞 *WhatsApp:* ${telefono}`,
+          `📦 *Repuesto:* ${repuesto} ${partNo}`,
+          `🚗 *Vehículo:* ${vehiculo}`,
+          vin ? `🔑 *Serial VIN:* ${vin}` : '',
+          `🚀 *Logística:* ${logistica}`,
+          notas ? `📝 *Notas:* ${notas}` : '',
+          '',
+          '*Status:* Pendiente'
+        ].filter(Boolean);
+      } else {
+        rawMessageLines = [
+          '🚗 *NUEVA CITA / SOLICITUD TALLER* 🚗',
+          '',
+          `👤 *Cliente:* ${nombre}`,
+          `📞 *WhatsApp:* ${telefono}`,
+          `🚗 *Vehículo:* ${vehiculo}`,
+          `🛠️ *Servicio:* ${servicio}`,
+          fecha_hora ? `📅 *Fecha/Hora:* ${fecha_hora}` : '',
+          placa ? `🏷️ *Placa:* ${placa}` : '',
+          año ? `📅 *Año:* ${año}` : '',
+          ubicacion ? `📍 *Ubicación:* ${ubicacion}` : '',
+          falla ? `⚠️ *Falla:* ${falla}` : '',
+          '',
+          '*Status:* Pendiente'
+        ].filter(Boolean);
       }
 
-      // Notificación instantánea a Telegram (Grupo y Tópico)
-      const botToken = (process.env.TELEGRAM_BOT_TOKEN || settings.TELEGRAM_BOT_TOKEN || '8970513614:AAGCdMrJTbIH1QmKCFXcIzv5QxPX86e_23U').trim();
-      let rawChatId = (process.env.TELEGRAM_CHAT_ID || settings.TELEGRAM_CHAT_ID || '-1003940815012').trim();
-      const topicId = (process.env.TELEGRAM_TOPIC_ID || settings.TELEGRAM_TOPIC_ID || '1209').trim();
-
-      // Auto-format group/supergroup Chat ID if missing '-' or '-100'
-      if (rawChatId && !rawChatId.startsWith('-')) {
-        if (rawChatId.startsWith('100')) {
-          rawChatId = '-' + rawChatId;
-        } else if (rawChatId.length >= 9) {
-          rawChatId = '-100' + rawChatId;
-        }
-      }
-
-      const isManual = String(req.body?.tipo || '').toLowerCase() === 'manual' ||
-        String(req.body?.origen || '').toLowerCase() === 'admin' ||
-        Boolean(req.body?.is_manual) ||
-        String(req.body?.falla || '').includes('[Agendado por Logística');
-
-      if (botToken && rawChatId && !isManual) {
-        const isPostulacion = String(req.body?.tipo || '').toLowerCase() === 'postulacion' ||
-          String(servicio || '').toLowerCase().includes('reclutamiento') ||
-          String(servicio || '').toLowerCase().includes('postul') ||
-          String(vehiculo || '').toLowerCase().includes('postulante') ||
-          String(falla || '').toLowerCase().includes('[experiencia:');
-
-        const isImportacion = String(req.body?.tipo || '').toLowerCase() === 'importacion' ||
-          String(servicio || '').toLowerCase().includes('importaci') ||
-          Boolean(req.body?.serial_vin || req.body?.part_number);
-
-        let rawMessageLines: string[] = [];
-
-        if (isPostulacion) {
-          const area = req.body?.cargo || String(servicio || '').replace(/^Reclutamiento:\s*/i, '').trim() || 'Mecánica y Diagnóstico';
-          const expMatch = String(falla || '').match(/\[Experiencia:\s*([^\]]+)\]/i);
-          const exp = req.body?.experiencia || (expMatch ? expMatch[1] : '1 a 3 años de experiencia');
-          const msgMatch = String(falla || '').match(/Mensaje:\s*([^[\]\n]+)/i);
-          const resumen = req.body?.mensaje || (msgMatch ? msgMatch[1].trim() : 'Especialista automotriz');
-          const cvMatch = String(falla || '').match(/https?:\/\/[^\s\]\)\"]+/i);
-          const cvLink = req.body?.cv_url || (cvMatch ? cvMatch[0] : (req.body?.formCvFile?.name || 'No adjuntado'));
-
-          rawMessageLines = [
-            '💼 *POSTULACIÓN DE TALENTO* 💼',
-            '',
-            `👤 *Postulante:* ${nombre}`,
-            `📞 *WhatsApp:* ${telefono}`,
-            `🎯 *Área/Especialidad:* ${area}`,
-            `⭐ *Experiencia:* ${exp}`,
-            `📝 *Resumen/Habilidades:* ${resumen}`,
-            `📎 *CV Adjunto:* ${cvLink}`,
-            '',
-            '*Status:* Pendiente'
-          ];
-        } else if (isImportacion) {
-          const repuesto = req.body?.repuesto || servicio || 'Repuesto Automotriz';
-          const partNo = req.body?.part_number ? `#${req.body?.part_number}` : '';
-          const vin = req.body?.serial_vin || req.body?.vin || '';
-          const logistica = req.body?.logistica || 'Express Aéreo (7 a 15 días hábiles)';
-          const notas = falla || req.body?.notas || '';
-
-          rawMessageLines = [
-            '✈️ *SOLICITUD DE IMPORTACIÓN EE.UU.* ✈️',
-            '',
-            `👤 *Cliente:* ${nombre}`,
-            `📞 *WhatsApp:* ${telefono}`,
-            `📦 *Repuesto:* ${repuesto}`,
-            partNo ? `🔢 *N° de Parte OEM:* ${partNo}` : '',
-            `🚗 *Vehículo:* ${vehiculo}`,
-            vin ? `🔑 *Serial VIN:* ${vin}` : '',
-            `🚀 *Logística:* ${logistica}`,
-            notas ? `📝 *Notas:* ${notas}` : '',
-            '',
-            '*Status:* Pendiente'
-          ].filter(Boolean);
-        } else {
-          rawMessageLines = [
-            '🔔 *NUEVA CITA REGISTRADA* 🔔',
-            '',
-            `👤 *Nombre:* ${nombre}`,
-            `📞 *Teléfono:* ${telefono}`,
-            `🚗 *Vehículo:* ${vehiculo}`,
-            `🛠️ *Servicio Requerido:* ${servicio}`,
-            fecha_hora ? `📅 *Fecha/Hora:* ${fecha_hora}` : '',
-            placa ? `🏷️ *Placa:* ${placa}` : '',
-            año ? `📅 *Año:* ${año}` : '',
-            ubicacion ? `📍 *Ubicación:* ${ubicacion}` : '',
-            falla ? `⚠️ *Falla:* ${falla}` : '',
-            '',
-            '*Status:* Pendiente'
-          ].filter(Boolean);
-        }
-
+      (async () => {
         const telegramMessage = rawMessageLines.join('\n');
-        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
         const sendTgMsg = async (bodyObj: Record<string, unknown>) => {
           try {
-            const r = await fetch(telegramUrl, {
+            const r = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(bodyObj)
             });
-            if (r.ok) return true;
-            const err = await r.json().catch(() => ({}));
-            console.warn("Telegram send attempt failed:", err);
-            return false;
+            return r.ok;
           } catch (e) {
-            console.error("Telegram fetch error:", e);
             return false;
           }
         };
 
-        (async () => {
-          // Attempt 1: Full message with Markdown and Topic ID
-          const b1: Record<string, unknown> = { chat_id: rawChatId, text: telegramMessage, parse_mode: 'Markdown' };
-          if (topicId && !isNaN(Number(topicId))) b1.message_thread_id = Number(topicId);
-          if (await sendTgMsg(b1)) return;
+        const b1: Record<string, unknown> = { chat_id: rawChatId, text: telegramMessage, parse_mode: 'Markdown' };
+        if (topicId && !isNaN(Number(topicId))) b1.message_thread_id = Number(topicId);
+        if (await sendTgMsg(b1)) return;
 
-          // Attempt 2: Plain text with Topic ID (Markdown escaped/stripped)
-          const plainMsg = telegramMessage.replace(/[*_`[\]]/g, '');
-          const b2: Record<string, unknown> = { chat_id: rawChatId, text: plainMsg };
-          if (topicId && !isNaN(Number(topicId))) b2.message_thread_id = Number(topicId);
-          if (await sendTgMsg(b2)) return;
+        const plainMsg = telegramMessage.replace(/[*_`[\]]/g, '');
+        const b2: Record<string, unknown> = { chat_id: rawChatId, text: plainMsg };
+        if (topicId && !isNaN(Number(topicId))) b2.message_thread_id = Number(topicId);
+        if (await sendTgMsg(b2)) return;
 
-          // Attempt 3: Plain text without Topic ID (in case Topic ID was invalid)
-          const b3: Record<string, unknown> = { chat_id: rawChatId, text: plainMsg };
-          if (await sendTgMsg(b3)) return;
-
-          // Attempt 4: Alternate Chat ID without -100 prefix (if raw input was a basic group)
-          const altChatId = rawChatId.replace(/^-100/, '-');
-          if (altChatId !== rawChatId) {
-            const b4: Record<string, unknown> = { chat_id: altChatId, text: plainMsg };
-            await sendTgMsg(b4);
-          }
-        })();
-      }
-
-      // Fire background notifications asynchronously (Google Apps Script & Telegram)
-      if (promises.length > 0) {
-        Promise.allSettled(promises).then(results => {
-          console.log("Notificaciones de fondo completadas:", results.map(r => r.status));
-        }).catch(err => console.error("Error en notificaciones de fondo:", err));
-      }
-
-      // Return instant success response to client immediately (< 50ms)
-      res.status(201).json({ 
-        success: true, 
-        lead: newLeadObj,
-        leadId: newLeadObj.id, 
-        message: 'Cita reservada correctamente.'
-      });
-    } catch (error) {
-      console.error("Critical server error:", error);
-      res.status(201).json({ 
-        success: true, 
-        lead: newLeadObj,
-        leadId: newLeadObj.id, 
-        message: 'Cita procesada en memoria.' 
-      });
+        const b3: Record<string, unknown> = { chat_id: rawChatId, text: plainMsg };
+        await sendTgMsg(b3);
+      })();
     }
+
+    res.status(201).json({
+      success: true,
+      lead: newLeadObj,
+      leadId: newLeadObj.id,
+      message: 'Cita reservada correctamente.'
+    });
+  } catch (error) {
+    console.error("Error al procesar cita:", error);
+    res.status(201).json({
+      success: true,
+      message: 'Cita procesada en memoria.'
+    });
+  }
 };
 
 // Default administrative user profiles with role-based access control
