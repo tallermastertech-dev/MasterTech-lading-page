@@ -611,6 +611,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     servicio: string;
     notas: string;
     status: string;
+    prioridad: string;
   }>({
     nombre: '',
     telefono: '',
@@ -619,7 +620,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     hora: '09:00',
     servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
     notas: '',
-    status: 'Confirmado'
+    status: 'Confirmado',
+    prioridad: 'media'
   });
   const [isSavingManualCita, setIsSavingManualCita] = useState(false);
   const [manualCitaError, setManualCitaError] = useState('');
@@ -847,8 +849,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         vehiculo: manualCitaData.vehiculo.trim() || 'Vehículo no especificado',
         servicio: manualCitaData.servicio || 'Servicio General Taller',
         fecha_hora: fechaHoraFormatted,
-        falla: manualCitaData.notas ? `[Agendado por Logística - ${currentUser?.name || 'Asesor'}] ${manualCitaData.notas}` : `[Agendado por Logística - ${currentUser?.name || 'Asesor'}]`,
+        falla: manualCitaData.notas ? `[Prioridad: ${manualCitaData.prioridad || 'media'}] [Agendado por Logística - ${currentUser?.name || 'Asesor'}] ${manualCitaData.notas}` : `[Prioridad: ${manualCitaData.prioridad || 'media'}] [Agendado por Logística - ${currentUser?.name || 'Asesor'}]`,
         status: manualCitaData.status || 'Confirmado',
+        prioridad: manualCitaData.prioridad || 'media',
         tipo: 'manual',
         origen: 'admin',
         is_manual: true
@@ -861,8 +864,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         vehiculo: manualCitaData.vehiculo.trim() || 'Vehículo no especificado',
         servicio: manualCitaData.servicio || 'Servicio General Taller',
         fecha_hora: fechaHoraFormatted,
-        falla: manualCitaData.notas ? `[Agendado por Logística - ${currentUser?.name || 'Asesor'}] ${manualCitaData.notas}` : `[Agendado por Logística - ${currentUser?.name || 'Asesor'}]`,
+        falla: manualCitaData.notas ? `[Prioridad: ${manualCitaData.prioridad || 'media'}] [Agendado por Logística - ${currentUser?.name || 'Asesor'}] ${manualCitaData.notas}` : `[Prioridad: ${manualCitaData.prioridad || 'media'}] [Agendado por Logística - ${currentUser?.name || 'Asesor'}]`,
         status: manualCitaData.status || 'Confirmado',
+        prioridad: manualCitaData.prioridad || 'media',
         created_at: new Date().toISOString()
       };
 
@@ -877,7 +881,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         hora: '09:00',
         servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
         notas: '',
-        status: 'Confirmado'
+        status: 'Confirmado',
+        prioridad: 'media'
       });
 
       const res = await fetch('/api/leads', {
@@ -6745,18 +6750,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </datalist>
               </div>
 
-              {/* Estado Cita */}
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Estado Inicial de la Cita</label>
-                <select
-                  value={manualCitaData.status}
-                  onChange={(e) => setManualCitaData({ ...manualCitaData, status: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
-                >
-                  <option value="Confirmado">Confirmado</option>
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Contactado">Contactado</option>
-                </select>
+              {/* Estado y Nivel de Prioridad Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Estado Inicial de la Cita</label>
+                  <select
+                    value={manualCitaData.status}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, status: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
+                  >
+                    <option value="Confirmado">Confirmado</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Contactado">Contactado</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Nivel de Prioridad *</label>
+                  <select
+                    value={manualCitaData.prioridad || 'media'}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, prioridad: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
+                  >
+                    <option value="alta">🔴 Alta Prioridad (Urgente)</option>
+                    <option value="media">🟡 Prioridad Media (Normal)</option>
+                    <option value="baja">🟢 Prioridad Baja (Rutina)</option>
+                  </select>
+                </div>
               </div>
 
               {/* Observaciones */}
@@ -6812,15 +6832,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               <div className="p-3 bg-black/40 border border-white/10 rounded-2xl space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] uppercase font-black text-zinc-400">Cliente</span>
-                  <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
-                    selectedDayCita.status === 'Confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
-                    selectedDayCita.status === 'Contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
-                    selectedDayCita.status === 'Atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
-                    selectedDayCita.status === 'Cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
-                    'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                  }`}>
-                    {selectedDayCita.status || 'Pendiente'}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {(selectedDayCita.prioridad === 'alta' || String(selectedDayCita.falla || '').includes('[Prioridad: alta]')) && (
+                      <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-red-500/20 text-red-300 border-red-500/40 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
+                        🔴 Prioridad Alta
+                      </span>
+                    )}
+                    {(selectedDayCita.prioridad === 'baja' || String(selectedDayCita.falla || '').includes('[Prioridad: baja]')) && (
+                      <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
+                        🟢 Prioridad Baja
+                      </span>
+                    )}
+                    {(!selectedDayCita.prioridad || selectedDayCita.prioridad === 'media' || String(selectedDayCita.falla || '').includes('[Prioridad: media]')) && (
+                      <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
+                        🟡 Prioridad Media
+                      </span>
+                    )}
+                    <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
+                      selectedDayCita.status === 'Confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
+                      selectedDayCita.status === 'Contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
+                      selectedDayCita.status === 'Atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
+                      selectedDayCita.status === 'Cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
+                      'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                    }`}>
+                      {selectedDayCita.status || 'Pendiente'}
+                    </span>
+                  </div>
                 </div>
                 <div className="text-sm font-black text-white">{selectedDayCita.nombre || 'Sin nombre'}</div>
                 <div className="font-mono text-zinc-300 font-bold flex items-center gap-1.5">
