@@ -674,14 +674,32 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (e) {}
   };
 
-  // Solicitud de Permisos de Notificaciones Push Nativas del Navegador
+  // Solicitud de Permisos de Notificaciones Push Nativas y Registro de Service Worker para Segundo Plano
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'default') {
         Notification.requestPermission();
       }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then((reg) => {
+          console.log("Service Worker activado para notificaciones en segundo plano:", reg.scope);
+        }).catch((err) => console.warn("Service worker notice:", err));
+      }
     }
   }, []);
+
+  // Helper para emitir notificaciones persistentes (vía Service Worker si está disponible o Web API)
+  const dispatchPushNotification = (title: string, options: any) => {
+    try {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.showNotification(title, options);
+        });
+      } else if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, options);
+      }
+    } catch (e) {}
+  };
 
   // Helper: Calcular diferencia en días entre hoy y la fecha objetivo (YYYY-MM-DD)
   const getDaysUntilDate = (targetDateStr: string): number | null => {
@@ -715,14 +733,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       // 1. Chequeo de Recordatorios Operativos Manuales
       reminders.forEach(r => {
         if (!r.completado && r.fecha === todayStr && r.hora === nowTime && !r.notified) {
-          try {
-            new Notification('🔔 Recordatorio Operativo Taller', {
-              body: `📌 ${r.titulo}${r.clienteNombre ? `\n👤 Cliente: ${formatName(r.clienteNombre)}` : ''}`,
-              icon: '/favicon.ico',
-              tag: r.id
-            });
-            r.notified = true;
-          } catch (e) {}
+          dispatchPushNotification('🔔 Recordatorio Operativo Taller', {
+            body: `📌 ${r.titulo}${r.clienteNombre ? `\n👤 Cliente: ${formatName(r.clienteNombre)}` : ''}`,
+            icon: '/logo.png',
+            tag: r.id
+          });
+          r.notified = true;
         }
       });
 
@@ -738,25 +754,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         const leadTime = getLeadTimeStr(l);
 
         if (daysDiff === 3 && !sessionStorage.getItem(notifKey3Days)) {
-          try {
-            new Notification('📢 Cita Agendada en 3 Días', {
-              body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (📅 ${leadDate})`,
-              icon: '/favicon.ico',
-              tag: `lead-3d-${l.id}`
-            });
-            sessionStorage.setItem(notifKey3Days, 'true');
-          } catch (e) {}
+          dispatchPushNotification('📢 Cita Agendada en 3 Días', {
+            body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (📅 ${leadDate})`,
+            icon: '/logo.png',
+            tag: `lead-3d-${l.id}`
+          });
+          sessionStorage.setItem(notifKey3Days, 'true');
         }
 
         if (daysDiff === 1 && !sessionStorage.getItem(notifKey1Day)) {
-          try {
-            new Notification('⏰ Cita Agendada para Mañana', {
-              body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (⏰ ${leadTime})`,
-              icon: '/favicon.ico',
-              tag: `lead-1d-${l.id}`
-            });
-            sessionStorage.setItem(notifKey1Day, 'true');
-          } catch (e) {}
+          dispatchPushNotification('⏰ Cita Agendada para Mañana', {
+            body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (⏰ ${leadTime})`,
+            icon: '/logo.png',
+            tag: `lead-1d-${l.id}`
+          });
+          sessionStorage.setItem(notifKey1Day, 'true');
         }
       });
     }, 30000); // Check every 30 seconds
