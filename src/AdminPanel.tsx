@@ -723,6 +723,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     return str.split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : '').join(' ');
   };
 
+  // Helper: Limpiar duplicados de sistema en el campo de Notas/Falla
+  const cleanFallaNotes = (rawStr: string): string => {
+    if (!rawStr) return '';
+    let cleaned = rawStr;
+    cleaned = cleaned.replace(/(?:\[?\s*Cita Inspección:\s*\]?)+/gi, '').trim();
+    cleaned = cleaned.replace(/\[Prioridad:\s*(?:alta|media|baja)\]/gi, '').trim();
+    cleaned = cleaned.replace(/\[Agendado por Logística[^\]]*\]/gi, '').trim();
+    cleaned = cleaned.replace(/^\[?\d{4}-\d{2}-\d{2}\]?\s*(?:Lunes|Martes|Miércoles|Jueves|Viernes|Sábado|Domingo)?[^]*?a las \d{2}:\d{2}\s*(?:AM|PM)?/gi, '').trim();
+    cleaned = cleaned.replace(/^[:\s\-\]\[]+/, '').trim();
+    return cleaned;
+  };
+
   // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo (Incluye 3 días y 1 día antes)
   useEffect(() => {
     const checkReminderInterval = setInterval(() => {
@@ -6913,12 +6925,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 <span className="font-black text-primary block">{selectedDayCita.servicio || 'Servicio General'}</span>
               </div>
 
-              {selectedDayCita.falla && (
-                <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
-                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Notas / Detalles</span>
-                  <p className="text-zinc-300 text-[11px] leading-relaxed">{selectedDayCita.falla}</p>
-                </div>
-              )}
+              {(() => {
+                const notes = cleanFallaNotes(selectedDayCita.falla);
+                if (!notes) return null;
+                return (
+                  <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                    <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Notas / Detalles</span>
+                    <p className="text-zinc-300 text-[11px] leading-relaxed">{notes}</p>
+                  </div>
+                );
+              })()}
 
               {/* Cambiar Estado Rápido */}
               <div>

@@ -375,7 +375,8 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     const ubicacion = sanitizeString(req.body.ubicacion, 100);
     const fecha_hora = sanitizeString(req.body.fecha_hora, 100);
     const fallaRaw = sanitizeString(req.body.falla || req.body.descripcion, 500);
-    const falla = fecha_hora ? `[Cita Inspección: ${fecha_hora}] ${fallaRaw}` : fallaRaw;
+    const hasCitaPrefix = fallaRaw.toLowerCase().includes('cita inspección:');
+    const falla = (fecha_hora && !hasCitaPrefix) ? `[Cita Inspección: ${fecha_hora}] ${fallaRaw}`.trim() : fallaRaw;
 
     if (!nombre || !telefono || !vehiculo || !servicio) {
       res.status(400).json({ error: 'Todos los campos principales son obligatorios.' });
