@@ -877,3 +877,71 @@ body.theme-light {
 .theme-light footer a:hover {
   color: #000000 !important;
 }
+
+/* 11. EXPLICIT DARK MODE HIGH-CONTRAST OVERRIDES */
+html:not(.theme-light) input,
+html:not(.theme-light) select,
+html:not(.theme-light) textarea,
+html.dark input,
+html.dark select,
+html.dark textarea,
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html:not(.theme-light) input::placeholder,
+html:not(.theme-light) textarea::placeholder,
+html.dark input::placeholder,
+html.dark textarea::placeholder,
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #71717a !important;
+}
+
+html:not(.theme-light) select option,
+html:not(.theme-light) option,
+html.dark select option,
+html.dark option,
+body.dark select option,
+body.dark option {
+  background-color: #12141a !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+html:not(.theme-light) select option:disabled,
+html:not(.theme-light) option:disabled,
+html.dark select option:disabled,
+html.dark option:disabled,
+body.dark select option:disabled,
+body.dark option:disabled {
+  background-color: #0c0e12 !important;
+  color: #52525b !important;
+}
+
+html:not(.theme-light) .fixed.inset-0 [class*="bg-[#12141a]"],
+html:not(.theme-light) .fixed.inset-0 [class*="bg-[#101216]"],
+html:not(.theme-light) .fixed.inset-0 [class*="bg-[#0c0e12]"],
+html.dark .fixed.inset-0 [class*="bg-[#12141a]"],
+html.dark .fixed.inset-0 [class*="bg-[#101216]"],
+html.dark .fixed.inset-0 [class*="bg-[#0c0e12]"] {
+  background-color: #12141a !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+html:not(.theme-light) .fixed.inset-0 label,
+html.dark .fixed.inset-0 label {
+  color: #a1a1aa !important;
+}
+
+html:not(.theme-light) .fixed.inset-0 h2,
+html:not(.theme-light) .fixed.inset-0 h3,
+html.dark .fixed.inset-0 h2,
+html.dark .fixed.inset-0 h3 {
+  color: #ffffff !important;
+}

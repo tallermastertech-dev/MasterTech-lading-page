@@ -425,8 +425,26 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setTheme(next);
     try {
       localStorage.setItem('mastertech_admin_theme', next);
+      localStorage.setItem('mastertech_public_theme', next);
+      localStorage.setItem('mastertech_theme', next);
     } catch (e) {}
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (theme === 'light') {
+        document.documentElement.classList.add('theme-light', 'light');
+        document.body.classList.add('theme-light', 'light');
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      } else {
+        document.documentElement.classList.remove('theme-light', 'light');
+        document.body.classList.remove('theme-light', 'light');
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      }
+    }
+  }, [theme]);
 
   // Auth State (Email & Password Multi-user)
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('mastertech_admin_token'));

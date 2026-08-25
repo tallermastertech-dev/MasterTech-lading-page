@@ -48,14 +48,21 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
 
   useEffect(() => {
     if (theme === 'light') {
-      document.documentElement.classList.add('theme-light');
-      document.body.classList.add('theme-light');
+      document.documentElement.classList.add('theme-light', 'light');
+      document.body.classList.add('theme-light', 'light');
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
     } else {
-      document.documentElement.classList.remove('theme-light');
-      document.body.classList.remove('theme-light');
+      document.documentElement.classList.remove('theme-light', 'light');
+      document.body.classList.remove('theme-light', 'light');
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
     }
-    localStorage.setItem('mastertech_public_theme', theme);
-    localStorage.setItem('mastertech_theme', theme);
+    try {
+      localStorage.setItem('mastertech_public_theme', theme);
+      localStorage.setItem('mastertech_admin_theme', theme);
+      localStorage.setItem('mastertech_theme', theme);
+    } catch (e) {}
   }, [theme]);
 
   const toggleTheme = () => {
