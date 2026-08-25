@@ -1613,7 +1613,121 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     const seg0 = segs[0].trim();
     const seg1 = (segs[1] || '').trim();
 
+
+    // ══════════════════════════════════════════════════════════════════
+    // LAUNCH TPMS SENSORS — LTR-03, LTR-01, LTR-02, LTR-05
+    // ══════════════════════════════════════════════════════════════════
+    if (/^LTR0?3$/i.test(c) || /^LAUNCH.*LTR0?3/i.test(u) || /^LTR[-_\s]?03$/i.test(u)) {
+      return {
+        titulo: 'Sensor TPMS Universal Programable LAUNCH LTR-03 315MHz + 433MHz',
+        categoria: 'Inyección y Sensores',
+        compatibilidad: 'Universal: Toyota, Nissan, Honda, Hyundai, Kia, Ford, Chevrolet, Jeep, Dodge, BMW, Mercedes-Benz, Audi, VW, Mazda, Subaru, Mitsubishi — Compatible con 98% de vehículos con TPMS 2005-2026 (315 MHz y 433 MHz)',
+        descripcionCorta: 'Sensor TPMS universal de doble frecuencia 315/433 MHz reprogramable, compatible con herramientas LAUNCH X431 y TPMS Pad para gestión completa del sistema de presión de neumáticos.',
+        descripcionDetallada: 'Sensor TPMS LAUNCH LTR-03. Doble frecuencia 315 MHz y 433 MHz en una sola unidad. Programable por herramienta LAUNCH X431, TPMS Pad, MaxiTPMS TS601 y compatibles. Rango de presión 0-120 PSI (0-8 bar). Temperatura de operación -40°C a +125°C. Batería de litio sellada vida útil 5-10 años / 200,000 km. Incluye información de ECU: ID sensor, voltaje batería, temperatura y presión en tiempo real. Válvula de aluminio anodizado M-7. Polvo de goma sellante incluido. Instalación sin necesidad de programación adicional en muchos modelos.',
+        specs: [
+          'Doble frecuencia 315 MHz + 433 MHz en una sola unidad universal',
+          'Rango de presión: 0-120 PSI (0-8 bar) — precisión ±0.1 bar',
+          'Temperatura de operación: -40°C a +125°C — batería litio 5-10 años',
+          'Compatible herramientas: LAUNCH X431, TPMS Pad, Autel MaxiTPMS, Bartec TECH600',
+          'Transmite presión, temperatura, voltaje batería e ID sensor a la ECU en tiempo real'
+        ],
+        precio: '$35 USD / unidad — Set de 4 sensores: $120-140 USD',
+        badge: 'Importación Directa USA',
+        referencias: [
+          'LAUNCH LTR-03 (OEM ref. original)',
+          'Autel MX-Sensor 433MHz/315MHz (equivalente programable)',
+          'Schrader EZ-sensor 28053 (equivalente universal)',
+          'VDO REDI-Sensor SE10001 (equivalente universal)'
+        ]
+      };
+    }
+    if (/^LTR0?1$/i.test(c) || /^LTR[-_\s]?01$/i.test(u)) {
+      return {
+        titulo: 'Sensor TPMS Universal LAUNCH LTR-01 433MHz OEM Cloneable',
+        categoria: 'Inyección y Sensores',
+        compatibilidad: 'Vehículos europeos y asiáticos con TPMS 433 MHz: BMW, Mercedes-Benz, Audi, VW, Toyota, Honda, Hyundai (2010-2026)',
+        descripcionCorta: 'Sensor TPMS LAUNCH LTR-01 de 433 MHz con función de clonar ID del sensor original, sin reprogramación del módulo TPMS del vehículo.',
+        descripcionDetallada: 'Sensor TPMS LAUNCH LTR-01. Frecuencia 433 MHz. Función de clonación del ID del sensor OEM original para instalación directa sin reaprendizaje. Compatible con plataformas LAUNCH X431, CRP, Torque Pro. Batería litio sellada, vida 5-8 años. Válvula aluminio con junta tórica EPDM.',
+        specs: [
+          'Frecuencia 433 MHz — función clonación ID sensor OEM original',
+          'Rango de presión: 0-87 PSI (0-6 bar) — precisión ±0.07 bar',
+          'Temperatura de operación: -40°C a +120°C',
+          'Batería litio sellada: 5-8 años / 160,000 km',
+          'Compatibilidad herramientas LAUNCH X431 y CRP series'
+        ],
+        precio: '$28 USD / unidad — Set de 4: $95-105 USD',
+        badge: 'Importación Directa USA',
+        referencias: ['LAUNCH LTR-01', 'Autel MX-Sensor 433MHz', 'Hamaton HP-PRO 433MHz']
+      };
+    }
+    if (/^LTR0?2$/i.test(c) || /^LTR[-_\s]?02$/i.test(u)) {
+      return {
+        titulo: 'Sensor TPMS Universal LAUNCH LTR-02 315MHz OEM Cloneable',
+        categoria: 'Inyección y Sensores',
+        compatibilidad: 'Vehículos americanos con TPMS 315 MHz: Toyota, Honda, Ford, Chevrolet, Jeep, Dodge, Nissan, Hyundai, Kia (2005-2024)',
+        descripcionCorta: 'Sensor TPMS LAUNCH LTR-02 de 315 MHz con función de clonación del ID sensor OEM, para mercado americano sin reaprendizaje.',
+        descripcionDetallada: 'Sensor TPMS LAUNCH LTR-02. Frecuencia 315 MHz. Clonable con herramientas LAUNCH para instalación directa. Rango 0-120 PSI. Válvula aluminio. Batería 5-8 años.',
+        specs: [
+          'Frecuencia 315 MHz — mercado americano USA/Japón',
+          'Rango de presión: 0-120 PSI (0-8.3 bar)',
+          'Temperatura operación: -40°C a +125°C',
+          'Batería litio sellada: 5-8 años vida útil',
+          'Compatibilidad: LAUNCH X431, Autel MaxiTPMS, Bartec TECH300'
+        ],
+        precio: '$28 USD / unidad — Set de 4: $95-105 USD',
+        badge: 'Importación Directa USA',
+        referencias: ['LAUNCH LTR-02', 'Schrader EZ-Sensor 28353 (315MHz)', 'Autel MX-Sensor 315MHz']
+      };
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    // AUTEL MX-SENSOR — Programable 433/315 MHz
+    // ══════════════════════════════════════════════════════════════════
+    if (/^MXSENSOR$|^MX[-_]?SENSOR$|^AUTEL[-_]?MX/i.test(c)) {
+      return {
+        titulo: 'Sensor TPMS Universal Autel MX-Sensor 433MHz + 315MHz Programable',
+        categoria: 'Inyección y Sensores',
+        compatibilidad: 'Universal 315/433 MHz: Toyota, Nissan, Honda, Ford, GM, Jeep, BMW, Mercedes-Benz, Audi, VW, Hyundai, Kia — 98% vehículos con TPMS 2003-2026',
+        descripcionCorta: 'Sensor TPMS universal Autel MX-Sensor reprogramable con herramientas MaxiTPMS TS601/TS608, copia exacta del ID del sensor original.',
+        descripcionDetallada: 'Sensor TPMS Autel MX-Sensor. Doble frecuencia 315 MHz + 433 MHz. Programable para copiar el ID del sensor OEM con equipos Autel MaxiTPMS TS601, TS608, ITS600. Rango 0-116 PSI. Temperatura -40°C a +125°C. Batería litio sellada 10 años.',
+        specs: [
+          'Doble frecuencia 315 MHz + 433 MHz — programable por herramienta',
+          'Rango presión 0-116 PSI — precisión ±1.5 PSI',
+          'Temperatura -40°C a +125°C — batería litio 10 años/300,000 km',
+          'Compatible: Autel MaxiTPMS TS601/TS608/ITS600, LAUNCH X431',
+          'Válvula aluminio anodizado con tuerca de bronce M7x0.75'
+        ],
+        precio: '$38 USD / unidad — Set de 4: $135-150 USD',
+        badge: 'Importación Directa USA',
+        referencias: ['Autel MX-Sensor 433/315', 'LAUNCH LTR-03', 'Schrader EZ-Sensor 28353']
+      };
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    // SCHRADER EZ-SENSOR TPMS
+    // ══════════════════════════════════════════════════════════════════
+    if (/^EZ[-_]?SENSOR$|^28053$|^28353$|^28000$|^SCHRADER/i.test(c)) {
+      return {
+        titulo: 'Sensor TPMS Universal Schrader EZ-Sensor Programable 315/433MHz',
+        categoria: 'Inyección y Sensores',
+        compatibilidad: 'Universal 315/433 MHz: Toyota, Ford, GM, Jeep, Nissan, Honda, Hyundai, Kia, VW, BMW (2002-2026) — Compatible 97% vehículos con TPMS',
+        descripcionCorta: 'Sensor TPMS Schrader EZ-Sensor programable, cuerpo aluminio y válvula con recubrimiento nitruro de titanio, el más utilizado en talleres OEM.',
+        descripcionDetallada: 'Sensor TPMS Schrader EZ-Sensor. Frecuencia seleccionable 315/433 MHz. Cuerpo de aluminio 100%. Válvula de metal sin plástico. Programable con Bartec TECH300/600, Autel TS601, LAUNCH X431 TPMS Pad. Rango 0-120 PSI. Vida útil batería 10+ años.',
+        specs: [
+          'Frecuencia 315/433 MHz seleccionable — cuerpo aluminio 100%',
+          'Rango presión: 0-120 PSI (0-8.3 bar) — precisión ±1.5 PSI',
+          'Temperatura: -40°C a +125°C — batería litio >10 años',
+          'Compatible: Bartec, Autel, LAUNCH, OTC, Snap-on, Hunter',
+          'Válvula metal recubrimiento nitruro de titanio anticorrosión'
+        ],
+        precio: '$35-45 USD / unidad — Set de 4: $130-170 USD',
+        badge: 'Importación Directa USA',
+        referencias: ['Schrader 28053 (315MHz)', 'Schrader 28353 (433MHz)', 'Autel MX-Sensor', 'LAUNCH LTR-03']
+      };
+    }
+
     // POLY-V / SERPENTINE BELT — 6PK389, PK389-16N00-TP, 7PK1105, 8PK2030
+
     const beltM = seg0.match(/^([0-9]?)PK([0-9]{3,5})$/i) || c.match(/^([0-9]?)PK([0-9]{3,5})/);
     if (beltM) {
       const ribs = beltM[1] || '6';
