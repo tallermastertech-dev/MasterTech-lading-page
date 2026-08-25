@@ -646,7 +646,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   });
 
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
-  const [reminderFilter, setReminderFilter] = useState<'PENDIENTES' | 'HOY' | 'COMPLETADOS' | 'TODOS'>('PENDIENTES');
+  const [reminderFilter, setReminderFilter] = useState<'PENDIENTES' | 'HOY' | '3_DIAS' | '1_DIA' | 'COMPLETADOS' | 'TODOS'>('PENDIENTES');
   const [newReminderData, setNewReminderData] = useState({
     titulo: '',
     fecha: new Date().toISOString().split('T')[0],
@@ -679,7 +679,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
   }, []);
 
-  // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo
+  // Helper: Calcular diferencia en días entre hoy y la fecha objetivo (YYYY-MM-DD)
+  const getDaysUntilDate = (targetDateStr: string): number | null => {
+    if (!targetDateStr) return null;
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const target = new Date(targetDateStr + 'T00:00:00');
+      target.setHours(0, 0, 0, 0);
+      const diffTime = target.getTime() - today.getTime();
+      return Math.round(diffTime / (1000 * 3600 * 24));
+    } catch (e) {
+      return null;
+    }
+  };
+
+  // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo (Incluye 3 días y 1 día antes)
   useEffect(() => {
     const checkReminderInterval = setInterval(() => {
       if (typeof window === 'undefined' || !('Notification' in window) || Notification.permission !== 'granted') return;
@@ -687,6 +702,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       const todayStr = new Date().toISOString().split('T')[0];
       const nowTime = new Date().toTimeString().slice(0, 5); // HH:MM
 
+      // 1. Chequeo de Recordatorios Operativos Manuales
       reminders.forEach(r => {
         if (!r.completado && r.fecha === todayStr && r.hora === nowTime && !r.notified) {
           try {
@@ -699,10 +715,42 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           } catch (e) {}
         }
       });
+
+      // 2. Chequeo Automático de Citas a 3 Días y 1 Día de distancia
+      leads.forEach(l => {
+        const leadDate = getLeadDateStr(l);
+        if (!leadDate || l.status === 'Cancelado' || l.status === 'Atendido') return;
+        
+        const daysDiff = getDaysUntilDate(leadDate);
+        const notifKey3Days = `notified_3d_${l.id}`;
+        const notifKey1Day = `notified_1d_${l.id}`;
+
+        if (daysDiff === 3 && !sessionStorage.getItem(notifKey3Days)) {
+          try {
+            new Notification('📢 Recordatorio (Faltan 3 Días para Cita)', {
+              body: `Cita de ${l.nombre || 'Cliente'} programada para el ${leadDate} (${l.servicio})`,
+              icon: '/logo.png',
+              tag: `lead-3d-${l.id}`
+            });
+            sessionStorage.setItem(notifKey3Days, 'true');
+          } catch (e) {}
+        }
+
+        if (daysDiff === 1 && !sessionStorage.getItem(notifKey1Day)) {
+          try {
+            new Notification('⏰ Recordatorio (Cita MAÑANA)', {
+              body: `Cita MAÑANA de ${l.nombre || 'Cliente'} (${l.servicio})`,
+              icon: '/logo.png',
+              tag: `lead-1d-${l.id}`
+            });
+            sessionStorage.setItem(notifKey1Day, 'true');
+          } catch (e) {}
+        }
+      });
     }, 30000); // Check every 30 seconds
 
     return () => clearInterval(checkReminderInterval);
-  }, [reminders]);
+  }, [reminders, leads]);
 
   const handleAddReminder = (e: React.FormEvent) => {
     e.preventDefault();
@@ -6805,31 +6853,88 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             </form>
 
             {/* Filter Tabs for Reminders */}
-            <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2">
-              <div className="flex items-center gap-1.5">
-                {(['PENDIENTES', 'HOY', 'COMPLETADOS', 'TODOS'] as const).map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setReminderFilter(tab)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      reminderFilter === tab
-                        ? 'bg-amber-500 text-black font-black shadow-md'
-                        : 'bg-white/5 text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    {tab === 'PENDIENTES' ? `Pendientes (${reminders.filter(r => !r.completado).length})` :
-                     tab === 'HOY' ? `Hoy (${reminders.filter(r => r.fecha === new Date().toISOString().split('T')[0]).length})` :
-                     tab === 'COMPLETADOS' ? `Completados (${reminders.filter(r => r.completado).length})` :
-                     `Todos (${reminders.length})`}
-                  </button>
-                ))}
+            <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2 overflow-x-auto scrollbar-thin">
+              <div className="flex items-center gap-1.5 shrink-0">
+                {(() => {
+                  const count3Days = leads.filter(l => getDaysUntilDate(getLeadDateStr(l)) === 3 && l.status !== 'Cancelado' && l.status !== 'Atendido').length;
+                  const count1Day = leads.filter(l => getDaysUntilDate(getLeadDateStr(l)) === 1 && l.status !== 'Cancelado' && l.status !== 'Atendido').length;
+
+                  return (['PENDIENTES', 'HOY', '3_DIAS', '1_DIA', 'COMPLETADOS', 'TODOS'] as const).map(tab => (
+                    <button
+                      key={tab}
+                      onClick={() => setReminderFilter(tab)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                        reminderFilter === tab
+                          ? 'bg-amber-500 text-black font-black shadow-md'
+                          : 'bg-white/5 text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      {tab === 'PENDIENTES' ? `Pendientes (${reminders.filter(r => !r.completado).length})` :
+                       tab === 'HOY' ? `Hoy (${reminders.filter(r => r.fecha === new Date().toISOString().split('T')[0]).length})` :
+                       tab === '3_DIAS' ? `📢 3 Días Antes (${count3Days})` :
+                       tab === '1_DIA' ? `⏰ 1 Día Antes (${count1Day})` :
+                       tab === 'COMPLETADOS' ? `Completados (${reminders.filter(r => r.completado).length})` :
+                       `Todos (${reminders.length})`}
+                    </button>
+                  ));
+                })()}
               </div>
             </div>
 
-            {/* List of Reminders */}
+            {/* List of Reminders / Automatic Lead Reminders */}
             <div className="space-y-2 text-xs">
               {(() => {
                 const todayStr = new Date().toISOString().split('T')[0];
+
+                if (reminderFilter === '3_DIAS' || reminderFilter === '1_DIA') {
+                  const targetDays = reminderFilter === '3_DIAS' ? 3 : 1;
+                  const autoLeads = leads.filter(l => getDaysUntilDate(getLeadDateStr(l)) === targetDays && l.status !== 'Cancelado' && l.status !== 'Atendido');
+
+                  if (autoLeads.length === 0) {
+                    return (
+                      <div className="p-8 text-center text-zinc-400 text-xs italic bg-black/30 rounded-2xl border border-white/10">
+                        No hay citas agendadas para dentro de {targetDays} {targetDays === 1 ? 'día (Mañana)' : 'días'}.
+                      </div>
+                    );
+                  }
+
+                  return autoLeads.map((l, idx) => {
+                    const leadDate = getLeadDateStr(l);
+                    const leadTime = getLeadTimeStr(l);
+                    const whatsappMsg = targetDays === 3
+                      ? `Hola ${l.nombre || ''}, te saludamos desde Taller MasterTech. Te recordamos que tienes tu cita agendada en 3 días (el ${leadDate} a las ${leadTime}) para tu vehículo ${l.vehiculo || ''} (${l.servicio}). Por favor confírmanos si estás listo. ¡Feliz día!`
+                      : `Hola ${l.nombre || ''}, te recordamos que MAÑANA es tu cita en Taller MasterTech a las ${leadTime} para tu vehículo ${l.vehiculo || ''} (${l.servicio}). Por favor confírmanos tu asistencia. ¡Te esperamos!`;
+
+                    return (
+                      <div key={l.id || idx} className="p-3 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-between gap-3">
+                        <div className="space-y-1 flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-amber-400 font-bold">{leadTime}</span>
+                            <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
+                              {targetDays === 3 ? '📢 Faltan 3 Días' : '⏰ MAÑANA (1 Día)'}
+                            </span>
+                          </div>
+                          <div className="font-black text-white text-sm truncate">{l.nombre || 'Cliente'}</div>
+                          <div className="text-zinc-300 text-xs truncate">🚗 {l.vehiculo || 'Vehículo no especificado'}</div>
+                          <div className="text-primary text-[11px] font-bold truncate">🛠️ {l.servicio}</div>
+                        </div>
+
+                        {l.telefono && (
+                          <a
+                            href={`https://wa.me/${l.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMsg)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs flex items-center gap-1.5 transition-all shadow-md shrink-0 cursor-pointer"
+                          >
+                            <WhatsAppIcon size={15} />
+                            <span>Recordatorio WA ({targetDays === 3 ? '3 Días' : '1 Día'})</span>
+                          </a>
+                        )}
+                      </div>
+                    );
+                  });
+                }
+
                 const list = reminders.filter(r => {
                   if (reminderFilter === 'PENDIENTES') return !r.completado;
                   if (reminderFilter === 'HOY') return r.fecha === todayStr;
