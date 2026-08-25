@@ -1025,3 +1025,11 @@ html.dark .fixed.inset-0 h3 {
   background-color: #f1f5f9 !important;
 }
 
+/* Custom Native Date Picker Dark Theme Styling */
+input[type="date"] {
+  color-scheme: dark;
+}
+.theme-light input[type="date"] {
+  color-scheme: light;
+}
+

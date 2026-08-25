@@ -593,6 +593,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [leadCategoryFilter, setLeadCategoryFilter] = useState<'TODOS' | 'TRABAJO' | 'CATALOGO' | 'INSPECCION' | 'TALLER'>('TODOS');
   const [dateFilter, setDateFilter] = useState<string>('TODOS');
   const [customDateFilter, setCustomDateFilter] = useState<string>('');
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [pickerMonthDate, setPickerMonthDate] = useState<Date>(new Date());
 
   // Citas View Mode & Manual Appointment Modal State
   const [citasViewMode, setCitasViewMode] = useState<'calendar' | 'list'>('calendar');
@@ -2554,12 +2556,146 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </select>
 
                         {dateFilter === 'DIA_ESPECIFICO' && (
-                          <input
-                            type="date"
-                            value={customDateFilter}
-                            onChange={(e) => setCustomDateFilter(e.target.value)}
-                            className="bg-slate-200 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-xl py-2.5 px-3 text-xs text-slate-900 dark:text-white outline-none focus:border-primary cursor-pointer font-mono font-bold shrink-0"
-                          />
+                          <div className="relative shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                              className="px-3 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                            >
+                              <Calendar size={15} />
+                              <span>
+                                {customDateFilter
+                                  ? new Date(customDateFilter + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+                                  : 'Elegir Día'}
+                              </span>
+                              <ChevronDown size={14} />
+                            </button>
+
+                            {isDatePickerOpen && (
+                              <div className="absolute right-0 top-full mt-2 z-50 bg-[#12141a] border border-white/20 rounded-2xl p-4 shadow-2xl w-72 space-y-3 backdrop-blur-xl">
+                                {/* Header: Month & Navigation */}
+                                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                                  <button
+                                    type="button"
+                                    onClick={() => setPickerMonthDate(new Date(pickerMonthDate.getFullYear(), pickerMonthDate.getMonth() - 1, 1))}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-white transition-colors cursor-pointer"
+                                  >
+                                    <ChevronLeft size={16} />
+                                  </button>
+
+                                  <span className="text-xs font-black uppercase text-white font-display tracking-tight">
+                                    {pickerMonthDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
+                                  </span>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => setPickerMonthDate(new Date(pickerMonthDate.getFullYear(), pickerMonthDate.getMonth() + 1, 1))}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-white transition-colors cursor-pointer"
+                                  >
+                                    <ChevronRight size={16} />
+                                  </button>
+                                </div>
+
+                                {/* Days of week header */}
+                                <div className="grid grid-cols-7 text-center text-[10px] font-black text-zinc-500 uppercase">
+                                  {['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'].map(d => (
+                                    <span key={d}>{d}</span>
+                                  ))}
+                                </div>
+
+                                {/* Calendar Days Grid */}
+                                <div className="grid grid-cols-7 gap-1 text-xs">
+                                  {(() => {
+                                    const year = pickerMonthDate.getFullYear();
+                                    const month = pickerMonthDate.getMonth();
+                                    const firstDayIndex = new Date(year, month, 1).getDay();
+                                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+                                    const todayStr = new Date().toISOString().split('T')[0];
+
+                                    const cells = [];
+                                    for (let i = 0; i < firstDayIndex; i++) {
+                                      cells.push(<div key={`empty-${i}`} className="h-8" />);
+                                    }
+
+                                    for (let day = 1; day <= daysInMonth; day++) {
+                                      const mStr = String(month + 1).padStart(2, '0');
+                                      const dStr = String(day).padStart(2, '0');
+                                      const dateStr = `${year}-${mStr}-${dStr}`;
+
+                                      const isSelected = customDateFilter === dateStr;
+                                      const isToday = todayStr === dateStr;
+                                      const hasLeads = leads.some(l => getLeadDateStr(l) === dateStr);
+
+                                      cells.push(
+                                        <button
+                                          key={day}
+                                          type="button"
+                                          onClick={() => {
+                                            setCustomDateFilter(dateStr);
+                                            setIsDatePickerOpen(false);
+                                          }}
+                                          className={`h-8 rounded-xl font-bold flex flex-col items-center justify-center relative transition-all cursor-pointer text-xs ${
+                                            isSelected
+                                              ? 'bg-amber-500 text-black font-black shadow-lg scale-105'
+                                              : isToday
+                                              ? 'border border-amber-500/60 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20'
+                                              : 'text-zinc-200 hover:bg-white/10'
+                                          }`}
+                                        >
+                                          <span>{day}</span>
+                                          {hasLeads && !isSelected && (
+                                            <span className="w-1 h-1 rounded-full bg-amber-400 absolute bottom-1" />
+                                          )}
+                                        </button>
+                                      );
+                                    }
+                                    return cells;
+                                  })()}
+                                </div>
+
+                                {/* Quick Actions Footer */}
+                                <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-1 text-[10px]">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const todayStr = new Date().toISOString().split('T')[0];
+                                      setCustomDateFilter(todayStr);
+                                      setPickerMonthDate(new Date());
+                                      setIsDatePickerOpen(false);
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500 hover:text-black font-bold cursor-pointer transition-all"
+                                  >
+                                    Hoy
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const tomorrow = new Date();
+                                      tomorrow.setDate(tomorrow.getDate() + 1);
+                                      const tomorrowStr = tomorrow.toISOString().split('T')[0];
+                                      setCustomDateFilter(tomorrowStr);
+                                      setPickerMonthDate(tomorrow);
+                                      setIsDatePickerOpen(false);
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-300 font-bold cursor-pointer transition-colors"
+                                  >
+                                    Mañana
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setCustomDateFilter('');
+                                      setDateFilter('TODOS');
+                                      setIsDatePickerOpen(false);
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 font-bold cursor-pointer transition-colors"
+                                  >
+                                    Limpiar
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
 
