@@ -622,6 +622,86 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [isSavingManualCita, setIsSavingManualCita] = useState(false);
   const [manualCitaError, setManualCitaError] = useState('');
 
+  // Recordatorios State & Persistence
+  const [reminders, setReminders] = useState<any[]>(() => {
+    try {
+      const stored = localStorage.getItem('mastertech_reminders_cache');
+      return stored ? JSON.parse(stored) : [
+        {
+          id: 'rem-demo-1',
+          titulo: 'Llamar a cliente Raed Maklad para confirmar repuesto Toyota Corolla',
+          fecha: new Date().toISOString().split('T')[0],
+          hora: '10:00',
+          clienteNombre: 'Raed Maklad',
+          clienteTelefono: '04147935555',
+          categoria: 'seguimiento',
+          prioridad: 'alta',
+          completado: false,
+          createdAt: new Date().toISOString()
+        }
+      ];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
+  const [reminderFilter, setReminderFilter] = useState<'PENDIENTES' | 'HOY' | 'COMPLETADOS' | 'TODOS'>('PENDIENTES');
+  const [newReminderData, setNewReminderData] = useState({
+    titulo: '',
+    fecha: new Date().toISOString().split('T')[0],
+    hora: '09:00',
+    clienteNombre: '',
+    clienteTelefono: '',
+    categoria: 'cita',
+    prioridad: 'media'
+  });
+
+  const saveReminders = async (updated: any[]) => {
+    setReminders(updated);
+    try {
+      localStorage.setItem('mastertech_reminders_cache', JSON.stringify(updated));
+      const serialized = JSON.stringify(updated.slice(0, 100));
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'SAVED_REMINDERS', value: serialized })
+      });
+    } catch (e) {}
+  };
+
+  const handleAddReminder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newReminderData.titulo.trim()) return;
+    const item = {
+      id: 'rem-' + Date.now(),
+      ...newReminderData,
+      completado: false,
+      createdAt: new Date().toISOString()
+    };
+    const updated = [item, ...reminders];
+    saveReminders(updated);
+    setNewReminderData({
+      titulo: '',
+      fecha: new Date().toISOString().split('T')[0],
+      hora: '09:00',
+      clienteNombre: '',
+      clienteTelefono: '',
+      categoria: 'cita',
+      prioridad: 'media'
+    });
+  };
+
+  const handleToggleReminder = (id: string | number) => {
+    const updated = reminders.map(r => r.id === id ? { ...r, completado: !r.completado } : r);
+    saveReminders(updated);
+  };
+
+  const handleDeleteReminder = (id: string | number) => {
+    const updated = reminders.filter(r => r.id !== id);
+    saveReminders(updated);
+  };
+
   // Helper: Extraer Fecha YYYY-MM-DD de una Cita/Lead
   const getLeadDateStr = (l: any): string => {
     if (!l) return '';
@@ -2272,6 +2352,20 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         >
                           <Plus size={15} />
                           <span>Agendar Cita Manual</span>
+                        </button>
+
+                        {/* Botón Gestor de Recordatorios */}
+                        <button
+                          onClick={() => setIsReminderModalOpen(true)}
+                          className="px-3.5 py-2 rounded-xl bg-slate-200 dark:bg-white/10 border border-slate-300 dark:border-white/15 text-slate-800 dark:text-white text-xs font-black uppercase tracking-tight flex items-center gap-1.5 hover:bg-slate-300 dark:hover:bg-white/20 transition-all cursor-pointer shadow-md"
+                        >
+                          <BellRing size={15} className="text-amber-500 shrink-0" />
+                          <span>Recordatorios</span>
+                          {reminders.filter(r => !r.completado).length > 0 && (
+                            <span className="bg-amber-500 text-black text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                              {reminders.filter(r => !r.completado).length}
+                            </span>
+                          )}
                         </button>
 
                         <button onClick={fetchLeads} className="p-2 rounded-xl bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-800 dark:text-zinc-300 flex items-center gap-1.5 hover:bg-slate-300 dark:hover:bg-white/10 transition-colors cursor-pointer">
@@ -6568,6 +6662,224 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               >
                 <Trash2 size={16} />
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL GESTOR DE RECORDATORIOS Y TAREAS */}
+      {isReminderModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <BellRing className="text-amber-400" size={22} />
+                <div>
+                  <h3 className="text-base font-bold text-white uppercase tracking-tight">Recordatorios & Tareas Pendientes</h3>
+                  <p className="text-xs text-zinc-400">Seguimiento a clientes, repuestos y alertas operativas del taller.</p>
+                </div>
+              </div>
+              <button onClick={() => setIsReminderModalOpen(false)} className="text-zinc-400 hover:text-white p-1 cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Formulario Crear Nuevo Recordatorio */}
+            <form onSubmit={handleAddReminder} className="p-4 bg-black/40 border border-white/10 rounded-2xl space-y-3 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-black text-amber-400 uppercase text-[10px] tracking-wider flex items-center gap-1.5">
+                  <Plus size={14} />
+                  <span>Crear Nuevo Recordatorio</span>
+                </span>
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej. Llamar a Juan Pérez para confirmar repuestos / Recordar cita..."
+                  value={newReminderData.titulo}
+                  onChange={(e) => setNewReminderData({ ...newReminderData, titulo: e.target.value })}
+                  className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-amber-400 font-bold"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div>
+                  <label className="text-[10px] text-zinc-400 font-bold block mb-1">Fecha Alerta</label>
+                  <input
+                    type="date"
+                    required
+                    value={newReminderData.fecha}
+                    onChange={(e) => setNewReminderData({ ...newReminderData, fecha: e.target.value })}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-amber-400 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-zinc-400 font-bold block mb-1">Hora Alerta</label>
+                  <input
+                    type="time"
+                    required
+                    value={newReminderData.hora}
+                    onChange={(e) => setNewReminderData({ ...newReminderData, hora: e.target.value })}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-amber-400 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] text-zinc-400 font-bold block mb-1">Prioridad</label>
+                  <select
+                    value={newReminderData.prioridad}
+                    onChange={(e) => setNewReminderData({ ...newReminderData, prioridad: e.target.value })}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-amber-400 cursor-pointer"
+                  >
+                    <option value="alta">🔴 Alta Prioridad</option>
+                    <option value="media">🟡 Prioridad Media</option>
+                    <option value="baja">🔵 Prioridad Baja</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  placeholder="Nombre Cliente (Opcional)"
+                  value={newReminderData.clienteNombre}
+                  onChange={(e) => setNewReminderData({ ...newReminderData, clienteNombre: e.target.value })}
+                  className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-amber-400"
+                />
+
+                <input
+                  type="text"
+                  placeholder="Teléfono / WhatsApp (Opcional)"
+                  value={newReminderData.clienteTelefono}
+                  onChange={(e) => setNewReminderData({ ...newReminderData, clienteTelefono: e.target.value })}
+                  className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-amber-400 font-mono"
+                />
+              </div>
+
+              <div className="flex justify-end pt-1">
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs flex items-center gap-1.5 cursor-pointer shadow-lg"
+                >
+                  <Plus size={15} />
+                  <span>Guardar Recordatorio</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Filter Tabs for Reminders */}
+            <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2">
+              <div className="flex items-center gap-1.5">
+                {(['PENDIENTES', 'HOY', 'COMPLETADOS', 'TODOS'] as const).map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setReminderFilter(tab)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      reminderFilter === tab
+                        ? 'bg-amber-500 text-black font-black shadow-md'
+                        : 'bg-white/5 text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    {tab === 'PENDIENTES' ? `Pendientes (${reminders.filter(r => !r.completado).length})` :
+                     tab === 'HOY' ? `Hoy (${reminders.filter(r => r.fecha === new Date().toISOString().split('T')[0]).length})` :
+                     tab === 'COMPLETADOS' ? `Completados (${reminders.filter(r => r.completado).length})` :
+                     `Todos (${reminders.length})`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* List of Reminders */}
+            <div className="space-y-2 text-xs">
+              {(() => {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const list = reminders.filter(r => {
+                  if (reminderFilter === 'PENDIENTES') return !r.completado;
+                  if (reminderFilter === 'HOY') return r.fecha === todayStr;
+                  if (reminderFilter === 'COMPLETADOS') return r.completado;
+                  return true;
+                });
+
+                if (list.length === 0) {
+                  return (
+                    <div className="p-8 text-center text-zinc-400 text-xs italic bg-black/30 rounded-2xl border border-white/10">
+                      No hay recordatorios en esta categoría.
+                    </div>
+                  );
+                }
+
+                return list.map(r => (
+                  <div
+                    key={r.id}
+                    className={`p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
+                      r.completado
+                        ? 'bg-black/20 border-white/5 opacity-50 line-through'
+                        : r.prioridad === 'alta'
+                        ? 'bg-red-500/10 border-red-500/30'
+                        : 'bg-black/40 border-white/10'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <input
+                        type="checkbox"
+                        checked={r.completado}
+                        onChange={() => handleToggleReminder(r.id)}
+                        className="w-4.5 h-4.5 rounded border-white/20 bg-black/40 text-amber-400 focus:ring-amber-400 cursor-pointer shrink-0"
+                      />
+
+                      <div className="space-y-0.5 min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`text-[9px] font-black px-1.5 py-0.2 rounded uppercase ${
+                            r.prioridad === 'alta' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                            r.prioridad === 'media' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                            'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                          }`}>
+                            {r.prioridad}
+                          </span>
+
+                          <span className="font-mono text-[11px] text-amber-400 font-bold">
+                            📅 {r.fecha} {r.hora ? `⏰ ${r.hora}` : ''}
+                          </span>
+                        </div>
+
+                        <div className="font-bold text-white text-xs leading-snug">{r.titulo}</div>
+
+                        {r.clienteNombre && (
+                          <div className="text-[11px] text-zinc-400 flex items-center gap-2">
+                            <span>👤 {r.clienteNombre}</span>
+                            {r.clienteTelefono && <span className="font-mono">📞 {r.clienteTelefono}</span>}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {r.clienteTelefono && (
+                        <a
+                          href={`https://wa.me/${r.clienteTelefono.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${r.clienteNombre || ''}, te escribimos de Taller MasterTech: ${r.titulo}`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black transition-all cursor-pointer"
+                          title="Contactar vía WhatsApp"
+                        >
+                          <WhatsAppIcon size={15} />
+                        </a>
+                      )}
+
+                      <button
+                        onClick={() => handleDeleteReminder(r.id)}
+                        className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors cursor-pointer"
+                        title="Eliminar Recordatorio"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </div>
+                ));
+              })()}
             </div>
           </div>
         </div>
