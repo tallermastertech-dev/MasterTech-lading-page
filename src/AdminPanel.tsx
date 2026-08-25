@@ -595,6 +595,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   // Citas View Mode & Manual Appointment Modal State
   const [citasViewMode, setCitasViewMode] = useState<'calendar' | 'list'>('calendar');
   const [calendarDate, setCalendarDate] = useState<Date>(new Date());
+  const [selectedCalendarDay, setSelectedCalendarDay] = useState<string | null>(null);
   const [selectedDayCita, setSelectedDayCita] = useState<any | null>(null);
   const [isManualCitaModalOpen, setIsManualCitaModalOpen] = useState(false);
   const [manualCitaData, setManualCitaData] = useState<{
@@ -2444,12 +2445,31 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   return (
                                     <div
                                       key={idx}
-                                      className={`min-h-[105px] md:min-h-[125px] p-2 rounded-2xl border transition-all flex flex-col justify-between group/cell ${
+                                      onClick={() => {
+                                        if (!cell.isCurrentMonth) return;
+                                        if (dayLeads.length > 0) {
+                                          setSelectedCalendarDay(cell.dateStr);
+                                        } else {
+                                          setManualCitaData({
+                                            nombre: '',
+                                            telefono: '',
+                                            vehiculo: '',
+                                            fecha: cell.dateStr,
+                                            hora: '09:00',
+                                            servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+                                            notas: '',
+                                            status: 'Confirmado'
+                                          });
+                                          setManualCitaError('');
+                                          setIsManualCitaModalOpen(true);
+                                        }
+                                      }}
+                                      className={`min-h-[105px] md:min-h-[125px] p-2 rounded-2xl border transition-all flex flex-col justify-between group/cell cursor-pointer ${
                                         !cell.isCurrentMonth
-                                          ? 'bg-black/20 border-white/5 opacity-40'
+                                          ? 'bg-black/20 border-white/5 opacity-40 cursor-default'
                                           : isToday
-                                          ? 'bg-primary/10 border-primary/50 ring-1 ring-primary/30'
-                                          : 'bg-black/40 border-white/10 hover:border-white/20'
+                                          ? 'bg-primary/10 border-primary/50 ring-1 ring-primary/30 hover:border-primary'
+                                          : 'bg-black/40 border-white/10 hover:border-white/30'
                                       }`}
                                     >
                                       {/* Top Header inside day cell */}
@@ -2462,7 +2482,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                                         {cell.isCurrentMonth && (
                                           <button
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                              e.stopPropagation();
                                               setManualCitaData({
                                                 nombre: '',
                                                 telefono: '',
@@ -2498,7 +2519,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           return (
                                             <div
                                               key={l.id || lIdx}
-                                              onClick={() => setSelectedDayCita(l)}
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedDayCita(l);
+                                              }}
                                               className={`p-1.5 rounded-lg border text-[10px] cursor-pointer transition-all hover:scale-[1.02] shadow-sm ${statusColor}`}
                                             >
                                               <div className="flex items-center justify-between font-mono font-bold">
@@ -6085,6 +6109,123 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <span>WhatsApp</span>
                 </a>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL CITAS DE UN DÍA ESPECÍFICO SELECCIONADO */}
+      {selectedCalendarDay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <Calendar className="text-primary" size={20} />
+                <div>
+                  <h3 className="text-base font-bold text-white uppercase tracking-tight">
+                    Citas Agendadas del Día
+                  </h3>
+                  <p className="text-xs font-bold text-amber-400 font-mono">{selectedCalendarDay}</p>
+                </div>
+              </div>
+              <button onClick={() => setSelectedCalendarDay(null)} className="text-zinc-400 hover:text-white p-1 cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* List of appointments for that specific day */}
+            <div className="space-y-2.5 text-xs">
+              {(() => {
+                const dayLeads = filteredLeads.filter(l => getLeadDateStr(l) === selectedCalendarDay);
+                if (dayLeads.length === 0) {
+                  return (
+                    <div className="p-6 text-center text-zinc-400 text-xs italic bg-black/40 rounded-2xl border border-white/10">
+                      No hay citas agendadas para esta fecha.
+                    </div>
+                  );
+                }
+                return dayLeads.map((l, idx) => {
+                  const st = (l.status || 'Pendiente').toLowerCase();
+                  const statusColor = 
+                    st === 'confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
+                    st === 'contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
+                    st === 'atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
+                    st === 'cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
+                    'bg-amber-500/20 text-amber-300 border-amber-500/40';
+
+                  return (
+                    <div key={l.id || idx} className="p-3 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-between gap-3">
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-amber-400 font-bold">{getLeadTimeStr(l)}</span>
+                          <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${statusColor}`}>
+                            {l.status || 'Pendiente'}
+                          </span>
+                        </div>
+                        <div className="font-black text-white text-sm truncate">{l.nombre || 'Cliente'}</div>
+                        <div className="text-zinc-300 text-xs truncate">🚗 {l.vehiculo || 'Vehículo no especificado'}</div>
+                        <div className="text-primary text-[11px] font-bold truncate">🛠️ {l.servicio}</div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {l.telefono && (
+                          <a
+                            href={`https://wa.me/${l.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${l.nombre || ''}, te escribimos desde Taller MasterTech para confirmar tu cita agendada para el ${getLeadDateStr(l)} a las ${getLeadTimeStr(l)}.`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black transition-all cursor-pointer"
+                            title="Chat por WhatsApp"
+                          >
+                            <WhatsAppIcon size={16} />
+                          </a>
+                        )}
+                        <button
+                          onClick={() => {
+                            setSelectedCalendarDay(null);
+                            setSelectedDayCita(l);
+                          }}
+                          className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-white transition-colors cursor-pointer"
+                          title="Ver / Editar Cita"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+
+            {/* Action to add new appointment for this day */}
+            <div className="pt-2 border-t border-white/10 flex justify-end gap-2">
+              <button
+                onClick={() => setSelectedCalendarDay(null)}
+                className="px-4 py-2 rounded-xl bg-white/5 text-zinc-400 hover:text-white font-bold text-xs cursor-pointer"
+              >
+                Cerrar
+              </button>
+              <button
+                onClick={() => {
+                  const targetDay = selectedCalendarDay;
+                  setSelectedCalendarDay(null);
+                  setManualCitaData({
+                    nombre: '',
+                    telefono: '',
+                    vehiculo: '',
+                    fecha: targetDay,
+                    hora: '09:00',
+                    servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+                    notas: '',
+                    status: 'Confirmado'
+                  });
+                  setManualCitaError('');
+                  setIsManualCitaModalOpen(true);
+                }}
+                className="px-4 py-2 rounded-xl bg-primary hover:bg-amber-400 text-black font-black text-xs flex items-center gap-1.5 cursor-pointer shadow-lg"
+              >
+                <Plus size={15} />
+                <span>Agendar Otra Cita para este Día</span>
+              </button>
             </div>
           </div>
         </div>
