@@ -670,6 +670,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (e) {}
   };
 
+  // Solicitud de Permisos de Notificaciones Push Nativas del Navegador
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    }
+  }, []);
+
+  // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo
+  useEffect(() => {
+    const checkReminderInterval = setInterval(() => {
+      if (typeof window === 'undefined' || !('Notification' in window) || Notification.permission !== 'granted') return;
+      
+      const todayStr = new Date().toISOString().split('T')[0];
+      const nowTime = new Date().toTimeString().slice(0, 5); // HH:MM
+
+      reminders.forEach(r => {
+        if (!r.completado && r.fecha === todayStr && r.hora === nowTime && !r.notified) {
+          try {
+            new Notification('🔔 Taller MasterTech - Recordatorio Operativo', {
+              body: `${r.titulo} ${r.clienteNombre ? `(${r.clienteNombre})` : ''}`,
+              icon: '/logo.png',
+              tag: r.id
+            });
+            r.notified = true;
+          } catch (e) {}
+        }
+      });
+    }, 30000); // Check every 30 seconds
+
+    return () => clearInterval(checkReminderInterval);
+  }, [reminders]);
+
   const handleAddReminder = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newReminderData.titulo.trim()) return;
