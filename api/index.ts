@@ -2416,14 +2416,38 @@ ESTRUCTURA DE RESPUESTA:
 
     if (!aiResponseText) {
       const lowerPrompt = userMessage.toLowerCase();
-      if (lowerPrompt.includes('fren') || lowerPrompt.includes('ruido') || lowerPrompt.includes('chirrido') || lowerPrompt.includes('metal')) {
-        aiResponseText = `🔧 **Diagnóstico de Ruidos en Frenos y Sistema de Suspensión:**\n\nUn ruido metálico o chirrido al frenar suele deberse a:\n1. **Pastillas de Freno Desgastadas:** El sensor de desgaste metálico está rozando directamente el disco.\n2. **Discos Cristalizados o Rayados:** Por alta fricción y temperaturas extremas.\n3. **Caliper o Mordaza Desajustada:** Provoca vibraciones y fricción desalineada.\n\n⚠️ **Riesgo:** Continuar rodando así reduce la capacidad de frenado y puede dañar severamente los discos.\n\nTe invitamos a agendar una revisión inmediata de frenos en **Taller MasterTech**.`;
-      } else if (lowerPrompt.includes('p0300') || lowerPrompt.includes('misfire') || lowerPrompt.includes('falla')) {
-        aiResponseText = `⚠️ **Diagnóstico Código DTC P0300 (Fallos de Encendido Múltiples):**\n\nEste código indica fallos de encendido aleatorios en varios cilindros. Causas principales:\n1. **Bujías o Bobinas Desgastadas.**\n2. **Inyectores Sucios o Baja Presión de Bomba de Gasolina.**\n3. **Fuga de Vacío en Admisión.**\n\nTe sugerimos realizar un escaneo computarizado en **Taller MasterTech**.`;
-      } else if (decodedVehicle) {
+
+      // 1. ENGINE NOISE & MOTOR ISSUES
+      if (lowerPrompt.includes('motor') || lowerPrompt.includes('taquete') || lowerPrompt.includes('golpeteo') || lowerPrompt.includes('cadena') || lowerPrompt.includes('biela') || lowerPrompt.includes('aceite')) {
+        aiResponseText = `⚙️ **Diagnóstico de Ruidos y Anomalías en Motor:**\n\nUn ruido o golpeteo en el área del motor suele estar relacionado a:\n1. **Taquetes / Elevadores Hidráulicos Desgastados:** Producen un tictac metálico rítmico por baja presión de aceite o lubricación deficiente.\n2. **Cadena o Correa de Tiempo Destensada:** Genera un roce o matraca metálica al acelerar en frío o en mínimo.\n3. **Holgura en Cojinetes de Biela o Bancada:** Produce un golpe sordo profundo de alta peligrosidad mecánica.\n\n⚠️ **Recomendación:** Te sugerimos no forzar el vehículo y agendar una inspección de presión de aceite y diagnóstico de motor en **Taller MasterTech**.`;
+      }
+      // 2. BRAKE NOISES
+      else if (lowerPrompt.includes('fren') || lowerPrompt.includes('pastilla') || lowerPrompt.includes('disco') || lowerPrompt.includes('caliper') || lowerPrompt.includes('mordaza')) {
+        aiResponseText = `🔧 **Diagnóstico de Ruidos en Sistema de Frenos:**\n\nUn chirrido o roce al pisar el pedal de freno suele deberse a:\n1. **Pastillas de Freno Desgastadas:** El sensor de desgaste metálico rozando directamente contra el disco.\n2. **Discos Cristalizados o Deformados:** Provocan vibración en el pedal y ruido por sobrecalentamiento.\n3. **Mordazas / Calipers Desalineados:** Causan desgaste irregular y fricción continua.\n\n⚠️ **Riesgo:** Reducción en la distancia de frenado y posible cristalización del disco.\n\nTe invitamos a agendar la revisión de frenos en **Taller MasterTech**.`;
+      }
+      // 3. SUSPENSION & FRONT END NOISES
+      else if (lowerPrompt.includes('suspensi') || lowerPrompt.includes('tren') || lowerPrompt.includes('amortiguador') || lowerPrompt.includes('buje') || lowerPrompt.includes('muñón') || lowerPrompt.includes('hueco') || lowerPrompt.includes('bache') || lowerPrompt.includes('tripezo') || lowerPrompt.includes('tripoide')) {
+        aiResponseText = `🚗 **Diagnóstico de Ruidos en Tren Delantero y Suspensión:**\n\nGolpes metálicos o crujidos al pasar por baches o girar el volante indican:\n1. **Bujes de Meseta o Muñones Desgastados:** Producen holgura y juego en la rueda.\n2. **Amortiguadores o Bases Vencidas:** Generan golpes secos al comprimir la suspensión.\n3. **Tripoide / Junta Homocinética con Desgaste:** Produce un crujido metálico repetitivo al girar.\n\nTe esperamos en **Taller MasterTech** para una revisión completa en elevador.`;
+      }
+      // 4. GENERAL NOISE
+      else if (lowerPrompt.includes('ruido') || lowerPrompt.includes('sonido') || lowerPrompt.includes('chirrido')) {
+        aiResponseText = `🔊 **Análisis de Ruido Automotriz:**\n\nDetectar el origen exacto del sonido es vital para prevenir averías mayores:\n- **Si el ruido proviene del motor:** Puede ser taquetes, cadena de tiempo o baja presión de aceite.\n- **Si ocurre al frenar:** Se trata de pastillas o discos de freno desgastados.\n- **Si suena en baches o al girar:** Corresponde a bujes, muñones o tripoides de suspensión.\n\n¿Podrías especificarme en qué zona del vehículo escuchas el ruido (motor, frenos o ruedas)?`;
+      }
+      // 5. DTC CODES & MISFIRES
+      else if (lowerPrompt.includes('p0300') || lowerPrompt.includes('p0420') || lowerPrompt.includes('misfire') || lowerPrompt.includes('check engine') || lowerPrompt.includes('falla')) {
+        aiResponseText = `⚠️ **Diagnóstico por Escáner y Códigos DTC:**\n\nCuando la luz Check Engine se enciende o el vehículo falla en marcha:\n1. **Fallos de Encendido (Misfires):** Bujías, bobinas de encendido o inyectores sucios.\n2. **Sensores de Oxígeno o Mezcla:** Desajuste en la relación aire/combustible.\n3. **Presión de Combustible:** Filtros tapados o bomba con baja presión.\n\nTe recomendamos realizar un diagnóstico computarizado con escáner profesional OEM en **Taller MasterTech**.`;
+      }
+      // 6. OVERHEATING / COOLING
+      else if (lowerPrompt.includes('calient') || lowerPrompt.includes('refrigerante') || lowerPrompt.includes('radiador') || lowerPrompt.includes('termostato') || lowerPrompt.includes('temperatura')) {
+        aiResponseText = `🌡️ **Diagnóstico de Sistema de Enfriamiento y Sobrecalentamiento:**\n\nEl incremento indeseado de temperatura suele deberse a:\n1. **Fugas de Refrigerante / Coolant:** En mangueras, radiador o envase de expansión.\n2. **Termostato Pegado / Válvula Cerrada:** Impide la circulación del refrigerante hacia el radiador.\n3. **Electroventilador o Empaque de Cámara:** Falla en la activación del fan o pérdida de compresión.\n\n⚠️ **Advertencia:** No permitas que la aguja entre en zona roja. Agenda tu revisión en **Taller MasterTech**.`;
+      }
+      // 7. VIN DECODED DEFAULT
+      else if (decodedVehicle) {
         aiResponseText = `He decodificado con éxito tu **${decodedVehicle.make} ${decodedVehicle.model} ${decodedVehicle.year} (${decodedVehicle.engine})**.\n\n¿Qué síntoma, ruido o código de falla (Check Engine) presenta tu vehículo actualmente? Cuéntame y te brindaré un diagnóstico inicial para coordinar en Taller MasterTech.`;
-      } else {
-        aiResponseText = `¡Con gusto! Para darte la mejor asesoría técnica OEM sobre tu vehículo en **Taller MasterTech**, por favor coméntame el síntoma específico (ruidos en frenos o suspensión, códigos DTC, pérdida de potencia o fallas de aire acondicionado) que deseas revisar.`;
+      }
+      // 8. GENERAL DEFAULT
+      else {
+        aiResponseText = `¡Hola! Con gusto te asesoro. En **Taller MasterTech** realizamos diagnóstico especializado para:\n\n• **Motor y Transmisión:** Ruidos de taquetes, cadenas, biela, botes de aceite y cajas.\n• **Frenos y Suspensión:** Cambio de pastillas, rectificación de discos y tren delantero.\n• **Electricidad y Escáner:** Decodificación de códigos DTC y fallas de encendido.\n\n¿Qué síntoma o falla presenta tu vehículo para orientarte?`;
       }
     }
 
