@@ -45,6 +45,7 @@ import Catalogo from './Catalogo';
 import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import { MT01AdvisorModal } from './components/MT01AdvisorModal';
 
 const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg 
@@ -866,6 +867,9 @@ export default function App() {
 
       {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
       <BrechaCambiariaPanel />
+
+      {/* MT-01 · Especialista MasterTech — AI Automotive Advisor & VIN Decoder */}
+      <MT01AdvisorModal />
 
       {/* Global CSS for custom styles */}
       <style>{`

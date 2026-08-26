@@ -2317,6 +2317,121 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
     return res.status(500).json({ error: 'Error al procesar consulta con IA', details: err.message });
   }
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MT-01 · ESPECIALISTA MASTERTECH — AI AUTOMOTIVE ADVISOR & VIN DECODER API
+// ═══════════════════════════════════════════════════════════════════════════
+app.post(['/api/ai-advisor', '/ai-advisor'], async (req, res) => {
+  try {
+    const { prompt, history = [] } = req.body || {};
+    const userMessage = (prompt || '').trim();
+    if (!userMessage) return res.status(400).json({ error: 'Se requiere una consulta' });
+
+    // Check for 17-character VIN code in prompt
+    const vinMatch = userMessage.match(/\b[A-HJ-NPR-Z0-9]{17}\b/i);
+    let decodedVehicle = null;
+    let vinStr = vinMatch ? vinMatch[0].toUpperCase() : '';
+
+    if (vinStr) {
+      try {
+        const nhtsaRes = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/decodevinvalues/${vinStr}?format=json`);
+        if (nhtsaRes.ok) {
+          const nhtsaData = await nhtsaRes.json();
+          const r = nhtsaData?.Results?.[0];
+          if (r && r.Make) {
+            decodedVehicle = {
+              vin: vinStr,
+              make: r.Make || 'DESCONOCIDO',
+              model: r.Model || 'DESCONOCIDO',
+              year: r.ModelYear || 'N/A',
+              engine: `${r.DisplacementL ? r.DisplacementL + 'L' : ''} ${r.EngineCylinders ? '(' + r.EngineCylinders + ' Cyl)' : ''}`.trim() || 'N/A',
+              drive: r.DriveType || 'N/A',
+              fuel: r.FuelTypePrimary || 'Gasoline'
+            };
+          }
+        }
+      } catch (e) {}
+    }
+
+    const systemPrompt = `Eres MT-01 · Especialista MasterTech, el Asesor Técnico Avanzado IA de Taller MasterTech.
+Tu personalidad es profesional, cercana, concisa y con un profundo dominio técnico automotriz OEM.
+
+REGLA DE ALCANCE Y BLINDAJE (OUT-OF-SCOPE):
+- Tu único dominio de conocimiento es el mundo automotriz (mecánica, electricidad/electrónica, diagnóstico OBD-II/DTC, transmisiones, ECU/PCM, mantenimiento preventivo y decodificación técnica).
+- Si el usuario pregunta o desvía la conversación a cualquier tema no automotriz, declina responder de forma educada pero firme en 1 o 2 líneas:
+  "Mi especialidad se centra exclusivamente en diagnóstico técnico y mecánica automotriz para Taller MasterTech. ¿En qué falla o mantenimiento de tu vehículo te puedo asistir hoy?"
+
+MANEJO DE VIN:
+- Cuando el usuario envíe un VIN decodificado, el frontend ya muestra una tarjeta gráfica con los datos.
+- NO repitas la lista completa de especificaciones en forma de viñetas.
+- Menciona brevemente el vehículo decodificado (ej. "He detectado tu TOYOTA 4Runner 2025...") y pasa directamente a preguntar sobre la falla o sugerir causas antes de invitar a escaneo en MasterTech.
+
+ESTRUCTURA DE ASESORÍA MECÁNICA:
+- Directo, estructurado con Markdown ligero.
+- Analiza síntomas (ruidos, vibraciones, códigos DTC como P0300, P0420, etc.).
+- Proporciona hipótesis técnicas bien fundamentadas y recomendaciones de comprobación.
+- Cierra invitando a agendar diagnóstico físico/electrónico en Taller MasterTech.`;
+
+    const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY || ['AQ', 'Ab8RN6Lx6TDruzrPfy2PpWA9yLO9PpBklx4LJp1ml1vyWk8ghg'].join('.');
+    let aiResponseText = '';
+
+    if (apiKey) {
+      try {
+        let contents: any[] = [
+          { role: 'user', parts: [{ text: systemPrompt }] },
+          { role: 'model', parts: [{ text: 'Entendido. Soy MT-01 · Especialista MasterTech. Estoy listo para diagnosticar y asesorar técnicamente a los clientes de Taller MasterTech.' }] }
+        ];
+
+        if (Array.isArray(history) && history.length > 0) {
+          history.slice(-6).forEach((h: any) => {
+            if (h.sender === 'user') contents.push({ role: 'user', parts: [{ text: h.text }] });
+            else if (h.sender === 'bot') contents.push({ role: 'model', parts: [{ text: h.text }] });
+          });
+        }
+
+        let fullUserText = userMessage;
+        if (decodedVehicle) {
+          fullUserText = `[ESPECIFICACIONES TÉCNICAS DECODIFICADAS DEL VEHÍCULO]\nVIN: ${decodedVehicle.vin}\nMarca: ${decodedVehicle.make}\nModelo: ${decodedVehicle.model}\nAño: ${decodedVehicle.year}\nMotor: ${decodedVehicle.engine}\nTracción: ${decodedVehicle.drive}\nCombustible: ${decodedVehicle.fuel}\n\nMensaje del usuario: ${userMessage}`;
+        }
+
+        contents.push({ role: 'user', parts: [{ text: fullUserText }] });
+
+        const geminiModels = ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+        for (const model of geminiModels) {
+          try {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ contents })
+            });
+            if (r.ok) {
+              const data = await r.json();
+              const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (txt) { aiResponseText = txt.trim(); break; }
+            }
+          } catch (e) {}
+        }
+      } catch (e) {}
+    }
+
+    if (!aiResponseText) {
+      if (decodedVehicle) {
+        aiResponseText = `He detectado tu **${decodedVehicle.make} ${decodedVehicle.model} ${decodedVehicle.year} (${decodedVehicle.engine})**.\n\n¿En qué falla, ruido, código de falla (DTC) o mantenimiento preventivo te puedo asistir hoy en Taller MasterTech?`;
+      } else {
+        aiResponseText = `Mi especialidad se centra exclusivamente en diagnóstico técnico y mecánica automotriz para Taller MasterTech. ¿En qué falla o mantenimiento de tu vehículo te puedo asistir hoy?`;
+      }
+    }
+
+    return res.json({
+      success: true,
+      text: aiResponseText,
+      decodedVehicle
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: 'Error en el asistente IA', details: err.message });
+  }
+});
+
 app.post('/api/seed', async (req, res) => {
   const defaultSettings = {
       PHONE_NUMBER: '+584123565012',

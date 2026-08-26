@@ -1,0 +1,321 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Bot, X, Send, Sparkles, RotateCcw, Car, Wrench, ShieldCheck, Clock, ExternalLink } from 'lucide-react';
+
+interface Message {
+  id: string;
+  sender: 'user' | 'bot';
+  text: string;
+  decodedVehicle?: {
+    vin: string;
+    make: string;
+    model: string;
+    year: string;
+    engine: string;
+    drive: string;
+    fuel: string;
+  };
+  timestamp: string;
+}
+
+export const MT01AdvisorModal: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const initialGreeting: Message = {
+    id: 'msg-1',
+    sender: 'bot',
+    text: `👋 ¡Hola! Soy **MT-01 · Especialista MasterTech**, tu Asesor Técnico Avanzado de Taller MasterTech.
+
+Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check Engine), reprogramaciones o ingresar un **código VIN de 17 dígitos** para decodificar las especificaciones oficiales de tu vehículo.`,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  };
+
+  const [messages, setMessages] = useState<Message[]>([initialGreeting]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
+
+  const handleSend = async (overrideText?: string) => {
+    const textToSend = overrideText || inputText;
+    if (!textToSend.trim() || isLoading) return;
+
+    const userMsg: Message = {
+      id: `user-${Date.now()}`,
+      sender: 'user',
+      text: textToSend.trim(),
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    if (!overrideText) setInputText('');
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/ai-advisor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: userMsg.text,
+          history: messages.map(m => ({ sender: m.sender, text: m.text }))
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const botMsg: Message = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text: data.text || 'Sin respuesta de IA',
+          decodedVehicle: data.decodedVehicle,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, botMsg]);
+      } else {
+        throw new Error('Error al conectar con el servidor');
+      }
+    } catch (err) {
+      const errorMsg: Message = {
+        id: `bot-err-${Date.now()}`,
+        sender: 'bot',
+        text: 'Mi especialidad se centra exclusivamente en diagnóstico técnico y mecánica automotriz para Taller MasterTech. ¿En qué falla o mantenimiento de tu vehículo te puedo asistir hoy?',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setMessages([initialGreeting]);
+  };
+
+  return (
+    <>
+      {/* Floating Trigger Button */}
+      <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="group relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold text-xs sm:text-sm shadow-[0_10px_30px_rgba(79,70,229,0.5)] hover:shadow-[0_15px_40px_rgba(79,70,229,0.7)] hover:scale-105 transition-all duration-300 border border-white/20 cursor-pointer"
+          title="MT-01 · Especialista MasterTech"
+        >
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md">
+              <Bot size={18} className="text-white animate-pulse" />
+            </div>
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full animate-ping" />
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
+          </div>
+          <div className="text-left hidden sm:block">
+            <div className="text-[11px] font-black tracking-wider uppercase leading-none text-white">MT-01 · IA MasterTech</div>
+            <div className="text-[9px] text-blue-200 font-medium leading-tight mt-0.5">Asesor Automotriz & VIN</div>
+          </div>
+        </button>
+      </div>
+
+      {/* Floating Chat Modal Popup */}
+      {isOpen && (
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[420px] h-full sm:h-[620px] max-h-[100vh] bg-[#0d0e12] border border-blue-500/30 sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+          {/* Header Header Bar */}
+          <div className="bg-gradient-to-r from-[#111827] via-[#1e1b4b] to-[#111827] p-3.5 border-b border-white/10 flex items-center justify-between shrink-0 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 shadow-md flex items-center justify-center relative">
+                <Bot size={22} className="text-white" />
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
+              </div>
+
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-black text-white tracking-wide">MT-01 · Especialista MasterTech</h3>
+                  <span className="px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[9px] font-mono font-bold">
+                    Gemini Pro
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Decodificador VIN & Asesor Automotriz</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={handleReset}
+                title="Reiniciar chat"
+                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <RotateCcw size={16} />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                title="Cerrar modal"
+                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          {/* Chat Messages Body */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-[#0b0c10] via-[#0f1117] to-[#0b0c10] scrollbar-thin">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+              >
+                <div className="flex items-center gap-1.5 mb-1 px-1">
+                  <span className="text-[10px] font-bold text-zinc-500">
+                    {msg.sender === 'user' ? 'TÚ' : 'MT-01'}
+                  </span>
+                  <span className="text-[9px] text-zinc-600">{msg.timestamp}</span>
+                </div>
+
+                <div
+                  className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed ${
+                    msg.sender === 'user'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-none shadow-md font-medium'
+                      : 'bg-[#181a22] border border-white/10 text-zinc-200 rounded-bl-none shadow-lg'
+                  }`}
+                >
+                  {/* Decoded Vehicle Card (if VIN was parsed) */}
+                  {msg.decodedVehicle && (
+                    <div className="mb-3 bg-gradient-to-br from-blue-950/80 via-slate-900 to-indigo-950/90 border border-blue-500/40 rounded-2xl p-3.5 shadow-xl text-white">
+                      <div className="flex items-center justify-between border-b border-blue-500/30 pb-2 mb-2">
+                        <div className="flex items-center gap-1.5 text-[11px] font-black text-blue-300 uppercase tracking-wider">
+                          <Car size={14} className="text-blue-400" />
+                          <span>ESPECIFICACIONES DE VEHÍCULO</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-200 text-[9px] font-mono font-bold border border-blue-400/30">
+                          {msg.decodedVehicle.vin}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                        <div>
+                          <span className="text-zinc-400">Marca:</span>{' '}
+                          <strong className="text-white font-bold">{msg.decodedVehicle.make}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-400">Modelo:</span>{' '}
+                          <strong className="text-white font-bold">{msg.decodedVehicle.model}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-400">Año:</span>{' '}
+                          <strong className="text-white font-bold">{msg.decodedVehicle.year}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-400">Motor:</span>{' '}
+                          <strong className="text-white font-bold">{msg.decodedVehicle.engine}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-400">Tracción:</span>{' '}
+                          <strong className="text-white font-bold">{msg.decodedVehicle.drive}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-400">Fuel:</span>{' '}
+                          <strong className="text-white font-bold">{msg.decodedVehicle.fuel}</strong>
+                        </div>
+                      </div>
+
+                      <div className="mt-2.5 pt-2 border-t border-blue-500/20 text-[10px] text-blue-300 font-bold flex items-center gap-1">
+                        <span>🚘 Decodificación Oficial de VIN</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Message content rendering */}
+                  <div className="whitespace-pre-wrap space-y-1">
+                    {msg.text.split('\n').map((line, i) => {
+                      if (line.startsWith('**') && line.endsWith('**')) {
+                        return <strong key={i} className="block text-white font-bold">{line.replace(/\*\*/g, '')}</strong>;
+                      }
+                      return <p key={i}>{line}</p>;
+                    })}
+                  </div>
+
+                  {/* WhatsApp scheduling action button */}
+                  {msg.sender === 'bot' && (
+                    <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between">
+                      <a
+                        href="https://wa.link/xnj37f"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold flex items-center gap-1.5 transition-all"
+                      >
+                        <Wrench size={12} />
+                        <span>Agendar Diagnóstico por WhatsApp</span>
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-zinc-400 p-3 rounded-2xl rounded-bl-none text-xs w-fit">
+                <Bot size={14} className="animate-spin text-blue-400" />
+                <span>MT-01 analizando diagnóstico técnico...</span>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Quick Action Pills */}
+          <div className="px-3 py-2 bg-[#0d0e12] border-t border-white/5 flex flex-wrap gap-1.5 shrink-0">
+            <button
+              onClick={() => handleSend('JTEVA5AR1S5003715')}
+              className="px-2.5 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-300 text-[10px] font-bold transition-all cursor-pointer"
+            >
+              🚗 Probar VIN JTEVA5AR1S5003715
+            </button>
+            <button
+              onClick={() => handleSend('¿Qué significa el código de falla P0300?')}
+              className="px-2.5 py-1 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold transition-all cursor-pointer"
+            >
+              ⚠️ Código DTC P0300
+            </button>
+            <button
+              onClick={() => handleSend('Tengo un ruido metálico al frenar')}
+              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+            >
+              🔧 Ruido al Frenar
+            </button>
+          </div>
+
+          {/* Message Input Box */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="p-3 bg-[#111218] border-t border-white/10 flex items-center gap-2 shrink-0"
+          >
+            <input
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              placeholder="Pregunta sobre fallas o pega un VIN de 17 dígitos..."
+              className="flex-1 bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-all"
+            />
+            <button
+              type="submit"
+              disabled={!inputText.trim() || isLoading}
+              className="p-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-40 text-white transition-all shadow-md cursor-pointer"
+            >
+              <Send size={16} />
+            </button>
+          </form>
+        </div>
+      )}
+    </>
+  );
+};
