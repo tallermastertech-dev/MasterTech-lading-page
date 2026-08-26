@@ -175,7 +175,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               <div className="relative shrink-0">
                 <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-md flex items-center justify-center">
                   <div className="w-full h-full rounded-[14px] bg-[#0d0e12] flex items-center justify-center">
-                    <Bot size={20} className="text-amber-400" style={{ color: '#fbbf24' }} />
+                    <Bot size={20} className="text-amber-400 mt01-bot-icon" style={{ color: '#fbbf24', stroke: '#fbbf24' }} />
                   </div>
                 </div>
                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-[#12141a] rounded-full" />
@@ -201,7 +201,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
               >
-                <RotateCcw size={15} style={{ color: '#ffffff' }} />
+                <RotateCcw size={15} style={{ color: '#ffffff', stroke: '#ffffff' }} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
@@ -209,7 +209,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
               >
-                <X size={18} style={{ color: '#ffffff' }} />
+                <X size={18} style={{ color: '#ffffff', stroke: '#ffffff' }} />
               </button>
             </div>
           </div>
@@ -222,10 +222,10 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div className="flex items-center gap-1.5 mb-1 px-1">
-                  <span className="text-[10px] font-bold text-zinc-500">
+                  <span className="text-[10px] font-bold text-zinc-400" style={{ color: '#a1a1aa' }}>
                     {msg.sender === 'user' ? 'TÚ' : 'MT-01'}
                   </span>
-                  <span className="text-[9px] text-zinc-600">{msg.timestamp}</span>
+                  <span className="text-[9px] text-zinc-500" style={{ color: '#71717a' }}>{msg.timestamp}</span>
                 </div>
 
                 <div
@@ -241,46 +241,46 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 >
                   {/* Decoded Vehicle Card (if VIN was parsed) */}
                   {msg.decodedVehicle && (
-                    <div className="mb-3 bg-gradient-to-br from-amber-950/50 via-slate-900 to-[#12141a] border border-amber-500/40 rounded-2xl p-3.5 shadow-xl text-white">
+                    <div className="mb-3 bg-gradient-to-br from-amber-950/50 via-slate-900 to-[#12141a] border border-amber-500/40 rounded-2xl p-3.5 shadow-xl text-white vin-spec-card" style={{ backgroundColor: '#12141a', color: '#ffffff' }}>
                       <div className="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-2">
                         <div className="flex items-center gap-1.5 text-[11px] font-black text-amber-300 uppercase tracking-wider">
-                          <Car size={14} className="text-amber-400" />
-                          <span>ESPECIFICACIONES DE VEHÍCULO</span>
+                          <Car size={14} className="text-amber-400 mt01-car-icon" style={{ color: '#fbbf24', stroke: '#fbbf24' }} />
+                          <span style={{ color: '#fde047' }}>ESPECIFICACIONES DE VEHÍCULO</span>
                         </div>
-                        <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[9px] font-mono font-bold border border-amber-400/40">
+                        <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[9px] font-mono font-bold border border-amber-400/40" style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}>
                           {msg.decodedVehicle.vin}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
                         <div>
-                          <span className="text-zinc-400">Marca:</span>{' '}
-                          <strong className="text-white font-bold">{msg.decodedVehicle.make}</strong>
+                          <span style={{ color: '#cbd5e1' }}>Marca:</span>{' '}
+                          <strong className="font-bold" style={{ color: '#fde047' }}>{msg.decodedVehicle.make}</strong>
                         </div>
                         <div>
-                          <span className="text-zinc-400">Modelo:</span>{' '}
-                          <strong className="text-white font-bold">{msg.decodedVehicle.model}</strong>
+                          <span style={{ color: '#cbd5e1' }}>Modelo:</span>{' '}
+                          <strong className="font-bold" style={{ color: '#fde047' }}>{msg.decodedVehicle.model}</strong>
                         </div>
                         <div>
-                          <span className="text-zinc-400">Año:</span>{' '}
-                          <strong className="text-white font-bold">{msg.decodedVehicle.year}</strong>
+                          <span style={{ color: '#cbd5e1' }}>Año:</span>{' '}
+                          <strong className="font-bold" style={{ color: '#fde047' }}>{msg.decodedVehicle.year}</strong>
                         </div>
                         <div>
-                          <span className="text-zinc-400">Motor:</span>{' '}
-                          <strong className="text-white font-bold">{msg.decodedVehicle.engine}</strong>
+                          <span style={{ color: '#cbd5e1' }}>Motor:</span>{' '}
+                          <strong className="font-bold" style={{ color: '#fde047' }}>{msg.decodedVehicle.engine}</strong>
                         </div>
                         <div>
-                          <span className="text-zinc-400">Tracción:</span>{' '}
-                          <strong className="text-white font-bold">{msg.decodedVehicle.drive}</strong>
+                          <span style={{ color: '#cbd5e1' }}>Tracción:</span>{' '}
+                          <strong className="font-bold" style={{ color: '#fde047' }}>{msg.decodedVehicle.drive}</strong>
                         </div>
                         <div>
-                          <span className="text-zinc-400">Fuel:</span>{' '}
-                          <strong className="text-white font-bold">{msg.decodedVehicle.fuel}</strong>
+                          <span style={{ color: '#cbd5e1' }}>Fuel:</span>{' '}
+                          <strong className="font-bold" style={{ color: '#fde047' }}>{msg.decodedVehicle.fuel}</strong>
                         </div>
                       </div>
 
-                      <div className="mt-2.5 pt-2 border-t border-amber-500/20 text-[10px] text-amber-300 font-bold flex items-center gap-1">
-                        <span>🚘 Decodificación Oficial de VIN</span>
+                      <div className="mt-2.5 pt-2 border-t border-amber-500/20 text-[10px] font-bold flex items-center gap-1">
+                        <span style={{ color: '#fde047' }}>🚘 Decodificación Oficial de VIN</span>
                       </div>
                     </div>
                   )}
@@ -298,8 +298,8 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                         className="w-full justify-center px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs shadow-lg flex items-center gap-2 transition-all cursor-pointer hover:scale-[1.02]"
                         style={{ backgroundColor: '#10b981', color: '#000000' }}
                       >
-                        <Wrench size={15} className="text-black fill-current" />
-                        <span>Agendar Diagnóstico por WhatsApp</span>
+                        <Wrench size={15} className="text-black fill-current" style={{ color: '#000000' }} />
+                        <span style={{ color: '#000000', fontWeight: 900 }}>Agendar Diagnóstico por WhatsApp</span>
                       </a>
                     </div>
                   )}
@@ -309,8 +309,8 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
             {isLoading && (
               <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-zinc-300 p-3 rounded-2xl rounded-bl-none text-xs w-fit">
-                <Bot size={14} className="animate-spin text-amber-400" />
-                <span>MT-01 analizando diagnóstico técnico...</span>
+                <Bot size={14} className="animate-spin text-amber-400 mt01-bot-icon" style={{ color: '#fbbf24', stroke: '#fbbf24' }} />
+                <span style={{ color: '#cbd5e1' }}>MT-01 analizando diagnóstico técnico...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -335,10 +335,10 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
             <button
               type="submit"
               disabled={!inputText.trim() || isLoading}
-              className="w-10 h-10 rounded-xl bg-[#C2A472] hover:bg-amber-400 disabled:opacity-40 text-black font-black flex items-center justify-center transition-all shadow-md cursor-pointer shrink-0"
+              className="w-10 h-10 rounded-xl bg-[#C2A472] hover:bg-amber-400 disabled:opacity-40 text-black font-black flex items-center justify-center transition-all shadow-md cursor-pointer shrink-0 send-btn"
               style={{ backgroundColor: '#C2A472', color: '#000000' }}
             >
-              <Send size={16} />
+              <Send size={16} className="mt01-send-icon" style={{ color: '#000000', stroke: '#000000' }} />
             </button>
           </form>
         </div>

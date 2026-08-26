@@ -1265,3 +1265,48 @@ body.theme-light .usa-import-header svg.usa-plane-icon,
   stroke: #38bdf8 !important;
   fill: none !important;
 }
+
+/* ABSOLUTE FINAL OVERRIDE FOR MT-01 CHAT MODAL ICONS & VIN CARD IN LIGHT MODE */
+html.theme-light .mt01-chat-modal svg.mt01-bot-icon,
+body.theme-light .mt01-chat-modal svg.mt01-bot-icon,
+.theme-light .mt01-chat-modal svg.mt01-bot-icon,
+.theme-light svg.mt01-bot-icon {
+  color: #fbbf24 !important;
+  stroke: #fbbf24 !important;
+  fill: none !important;
+}
+
+html.theme-light .mt01-chat-modal svg.mt01-send-icon,
+body.theme-light .mt01-chat-modal svg.mt01-send-icon,
+.theme-light .mt01-chat-modal svg.mt01-send-icon,
+.theme-light svg.mt01-send-icon {
+  color: #0d0e12 !important;
+  stroke: #0d0e12 !important;
+  fill: none !important;
+}
+
+html.theme-light .mt01-chat-modal .vin-spec-card,
+body.theme-light .mt01-chat-modal .vin-spec-card,
+.theme-light .mt01-chat-modal .vin-spec-card {
+  background-color: #12141a !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .mt01-chat-modal .vin-spec-card span,
+body.theme-light .mt01-chat-modal .vin-spec-card span,
+.theme-light .mt01-chat-modal .vin-spec-card span {
+  color: #cbd5e1 !important;
+}
+
+html.theme-light .mt01-chat-modal .vin-spec-card strong,
+body.theme-light .mt01-chat-modal .vin-spec-card strong,
+.theme-light .mt01-chat-modal .vin-spec-card strong {
+  color: #fde047 !important;
+}
+
+html.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon,
+body.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon,
+.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon {
+  color: #fbbf24 !important;
+  stroke: #fbbf24 !important;
+}
