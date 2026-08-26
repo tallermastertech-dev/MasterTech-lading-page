@@ -3385,23 +3385,77 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </div>
 
                     <div>
-                      <label className="text-zinc-400 font-bold block mb-1">Botones Rápido Cierre del Reloj</label>
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {[1, 3, 7, 14].map(days => (
-                          <button
-                            key={days}
-                            type="button"
-                            onClick={() => {
-                              const newEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-                              const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: newEnd };
-                              setSettingsForm(updated);
-                              handleSaveSettings(updated);
+                      <label className="text-zinc-400 font-bold block mb-1">Configuración Manual de Cierre del Reloj</label>
+                      <div className="space-y-2">
+                        {/* Selector Manual de Fecha y Hora Exacta (datetime-local) */}
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                          <input
+                            type="datetime-local"
+                            value={settingsForm.JORNADA_COUNTDOWN_END ? new Date(new Date(settingsForm.JORNADA_COUNTDOWN_END).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ''}
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                const selectedDate = new Date(e.target.value).toISOString();
+                                const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: selectedDate };
+                                setSettingsForm(updated);
+                                handleSaveSettings(updated);
+                              }
                             }}
-                            className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold hover:bg-amber-500/20 transition-colors"
-                          >
-                            + {days} {days === 1 ? 'Día' : 'Días'}
-                          </button>
-                        ))}
+                            className="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-white font-mono text-xs outline-none focus:border-amber-500 cursor-pointer"
+                            title="Selecciona la fecha y hora exacta de finalización"
+                          />
+
+                          {/* Entrada Manual de Días Personalizados */}
+                          <div className="flex items-center gap-1.5">
+                            <input
+                              type="number"
+                              min="1"
+                              max="365"
+                              placeholder="Días"
+                              className="w-16 bg-black/40 border border-white/10 rounded-xl p-2 text-white font-mono text-xs outline-none focus:border-amber-500 text-center"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  const val = parseInt((e.target as HTMLInputElement).value, 10);
+                                  if (val && val > 0) {
+                                    const newEnd = new Date(Date.now() + val * 24 * 60 * 60 * 1000).toISOString();
+                                    const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: newEnd };
+                                    setSettingsForm(updated);
+                                    handleSaveSettings(updated);
+                                  }
+                                }
+                              }}
+                            />
+                            <span className="text-[10px] text-zinc-400 font-bold shrink-0">Días</span>
+                          </div>
+                        </div>
+
+                        {/* Botones de Acceso Rápido Preset */}
+                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                          <span className="text-[10px] font-bold text-zinc-400 mr-1">Rápidos:</span>
+                          {[1, 3, 5, 7, 10, 14, 30].map(days => (
+                            <button
+                              key={days}
+                              type="button"
+                              onClick={() => {
+                                const newEnd = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+                                const updated = { ...settingsForm, JORNADA_COUNTDOWN_END: newEnd };
+                                setSettingsForm(updated);
+                                handleSaveSettings(updated);
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-bold hover:bg-amber-500 hover:text-black transition-all cursor-pointer"
+                            >
+                              + {days}d
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Fecha Guardada Actual */}
+                        {settingsForm.JORNADA_COUNTDOWN_END && (
+                          <div className="text-[10px] text-amber-400 font-mono font-bold flex items-center gap-1 bg-amber-500/10 border border-amber-500/20 p-1.5 rounded-lg">
+                            <Clock size={12} />
+                            <span>Cierre Programado: {new Date(settingsForm.JORNADA_COUNTDOWN_END).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
