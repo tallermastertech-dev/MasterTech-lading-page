@@ -772,8 +772,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 {/* Header */}
                 <div className="p-5 sm:p-6 border-b border-white/10 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 flex items-center justify-between usa-import-header" style={{ backgroundColor: '#0f172a', color: '#ffffff' }}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-blue-600/30 border border-blue-400/50 flex items-center justify-center text-blue-400 shadow-md shrink-0">
-                      <Plane size={20} className="animate-pulse text-blue-400" style={{ color: '#60a5fa' }} />
+                    <div className="w-10 h-10 rounded-2xl bg-blue-500/20 border border-blue-400/60 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
+                      <Plane size={20} className="animate-pulse text-sky-400 usa-plane-icon" style={{ color: '#38bdf8', stroke: '#38bdf8' }} />
                     </div>
                     <div>
                       <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2 usa-import-title" style={{ color: '#ffffff' }}>
@@ -792,7 +792,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', color: '#ffffff' }}
                     title="Cerrar modal"
                   >
-                    <X size={18} style={{ color: '#ffffff' }} />
+                    <X size={18} style={{ color: '#ffffff', stroke: '#ffffff' }} />
                   </button>
                 </div>
 

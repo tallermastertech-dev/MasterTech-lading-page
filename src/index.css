@@ -1256,3 +1256,12 @@ body.theme-light .usa-import-modal select,
   border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
+/* ABSOLUTE FINAL OVERRIDE FOR PLANE ICON IN USA IMPORT MODAL IN LIGHT MODE */
+html.theme-light .usa-import-header svg.usa-plane-icon,
+body.theme-light .usa-import-header svg.usa-plane-icon,
+.theme-light .usa-import-header svg.usa-plane-icon,
+.theme-light .usa-import-header .usa-plane-icon {
+  color: #38bdf8 !important;
+  stroke: #38bdf8 !important;
+  fill: none !important;
+}
