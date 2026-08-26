@@ -1232,3 +1232,27 @@ body.theme-light .usa-import-header span.text-blue-300 {
   color: #93c5fd !important;
 }
 
+/* ABSOLUTE FINAL OVERRIDE FOR IMPORT USA MODAL FORM LABELS & INPUTS IN LIGHT MODE */
+html.theme-light .usa-import-modal label,
+body.theme-light .usa-import-modal label,
+.theme-light .usa-import-modal label,
+html.theme-light .usa-import-modal label span,
+body.theme-light .usa-import-modal label span,
+.theme-light .usa-import-modal label span {
+  color: #f1f5f9 !important;
+}
+
+html.theme-light .usa-import-modal input,
+body.theme-light .usa-import-modal input,
+html.theme-light .usa-import-modal textarea,
+body.theme-light .usa-import-modal textarea,
+html.theme-light .usa-import-modal select,
+body.theme-light .usa-import-modal select,
+.theme-light .usa-import-modal input,
+.theme-light .usa-import-modal textarea,
+.theme-light .usa-import-modal select {
+  background-color: #0d0e12 !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+

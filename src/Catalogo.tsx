@@ -820,9 +820,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Part Number & Product Name */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="usa-part-number" className="block text-xs font-bold text-blue-300 mb-1 flex items-center gap-1">
-                            <Tag size={12} />
-                            <span>Número de Parte OEM / Código (Recomendado)</span>
+                          <label htmlFor="usa-part-number" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#93c5fd' }}>
+                            <Tag size={12} className="text-blue-400" />
+                            <span style={{ color: '#93c5fd' }}>Número de Parte OEM / Código (Recomendado)</span>
                           </label>
                           <input
                             id="usa-part-number"
@@ -831,14 +831,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.partNumber}
                             onChange={(e) => setUsaForm({ ...usaForm, partNumber: e.target.value })}
                             placeholder="Ej. #52008899AD / Mopar / Denso"
-                            className="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-blue-400 transition-colors font-mono"
+                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-blue-400 transition-colors font-mono"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-product-name" className="block text-xs font-bold text-zinc-200 mb-1 flex items-center gap-1">
+                          <label htmlFor="usa-product-name" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#f1f5f9' }}>
                             <Package size={12} className="text-primary" />
-                            <span>Nombre o Descripción del Repuesto *</span>
+                            <span style={{ color: '#f1f5f9' }}>Nombre o Descripción del Repuesto *</span>
                           </label>
                           <input
                             id="usa-product-name"
@@ -848,7 +849,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.productName}
                             onChange={(e) => setUsaForm({ ...usaForm, productName: e.target.value })}
                             placeholder="Ej. Bomba de agua, Juego de inyectores, Sensor O2"
-                            className="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary transition-colors"
+                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
                       </div>
@@ -856,7 +858,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Vehicle Details: Brand, Model, Year, Engine */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/10">
                         <div>
-                          <label htmlFor="usa-brand" className="block text-[11px] font-bold text-zinc-400 mb-1">Marca *</label>
+                          <label htmlFor="usa-brand" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Marca *</label>
                           <input
                             id="usa-brand"
                             name="usa-brand"
@@ -865,12 +867,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.brand}
                             onChange={(e) => setUsaForm({ ...usaForm, brand: e.target.value })}
                             placeholder="Jeep / Toyota"
-                            className="w-full bg-black/80 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-600 outline-none focus:border-primary"
+                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-model" className="block text-[11px] font-bold text-zinc-400 mb-1">Modelo *</label>
+                          <label htmlFor="usa-model" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Modelo *</label>
                           <input
                             id="usa-model"
                             name="usa-model"
@@ -879,12 +882,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.model}
                             onChange={(e) => setUsaForm({ ...usaForm, model: e.target.value })}
                             placeholder="Grand Cherokee"
-                            className="w-full bg-black/80 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-600 outline-none focus:border-primary"
+                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-year" className="block text-[11px] font-bold text-zinc-400 mb-1">Año *</label>
+                          <label htmlFor="usa-year" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Año *</label>
                           <input
                             id="usa-year"
                             name="usa-year"
@@ -893,12 +897,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.year}
                             onChange={(e) => setUsaForm({ ...usaForm, year: e.target.value })}
                             placeholder="2018"
-                            className="w-full bg-black/80 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-600 outline-none focus:border-primary"
+                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-engine" className="block text-[11px] font-bold text-zinc-400 mb-1">Motor</label>
+                          <label htmlFor="usa-engine" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Motor</label>
                           <input
                             id="usa-engine"
                             name="usa-engine"
@@ -906,7 +911,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.engine}
                             onChange={(e) => setUsaForm({ ...usaForm, engine: e.target.value })}
                             placeholder="3.6L V6"
-                            className="w-full bg-black/80 border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-600 outline-none focus:border-primary"
+                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
                       </div>
@@ -914,9 +920,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Serial VIN & Shipping Method */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="usa-vin" className="block text-xs font-bold text-zinc-300 mb-1 flex items-center gap-1">
+                          <label htmlFor="usa-vin" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#f1f5f9' }}>
                             <ShieldCheck size={12} className="text-green-400" />
-                            <span>Número de Chasis / Serial VIN (17 dígitos)</span>
+                            <span style={{ color: '#f1f5f9' }}>Número de Chasis / Serial VIN (17 dígitos)</span>
                           </label>
                           <input
                             id="usa-vin"
@@ -925,21 +931,23 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.vin}
                             onChange={(e) => setUsaForm({ ...usaForm, vin: e.target.value.toUpperCase() })}
                             placeholder="Ej. 1C4RJFAG8JC123456 (Opcional)"
-                            className="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary transition-colors font-mono uppercase"
+                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors font-mono uppercase"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-shipping" className="block text-xs font-bold text-blue-300 mb-1 flex items-center gap-1">
-                            <Plane size={12} />
-                            <span>Modalidad de Logística Preferida</span>
+                          <label htmlFor="usa-shipping" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#93c5fd' }}>
+                            <Plane size={12} className="text-blue-400" />
+                            <span style={{ color: '#93c5fd' }}>Modalidad de Logística Preferida</span>
                           </label>
                           <select
                             id="usa-shipping"
                             name="usa-shipping"
                             value={usaForm.shippingMode}
                             onChange={(e) => setUsaForm({ ...usaForm, shippingMode: e.target.value })}
-                            className="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-blue-400 transition-colors font-medium"
+                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-blue-400 transition-colors font-medium"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           >
                             <option value="Express Aéreo (7 a 15 días hábiles)">✈️ Express Aéreo (7 a 15 días hábiles - Urgente)</option>
                             <option value="Marítimo Estándar (21 a 40 días hábiles)">🚢 Marítimo Estándar (21 a 40 días hábiles - Económico)</option>
@@ -950,7 +958,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Client Name & Phone */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="usa-client-name" className="block text-xs font-bold text-zinc-200 mb-1">Nombre y Apellido *</label>
+                          <label htmlFor="usa-client-name" className="block text-xs font-bold mb-1" style={{ color: '#f1f5f9' }}>Nombre y Apellido *</label>
                           <input
                             id="usa-client-name"
                             name="usa-client-name"
@@ -959,12 +967,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.clientName}
                             onChange={(e) => setUsaForm({ ...usaForm, clientName: e.target.value })}
                             placeholder="Tu nombre completo"
-                            className="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary transition-colors"
+                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-phone" className="block text-xs font-bold text-zinc-200 mb-1">Teléfono WhatsApp *</label>
+                          <label htmlFor="usa-phone" className="block text-xs font-bold mb-1" style={{ color: '#f1f5f9' }}>Teléfono WhatsApp *</label>
                           <input
                             id="usa-phone"
                             name="usa-phone"
@@ -973,14 +982,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.phone}
                             onChange={(e) => setUsaForm({ ...usaForm, phone: e.target.value })}
                             placeholder="+58 412 1234567"
-                            className="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary transition-colors"
+                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors"
+                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           />
                         </div>
                       </div>
 
                       {/* Additional Notes */}
                       <div>
-                        <label htmlFor="usa-notes" className="block text-xs font-bold text-zinc-300 mb-1">Notas Adicionales o Detalles del Repuesto</label>
+                        <label htmlFor="usa-notes" className="block text-xs font-bold mb-1" style={{ color: '#f1f5f9' }}>Notas Adicionales o Detalles del Repuesto</label>
                         <textarea
                           id="usa-notes"
                           name="usa-notes"
@@ -988,7 +998,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           value={usaForm.notes}
                           onChange={(e) => setUsaForm({ ...usaForm, notes: e.target.value })}
                           placeholder="Especifica lado (derecho/izquierdo), si requieres kit completo o consultas extra..."
-                          className="w-full bg-black/60 border border-white/15 rounded-xl p-3 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary transition-colors resize-none"
+                          className="w-full bg-[#0d0e12] border border-white/20 rounded-xl p-3 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors resize-none"
+                          style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                         />
                       </div>
 
