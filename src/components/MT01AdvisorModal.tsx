@@ -169,7 +169,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
       {isOpen && (
         <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-32px)] sm:w-[420px] h-[calc(100vh-100px)] sm:h-[560px] max-h-[580px] bg-[#0d0e12] border border-[#C2A472]/40 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300 mt01-chat-modal">
           {/* Header Bar */}
-          <div className="bg-[#111319] p-3.5 border-b border-[#C2A472]/30 flex items-center justify-between shrink-0 shadow-lg">
+          <div className="bg-[#111319] p-3.5 border-b border-[#C2A472]/30 flex items-center justify-between shrink-0 shadow-lg mt01-chat-header" style={{ backgroundColor: '#111319' }}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-md flex items-center justify-center relative shrink-0">
                 <Bot size={22} className="text-black" />
@@ -178,14 +178,14 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xs sm:text-sm font-black text-white tracking-wide" style={{ color: '#ffffff' }}>MT-01 · Especialista MasterTech</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[9px] font-mono font-bold shrink-0" style={{ color: '#fde047' }}>
+                  <h3 className="text-xs sm:text-sm font-black tracking-wide" style={{ color: '#ffffff' }}>MT-01 · Especialista MasterTech</h3>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-[9px] font-mono font-bold shrink-0" style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}>
                     Taller MasterTech
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-medium mt-0.5" style={{ color: '#94a3b8' }}>
+                <div className="flex items-center gap-1.5 text-[10px] font-medium mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Decodificador VIN & Asesor Automotriz</span>
+                  <span style={{ color: '#94a3b8' }}>Decodificador VIN & Asesor Automotriz</span>
                 </div>
               </div>
             </div>
@@ -194,18 +194,18 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               <button
                 onClick={handleReset}
                 title="Reiniciar chat"
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer hdr-btn"
-                style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#d4d4d8' }}
+                className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
+                style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
               >
-                <RotateCcw size={15} />
+                <RotateCcw size={15} style={{ color: '#ffffff' }} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 title="Cerrar modal"
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
-                style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
+                className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
+                style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
               >
-                <X size={18} />
+                <X size={18} style={{ color: '#ffffff' }} />
               </button>
             </div>
           </div>
