@@ -2529,13 +2529,15 @@ RESTRICCIONES MÍNIMAS:
       if (has('biela', 'ciguenial', 'ciguenal')) scores.motor += 4;
       if (has('cadena de tiempo', 'correa de tiempo', 'distribucion', 'arbol de levas')) scores.motor += 4;
       if (has('golpeteo', 'golpea el motor', 'golpe en el motor')) scores.motor += 4;
-      if (has('pierde aceite', 'consume aceite', 'bota aceite', 'gasta aceite')) scores.motor += 3;
+      if (has('pierde aceite', 'consume aceite', 'bota aceite', 'gasta aceite', 'esta botando aceite', 'le sale aceite')) scores.motor += 3;
       if (has('aceite', 'lubricante')) scores.motor += 2;
       if (has('tictac', 'tic tac', 'traquetea', 'matraca', 'cascabeleo')) scores.motor += 3;
       if (has('pierde potencia', 'sin potencia', 'no tiene fuerza', 'se apaga', 'se muere', 'se cala', 'falla en marcha')) scores.motor += 2;
+      if (has('se me apaga', 'se me cala', 'se me muere', 'no me da potencia', 'se me va la potencia')) scores.motor += 3;
       if (has('bujia', 'bujias', 'bobina', 'inyector')) scores.motor += 2;
       if (has('correa', 'tensor', 'polea')) scores.motor += 1;
       if (has('temperatura', 'caliente', 'se calienta', 'aguja roja', 'se recalienta')) scores.motor += 2;
+      if (has('se me calienta', 'se le calienta', 'se esta calentando', 'esta recalentando')) scores.motor += 3;
       if (has('humo azul', 'consume aceite', 'echa aceite')) scores.motor += 3;
       if (has('humo blanco', 'agua por el escape', 'refrigerante')) scores.motor += 2;
 
@@ -2606,8 +2608,11 @@ RESTRICCIONES MÍNIMAS:
 
       // ELECTRICO
       if (has('electrico', 'electrica', 'corto circuito', 'corto')) scores.electrico += 3;
+      // "no me enciende / no le arranca / no prende" — with pronoun variants
       if (has('no arranca', 'no enciende', 'no prende', 'no da', 'no jala')) scores.electrico += 3;
-      if (has('clic clic', 'click click', 'hace clic', 'no hace nada al arrancar')) scores.electrico += 3;
+      if (has('no me arranca', 'no me enciende', 'no me prende', 'no me da', 'no le arranca', 'no le enciende', 'no le prende')) scores.electrico += 4;
+      if (has('no quiere arrancar', 'no quiere encender', 'no quiere prender')) scores.electrico += 4;
+      if (has('clic clic', 'click click', 'hace clic', 'no hace nada al arrancar', 'no hace nada')) scores.electrico += 3;
       if (has('alternador')) scores.electrico += 3;
       if (has('fusible', 'fusibles', 'caja de fusibles')) scores.electrico += 4;
       if (has('rele ', 'relay ', 'relevo')) scores.electrico += 3;
@@ -2641,12 +2646,16 @@ RESTRICCIONES MÍNIMAS:
       if (has('huele a gasolina', 'fuga de gasolina', 'gotea gasolina')) scores.combustible += 4;
       if (has('presion de combustible', 'regulador de presion')) scores.combustible += 4;
 
-      // ARRANQUE
+      // ARRANQUE — broad matching including pronoun variants
       if (has('no arranca', 'no enciende', 'no prende')) scores.arranque += 4;
-      if (has('arranca mal', 'arranca dificil', 'tarda en arrancar')) scores.arranque += 4;
-      if (has('en caliente no arranca', 'caliente no arranca')) { scores.arranque += 5; scores.motor += 1; }
-      if (has('en frio no arranca', 'frio no arranca', 'en la manana no arranca')) scores.arranque += 5;
-      if (has('motor de arranque', 'marcha ', 'starter')) scores.arranque += 3;
+      if (has('no me arranca', 'no me enciende', 'no me prende', 'no me da', 'no me jala')) scores.arranque += 5;
+      if (has('no le arranca', 'no le enciende', 'no le prende', 'no le da')) scores.arranque += 5;
+      if (has('no quiere arrancar', 'no quiere encender', 'no quiere prender')) scores.arranque += 5;
+      if (has('vehiculo no enciende', 'carro no enciende', 'vehiculo no arranca', 'carro no arranca')) scores.arranque += 5;
+      if (has('arranca mal', 'arranca dificil', 'tarda en arrancar', 'cuesta arrancar')) scores.arranque += 4;
+      if (has('en caliente no arranca', 'caliente no arranca', 'caliente no enciende')) { scores.arranque += 5; scores.motor += 1; }
+      if (has('en frio no arranca', 'frio no arranca', 'en la manana no arranca', 'manana no arranca', 'frio no enciende')) scores.arranque += 5;
+      if (has('motor de arranque', 'starter')) scores.arranque += 3;
 
       // Determine winner
       const winner = Object.entries(scores).reduce((a, b) => b[1] > a[1] ? b : a);
