@@ -250,6 +250,13 @@ body.theme-light .dark-vip-card,
   color: #ffffff !important;
 }
 
+html.theme-light .vip-icon-box,
+body.theme-light .vip-icon-box,
+.theme-light .vip-icon-box,
+.theme-light div.vip-icon-box {
+  background-color: #12141a !important;
+}
+
 html.theme-light .dark-vip-card svg,
 body.theme-light .dark-vip-card svg,
 .theme-light .dark-vip-card svg {
@@ -270,13 +277,17 @@ body.theme-light .dark-vip-card a:not(.bg-amber-400),
 .theme-light .dark-vip-card a:not(.bg-amber-400),
 .theme-light main .dark-vip-card a:not(.bg-amber-400),
 .theme-light section .dark-vip-card a:not(.bg-amber-400),
-.theme-light div.dark-vip-card a:not(.bg-amber-400),
+.theme-light div.dark-vip-card a:not(.bg-amber-400) {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
 html.theme-light .dark-vip-card a:not(.bg-amber-400) span,
 body.theme-light .dark-vip-card a:not(.bg-amber-400) span,
 .theme-light .dark-vip-card a:not(.bg-amber-400) span {
   color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
+  background-color: transparent !important;
 }
 
 /* Protect MT-01 AI Chat Modal from light theme color distortion */

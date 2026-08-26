@@ -424,7 +424,7 @@ export default function Jornadas() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 blur-[130px] rounded-full pointer-events-none" />
 
             <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-[0_0_30px_rgba(245,158,11,0.4)] flex items-center justify-center mx-auto relative z-10">
-              <div className="w-full h-full rounded-[22px] bg-[#12141a] flex items-center justify-center">
+              <div className="w-full h-full rounded-[22px] bg-[#12141a] flex items-center justify-center vip-icon-box" style={{ backgroundColor: '#12141a' }}>
                 <Sparkles size={36} className="animate-pulse" style={{ color: '#fbbf24' }} />
               </div>
             </div>
@@ -453,10 +453,10 @@ export default function Jornadas() {
               </a>
               <a
                 href="/servicios"
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/20 hover:bg-white/30 border border-white/40 text-white text-sm font-bold transition-all text-center"
-                style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/30 text-white text-sm font-bold transition-all text-center"
+                style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
               >
-                <span style={{ color: '#ffffff', fontWeight: 800 }}>{config.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}</span>
+                <span style={{ color: '#ffffff', backgroundColor: 'transparent', fontWeight: 800 }}>{config.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}</span>
               </a>
             </div>
           </motion.div>
