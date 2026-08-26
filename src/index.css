@@ -1149,18 +1149,18 @@ html.dark .fixed.inset-0 h3 {
 }
 
 /* Calendar Container & Day Cells in Light Mode */
-.theme-light main div[class*="bg-[#12141a]"] {
+.theme-light main div[class*="bg-[#12141a]"]:not(.vip-icon-box):not(.dark-vip-card):not(.mt01-chat-modal):not(.mt01-chat-header) {
   background-color: #ffffff !important;
   border-color: #e2e8f0 !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01) !important;
 }
 
-.theme-light main div[class*="min-h-"][class*="rounded-2xl"] {
+.theme-light main div[class*="min-h-"][class*="rounded-2xl"]:not(.vip-icon-box):not(.dark-vip-card) {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
 }
 
-.theme-light main div[class*="min-h-"][class*="rounded-2xl"]:hover {
+.theme-light main div[class*="min-h-"][class*="rounded-2xl"]:not(.vip-icon-box):not(.dark-vip-card):hover {
   border-color: #cbd5e1 !important;
   background-color: #f1f5f9 !important;
 }
@@ -1168,6 +1168,25 @@ html.dark .fixed.inset-0 h3 {
 /* Custom Native Date Picker Dark Theme Styling */
 input[type="date"] {
   color-scheme: dark;
+}
+
+/* ABSOLUTE FINAL OVERRIDE FOR DARK VIP CARD ICONS & ELEMENTS IN LIGHT MODE */
+html.theme-light .vip-icon-box,
+body.theme-light .vip-icon-box,
+.theme-light .vip-icon-box,
+.theme-light div.vip-icon-box {
+  background-color: #12141a !important;
+}
+
+html.theme-light .dark-vip-card svg,
+body.theme-light .dark-vip-card svg,
+.theme-light .dark-vip-card svg,
+.theme-light section.dark-vip-card-section svg,
+.theme-light .vip-icon-box svg,
+.theme-light svg.vip-sparkles-icon {
+  color: #fbbf24 !important;
+  stroke: #fbbf24 !important;
+  fill: none !important;
 }
 .theme-light input[type="date"] {
   color-scheme: light;
