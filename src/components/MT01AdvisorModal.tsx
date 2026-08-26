@@ -312,31 +312,6 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Action Pills */}
-          <div className="px-3 py-2 bg-[#0d0e12] border-t border-white/5 flex flex-wrap gap-1.5 shrink-0">
-            <button
-              onClick={() => handleSend('JTEVA5AR1S5003715')}
-              className="px-3 py-1.5 rounded-full bg-[#1c1f2b] hover:bg-[#25293a] border border-[#C2A472]/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
-              style={{ color: '#fde047', backgroundColor: '#1c1f2b', borderColor: 'rgba(194, 164, 114, 0.4)' }}
-            >
-              🚗 Probar VIN JTEVA5AR1S5003715
-            </button>
-            <button
-              onClick={() => handleSend('¿Qué significa el código de falla P0300?')}
-              className="px-3 py-1.5 rounded-full bg-[#1c1f2b] hover:bg-[#25293a] border border-[#C2A472]/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
-              style={{ color: '#fde047', backgroundColor: '#1c1f2b', borderColor: 'rgba(194, 164, 114, 0.4)' }}
-            >
-              ⚠️ Código DTC P0300
-            </button>
-            <button
-              onClick={() => handleSend('Tengo un ruido metálico al frenar')}
-              className="px-3 py-1.5 rounded-full bg-[#1c1f2b] hover:bg-[#25293a] border border-[#C2A472]/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
-              style={{ color: '#fde047', backgroundColor: '#1c1f2b', borderColor: 'rgba(194, 164, 114, 0.4)' }}
-            >
-              🔧 Ruido al Frenar
-            </button>
-          </div>
-
           {/* Message Input Box */}
           <form
             onSubmit={(e) => {
