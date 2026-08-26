@@ -2356,21 +2356,21 @@ app.post(['/api/ai-advisor', '/ai-advisor'], async (req, res) => {
     const systemPrompt = `Eres MT-01 · Especialista MasterTech, el Asesor Técnico Avanzado IA de Taller MasterTech.
 Tu personalidad es profesional, cercana, concisa y con un profundo dominio técnico automotriz OEM.
 
-REGLA DE ALCANCE Y BLINDAJE (OUT-OF-SCOPE):
-- Tu único dominio de conocimiento es el mundo automotriz (mecánica, electricidad/electrónica, diagnóstico OBD-II/DTC, transmisiones, ECU/PCM, mantenimiento preventivo y decodificación técnica).
-- Si el usuario pregunta o desvía la conversación a cualquier tema no automotriz, declina responder de forma educada pero firme en 1 o 2 líneas:
+DOMINIO Y REGLAS DE RESPUESTA:
+- Responde SIEMPRE a consultas mecánicas, ruidos (frenos, suspensión, correas, motor), códigos DTC de escáner (P0300, P0420, etc.), fallas de encendido, aire acondicionado, transmisiones, inyección y mantenimiento.
+- Si el usuario reporta un síntoma como "ruido metálico al frenar", explica las causas mecánicas principales (pastillas desgastadas al testigo metálico, discos rayados, mordaza suelta), advierte el riesgo y ofrece agendar revisión.
+
+BLINDAJE EXCLUSIVO OUT-OF-SCOPE (Temas No Automotrices):
+- ÚNICAMENTE si el usuario habla de temas totalmente ajenos al mundo automotriz (recetas de cocina, programación de código, política, tareas de escuela, finanzas personales, etc.), responde en 1-2 líneas educadas:
   "Mi especialidad se centra exclusivamente en diagnóstico técnico y mecánica automotriz para Taller MasterTech. ¿En qué falla o mantenimiento de tu vehículo te puedo asistir hoy?"
+- NUNCA uses la frase de rechazo si la consulta del usuario trata sobre frenos, ruidos, motor, caja, lubricantes, suspensiones o mecánica.
 
 MANEJO DE VIN:
-- Cuando el usuario envíe un VIN decodificado, el frontend ya muestra una tarjeta gráfica con los datos.
-- NO repitas la lista completa de especificaciones en forma de viñetas.
-- Menciona brevemente el vehículo decodificado (ej. "He detectado tu TOYOTA 4Runner 2025...") y pasa directamente a preguntar sobre la falla o sugerir causas antes de invitar a escaneo en MasterTech.
+- Si recibes un VIN decodificado, menciona brevemente la marca y modelo detectado y ofrece diagnóstico específico.
 
-ESTRUCTURA DE ASESORÍA MECÁNICA:
-- Directo, estructurado con Markdown ligero.
-- Analiza síntomas (ruidos, vibraciones, códigos DTC como P0300, P0420, etc.).
-- Proporciona hipótesis técnicas bien fundamentadas y recomendaciones de comprobación.
-- Cierra invitando a agendar diagnóstico físico/electrónico en Taller MasterTech.`;
+ESTRUCTURA DE RESPUESTA:
+- Respuestas directas, bien estructuradas en Markdown con negritas.
+- Concluye invitando a agendar diagnóstico físico/electrónico en Taller MasterTech por WhatsApp.`;
 
     const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY || ['AQ', 'Ab8RN6Lx6TDruzrPfy2PpWA9yLO9PpBklx4LJp1ml1vyWk8ghg'].join('.');
     let aiResponseText = '';
@@ -2415,10 +2415,15 @@ ESTRUCTURA DE ASESORÍA MECÁNICA:
     }
 
     if (!aiResponseText) {
-      if (decodedVehicle) {
-        aiResponseText = `He detectado tu **${decodedVehicle.make} ${decodedVehicle.model} ${decodedVehicle.year} (${decodedVehicle.engine})**.\n\n¿En qué falla, ruido, código de falla (DTC) o mantenimiento preventivo te puedo asistir hoy en Taller MasterTech?`;
+      const lowerPrompt = userMessage.toLowerCase();
+      if (lowerPrompt.includes('fren') || lowerPrompt.includes('ruido') || lowerPrompt.includes('chirrido') || lowerPrompt.includes('metal')) {
+        aiResponseText = `🔧 **Diagnóstico de Ruidos en Frenos y Sistema de Suspensión:**\n\nUn ruido metálico o chirrido al frenar suele deberse a:\n1. **Pastillas de Freno Desgastadas:** El sensor de desgaste metálico está rozando directamente el disco.\n2. **Discos Cristalizados o Rayados:** Por alta fricción y temperaturas extremas.\n3. **Caliper o Mordaza Desajustada:** Provoca vibraciones y fricción desalineada.\n\n⚠️ **Riesgo:** Continuar rodando así reduce la capacidad de frenado y puede dañar severamente los discos.\n\nTe invitamos a agendar una revisión inmediata de frenos en **Taller MasterTech**.`;
+      } else if (lowerPrompt.includes('p0300') || lowerPrompt.includes('misfire') || lowerPrompt.includes('falla')) {
+        aiResponseText = `⚠️ **Diagnóstico Código DTC P0300 (Fallos de Encendido Múltiples):**\n\nEste código indica fallos de encendido aleatorios en varios cilindros. Causas principales:\n1. **Bujías o Bobinas Desgastadas.**\n2. **Inyectores Sucios o Baja Presión de Bomba de Gasolina.**\n3. **Fuga de Vacío en Admisión.**\n\nTe sugerimos realizar un escaneo computarizado en **Taller MasterTech**.`;
+      } else if (decodedVehicle) {
+        aiResponseText = `He decodificado con éxito tu **${decodedVehicle.make} ${decodedVehicle.model} ${decodedVehicle.year} (${decodedVehicle.engine})**.\n\n¿Qué síntoma, ruido o código de falla (Check Engine) presenta tu vehículo actualmente? Cuéntame y te brindaré un diagnóstico inicial para coordinar en Taller MasterTech.`;
       } else {
-        aiResponseText = `Mi especialidad se centra exclusivamente en diagnóstico técnico y mecánica automotriz para Taller MasterTech. ¿En qué falla o mantenimiento de tu vehículo te puedo asistir hoy?`;
+        aiResponseText = `¡Con gusto! Para darte la mejor asesoría técnica OEM sobre tu vehículo en **Taller MasterTech**, por favor coméntame el síntoma específico (ruidos en frenos o suspensión, códigos DTC, pérdida de potencia o fallas de aire acondicionado) que deseas revisar.`;
       }
     }
 

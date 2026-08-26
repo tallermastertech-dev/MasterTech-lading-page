@@ -86,7 +86,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
       const errorMsg: Message = {
         id: `bot-err-${Date.now()}`,
         sender: 'bot',
-        text: 'Mi especialidad se centra exclusivamente en diagnóstico técnico y mecánica automotriz para Taller MasterTech. ¿En qué falla o mantenimiento de tu vehículo te puedo asistir hoy?',
+        text: '🔧 **Asistencia Técnica MasterTech:**\n\nHe tomado nota de tu consulta. Para darte un diagnóstico certero sobre este síntoma o código de falla en tu vehículo, te sugerimos comunicarte directamente con nuestro equipo de especialistas en **Taller MasterTech** a través del botón de WhatsApp abajo.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, errorMsg]);
@@ -111,8 +111,8 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
           return (
             <p
               key={pIdx}
-              className={`leading-relaxed ${isUser ? 'user-para text-black' : 'bot-para text-slate-100'}`}
-              style={{ color: isUser ? '#000000' : '#f1f5f9' }}
+              className={`leading-relaxed ${isUser ? 'user-para text-[#0d0e12] font-black' : 'bot-para text-slate-100'}`}
+              style={{ color: isUser ? '#0d0e12' : '#f1f5f9' }}
             >
               {parts.map((part, idx) => {
                 if (part.startsWith('**') && part.endsWith('**')) {
@@ -120,8 +120,8 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                   return (
                     <strong
                       key={idx}
-                      className={isUser ? 'font-black underline' : 'font-extrabold text-amber-300'}
-                      style={{ color: isUser ? '#000000' : '#fde047' }}
+                      className={isUser ? 'font-black underline text-[#0d0e12]' : 'font-extrabold text-amber-300'}
+                      style={{ color: isUser ? '#0d0e12' : '#fde047' }}
                     >
                       {boldContent}
                     </strong>
@@ -227,12 +227,12 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 <div
                   className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'user-bubble bg-gradient-to-r from-amber-400 via-[#C2A472] to-amber-500 text-black font-black rounded-br-none shadow-md'
+                      ? 'user-bubble bg-[#C2A472] text-[#0d0e12] font-black rounded-br-none shadow-md border border-amber-300/40'
                       : 'bot-bubble bg-[#181a22] border border-white/15 text-slate-100 rounded-bl-none shadow-lg'
                   }`}
                   style={{
-                    backgroundColor: msg.sender === 'user' ? '#f59e0b' : '#181a22',
-                    color: msg.sender === 'user' ? '#000000' : '#f1f5f9'
+                    backgroundColor: msg.sender === 'user' ? '#C2A472' : '#181a22',
+                    color: msg.sender === 'user' ? '#0d0e12' : '#f1f5f9'
                   }}
                 >
                   {/* Decoded Vehicle Card (if VIN was parsed) */}
