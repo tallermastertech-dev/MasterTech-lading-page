@@ -168,17 +168,17 @@ body.theme-light {
 }
 
 /* 1. HERO SECTION (Dark photographic background -> Text MUST stay white) */
-.theme-light section:first-of-type {
+.theme-light section:first-of-type:not(.jornada-hero-section) {
   color: #ffffff !important;
 }
-.theme-light section:first-of-type h1 {
+.theme-light section:first-of-type:not(.jornada-hero-section) h1 {
   color: #ffffff !important;
 }
-.theme-light section:first-of-type h1 span:first-child {
+.theme-light section:first-of-type:not(.jornada-hero-section) h1 span:first-child {
   color: #ffffff !important;
 }
-.theme-light section:first-of-type p,
-.theme-light section:first-of-type .text-zinc-300 {
+.theme-light section:first-of-type:not(.jornada-hero-section) p,
+.theme-light section:first-of-type:not(.jornada-hero-section) .text-zinc-300 {
   color: #e2e8f0 !important;
 }
 .theme-light section:first-of-type span.text-primary {
@@ -195,20 +195,33 @@ body.theme-light {
 }
 
 /* 2. GENERAL TYPOGRAPHY (Outside Hero) */
-.theme-light section:not(:first-of-type) h1,
-.theme-light section:not(:first-of-type) h2,
-.theme-light section:not(:first-of-type) h3,
-.theme-light section:not(:first-of-type) h4,
-.theme-light section:not(:first-of-type) h5,
-.theme-light section:not(:first-of-type) h6,
-.theme-light main h1,
-.theme-light main h2,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h1:not(.dark-vip-card-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h2:not(.dark-vip-card-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h3,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h4,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h5,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h6,
+.theme-light main h1:not(.dark-vip-card-title),
+.theme-light main h2:not(.dark-vip-card-title),
 .theme-light main h3 {
   color: #0f172a !important;
 }
 
-.theme-light section:not(:first-of-type) p,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) p,
 .theme-light main p {
+  color: #334155 !important;
+}
+
+/* Jornada Hero Specific Styles for Light Mode */
+.theme-light .jornada-hero-section h1,
+.theme-light .jornada-hero-section .jornada-hero-title,
+.theme-light h1.jornada-hero-title {
+  color: #0f172a !important;
+}
+
+.theme-light .jornada-hero-section p,
+.theme-light .jornada-hero-section .jornada-hero-subtitle,
+.theme-light p.jornada-hero-subtitle {
   color: #334155 !important;
 }
 
@@ -219,20 +232,16 @@ body.theme-light {
 .theme-light .dark-vip-card h3,
 .theme-light .dark-vip-card h4,
 .theme-light .dark-vip-card h5,
-.theme-light .dark-vip-card h6 {
+.theme-light .dark-vip-card h6,
+.theme-light .dark-vip-card-title,
+.theme-light section .dark-vip-card h2,
+.theme-light section .dark-vip-card-title {
   color: #ffffff !important;
 }
 
-.theme-light .dark-vip-card p {
+.theme-light .dark-vip-card p,
+.theme-light section .dark-vip-card p {
   color: #cbd5e1 !important;
-}
-
-.theme-light .jornada-hero-title {
-  color: #0f172a !important;
-}
-
-.theme-light .jornada-hero-subtitle {
-  color: #334155 !important;
 }
 
 /* 3. NAVBAR IN LIGHT MODE */

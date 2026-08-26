@@ -341,7 +341,7 @@ export default function Jornadas() {
       <Navbar />
 
       {/* Hero Banner with Countdown Timer */}
-      <section className="relative pt-36 pb-20 px-6 overflow-hidden border-b border-white/10">
+      <section className="relative pt-36 pb-20 px-6 overflow-hidden border-b border-white/10 jornada-hero-section">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-96 h-96 bg-amber-500/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -361,7 +361,7 @@ export default function Jornadas() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight uppercase leading-[1.1] mb-6 max-w-4xl mx-auto jornada-hero-title"
           >
-            TECNOLOGÍA DE ALTO NIVEL <br />
+            <span className="jornada-hero-title">TECNOLOGÍA DE ALTO NIVEL</span> <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 dark:from-amber-200 dark:via-primary dark:to-amber-400 italic">
               CON PRECIOS DE JORNADA
             </span>
@@ -414,7 +414,7 @@ export default function Jornadas() {
 
       {/* Conditional Rendering: VIP Empty State vs Active Jornadas */}
       {currentJornadasList.length === 0 ? (
-        <section className="py-16 px-6 max-w-4xl mx-auto">
+        <section className="py-16 px-6 max-w-4xl mx-auto dark-vip-card-section">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -430,10 +430,10 @@ export default function Jornadas() {
               <span className="px-5 py-2 rounded-full bg-amber-400 text-black text-xs font-black uppercase tracking-widest inline-block shadow-lg shadow-amber-400/20">
                 {config.JORNADA_EMPTY_BADGE || '⚡ PRÓXIMA APERTURA DE CUPOS'}
               </span>
-              <h2 className="text-3xl sm:text-5xl font-display font-black uppercase tracking-tight text-white leading-tight">
+              <h2 className="text-3xl sm:text-5xl font-display font-black uppercase tracking-tight text-white leading-tight dark-vip-card-title" style={{ color: '#ffffff' }}>
                 {config.JORNADA_EMPTY_TITLE || 'No hay Jornadas VIP Activas en este momento'}
               </h2>
-              <p className="text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
+              <p className="text-slate-200 text-sm sm:text-base leading-relaxed font-medium" style={{ color: '#cbd5e1' }}>
                 {config.JORNADA_EMPTY_DESC || 'Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!'}
               </p>
             </div>
