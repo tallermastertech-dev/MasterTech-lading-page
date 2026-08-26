@@ -212,6 +212,29 @@ body.theme-light {
   color: #334155 !important;
 }
 
+/* Dark VIP Cards (Must ALWAYS keep white text regardless of theme) */
+.theme-light .dark-vip-card,
+.theme-light .dark-vip-card h1,
+.theme-light .dark-vip-card h2,
+.theme-light .dark-vip-card h3,
+.theme-light .dark-vip-card h4,
+.theme-light .dark-vip-card h5,
+.theme-light .dark-vip-card h6 {
+  color: #ffffff !important;
+}
+
+.theme-light .dark-vip-card p {
+  color: #cbd5e1 !important;
+}
+
+.theme-light .jornada-hero-title {
+  color: #0f172a !important;
+}
+
+.theme-light .jornada-hero-subtitle {
+  color: #334155 !important;
+}
+
 /* 3. NAVBAR IN LIGHT MODE */
 .theme-light nav {
   background-color: rgba(241, 244, 248, 0.96) !important;

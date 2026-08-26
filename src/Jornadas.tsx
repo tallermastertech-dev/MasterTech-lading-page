@@ -359,10 +359,10 @@ export default function Jornadas() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight uppercase leading-[1.1] mb-6 max-w-4xl mx-auto"
+            className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight uppercase leading-[1.1] mb-6 max-w-4xl mx-auto jornada-hero-title"
           >
             TECNOLOGÍA DE ALTO NIVEL <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-primary to-amber-400 italic">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 dark:from-amber-200 dark:via-primary dark:to-amber-400 italic">
               CON PRECIOS DE JORNADA
             </span>
           </motion.h1>
@@ -371,7 +371,7 @@ export default function Jornadas() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10"
+            className="text-zinc-600 dark:text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10 jornada-hero-subtitle font-medium"
           >
             Aprovecha nuestros días de servicio especializado con equipos importados de diagnóstico y programación. Reserva tu turno a precio promocional antes de que agoten los cupos.
           </motion.p>
@@ -381,9 +381,9 @@ export default function Jornadas() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="inline-flex flex-col sm:flex-row items-center gap-4 bg-[#12141a]/90 backdrop-blur-xl border border-amber-500/30 p-4 md:p-6 rounded-3xl shadow-2xl mb-12"
+            className="inline-flex flex-col sm:flex-row items-center gap-4 bg-white/90 dark:bg-[#12141a]/90 backdrop-blur-xl border border-amber-500/30 p-4 md:p-6 rounded-3xl shadow-2xl mb-12"
           >
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-amber-400 sm:pr-4 sm:border-r sm:border-white/10">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-amber-500 dark:text-amber-400 sm:pr-4 sm:border-r sm:border-slate-300 dark:sm:border-white/10">
               <Clock className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
               <span>{config.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}</span>
             </div>
@@ -396,15 +396,15 @@ export default function Jornadas() {
                 { val: timeLeft.secs, unit: "Seg" }
               ].map((t, idx) => (
                 <React.Fragment key={idx}>
-                  <div className="bg-black/60 border border-white/10 rounded-2xl px-3 py-2 min-w-[60px] text-center">
-                    <span className="text-2xl md:text-3xl font-display font-black text-primary block leading-none">
+                  <div className="bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-white/10 rounded-2xl px-3 py-2 min-w-[60px] text-center">
+                    <span className="text-2xl md:text-3xl font-display font-black text-amber-600 dark:text-primary block leading-none">
                       {String(t.val).padStart(2, '0')}
                     </span>
-                    <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1 block">
+                    <span className="text-[9px] font-bold text-slate-500 dark:text-zinc-500 uppercase tracking-widest mt-1 block">
                       {t.unit}
                     </span>
                   </div>
-                  {idx < 3 && <span className="text-xl font-bold text-amber-500/50">:</span>}
+                  {idx < 3 && <span className="text-xl font-bold text-amber-500/60">:</span>}
                 </React.Fragment>
               ))}
             </div>
@@ -418,7 +418,7 @@ export default function Jornadas() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-b from-[#12141a] via-[#0d0e12] to-black border border-amber-500/30 rounded-3xl p-8 md:p-14 text-center space-y-6 shadow-2xl relative overflow-hidden"
+            className="bg-gradient-to-b from-[#12141a] via-[#0d0e12] to-black border border-amber-500/40 rounded-3xl p-8 md:p-14 text-center space-y-6 shadow-2xl relative overflow-hidden dark-vip-card"
           >
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 blur-[130px] rounded-full pointer-events-none" />
 
@@ -433,7 +433,7 @@ export default function Jornadas() {
               <h2 className="text-3xl sm:text-5xl font-display font-black uppercase tracking-tight text-white leading-tight">
                 {config.JORNADA_EMPTY_TITLE || 'No hay Jornadas VIP Activas en este momento'}
               </h2>
-              <p className="text-zinc-200 text-sm sm:text-base leading-relaxed font-medium">
+              <p className="text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
                 {config.JORNADA_EMPTY_DESC || 'Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!'}
               </p>
             </div>
@@ -450,7 +450,7 @@ export default function Jornadas() {
               </a>
               <a
                 href="/servicios"
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-black/60 hover:bg-white/10 border border-white/30 text-white text-sm font-bold transition-all text-center"
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/30 text-white text-sm font-bold transition-all text-center"
               >
                 {config.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}
               </a>
