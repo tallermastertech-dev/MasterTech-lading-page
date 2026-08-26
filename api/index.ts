@@ -2511,240 +2511,350 @@ RESTRICCIONES MÍNIMAS:
     }
 
     if (!aiResponseText) {
-      const lp = userMessage.toLowerCase();
+      const lp = userMessage.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[?!]/g, '');
 
-      // ── MOTOR / ENGINE ──────────────────────────────────────────────────────
-      if (lp.includes('motor') || lp.includes('taquete') || lp.includes('golpeteo') || lp.includes('biela') || lp.includes('pistón') || lp.includes('piston') || lp.includes('cadena de tiempo') || lp.includes('correa de tiempo') || lp.includes('presión de aceite') || lp.includes('aceite')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Anomalía detectada en el **Sistema de Motor**.
+      const has = (...terms: string[]) => terms.some(t => lp.includes(t));
 
-📋 **Causas Posibles** (de mayor a menor probabilidad):
-1. **Taquetes / Elevadores Hidráulicos Desgastados:** Tictac metálico rítmico en frío o continuo. Ocurre por aceite degradado, bajo nivel o por desgaste de la leva.
-2. **Cadena o Correa de Tiempo Destensada:** Matraca metálica o roce al acelerar desde frío. Puede dañar válvulas si se salta un diente.
-3. **Holgura en Cojinetes de Biela (Bigend Bearing):** Golpe sordo profundo proporcional a las RPM. Alta peligrosidad — riesgo de fundición del motor.
-4. **Baja Presión de Aceite (Oil Pressure Low):** Bomba de aceite desgastada, rotura de árbol de levas o nivel de aceite insuficiente.
-5. **Tensor de Polea Serpentina Desgastado:** Silbido o chirrido constante al ralentí, especialmente en frío.
+      let scores: Record<string, number> = {
+        motor: 0, frenos: 0, suspension: 0, tablero: 0,
+        dtc: 0, mantenimiento: 0, ac: 0, electrico: 0,
+        transmision: 0, humo: 0, combustible: 0, arranque: 0
+      };
 
-⚠️ **Nivel de Urgencia:** 🔴 **INMEDIATO** — Un golpeteo profundo en motor requiere apagar el vehículo y no forzarlo.
+      // MOTOR
+      if (has('motor', 'engine', 'cofre')) scores.motor += 3;
+      if (has('taquete', 'taquite')) scores.motor += 4;
+      if (has('biela', 'ciguenial', 'ciguenal')) scores.motor += 4;
+      if (has('cadena de tiempo', 'correa de tiempo', 'distribucion', 'arbol de levas')) scores.motor += 4;
+      if (has('golpeteo', 'golpea el motor', 'golpe en el motor')) scores.motor += 4;
+      if (has('pierde aceite', 'consume aceite', 'bota aceite', 'gasta aceite')) scores.motor += 3;
+      if (has('aceite', 'lubricante')) scores.motor += 2;
+      if (has('tictac', 'tic tac', 'traquetea', 'matraca', 'cascabeleo')) scores.motor += 3;
+      if (has('pierde potencia', 'sin potencia', 'no tiene fuerza', 'se apaga', 'se muere', 'se cala', 'falla en marcha')) scores.motor += 2;
+      if (has('bujia', 'bujias', 'bobina', 'inyector')) scores.motor += 2;
+      if (has('correa', 'tensor', 'polea')) scores.motor += 1;
+      if (has('temperatura', 'caliente', 'se calienta', 'aguja roja', 'se recalienta')) scores.motor += 2;
+      if (has('humo azul', 'consume aceite', 'echa aceite')) scores.motor += 3;
+      if (has('humo blanco', 'agua por el escape', 'refrigerante')) scores.motor += 2;
 
-🛠️ **Acción Recomendada:** Diagnóstico de presión de aceite, inspección de cadena de tiempo, medición de holgura de cojinetes. Posible cambio de aceite 5W-30/5W-20 full sintético con limpiador de motor.
+      // FRENOS
+      if (has('freno', 'frenos', 'frenar', 'frenado')) scores.frenos += 3;
+      if (has('pastilla', 'pastillas')) scores.frenos += 4;
+      if (has('disco', 'discos', 'rotor')) scores.frenos += 3;
+      if (has('mordaza', 'caliper')) scores.frenos += 4;
+      if (has('chirrido al frenar', 'chilla al frenar', 'suena al frenar')) scores.frenos += 4;
+      if (has('pedal', 'se va al piso', 'pedal esponjoso', 'pedal blando', 'pedal duro')) scores.frenos += 3;
+      if (has('jala a un lado', 'jala para', 'se va para', 'se desvia')) scores.frenos += 2;
+      if (has('liquido de freno', 'fluido de freno', 'dot 4', 'dot4')) scores.frenos += 4;
+      if (has('vibra al frenar', 'tiembla al frenar', 'pulsa al frenar')) scores.frenos += 3;
 
-📞 Agenda tu diagnóstico de motor en **Taller MasterTech** vía WhatsApp.`;
-      }
+      // SUSPENSION
+      if (has('suspension', 'tren delantero', 'tren trasero')) scores.suspension += 3;
+      if (has('amortiguador', 'amortiguadores', 'shock')) scores.suspension += 4;
+      if (has('buje', 'bujes', 'silent block')) scores.suspension += 4;
+      if (has('rotula', 'rotulas', 'ball joint')) scores.suspension += 4;
+      if (has('terminal', 'terminal de direccion')) scores.suspension += 3;
+      if (has('tripoide', 'junta cv', 'homocinetic', 'clac clac', 'clic clic al doblar')) scores.suspension += 4;
+      if (has('bache', 'huecos', 'lomos', 'topes')) scores.suspension += 2;
+      if (has('golpe al pasar', 'golpea en bache', 'salta mucho', 'rebota')) scores.suspension += 3;
+      if (has('crujido al doblar', 'cruje al girar', 'suena al doblar', 'ruido al girar', 'traquea al doblar')) scores.suspension += 4;
+      if (has('vibra el volante', 'tiembla el volante', 'baile de volante')) scores.suspension += 3;
+      if (has('alineacion', 'balanceo', 'direccion')) scores.suspension += 2;
+      if (has('rodamiento', 'cubo', 'zumbido en rueda')) scores.suspension += 3;
+      if (has('resorte', 'muelle')) scores.suspension += 2;
+      if (has('barra estabilizadora', 'estabilizadora', 'biela estabilizadora')) scores.suspension += 3;
 
-      // ── FRENOS / BRAKES ─────────────────────────────────────────────────────
-      else if (lp.includes('fren') || lp.includes('pastilla') || lp.includes('disco') || lp.includes('caliper') || lp.includes('mordaza') || lp.includes('pedal de freno') || lp.includes('liquido de freno') || lp.includes('líquido de freno')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Anomalía detectada en el **Sistema de Frenos**.
+      // TABLERO
+      if (has('tablero', 'dashboard', 'panel')) scores.tablero += 3;
+      if (has('luz de', 'luz del', 'lucecita', 'piloto', 'testigo', 'indicador')) scores.tablero += 3;
+      if (has('check engine', 'motor encendido', 'luz del motor')) scores.tablero += 4;
+      if (has('abs ', 'luz abs', 'sistema abs')) scores.tablero += 3;
+      if (has('airbag', 'srs ', 'bolsa de aire')) scores.tablero += 4;
+      if (has('tpms', 'presion de llanta', 'rueda baja')) scores.tablero += 3;
+      if (has('luz de aceite', 'presion de aceite', 'lata de aceite')) scores.tablero += 4;
+      if (has('luz de bateria', 'icono de bateria')) scores.tablero += 3;
+      if (has('se encendio', 'se prende', 'aparecio', 'se ilumino', 'prendio')) scores.tablero += 1;
+      if (has('maint reqd', 'service due', 'mantenimiento requerido')) scores.tablero += 3;
 
-📋 **Causas Posibles** (de mayor a menor probabilidad):
-1. **Pastillas de Freno al Testigo Metálico:** Chirrido agudo constante al frenar. El sensor de desgaste está en contacto directo con el disco.
-2. **Discos Rayados o Cristalizados:** Vibración en el pedal durante el frenado, sensación de pulsación. Ocurre por sobrecalentamiento o frenadas bruscas frecuentes.
-3. **Mordaza / Caliper Pegado o Desalineado:** Calor excesivo en una rueda, desgaste desigual de pastillas, vehículo jalando a un lado.
-4. **Líquido de Frenos Saturado de Humedad:** Punto de ebullición reducido → vapor en líneas → pedal blando o esponjoso.
-5. **Rotor Deformado (Runout):** Vibración en el volante al frenar, medible con comparador de cuadrante.
+      // DTC
+      if (/[pPbBcCuU][0-9]{4}/.test(userMessage)) scores.dtc += 10;
+      if (has('codigo', 'code', 'dtc ', 'obd', 'scanner', 'escanear', 'escaneo')) scores.dtc += 4;
+      if (has('leer el carro', 'leer el vehiculo', 'conectar scanner')) scores.dtc += 3;
 
-⚠️ **Nivel de Urgencia:** 🔴 **INMEDIATO** — Frenos comprometidos representan riesgo de seguridad vial directo.
+      // MANTENIMIENTO
+      if (has('mantenimiento', 'servicio de', 'cambio de aceite', 'hacer el aceite')) scores.mantenimiento += 3;
+      if (/ \d+\s*km/.test(lp) || has('kilometros', 'millas', 'cuantos km')) scores.mantenimiento += 3;
+      if (has('bujia', 'bujias', 'filtro de aire', 'filtro de aceite', 'filtro de gasolina')) scores.mantenimiento += 3;
+      if (has('cada cuando', 'cuando debo', 'cuando hay que', 'cuando cambiar', 'cuando toca')) scores.mantenimiento += 3;
+      if (has('preventivo', 'revision general', 'revision completa', 'chequeo general')) scores.mantenimiento += 2;
+      if (has('aceite sintetico', 'aceite convencional', '5w30', '0w20', '5w40', '10w40')) scores.mantenimiento += 3;
+      if (has('correa de distribucion', 'kit de distribucion', 'kit de tiempo')) scores.mantenimiento += 4;
 
-🛠️ **Acción Recomendada:** Cambio de pastillas delanteras/traseras, rectificación o cambio de discos, purga y sangrado del sistema de frenos con DOT 4 nuevo.
+      // A/C
+      if (has('aire acondicionado', 'aire acondicion')) scores.ac += 4;
+      if (has('no enfria', 'no refresca', 'sale caliente', 'calienta en lugar')) scores.ac += 4;
+      if (has('gas refrigerante', 'freon', 'r134', 'r1234', 'recargar gas', 'recarga')) scores.ac += 4;
+      if (has('compresor de ac', 'compresor del aire', 'embrague del compresor')) scores.ac += 4;
+      if (has('condensador', 'evaporador', 'valvula de expansion')) scores.ac += 4;
+      if (has('olor a humedad', 'olor a moho', 'olor cuando prendo el ac')) scores.ac += 3;
+      if (has('filtro de cabina', 'filtro de habitaculo')) scores.ac += 3;
+      if (has('sopla poco', 'poco flujo', 'blower', 'resistencia del blower')) scores.ac += 3;
+      if (has('enfria pero poco', 'enfria a ratos', 'no enfria bien')) scores.ac += 3;
+      if (has('el ac', 'el a/c', 'a/c no', 'el aire', 'el clima')) scores.ac += 2;
 
-📞 Coordina tu revisión de frenos en **Taller MasterTech** vía WhatsApp.`;
-      }
+      // ELECTRICO
+      if (has('electrico', 'electrica', 'corto circuito', 'corto')) scores.electrico += 3;
+      if (has('no arranca', 'no enciende', 'no prende', 'no da', 'no jala')) scores.electrico += 3;
+      if (has('clic clic', 'click click', 'hace clic', 'no hace nada al arrancar')) scores.electrico += 3;
+      if (has('alternador')) scores.electrico += 3;
+      if (has('fusible', 'fusibles', 'caja de fusibles')) scores.electrico += 4;
+      if (has('rele ', 'relay ', 'relevo')) scores.electrico += 3;
+      if (has('ecu', 'computadora del carro', 'modulo ecu', 'ecm', 'tcm', 'bcm', 'pcm')) scores.electrico += 3;
+      if (has('maf ', 'tps ', 'ckp ', 'cmp ', 'sonda lambda', 'sensor de oxigeno')) scores.electrico += 3;
+      if (has('se apaga solo', 'se muere solo', 'se va la corriente')) scores.electrico += 3;
+      if (has('elevalunas', 'centralizado', 'alarma', 'inmovilizador')) scores.electrico += 2;
 
-      // ── SUSPENSIÓN / TREN DELANTERO ─────────────────────────────────────────
-      else if (lp.includes('suspensi') || lp.includes('tren delantero') || lp.includes('amortiguador') || lp.includes('buje') || lp.includes('muñon') || lp.includes('muñón') || lp.includes('rotula') || lp.includes('rótula') || lp.includes('bache') || lp.includes('hueco') || lp.includes('tripoide') || lp.includes('homocinética') || lp.includes('homocinetic') || lp.includes('volante vibra') || lp.includes('barra estabilizadora')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Anomalía detectada en el **Tren Delantero y Sistema de Suspensión**.
+      // TRANSMISION
+      if (has('transmision', 'caja', 'caja de cambios', 'caja automatica', 'caja manual')) scores.transmision += 3;
+      if (has('embrague', 'clutch', 'cloch', 'plato de embrague')) scores.transmision += 4;
+      if (has('no agarra marcha', 'no entra la marcha', 'no sale la marcha', 'traba la marcha')) scores.transmision += 3;
+      if (has('golpea al cambiar', 'golpe al meter', 'sacudida al cambio')) scores.transmision += 4;
+      if (has('resbala', 'desliza', 'patina', 'no sube de marcha')) scores.transmision += 4;
+      if (has('reversa', 'no agarra reversa')) scores.transmision += 3;
+      if (has('atf', 'aceite de caja', 'liquido de transmision')) scores.transmision += 4;
+      if (has('cvt ', 'variador', 'xtronic')) scores.transmision += 4;
+      if (has('dsg ', 'dct ', 'doble embrague')) scores.transmision += 4;
+      if (has('patina el embrague', 'se quema el embrague', 'huele a embrague')) scores.transmision += 4;
 
-📋 **Causas Posibles** (de mayor a menor probabilidad):
-1. **Bujes de Meseta / Silent Block Desgastados:** Golpe seco al pasar por baches, holgura lateral en la rueda. Se palpa agitando la rueda a las 3 y 9 del reloj.
-2. **Rótulas de Meseta o Mangueta Desgastadas:** Crujido al girar el volante, exceso de camber negativo en la rueda delantera. Riesgo de colapso de la rueda.
-3. **Amortiguadores Vencidos:** Balanceo excesivo del vehículo en curvas, desgaste irregular de llantas (manchas de desgaste).
-4. **Bases de Amortiguador / Top Mount Dañadas:** Golpe metálico agudo al comprimir la suspensión, especialmente en frío.
-5. **Tripoide / Junta CV Desgastada:** Crujido metálico al arrancar girando (típico del tripoide) o vibración constante (junta exterior dañada).
-6. **Barra Estabilizadora o Bujes de Estabilizadora:** Golpe de "toc-toc" al doblar en reducido, peor en frenadas.
+      // HUMO
+      if (has('humo', 'humea', 'echa humo', 'bota humo', 'sale humo')) scores.humo += 5;
+      if (has('humo negro')) { scores.humo += 3; scores.combustible += 2; }
+      if (has('humo blanco')) { scores.humo += 3; scores.motor += 2; }
+      if (has('humo azul', 'humo gris')) { scores.humo += 3; scores.motor += 3; }
 
-⚠️ **Nivel de Urgencia:** 🟡 **ESTA SEMANA** — Rótulas y bujes pueden colapsar en falla total si se ignoran.
+      // COMBUSTIBLE
+      if (has('bomba de gasolina', 'bomba de combustible')) scores.combustible += 4;
+      if (has('inyector', 'inyectores', 'limpieza de inyectores')) scores.combustible += 4;
+      if (has('consume mucha gasolina', 'gasta mucho combustible', 'mal rendimiento')) scores.combustible += 3;
+      if (has('huele a gasolina', 'fuga de gasolina', 'gotea gasolina')) scores.combustible += 4;
+      if (has('presion de combustible', 'regulador de presion')) scores.combustible += 4;
 
-🛠️ **Acción Recomendada:** Revisión en elevador con palanca de dirección, cambio de bujes y rótulas OEM, balanceo y alineación tras la reparación.
+      // ARRANQUE
+      if (has('no arranca', 'no enciende', 'no prende')) scores.arranque += 4;
+      if (has('arranca mal', 'arranca dificil', 'tarda en arrancar')) scores.arranque += 4;
+      if (has('en caliente no arranca', 'caliente no arranca')) { scores.arranque += 5; scores.motor += 1; }
+      if (has('en frio no arranca', 'frio no arranca', 'en la manana no arranca')) scores.arranque += 5;
+      if (has('motor de arranque', 'marcha ', 'starter')) scores.arranque += 3;
 
-📞 Agenda tu revisión de suspensión en **Taller MasterTech** vía WhatsApp.`;
-      }
+      // Determine winner
+      const winner = Object.entries(scores).reduce((a, b) => b[1] > a[1] ? b : a);
+      const category = winner[1] >= 2 ? winner[0] : 'default';
 
-      // ── TABLERO / LUCES DE ADVERTENCIA ──────────────────────────────────────
-      else if (lp.includes('tablero') || lp.includes('luz') || lp.includes('led') || lp.includes('testigo') || lp.includes('check engine') || lp.includes('abs') || lp.includes('airbag') || lp.includes('srs') || lp.includes('bateria') || lp.includes('batería') || lp.includes('tpms') || lp.includes('esp') || lp.includes('service') || lp.includes('mantenimiento requerido') || lp.includes('maint req')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Detección de **Luz de Advertencia en Tablero**.
-
-📋 **Guía de Luces por Color e Ícono:**
-
-🟡 **CHECK ENGINE (Motor con rayo):**
-- Intermitente → fallo menor (sensor O2, MAF, EVAP, catalizador). Puede rodar, pero agenda diagnóstico.
-- Fija + vehículo tembla → Misfire activo (P0300-P030x). Reduce velocidad y va a taller inmediato.
-
-🔴 **LUZ DE ACEITE (Lata de aceite):**
-- Presión de aceite baja — APAGAR EL MOTOR DE INMEDIATO. Verificar nivel. Si está bien el nivel, bomba de aceite o sensor de presión averiado.
-
-🌡️ **LUZ DE TEMPERATURA (Termómetro en agua):**
-- Sobrecalentamiento — Apagar A/C, encender calefacción al máximo, detener el vehículo de forma segura. No abrir el radiador en caliente. Causa: termostato, bomba de agua, fuga de refrigerante o empaque de culata.
-
-🔴 **LUZ DE FRENOS:**
-- Nivel de líquido de frenos bajo, pastillas al límite (sensor eléctrico), o freno de mano activado.
-
-🔴⚡ **LUZ DE BATERÍA:**
-- Alternador no carga (voltaje <13.8V en marcha), correa serpentina rota, borne oxidado o batería defectuosa.
-
-🚗 **ABS / ESP / TRACCIÓN:**
-- Sensor de velocidad de rueda (Wheel Speed Sensor) sucio o dañado. El ABS se desactiva → distancia de frenado aumenta.
-
-💛 **TPMS (Rueda con signo de exclamación):**
-- Presión incorrecta en una o más llantas. Inflar a la presión indicada en el pilar de la puerta. Si persiste, sensor de rueda TPMS averiado.
-
-⚠️ **Nivel de Urgencia:** Depende del color — 🔴 Rojo = INMEDIATO · 🟡 Amarillo = ESTA SEMANA.
-
-🛠️ **Acción Recomendada:** Diagnóstico con escáner OEM para leer el código exacto del módulo correspondiente.
-
-📞 Agenda diagnóstico en **Taller MasterTech** vía WhatsApp.`;
-      }
-
-      // ── DTC CODES ───────────────────────────────────────────────────────────
-      else if (/p0[0-9]{3}|p1[0-9]{3}|b0[0-9]{3}|c0[0-9]{3}|u0[0-9]{3}/i.test(userMessage) || lp.includes('código') || lp.includes('codigo') || lp.includes('dtc') || lp.includes('escaner') || lp.includes('escáner')) {
+      if (category === 'dtc' || scores.dtc >= 5) {
         const dtcMatch = userMessage.match(/[pPbBcCuU][0-9]{4}/);
         const dtc = dtcMatch ? dtcMatch[0].toUpperCase() : null;
         const dtcGuide: Record<string, string> = {
-          'P0300': '**P0300 — Misfire Aleatorio Múltiple:** Fallos de encendido en más de un cilindro. Causas: bujías desgastadas, bobinas de encendido defectuosas, inyectores sucios, compresión baja o fuga de vacío en admisión.',
-          'P0420': '**P0420 — Eficiencia de Catalizador Banco 1 por Debajo del Umbral:** El catalizador (convertidor catalítico) no procesa correctamente los gases. Causas: catalizador dañado, sensor O2 trasero defectuoso, fuga de escape.',
-          'P0171': '**P0171 — Mezcla Pobre Banco 1 (System Lean):** Más aire que combustible en la mezcla. Causas: sensor MAF sucio, fuga de vacío, inyectores tapados, presión de combustible baja.',
-          'P0174': '**P0174 — Mezcla Pobre Banco 2:** Mismo diagnóstico que P0171 pero en banco 2. En V6/V8 indica fuga de colector de admisión.',
-          'P0455': '**P0455 — Fuga Grande en Sistema EVAP:** Fuga de vapores de combustible. Causas: tapa de gasolina floja o dañada, manguera EVAP rota, válvula de purga defectuosa.',
-          'P0401': '**P0401 — Flujo de EGR Insuficiente:** La válvula EGR no recircula suficientes gases. Causas: válvula EGR tapada de carbonilla, tubo EGR obstruido, sensor DPFE dañado.',
-          'P0128': '**P0128 — Temperatura del Refrigerante por Debajo del Umbral:** El termostato queda abierto permanentemente, el motor no alcanza temperatura operativa. Solución: cambio de termostato.',
-          'P0700': '**P0700 — Falla en Módulo de Control de Transmisión (TCM):** El TCM detectó una falla interna. Requiere lectura de subcódigos de transmisión con escáner específico.',
+          'P0300': 'Misfire aleatorio multiple. Comienza con bujias y bobinas. Si ya se cambiaron, prueba compresion e inyectores.',
+          'P0301': 'Misfire cilindro 1. Intercambia la bobina del cil.1 con otro. Si persiste: inyector o baja compresion.',
+          'P0302': 'Misfire cilindro 2.',
+          'P0303': 'Misfire cilindro 3.',
+          'P0304': 'Misfire cilindro 4.',
+          'P0420': 'Catalizador banco 1 bajo umbral. Antes de cambiarlo: verifica que no haya fuga de escape antes del sensor O2 trasero.',
+          'P0430': 'Catalizador banco 2 bajo umbral. Mismo diagnostico que P0420.',
+          'P0171': 'Mezcla pobre banco 1. El 80% es el MAF sucio. Limpialo primero. Si persiste: fuga de vacio o inyectores tapados.',
+          'P0174': 'Mezcla pobre banco 2. En V6/V8 suele ser fuga en colector de admision entre bancos.',
+          'P0172': 'Mezcla rica banco 1. Inyectores que gotean o regulador de presion dafiado.',
+          'P0175': 'Mezcla rica banco 2.',
+          'P0128': 'Temperatura del refrigerante bajo umbral - termostato pegado abierto. Cambio de termostato es barato y soluciona.',
+          'P0340': 'Sensor arbol de levas (CMP) sin senal. Puede que el carro se apague en marcha.',
+          'P0335': 'Sensor ciguenal (CKP) sin senal. Sin CKP no hay inyeccion ni encendido - puede parar en marcha.',
+          'P0401': 'Flujo EGR insuficiente. Generalmente la valvula EGR esta llena de carbonilla. Limpiala primero.',
+          'P0455': 'Fuga grande EVAP. Comienza por la tapa de gasolina. Si persiste, busca manguera EVAP rota.',
+          'P0456': 'Fuga pequena EVAP. Misma ruta: tapa de gasolina, luego mangueras.',
+          'P0442': 'Fuga mediana EVAP.',
+          'P0700': 'Falla generica transmision (TCM). Necesitas escaner especifico de transmision para subcod.',
+          'P0720': 'Sensor velocidad salida transmision. Cambios bruscos o erraticos.',
+          'P0740': 'Circuito embrague convertidor de par (TCC).',
+          'U0001': 'Falla comunicacion CAN Bus alta velocidad. Revisa bornes de bateria primero.',
+          'U0100': 'Perdida comunicacion ECM/PCM.',
+          'U0155': 'Perdida comunicacion cluster (tablero).',
+          'P0500': 'Sensor velocidad vehiculo (VSS) sin senal. Afecta velocimetro y transmision.',
+          'P0505': 'Sistema control ralenti (IAC). Motor en minimo inestable o muy alto.',
+          'P0113': 'Sensor temperatura aire admision (IAT) senal alta.',
+          'P0118': 'Sensor temperatura refrigerante (ECT) senal alta. Revisa el conector antes de cambiar.',
+          'P0116': 'Rango sensor temperatura refrigerante fuera de spec.',
         };
-        const dtcDescription = dtc && dtcGuide[dtc] ? dtcGuide[dtc] : (dtc ? `**${dtc}** — Código detectado. Se requiere lectura con escáner OEM para confirmar el sistema afectado y los parámetros de falla en tiempo real.` : 'Código DTC mencionado. Proporciona el código exacto (ejemplo: P0300) para un diagnóstico más preciso.');
+        const dtcInfo = dtc && dtcGuide[dtc]
+          ? `El codigo **${dtc}** indica: ${dtcGuide[dtc]}`
+          : dtc
+            ? `El codigo **${dtc}** requiere diagnostico con escaner para confirmar el sistema y parametros de falla. Describe los sintomas del vehiculo para orientarte mejor.`
+            : 'Para darte el diagnostico exacto necesito el codigo completo (ej: P0300). Cual aparece en el escaner?';
 
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Lectura de **Código DTC de Escáner Automotriz**.
-
-📋 ${dtcDescription}
-
-⚠️ **Nivel de Urgencia:** 🟡 Verificar con escáner OEM antes de continuar rodando de forma prolongada.
-
-🛠️ **Acción Recomendada:** Diagnóstico computarizado con escáner profesional, medición de parámetros en tiempo real (datos PID) y limpieza de código para confirmar si es intermitente o activo.
-
-📞 Realiza tu diagnóstico por escáner en **Taller MasterTech** vía WhatsApp.`;
+        aiResponseText = `**Diagnostico por Codigo DTC:**\n\n${dtcInfo}\n\n**Presenta otros sintomas?** (temblor, humo, perdida de potencia, dificultad arrancar) — eso afina el diagnostico.\n\nPara lectura completa con datos PID en tiempo real, agenda en **Taller MasterTech** via WhatsApp.`;
       }
 
-      // ── MANTENIMIENTO POR KILOMETRAJE ─────────────────────────────────────
-      else if (lp.includes('km') || lp.includes('kilometro') || lp.includes('kilómetro') || lp.includes('millas') || lp.includes('mantenimiento') || lp.includes('servicio') || lp.includes('cambio de aceite') || lp.includes('bujias') || lp.includes('bujías') || lp.includes('filtro')) {
-        const kmMatch = userMessage.match(/(\d[\d.,]*)\s*(?:km|kms|kilómetros|kilometros|millas)/i);
-        const km = kmMatch ? parseInt(kmMatch[1].replace(/[.,]/g, '')) : null;
-        let mtoText = '';
-
-        if (km && km <= 10000) {
-          mtoText = `Para **${km.toLocaleString()} km** corresponde:\n✅ Cambio de aceite de motor (convencional 5W-30 o sintético según fabricante)\n✅ Revisión de nivel de todos los fluidos (refrigerante, frenos, dirección, transmisión)\n✅ Inspección visual de correas y mangueras\n✅ Revisión de presión de llantas y luces`;
-        } else if (km && km <= 20000) {
-          mtoText = `Para **${km.toLocaleString()} km** corresponde:\n✅ Cambio de aceite sintético + filtro de aceite\n✅ Rotación de llantas (prolongar desgaste uniforme)\n✅ Revisión de frenos delanteros y traseros\n✅ Revisión de batería (prueba de carga CCA)`;
-        } else if (km && km <= 40000) {
-          mtoText = `Para **${km.toLocaleString()} km** corresponde:\n✅ Cambio de filtro de aire del motor\n✅ Cambio de filtro de habitáculo / cabina\n✅ Revisión de bujías (o cambio si son convencionales)\n✅ Servicio de transmisión (líquido ATF o manual según fabricante)\n✅ Líquido de frenos DOT 4 (si no se ha cambiado)`;
-        } else if (km && km <= 60000) {
-          mtoText = `Para **${km.toLocaleString()} km** corresponde:\n✅ Cambio de bujías de iridio o platino (duran hasta 100,000 km)\n✅ Servicio de inyección (limpieza ultrasónica de inyectores)\n✅ Revisión de cadena/correa de tiempo + tensor\n✅ Revisión de juntas homocinéticas y fuelles\n✅ Revisión integral de frenos (calibrar mordazas, limpiar)`;
-        } else if (km && km <= 100000) {
-          mtoText = `Para **${km.toLocaleString()} km** corresponde:\n✅ Cambio de correa de distribución + bomba de agua (si aplica — motores de correa)\n✅ Revisión de amortiguadores (prueba de rebote)\n✅ Cambio de líquido de dirección hidráulica\n✅ Inspección de escape completo\n✅ Revisión de válvulas PCV y mangueras de vacío`;
-        } else if (km && km > 100000) {
-          mtoText = `Para **${km.toLocaleString()} km** corresponde:\n✅ Revisión de culata y empaques de válvulas (consumo de aceite o refrigerante)\n✅ Cambio preventivo de termostato + bomba de agua\n✅ Revisión de consumo de aceite (guías y sellos de válvulas)\n✅ Inspección de rodamientos de rueda\n✅ Servicio de transmisión completo (desmontaje y revisión)`;
+      else if (category === 'arranque' || (scores.arranque >= 3)) {
+        const enCaliente = has('en caliente', 'caliente', 'despues de manejar', 'cuando esta caliente');
+        const enFrio = has('en frio', 'frio', 'en la manana', 'manana', 'de madrugada');
+        if (enCaliente) {
+          aiResponseText = `El **arranque dificil en caliente** apunta a:\n\n1. **Bomba de combustible debil:** Prueba: deja el switch en ON por 3-4 segundos antes de girar el arranque. Si mejora, es la bomba.\n2. **Sensor de temperatura del motor (ECT) defectuoso:** Le dice a la ECU que el motor esta frio cuando esta caliente, mezcla incorrecta.\n3. **Inyectores que gotean:** Inundan el cilindro en caliente, exceso de combustible dificulta el arranque.\n4. **Valvula IACV sucia:** El motor arranca pero se apaga inmediatamente en caliente.\n\nEl motor gira normal pero no enciende, o no gira nada? Eso cambia el diagnostico.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (enFrio) {
+          aiResponseText = `**Arranque dificil en frio** — mas comun de lo que parece:\n\n1. **Bateria con baja capacidad (CCA):** Puede mostrar voltaje normal pero no tener la corriente de arranque en frio. Si la bateria tiene 3+ anos, probable.\n2. **Bujias desgastadas:** Mala chispa con mezcla fria y densa.\n3. **Sensor ECT defectuoso:** La ECU no enriquece bien la mezcla en frio.\n4. **Aceite demasiado espeso:** Un 20W-50 en motor disenado para 5W-30 dificulta el giro en frio.\n5. **Inyectores con mala atomizacion:** Mezcla deficiente en frio.\n\nQue aceite usa actualmente y cuantos anos tiene la bateria?\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
         } else {
-          mtoText = `Proporciona el kilometraje exacto de tu vehículo para indicarte el plan de mantenimiento preventivo OEM completo según la marca y modelo.`;
+          aiResponseText = `Para diagnosticar el **problema de arranque** necesito saber que pasa exactamente:\n\n- **No hace nada, ni clic:** Terminal de bateria sulfatado o fusible principal\n- **Hace clic clic clic:** Bateria muy descargada o motor de arranque debil\n- **El motor gira (rrrr) pero no enciende:** Problema de combustible (bomba) o encendido (CKP, bujias)\n- **Arranca pero se apaga:** IACV sucio, fuga de vacio o sensor de arbol de levas\n\nCual describe mejor lo que ocurre? Asi te doy el diagnostico exacto.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
         }
-
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Plan de **Mantenimiento Preventivo por Kilometraje**.
-
-📋 **Plan de Mantenimiento:**
-${mtoText}
-
-⚠️ **Nivel de Urgencia:** 🟢 PRÓXIMO MANTENIMIENTO — Seguir el plan preventivo evita averías mayores.
-
-🛠️ **Acción Recomendada:** Llevar el vehículo a su próximo servicio en el intervalo indicado con aceite y filtros OEM de la marca.
-
-📞 Agenda tu servicio de mantenimiento en **Taller MasterTech** vía WhatsApp.`;
       }
 
-      // ── AIRE ACONDICIONADO / A/C ─────────────────────────────────────────────
-      else if (lp.includes('aire') || lp.includes('a/c') || lp.includes('ac ') || lp.includes('clima') || lp.includes('frio') || lp.includes('frío') || lp.includes('compresor') || lp.includes('refrigeran')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Anomalía detectada en el **Sistema de Climatización / Aire Acondicionado**.
-
-📋 **Causas Posibles** (de mayor a menor probabilidad):
-1. **Gas Refrigerante Bajo (R134a / R1234yf):** El A/C no enfría o enfría poco. Fuga en mangueras, condensador o evaporador. Requiere recarga y prueba de presión.
-2. **Compresor Averiado:** Ruido de golpeteo al activar el A/C, vibración, el embrague no engancha. Puede necesitar cambio de embrague magnético o compresor completo.
-3. **Condensador Tapado o Dañado:** El vehículo sí tiene gas pero no enfría bien al ralentí. El condensador requiere limpieza o reemplazo.
-4. **Válvula de Expansión o Orificio Tubular Obstruido:** Enfriamiento irregular o formación de escarcha en las mangueras.
-5. **Filtro de Cabina / Polen Saturado:** Reducción del flujo de aire por los ductos. Cambiar cada 15,000–20,000 km.
-6. **Olor a Humedad o Moho:** Bacterias en el evaporador — requiere desinfección y limpieza del sistema.
-
-⚠️ **Nivel de Urgencia:** 🟡 **ESTA SEMANA** en clima tropical (>30°C) o 🟢 próximo servicio en clima fresco.
-
-🛠️ **Acción Recomendada:** Prueba de presión en alta y baja del sistema, recarga de refrigerante con máquina de recuperación, revisión del compresor y condensador.
-
-📞 Agenda tu servicio de A/C en **Taller MasterTech** vía WhatsApp.`;
+      else if (category === 'humo' || scores.humo >= 5) {
+        const negro = has('humo negro', 'negro', 'sale negro');
+        const blanco = has('humo blanco', 'blanco', 'agua por el escape', 'sale agua');
+        const azul = has('humo azul', 'gris', 'humo gris');
+        if (negro) {
+          aiResponseText = `**Humo negro** = mezcla rica (exceso de combustible que no se quema):\n\n1. **MAF sucio o defectuoso:** El 60% de los casos. Limpialo con aerosol de MAF antes de reemplazar nada. Codigo probable: P0172.\n2. **Inyectores que gotean o sucios:** Inyectan mas de lo necesario. Servicio de limpieza en banco.\n3. **Filtro de aire completamente tapado:** Menos aire = mezcla automaticamente rica.\n4. **Regulador de presion de combustible danado:** Mantiene presion alta siempre.\n5. **Sensor O2 defectuoso:** La ECU no puede corregir la mezcla.\n\nHay algun codigo DTC activo? El escaner lo confirma rapido.\n\nAgenda servicio de inyeccion en **Taller MasterTech** via WhatsApp.`;
+        } else if (blanco) {
+          aiResponseText = `**Humo blanco** — depende de si desaparece o no:\n\n**Sale al arrancar en frio y desaparece en 2-3 min:** Es condensacion normal. Sin problema.\n\n**Sale constantemente o huele dulce (a coolant):** Esto es serio.\n- **Empaque de culata danado:** El refrigerante entra a la camara de combustion y sale como vapor blanco. El nivel de refrigerante baja solo.\n- **Culata fisurada:** Mas raro, ocurre en motores que se sobrecalentaron.\n\n**Si el humo blanco es constante y el nivel de refrigerante baja solo: PARA el vehiculo.** No lo fuercez — puede fundir el motor.\n\nLleva a **Taller MasterTech** para prueba de gases de culata. Via WhatsApp.`;
+        } else if (azul) {
+          aiResponseText = `**Humo azul o gris** = el motor esta **quemando aceite**:\n\n1. **Sellos de valvulas desgastados:** El aceite baja por las guias hacia la camara. Humo azul al arrancar en frio y al soltar el acelerador.\n2. **Anillos de piston desgastados:** Aceite sube desde el carter. Humo constante en aceleracion. Implica desgaste general del motor.\n3. **Turbo danado (en motores turbo):** El sello del turbo falla, aceite pasa al intercooler. Revisa la manguera del intercooler — si tiene aceite adentro, el turbo esta danado.\n4. **Valvula PCV defectuosa:** Presion del carter empuja aceite a la admision.\n\nCuanto aceite consume? Si necesitas agregar cada 1,000-2,000 km es significativo.\n\nAgenda diagnostico en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `El color del humo es la clave del diagnostico:\n\n**Negro:** Mezcla rica (MAF, inyectores, filtro de aire)\n**Azul/Gris:** Motor quemando aceite (sellos, anillos, turbo)\n**Blanco constante:** Refrigerante en camara - empaque de culata (URGENTE)\n**Vapor blanco en frio que desaparece:** Condensacion normal\n\nDe que color es exactamente el humo? Y aparece siempre o solo al arrancar / al acelerar?`;
+        }
       }
 
-      // ── SISTEMA ELÉCTRICO ────────────────────────────────────────────────────
-      else if (lp.includes('electr') || lp.includes('bateria') || lp.includes('batería') || lp.includes('alternador') || lp.includes('fusible') || lp.includes('relay') || lp.includes('relé') || lp.includes('corto') || lp.includes('no enciende') || lp.includes('no arranca') || lp.includes('arranque') || lp.includes('falla eléctric')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Anomalía detectada en el **Sistema Eléctrico**.
+      else if (category === 'motor' || scores.motor >= 3) {
+        const golpe = has('golpeteo', 'golpe', 'golpea', 'tum tum', 'toc toc');
+        const taquete = has('taquete', 'tictac', 'tic tac', 'matraca', 'cascabeleo');
+        const potencia = has('pierde potencia', 'sin potencia', 'no tiene fuerza', 'se cala', 'se apaga');
+        const aceiteIssue = has('consume aceite', 'pierde aceite', 'bota aceite');
+        const calienta = has('se calienta', 'temperatura', 'aguja al rojo', 'recalentamiento');
 
-📋 **Causas Posibles** (de mayor a menor probabilidad):
-1. **Batería Descargada o Defectuosa:** Arranque lento o nulo (clic clic clic). Prueba de capacidad CCA necesaria. Una batería >3 años con el motor encendido bajo 12.6V está al límite.
-2. **Alternador No Carga:** Si el voltaje en marcha es inferior a 13.8V, el alternador no genera suficiente corriente. Causa: correa serpentina rota, diodos del alternador fundidos, regulador de voltaje dañado.
-3. **Borne de Batería Sulfatado / Tierra Mala:** Arranque intermitente, luces que parpadean, radio que se reinicia. Limpiar bornes con bicarbonato o cambiar cable de masa.
-4. **Fusible o Relé Fundido:** Sistema específico no funciona (luces, elevalunas, bomba de combustible). Revisar caja de fusibles principal e interior.
-5. **Módulo ECU / BCM Averiado:** Síntomas erráticos en múltiples sistemas simultáneos, luces en tablero sin causa aparente.
-6. **Sensor de Posición del Cigüeñal (CKP) Dañado:** Motor arranca difícil o no arranca (sin señal de posición de cigüeñal no hay inyección ni encendido).
-
-⚠️ **Nivel de Urgencia:** 🔴 **INMEDIATO** si el vehículo no arranca o hay humo/olor a quemado.
-
-🛠️ **Acción Recomendada:** Prueba de batería con equipo de carga (CCA), medición de voltaje de alternador, diagnóstico de módulos con escáner.
-
-📞 Agenda tu diagnóstico eléctrico en **Taller MasterTech** vía WhatsApp.`;
+        if (calienta) {
+          aiResponseText = `**Motor que se calienta** — evaluemos la causa:\n\n1. **Termostato pegado cerrado:** El refrigerante no circula al radiador. La temperatura sube rapidamente desde frio. Cambio de termostato es barato.\n2. **Bomba de agua debil o danada:** El refrigerante no circula con suficiente flujo. Mas comun en motores de alta kilometraje.\n3. **Fuga de refrigerante:** El nivel baja, entra aire al sistema y la temperatura sube. Revisa si hay manchas de coolant en el piso o en las mangueras.\n4. **Electroventilador del radiador no funciona:** Se nota mas al ralenti o en trafico.\n5. **Empaque de culata (avanzado):** Si ya se revisaron los anteriores. El gas de combustion entra al circuito de refrigeracion.\n\nCuando sube la temperatura? Al ralenti, en autopista, o siempre?\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (golpe && !taquete) {
+          aiResponseText = `**ATENCION — Golpe en Motor**\n\nUn golpe sordo profundo que aumenta con las RPM es muy serio:\n\n1. **Holgura en cojinetes de biela:** El golpe tipico "tum-tum" ritmico proporcional a las RPM. El cojinete esta desgastado y hay juego excesivo en el eje.\n2. **Holgura en cojinetes de bancada:** Golpe mas profundo y severo, involucra el ciguenial.\n3. **Piston danado:** Golpe seco metalico, puede ser piston fisurado.\n\n**Si el golpe es profundo y ritmico: PARA EL MOTOR AHORA.** Si sigues rodando puedes fundir el motor completamente — reparacion de decenas de veces mas costosa.\n\nLlama a grua si es necesario. Lleva a **Taller MasterTech** via WhatsApp.`;
+        } else if (taquete) {
+          aiResponseText = `**Ruido de Taquetes (Tictac en Motor)**\n\nEl tictac rapido y superficial en la parte alta del motor es taquetes/elevadores hidraulicos. Diferente al golpe profundo de biela.\n\n1. **Aceite bajo o degradado:** Primero verifica el nivel. Si esta bajo, ahi esta la causa inmediata. Si esta bien, el aceite puede estar muy degradado.\n2. **Viscosidad incorrecta:** Un 20W-50 en motor para 5W-30 llega tarde a los taquetes en frio.\n3. **Taquetes hidraulicos desgastados:** Si persiste despues de cambio de aceite sintetico con limpiador.\n4. **Leva con desgaste puntual:** Si el tictac es en un solo punto, puede ser una leva.\n\n**Prueba practica:** Cambia el aceite sintetico con un litro de limpiador de motor. Si mejora, era el aceite. Si no mejora, hay que revisar los taquetes.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (potencia) {
+          aiResponseText = `**Perdida de Potencia** — la causa cambia mucho segun cuando ocurre:\n\n- **Siempre desde que arranca:** Bujias, inyectores sucios, compresion baja en algun cilindro\n- **Al acelerar fuerte o en subida:** Turbo debil, filtro de aire tapado, bomba de combustible con baja presion\n- **A cierta velocidad (100+ km/h):** Catalizador tapado (back-pressure) o caja automatica que no sube de marcha\n- **Con vibracion o temblor:** Misfire activo — bujia o bobina fallando\n- **Con humo negro:** Mezcla rica — MAF, inyectores o filtro de aire\n\nHay luz check engine encendida? Y en que momento especifico lo notas mas?\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (aceiteIssue) {
+          aiResponseText = `**Consumo o Fuga de Aceite**\n\n**Si el nivel baja sin manchas en el piso (consume internamente):**\n- Sellos de valvulas: humo azul al arrancar y al soltar el acelerador\n- Anillos de piston: humo azul constante en aceleracion\n- Turbo danado: aceite en el intercooler\n\n**Si hay manchas en el piso o goteo visible:**\n- Juntas de tapa de valvulas: la fuga mas comun, especialmente en Toyota/Honda/Mitsubishi\n- Sello delantero o trasero del ciguenial: fuga por frente o trasero del motor\n- Empaque del carter: fuga en la parte inferior del motor\n\nCuanto aceite consume por cada 1,000 km? Ves manchas en el piso?\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `**Problema en el Motor** — para afinar el diagnostico:\n\n- Hay un **ruido**? (superficial y rapido = taquetes / profundo y sordo = biela)\n- Sale **humo**? (negro = mezcla rica / azul = aceite / blanco constante = culata)\n- **Pierde potencia**? (cuando y en que condiciones)\n- **Se calienta**? (la aguja sube al rojo)\n- **Consume aceite**? (cuanto por cada 1,000 km)\n\nCuentame el sintoma exacto y te doy el diagnostico. Agenda en **Taller MasterTech** via WhatsApp.`;
+        }
       }
 
-      // ── TRANSMISIÓN / CAJA ───────────────────────────────────────────────────
-      else if (lp.includes('caja') || lp.includes('transmisión') || lp.includes('transmision') || lp.includes('embrague') || lp.includes('cambio') || lp.includes('marcha') || lp.includes('automática') || lp.includes('cvt') || lp.includes('atf') || lp.includes('dsg')) {
-        aiResponseText = `🔍 **Diagnóstico Inicial:** Anomalía detectada en el **Sistema de Transmisión**.
+      else if (category === 'frenos' || scores.frenos >= 3) {
+        const pedal = has('pedal', 'se va el pedal', 'pedal al piso', 'pedal blando', 'pedal duro', 'esponjoso');
+        const jala = has('jala', 'se va para', 'desvia', 'tira a un lado');
+        const vibra = has('vibra', 'pulsa', 'tiembla', 'golpetea al frenar');
+        const chirrido = has('chirrido', 'chilla', 'suena', 'ruido al frenar', 'rechina');
 
-📋 **Causas Posibles** (de mayor a menor probabilidad):
-
-🔧 **Transmisión Manual:**
-1. **Sincronizadores Desgastados:** Dificultad o resistencia al meter una marcha específica (típico en 2da o 3ra).
-2. **Embrague al Límite:** Deslizamiento al acelerar (las RPM suben pero el vehículo no acelera proporcionalmente), olor a quemado.
-3. **Collarín / Horquilla de Embrague:** Ruido de roce al pisar el embrague (cojinete de empuje desgastado).
-
-⚙️ **Transmisión Automática / CVT:**
-1. **Líquido ATF Degradado o Bajo:** Golpes al cambiar de velocidad, retrasos en el cambio (transmission shudder).
-2. **Deslizamiento de Torque Converter:** El motor sube de RPM sin que el vehículo acelere en proporción.
-3. **Bandas de Freno Internas Desgastadas:** Falta alguna relación de marcha (no agarra la 1ra, 2da o reversa).
-4. **Solenoides de Control Hidráulico Dañados:** Cambios bruscos o erráticos, luz de transmisión o check engine (P0700-P0780).
-
-⚠️ **Nivel de Urgencia:** 🟡 **ESTA SEMANA** — Una transmisión con deslizamiento puede dañarse en poco tiempo.
-
-🛠️ **Acción Recomendada:** Cambio de líquido ATF OEM (Dexron VI, Toyota ATF-WS, Honda ATF-Z1 según marca), diagnóstico con escáner de transmisión, inspección de solenoides.
-
-📞 Agenda tu revisión de transmisión en **Taller MasterTech** vía WhatsApp.`;
+        if (pedal) {
+          const emergencia = has('pedal al piso', 'se va al piso', 'al fondo');
+          aiResponseText = `${emergencia ? '**EMERGENCIA — Pedal al Piso:** Detente de forma segura de inmediato. Posible fuga en linea de freno. No conduzcas.\n\n' : ''}**Diagnostico segun lo que sientes en el pedal:**\n\n- **Esponjoso o blando:** Hay aire en las lineas (necesita purga/sangrado) o fuga interna en cilindro maestro\n- **Se va bajando solo al sostenerlo:** Fuga interna en cilindro maestro — se reemplaza completo\n- **Muy duro, no baja:** Servofreno danado o sin vacio\n- **Requiere mas fuerza que antes:** Pastillas desgastadas o servofreno debil\n\nEl nivel de liquido de frenos esta bajo?\n\n${emergencia ? 'Lleva en grua a **Taller MasterTech**.' : 'Agenda en **Taller MasterTech** via WhatsApp.'}`;
+        } else if (jala) {
+          aiResponseText = `**Vehiculo que Jala a un Lado al Frenar**\n\nEs desigualdad de fuerza de frenado entre las ruedas:\n\n1. **Mordaza/Caliper pegado:** La rueda del lado que jala frena mas porque la mordaza no libera el disco. Prueba: despues de manejar, una llanta esta mucho mas caliente que la otra?\n2. **Manguera de freno interna colapsada:** La manguera actua como valvula unidireccional — deja pasar presion pero no libera. La rueda de ese lado siempre frena.\n3. **Pastillas con desgaste desigual:** Mordaza que no desliza correctamente.\n\nAgenda en **Taller MasterTech** — revision en elevador via WhatsApp.`;
+        } else if (vibra) {
+          aiResponseText = `**Vibracion o Pulsacion al Frenar**\n\nEsa vibracion que sientes en el pedal o en el volante al frenar se llama runout — los discos estan deformados:\n\n1. **Discos deformados por choque termico:** Ocurre cuando discos calientes entran en contacto con agua fria (charco despues de frenar fuerte). La diferencia de temperatura los tuerce.\n2. **Material de pastilla transferido al disco:** Zonas de material adherido crean variacion de espesor.\n3. **Mordaza que aplica presion desigual.**\n\nSolucion: Rectificacion de discos (si tienen material suficiente) o cambio de discos y pastillas. Empeora si se ignora.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (chirrido) {
+          aiResponseText = `**Chirrido o Ruido al Frenar**\n\n- **Chirrido agudo constante al frenar:** Pastillas al testigo metalico. El sensor de desgaste roza el disco. Cambio urgente.\n- **Chirrido solo en frio (primeros 2-3 frenazos del dia) y desaparece:** Polvo o humedad en el disco. No urgente.\n- **Ruido de matraca al frenar en pavimento seco:** ABS activandose sin necesidad — sensor de velocidad de rueda sucio o danado.\n- **Sonido de roce constante (sin pisar freno):** Mordaza pegada que no libera el disco completamente.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `**Sistema de Frenos** — que sintoma especifico notas?\n\n- **Chirrido al frenar:** Pastillas al testigo (urgente)\n- **Pedal esponjoso:** Aire en lineas, necesita purga\n- **Vehiculo que jala a un lado:** Mordaza pegada\n- **Vibracion al frenar:** Discos deformados\n- **Luz de freno en tablero:** Nivel bajo o pastillas al limite\n\nCuentame que sientes exactamente. Agenda en **Taller MasterTech** via WhatsApp.`;
+        }
       }
 
-      // ── GENERAL NOISE (residual catch) ─────────────────────────────────────
-      else if (lp.includes('ruido') || lp.includes('sonido') || lp.includes('vibra') || lp.includes('chirrido') || lp.includes('traqueteo') || lp.includes('golpe')) {
-        aiResponseText = `🔊 **Diagnóstico Inicial:** Síntoma de **Ruido o Vibración en el Vehículo**.
+      else if (category === 'suspension' || scores.suspension >= 3) {
+        const zumbido = has('zumbido', 'zum zum', 'zumba', 'ruido de avion', 'ruido proporcional a velocidad');
+        const clac = has('clac clac', 'clic clic al doblar', 'traqueteo al doblar', 'cruje al doblar', 'toc toc al doblar');
+        const golpesBache = has('golpe en bache', 'golpea en huecos', 'golpe al pasar', 'toc en bache', 'golpe duro');
 
-Para darte el diagnóstico más preciso, necesito ubicar el origen del ruido:
+        if (zumbido) {
+          aiResponseText = `**Zumbido Constante Proporcional a la Velocidad**\n\nSi aumenta con la velocidad del vehiculo pero no con las RPM del motor, casi siempre es un **rodamiento de rueda (wheel bearing)** desgastado.\n\n**Como confirmar sin herramientas:**\nMientras conduces a velocidad constante, gira levemente el volante a izquierda y derecha. El zumbido cambia?\n- Giras a la izquierda y el zumbido baja -> rodamiento derecho\n- Giras a la derecha y el zumbido baja -> rodamiento izquierdo\n\n**Urgencia:** Esta semana. Si el rodamiento falla completamente puede trabar la rueda en marcha.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (clac) {
+          aiResponseText = `**Sonido "Clac-Clac" al Doblar Despacio**\n\nEse metalico repetitivo al girar con aceleracion es el sintoma clasico del **tripoide (junta CV interna)** desgastado.\n\nEl tripoide conecta la caja de cambios con el semieje. Cuando su jaula interna se desgasta, produce ese "clac-clac" especialmente al doblar bajo aceleracion.\n\n**Verificacion:** Haz un circulo lento acelerando. Si el sonido aumenta, es el tripoide. Si es mas en baches, son los bujes.\n\n**Urgencia:** Esta semana — si el tripoide se rompe en marcha pierdes traccion en esa rueda.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (golpesBache) {
+          aiResponseText = `**Golpes al Pasar por Baches o Irregularidades**\n\nEl tipo de sonido ayuda a identificar el componente:\n\n- **Golpe seco y sordo:** Bujes de meseta (silent block). Se palpa agitando la rueda.\n- **Golpe metalico agudo, especialmente en frio:** Base del amortiguador (top mount). Muy comun.\n- **Golpe suave con balanceo posterior:** Amortiguadores vencidos.\n- **Golpe seguido de chirrido:** Rotula de meseta rozando. Revisar urgente — riesgo de desmontaje de rueda.\n\nEl golpe viene del frente, de atras o de ambos lados?\n\nAgenda revision en elevador en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `**Suspension y Tren Delantero** — para afinar:\n\n- **Cuando suena?** Baches / al doblar / siempre / al frenar\n- **De donde viene?** Frente / Atras / Rueda especifica\n- **Como suena?** Golpe seco / Clac-clac / Zumbido / Crujido\n\nCada combinacion apunta a un componente diferente (bujes, rotulas, amortiguadores, tripoide, rodamientos). Cuentame mas.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        }
+      }
 
-📋 **¿Dónde y cuándo ocurre?**
-- 🔴 **Motor (cofre):** Taquetes, cadena de tiempo, bielas, tensor de polea → apagar y no forzar.
-- 🟡 **Al frenar:** Pastillas desgastadas, discos rayados, mordaza pegada.
-- 🟡 **En baches o al girar:** Bujes, rótulas, amortiguadores, tripoide.
-- 🟡 **Al acelerar en vacío:** Correa serpentina, alternador, compresor de A/C.
-- 🟡 **En la transmisión/caja:** Sincronizadores, torque converter, ATF bajo.
-- 🟢 **Escape:** Colector suelto, silenciador dañado, abrazadera floja.
+      else if (category === 'ac' || scores.ac >= 3) {
+        const noEnfria = has('no enfria', 'no refresca', 'sale caliente', 'calienta');
+        const poco = has('enfria poco', 'poco frio', 'no enfria bien', 'a ratos');
+        const olor = has('olor', 'huele', 'humedad', 'moho');
 
-⚠️ **Nivel de Urgencia:** Depende del sistema afectado (ver arriba).
+        if (noEnfria) {
+          aiResponseText = `**A/C que No Enfria — Diagnostico:**\n\n**Primero:** Con el A/C al maximo, se escucha un "clac" al activarlo y el motor siente un jaloncito? Si no:\n- Gas muy bajo (el presostato corta el compresor para protegerlo)\n- Rele del compresor fundido\n- Embrague magnetico del compresor quemado\n\n**Si el compresor si engancha pero no enfria:**\n1. Gas agotado por fuga — busca aceite de compresor en mangueras\n2. Condensador tapado — no disipa el calor\n3. Valvula de expansion obstruida\n\nSe necesita manifold de presiones para diagnostico real. Agenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (poco) {
+          aiResponseText = `**A/C que Enfria Poco**\n\n1. **Gas refrigerante bajo (fuga pequena):** Tiene algo de gas pero no la presion correcta. Enfria de noche pero no al mediodia con calor extremo.\n2. **Condensador sucio:** El calor no se disipa bien. Se nota mas al ralenti que en movimiento.\n3. **Electroventilador del condensador debil:** No circula aire suficiente cuando estas detenido.\n4. **Filtro de cabina tapado:** Reduce el flujo de aire frio al interior.\n\nEl A/C enfria mejor en movimiento que detenido? Si es asi, apunta al condensador o al ventilador.\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (olor) {
+          aiResponseText = `**Olor del A/C**\n\n**Olor a humedad/moho (el mas comun):** Bacterias en el evaporador. Siempre esta humedo = ambiente ideal para bacterias.\nSolucion: Cambio de filtro de cabina + desinfeccion del evaporador con aerosol antibacterial.\n\n**Olor a quemado con A/C:** Correa del compresor deslizando, resistencia del blower quemada o fuga de aceite cerca del motor.\n\n**Olor quimico:** Pequena fuga de refrigerante.\n\nAgenda servicio de desinfeccion de A/C en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `**Sistema de Aire Acondicionado** — cual es el sintoma?\n\n- **No enfria nada:** Compresor que no engancha, gas agotado\n- **Enfria poco:** Gas bajo, condensador sucio, filtro de cabina\n- **Olor a humedad:** Bacterias en evaporador\n- **Ruido al encender A/C:** Polea libre o embrague del compresor\n- **Sopla poco aire:** Blower motor debil o filtro tapado\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        }
+      }
 
-🛠️ **Acción Recomendada:** Descríbeme exactamente **dónde** suena (motor, ruedas, debajo del auto), **cuándo** suena (al frenar, en baches, en marcha) y si hay alguna luz en el tablero, para darte el diagnóstico exacto.
+      else if (category === 'electrico' || scores.electrico >= 3) {
+        aiResponseText = `**Sistema Electrico** — sintomas y causa probable:\n\n**No arranca (clic-clic-clic):** Bateria con capacidad insuficiente. Una bateria de 3+ anos puede mostrar voltaje normal pero fallar bajo carga. Prueba de CCA necesaria.\n\n**No arranca (silencio total):** Terminal sulfatado o fusible principal quemado. Revisa los bornes — si tienen deposito blanco/azul, ahi esta el problema.\n\n**Luces titilan o radio se reinicia:** Tierra mala (cable de masa) o borne flojo.\n\n**Alternador debil:** Menos de 13.5V con el motor en marcha = alternador no carga.\n\n**Sistema especifico no funciona:** Fusible o rele en ese circuito.\n\n**Check Engine + multiples luces:** Voltaje bajo de bateria o fallo en modulo ECU/BCM.\n\nCual de estos describe mejor tu situacion?\n\nAgenda diagnostico electrico en **Taller MasterTech** via WhatsApp.`;
+      }
 
-📞 O agenda directamente en **Taller MasterTech** para inspección en elevador vía WhatsApp.`;
+      else if (category === 'transmision' || scores.transmision >= 3) {
+        const manual = has('manual', 'embrague', 'clutch', 'cloch', 'no mete', 'traba', 'sincronizador');
+        const auto = has('automatica', 'automatico', 'no agarra', 'golpe al cambiar', 'resbala', 'patina', 'reversa');
+
+        if (manual) {
+          aiResponseText = `**Transmision Manual**\n\n- **Cuesta meter marcha especifica en caliente:** Sincronizador desgastado. La 2da y 3ra son las mas frecuentes.\n- **Embrague patina (RPM suben pero no acelera):** Disco al limite de desgaste. Olor a quemado al soltar brusco.\n- **Ruido al pisar el embrague:** Collarín (cojinete de empuje) desgastado — el ruido desaparece al soltar el pedal.\n- **Pedal de embrague sin agarre / al piso:** Cable roto (cable) o fuga en cilindro maestro de embrague (hidraulico).\n- **Cruje al meter marcha:** Falta de sincronizacion o desgaste de la horquilla.\n\nEn que marcha falla o que sintoma describes exactamente?\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else if (auto) {
+          aiResponseText = `**Transmision Automatica**\n\n- **Golpes o sacudidas al cambiar:** ATF degradado o bajo. Cambia el liquido ATF OEM primero — resuelve muchos casos sin abrir la caja.\n- **Resbala / patina (RPM sube pero no avanza):** Bandas internas o solenoide de cambio danado.\n- **No agarra reversa:** Banda de marcha atras desgastada o solenoide.\n- **Solo avanza en 1ra:** Solenoide de cambio o falla del TCM. Revisa codigo P07xx.\n- **CVT con vibracion al acelerar:** Variador o correa metalica. Solo usa ATF-CVT especifico de la marca.\n\nHay codigo DTC de transmision (P0700 o similar)?\n\nAgenda diagnostico de caja en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `**Transmision / Caja de Cambios** — es manual o automatica? Y que pasa exactamente cuando falla?\n\nAgenda diagnostico en **Taller MasterTech** via WhatsApp.`;
+        }
+      }
+
+      else if (category === 'mantenimiento' || scores.mantenimiento >= 3) {
+        const kmMatch = userMessage.match(/(\d[\d.,]*)\s*(?:km|kms|kilom|millas)/i);
+        const km = kmMatch ? parseInt(kmMatch[1].replace(/[.,]/g, '')) : null;
+        if (km) {
+          let plan = '';
+          if (km <= 10000) plan = `A los **${km.toLocaleString()} km:**\n- Cambio aceite + filtro (sintetico especificacion fabrica)\n- Revision de todos los fluidos\n- Inspeccion visual de correas y mangueras\n- Presion de llantas`;
+          else if (km <= 20000) plan = `A los **${km.toLocaleString()} km:**\n- Cambio aceite sintetico + filtro\n- Rotacion de llantas\n- Revision de frenos (grosor pastillas y estado discos)\n- Prueba de carga de bateria (CCA)`;
+          else if (km <= 40000) plan = `A los **${km.toLocaleString()} km:**\n- Cambio aceite + filtro\n- Filtro de aire del motor\n- Filtro de habitaculo/cabina\n- Revision de bujias (cambio si son convencionales)\n- Liquido de frenos DOT 4 (si no se ha cambiado)\n- ATF de transmision (segun fabricante)`;
+          else if (km <= 60000) plan = `A los **${km.toLocaleString()} km:**\n- Cambio aceite sintetico\n- Bujias de iridio o platino\n- Servicio de inyeccion (limpieza ultrasonica)\n- Revision cadena/correa de tiempo + tensor\n- Revision juntas homocinéticas (fuelles)\n- Revision frenos completa (calibrar mordazas)`;
+          else if (km <= 100000) plan = `A los **${km.toLocaleString()} km:**\n- Cambio aceite full sintetico\n- Correa de distribucion + bomba de agua (si usa correa)\n- Revision/cambio de amortiguadores\n- Cambio liquido de direccion hidraulica\n- Inspeccion de escape completo\n- Valvula PCV y mangueras de vacio`;
+          else plan = `A los **${km.toLocaleString()} km** — revision mayor:\n- Inspeccion de culata y empaques de valvulas\n- Termostato y bomba de agua preventivos\n- Rodamientos de rueda\n- Servicio de transmision completo\n- Sellos del motor (ciguenial, arbol de levas)\n- Catalizador e inspeccion de escape`;
+          aiResponseText = `**Mantenimiento Preventivo:**\n\n${plan}\n\n**Nota:** En Venezuela, con el calor y el combustible local, recomendamos cambiar el aceite sintetico cada 7,000-8,000 km (no esperar los 10,000 del manual europeo).\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        } else {
+          aiResponseText = `**Mantenimiento Preventivo por Kilometraje**\n\nDime cuantos km tiene tu vehiculo y te digo exactamente que le corresponde.\n\nReferencia general:\n- **Cada 7-8k km:** Aceite + filtro (sintetico, considerando clima tropical)\n- **Cada 20k km:** Filtros de aire y cabina, rotacion de llantas\n- **Cada 40k km:** Bujias, liquido de frenos, ATF\n- **Cada 60k km:** Bujias de iridio, servicio de inyeccion, revision de distribucion\n- **80-100k km:** Correa de distribucion (si aplica), amortiguadores\n\nAgenda en **Taller MasterTech** via WhatsApp.`;
+        }
+      }
+
+      else if (category === 'tablero' || scores.tablero >= 3) {
+        const cual = has('check engine', 'motor encendido') ? 'check_engine'
+          : has('abs ', 'luz abs') ? 'abs'
+          : has('airbag', 'srs ') ? 'airbag'
+          : has('luz de aceite', 'presion de aceite') ? 'aceite'
+          : has('temperatura', 'caliente', 'termometro') ? 'temperatura'
+          : has('bateria', 'alternador', 'icono bateria') ? 'bateria'
+          : has('tpms', 'presion de llanta') ? 'tpms'
+          : 'multiple';
+
+        const respuestas: Record<string, string> = {
+          check_engine: `**Luz Check Engine**\n\nEl motor tiembla o sientes algo raro?\n- **Si, tiembla:** Misfire activo. Reduce velocidad y ven al taller esta semana.\n- **No tiembla:** Falla menor almacenada (O2, MAF, EVAP). Puedes rodar pero agenda diagnostico.\n\nLa luz parpadea o esta fija?\n- **Parpadeante:** Misfire severo en marcha. Reduce velocidad y no le exijas al motor.\n- **Fija:** Falla almacenada, puede ser de dias atras.\n\nEl unico diagnostico correcto es leer el codigo con escaner OBD-II. Agenda en **Taller MasterTech** via WhatsApp.`,
+          abs: `**Luz de ABS**\n\nEl ABS se desactivo. Los frenos normales siguen funcionando pero en emergencia puedes bloquear las ruedas.\n\nCausas mas comunes:\n1. Sensor de velocidad de rueda (WSS) sucio o danado — acumula viruta metalica\n2. Tono (corona dentada) del ABS con dientes rotos\n3. Modulo ABS defectuoso\n\nSe lee con escaner para saber exactamente cual rueda. Agenda en **Taller MasterTech** via WhatsApp.`,
+          airbag: `**Luz de Airbag/SRS**\n\nEl sistema de airbag puede estar desactivado — los airbags no se activarian en un accidente.\n\nCausas frecuentes:\n1. **Reloj del volante (Clock Spring):** El cable en espiral dentro del volante se rompe. Sintoma extra: bocina que no funciona.\n2. **Conector suelto debajo de un asiento:** Los sensores de pasajero suelen estar bajo los asientos.\n3. **Sensor de impacto con codigo almacenado.**\n\nRequiere escaner de airbag. Agenda en **Taller MasterTech** via WhatsApp.`,
+          aceite: `**LUZ DE ACEITE — URGENTE**\n\nSi esta encendida mientras manejas: **APAGA EL MOTOR DE INMEDIATO.**\n\nVerifica el nivel con la varilla. Si el nivel esta bien y la luz sigue:\n- Bomba de aceite debil o averiada\n- Sensor de presion defectuoso (la presion real esta bien pero el sensor reporta mal)\n\nNo continues hasta confirmar. Llama a grua si es necesario. **Taller MasterTech** via WhatsApp.`,
+          temperatura: `**LUZ DE TEMPERATURA — URGENTE**\n\n1. Apaga el A/C (reduce carga)\n2. Enciende la calefaccion al maximo (transfiere calor al habitaculo)\n3. Detente de forma segura\n4. NO abras el tapon del radiador en caliente\n\nCausas: termostato pegado, bomba de agua debil, fuga de refrigerante, empaque de culata.\n\nLlama a **Taller MasterTech** via WhatsApp para asistencia.`,
+          bateria: `**Luz de Bateria/Alternador**\n\nEl alternador no esta cargando. El vehiculo esta usando la energia de la bateria y se apagara pronto.\n\nQue hacer: Apaga A/C, radio y luces innecesarias. Ven al taller lo antes posible. No apagues el motor si puedes evitarlo.\n\nCausas: alternador averiado, correa serpentina rota, diodos del alternador fundidos.\n\nAgenda en **Taller MasterTech** via WhatsApp.`,
+          tpms: `**Luz TPMS (Presion de Llantas)**\n\n1. Verifica la presion de cada llanta con manometro (presion correcta en el pilar de la puerta del conductor)\n2. Infla a la presion indicada\n3. Si la luz persiste: sensor TPMS de alguna rueda danado o descalibrado\n\nEn **Taller MasterTech** tenemos el equipo para resetear y calibrar sensores TPMS. Agenda via WhatsApp.`,
+          multiple: `**Luces de Advertencia en el Tablero**\n\nEl color es la clave:\n- **Roja = URGENTE** (aceite, temperatura, frenos, bateria)\n- **Amarilla = Esta semana** (check engine, ABS, traccion, TPMS)\n- **Verde/Azul = Informativa**\n\nDime que icono o color tiene la luz y te digo exactamente que hacer.`
+        };
+        aiResponseText = respuestas[cual] || respuestas['multiple'];
+      }
+
+      else if (category === 'combustible' || scores.combustible >= 3) {
+        aiResponseText = `**Sistema de Combustible e Inyeccion**\n\n**Inyectores sucios:** Consumo alto, ralenti inestable, humo negro, perdida de potencia. Servicio de limpieza ultrasonica.\n\n**Bomba de combustible debil:** Arranque dificil en caliente, corte de potencia bajo carga. Diagnostico: medicion de presion con manometro.\n\n**MAF sucio:** Mezcla rica o pobre, codigo P0171/P0172, humo negro. Limpia primero con aerosol de MAF.\n\n**Fuga de combustible:** Olor a gasolina, manchas en piso. Revisar lineas y conexiones.\n\nQual sintoma describes mejor? Agenda en **Taller MasterTech** via WhatsApp.`;
       }
 
       // ── VIN DECODED DEFAULT ─────────────────────────────────────────────────
