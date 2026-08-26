@@ -776,11 +776,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <Plane size={20} className="animate-pulse text-blue-400" style={{ color: '#60a5fa' }} />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2" style={{ color: '#ffffff' }}>
-                        <span style={{ color: '#ffffff' }}>Solicitud de Importación EE.UU.</span>
+                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2 usa-import-title" style={{ color: '#ffffff' }}>
+                        <span className="usa-import-title" style={{ color: '#ffffff' }}>Solicitud de Importación EE.UU.</span>
                         <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-400/40 px-2 py-0.5 rounded-full font-bold" style={{ color: '#93c5fd', backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>OEM Directo</span>
                       </h2>
-                      <p className="text-zinc-300 text-xs mt-0.5" style={{ color: '#cbd5e1' }}>
+                      <p className="text-zinc-300 text-xs mt-0.5 usa-import-desc" style={{ color: '#cbd5e1' }}>
                         Ingresa el N° de parte o datos del repuesto para cotización express desde EE.UU.
                       </p>
                     </div>

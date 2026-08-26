@@ -194,21 +194,21 @@ body.theme-light {
   color: #ffffff !important;
 }
 
-/* 2. GENERAL TYPOGRAPHY (Outside Hero) */
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h1:not(.dark-vip-card-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h2:not(.dark-vip-card-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h3,
+/* 2. GENERAL TYPOGRAPHY (Outside Hero & Dark Modals) */
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h1:not(.dark-vip-card-title):not(.usa-import-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h2:not(.dark-vip-card-title):not(.usa-import-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h3:not(.usa-import-title),
 .theme-light section:not(:first-of-type):not(.dark-vip-card-section) h4,
 .theme-light section:not(:first-of-type):not(.dark-vip-card-section) h5,
 .theme-light section:not(:first-of-type):not(.dark-vip-card-section) h6,
-.theme-light main h1:not(.dark-vip-card-title),
-.theme-light main h2:not(.dark-vip-card-title),
-.theme-light main h3 {
+.theme-light main h1:not(.dark-vip-card-title):not(.usa-import-title),
+.theme-light main h2:not(.dark-vip-card-title):not(.usa-import-title),
+.theme-light main h3:not(.usa-import-title) {
   color: #0f172a !important;
 }
 
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) p,
-.theme-light main p {
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section) p:not(.usa-import-desc),
+.theme-light main p:not(.usa-import-desc) {
   color: #334155 !important;
 }
 
