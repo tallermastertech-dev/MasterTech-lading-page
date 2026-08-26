@@ -245,12 +245,19 @@ body.theme-light {
 }
 
 /* Protect MT-01 AI Chat Modal from light theme color distortion */
-.theme-light .mt01-chat-modal,
-.theme-light .mt01-chat-modal div:not(.user-bubble),
-.theme-light .mt01-chat-modal p:not(.user-para),
-.theme-light .mt01-chat-modal span:not(.user-span),
-.theme-light .mt01-chat-modal h3 {
+.theme-light .mt01-chat-modal {
+  background-color: #0d0e12 !important;
   color: #f1f5f9 !important;
+}
+
+.theme-light .mt01-chat-modal button.hdr-btn {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e4e4e7 !important;
+}
+
+.theme-light .mt01-chat-modal button.hdr-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
 }
 
 .theme-light .mt01-chat-modal .bot-bubble p {

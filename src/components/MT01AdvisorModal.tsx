@@ -165,11 +165,11 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
         </div>
       )}
 
-      {/* Floating Chat Modal Popup (Protected with mt01-chat-modal class & clean top boundary) */}
+      {/* Floating Chat Modal Popup (Positioned neatly at bottom-right viewport bound) */}
       {isOpen && (
-        <div className="fixed top-16 sm:top-auto sm:bottom-6 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[420px] h-[calc(100vh-80px)] sm:h-[560px] max-h-[580px] bg-[#0d0e12] border border-amber-500/40 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300 mt01-chat-modal">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-32px)] sm:w-[420px] h-[calc(100vh-100px)] sm:h-[560px] max-h-[580px] bg-[#0d0e12] border border-[#C2A472]/40 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300 mt01-chat-modal">
           {/* Header Bar */}
-          <div className="bg-gradient-to-r from-[#0d0e12] via-[#181a23] to-[#0d0e12] p-3.5 border-b border-amber-500/30 flex items-center justify-between shrink-0 shadow-lg">
+          <div className="bg-[#111319] p-3.5 border-b border-[#C2A472]/30 flex items-center justify-between shrink-0 shadow-lg">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-md flex items-center justify-center relative shrink-0">
                 <Bot size={22} className="text-black" />
@@ -190,20 +190,22 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={handleReset}
                 title="Reiniciar chat"
-                className="p-2 rounded-xl text-zinc-400 hover:text-amber-400 hover:bg-white/10 transition-colors"
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer hdr-btn"
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#d4d4d8' }}
               >
-                <RotateCcw size={16} />
+                <RotateCcw size={15} />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 title="Cerrar modal"
-                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
           </div>
@@ -289,10 +291,10 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                         href="https://wa.link/xnj37f"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full justify-center px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer hover:scale-[1.02]"
-                        style={{ backgroundColor: '#fbbf24', color: '#000000' }}
+                        className="w-full justify-center px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs shadow-lg flex items-center gap-2 transition-all cursor-pointer hover:scale-[1.02]"
+                        style={{ backgroundColor: '#10b981', color: '#000000' }}
                       >
-                        <Wrench size={14} className="text-black fill-current" />
+                        <Wrench size={15} className="text-black fill-current" />
                         <span>Agendar Diagnóstico por WhatsApp</span>
                       </a>
                     </div>
@@ -314,22 +316,22 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
           <div className="px-3 py-2 bg-[#0d0e12] border-t border-white/5 flex flex-wrap gap-1.5 shrink-0">
             <button
               onClick={() => handleSend('JTEVA5AR1S5003715')}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
-              style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}
+              className="px-3 py-1.5 rounded-full bg-[#1c1f2b] hover:bg-[#25293a] border border-[#C2A472]/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              style={{ color: '#fde047', backgroundColor: '#1c1f2b', borderColor: 'rgba(194, 164, 114, 0.4)' }}
             >
               🚗 Probar VIN JTEVA5AR1S5003715
             </button>
             <button
               onClick={() => handleSend('¿Qué significa el código de falla P0300?')}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
-              style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}
+              className="px-3 py-1.5 rounded-full bg-[#1c1f2b] hover:bg-[#25293a] border border-[#C2A472]/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              style={{ color: '#fde047', backgroundColor: '#1c1f2b', borderColor: 'rgba(194, 164, 114, 0.4)' }}
             >
               ⚠️ Código DTC P0300
             </button>
             <button
               onClick={() => handleSend('Tengo un ruido metálico al frenar')}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
-              style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}
+              className="px-3 py-1.5 rounded-full bg-[#1c1f2b] hover:bg-[#25293a] border border-[#C2A472]/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              style={{ color: '#fde047', backgroundColor: '#1c1f2b', borderColor: 'rgba(194, 164, 114, 0.4)' }}
             >
               🔧 Ruido al Frenar
             </button>
@@ -348,14 +350,14 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Pregunta sobre fallas o pega un VIN de 17 dígitos..."
-              className="flex-1 bg-black border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-amber-400 transition-all"
-              style={{ backgroundColor: '#000000', color: '#ffffff' }}
+              className="flex-1 bg-[#161822] border border-white/20 rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-amber-400 transition-all"
+              style={{ backgroundColor: '#161822', color: '#ffffff' }}
             />
             <button
               type="submit"
               disabled={!inputText.trim() || isLoading}
-              className="p-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 disabled:opacity-40 text-black font-black transition-all shadow-md cursor-pointer"
-              style={{ backgroundColor: '#fbbf24', color: '#000000' }}
+              className="w-10 h-10 rounded-xl bg-[#C2A472] hover:bg-amber-400 disabled:opacity-40 text-black font-black flex items-center justify-center transition-all shadow-md cursor-pointer shrink-0"
+              style={{ backgroundColor: '#C2A472', color: '#000000' }}
             >
               <Send size={16} />
             </button>
