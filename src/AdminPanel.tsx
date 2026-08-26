@@ -651,7 +651,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   });
 
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
-  const [reminderFilter, setReminderFilter] = useState<'PENDIENTES' | 'HOY' | '3_DIAS' | '1_DIA' | 'COMPLETADOS' | 'TODOS'>('PENDIENTES');
+  const [reminderFilter, setReminderFilter] = useState<'PENDIENTES' | 'HOY' | '3_DIAS' | '1_DIA' | '1_HORA' | 'COMPLETADOS' | 'TODOS'>('PENDIENTES');
   const [newReminderData, setNewReminderData] = useState({
     titulo: '',
     fecha: new Date().toISOString().split('T')[0],
@@ -735,7 +735,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     return cleaned;
   };
 
-  // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo (Incluye 3 días y 1 día antes)
+  // Helper: Calcular minutos restantes hasta la hora de la cita
+  const getMinutesUntilLead = (leadDateStr: string, timeStr: string): number | null => {
+    if (!leadDateStr || !timeStr) return null;
+    try {
+      const today = new Date();
+      const [year, month, day] = leadDateStr.split('-').map(Number);
+      let hours = 9;
+      let minutes = 0;
+      const cleanTime = timeStr.trim();
+      const isPM = /pm/i.test(cleanTime);
+      const isAM = /am/i.test(cleanTime);
+      const timeMatch = cleanTime.match(/(\d{1,2}):(\d{2})/);
+      if (timeMatch) {
+        hours = parseInt(timeMatch[1], 10);
+        minutes = parseInt(timeMatch[2], 10);
+        if (isPM && hours < 12) hours += 12;
+        if (isAM && hours === 12) hours = 0;
+      }
+      const leadDateTime = new Date(year, month - 1, day, hours, minutes, 0);
+      const diffMs = leadDateTime.getTime() - today.getTime();
+      return Math.floor(diffMs / (1000 * 60));
+    } catch (e) {
+      return null;
+    }
+  };
+
+  // Intervalo de chequeo de recordatorios para emitir notificación en pantalla/dispositivo (Incluye 3 días, 1 día y 1 hora antes)
   useEffect(() => {
     const checkReminderInterval = setInterval(() => {
       if (typeof window === 'undefined' || !('Notification' in window) || Notification.permission !== 'granted') return;
@@ -755,7 +781,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }
       });
 
-      // 2. Chequeo Automático de Citas a 3 Días y 1 Día de distancia
+      // 2. Chequeo Automático de Citas a 3 Días, 1 Día y 1 Hora de distancia
       leads.forEach(l => {
         const leadDate = getLeadDateStr(l);
         if (!leadDate || l.status === 'Cancelado' || l.status === 'Atendido') return;
@@ -763,9 +789,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         const daysDiff = getDaysUntilDate(leadDate);
         const notifKey3Days = `notified_3d_${l.id}`;
         const notifKey1Day = `notified_1d_${l.id}`;
+        const notifKey1Hour = `notified_1h_${l.id}`;
         const clientName = formatName(l.nombre);
         const leadTime = getLeadTimeStr(l);
+        const minutesUntil = getMinutesUntilLead(leadDate, leadTime);
 
+        // 3 Días Antes
         if (daysDiff === 3 && !sessionStorage.getItem(notifKey3Days)) {
           dispatchPushNotification('📢 Cita Agendada en 3 Días', {
             body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (📅 ${leadDate})`,
@@ -775,6 +804,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           sessionStorage.setItem(notifKey3Days, 'true');
         }
 
+        // 1 Día Antes (Mañana)
         if (daysDiff === 1 && !sessionStorage.getItem(notifKey1Day)) {
           dispatchPushNotification('⏰ Cita Agendada para Mañana', {
             body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (⏰ ${leadTime})`,
@@ -782,6 +812,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             tag: `lead-1d-${l.id}`
           });
           sessionStorage.setItem(notifKey1Day, 'true');
+        }
+
+        // 1 Hora Antes (Urgente)
+        if (minutesUntil !== null && minutesUntil >= 45 && minutesUntil <= 65 && !sessionStorage.getItem(notifKey1Hour)) {
+          dispatchPushNotification('⏳ Cita en 1 Hora (Recordatorio Urgente)', {
+            body: `👤 ${clientName} | 🚗 ${l.vehiculo || 'Vehículo'}\n🛠️ ${l.servicio} (⏰ En 1 Hora - ${leadTime})`,
+            icon: '/logo.png',
+            tag: `lead-1h-${l.id}`
+          });
+          sessionStorage.setItem(notifKey1Hour, 'true');
         }
       });
     }, 30000); // Check every 30 seconds
@@ -7097,8 +7137,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 {(() => {
                   const count3Days = leads.filter(l => getDaysUntilDate(getLeadDateStr(l)) === 3 && l.status !== 'Cancelado' && l.status !== 'Atendido').length;
                   const count1Day = leads.filter(l => getDaysUntilDate(getLeadDateStr(l)) === 1 && l.status !== 'Cancelado' && l.status !== 'Atendido').length;
+                  const count1Hour = leads.filter(l => {
+                    const m = getMinutesUntilLead(getLeadDateStr(l), getLeadTimeStr(l));
+                    return m !== null && m >= 0 && m <= 120 && l.status !== 'Cancelado' && l.status !== 'Atendido';
+                  }).length;
 
-                  return (['PENDIENTES', 'HOY', '3_DIAS', '1_DIA', 'COMPLETADOS', 'TODOS'] as const).map(tab => (
+                  return (['PENDIENTES', 'HOY', '3_DIAS', '1_DIA', '1_HORA', 'COMPLETADOS', 'TODOS'] as const).map(tab => (
                     <button
                       key={tab}
                       onClick={() => setReminderFilter(tab)}
@@ -7112,6 +7156,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                        tab === 'HOY' ? `Hoy (${reminders.filter(r => r.fecha === new Date().toISOString().split('T')[0]).length})` :
                        tab === '3_DIAS' ? `📢 3 Días Antes (${count3Days})` :
                        tab === '1_DIA' ? `⏰ 1 Día Antes (${count1Day})` :
+                       tab === '1_HORA' ? `⏳ En 1 Hora (${count1Hour})` :
                        tab === 'COMPLETADOS' ? `Completados (${reminders.filter(r => r.completado).length})` :
                        `Todos (${reminders.length})`}
                     </button>
@@ -7125,14 +7170,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {(() => {
                 const todayStr = new Date().toISOString().split('T')[0];
 
-                if (reminderFilter === '3_DIAS' || reminderFilter === '1_DIA') {
-                  const targetDays = reminderFilter === '3_DIAS' ? 3 : 1;
-                  const autoLeads = leads.filter(l => getDaysUntilDate(getLeadDateStr(l)) === targetDays && l.status !== 'Cancelado' && l.status !== 'Atendido');
+                if (reminderFilter === '3_DIAS' || reminderFilter === '1_DIA' || reminderFilter === '1_HORA') {
+                  const autoLeads = leads.filter(l => {
+                    if (l.status === 'Cancelado' || l.status === 'Atendido') return false;
+                    if (reminderFilter === '3_DIAS') return getDaysUntilDate(getLeadDateStr(l)) === 3;
+                    if (reminderFilter === '1_DIA') return getDaysUntilDate(getLeadDateStr(l)) === 1;
+                    if (reminderFilter === '1_HORA') {
+                      const m = getMinutesUntilLead(getLeadDateStr(l), getLeadTimeStr(l));
+                      return m !== null && m >= 0 && m <= 120;
+                    }
+                    return false;
+                  });
 
                   if (autoLeads.length === 0) {
                     return (
                       <div className="p-8 text-center text-zinc-400 text-xs italic bg-black/30 rounded-2xl border border-white/10">
-                        No hay citas agendadas para dentro de {targetDays} {targetDays === 1 ? 'día (Mañana)' : 'días'}.
+                        {reminderFilter === '3_DIAS' ? 'No hay citas agendadas para dentro de 3 días.' :
+                         reminderFilter === '1_DIA' ? 'No hay citas agendadas para mañana (1 día).' :
+                         'No hay citas programadas para la próxima hora.'}
                       </div>
                     );
                   }
@@ -7140,9 +7195,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   return autoLeads.map((l, idx) => {
                     const leadDate = getLeadDateStr(l);
                     const leadTime = getLeadTimeStr(l);
-                    const whatsappMsg = targetDays === 3
+                    const whatsappMsg = reminderFilter === '3_DIAS'
                       ? `Hola ${l.nombre || ''}, te saludamos desde Taller MasterTech. Te recordamos que tienes tu cita agendada en 3 días (el ${leadDate} a las ${leadTime}) para tu vehículo ${l.vehiculo || ''} (${l.servicio}). Por favor confírmanos si estás listo. ¡Feliz día!`
-                      : `Hola ${l.nombre || ''}, te recordamos que MAÑANA es tu cita en Taller MasterTech a las ${leadTime} para tu vehículo ${l.vehiculo || ''} (${l.servicio}). Por favor confírmanos tu asistencia. ¡Te esperamos!`;
+                      : reminderFilter === '1_DIA'
+                      ? `Hola ${l.nombre || ''}, te recordamos que MAÑANA es tu cita en Taller MasterTech a las ${leadTime} para tu vehículo ${l.vehiculo || ''} (${l.servicio}). Por favor confírmanos tu asistencia. ¡Te esperamos!`
+                      : `Hola ${l.nombre || ''}, te recordamos que en 1 HORA es tu cita en Taller MasterTech (a las ${leadTime}) para tu vehículo ${l.vehiculo || ''} (${l.servicio}). Por favor confírmanos que ya vienes en camino. ¡Te esperamos!`;
 
                     return (
                       <div key={l.id || idx} className="p-3 bg-black/40 border border-white/10 rounded-2xl flex items-center justify-between gap-3">
@@ -7150,7 +7207,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-amber-400 font-bold">{leadTime}</span>
                             <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
-                              {targetDays === 3 ? '📢 Faltan 3 Días' : '⏰ MAÑANA (1 Día)'}
+                              {reminderFilter === '3_DIAS' ? '📢 Faltan 3 Días' : reminderFilter === '1_DIA' ? '⏰ MAÑANA (1 Día)' : '⏳ En 1 Hora'}
                             </span>
                           </div>
                           <div className="font-black text-white text-sm truncate">{l.nombre || 'Cliente'}</div>
@@ -7166,7 +7223,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             className="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs flex items-center gap-1.5 transition-all shadow-md shrink-0 cursor-pointer"
                           >
                             <WhatsAppIcon size={15} />
-                            <span>Recordatorio WA ({targetDays === 3 ? '3 Días' : '1 Día'})</span>
+                            <span>Recordatorio WA ({reminderFilter === '3_DIAS' ? '3 Días' : reminderFilter === '1_DIA' ? '1 Día' : '1 Hora'})</span>
                           </a>
                         )}
                       </div>
