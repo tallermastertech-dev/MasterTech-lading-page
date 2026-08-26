@@ -423,8 +423,10 @@ export default function Jornadas() {
           >
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 blur-[130px] rounded-full pointer-events-none" />
 
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500/20 to-primary/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mx-auto shadow-2xl relative z-10">
-              <Sparkles size={36} className="animate-pulse" />
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-[0_0_30px_rgba(245,158,11,0.4)] flex items-center justify-center mx-auto relative z-10">
+              <div className="w-full h-full rounded-[22px] bg-[#12141a] flex items-center justify-center">
+                <Sparkles size={36} className="animate-pulse" style={{ color: '#fbbf24' }} />
+              </div>
             </div>
 
             <div className="space-y-4 max-w-2xl mx-auto relative z-10">

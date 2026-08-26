@@ -250,6 +250,12 @@ body.theme-light .dark-vip-card,
   color: #ffffff !important;
 }
 
+html.theme-light .dark-vip-card svg,
+body.theme-light .dark-vip-card svg,
+.theme-light .dark-vip-card svg {
+  color: #fbbf24 !important;
+}
+
 html.theme-light .dark-vip-card p,
 body.theme-light .dark-vip-card p,
 .theme-light .dark-vip-card p,
