@@ -244,6 +244,28 @@ body.theme-light {
   color: #cbd5e1 !important;
 }
 
+/* Protect MT-01 AI Chat Modal from light theme color distortion */
+.theme-light .mt01-chat-modal,
+.theme-light .mt01-chat-modal div:not(.user-bubble),
+.theme-light .mt01-chat-modal p:not(.user-para),
+.theme-light .mt01-chat-modal span:not(.user-span),
+.theme-light .mt01-chat-modal h3 {
+  color: #f1f5f9 !important;
+}
+
+.theme-light .mt01-chat-modal .bot-bubble p {
+  color: #f1f5f9 !important;
+}
+
+.theme-light .mt01-chat-modal .bot-bubble strong {
+  color: #fde047 !important;
+}
+
+.theme-light .mt01-chat-modal input {
+  color: #ffffff !important;
+  background-color: #000000 !important;
+}
+
 /* 3. NAVBAR IN LIGHT MODE */
 .theme-light nav {
   background-color: rgba(241, 244, 248, 0.96) !important;

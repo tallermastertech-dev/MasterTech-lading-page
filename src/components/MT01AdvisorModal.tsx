@@ -109,7 +109,11 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
           const parts = para.split(/(\*\*.*?\*\*)/g);
           return (
-            <p key={pIdx} className="leading-normal">
+            <p
+              key={pIdx}
+              className={`leading-relaxed ${isUser ? 'user-para text-black' : 'bot-para text-slate-100'}`}
+              style={{ color: isUser ? '#000000' : '#f1f5f9' }}
+            >
               {parts.map((part, idx) => {
                 if (part.startsWith('**') && part.endsWith('**')) {
                   const boldContent = part.slice(2, -2);
@@ -117,6 +121,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                     <strong
                       key={idx}
                       className={isUser ? 'font-black underline' : 'font-extrabold text-amber-300'}
+                      style={{ color: isUser ? '#000000' : '#fde047' }}
                     >
                       {boldContent}
                     </strong>
@@ -138,7 +143,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
         <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2">
           <button
             onClick={() => setIsOpen(true)}
-            className="group relative flex items-center gap-3 px-4.5 py-3 rounded-full bg-[#12141a]/95 backdrop-blur-xl border border-[#C2A472]/50 hover:border-[#C2A472] text-white font-bold text-xs sm:text-sm shadow-[0_10px_35px_rgba(0,0,0,0.85)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.35)] hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="group relative flex items-center gap-3 px-4.5 py-3 rounded-full bg-[#12141a] text-white font-bold text-xs sm:text-sm shadow-[0_10px_35px_rgba(0,0,0,0.85)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.35)] hover:scale-105 transition-all duration-300 cursor-pointer border border-[#C2A472]/60"
             title="MT-01 · Especialista MasterTech"
           >
             <div className="relative">
@@ -160,9 +165,9 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
         </div>
       )}
 
-      {/* Floating Chat Modal Popup (Positioned neatly within viewport bounds) */}
+      {/* Floating Chat Modal Popup (Protected with mt01-chat-modal class & clean top boundary) */}
       {isOpen && (
-        <div className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[420px] h-[92vh] sm:h-[580px] max-h-[600px] bg-[#0d0e12] border border-amber-500/40 rounded-t-3xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed top-16 sm:top-auto sm:bottom-6 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[420px] h-[calc(100vh-80px)] sm:h-[560px] max-h-[580px] bg-[#0d0e12] border border-amber-500/40 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300 mt01-chat-modal">
           {/* Header Bar */}
           <div className="bg-gradient-to-r from-[#0d0e12] via-[#181a23] to-[#0d0e12] p-3.5 border-b border-amber-500/30 flex items-center justify-between shrink-0 shadow-lg">
             <div className="flex items-center gap-3">
@@ -173,12 +178,12 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xs sm:text-sm font-black text-white tracking-wide">MT-01 · Especialista MasterTech</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[9px] font-mono font-bold shrink-0">
+                  <h3 className="text-xs sm:text-sm font-black text-white tracking-wide" style={{ color: '#ffffff' }}>MT-01 · Especialista MasterTech</h3>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[9px] font-mono font-bold shrink-0" style={{ color: '#fde047' }}>
                     Taller MasterTech
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-medium mt-0.5">
+                <div className="flex items-center gap-1.5 text-[10px] font-medium mt-0.5" style={{ color: '#94a3b8' }}>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Decodificador VIN & Asesor Automotriz</span>
                 </div>
@@ -220,13 +225,17 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 <div
                   className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-black rounded-br-none shadow-md'
-                      : 'bg-[#181a22] border border-white/10 text-zinc-200 rounded-bl-none shadow-lg'
+                      ? 'user-bubble bg-gradient-to-r from-amber-400 via-[#C2A472] to-amber-500 text-black font-black rounded-br-none shadow-md'
+                      : 'bot-bubble bg-[#181a22] border border-white/15 text-slate-100 rounded-bl-none shadow-lg'
                   }`}
+                  style={{
+                    backgroundColor: msg.sender === 'user' ? '#f59e0b' : '#181a22',
+                    color: msg.sender === 'user' ? '#000000' : '#f1f5f9'
+                  }}
                 >
                   {/* Decoded Vehicle Card (if VIN was parsed) */}
                   {msg.decodedVehicle && (
-                    <div className="mb-3 bg-gradient-to-br from-amber-950/40 via-slate-900 to-[#12141a] border border-amber-500/40 rounded-2xl p-3.5 shadow-xl text-white">
+                    <div className="mb-3 bg-gradient-to-br from-amber-950/50 via-slate-900 to-[#12141a] border border-amber-500/40 rounded-2xl p-3.5 shadow-xl text-white">
                       <div className="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-2">
                         <div className="flex items-center gap-1.5 text-[11px] font-black text-amber-300 uppercase tracking-wider">
                           <Car size={14} className="text-amber-400" />
@@ -280,7 +289,8 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                         href="https://wa.link/xnj37f"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full justify-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black font-black text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer hover:scale-[1.02]"
+                        className="w-full justify-center px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer hover:scale-[1.02]"
+                        style={{ backgroundColor: '#fbbf24', color: '#000000' }}
                       >
                         <Wrench size={14} className="text-black fill-current" />
                         <span>Agendar Diagnóstico por WhatsApp</span>
@@ -304,19 +314,22 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
           <div className="px-3 py-2 bg-[#0d0e12] border-t border-white/5 flex flex-wrap gap-1.5 shrink-0">
             <button
               onClick={() => handleSend('JTEVA5AR1S5003715')}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}
             >
               🚗 Probar VIN JTEVA5AR1S5003715
             </button>
             <button
               onClick={() => handleSend('¿Qué significa el código de falla P0300?')}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}
             >
               ⚠️ Código DTC P0300
             </button>
             <button
               onClick={() => handleSend('Tengo un ruido metálico al frenar')}
-              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
+              style={{ color: '#fde047', backgroundColor: 'rgba(245, 158, 11, 0.2)' }}
             >
               🔧 Ruido al Frenar
             </button>
@@ -335,12 +348,14 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Pregunta sobre fallas o pega un VIN de 17 dígitos..."
-              className="flex-1 bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-amber-500 transition-all"
+              className="flex-1 bg-black border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-amber-400 transition-all"
+              style={{ backgroundColor: '#000000', color: '#ffffff' }}
             />
             <button
               type="submit"
               disabled={!inputText.trim() || isLoading}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-40 text-black font-bold transition-all shadow-md cursor-pointer"
+              className="p-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 disabled:opacity-40 text-black font-black transition-all shadow-md cursor-pointer"
+              style={{ backgroundColor: '#fbbf24', color: '#000000' }}
             >
               <Send size={16} />
             </button>
