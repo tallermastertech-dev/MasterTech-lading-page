@@ -1310,3 +1310,17 @@ body.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon,
   color: #fbbf24 !important;
   stroke: #fbbf24 !important;
 }
+
+html.theme-light .mt01-chat-modal .mt01-loading-text,
+body.theme-light .mt01-chat-modal .mt01-loading-text,
+.theme-light .mt01-chat-modal .mt01-loading-text,
+.theme-light .mt01-loading-text {
+  color: #ffffff !important;
+}
+
+html.theme-light .mt01-chat-modal .bot-loading-bubble,
+body.theme-light .mt01-chat-modal .bot-loading-bubble,
+.theme-light .mt01-chat-modal .bot-loading-bubble {
+  background-color: #181a22 !important;
+  color: #ffffff !important;
+}

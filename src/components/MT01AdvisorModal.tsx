@@ -308,9 +308,9 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
             ))}
 
             {isLoading && (
-              <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-zinc-300 p-3 rounded-2xl rounded-bl-none text-xs w-fit">
+              <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-slate-100 p-3 rounded-2xl rounded-bl-none text-xs w-fit bot-loading-bubble" style={{ backgroundColor: '#181a22', color: '#ffffff' }}>
                 <Bot size={14} className="animate-spin text-amber-400 mt01-bot-icon" style={{ color: '#fbbf24', stroke: '#fbbf24' }} />
-                <span style={{ color: '#cbd5e1' }}>MT-01 analizando diagnóstico técnico...</span>
+                <span className="mt01-loading-text" style={{ color: '#ffffff', fontWeight: 600 }}>MT-01 analizando diagnóstico técnico...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
