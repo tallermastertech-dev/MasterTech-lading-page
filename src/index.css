@@ -260,15 +260,31 @@ body.theme-light .dark-vip-card a:not(.bg-amber-400),
 /* Protect MT-01 AI Chat Modal from light theme color distortion */
 html.theme-light .mt01-chat-modal,
 body.theme-light .mt01-chat-modal,
-.theme-light .mt01-chat-modal {
+.theme-light .mt01-chat-modal,
+.theme-light div.mt01-chat-modal {
   background-color: #0d0e12 !important;
   color: #f1f5f9 !important;
 }
 
+html.theme-light .mt01-chat-header,
+body.theme-light .mt01-chat-header,
+.theme-light .mt01-chat-header,
+.theme-light div.mt01-chat-header {
+  background-color: #12141a !important;
+  color: #ffffff !important;
+}
+
 html.theme-light .mt01-chat-modal h3,
 body.theme-light .mt01-chat-modal h3,
-.theme-light .mt01-chat-modal h3 {
+.theme-light .mt01-chat-modal h3,
+.theme-light .mt01-chat-header h3 {
   color: #ffffff !important;
+}
+
+html.theme-light .mt01-chat-header span,
+body.theme-light .mt01-chat-header span,
+.theme-light .mt01-chat-header span {
+  color: #94a3b8 !important;
 }
 
 html.theme-light .mt01-chat-modal button.hdr-btn,
@@ -277,6 +293,11 @@ body.theme-light .mt01-chat-modal button.hdr-btn,
   background-color: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+html.theme-light .mt01-chat-modal button.hdr-btn svg,
+body.theme-light .mt01-chat-modal button.hdr-btn svg {
+  color: #ffffff !important;
 }
 
 html.theme-light .mt01-chat-modal button.hdr-btn:hover,
@@ -333,8 +354,8 @@ body.theme-light .mt01-chat-modal button.hdr-btn:hover {
 }
 
 /* Mega Dropdowns in Light Mode */
-.theme-light nav [class*="bg-[#12141a]"],
-.theme-light nav [class*="bg-[#0d0e12]"] {
+.theme-light nav [class*="bg-[#12141a]"]:not(.mt01-chat-modal):not(.mt01-chat-header),
+.theme-light nav [class*="bg-[#0d0e12]"]:not(.mt01-chat-modal):not(.mt01-chat-header) {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.15) !important;
