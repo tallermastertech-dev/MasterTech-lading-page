@@ -2942,16 +2942,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       }}
                                       className={`min-h-[105px] md:min-h-[125px] p-2 rounded-2xl border transition-all flex flex-col justify-between group/cell cursor-pointer ${
                                         !cell.isCurrentMonth
-                                          ? 'bg-black/20 border-white/5 opacity-40 cursor-default'
+                                          ? 'bg-slate-100 dark:bg-black/20 border-slate-200 dark:border-white/5 opacity-40 cursor-default'
                                           : isToday
-                                          ? 'bg-primary/10 border-primary/50 ring-1 ring-primary/30 hover:border-primary'
-                                          : 'bg-black/40 border-white/10 hover:border-white/30'
+                                          ? 'bg-amber-500/10 dark:bg-primary/10 border-amber-500/50 dark:border-primary/50 ring-1 ring-amber-500/30 dark:ring-primary/30'
+                                          : 'bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 hover:border-amber-500/50 dark:hover:border-white/30 shadow-sm'
                                       }`}
                                     >
                                       {/* Top Header inside day cell */}
                                       <div className="flex items-center justify-between">
                                         <span className={`text-xs font-black px-1.5 py-0.5 rounded-md ${
-                                          isToday ? 'bg-primary text-black font-black' : cell.isCurrentMonth ? 'text-white' : 'text-zinc-500'
+                                          isToday ? 'bg-amber-500 dark:bg-primary text-black font-black' : cell.isCurrentMonth ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-zinc-500'
                                         }`}>
                                           {cell.day}
                                         </span>
@@ -2968,12 +2968,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 hora: '09:00',
                                                 servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
                                                 notas: '',
-                                                status: 'Confirmado'
+                                                status: 'Confirmado',
+                                                prioridad: 'media'
                                               });
                                               setManualCitaError('');
                                               setIsManualCitaModalOpen(true);
                                             }}
-                                            className="opacity-0 group-hover/cell:opacity-100 p-1 rounded-md bg-primary/20 hover:bg-primary text-primary hover:text-black transition-all cursor-pointer"
+                                            className="opacity-0 group-hover/cell:opacity-100 p-1 rounded-md bg-amber-500/20 dark:bg-primary/20 hover:bg-amber-500 dark:hover:bg-primary text-amber-600 dark:text-primary hover:text-black dark:hover:text-black transition-all cursor-pointer"
                                             title={`Agendar Cita para el ${cell.dateStr}`}
                                           >
                                             <Plus size={12} />
@@ -2981,17 +2982,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                         )}
                                       </div>
 
-                                      {/* Day Appointments List */}
-                                      <div className="space-y-1 my-1 overflow-y-auto max-h-[85px] scrollbar-thin">
+                                      {/* Day Appointments List (Sin Scrollbars Visibles) */}
+                                      <div className="space-y-1 my-1 overflow-y-auto max-h-[85px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                                         {dayLeads.slice(0, 3).map((l, lIdx) => {
                                           const prio = l.prioridad === 'alta' || String(l.falla || '').toLowerCase().includes('[prioridad: alta]') ? 'alta'
                                             : l.prioridad === 'baja' || String(l.falla || '').toLowerCase().includes('[prioridad: baja]') ? 'baja'
                                             : 'media';
 
                                           const priorityStyle = 
-                                            prio === 'alta' ? 'bg-red-950/70 border-red-500/60 text-red-200 hover:border-red-400' :
-                                            prio === 'baja' ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-200 hover:border-emerald-400' :
-                                            'bg-amber-950/70 border-amber-500/60 text-amber-200 hover:border-amber-400';
+                                            prio === 'alta' ? 'bg-red-100/90 dark:bg-red-950/70 border-red-300 dark:border-red-500/60 text-red-950 dark:text-red-200 hover:border-red-400 shadow-sm' :
+                                            prio === 'baja' ? 'bg-emerald-100/90 dark:bg-emerald-950/70 border-emerald-300 dark:border-emerald-500/60 text-emerald-950 dark:text-emerald-200 hover:border-emerald-400 shadow-sm' :
+                                            'bg-amber-100/90 dark:bg-amber-950/70 border-amber-300 dark:border-amber-500/60 text-amber-950 dark:text-amber-200 hover:border-amber-400 shadow-sm';
 
                                           const prioLabel = prio === 'alta' ? 'Alta' : prio === 'baja' ? 'Baja' : 'Media';
                                           const clientNameFormatted = formatName(l.nombre);
@@ -3011,14 +3012,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               className={`p-1.5 rounded-lg border text-[10px] cursor-pointer transition-all hover:scale-[1.02] shadow-sm relative ${priorityStyle}`}
                                             >
                                               <div className="flex items-center justify-between font-mono font-bold leading-tight">
-                                                <span className="truncate">{getLeadTimeStr(l)}</span>
-                                                <span className={`text-[8px] font-black px-1 rounded ${
-                                                  prio === 'alta' ? 'bg-red-900/80 text-red-200' :
-                                                  prio === 'baja' ? 'bg-emerald-900/80 text-emerald-200' :
-                                                  'bg-amber-900/80 text-amber-200'
+                                                <span className="truncate text-slate-700 dark:text-amber-300">{getLeadTimeStr(l)}</span>
+                                                <span className={`text-[8px] font-black px-1 py-0.5 rounded ${
+                                                  prio === 'alta' ? 'bg-red-200 text-red-900 dark:bg-red-900/80 dark:text-red-200' :
+                                                  prio === 'baja' ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900/80 dark:text-emerald-200' :
+                                                  'bg-amber-200 text-amber-900 dark:bg-amber-900/80 dark:text-amber-200'
                                                 }`}>{prioLabel}</span>
                                               </div>
-                                              <div className="font-black text-white text-[11px] truncate mt-0.5 leading-tight">
+                                              <div className="font-black text-slate-900 dark:text-white text-[11px] truncate mt-0.5 leading-tight">
                                                 {clientNameFormatted}
                                               </div>
                                             </div>
