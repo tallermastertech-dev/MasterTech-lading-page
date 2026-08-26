@@ -1343,3 +1343,24 @@ body.theme-light .mt01-chat-modal .hdr-btn,
   background-color: rgba(255, 255, 255, 0.12) !important;
 }
 
+/* ── TALLER STATUS BADGE IMMUNITY (HERO SECTION BADGE) ── */
+.taller-status-badge {
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+html.theme-light .taller-status-badge .taller-status-text,
+body.theme-light .taller-status-badge .taller-status-text,
+.theme-light .taller-status-badge .taller-status-text,
+.taller-status-badge .taller-status-text {
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+}
+
+html.theme-light .taller-status-badge span.text-emerald-400,
+.theme-light .taller-status-badge span.text-emerald-400,
+html.theme-light .taller-status-badge .taller-status-text,
+.theme-light .taller-status-badge .taller-status-text {
+  color: #34d399 !important;
+}
+
+

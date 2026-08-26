@@ -461,10 +461,20 @@ export default function App() {
             >
               {(() => {
                 const tallerStatus = getTallerStatus(config.IS_OPEN);
+                const textColor = tallerStatus.isOpen ? '#34d399' : '#fbbf24';
                 return (
-                  <div className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border mb-4 text-xs font-black uppercase tracking-wider shadow-xl transition-all ${tallerStatus.badgeBg} ${tallerStatus.badgeBorder}`}>
-                    <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.dotColor} animate-pulse`} />
-                    <span>{tallerStatus.badgeText}</span>
+                  <div 
+                    className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border mb-4 text-xs font-black uppercase tracking-wider shadow-xl transition-all taller-status-badge ${tallerStatus.badgeBg} ${tallerStatus.badgeBorder}`}
+                    style={{
+                      backgroundColor: tallerStatus.isOpen ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                      borderColor: tallerStatus.isOpen ? 'rgba(52, 211, 153, 0.4)' : 'rgba(251, 191, 36, 0.4)',
+                      color: textColor
+                    }}
+                  >
+                    <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.dotColor} animate-pulse shrink-0`} />
+                    <span className="taller-status-text font-black" style={{ color: textColor }}>
+                      {tallerStatus.badgeText}
+                    </span>
                   </div>
                 );
               })()}
