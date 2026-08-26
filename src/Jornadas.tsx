@@ -434,7 +434,7 @@ export default function Jornadas() {
               <h2 className="text-3xl sm:text-5xl font-display font-black uppercase tracking-tight text-white leading-tight dark-vip-card-title" style={{ color: '#ffffff' }}>
                 {config.JORNADA_EMPTY_TITLE || 'No hay Jornadas VIP Activas en este momento'}
               </h2>
-              <p className="text-slate-100 text-sm sm:text-base leading-relaxed font-medium" style={{ color: '#e2e8f0' }}>
+              <p className="text-white text-sm sm:text-base leading-relaxed font-medium" style={{ color: '#ffffff' }}>
                 {config.JORNADA_EMPTY_DESC || 'Nuestras jornadas automotrices especializadas (Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Techo Estrellado, A/A e Inyección) se abren en fechas exclusivas por lotes de cupos limitados. ¡Escríbenos por WhatsApp para ser notificado de la próxima fecha o agendar tu servicio estándar en taller!'}
               </p>
             </div>
@@ -451,10 +451,10 @@ export default function Jornadas() {
               </a>
               <a
                 href="/servicios"
-                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/40 text-white text-sm font-bold transition-all text-center"
-                style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+                className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/20 hover:bg-white/30 border border-white/40 text-white text-sm font-bold transition-all text-center"
+                style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
               >
-                <span style={{ color: '#ffffff' }}>{config.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}</span>
+                <span style={{ color: '#ffffff', fontWeight: 800 }}>{config.JORNADA_EMPTY_BTN_SEC || 'Ver Servicios de Taller Disponibles'}</span>
               </a>
             </div>
           </motion.div>

@@ -239,22 +239,38 @@ body.theme-light {
   color: #ffffff !important;
 }
 
+/* ULTRA SPECIFIC IMMUNITY FOR DARK VIP CARD IN LIGHT MODE */
+html.theme-light .dark-vip-card,
+body.theme-light .dark-vip-card,
+.theme-light .dark-vip-card,
+.theme-light main .dark-vip-card,
+.theme-light section .dark-vip-card,
+.theme-light div.dark-vip-card {
+  background-color: #0d0e12 !important;
+  color: #ffffff !important;
+}
+
 html.theme-light .dark-vip-card p,
 body.theme-light .dark-vip-card p,
-.theme-light section .dark-vip-card p,
+.theme-light .dark-vip-card p,
 .theme-light main .dark-vip-card p,
+.theme-light section .dark-vip-card p,
 .theme-light div.dark-vip-card p {
-  color: #e2e8f0 !important;
+  color: #f1f5f9 !important;
 }
 
 html.theme-light .dark-vip-card a:not(.bg-amber-400),
 body.theme-light .dark-vip-card a:not(.bg-amber-400),
-.theme-light section .dark-vip-card a:not(.bg-amber-400),
+.theme-light .dark-vip-card a:not(.bg-amber-400),
 .theme-light main .dark-vip-card a:not(.bg-amber-400),
-.theme-light div.dark-vip-card a:not(.bg-amber-400) {
+.theme-light section .dark-vip-card a:not(.bg-amber-400),
+.theme-light div.dark-vip-card a:not(.bg-amber-400),
+html.theme-light .dark-vip-card a:not(.bg-amber-400) span,
+body.theme-light .dark-vip-card a:not(.bg-amber-400) span,
+.theme-light .dark-vip-card a:not(.bg-amber-400) span {
   color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.35) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 /* Protect MT-01 AI Chat Modal from light theme color distortion */
