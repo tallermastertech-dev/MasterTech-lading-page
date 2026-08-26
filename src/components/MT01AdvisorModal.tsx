@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, Sparkles, RotateCcw, Car, Wrench, ShieldCheck, Clock, ExternalLink } from 'lucide-react';
+import { Bot, X, Send, RotateCcw, Car, Wrench } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -101,43 +101,43 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
   return (
     <>
-      {/* Floating Trigger Button */}
+      {/* Floating Trigger Button aligned with MasterTech Gold Theme */}
       <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="group relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold text-xs sm:text-sm shadow-[0_10px_30px_rgba(79,70,229,0.5)] hover:shadow-[0_15px_40px_rgba(79,70,229,0.7)] hover:scale-105 transition-all duration-300 border border-white/20 cursor-pointer"
+          className="group relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-black text-xs sm:text-sm shadow-[0_10px_35px_rgba(194,164,114,0.45)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.7)] hover:scale-105 transition-all duration-300 border border-amber-300 cursor-pointer"
           title="MT-01 · Especialista MasterTech"
         >
           <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md">
-              <Bot size={18} className="text-white animate-pulse" />
+            <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md">
+              <Bot size={18} className="text-black animate-pulse" />
             </div>
-            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full animate-ping" />
-            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full animate-ping" />
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full" />
           </div>
           <div className="text-left hidden sm:block">
-            <div className="text-[11px] font-black tracking-wider uppercase leading-none text-white">MT-01 · IA MasterTech</div>
-            <div className="text-[9px] text-blue-200 font-medium leading-tight mt-0.5">Asesor Automotriz & VIN</div>
+            <div className="text-[11px] font-black tracking-wider uppercase leading-none text-black">MT-01 · IA MASTERTECH</div>
+            <div className="text-[9px] text-zinc-950 font-bold leading-tight mt-0.5">Asesor Automotriz & VIN</div>
           </div>
         </button>
       </div>
 
-      {/* Floating Chat Modal Popup */}
+      {/* Floating Chat Modal Popup aligned with MasterTech Theme */}
       {isOpen && (
-        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[420px] h-full sm:h-[620px] max-h-[100vh] bg-[#0d0e12] border border-blue-500/30 sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
-          {/* Header Header Bar */}
-          <div className="bg-gradient-to-r from-[#111827] via-[#1e1b4b] to-[#111827] p-3.5 border-b border-white/10 flex items-center justify-between shrink-0 shadow-lg">
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[420px] h-full sm:h-[620px] max-h-[100vh] bg-[#0d0e12] border border-amber-500/40 sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+          {/* Header Bar */}
+          <div className="bg-gradient-to-r from-[#0d0e12] via-[#181a23] to-[#0d0e12] p-3.5 border-b border-amber-500/30 flex items-center justify-between shrink-0 shadow-lg">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 shadow-md flex items-center justify-center relative">
-                <Bot size={22} className="text-white" />
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-md flex items-center justify-center relative">
+                <Bot size={22} className="text-black" />
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
               </div>
 
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-black text-white tracking-wide">MT-01 · Especialista MasterTech</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[9px] font-mono font-bold">
-                    Gemini Pro
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[9px] font-mono font-bold">
+                    Taller MasterTech
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-medium">
@@ -151,7 +151,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               <button
                 onClick={handleReset}
                 title="Reiniciar chat"
-                className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-2 rounded-xl text-zinc-400 hover:text-amber-400 hover:bg-white/10 transition-colors"
               >
                 <RotateCcw size={16} />
               </button>
@@ -182,19 +182,19 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 <div
                   className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-none shadow-md font-medium'
+                      ? 'bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-bold rounded-br-none shadow-md'
                       : 'bg-[#181a22] border border-white/10 text-zinc-200 rounded-bl-none shadow-lg'
                   }`}
                 >
                   {/* Decoded Vehicle Card (if VIN was parsed) */}
                   {msg.decodedVehicle && (
-                    <div className="mb-3 bg-gradient-to-br from-blue-950/80 via-slate-900 to-indigo-950/90 border border-blue-500/40 rounded-2xl p-3.5 shadow-xl text-white">
-                      <div className="flex items-center justify-between border-b border-blue-500/30 pb-2 mb-2">
-                        <div className="flex items-center gap-1.5 text-[11px] font-black text-blue-300 uppercase tracking-wider">
-                          <Car size={14} className="text-blue-400" />
+                    <div className="mb-3 bg-gradient-to-br from-amber-950/40 via-slate-900 to-[#12141a] border border-amber-500/40 rounded-2xl p-3.5 shadow-xl text-white">
+                      <div className="flex items-center justify-between border-b border-amber-500/30 pb-2 mb-2">
+                        <div className="flex items-center gap-1.5 text-[11px] font-black text-amber-300 uppercase tracking-wider">
+                          <Car size={14} className="text-amber-400" />
                           <span>ESPECIFICACIONES DE VEHÍCULO</span>
                         </div>
-                        <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-200 text-[9px] font-mono font-bold border border-blue-400/30">
+                        <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[9px] font-mono font-bold border border-amber-400/40">
                           {msg.decodedVehicle.vin}
                         </span>
                       </div>
@@ -226,7 +226,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                         </div>
                       </div>
 
-                      <div className="mt-2.5 pt-2 border-t border-blue-500/20 text-[10px] text-blue-300 font-bold flex items-center gap-1">
+                      <div className="mt-2.5 pt-2 border-t border-amber-500/20 text-[10px] text-amber-300 font-bold flex items-center gap-1">
                         <span>🚘 Decodificación Oficial de VIN</span>
                       </div>
                     </div>
@@ -249,7 +249,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                         href="https://wa.link/xnj37f"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold flex items-center gap-1.5 transition-all"
+                        className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold flex items-center gap-1.5 transition-all"
                       >
                         <Wrench size={12} />
                         <span>Agendar Diagnóstico por WhatsApp</span>
@@ -262,7 +262,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
             {isLoading && (
               <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-zinc-400 p-3 rounded-2xl rounded-bl-none text-xs w-fit">
-                <Bot size={14} className="animate-spin text-blue-400" />
+                <Bot size={14} className="animate-spin text-amber-400" />
                 <span>MT-01 analizando diagnóstico técnico...</span>
               </div>
             )}
@@ -273,13 +273,13 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
           <div className="px-3 py-2 bg-[#0d0e12] border-t border-white/5 flex flex-wrap gap-1.5 shrink-0">
             <button
               onClick={() => handleSend('JTEVA5AR1S5003715')}
-              className="px-2.5 py-1 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-300 text-[10px] font-bold transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
             >
               🚗 Probar VIN JTEVA5AR1S5003715
             </button>
             <button
               onClick={() => handleSend('¿Qué significa el código de falla P0300?')}
-              className="px-2.5 py-1 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold transition-all cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[10px] font-bold transition-all cursor-pointer"
             >
               ⚠️ Código DTC P0300
             </button>
@@ -304,12 +304,12 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Pregunta sobre fallas o pega un VIN de 17 dígitos..."
-              className="flex-1 bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition-all"
+              className="flex-1 bg-black/50 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-amber-500 transition-all"
             />
             <button
               type="submit"
               disabled={!inputText.trim() || isLoading}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-40 text-white transition-all shadow-md cursor-pointer"
+              className="p-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-40 text-black font-bold transition-all shadow-md cursor-pointer"
             >
               <Send size={16} />
             </button>
