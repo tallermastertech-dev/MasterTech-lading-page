@@ -1324,3 +1324,22 @@ body.theme-light .mt01-chat-modal .bot-loading-bubble,
   background-color: #181a22 !important;
   color: #ffffff !important;
 }
+
+/* ── ABSOLUTE FINAL OVERRIDE FOR HEADER CONTROL ICONS (RotateCcw & X) IN LIGHT MODE ── */
+html.theme-light .mt01-chat-header svg.mt01-header-btn-icon,
+body.theme-light .mt01-chat-header svg.mt01-header-btn-icon,
+.theme-light .mt01-chat-header svg.mt01-header-btn-icon,
+html.theme-light .mt01-chat-modal .hdr-btn svg,
+body.theme-light .mt01-chat-modal .hdr-btn svg,
+.theme-light .mt01-chat-modal .hdr-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
+html.theme-light .mt01-chat-modal .hdr-btn,
+body.theme-light .mt01-chat-modal .hdr-btn,
+.theme-light .mt01-chat-modal .hdr-btn {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
