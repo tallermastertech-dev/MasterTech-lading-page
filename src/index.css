@@ -1192,3 +1192,43 @@ body.theme-light .dark-vip-card svg,
   color-scheme: light;
 }
 
+/* ABSOLUTE FINAL OVERRIDE FOR IMPORT USA MODAL HEADER IN LIGHT MODE */
+html.theme-light .usa-import-modal,
+body.theme-light .usa-import-modal,
+.theme-light .usa-import-modal,
+.theme-light div.usa-import-modal {
+  background-color: #12141a !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .usa-import-header,
+body.theme-light .usa-import-header,
+.theme-light .usa-import-header,
+.theme-light div.usa-import-header {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .usa-import-header h2,
+body.theme-light .usa-import-header h2,
+.theme-light .usa-import-header h2 {
+  color: #ffffff !important;
+}
+
+html.theme-light .usa-import-header p,
+body.theme-light .usa-import-header p,
+.theme-light .usa-import-header p {
+  color: #cbd5e1 !important;
+}
+
+html.theme-light .usa-import-header span,
+body.theme-light .usa-import-header span,
+.theme-light .usa-import-header span {
+  color: #ffffff !important;
+}
+
+html.theme-light .usa-import-header span.text-blue-300,
+body.theme-light .usa-import-header span.text-blue-300 {
+  color: #93c5fd !important;
+}
+

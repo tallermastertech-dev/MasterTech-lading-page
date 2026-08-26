@@ -767,20 +767,20 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="bg-[#12141a] border border-blue-500/50 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8 max-h-[92vh] flex flex-col"
+                className="bg-[#12141a] border border-blue-500/50 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8 max-h-[92vh] flex flex-col usa-import-modal"
               >
                 {/* Header */}
-                <div className="p-5 sm:p-6 border-b border-white/10 bg-gradient-to-r from-blue-950/90 via-slate-900 to-blue-900/70 flex items-center justify-between">
+                <div className="p-5 sm:p-6 border-b border-white/10 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 flex items-center justify-between usa-import-header" style={{ backgroundColor: '#0f172a', color: '#ffffff' }}>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-blue-600/30 border border-blue-400/50 flex items-center justify-center text-blue-400 shadow-md shrink-0">
-                      <Plane size={20} className="animate-pulse" />
+                      <Plane size={20} className="animate-pulse text-blue-400" style={{ color: '#60a5fa' }} />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2">
-                        <span>Solicitud de Importación EE.UU.</span>
-                        <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-400/40 px-2 py-0.5 rounded-full font-bold">OEM Directo</span>
+                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2" style={{ color: '#ffffff' }}>
+                        <span style={{ color: '#ffffff' }}>Solicitud de Importación EE.UU.</span>
+                        <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-400/40 px-2 py-0.5 rounded-full font-bold" style={{ color: '#93c5fd', backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>OEM Directo</span>
                       </h2>
-                      <p className="text-zinc-400 text-xs mt-0.5">
+                      <p className="text-zinc-300 text-xs mt-0.5" style={{ color: '#cbd5e1' }}>
                         Ingresa el N° de parte o datos del repuesto para cotización express desde EE.UU.
                       </p>
                     </div>
@@ -788,10 +788,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                   <button
                     onClick={() => setIsUsaModalOpen(false)}
-                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+                    className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', color: '#ffffff' }}
                     title="Cerrar modal"
                   >
-                    <X size={18} />
+                    <X size={18} style={{ color: '#ffffff' }} />
                   </button>
                 </div>
 
