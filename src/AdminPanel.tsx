@@ -6807,26 +6807,117 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               </div>
 
-              {/* Servicio Requerido (Input de Texto Libre + Datalist de Sugerencias) */}
-              <div>
-                <label className="text-zinc-400 font-bold block mb-1">Servicio / Motivo de Cita (Escribe o Selecciona)</label>
-                <input
-                  type="text"
-                  list="servicios-preset-list"
-                  placeholder="Ej. Inspección Diagnóstica, Revisión de Frenos, Cambio de Aceite..."
-                  value={manualCitaData.servicio}
-                  onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
-                />
-                <datalist id="servicios-preset-list">
-                  <option value="Inspección Diagnóstica 25 Puntos Gratuita" />
-                  <option value="Mecánica General & Mantenimiento Preventivo" />
-                  <option value="Diagnóstico Electrónico & Ultrasonido Inyectores" />
-                  <option value="Frenos, Amortiguadores & Suspensión" />
-                  <option value="Climatización A/A (Carga Gas R134a)" />
-                  <option value="Jornada Preventiva Especial VIP" />
-                  <option value="Instalación de Repuestos Adquiridos" />
-                </datalist>
+              {/* Servicio / Motivo de Cita (Badges de Categoría con Colores + Select Categorizado + Text Input) */}
+              <div className="space-y-2">
+                <label className="text-zinc-400 font-bold block mb-1">
+                  Servicio / Motivo de Cita (Selecciona una categoría o escribe) *
+                </label>
+
+                {/* Badges Rápidos de Categoría con Colores Correspondientes */}
+                <div className="flex flex-wrap items-center gap-1.5 pb-1">
+                  <button
+                    type="button"
+                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Inspección Diagnóstica 25 Puntos Gratuita' })}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                      manualCitaData.servicio.includes('Inspección')
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500 shadow-md scale-105'
+                        : 'bg-black/40 text-amber-400/70 border-amber-500/30 hover:border-amber-500 hover:text-amber-300'
+                    }`}
+                  >
+                    <Calendar size={13} className="text-amber-400 shrink-0" />
+                    <span>Línea de Inspección</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Mecánica General & Mantenimiento Preventivo' })}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                      (manualCitaData.servicio.includes('Mecánica') || manualCitaData.servicio.includes('Taller') || manualCitaData.servicio.includes('Frenos'))
+                        ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500 shadow-md scale-105'
+                        : 'bg-black/40 text-cyan-400/70 border-cyan-500/30 hover:border-cyan-500 hover:text-cyan-300'
+                    }`}
+                  >
+                    <Wrench size={13} className="text-cyan-400 shrink-0" />
+                    <span>Citas de Taller</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Importación & Pedidos Repuestos EE.UU.' })}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                      (manualCitaData.servicio.includes('Importación') || manualCitaData.servicio.includes('Pedido') || manualCitaData.servicio.includes('Catálogo'))
+                        ? 'bg-blue-500/20 text-blue-300 border-blue-500 shadow-md scale-105'
+                        : 'bg-black/40 text-blue-400/70 border-blue-500/30 hover:border-blue-500 hover:text-blue-300'
+                    }`}
+                  >
+                    <Package size={13} className="text-blue-400 shrink-0" />
+                    <span>Pedidos Catálogo</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Postulación & Reclutamiento de Talento' })}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                      (manualCitaData.servicio.includes('Postulación') || manualCitaData.servicio.includes('Reclutamiento') || manualCitaData.servicio.includes('CV'))
+                        ? 'bg-purple-500/20 text-purple-300 border-purple-500 shadow-md scale-105'
+                        : 'bg-black/40 text-purple-400/70 border-purple-500/30 hover:border-purple-500 hover:text-purple-300'
+                    }`}
+                  >
+                    <Users size={13} className="text-purple-400 shrink-0" />
+                    <span>Postulaciones & CVs</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Recordatorio / Gestión Operativa Taller' })}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+                      (manualCitaData.servicio.includes('Recordatorio') || manualCitaData.servicio.includes('Operativa'))
+                        ? 'bg-amber-400/20 text-amber-200 border-amber-400 shadow-md scale-105'
+                        : 'bg-black/40 text-amber-200/70 border-amber-400/30 hover:border-amber-400 hover:text-amber-200'
+                    }`}
+                  >
+                    <Tag size={13} className="text-amber-300 shrink-0" />
+                    <span>Recordatorios</span>
+                  </button>
+                </div>
+
+                {/* Select de Opciones Categorizado + Input Editable */}
+                <div className="space-y-1.5">
+                  <select
+                    value={manualCitaData.servicio}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer font-bold"
+                  >
+                    <optgroup label="── 📅 Línea de Inspección (Dorado) ──" className="bg-[#12141a] text-amber-300 font-bold">
+                      <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
+                      <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
+                    </optgroup>
+                    <optgroup label="── 🛠️ Citas de Taller / Mecánica (Cian) ──" className="bg-[#12141a] text-cyan-300 font-bold">
+                      <option value="Mecánica General & Mantenimiento Preventivo">Mecánica General & Mantenimiento Preventivo</option>
+                      <option value="Diagnóstico Electrónico & Ultrasonido Inyectores">Diagnóstico Electrónico & Ultrasonido Inyectores</option>
+                      <option value="Frenos, Amortiguadores & Suspensión">Frenos, Amortiguadores & Suspensión</option>
+                      <option value="Climatización A/A (Carga Gas R134a)">Climatización A/A (Carga Gas R134a)</option>
+                      <option value="Instalación de Repuestos Adquiridos">Instalación de Repuestos Adquiridos</option>
+                    </optgroup>
+                    <optgroup label="── 📦 Pedidos Catálogo & Importación (Azul) ──" className="bg-[#12141a] text-blue-300 font-bold">
+                      <option value="Importación & Pedidos Repuestos EE.UU.">Importación & Pedidos Repuestos EE.UU.</option>
+                    </optgroup>
+                    <optgroup label="── 💼 Postulaciones & Talento (Púrpura) ──" className="bg-[#12141a] text-purple-300 font-bold">
+                      <option value="Postulación & Reclutamiento de Talento">Postulación & Reclutamiento de Talento</option>
+                    </optgroup>
+                    <optgroup label="── 🔔 Recordatorios Operativos (Naranja) ──" className="bg-[#12141a] text-amber-200 font-bold">
+                      <option value="Recordatorio / Gestión Operativa Taller">Recordatorio / Gestión Operativa Taller</option>
+                    </optgroup>
+                  </select>
+
+                  <input
+                    type="text"
+                    placeholder="O escribe un motivo de cita personalizado..."
+                    value={manualCitaData.servicio}
+                    onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white text-xs outline-none focus:border-primary"
+                  />
+                </div>
               </div>
 
               {/* Estado y Nivel de Prioridad Grid */}
