@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, RotateCcw, Car, Wrench } from 'lucide-react';
+import { Bot, X, Send, RotateCcw, Car, Wrench, Sparkles } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -99,48 +99,82 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
     setMessages([initialGreeting]);
   };
 
+  // Helper to render bold markdown **text** without raw asterisks
+  const renderFormattedText = (rawText: string, isUser: boolean) => {
+    const paragraphs = rawText.split('\n');
+    return (
+      <div className="space-y-1.5">
+        {paragraphs.map((para, pIdx) => {
+          if (!para.trim()) return <div key={pIdx} className="h-1" />;
+
+          const parts = para.split(/(\*\*.*?\*\*)/g);
+          return (
+            <p key={pIdx} className="leading-normal">
+              {parts.map((part, idx) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                  const boldContent = part.slice(2, -2);
+                  return (
+                    <strong
+                      key={idx}
+                      className={isUser ? 'font-black underline' : 'font-extrabold text-amber-300'}
+                    >
+                      {boldContent}
+                    </strong>
+                  );
+                }
+                return part;
+              })}
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <>
-      {/* Floating Trigger Button aligned with MasterTech Gold Theme */}
-      <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="group relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-black text-xs sm:text-sm shadow-[0_10px_35px_rgba(194,164,114,0.45)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.7)] hover:scale-105 transition-all duration-300 border border-amber-300 cursor-pointer"
-          title="MT-01 · Especialista MasterTech"
-        >
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md">
-              <Bot size={18} className="text-black animate-pulse" />
+      {/* Floating Trigger Button (Hidden when modal is open to avoid overlaps) */}
+      {!isOpen && (
+        <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="group relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-black text-xs sm:text-sm shadow-[0_10px_35px_rgba(194,164,114,0.45)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.7)] hover:scale-105 transition-all duration-300 border border-amber-300 cursor-pointer"
+            title="MT-01 · Especialista MasterTech"
+          >
+            <div className="relative">
+              <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md">
+                <Bot size={18} className="text-black animate-pulse" />
+              </div>
+              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full animate-ping" />
+              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full" />
             </div>
-            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full animate-ping" />
-            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full" />
-          </div>
-          <div className="text-left hidden sm:block">
-            <div className="text-[11px] font-black tracking-wider uppercase leading-none text-black">MT-01 · IA MASTERTECH</div>
-            <div className="text-[9px] text-zinc-950 font-bold leading-tight mt-0.5">Asesor Automotriz & VIN</div>
-          </div>
-        </button>
-      </div>
+            <div className="text-left hidden sm:block">
+              <div className="text-[11px] font-black tracking-wider uppercase leading-none text-black">MT-01 · IA MASTERTECH</div>
+              <div className="text-[9px] text-zinc-950 font-bold leading-tight mt-0.5">Asesor Automotriz & VIN</div>
+            </div>
+          </button>
+        </div>
+      )}
 
-      {/* Floating Chat Modal Popup aligned with MasterTech Theme */}
+      {/* Floating Chat Modal Popup (Positioned neatly within viewport bounds) */}
       {isOpen && (
-        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 w-full sm:w-[420px] h-full sm:h-[620px] max-h-[100vh] bg-[#0d0e12] border border-amber-500/40 sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[420px] h-[92vh] sm:h-[580px] max-h-[600px] bg-[#0d0e12] border border-amber-500/40 rounded-t-3xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-[9999] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
           {/* Header Bar */}
           <div className="bg-gradient-to-r from-[#0d0e12] via-[#181a23] to-[#0d0e12] p-3.5 border-b border-amber-500/30 flex items-center justify-between shrink-0 shadow-lg">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-md flex items-center justify-center relative">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 p-0.5 shadow-md flex items-center justify-center relative shrink-0">
                 <Bot size={22} className="text-black" />
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
               </div>
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-black text-white tracking-wide">MT-01 · Especialista MasterTech</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[9px] font-mono font-bold">
+                  <h3 className="text-xs sm:text-sm font-black text-white tracking-wide">MT-01 · Especialista MasterTech</h3>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[9px] font-mono font-bold shrink-0">
                     Taller MasterTech
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-medium">
+                <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 font-medium mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Decodificador VIN & Asesor Automotriz</span>
                 </div>
@@ -160,7 +194,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 title="Cerrar modal"
                 className="p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
           </div>
@@ -232,26 +266,19 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                     </div>
                   )}
 
-                  {/* Message content rendering */}
-                  <div className="whitespace-pre-wrap space-y-1">
-                    {msg.text.split('\n').map((line, i) => {
-                      if (line.startsWith('**') && line.endsWith('**')) {
-                        return <strong key={i} className="block text-white font-bold">{line.replace(/\*\*/g, '')}</strong>;
-                      }
-                      return <p key={i}>{line}</p>;
-                    })}
-                  </div>
+                  {/* Message formatted rendering */}
+                  {renderFormattedText(msg.text, msg.sender === 'user')}
 
                   {/* WhatsApp scheduling action button */}
                   {msg.sender === 'bot' && (
-                    <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between">
+                    <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between">
                       <a
                         href="https://wa.link/xnj37f"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[10px] font-bold flex items-center gap-1.5 transition-all"
+                        className="w-full justify-center px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-black font-black text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer hover:scale-[1.02]"
                       >
-                        <Wrench size={12} />
+                        <Wrench size={14} className="text-black fill-current" />
                         <span>Agendar Diagnóstico por WhatsApp</span>
                       </a>
                     </div>
@@ -261,7 +288,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
             ))}
 
             {isLoading && (
-              <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-zinc-400 p-3 rounded-2xl rounded-bl-none text-xs w-fit">
+              <div className="flex items-center gap-2 bg-[#181a22] border border-white/10 text-zinc-300 p-3 rounded-2xl rounded-bl-none text-xs w-fit">
                 <Bot size={14} className="animate-spin text-amber-400" />
                 <span>MT-01 analizando diagnóstico técnico...</span>
               </div>
