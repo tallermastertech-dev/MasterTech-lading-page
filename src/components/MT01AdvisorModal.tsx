@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, RotateCcw, Car, Wrench, Sparkles } from 'lucide-react';
+import { Bot, X, Send, RotateCcw, Car, Wrench } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -133,24 +133,28 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
 
   return (
     <>
-      {/* Floating Trigger Button (Hidden when modal is open to avoid overlaps) */}
+      {/* Floating Trigger Button: Midnight Black Glassmorphism + Radiant Gold Icon */}
       {!isOpen && (
         <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-2">
           <button
             onClick={() => setIsOpen(true)}
-            className="group relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-black text-xs sm:text-sm shadow-[0_10px_35px_rgba(194,164,114,0.45)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.7)] hover:scale-105 transition-all duration-300 border border-amber-300 cursor-pointer"
+            className="group relative flex items-center gap-3 px-4.5 py-3 rounded-full bg-[#12141a]/95 backdrop-blur-xl border border-[#C2A472]/50 hover:border-[#C2A472] text-white font-bold text-xs sm:text-sm shadow-[0_10px_35px_rgba(0,0,0,0.85)] hover:shadow-[0_15px_45px_rgba(194,164,114,0.35)] hover:scale-105 transition-all duration-300 cursor-pointer"
             title="MT-01 · Especialista MasterTech"
           >
             <div className="relative">
-              <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md">
-                <Bot size={18} className="text-black animate-pulse" />
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 via-[#C2A472] to-amber-600 flex items-center justify-center shadow-[0_0_12px_rgba(194,164,114,0.5)]">
+                <Bot size={19} className="text-black animate-pulse" />
               </div>
-              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full animate-ping" />
-              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-black rounded-full" />
+              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-[#12141a] rounded-full animate-ping" />
+              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-[#12141a] rounded-full" />
             </div>
+
             <div className="text-left hidden sm:block">
-              <div className="text-[11px] font-black tracking-wider uppercase leading-none text-black">MT-01 · IA MASTERTECH</div>
-              <div className="text-[9px] text-zinc-950 font-bold leading-tight mt-0.5">Asesor Automotriz & VIN</div>
+              <div className="text-[11px] font-black tracking-wider uppercase leading-none text-white flex items-center gap-1.5">
+                <span>MT-01 · IA MASTERTECH</span>
+                <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[8px] font-mono border border-amber-500/30">VIP</span>
+              </div>
+              <div className="text-[9px] text-zinc-400 font-medium leading-tight mt-1">Asesor Automotriz & VIN</div>
             </div>
           </button>
         </div>
@@ -216,7 +220,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                 <div
                   className={`max-w-[88%] rounded-2xl p-3.5 text-xs leading-relaxed ${
                     msg.sender === 'user'
-                      ? 'bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-bold rounded-br-none shadow-md'
+                      ? 'bg-gradient-to-r from-amber-500 via-[#C2A472] to-amber-600 text-black font-black rounded-br-none shadow-md'
                       : 'bg-[#181a22] border border-white/10 text-zinc-200 rounded-bl-none shadow-lg'
                   }`}
                 >
