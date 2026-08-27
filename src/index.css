@@ -322,21 +322,31 @@ body.theme-light .mt01-chat-header span,
 
 html.theme-light .mt01-chat-modal button.hdr-btn,
 body.theme-light .mt01-chat-modal button.hdr-btn,
-.theme-light .mt01-chat-modal button.hdr-btn {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+.theme-light .mt01-chat-modal button.hdr-btn,
+html.theme-light .mt01-chat-modal button.mt01-hdr-btn,
+body.theme-light .mt01-chat-modal button.mt01-hdr-btn,
+.theme-light .mt01-chat-modal button.mt01-hdr-btn {
+  background-color: #1e222d !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(194, 164, 114, 0.45) !important;
 }
 
 html.theme-light .mt01-chat-modal button.hdr-btn svg,
-body.theme-light .mt01-chat-modal button.hdr-btn svg {
-  color: #ffffff !important;
+body.theme-light .mt01-chat-modal button.hdr-btn svg,
+html.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
+body.theme-light .mt01-chat-modal button.mt01-hdr-btn svg {
+  color: #fbbf24 !important;
+  stroke: #fbbf24 !important;
+  fill: none !important;
 }
 
 html.theme-light .mt01-chat-modal button.hdr-btn:hover,
-body.theme-light .mt01-chat-modal button.hdr-btn:hover {
-  background-color: rgba(255, 255, 255, 0.25) !important;
+body.theme-light .mt01-chat-modal button.hdr-btn:hover,
+html.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
+body.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover {
+  background-color: rgba(251, 191, 36, 0.25) !important;
   color: #fbbf24 !important;
+  border-color: #fbbf24 !important;
 }
 
 .theme-light .mt01-chat-modal .bot-bubble p {
@@ -1355,22 +1365,38 @@ body.theme-light .mt01-chat-modal .bot-loading-bubble,
   color: #ffffff !important;
 }
 
-/* ── ABSOLUTE FINAL OVERRIDE FOR HEADER CONTROL ICONS (RotateCcw & X) IN LIGHT MODE ── */
-html.theme-light .mt01-chat-header svg.mt01-header-btn-icon,
-body.theme-light .mt01-chat-header svg.mt01-header-btn-icon,
-.theme-light .mt01-chat-header svg.mt01-header-btn-icon,
-html.theme-light .mt01-chat-modal .hdr-btn svg,
-body.theme-light .mt01-chat-modal .hdr-btn svg,
-.theme-light .mt01-chat-modal .hdr-btn svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-  fill: none !important;
+/* ── ABSOLUTE FINAL OVERRIDE FOR HEADER CONTROL ICONS (RotateCcw & X) IN LIGHT AND DARK MODE ── */
+.mt01-chat-modal button.mt01-hdr-btn,
+.theme-light .mt01-chat-modal button.mt01-hdr-btn,
+html.theme-light .mt01-chat-modal button.mt01-hdr-btn,
+body.theme-light .mt01-chat-modal button.mt01-hdr-btn,
+.mt01-chat-header button.mt01-hdr-btn,
+.theme-light .mt01-chat-header button.mt01-hdr-btn {
+  background-color: #1e222d !important;
+  border: 1px solid rgba(194, 164, 114, 0.45) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
 }
 
-html.theme-light .mt01-chat-modal .hdr-btn,
-body.theme-light .mt01-chat-modal .hdr-btn,
-.theme-light .mt01-chat-modal .hdr-btn {
-  background-color: rgba(255, 255, 255, 0.12) !important;
+.mt01-chat-modal button.mt01-hdr-btn:hover,
+.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
+html.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
+body.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
+.mt01-chat-header button.mt01-hdr-btn:hover {
+  background-color: rgba(251, 191, 36, 0.2) !important;
+  border-color: #fbbf24 !important;
+}
+
+.mt01-chat-modal button.mt01-hdr-btn svg,
+.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
+html.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
+body.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
+.mt01-chat-modal svg.mt01-header-btn-icon,
+.theme-light .mt01-chat-modal svg.mt01-header-btn-icon,
+html.theme-light .mt01-chat-modal svg.mt01-header-btn-icon,
+body.theme-light .mt01-chat-modal svg.mt01-header-btn-icon {
+  color: #fbbf24 !important;
+  stroke: #fbbf24 !important;
+  fill: none !important;
 }
 
 /* ── TALLER STATUS BADGE IMMUNITY (HERO SECTION BADGE) ── */

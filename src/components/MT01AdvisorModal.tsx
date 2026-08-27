@@ -196,20 +196,20 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
             {/* Header Controls */}
             <div className="flex items-center gap-1.5 shrink-0 pl-2">
               <button
+                type="button"
                 onClick={handleReset}
                 title="Reiniciar chat"
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all cursor-pointer hdr-btn"
-                style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
+                className="w-8 h-8 rounded-full bg-[#1e222d] hover:bg-amber-500/30 border border-[#C2A472]/40 flex items-center justify-center transition-all cursor-pointer mt01-hdr-btn"
               >
-                <RotateCcw size={15} className="mt01-header-btn-icon" style={{ color: '#ffffff', stroke: '#ffffff', fill: 'none' }} />
+                <RotateCcw size={15} className="mt01-header-btn-icon" />
               </button>
               <button
+                type="button"
                 onClick={() => setIsOpen(false)}
                 title="Cerrar modal"
-                className="w-8 h-8 rounded-full bg-white/10 hover:bg-amber-500/30 flex items-center justify-center transition-all cursor-pointer hdr-btn"
-                style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
+                className="w-8 h-8 rounded-full bg-[#1e222d] hover:bg-red-500/30 border border-[#C2A472]/40 flex items-center justify-center transition-all cursor-pointer mt01-hdr-btn"
               >
-                <X size={18} className="mt01-header-btn-icon" style={{ color: '#ffffff', stroke: '#ffffff', fill: 'none' }} />
+                <X size={18} className="mt01-header-btn-icon" />
               </button>
             </div>
           </div>
