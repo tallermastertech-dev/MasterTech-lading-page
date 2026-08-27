@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, TrendingUp, Calculator, DollarSign, Euro, Coins, Zap, X, ChevronDown } from 'lucide-react';
+import { RefreshCw, TrendingUp, Calculator, DollarSign, Euro, Coins, Zap, X, ChevronDown, Copy, Check } from 'lucide-react';
 
 interface RateData {
   bcv_usd: number;
@@ -27,6 +27,14 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
   
   // Quick Automotive Cost Calculator State
   const [calcAmountUSD, setCalcAmountUSD] = useState<string>('50');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopyAmount = (text: string, fieldKey: string) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopiedField(fieldKey);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   const fetchRates = async () => {
     setIsLoading(true);
@@ -290,29 +298,71 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 bg-white dark:bg-black/70 border border-slate-300 dark:border-primary/30 rounded-xl px-4 py-2.5 text-xs font-mono shadow-xs">
-            <div>
-              <span className="text-[10px] uppercase tracking-wider text-emerald-900 dark:text-emerald-400 font-black flex items-center gap-1">
-                <DollarSign size={11} /> DÓLAR BCV
-              </span>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 bg-white dark:bg-black/70 border border-slate-300 dark:border-primary/30 rounded-xl px-2 sm:px-3 py-1.5 text-xs font-mono shadow-xs">
+            {/* DÓLAR BCV */}
+            <div 
+              onClick={() => handleCopyAmount(`${formatNumber(totalVES_USD_BCV)} Bs.`, 'usd_bcv')}
+              className="group flex flex-col cursor-pointer hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20 px-2.5 py-1 rounded-lg transition-all border border-transparent hover:border-emerald-500/30"
+              title="Haz clic para copiar este monto en Bolívares"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-emerald-900 dark:text-emerald-400 font-black flex items-center gap-1">
+                  <DollarSign size={11} /> DÓLAR BCV
+                </span>
+                {copiedField === 'usd_bcv' ? (
+                  <span className="text-[9px] text-emerald-600 dark:text-emerald-300 flex items-center gap-0.5 bg-emerald-500/20 px-1 py-0.2 rounded font-bold">
+                    <Check size={10} /> Copiado
+                  </span>
+                ) : (
+                  <Copy size={11} className="text-emerald-700 dark:text-emerald-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                )}
+              </div>
               <span className="text-emerald-800 dark:text-emerald-400 font-black text-sm">{formatNumber(totalVES_USD_BCV)} Bs.</span>
             </div>
 
             <span className="text-slate-400 dark:text-zinc-600 hidden sm:inline-block font-black">|</span>
 
-            <div>
-              <span className="text-[10px] uppercase tracking-wider text-cyan-900 dark:text-cyan-400 font-black flex items-center gap-1">
-                <Euro size={11} /> EURO BCV
-              </span>
+            {/* EURO BCV */}
+            <div 
+              onClick={() => handleCopyAmount(`${formatNumber(totalVES_EUR_BCV)} Bs.`, 'eur_bcv')}
+              className="group flex flex-col cursor-pointer hover:bg-cyan-500/10 dark:hover:bg-cyan-500/20 px-2.5 py-1 rounded-lg transition-all border border-transparent hover:border-cyan-500/30"
+              title="Haz clic para copiar este monto en Bolívares"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-cyan-900 dark:text-cyan-400 font-black flex items-center gap-1">
+                  <Euro size={11} /> EURO BCV
+                </span>
+                {copiedField === 'eur_bcv' ? (
+                  <span className="text-[9px] text-cyan-600 dark:text-cyan-300 flex items-center gap-0.5 bg-cyan-500/20 px-1 py-0.2 rounded font-bold">
+                    <Check size={10} /> Copiado
+                  </span>
+                ) : (
+                  <Copy size={11} className="text-cyan-700 dark:text-cyan-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                )}
+              </div>
               <span className="text-cyan-800 dark:text-cyan-300 font-black text-sm">{formatNumber(totalVES_EUR_BCV)} Bs.</span>
             </div>
 
             <span className="text-slate-400 dark:text-zinc-600 hidden sm:inline-block font-black">|</span>
 
-            <div>
-              <span className="text-[10px] uppercase tracking-wider text-amber-900 dark:text-amber-400 font-black flex items-center gap-1">
-                <Coins size={11} /> USDT P2P
-              </span>
+            {/* USDT P2P */}
+            <div 
+              onClick={() => handleCopyAmount(`${formatNumber(totalVES_USDT)} Bs.`, 'usdt_p2p')}
+              className="group flex flex-col cursor-pointer hover:bg-amber-500/10 dark:hover:bg-amber-500/20 px-2.5 py-1 rounded-lg transition-all border border-transparent hover:border-amber-500/30"
+              title="Haz clic para copiar este monto en Bolívares"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-amber-900 dark:text-amber-400 font-black flex items-center gap-1">
+                  <Coins size={11} /> USDT P2P
+                </span>
+                {copiedField === 'usdt_p2p' ? (
+                  <span className="text-[9px] text-amber-600 dark:text-amber-300 flex items-center gap-0.5 bg-amber-500/20 px-1 py-0.2 rounded font-bold">
+                    <Check size={10} /> Copiado
+                  </span>
+                ) : (
+                  <Copy size={11} className="text-amber-700 dark:text-amber-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                )}
+              </div>
               <span className="text-amber-800 dark:text-amber-300 font-black text-sm">{formatNumber(totalVES_USDT)} Bs.</span>
             </div>
           </div>
@@ -340,47 +390,55 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 shrink-0">
-                <Zap size={16} className="animate-pulse" />
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                <TrendingUp size={16} />
               </div>
               <div>
-                <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-white block leading-tight font-display">
-                  Tasas & Brecha Cambiaria
-                </span>
-                <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1.5 mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  EN VIVO • BCV & BINANCE
-                </span>
+                <h4 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-1.5">
+                  <span>Monitor Cambiario Taller</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </h4>
+                <p className="text-[10px] text-zinc-400 font-mono">Tasas Oficiales & Paralelo P2P</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <button
+            <div className="flex items-center gap-1">
+              <button 
                 onClick={fetchRates}
                 disabled={isLoading}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer"
                 title="Actualizar tasas"
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
               >
-                <RefreshCw size={14} className={isLoading ? "animate-spin text-amber-400" : ""} />
+                <RefreshCw size={13} className={isLoading ? 'animate-spin text-amber-400' : ''} />
               </button>
-              <button
+              <button 
                 onClick={() => setIsOpen(false)}
-                className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-300 hover:text-red-400 transition-colors cursor-pointer"
-                title="Ocultar"
+                title="Cerrar panel"
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition-colors cursor-pointer"
               >
-                <X size={16} />
+                <X size={14} />
               </button>
             </div>
           </div>
 
-          {/* 3 Currency Rates (3 Columns Grid - High Legibility) */}
+          {/* 3 Currency Rates (3 Columns Grid - High Legibility & 1-Click Copy) */}
           <div className="grid grid-cols-3 gap-2.5">
             {/* Dólar BCV */}
-            <div className="bg-[#131620] p-2.5 sm:p-3 rounded-2xl border border-emerald-500/40 shadow-md">
+            <div 
+              onClick={() => handleCopyAmount(`${formatNumber(rates.bcv_usd)} Bs.`, 'rate_usd')}
+              className="bg-[#131620] hover:bg-emerald-500/10 p-2.5 sm:p-3 rounded-2xl border border-emerald-500/40 shadow-md cursor-pointer transition-all group"
+              title="Haz clic para copiar tasa"
+            >
               <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black text-emerald-400 uppercase tracking-wide">
                 <span>$ BCV</span>
-                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300">Oficial</span>
+                {copiedField === 'rate_usd' ? (
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-200 flex items-center gap-0.5">
+                    <Check size={8} /> Copiado
+                  </span>
+                ) : (
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300">Oficial</span>
+                )}
               </div>
               <div className="text-base sm:text-lg font-black text-white font-mono mt-1 tracking-tight">
                 {formatNumber(rates.bcv_usd)} <small className="text-[9px] text-emerald-400 font-bold">Bs.</small>
@@ -388,10 +446,20 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             </div>
 
             {/* Euro BCV */}
-            <div className="bg-[#131620] p-2.5 sm:p-3 rounded-2xl border border-cyan-500/40 shadow-md">
+            <div 
+              onClick={() => handleCopyAmount(`${formatNumber(rates.bcv_eur)} Bs.`, 'rate_eur')}
+              className="bg-[#131620] hover:bg-cyan-500/10 p-2.5 sm:p-3 rounded-2xl border border-cyan-500/40 shadow-md cursor-pointer transition-all group"
+              title="Haz clic para copiar tasa"
+            >
               <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black text-cyan-400 uppercase tracking-wide">
                 <span>€ BCV</span>
-                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300">Oficial</span>
+                {copiedField === 'rate_eur' ? (
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/30 text-cyan-200 flex items-center gap-0.5">
+                    <Check size={8} /> Copiado
+                  </span>
+                ) : (
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300">Oficial</span>
+                )}
               </div>
               <div className="text-base sm:text-lg font-black text-white font-mono mt-1 tracking-tight">
                 {formatNumber(rates.bcv_eur)} <small className="text-[9px] text-cyan-400 font-bold">Bs.</small>
@@ -399,10 +467,20 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             </div>
 
             {/* USDT Binance */}
-            <div className="bg-[#131620] p-2.5 sm:p-3 rounded-2xl border border-amber-500/40 shadow-md">
+            <div 
+              onClick={() => handleCopyAmount(`${formatNumber(rates.usdt)} Bs.`, 'rate_usdt')}
+              className="bg-[#131620] hover:bg-amber-500/10 p-2.5 sm:p-3 rounded-2xl border border-amber-500/40 shadow-md cursor-pointer transition-all group"
+              title="Haz clic para copiar tasa"
+            >
               <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-black text-amber-400 uppercase tracking-wide">
                 <span>USDT</span>
-                <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300">P2P</span>
+                {copiedField === 'rate_usdt' ? (
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-500/30 text-amber-200 flex items-center gap-0.5">
+                    <Check size={8} /> Copiado
+                  </span>
+                ) : (
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-500/20 text-amber-300">P2P</span>
+                )}
               </div>
               <div className="text-base sm:text-lg font-black text-white font-mono mt-1 tracking-tight">
                 {formatNumber(rates.usdt)} <small className="text-[9px] text-amber-400 font-bold">Bs.</small>
@@ -410,12 +488,14 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             </div>
           </div>
 
-          {/* All 3 Exchange Rate Gaps / Brechas (3 Columns Grid - High Legibility) */}
-          <div className="space-y-1.5">
-            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 block px-1">
-              Brechas Cambiarias (Diferencial %)
-            </span>
-            <div className="grid grid-cols-3 gap-2.5">
+          {/* Differential / Brecha Badges */}
+          <div className="bg-[#131620]/60 p-3 rounded-2xl border border-white/10 space-y-2">
+            <div className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Brechas Porcentuales (Diferencial)</span>
+              <span className="text-amber-400">En Vivo</span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
               {/* 1. USDT vs $ BCV */}
               <div className="bg-[#131620] p-2.5 rounded-2xl border border-rose-500/40 shadow-md">
                 <div className="text-[9.5px] sm:text-[10px] font-bold text-rose-300 uppercase leading-tight truncate">
@@ -448,7 +528,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             </div>
           </div>
 
-          {/* Compact Workshop Budget Calculator (High Legibility) */}
+          {/* Compact Workshop Budget Calculator (High Legibility & 1-Click Copy) */}
           <div className="bg-[#131620] border border-white/15 rounded-2xl p-3.5 space-y-2.5 shadow-lg">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-black uppercase tracking-wider text-white flex items-center gap-1.5">
@@ -469,18 +549,59 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
               </div>
             </div>
 
-            {/* Instant conversion outputs (Clear and Bold) */}
+            {/* Instant conversion outputs (Clear, Bold, and 1-Click Copy) */}
             <div className="space-y-1.5 text-xs font-mono pt-1">
-              <div className="flex justify-between items-center bg-black/50 px-3 py-2 rounded-xl border border-emerald-500/20">
-                <span className="text-emerald-400 font-bold text-xs">En Dólar BCV:</span>
+              <div 
+                onClick={() => handleCopyAmount(`${formatNumber(totalVES_USD_BCV)} Bs.`, 'pop_usd')}
+                className="group flex justify-between items-center bg-black/50 hover:bg-emerald-500/15 px-3 py-2 rounded-xl border border-emerald-500/20 hover:border-emerald-500/40 cursor-pointer transition-all"
+                title="Haz clic para copiar"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-emerald-400 font-bold text-xs">En Dólar BCV:</span>
+                  {copiedField === 'pop_usd' ? (
+                    <span className="text-[10px] text-emerald-300 flex items-center gap-0.5 bg-emerald-500/20 px-1.5 py-0.5 rounded font-bold">
+                      <Check size={11} /> ¡Copiado!
+                    </span>
+                  ) : (
+                    <Copy size={11} className="text-emerald-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                  )}
+                </div>
                 <span className="text-white font-black text-sm sm:text-base">{formatNumber(totalVES_USD_BCV)} <small className="text-[10px] text-emerald-400">Bs.</small></span>
               </div>
-              <div className="flex justify-between items-center bg-black/50 px-3 py-2 rounded-xl border border-cyan-500/20">
-                <span className="text-cyan-400 font-bold text-xs">En Euro BCV:</span>
+
+              <div 
+                onClick={() => handleCopyAmount(`${formatNumber(totalVES_EUR_BCV)} Bs.`, 'pop_eur')}
+                className="group flex justify-between items-center bg-black/50 hover:bg-cyan-500/15 px-3 py-2 rounded-xl border border-cyan-500/20 hover:border-cyan-500/40 cursor-pointer transition-all"
+                title="Haz clic para copiar"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-cyan-400 font-bold text-xs">En Euro BCV:</span>
+                  {copiedField === 'pop_eur' ? (
+                    <span className="text-[10px] text-cyan-300 flex items-center gap-0.5 bg-cyan-500/20 px-1.5 py-0.5 rounded font-bold">
+                      <Check size={11} /> ¡Copiado!
+                    </span>
+                  ) : (
+                    <Copy size={11} className="text-cyan-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                  )}
+                </div>
                 <span className="text-white font-black text-sm sm:text-base">{formatNumber(totalVES_EUR_BCV)} <small className="text-[10px] text-cyan-400">Bs.</small></span>
               </div>
-              <div className="flex justify-between items-center bg-black/50 px-3 py-2 rounded-xl border border-amber-500/20">
-                <span className="text-amber-400 font-bold text-xs">En USDT P2P:</span>
+
+              <div 
+                onClick={() => handleCopyAmount(`${formatNumber(totalVES_USDT)} Bs.`, 'pop_usdt')}
+                className="group flex justify-between items-center bg-black/50 hover:bg-amber-500/15 px-3 py-2 rounded-xl border border-amber-500/20 hover:border-amber-500/40 cursor-pointer transition-all"
+                title="Haz clic para copiar"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-amber-400 font-bold text-xs">En USDT P2P:</span>
+                  {copiedField === 'pop_usdt' ? (
+                    <span className="text-[10px] text-amber-300 flex items-center gap-0.5 bg-amber-500/20 px-1.5 py-0.5 rounded font-bold">
+                      <Check size={11} /> ¡Copiado!
+                    </span>
+                  ) : (
+                    <Copy size={11} className="text-amber-400 opacity-40 group-hover:opacity-100 transition-opacity" />
+                  )}
+                </div>
                 <span className="text-white font-black text-sm sm:text-base">{formatNumber(totalVES_USDT)} <small className="text-[10px] text-amber-400">Bs.</small></span>
               </div>
             </div>
