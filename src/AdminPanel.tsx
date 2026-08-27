@@ -619,7 +619,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     vehiculo: '',
     fecha: new Date().toISOString().split('T')[0],
     hora: '09:00',
-    servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+    servicio: 'Diagnóstico',
     notas: '',
     status: 'Confirmado',
     prioridad: 'media'
@@ -896,6 +896,117 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     return '09:00 AM';
   };
 
+  // Estado para el mensaje editable de WhatsApp en el modal de detalle de cita
+  const [citaWaMessage, setCitaWaMessage] = useState<string>('');
+  const [isCopiedWaMsg, setIsCopiedWaMsg] = useState(false);
+  const [isEditingCita, setIsEditingCita] = useState(false);
+  const [isSavingEditedCita, setIsSavingEditedCita] = useState(false);
+  const [editCitaData, setEditCitaData] = useState<{
+    nombre: string;
+    telefono: string;
+    vehiculo: string;
+    fecha: string;
+    hora: string;
+    servicio: string;
+    notas: string;
+    status: string;
+    prioridad: string;
+  }>({
+    nombre: '',
+    telefono: '',
+    vehiculo: '',
+    fecha: '',
+    hora: '09:00',
+    servicio: 'Diagnóstico',
+    notas: '',
+    status: 'Pendiente',
+    prioridad: 'media'
+  });
+
+  useEffect(() => {
+    if (selectedDayCita) {
+      const nombre = selectedDayCita.nombre ? selectedDayCita.nombre.trim() : 'Cliente';
+      const dateStr = getLeadDateStr(selectedDayCita) || new Date().toISOString().split('T')[0];
+      const timeStr = getLeadTimeStr(selectedDayCita) || '09:00 AM';
+      
+      let time24 = '09:00';
+      const matchTime = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)?/i);
+      if (matchTime) {
+        let h = parseInt(matchTime[1], 10);
+        const m = matchTime[2];
+        const ampm = matchTime[3]?.toUpperCase();
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        time24 = `${String(h).padStart(2, '0')}:${m}`;
+      }
+
+      const prio = selectedDayCita.prioridad || (String(selectedDayCita.falla || '').toLowerCase().includes('[prioridad: alta]') ? 'alta' : String(selectedDayCita.falla || '').toLowerCase().includes('[prioridad: baja]') ? 'baja' : 'media');
+      const rawNotes = cleanFallaNotes(selectedDayCita.falla) || '';
+
+      setEditCitaData({
+        nombre: selectedDayCita.nombre || '',
+        telefono: selectedDayCita.telefono || '',
+        vehiculo: selectedDayCita.vehiculo || '',
+        fecha: dateStr,
+        hora: time24,
+        servicio: selectedDayCita.servicio || 'Diagnóstico',
+        notas: rawNotes,
+        status: selectedDayCita.status || 'Pendiente',
+        prioridad: prio
+      });
+
+      const defaultMsg = `Hola ${nombre}, te escribimos desde Taller MasterTech para confirmar tu cita agendada para el ${dateStr} a las ${timeStr}.`;
+      setCitaWaMessage(defaultMsg);
+      setIsCopiedWaMsg(false);
+      setIsEditingCita(false);
+    }
+  }, [selectedDayCita]);
+
+  const handleSaveEditedCita = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedDayCita) return;
+    setIsSavingEditedCita(true);
+
+    try {
+      const fechaHoraFormatted = `${editCitaData.fecha} ${editCitaData.hora}`;
+      const cleanNotes = editCitaData.notas ? `[Prioridad: ${editCitaData.prioridad}] ${editCitaData.notas}` : `[Prioridad: ${editCitaData.prioridad}]`;
+      const updates = {
+        nombre: editCitaData.nombre.trim(),
+        telefono: editCitaData.telefono.trim(),
+        vehiculo: editCitaData.vehiculo.trim() || 'Vehículo no especificado',
+        servicio: editCitaData.servicio || 'Diagnóstico',
+        fecha_hora: fechaHoraFormatted,
+        status: editCitaData.status,
+        prioridad: editCitaData.prioridad,
+        falla: cleanNotes
+      };
+
+      const updatedLeadObj = { ...selectedDayCita, ...updates };
+      setSelectedDayCita(updatedLeadObj);
+
+      // Update leads state in memory
+      const updatedLeads = leads.map(l => String(l.id) === String(selectedDayCita.id) ? { ...l, ...updates } : l);
+      setLeads(updatedLeads);
+
+      logClientAction('Editó Cita', 'CITAS', `Actualizó los datos de la cita de ${updates.nombre} (${updates.vehiculo}) para el ${fechaHoraFormatted}.`);
+
+      await fetch(`/api/leads/${selectedDayCita.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updates)
+      });
+
+      setIsEditingCita(false);
+    } catch (err) {
+      console.error("Error al guardar cambios de la cita:", err);
+    } finally {
+      setIsSavingEditedCita(false);
+    }
+  };
+
   // Handler: Guardar Cita Manual
   const handleSaveManualCita = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -944,7 +1055,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         vehiculo: '',
         fecha: new Date().toISOString().split('T')[0],
         hora: '09:00',
-        servicio: 'Inspección Diagnóstica 25 Puntos Gratuita',
+        servicio: 'Diagnóstico',
         notas: '',
         status: 'Confirmado',
         prioridad: 'media'
@@ -6872,15 +6983,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 <div className="flex flex-wrap items-center gap-1.5 pb-1">
                   <button
                     type="button"
-                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Inspección Diagnóstica 25 Puntos Gratuita' })}
+                    onClick={() => setManualCitaData({ ...manualCitaData, servicio: 'Diagnóstico' })}
                     className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
-                      manualCitaData.servicio.includes('Inspección')
+                      (manualCitaData.servicio.includes('Diagnóstico') || manualCitaData.servicio.includes('Inspección'))
                         ? 'bg-amber-500/20 text-amber-300 border-amber-500 shadow-md scale-105'
                         : 'bg-black/40 text-amber-400/70 border-amber-500/30 hover:border-amber-500 hover:text-amber-300'
                     }`}
                   >
-                    <Calendar size={13} className="text-amber-400 shrink-0" />
-                    <span>Línea de Inspección</span>
+                    <Search size={13} className="text-amber-400 shrink-0" />
+                    <span>Diagnóstico</span>
                   </button>
 
                   <button
@@ -6936,14 +7047,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </button>
                 </div>
 
-                {/* Select de Opciones Categorizado + Input Editable */}
-                <div className="space-y-1.5">
+                {/* Select de Opciones Categorizado */}
+                <div>
                   <select
                     value={manualCitaData.servicio}
                     onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
                     className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer font-bold"
                   >
-                    <optgroup label="── 📅 Línea de Inspección (Dorado) ──" className="bg-[#12141a] text-amber-300 font-bold">
+                    <optgroup label="── 🔍 Diagnóstico & Inspección (Dorado) ──" className="bg-[#12141a] text-amber-300 font-bold">
+                      <option value="Diagnóstico">Diagnóstico</option>
+                      <option value="Diagnóstico Electrónico & Scanner">Diagnóstico Electrónico & Scanner</option>
                       <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
                       <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
                     </optgroup>
@@ -6964,14 +7077,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <option value="Recordatorio / Gestión Operativa Taller">Recordatorio / Gestión Operativa Taller</option>
                     </optgroup>
                   </select>
-
-                  <input
-                    type="text"
-                    placeholder="O escribe un motivo de cita personalizado..."
-                    value={manualCitaData.servicio}
-                    onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white text-xs outline-none focus:border-primary"
-                  />
                 </div>
               </div>
 
@@ -7042,134 +7147,408 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       {/* MODAL DETALLE DE CITA SELECCIONADA DESDE CALENDARIO */}
       {selectedDayCita && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#12141a] border border-white/20 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
                 <Calendar className="text-primary" size={20} />
-                <h3 className="text-base font-bold text-white uppercase tracking-tight">Detalle de la Cita</h3>
+                <h3 className="text-base font-bold text-white uppercase tracking-tight">
+                  {isEditingCita ? 'Editar Cita' : 'Detalle de la Cita'}
+                </h3>
               </div>
-              <button onClick={() => setSelectedDayCita(null)} className="text-zinc-400 hover:text-white p-1 cursor-pointer">
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsEditingCita(!isEditingCita)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                    isEditingCita 
+                      ? 'bg-white/10 hover:bg-white/20 text-white border-white/20' 
+                      : 'bg-primary/20 hover:bg-primary text-primary hover:text-black border-primary/40'
+                  }`}
+                  title={isEditingCita ? 'Ver vista normal' : 'Editar campos de la cita'}
+                >
+                  <Edit size={12} />
+                  <span>{isEditingCita ? 'Ver Detalle' : 'Editar Cita'}</span>
+                </button>
+                <button onClick={() => setSelectedDayCita(null)} className="text-zinc-400 hover:text-white p-1 cursor-pointer">
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="p-3 bg-black/40 border border-white/10 rounded-2xl space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-black text-zinc-400">Cliente</span>
-                  <div className="flex items-center gap-1.5">
-                    {(selectedDayCita.prioridad === 'alta' || String(selectedDayCita.falla || '').includes('[Prioridad: alta]')) && (
-                      <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-red-500/20 text-red-300 border-red-500/40 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
-                        🔴 Prioridad Alta
+            {isEditingCita ? (
+              /* FORMULARIO DE EDICIÓN DE CITA */
+              <form onSubmit={handleSaveEditedCita} className="space-y-3 text-xs">
+                <div>
+                  <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Nombre del Cliente *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editCitaData.nombre}
+                    onChange={(e) => setEditCitaData({ ...editCitaData, nombre: e.target.value })}
+                    className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                    placeholder="Nombre completo"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Teléfono / WhatsApp *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editCitaData.telefono}
+                    onChange={(e) => setEditCitaData({ ...editCitaData, telefono: e.target.value })}
+                    className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-mono font-bold outline-none"
+                    placeholder="Ej. 04120392830"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Vehículo (Marca, Modelo, Año)</label>
+                  <input
+                    type="text"
+                    value={editCitaData.vehiculo}
+                    onChange={(e) => setEditCitaData({ ...editCitaData, vehiculo: e.target.value })}
+                    className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                    placeholder="Ej. Jeep Grand Cherokee 2015"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Fecha *</label>
+                    <input
+                      type="date"
+                      required
+                      value={editCitaData.fecha}
+                      onChange={(e) => setEditCitaData({ ...editCitaData, fecha: e.target.value })}
+                      className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Hora *</label>
+                    <input
+                      type="time"
+                      required
+                      value={editCitaData.hora}
+                      onChange={(e) => setEditCitaData({ ...editCitaData, hora: e.target.value })}
+                      className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Servicio Requerido *</label>
+                  <select
+                    value={editCitaData.servicio}
+                    onChange={(e) => setEditCitaData({ ...editCitaData, servicio: e.target.value })}
+                    className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer mb-1.5"
+                  >
+                    <optgroup label="── 🔍 Diagnóstico & Inspección ──" className="bg-[#12141a] text-amber-300 font-bold">
+                      <option value="Diagnóstico">Diagnóstico</option>
+                      <option value="Diagnóstico Electrónico & Scanner">Diagnóstico Electrónico & Scanner</option>
+                      <option value="Línea de inspección gratuita">Línea de inspección gratuita</option>
+                      <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
+                      <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
+                    </optgroup>
+                    <optgroup label="── 🛠️ Citas de Taller / Mecánica ──" className="bg-[#12141a] text-cyan-300 font-bold">
+                      <option value="Mecánica General & Mantenimiento Preventivo">Mecánica General & Mantenimiento Preventivo</option>
+                      <option value="Diagnóstico Electrónico & Ultrasonido Inyectores">Diagnóstico Electrónico & Ultrasonido Inyectores</option>
+                      <option value="Frenos, Amortiguadores & Suspensión">Frenos, Amortiguadores & Suspensión</option>
+                      <option value="Climatización A/A (Carga Gas R134a)">Climatización A/A (Carga Gas R134a)</option>
+                      <option value="Instalación de Repuestos Adquiridos">Instalación de Repuestos Adquiridos</option>
+                    </optgroup>
+                    <optgroup label="── 📦 Catálogo & Otros ──" className="bg-[#12141a] text-blue-300 font-bold">
+                      <option value="Importación & Pedidos Repuestos EE.UU.">Importación & Pedidos Repuestos EE.UU.</option>
+                      <option value="Postulación & Reclutamiento de Talento">Postulación & Reclutamiento de Talento</option>
+                      <option value="Recordatorio / Gestión Operativa Taller">Recordatorio / Gestión Operativa Taller</option>
+                    </optgroup>
+                  </select>
+                  <input
+                    type="text"
+                    value={editCitaData.servicio}
+                    onChange={(e) => setEditCitaData({ ...editCitaData, servicio: e.target.value })}
+                    placeholder="O escribe un servicio personalizado..."
+                    className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2 text-white text-xs outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Prioridad</label>
+                    <select
+                      value={editCitaData.prioridad}
+                      onChange={(e) => setEditCitaData({ ...editCitaData, prioridad: e.target.value })}
+                      className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                    >
+                      <option value="alta">🔴 Alta Prioridad</option>
+                      <option value="media">🟡 Prioridad Media</option>
+                      <option value="baja">🟢 Prioridad Baja</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Estado</label>
+                    <select
+                      value={editCitaData.status}
+                      onChange={(e) => setEditCitaData({ ...editCitaData, status: e.target.value })}
+                      className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                    >
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="Contactado">Contactado</option>
+                      <option value="Entrevistado">Entrevistado</option>
+                      <option value="Confirmado">Confirmado</option>
+                      <option value="Atendido">Atendido</option>
+                      <option value="Cancelado">Cancelado</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Notas / Fallas Reportadas</label>
+                  <textarea
+                    rows={2}
+                    value={editCitaData.notas}
+                    onChange={(e) => setEditCitaData({ ...editCitaData, notas: e.target.value })}
+                    placeholder="Ej. Ruidos en suspensión, revisión de frenos..."
+                    className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white outline-none"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingCita(false)}
+                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white font-bold transition-all cursor-pointer"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSavingEditedCita}
+                    className="px-5 py-2.5 rounded-xl bg-primary hover:bg-amber-400 text-black font-black flex items-center gap-2 transition-all shadow-lg cursor-pointer"
+                  >
+                    {isSavingEditedCita ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+                    <span>Guardar Cambios</span>
+                  </button>
+                </div>
+              </form>
+            ) : (
+              /* VISTA DE DETALLE DE CITA */
+              <div className="space-y-3 text-xs">
+                <div className="p-3 bg-black/40 border border-white/10 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-black text-zinc-400">Cliente</span>
+                    <div className="flex items-center gap-1.5">
+                      {(selectedDayCita.prioridad === 'alta' || String(selectedDayCita.falla || '').includes('[Prioridad: alta]')) && (
+                        <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-red-500/20 text-red-300 border-red-500/40 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
+                          🔴 Prioridad Alta
+                        </span>
+                      )}
+                      {(selectedDayCita.prioridad === 'baja' || String(selectedDayCita.falla || '').includes('[Prioridad: baja]')) && (
+                        <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
+                          🟢 Prioridad Baja
+                        </span>
+                      )}
+                      {(!selectedDayCita.prioridad || selectedDayCita.prioridad === 'media' || String(selectedDayCita.falla || '').includes('[Prioridad: media]')) && (
+                        <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
+                          🟡 Prioridad Media
+                        </span>
+                      )}
+                      <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
+                        selectedDayCita.status === 'Confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
+                        selectedDayCita.status === 'Contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
+                        selectedDayCita.status === 'Atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
+                        selectedDayCita.status === 'Cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
+                        'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                      }`}>
+                        {selectedDayCita.status || 'Pendiente'}
                       </span>
-                    )}
-                    {(selectedDayCita.prioridad === 'baja' || String(selectedDayCita.falla || '').includes('[Prioridad: baja]')) && (
-                      <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
-                        🟢 Prioridad Baja
-                      </span>
-                    )}
-                    {(!selectedDayCita.prioridad || selectedDayCita.prioridad === 'media' || String(selectedDayCita.falla || '').includes('[Prioridad: media]')) && (
-                      <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
-                        🟡 Prioridad Media
-                      </span>
-                    )}
-                    <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
-                      selectedDayCita.status === 'Confirmado' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' :
-                      selectedDayCita.status === 'Contactado' ? 'bg-blue-500/20 text-blue-300 border-blue-500/40' :
-                      selectedDayCita.status === 'Atendido' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
-                      selectedDayCita.status === 'Cancelado' ? 'bg-red-500/20 text-red-300 border-red-500/40' :
-                      'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                    }`}>
-                      {selectedDayCita.status || 'Pendiente'}
+                    </div>
+                  </div>
+                  <div className="text-sm font-black text-white">{selectedDayCita.nombre || 'Sin nombre'}</div>
+                  <div className="font-mono text-zinc-300 font-bold flex items-center gap-1.5">
+                    <Phone size={13} className="text-primary" />
+                    <span>{selectedDayCita.telefono || 'Sin teléfono'}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                    <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Vehículo</span>
+                    <span className="font-bold text-white block truncate">{selectedDayCita.vehiculo || 'No especificado'}</span>
+                  </div>
+
+                  <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                    <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Fecha y Hora</span>
+                    <span className="font-mono font-bold text-amber-400 block truncate">
+                      {getLeadDateStr(selectedDayCita)} {getLeadTimeStr(selectedDayCita)}
                     </span>
                   </div>
                 </div>
-                <div className="text-sm font-black text-white">{selectedDayCita.nombre || 'Sin nombre'}</div>
-                <div className="font-mono text-zinc-300 font-bold flex items-center gap-1.5">
-                  <Phone size={13} className="text-primary" />
-                  <span>{selectedDayCita.telefono || 'Sin teléfono'}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
-                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Vehículo</span>
-                  <span className="font-bold text-white block truncate">{selectedDayCita.vehiculo || 'No especificado'}</span>
-                </div>
 
                 <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
-                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Fecha y Hora</span>
-                  <span className="font-mono font-bold text-amber-400 block truncate">
-                    {getLeadDateStr(selectedDayCita)} {getLeadTimeStr(selectedDayCita)}
-                  </span>
+                  <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Servicio Requerido</span>
+                  <span className="font-black text-primary block">{selectedDayCita.servicio || 'Servicio General'}</span>
                 </div>
-              </div>
 
-              <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
-                <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Servicio Requerido</span>
-                <span className="font-black text-primary block">{selectedDayCita.servicio || 'Servicio General'}</span>
-              </div>
+                {(() => {
+                  const notes = cleanFallaNotes(selectedDayCita.falla);
+                  if (!notes) return null;
+                  return (
+                    <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
+                      <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Notas / Detalles</span>
+                      <p className="text-zinc-300 text-[11px] leading-relaxed">{notes}</p>
+                    </div>
+                  );
+                })()}
 
-              {(() => {
-                const notes = cleanFallaNotes(selectedDayCita.falla);
-                if (!notes) return null;
-                return (
-                  <div className="p-2.5 bg-black/40 border border-white/10 rounded-xl">
-                    <span className="text-[9px] uppercase font-black text-zinc-400 block mb-0.5">Notas / Detalles</span>
-                    <p className="text-zinc-300 text-[11px] leading-relaxed">{notes}</p>
+                {/* Cambiar Estado Rápido */}
+                <div>
+                  <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Cambiar Estado</label>
+                  <select
+                    value={selectedDayCita.status || 'Pendiente'}
+                    onChange={async (e) => {
+                      const newSt = e.target.value;
+                      setSelectedDayCita({ ...selectedDayCita, status: newSt });
+                      await handleUpdateLeadStatus(selectedDayCita.id, newSt);
+                    }}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-white font-bold outline-none focus:border-primary cursor-pointer"
+                  >
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Contactado">Contactado</option>
+                    <option value="Entrevistado">Entrevistado</option>
+                    <option value="Confirmado">Confirmado</option>
+                    <option value="Atendido">Atendido</option>
+                    <option value="Cancelado">Cancelado</option>
+                  </select>
+                </div>
+
+                {/* Mensaje de WhatsApp Editable */}
+                <div className="p-3 bg-black/40 border border-white/10 rounded-2xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-emerald-400 font-black text-[10px] uppercase">
+                      <WhatsAppIcon size={14} />
+                      <span>Mensaje para WhatsApp</span>
+                    </div>
+                    <span className="text-[9px] text-zinc-400 italic">Editable antes de enviar</span>
                   </div>
-                );
-              })()}
 
-              {/* Cambiar Estado Rápido */}
-              <div>
-                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">Cambiar Estado</label>
-                <select
-                  value={selectedDayCita.status || 'Pendiente'}
-                  onChange={async (e) => {
-                    const newSt = e.target.value;
-                    setSelectedDayCita({ ...selectedDayCita, status: newSt });
-                    await handleUpdateLeadStatus(selectedDayCita.id, newSt);
-                  }}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-white font-bold outline-none focus:border-primary cursor-pointer"
-                >
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Contactado">Contactado</option>
-                  <option value="Entrevistado">Entrevistado</option>
-                  <option value="Confirmado">Confirmado</option>
-                  <option value="Atendido">Atendido</option>
-                  <option value="Cancelado">Cancelado</option>
-                </select>
+                  {/* Plantillas Rápidas */}
+                  <div className="flex flex-wrap gap-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nombre = selectedDayCita.nombre ? selectedDayCita.nombre.trim() : 'Cliente';
+                        const dateStr = getLeadDateStr(selectedDayCita);
+                        const timeStr = getLeadTimeStr(selectedDayCita);
+                        setCitaWaMessage(`Hola ${nombre}, te escribimos desde Taller MasterTech para confirmar tu cita agendada para el ${dateStr} a las ${timeStr}.`);
+                      }}
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-emerald-500/20 text-zinc-300 hover:text-emerald-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                    >
+                      📅 Confirmar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nombre = selectedDayCita.nombre ? selectedDayCita.nombre.trim() : 'Cliente';
+                        const dateStr = getLeadDateStr(selectedDayCita);
+                        const timeStr = getLeadTimeStr(selectedDayCita);
+                        const vehiculo = selectedDayCita.vehiculo || 'vehículo';
+                        setCitaWaMessage(`Hola ${nombre}, te recordamos tu cita en Taller MasterTech pautada para el ${dateStr} a las ${timeStr} con tu ${vehiculo}. ¡Te esperamos!`);
+                      }}
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                    >
+                      ⏰ Recordatorio
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nombre = selectedDayCita.nombre ? selectedDayCita.nombre.trim() : 'Cliente';
+                        const vehiculo = selectedDayCita.vehiculo || 'vehículo';
+                        setCitaWaMessage(`Hola ${nombre}, te informamos desde Taller MasterTech que tu ${vehiculo} está listo para ser retirado. ¡Muchas gracias por tu confianza!`);
+                      }}
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-cyan-500/20 text-zinc-300 hover:text-cyan-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                    >
+                      🚗 Vehículo Listo
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nombre = selectedDayCita.nombre ? selectedDayCita.nombre.trim() : 'Cliente';
+                        setCitaWaMessage(`Hola ${nombre}, te escribimos desde Taller MasterTech para coordinar una reprogramación de tu cita.`);
+                      }}
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-purple-500/20 text-zinc-300 hover:text-purple-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                    >
+                      🔄 Reprogramar
+                    </button>
+                  </div>
+
+                  <textarea
+                    rows={3}
+                    value={citaWaMessage}
+                    onChange={(e) => setCitaWaMessage(e.target.value)}
+                    placeholder="Escribe o modifica el mensaje de WhatsApp aquí..."
+                    className="w-full bg-black/60 border border-white/10 focus:border-emerald-500 rounded-xl p-2.5 text-white text-[11px] leading-relaxed outline-none transition-all resize-y"
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Footer Buttons */}
-            <div className="flex items-center gap-2 pt-2 border-t border-white/10">
-              {selectedDayCita.telefono && (
-                <a
-                  href={`https://wa.me/${selectedDayCita.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(`Hola ${selectedDayCita.nombre || ''}, te escribimos desde Taller MasterTech para confirmar tu cita agendada para el ${getLeadDateStr(selectedDayCita)} a las ${getLeadTimeStr(selectedDayCita)}.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg cursor-pointer"
-                >
-                  <WhatsAppIcon size={16} />
-                  <span>WhatsApp</span>
-                </a>
-              )}
+            {!isEditingCita && (
+              <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+                {selectedDayCita.telefono && (
+                  <>
+                    <a
+                      href={`https://wa.me/${selectedDayCita.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(citaWaMessage || `Hola ${selectedDayCita.nombre || ''}, te escribimos desde Taller MasterTech.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg cursor-pointer"
+                    >
+                      <WhatsAppIcon size={16} />
+                      <span>WhatsApp</span>
+                    </a>
 
-              <button
-                onClick={() => {
-                  const id = selectedDayCita.id;
-                  setSelectedDayCita(null);
-                  handleDeleteLead(id);
-                }}
-                className="p-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors cursor-pointer"
-                title="Eliminar Cita"
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (citaWaMessage) {
+                          navigator.clipboard.writeText(citaWaMessage);
+                          setIsCopiedWaMsg(true);
+                          setTimeout(() => setIsCopiedWaMsg(false), 2000);
+                        }
+                      }}
+                      className="px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold shrink-0"
+                      title="Copiar texto del mensaje"
+                    >
+                      {isCopiedWaMsg ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
+                      <span>{isCopiedWaMsg ? 'Copiado' : 'Copiar'}</span>
+                    </button>
+                  </>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setIsEditingCita(true)}
+                  className="p-2.5 rounded-xl bg-white/5 hover:bg-amber-500/20 text-zinc-400 hover:text-amber-400 border border-white/10 transition-colors cursor-pointer shrink-0"
+                  title="Editar datos de la cita"
+                >
+                  <Edit size={16} />
+                </button>
+
+                <button
+                  onClick={() => {
+                    const id = selectedDayCita.id;
+                    setSelectedDayCita(null);
+                    handleDeleteLead(id);
+                  }}
+                  className="p-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors cursor-pointer shrink-0"
+                  title="Eliminar Cita"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -637,7 +637,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   )}
 
                   {/* Price Tag */}
-                  <div className="absolute bottom-1.5 right-1.5 bg-black/90 backdrop-blur-md border border-primary/40 text-primary font-black text-[11px] px-1.5 py-0.5 rounded shadow">
+                  <div className="absolute bottom-1.5 right-1.5 bg-[#C2A472] text-black font-black text-[11px] px-2 py-0.5 rounded shadow-lg border border-amber-300/40">
                     {item.price}
                   </div>
                 </div>
@@ -645,14 +645,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 {/* Card Content Body */}
                 <div className="p-2.5 flex-1 flex flex-col justify-between space-y-2">
                   <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-1">
+                    <div className="flex flex-wrap items-center justify-between gap-1">
                       {item.partNumber && (
-                        <span className="text-[8.5px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-1 py-0.5 rounded truncate max-w-full">
+                        <span className="text-[8.5px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-1 py-0.5 rounded truncate max-w-[65%]">
                           #{item.partNumber}
                         </span>
                       )}
                       
-                      <span className={`text-[8.5px] font-bold px-1 py-0.5 rounded ${
+                      <span className={`text-[8.5px] font-bold px-1 py-0.5 rounded ml-auto ${
                         (item.stock ?? 10) > 0 
                           ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
                           : 'bg-red-500/20 text-red-400 border border-red-500/30'
@@ -668,6 +668,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     >
                       {item.title}
                     </h3>
+
+                    {/* Prominent Price in Card Body */}
+                    <div className="text-[13px] font-black text-[#C2A472] dark:text-primary pt-0.5">
+                      {item.price}
+                    </div>
                   </div>
 
                   {/* Card Actions */}
@@ -1033,15 +1038,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               className="bg-[#12141a] border border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
             >
               {/* Modal Header */}
-              <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-black/40">
+              <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-black/60">
                 <div className="flex items-center gap-2">
-                  <Tag size={16} className="text-primary" />
-                  <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{selectedProduct.category}</span>
+                  <Tag size={16} className="text-[#C2A472]" />
+                  <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">{selectedProduct.category}</span>
                 </div>
                 <button 
                   type="button"
                   onClick={() => setSelectedProduct(null)}
-                  className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white transition-colors cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -1068,12 +1073,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" 
                           />
                           {selectedProduct.badge && (
-                            <span className="absolute top-3 left-3 bg-primary text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
+                            <span className="absolute top-3 left-3 bg-[#C2A472] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
                               {selectedProduct.badge}
                             </span>
                           )}
                           <div className="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity border border-white/20 shadow-lg">
-                            <ZoomIn size={14} className="text-primary" />
+                            <ZoomIn size={14} className="text-[#C2A472]" />
                             <span>Tocar para Ampliar</span>
                           </div>
                         </div>
@@ -1089,7 +1094,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                   type="button"
                                   onClick={() => setActiveImageIndex(pIdx)}
                                   className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                                    isActive ? 'border-primary scale-105 shadow-md shadow-primary/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                                    isActive ? 'border-[#C2A472] scale-105 shadow-md shadow-[#C2A472]/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
                                   }`}
                                 >
                                   <img src={photo} alt="" className="w-full h-full object-cover" />
@@ -1103,7 +1108,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <div className="space-y-3">
                         <div className="flex flex-wrap items-center gap-2">
                           {selectedProduct.partNumber && (
-                            <span className="text-xs font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full inline-block">
+                            <span className="text-xs font-mono font-bold text-[#C2A472] bg-[#C2A472]/15 border border-[#C2A472]/30 px-3 py-1 rounded-full inline-block">
                               N° OEM: {selectedProduct.partNumber}
                             </span>
                           )}
@@ -1118,22 +1123,22 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         </div>
 
                         <h3 className="text-xl font-bold text-white leading-snug">{selectedProduct.title}</h3>
-                        <div className="text-2xl font-black text-primary">{selectedProduct.price}</div>
+                        <div className="text-2xl font-black text-[#C2A472]">{selectedProduct.price}</div>
                         <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.desc}</p>
                       </div>
                     </div>
 
                     {selectedProduct.isImportedUSA && (
-                      <div className="p-4 bg-blue-950/40 border border-blue-500/30 rounded-2xl text-xs text-blue-200 flex items-center gap-3">
+                      <div className="p-4 bg-blue-950/60 border border-blue-500/40 rounded-2xl text-xs text-blue-200 flex items-center gap-3 shadow-md">
                         <div>
                           <strong className="text-white block font-bold">Repuesto Importado Directamente desde EE.UU.</strong>
-                          <p className="text-blue-300/80 text-[11px] mt-0.5">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
+                          <p className="text-blue-300 text-[11px] mt-0.5">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
                         </div>
                       </div>
                     )}
 
                     {selectedProduct.longDesc && (
-                      <div className="space-y-2 bg-white/5 p-4 rounded-2xl border border-white/5">
+                      <div className="space-y-2 bg-black/40 p-4 rounded-2xl border border-white/10">
                         <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Ficha Técnica & Detalles de Calidad</h4>
                         <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.longDesc}</p>
                       </div>
@@ -1145,7 +1150,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {selectedProduct.specs.map((spec, i) => (
                             <li key={i} className="text-xs text-zinc-300 flex items-center gap-2">
-                              <CheckCircle2 size={14} className="text-primary shrink-0" />
+                              <CheckCircle2 size={14} className="text-[#C2A472] shrink-0" />
                               <span>{spec}</span>
                             </li>
                           ))}
@@ -1154,8 +1159,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     )}
 
                     {selectedProduct.compatibility && (
-                      <div className="p-3.5 bg-primary/10 border border-primary/20 rounded-2xl text-xs text-zinc-200 flex items-center gap-3 shadow-md mb-2">
-                        <ShieldCheck size={18} className="text-primary shrink-0" />
+                      <div className="p-3.5 bg-[#C2A472]/10 border border-[#C2A472]/25 rounded-2xl text-xs text-zinc-200 flex items-center gap-3 shadow-md mb-2">
+                        <ShieldCheck size={18} className="text-[#C2A472] shrink-0" />
                         <span><strong className="text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
                       </div>
                     )}
@@ -1164,7 +1169,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               })()}
 
               {/* Modal Footer CTA */}
-              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/40 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
+              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/60 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
                 <span className="text-xs text-zinc-400">¿Deseas solicitar o cotizar este repuesto?</span>
                 <a
                   href={getWhatsAppMessage(selectedProduct.title, selectedProduct.price, selectedProduct.partNumber, selectedProduct.isImportedUSA, selectedProduct.stock)}

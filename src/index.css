@@ -857,6 +857,36 @@ body.theme-light .mt01-chat-modal button.hdr-btn:hover {
   border-color: #cbd5e1 !important;
 }
 
+/* Product Detail Modal in Light Mode */
+.theme-light .fixed.inset-0 div[class*="bg-black/60"] {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+.theme-light .fixed.inset-0 div[class*="bg-black/60"] span,
+.theme-light .fixed.inset-0 div[class*="bg-black/60"] button {
+  color: #0f172a !important;
+}
+.theme-light .fixed.inset-0 div[class*="bg-blue-950"] {
+  background-color: #eff6ff !important;
+  border-color: #bfdbfe !important;
+}
+.theme-light .fixed.inset-0 div[class*="bg-blue-950"] strong,
+.theme-light .fixed.inset-0 div[class*="bg-blue-950"] p {
+  color: #1e3a8a !important;
+}
+.theme-light .fixed.inset-0 div[class*="bg-black/40"] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+.theme-light .fixed.inset-0 div[class*="bg-[#C2A472]/10"] {
+  background-color: #fef3c7 !important;
+  border-color: #fde68a !important;
+}
+.theme-light .fixed.inset-0 div[class*="bg-[#C2A472]/10"] span,
+.theme-light .fixed.inset-0 div[class*="bg-[#C2A472]/10"] strong {
+  color: #78350f !important;
+}
+
 .theme-light section:not(:first-of-type) [class*="text-zinc-300"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-400"],
 .theme-light section:not(:first-of-type) [class*="text-zinc-500"],
