@@ -666,13 +666,30 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setReminders(updated);
     try {
       localStorage.setItem('mastertech_reminders_cache', JSON.stringify(updated));
-      const serialized = JSON.stringify(updated.slice(0, 100));
-      await fetch('/api/settings', {
+      const serialized = JSON.stringify(updated.slice(0, 300));
+      
+      // Save directly to dedicated Supabase reminders endpoint
+      await fetch('/api/admin/reminders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'SAVED_REMINDERS', value: serialized })
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ reminders: updated })
       });
-    } catch (e) {}
+
+      // Also backup to settings
+      await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ SAVED_REMINDERS: serialized })
+      });
+    } catch (e) {
+      console.warn("Reminders Supabase sync notice:", e);
+    }
   };
 
   // Solicitud de Permisos de Notificaciones Push Nativas y Registro de Service Worker para Segundo Plano
@@ -1063,13 +1080,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
       const res = await fetch('/api/leads', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(payload)
       });
 
       if (res.ok) {
         logClientAction('Agendó Cita Manual', 'CITAS', `Agendó cita para ${manualCitaData.nombre} (${manualCitaData.vehiculo}) el ${fechaHoraFormatted}`);
-        fetchLeads();
+        await fetchLeads();
       }
     } catch (err: any) {
       console.warn("Manual cita background sync warning:", err);
@@ -1351,6 +1371,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     if (merged.FAQS_JSON) {
       try { const p = JSON.parse(merged.FAQS_JSON); if (Array.isArray(p)) setFaqs(p); } catch (e) {}
     }
+    if (merged.SAVED_REMINDERS) {
+      try {
+        const r = typeof merged.SAVED_REMINDERS === 'string' ? JSON.parse(merged.SAVED_REMINDERS) : merged.SAVED_REMINDERS;
+        if (Array.isArray(r) && r.length > 0) {
+          setReminders(r);
+          localStorage.setItem('mastertech_reminders_cache', JSON.stringify(r));
+        }
+      } catch (e) {}
+    }
   };
 
   // Fetch Leads
@@ -1368,6 +1397,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (err) {} finally {
       setIsLoadingLeads(false);
     }
+  };
+
+  // Fetch Reminders from dedicated endpoint
+  const fetchReminders = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch(`/api/admin/reminders?t=${Date.now()}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.reminders && Array.isArray(data.reminders) && data.reminders.length > 0) {
+          setReminders(data.reminders);
+          localStorage.setItem('mastertech_reminders_cache', JSON.stringify(data.reminders));
+        }
+      }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -1398,6 +1444,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   useEffect(() => {
     if (token) {
       fetchLeads();
+      fetchReminders();
       fetchAdminUsers();
     }
   }, [token]);

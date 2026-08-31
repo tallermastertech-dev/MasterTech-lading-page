@@ -378,12 +378,14 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     const hasCitaPrefix = fallaRaw.toLowerCase().includes('cita inspección:');
     const falla = (fecha_hora && !hasCitaPrefix) ? `[Cita Inspección: ${fecha_hora}] ${fallaRaw}`.trim() : fallaRaw;
 
-    if (!nombre || !telefono || !vehiculo || !servicio) {
-      res.status(400).json({ error: 'Todos los campos principales son obligatorios.' });
+    const isFromAdmin = Boolean(req.headers.authorization);
+
+    if (!nombre) {
+      res.status(400).json({ error: 'El nombre del cliente o solicitante es obligatorio.' });
       return;
     }
 
-    if (telefono.replace(/\D/g, '').length < 7) {
+    if (!isFromAdmin && telefono.replace(/\D/g, '').length < 7) {
       res.status(400).json({ error: 'Número de teléfono inválido.' });
       return;
     }
@@ -394,7 +396,7 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
       if (slot) {
         const currentOccupiedMap = await getOccupiedSlotsMap();
         const bookedForDate = currentOccupiedMap[slot.dateStr] || [];
-        if (bookedForDate.includes(slot.timeStr)) {
+        if (bookedForDate.includes(slot.timeStr) && !isFromAdmin) {
           res.status(409).json({ 
             error: `El turno de inspección para el ${slot.dateStr} a las ${slot.timeStr} ya fue reservado por otro cliente.` 
           });
@@ -422,12 +424,12 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     let existingLeads: any[] = [];
     try { existingLeads = await getAllLeads(); } catch (e) {}
 
-    const newLeadObj = {
+    const newLeadObj: any = {
       id: Date.now(),
       nombre,
-      telefono,
-      vehiculo,
-      servicio,
+      telefono: telefono || 'No indicado',
+      vehiculo: vehiculo || 'Vehículo no especificado',
+      servicio: servicio || 'Diagnóstico',
       status: req.body.status || 'Confirmado',
       placa,
       anio: año,
@@ -437,35 +439,45 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
       created_at: new Date().toISOString()
     };
 
-    // Fast in-memory & disk cache updates (< 5ms)
+    // 1. Direct Supabase Leads Table Insertion
+    try {
+      const { data, error } = await supabase.from('leads').insert([{
+        nombre: newLeadObj.nombre,
+        telefono: newLeadObj.telefono,
+        vehiculo: newLeadObj.vehiculo,
+        servicio: newLeadObj.servicio,
+        status: newLeadObj.status,
+        placa: newLeadObj.placa,
+        anio: newLeadObj.anio,
+        ubicacion: newLeadObj.ubicacion,
+        falla: newLeadObj.falla,
+        fecha_hora: newLeadObj.fecha_hora
+      }]).select();
+
+      if (data && data[0] && data[0].id) {
+        newLeadObj.id = data[0].id;
+      }
+      if (error) {
+        console.warn("Supabase direct leads table insert warning:", error.message);
+      }
+    } catch (e: any) {
+      console.warn("Supabase leads table insert exception:", e?.message);
+    }
+
+    // 2. Guaranteed Supabase SETTINGS backup table (SAVED_LEADS)
+    try {
+      const combinedList = [newLeadObj, ...existingLeads.filter(l => String(l?.id) !== String(newLeadObj.id))];
+      const serializedLeads = JSON.stringify(combinedList.slice(0, 300));
+      memorySettingsCache['SAVED_LEADS'] = serializedLeads;
+      await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
+    } catch (e: any) {
+      console.warn("Supabase settings SAVED_LEADS upsert exception:", e?.message);
+    }
+
+    // Fast in-memory & disk cache updates
     memoryLeadsCache.unshift(newLeadObj);
     saveLeadsToDisk();
     saveSettingsToDisk();
-
-    // Async background Supabase persistence (non-blocking)
-    (async () => {
-      try {
-        const combinedList = [newLeadObj, ...existingLeads.filter(l => String(l?.id) !== String(newLeadObj.id))];
-        const serializedLeads = JSON.stringify(combinedList.slice(0, 200));
-        memorySettingsCache['SAVED_LEADS'] = serializedLeads;
-        await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
-      } catch (e) {}
-
-      try {
-        const { data } = await supabase.from('leads').insert([{
-          nombre, telefono, vehiculo, servicio,
-          status: req.body.status || 'Confirmado',
-          placa,
-          anio: año,
-          ubicacion,
-          falla,
-          fecha_hora
-        }]).select();
-        if (data && data[0] && data[0].id) {
-          newLeadObj.id = data[0].id;
-        }
-      } catch (e) {}
-    })();
 
     // Telegram Dispatch for Web Landing leads (Exempts Admin/Manual appointments)
     const settings = await getSettings();
@@ -1281,6 +1293,36 @@ app.post(['/api/admin/proveedores', '/admin/proveedores'], authenticateAdmin, as
     res.json({ success: true, message: 'Proveedores guardados correctamente en Supabase.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al guardar proveedores en Supabase', details: err.message });
+  }
+});
+
+// Admin Reminders Dedicated Endpoints (Supabase Synchronization)
+app.get(['/api/admin/reminders', '/admin/reminders'], authenticateAdmin, async (_req, res) => {
+  try {
+    const s = await getSettings();
+    let reminders: any[] = [];
+    if (s.SAVED_REMINDERS) {
+      try { reminders = JSON.parse(s.SAVED_REMINDERS); } catch (e) {}
+    }
+    res.json({ success: true, reminders });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al obtener recordatorios', details: err.message });
+  }
+});
+
+app.post(['/api/admin/reminders', '/admin/reminders'], authenticateAdmin, async (req, res) => {
+  try {
+    const { reminders } = req.body;
+    if (!Array.isArray(reminders)) {
+      return res.status(400).json({ error: 'Formato de recordatorios inválido.' });
+    }
+    const jsonStr = JSON.stringify(reminders.slice(0, 300));
+    memorySettingsCache['SAVED_REMINDERS'] = jsonStr;
+    await supabase.from('settings').upsert([{ key: 'SAVED_REMINDERS', value: jsonStr }], { onConflict: 'key' });
+    saveSettingsToDisk();
+    res.json({ success: true, message: 'Recordatorios guardados correctamente en Supabase.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al guardar recordatorios en Supabase', details: err.message });
   }
 });
 
