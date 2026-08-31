@@ -487,7 +487,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   const getAllowedTabsForUser = (user: any): string[] => {
-    if (!user) return ['dashboard'];
+    if (!user) return ['dashboard', 'brecha'];
     const email = (user.email || '').toLowerCase().trim();
     const role = (user.role || '').toLowerCase().trim();
     const access = (user.accessLevel || '').toLowerCase().trim();
