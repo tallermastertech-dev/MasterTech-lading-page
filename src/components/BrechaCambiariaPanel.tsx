@@ -155,8 +155,9 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
   const totalVES_EUR_BCV = parsedAmount * rates.bcv_eur;
   const totalVES_USDT = parsedAmount * rates.usdt;
 
-  // Timeframe for Historical Charts
+  // Timeframe & Chart Style for Historical Charts
   const [timeframe, setTimeframe] = useState<'7d' | '30d' | '90d'>('7d');
+  const [bcvStyle, setBcvStyle] = useState<'smooth' | 'step'>('smooth');
   const [hoverIndex, setHoverIndex] = useState<{ chart: 'usdt' | 'bcv' | 'brecha'; index: number } | null>(null);
 
   // Generate dynamic, high-resolution historical data anchored to live rates with exact peaks and troughs
@@ -774,7 +775,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           })()}
         </div>
 
-        {/* 2. CHART: TASA BCV (Official Step Progression) */}
+        {/* 2. CHART: TASA BCV OFICIAL */}
         <div className="bg-white dark:bg-[#0c0e14] border border-slate-300 dark:border-white/10 rounded-2xl p-5 shadow-sm space-y-4 relative">
           {(() => {
             const statsBcv = getStats(chartData.bcv);
@@ -788,6 +789,11 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
               minVal
             ];
 
+            const smoothLine = createSmoothPath(chartData.bcv, minVal, maxVal);
+            const stepLine = createStepPath(chartData.bcv, minVal, maxVal);
+            const activeLine = bcvStyle === 'smooth' ? smoothLine : stepLine;
+            const areaPath = `${activeLine} L ${padding.left + graphWidth} ${padding.top + graphHeight} L ${padding.left} ${padding.top + graphHeight} Z`;
+
             const activeIdx = hoverIndex?.chart === 'bcv' ? hoverIndex.index : null;
             const activeX = activeIdx !== null ? padding.left + (activeIdx / (chartData.bcv.length - 1)) * graphWidth : null;
             const activeBcvY = activeIdx !== null ? padding.top + graphHeight - ((chartData.bcv[activeIdx] - minVal) / (maxVal - minVal)) * graphHeight : null;
@@ -795,11 +801,37 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             return (
               <>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-200 dark:border-white/5 pb-3">
-                  <div>
+                  <div className="flex items-center gap-3">
                     <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide flex items-center gap-2">
                       <span>Tasa BCV Oficial</span>
-                      <span className="text-[10px] font-mono text-zinc-400 font-bold">(Ajustes de Mesas Cambiarias)</span>
+                      <span className="text-[10px] font-mono text-zinc-400 font-bold">(Mesas de Cambio)</span>
                     </h4>
+
+                    {/* Visual Style Toggle: Smooth vs Step */}
+                    <div className="flex items-center bg-slate-200 dark:bg-black/60 p-0.5 rounded-lg border border-slate-300 dark:border-white/10 text-[10px] font-bold">
+                      <button
+                        type="button"
+                        onClick={() => setBcvStyle('smooth')}
+                        className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                          bcvStyle === 'smooth'
+                            ? 'bg-amber-500 text-black font-black shadow-sm'
+                            : 'text-zinc-400 hover:text-white'
+                        }`}
+                      >
+                        Curva Suave
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setBcvStyle('step')}
+                        className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                          bcvStyle === 'step'
+                            ? 'bg-amber-500 text-black font-black shadow-sm'
+                            : 'text-zinc-400 hover:text-white'
+                        }`}
+                      >
+                        Escalonada
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono font-bold">
@@ -839,7 +871,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                 ) : (
                   <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic flex items-center gap-1.5">
                     <Info size={12} className="text-amber-500 shrink-0" />
-                    La tasa oficial se mantiene fija durante fines de semana y se actualiza al cierre de cada jornada bancaria.
+                    La tasa oficial se actualiza al cierre de cada jornada bancaria y se mantiene estable durante fines de semana.
                   </p>
                 )}
 
@@ -850,6 +882,13 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                     onMouseMove={(e) => handleChartMouseMove('bcv', e, chartData.bcv.length)}
                     onMouseLeave={() => setHoverIndex(null)}
                   >
+                    <defs>
+                      <linearGradient id="bcvGoldGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.30" />
+                        <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
+
                     {/* Gridlines & Y-Axis Labels */}
                     {yLabels.map((yVal, idx) => {
                       const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
@@ -881,8 +920,11 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                       );
                     })}
 
-                    {/* Step Curve */}
-                    <path d={createStepPath(chartData.bcv, minVal, maxVal)} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" className="pointer-events-none" />
+                    {/* Golden Gradient Glow Area */}
+                    <path d={areaPath} fill="url(#bcvGoldGrad)" className="pointer-events-none" />
+
+                    {/* Golden Line */}
+                    <path d={activeLine} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" className="pointer-events-none" />
 
                     {/* Crosshair Cursor Tracking */}
                     {activeX !== null && (
@@ -907,7 +949,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                   <div className="flex items-center gap-5 text-xs font-bold pt-2 px-2">
                     <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                      <span>BCV Oficial</span>
+                      <span>BCV Oficial (Dólar)</span>
                     </div>
                   </div>
                 </div>
