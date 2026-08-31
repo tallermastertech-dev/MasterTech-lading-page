@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, TrendingUp, Calculator, DollarSign, Euro, Coins, Zap, X, ChevronDown, Copy, Check } from 'lucide-react';
+import { 
+  RefreshCw, TrendingUp, TrendingDown, Calculator, DollarSign, Euro, Coins, Zap, X, 
+  ChevronDown, Copy, Check, Calendar, Activity, Info, Building2, ArrowUpRight, ArrowDownRight 
+} from 'lucide-react';
 
 interface RateData {
   bcv_usd: number;
@@ -631,17 +634,20 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                   {/* Dynamic High / Low Quick KPI Badges */}
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono font-bold">
                     <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-2 py-0.5 rounded-md flex items-center gap-1">
-                      <span>🔺 Pico Máx:</span>
+                      <ArrowUpRight size={12} className="text-rose-500" />
+                      <span>Pico Máx:</span>
                       <strong>{formatNumber(statsBybit.maxVal)} Bs.</strong>
                       <span className="text-[9px] text-zinc-400">({statsBybit.maxDate})</span>
                     </div>
                     <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-2 py-0.5 rounded-md flex items-center gap-1">
-                      <span>🔻 Mínimo:</span>
+                      <ArrowDownRight size={12} className="text-emerald-500" />
+                      <span>Mínimo:</span>
                       <strong>{formatNumber(statsBinance.minVal)} Bs.</strong>
                       <span className="text-[9px] text-zinc-400">({statsBinance.minDate})</span>
                     </div>
-                    <div className="bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded-md">
-                      <span>📊 Rango: <strong>{formatNumber(statsBybit.maxVal - statsBinance.minVal)} Bs.</strong></span>
+                    <div className="bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded-md flex items-center gap-1">
+                      <Activity size={12} className="text-zinc-400" />
+                      <span>Rango: <strong>{formatNumber(statsBybit.maxVal - statsBinance.minVal)} Bs.</strong></span>
                     </div>
                   </div>
                 </div>
@@ -650,19 +656,27 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                 {activeIdx !== null ? (
                   <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono font-bold animate-fade-in">
                     <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                      <span>📅 <strong>{chartData.timestamps[activeIdx]}</strong></span>
+                      <Calendar size={13} className="text-emerald-500" />
+                      <span><strong>{chartData.timestamps[activeIdx]}</strong></span>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span>🟢 Binance: <strong className="text-emerald-400">{formatNumber(chartData.binance[activeIdx])} Bs.</strong></span>
-                      <span>🔵 Bybit: <strong className="text-blue-400">{formatNumber(chartData.bybit[activeIdx])} Bs.</strong></span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                        Binance: <strong className="text-emerald-400">{formatNumber(chartData.binance[activeIdx])} Bs.</strong>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
+                        Bybit: <strong className="text-blue-400">{formatNumber(chartData.bybit[activeIdx])} Bs.</strong>
+                      </span>
                       <span className="text-zinc-400 text-[11px]">
                         (vs Pico: <strong className="text-rose-400">{formatNumber(((chartData.bybit[activeIdx] - statsBybit.maxVal) / statsBybit.maxVal) * 100)}%</strong>)
                       </span>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic">
-                    💡 Pasa el cursor o presiona sobre cualquier punto para ver el valor exacto de cada pico o caída.
+                  <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic flex items-center gap-1.5">
+                    <Info size={12} className="text-emerald-500 shrink-0" />
+                    Pasa el cursor o presiona sobre cualquier punto para ver el valor exacto de cada pico o caída.
                   </p>
                 )}
 
@@ -712,12 +726,12 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                     <g className="pointer-events-none">
                       <circle cx={peakBybitX} cy={peakBybitY} r="5" fill="#f43f5e" stroke="#ffffff" strokeWidth="1.5" />
                       <text x={peakBybitX} y={peakBybitY - 8} textAnchor="middle" className="text-[9px] font-mono font-black fill-rose-400">
-                        🔺 PICO {formatNumber(statsBybit.maxVal)}
+                        MAX {formatNumber(statsBybit.maxVal)}
                       </text>
 
                       <circle cx={minBinanceX} cy={minBinanceY} r="5" fill="#10b981" stroke="#ffffff" strokeWidth="1.5" />
                       <text x={minBinanceX} y={minBinanceY + 16} textAnchor="middle" className="text-[9px] font-mono font-black fill-emerald-400">
-                        🔻 MÍN {formatNumber(statsBinance.minVal)}
+                        MIN {formatNumber(statsBinance.minVal)}
                       </text>
                     </g>
 
@@ -790,11 +804,13 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono font-bold">
                     <div className="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-2 py-0.5 rounded-md flex items-center gap-1">
-                      <span>🏛️ Tasa Actual:</span>
+                      <Building2 size={12} className="text-amber-500" />
+                      <span>Tasa Actual:</span>
                       <strong>{formatNumber(statsBcv.lastVal)} Bs.</strong>
                     </div>
                     <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-2 py-0.5 rounded-md flex items-center gap-1">
-                      <span>📈 Variación Período:</span>
+                      <TrendingUp size={12} className="text-emerald-500" />
+                      <span>Variación Período:</span>
                       <strong>+{statsBcv.diffPct}%</strong>
                     </div>
                     <div className="bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded-md">
@@ -807,18 +823,23 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                 {activeIdx !== null ? (
                   <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono font-bold animate-fade-in">
                     <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
-                      <span>📅 <strong>{chartData.timestamps[activeIdx]}</strong></span>
+                      <Calendar size={13} className="text-amber-500" />
+                      <span><strong>{chartData.timestamps[activeIdx]}</strong></span>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span>🟡 Tasa Oficial BCV: <strong className="text-amber-400">{formatNumber(chartData.bcv[activeIdx])} Bs.</strong></span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
+                        Tasa Oficial BCV: <strong className="text-amber-400">{formatNumber(chartData.bcv[activeIdx])} Bs.</strong>
+                      </span>
                       <span className="text-zinc-400 text-[11px]">
                         (Incremento neto: <strong className="text-amber-300">+{formatNumber(chartData.bcv[activeIdx] - statsBcv.minVal)} Bs.</strong>)
                       </span>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic">
-                    💡 La tasa oficial se mantiene fija durante fines de semana y se actualiza al cierre de cada jornada bancaria.
+                  <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic flex items-center gap-1.5">
+                    <Info size={12} className="text-amber-500 shrink-0" />
+                    La tasa oficial se mantiene fija durante fines de semana y se actualiza al cierre de cada jornada bancaria.
                   </p>
                 )}
 
@@ -934,17 +955,20 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono font-bold">
                     <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-2 py-0.5 rounded-md flex items-center gap-1">
-                      <span>🔺 Pico Máx:</span>
+                      <ArrowUpRight size={12} className="text-rose-500" />
+                      <span>Pico Máx:</span>
                       <strong>{formatNumber(statsBrecha.maxVal)}%</strong>
                       <span className="text-[9px] text-zinc-400">({statsBrecha.maxDate})</span>
                     </div>
                     <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-2 py-0.5 rounded-md flex items-center gap-1">
-                      <span>🔻 Mínimo:</span>
+                      <ArrowDownRight size={12} className="text-emerald-500" />
+                      <span>Mínimo:</span>
                       <strong>{formatNumber(statsBrecha.minVal)}%</strong>
                       <span className="text-[9px] text-zinc-400">({statsBrecha.minDate})</span>
                     </div>
-                    <div className="bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded-md">
-                      <span>⚡ Actual: <strong className="text-rose-400">{formatNumber(statsBrecha.lastVal)}%</strong></span>
+                    <div className="bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded-md flex items-center gap-1">
+                      <Zap size={12} className="text-rose-400" />
+                      <span>Actual: <strong className="text-rose-400">{formatNumber(statsBrecha.lastVal)}%</strong></span>
                     </div>
                   </div>
                 </div>
@@ -953,18 +977,23 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                 {activeIdx !== null ? (
                   <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-mono font-bold animate-fade-in">
                     <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
-                      <span>📅 <strong>{chartData.timestamps[activeIdx]}</strong></span>
+                      <Calendar size={13} className="text-rose-500" />
+                      <span><strong>{chartData.timestamps[activeIdx]}</strong></span>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span>🔴 Brecha Porcentual: <strong className="text-rose-400 text-sm">{formatNumber(chartData.brecha[activeIdx])}%</strong></span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 inline-block" />
+                        Brecha Porcentual: <strong className="text-rose-400 text-sm">{formatNumber(chartData.brecha[activeIdx])}%</strong>
+                      </span>
                       <span className="text-zinc-400 text-[11px]">
                         (Distancia vs Pico Máximo: <strong className="text-rose-300">{formatNumber(chartData.brecha[activeIdx] - statsBrecha.maxVal)}%</strong>)
                       </span>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic">
-                    💡 Muestra la diferencia porcentual entre el dólar oficial BCV y el precio del mercado USDT.
+                  <p className="text-[11px] text-slate-500 dark:text-zinc-500 font-mono italic flex items-center gap-1.5">
+                    <Info size={12} className="text-rose-500 shrink-0" />
+                    Muestra la diferencia porcentual entre el dólar oficial BCV y el precio del mercado USDT.
                   </p>
                 )}
 
@@ -1023,12 +1052,12 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                     <g className="pointer-events-none">
                       <circle cx={peakBrechaX} cy={peakBrechaY} r="5" fill="#f43f5e" stroke="#ffffff" strokeWidth="1.5" />
                       <text x={peakBrechaX} y={peakBrechaY - 8} textAnchor="middle" className="text-[9px] font-mono font-black fill-rose-400">
-                        🔺 PICO {formatNumber(statsBrecha.maxVal)}%
+                        MAX {formatNumber(statsBrecha.maxVal)}%
                       </text>
 
                       <circle cx={minBrechaX} cy={minBrechaY} r="5" fill="#10b981" stroke="#ffffff" strokeWidth="1.5" />
                       <text x={minBrechaX} y={minBrechaY + 16} textAnchor="middle" className="text-[9px] font-mono font-black fill-emerald-400">
-                        🔻 MÍN {formatNumber(statsBrecha.minVal)}%
+                        MIN {formatNumber(statsBrecha.minVal)}%
                       </text>
                     </g>
 

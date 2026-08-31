@@ -56,7 +56,7 @@ interface JornadaItem {
 const JORNADAS_DATA: JornadaItem[] = [
   {
     id: "reprogramacion",
-    badge: "🏎️ Jornada de Potenciación",
+    badge: "Jornada de Potenciación",
     title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
     subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
     icon: <Zap className="w-6 h-6 text-primary" />,
@@ -83,7 +83,7 @@ const JORNADAS_DATA: JornadaItem[] = [
   },
   {
     id: "egr-dpf",
-    badge: "⚡ Solución Electrónica Definitiva",
+    badge: "Solución Electrónica Definitiva",
     title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off",
     subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.",
     icon: <Activity className="w-6 h-6 text-amber-400" />,
@@ -110,7 +110,7 @@ const JORNADAS_DATA: JornadaItem[] = [
   },
   {
     id: "cielo-estrellado",
-    badge: "✨ Estética VIP Rolls-Royce",
+    badge: "Estética VIP Rolls-Royce",
     title: "Cielo Estrellado de Fibra Óptica LED RGBW (Starlight Headliner)",
     subtitle: "Transforma el techo interior de tu vehículo en un cielo estrellado de lujo artesanal con destellos y estrellas fugaces.",
     icon: <Sparkles className="w-6 h-6 text-purple-400" />,
@@ -137,7 +137,7 @@ const JORNADAS_DATA: JornadaItem[] = [
   },
   {
     id: "climatizacion",
-    badge: "❄️ Confort & Máximo Frío",
+    badge: "Confort & Máximo Frío",
     title: "Jornada de Climatización & Recuperación de Aire Acondicionado",
     subtitle: "Restaura el frío polar de tu sistema A/A con recarga R134a de máxima pureza, aceite PAG sintético y trazador UV anti-fugas.",
     icon: <Snowflake className="w-6 h-6 text-cyan-400" />,
@@ -164,7 +164,7 @@ const JORNADAS_DATA: JornadaItem[] = [
   },
   {
     id: "inyeccion",
-    badge: "🔧 Rendimiento & Limpieza",
+    badge: "Rendimiento & Limpieza",
     title: "Jornada de Limpieza & Calibración de Inyectores por Ultrasonido",
     subtitle: "Devuelve la suavidad al motor y elimina tirones limpiando inyectores en banco ultrasónico con reemplazo de micro-filtros.",
     icon: <Wrench className="w-6 h-6 text-emerald-400" />,

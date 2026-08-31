@@ -439,8 +439,8 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-blue-500" />}
                   <span className="text-sm font-bold">{theme === 'dark' ? 'Activar Modo Claro' : 'Activar Modo Oscuro'}</span>
                 </div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10 text-zinc-300">
-                  {theme === 'dark' ? 'CLARO ☀️' : 'OSCURO 🌙'}
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10 text-zinc-300 flex items-center gap-1">
+                  {theme === 'dark' ? <><Sun size={10} className="text-amber-400" /> CLARO</> : <><Moon size={10} className="text-blue-400" /> OSCURO</>}
                 </span>
               </button>
 

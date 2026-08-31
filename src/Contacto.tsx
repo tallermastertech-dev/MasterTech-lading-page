@@ -418,9 +418,7 @@ export default function Contacto() {
                       </a>
                     </div>
 
-                    <p className="text-xs text-center text-zinc-500 leading-relaxed font-medium pt-1">
-                      Una vez enviado, un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu hora exacta. ¡Te esperamos con el café listo! ☕
-                    </p>
+                    <p className="text-[11px] sm:text-xs text-center text-zinc-500 leading-relaxed font-medium pt-1 sm:pt-2">Una vez enviado, un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu hora exacta. ¡Te esperamos en nuestro taller!</p>
                   </motion.form>
                 )}
               </AnimatePresence>

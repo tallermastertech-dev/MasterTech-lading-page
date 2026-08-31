@@ -26,7 +26,7 @@ export const MT01AdvisorModal: React.FC = () => {
   const initialGreeting: Message = {
     id: 'msg-1',
     sender: 'bot',
-    text: `👋 ¡Hola! Soy **MT-01 · Especialista MasterTech**, tu Asesor Técnico Avanzado de Taller MasterTech.
+    text: `¡Hola! Soy **MT-01 · Especialista MasterTech**, tu Asesor Técnico Avanzado de Taller MasterTech.
 
 Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check Engine), reprogramaciones o ingresar un **código VIN de 17 dígitos** para decodificar las especificaciones oficiales de tu vehículo.`,
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -86,7 +86,7 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
       const errorMsg: Message = {
         id: `bot-err-${Date.now()}`,
         sender: 'bot',
-        text: '🔧 **Asistencia Técnica MasterTech:**\n\nHe tomado nota de tu consulta. Para darte un diagnóstico certero sobre este síntoma o código de falla en tu vehículo, te sugerimos comunicarte directamente con nuestro equipo de especialistas en **Taller MasterTech** a través del botón de WhatsApp abajo.',
+        text: '**Asistencia Técnica MasterTech:**\n\nHe tomado nota de tu consulta. Para darte un diagnóstico certero sobre este síntoma o código de falla en tu vehículo, te sugerimos comunicarte directamente con nuestro equipo de especialistas en **Taller MasterTech** a través del botón de WhatsApp abajo.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, errorMsg]);
@@ -279,8 +279,9 @@ Puedes consultarme sobre diagnósticos mecánicos, ruidos, códigos DTC (Check E
                         </div>
                       </div>
 
-                      <div className="mt-2.5 pt-2 border-t border-amber-500/20 text-[10px] font-bold flex items-center gap-1">
-                        <span style={{ color: '#fde047' }}>🚘 Decodificación Oficial de VIN</span>
+                      <div className="mt-2.5 pt-2 border-t border-amber-500/20 text-[10px] font-bold flex items-center gap-1.5 text-amber-400">
+                        <Car size={13} className="text-amber-400" />
+                        <span>Decodificación Oficial de VIN</span>
                       </div>
                     </div>
                   )}

@@ -335,7 +335,7 @@ export default function Inspeccion() {
                     </button>
                     
                     <p className="text-xs text-center text-zinc-500 font-medium pt-2">
-                      Una vez enviado, te contactaremos de inmediato por WhatsApp para confirmar. ¡Te esperamos con el café listo! ☕
+                      Una vez enviado, te contactaremos de inmediato por WhatsApp para confirmar. ¡Te esperamos en nuestro taller!
                     </p>
                   </form>
                 </>

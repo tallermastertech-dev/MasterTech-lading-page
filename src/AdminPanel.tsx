@@ -3593,10 +3593,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <label className="text-zinc-400 font-bold block mb-1">Distintivo / Pill Superior</label>
                         <input
                           type="text"
-                          value={settingsForm.JORNADA_EMPTY_BADGE || '⚡ PRÓXIMA APERTURA DE CUPOS'}
+                          value={settingsForm.JORNADA_EMPTY_BADGE || 'PRÓXIMA APERTURA DE CUPOS'}
                           onChange={(e) => setSettingsForm({ ...settingsForm, JORNADA_EMPTY_BADGE: e.target.value })}
                           className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-amber-300 font-bold outline-none focus:border-primary"
-                          placeholder="Ej. ⚡ PRÓXIMA APERTURA DE CUPOS"
+                          placeholder="Ej. PRÓXIMA APERTURA DE CUPOS"
                         />
                       </div>
 
@@ -6060,7 +6060,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {/* Mensaje de Ayuda si no hay métodos seleccionados */}
               {!((editingProveedor.bancos && editingProveedor.bancos.length > 0) || (editingProveedor.pagoMovil && editingProveedor.pagoMovil.length > 0) || editingProveedor.zelle !== undefined || editingProveedor.binance !== undefined) && (
                 <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 text-center space-y-1">
-                  <span className="text-xs font-bold text-amber-300 block">💡 Selecciona uno o más métodos de pago arriba</span>
+                  <span className="text-xs font-bold text-amber-300 flex items-center justify-center gap-1.5">
+                    <Info size={13} className="text-amber-400" />
+                    <span>Selecciona uno o más métodos de pago arriba</span>
+                  </span>
                   <span className="text-[11px] text-zinc-400 block">Por ejemplo, activa <strong>"Transferencia"</strong> y <strong>"Pago Móvil"</strong> para completar sus datos bancarios.</span>
                 </div>
               )}
@@ -6833,8 +6836,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           </span>
                         </div>
                         <div className="font-black text-white text-sm truncate">{l.nombre || 'Cliente'}</div>
-                        <div className="text-zinc-300 text-xs truncate">🚗 {l.vehiculo || 'Vehículo no especificado'}</div>
-                        <div className="text-primary text-[11px] font-bold truncate">🛠️ {l.servicio}</div>
+                        <div className="text-zinc-300 text-xs truncate flex items-center gap-1.5">
+                          <Car size={13} className="text-zinc-400 shrink-0" />
+                          <span>{l.vehiculo || 'Vehículo no especificado'}</span>
+                        </div>
+                        <div className="text-primary text-[11px] font-bold truncate flex items-center gap-1.5">
+                          <Wrench size={12} className="text-primary shrink-0" />
+                          <span>{l.servicio}</span>
+                        </div>
                       </div>
 
                       <div className="flex items-center gap-1.5 shrink-0">
@@ -7068,26 +7077,26 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     onChange={(e) => setManualCitaData({ ...manualCitaData, servicio: e.target.value })}
                     className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer font-bold"
                   >
-                    <optgroup label="── 🔍 Diagnóstico & Inspección (Dorado) ──" className="bg-[#12141a] text-amber-300 font-bold">
+                    <optgroup label="── Diagnóstico & Inspección (Dorado) ──" className="bg-[#12141a] text-amber-300 font-bold">
                       <option value="Diagnóstico">Diagnóstico</option>
                       <option value="Diagnóstico Electrónico & Scanner">Diagnóstico Electrónico & Scanner</option>
                       <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
                       <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
                     </optgroup>
-                    <optgroup label="── 🛠️ Citas de Taller / Mecánica (Cian) ──" className="bg-[#12141a] text-cyan-300 font-bold">
+                    <optgroup label="── Citas de Taller / Mecánica (Cian) ──" className="bg-[#12141a] text-cyan-300 font-bold">
                       <option value="Mecánica General & Mantenimiento Preventivo">Mecánica General & Mantenimiento Preventivo</option>
                       <option value="Diagnóstico Electrónico & Ultrasonido Inyectores">Diagnóstico Electrónico & Ultrasonido Inyectores</option>
                       <option value="Frenos, Amortiguadores & Suspensión">Frenos, Amortiguadores & Suspensión</option>
                       <option value="Climatización A/A (Carga Gas R134a)">Climatización A/A (Carga Gas R134a)</option>
                       <option value="Instalación de Repuestos Adquiridos">Instalación de Repuestos Adquiridos</option>
                     </optgroup>
-                    <optgroup label="── 📦 Pedidos Catálogo & Importación (Azul) ──" className="bg-[#12141a] text-blue-300 font-bold">
+                    <optgroup label="── Pedidos Catálogo & Importación (Azul) ──" className="bg-[#12141a] text-blue-300 font-bold">
                       <option value="Importación & Pedidos Repuestos EE.UU.">Importación & Pedidos Repuestos EE.UU.</option>
                     </optgroup>
-                    <optgroup label="── 💼 Postulaciones & Talento (Púrpura) ──" className="bg-[#12141a] text-purple-300 font-bold">
+                    <optgroup label="── Postulaciones & Talento (Púrpura) ──" className="bg-[#12141a] text-purple-300 font-bold">
                       <option value="Postulación & Reclutamiento de Talento">Postulación & Reclutamiento de Talento</option>
                     </optgroup>
-                    <optgroup label="── 🔔 Recordatorios Operativos (Naranja) ──" className="bg-[#12141a] text-amber-200 font-bold">
+                    <optgroup label="── Recordatorios Operativos (Naranja) ──" className="bg-[#12141a] text-amber-200 font-bold">
                       <option value="Recordatorio / Gestión Operativa Taller">Recordatorio / Gestión Operativa Taller</option>
                     </optgroup>
                   </select>
@@ -7116,9 +7125,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     onChange={(e) => setManualCitaData({ ...manualCitaData, prioridad: e.target.value })}
                     className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer"
                   >
-                    <option value="alta">🔴 Alta Prioridad (Urgente)</option>
-                    <option value="media">🟡 Prioridad Media (Normal)</option>
-                    <option value="baja">🟢 Prioridad Baja (Rutina)</option>
+                    <option value="alta">Alta Prioridad (Urgente)</option>
+                    <option value="media">Prioridad Media (Normal)</option>
+                    <option value="baja">Prioridad Baja (Rutina)</option>
                   </select>
                 </div>
               </div>
@@ -7257,21 +7266,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     onChange={(e) => setEditCitaData({ ...editCitaData, servicio: e.target.value })}
                     className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer mb-1.5"
                   >
-                    <optgroup label="── 🔍 Diagnóstico & Inspección ──" className="bg-[#12141a] text-amber-300 font-bold">
+                    <optgroup label="── Diagnóstico & Inspección ──" className="bg-[#12141a] text-amber-300 font-bold">
                       <option value="Diagnóstico">Diagnóstico</option>
                       <option value="Diagnóstico Electrónico & Scanner">Diagnóstico Electrónico & Scanner</option>
                       <option value="Línea de inspección gratuita">Línea de inspección gratuita</option>
                       <option value="Inspección Diagnóstica 25 Puntos Gratuita">Inspección Diagnóstica 25 Puntos Gratuita</option>
                       <option value="Jornada Preventiva Especial VIP">Jornada Preventiva Especial VIP</option>
                     </optgroup>
-                    <optgroup label="── 🛠️ Citas de Taller / Mecánica ──" className="bg-[#12141a] text-cyan-300 font-bold">
+                    <optgroup label="── Citas de Taller / Mecánica ──" className="bg-[#12141a] text-cyan-300 font-bold">
                       <option value="Mecánica General & Mantenimiento Preventivo">Mecánica General & Mantenimiento Preventivo</option>
                       <option value="Diagnóstico Electrónico & Ultrasonido Inyectores">Diagnóstico Electrónico & Ultrasonido Inyectores</option>
                       <option value="Frenos, Amortiguadores & Suspensión">Frenos, Amortiguadores & Suspensión</option>
                       <option value="Climatización A/A (Carga Gas R134a)">Climatización A/A (Carga Gas R134a)</option>
                       <option value="Instalación de Repuestos Adquiridos">Instalación de Repuestos Adquiridos</option>
                     </optgroup>
-                    <optgroup label="── 📦 Catálogo & Otros ──" className="bg-[#12141a] text-blue-300 font-bold">
+                    <optgroup label="── Catálogo & Otros ──" className="bg-[#12141a] text-blue-300 font-bold">
                       <option value="Importación & Pedidos Repuestos EE.UU.">Importación & Pedidos Repuestos EE.UU.</option>
                       <option value="Postulación & Reclutamiento de Talento">Postulación & Reclutamiento de Talento</option>
                       <option value="Recordatorio / Gestión Operativa Taller">Recordatorio / Gestión Operativa Taller</option>
@@ -7294,9 +7303,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       onChange={(e) => setEditCitaData({ ...editCitaData, prioridad: e.target.value })}
                       className="w-full bg-black/50 border border-white/15 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
                     >
-                      <option value="alta">🔴 Alta Prioridad</option>
-                      <option value="media">🟡 Prioridad Media</option>
-                      <option value="baja">🟢 Prioridad Baja</option>
+                      <option value="alta">Alta Prioridad</option>
+                      <option value="media">Prioridad Media</option>
+                      <option value="baja">Prioridad Baja</option>
                     </select>
                   </div>
                   <div>
@@ -7355,17 +7364,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       {(selectedDayCita.prioridad === 'alta' || String(selectedDayCita.falla || '').includes('[Prioridad: alta]')) && (
                         <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-red-500/20 text-red-300 border-red-500/40 flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
-                          🔴 Prioridad Alta
+                          <span>Prioridad Alta</span>
                         </span>
                       )}
                       {(selectedDayCita.prioridad === 'baja' || String(selectedDayCita.falla || '').includes('[Prioridad: baja]')) && (
                         <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
-                          🟢 Prioridad Baja
+                          Prioridad Baja
                         </span>
                       )}
                       {(!selectedDayCita.prioridad || selectedDayCita.prioridad === 'media' || String(selectedDayCita.falla || '').includes('[Prioridad: media]')) && (
                         <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
-                          🟡 Prioridad Media
+                          Prioridad Media
                         </span>
                       )}
                       <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
@@ -7457,9 +7466,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         const timeStr = getLeadTimeStr(selectedDayCita);
                         setCitaWaMessage(`Hola ${nombre}, te escribimos desde Taller MasterTech para confirmar tu cita agendada para el ${dateStr} a las ${timeStr}.`);
                       }}
-                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-emerald-500/20 text-zinc-300 hover:text-emerald-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-emerald-500/20 text-zinc-300 hover:text-emerald-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer flex items-center gap-1"
                     >
-                      📅 Confirmar
+                      <Check size={11} />
+                      <span>Confirmar</span>
                     </button>
                     <button
                       type="button"
@@ -7470,9 +7480,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         const vehiculo = selectedDayCita.vehiculo || 'vehículo';
                         setCitaWaMessage(`Hola ${nombre}, te recordamos tu cita en Taller MasterTech pautada para el ${dateStr} a las ${timeStr} con tu ${vehiculo}. ¡Te esperamos!`);
                       }}
-                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer flex items-center gap-1"
                     >
-                      ⏰ Recordatorio
+                      <Clock size={11} />
+                      <span>Recordatorio</span>
                     </button>
                     <button
                       type="button"
@@ -7481,9 +7492,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         const vehiculo = selectedDayCita.vehiculo || 'vehículo';
                         setCitaWaMessage(`Hola ${nombre}, te informamos desde Taller MasterTech que tu ${vehiculo} está listo para ser retirado. ¡Muchas gracias por tu confianza!`);
                       }}
-                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-cyan-500/20 text-zinc-300 hover:text-cyan-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-cyan-500/20 text-zinc-300 hover:text-cyan-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer flex items-center gap-1"
                     >
-                      🚗 Vehículo Listo
+                      <Car size={11} />
+                      <span>Vehículo Listo</span>
                     </button>
                     <button
                       type="button"
@@ -7491,9 +7503,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         const nombre = selectedDayCita.nombre ? selectedDayCita.nombre.trim() : 'Cliente';
                         setCitaWaMessage(`Hola ${nombre}, te escribimos desde Taller MasterTech para coordinar una reprogramación de tu cita.`);
                       }}
-                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-purple-500/20 text-zinc-300 hover:text-purple-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer"
+                      className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-purple-500/20 text-zinc-300 hover:text-purple-300 border border-white/10 text-[9px] font-bold transition-all cursor-pointer flex items-center gap-1"
                     >
-                      🔄 Reprogramar
+                      <RotateCcw size={11} />
+                      <span>Reprogramar</span>
                     </button>
                   </div>
 
@@ -7634,9 +7647,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     onChange={(e) => setNewReminderData({ ...newReminderData, prioridad: e.target.value })}
                     className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none focus:border-amber-400 cursor-pointer"
                   >
-                    <option value="alta">🔴 Alta Prioridad</option>
-                    <option value="media">🟡 Prioridad Media</option>
-                    <option value="baja">🔵 Prioridad Baja</option>
+                    <option value="alta">Alta Prioridad</option>
+                    <option value="media">Prioridad Media</option>
+                    <option value="baja">Prioridad Baja</option>
                   </select>
                 </div>
               </div>
@@ -7693,9 +7706,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     >
                       {tab === 'PENDIENTES' ? `Pendientes (${reminders.filter(r => !r.completado).length})` :
                        tab === 'HOY' ? `Hoy (${reminders.filter(r => r.fecha === new Date().toISOString().split('T')[0]).length})` :
-                       tab === '3_DIAS' ? `📢 3 Días Antes (${count3Days})` :
-                       tab === '1_DIA' ? `⏰ 1 Día Antes (${count1Day})` :
-                       tab === '1_HORA' ? `⏳ En 1 Hora (${count1Hour})` :
+                       tab === '3_DIAS' ? `3 Días Antes (${count3Days})` :
+                       tab === '1_DIA' ? `1 Día Antes (${count1Day})` :
+                       tab === '1_HORA' ? `En 1 Hora (${count1Hour})` :
                        tab === 'COMPLETADOS' ? `Completados (${reminders.filter(r => r.completado).length})` :
                        `Todos (${reminders.length})`}
                     </button>
@@ -7746,12 +7759,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-amber-400 font-bold">{leadTime}</span>
                             <span className="text-[9px] font-black px-2 py-0.5 rounded-md border bg-amber-500/20 text-amber-300 border-amber-500/40">
-                              {reminderFilter === '3_DIAS' ? '📢 Faltan 3 Días' : reminderFilter === '1_DIA' ? '⏰ MAÑANA (1 Día)' : '⏳ En 1 Hora'}
+                              {reminderFilter === '3_DIAS' ? 'Faltan 3 Días' : reminderFilter === '1_DIA' ? 'MAÑANA (1 Día)' : 'En 1 Hora'}
                             </span>
                           </div>
                           <div className="font-black text-white text-sm truncate">{l.nombre || 'Cliente'}</div>
-                          <div className="text-zinc-300 text-xs truncate">🚗 {l.vehiculo || 'Vehículo no especificado'}</div>
-                          <div className="text-primary text-[11px] font-bold truncate">🛠️ {l.servicio}</div>
+                          <div className="text-zinc-300 text-xs truncate flex items-center gap-1.5">
+                            <Car size={13} className="text-zinc-400 shrink-0" />
+                            <span>{l.vehiculo || 'Vehículo no especificado'}</span>
+                          </div>
+                          <div className="text-primary text-[11px] font-bold truncate flex items-center gap-1.5">
+                            <Wrench size={12} className="text-primary shrink-0" />
+                            <span>{l.servicio}</span>
+                          </div>
                         </div>
 
                         {l.telefono && (
@@ -7814,17 +7833,32 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             {r.prioridad}
                           </span>
 
-                          <span className="font-mono text-[11px] text-amber-400 font-bold">
-                            📅 {r.fecha} {r.hora ? `⏰ ${r.hora}` : ''}
+                          <span className="font-mono text-[11px] text-amber-400 font-bold flex items-center gap-1">
+                            <Calendar size={12} className="text-amber-400 shrink-0" />
+                            <span>{r.fecha}</span>
+                            {r.hora && (
+                              <>
+                                <Clock size={11} className="text-amber-400 shrink-0 ml-1" />
+                                <span>{r.hora}</span>
+                              </>
+                            )}
                           </span>
                         </div>
 
                         <div className="font-bold text-white text-xs leading-snug">{r.titulo}</div>
 
                         {r.clienteNombre && (
-                          <div className="text-[11px] text-zinc-400 flex items-center gap-2">
-                            <span>👤 {r.clienteNombre}</span>
-                            {r.clienteTelefono && <span className="font-mono">📞 {r.clienteTelefono}</span>}
+                          <div className="text-[11px] text-zinc-400 flex items-center gap-3">
+                            <span className="flex items-center gap-1">
+                              <User size={12} className="text-zinc-400" />
+                              <span>{r.clienteNombre}</span>
+                            </span>
+                            {r.clienteTelefono && (
+                              <span className="font-mono flex items-center gap-1">
+                                <Phone size={12} className="text-zinc-400" />
+                                <span>{r.clienteTelefono}</span>
+                              </span>
+                            )}
                           </div>
                         )}
                       </div>
