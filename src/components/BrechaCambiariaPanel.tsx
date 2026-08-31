@@ -14,12 +14,12 @@ interface RateData {
 export default function BrechaCambiariaPanel({ initialOpen = false }: { initialOpen?: boolean }) {
   const [isOpen, setIsOpen] = useState(initialOpen);
   const [rates, setRates] = useState<RateData>({
-    bcv_usd: 775.34,
-    bcv_eur: 897.82,
-    usdt: 922.43,
-    brecha_usdt_usd: 18.88,
-    brecha_usdt_eur: 2.66,
-    brecha_eur_usd: 15.80,
+    bcv_usd: 794.99,
+    bcv_eur: 922.69,
+    usdt: 937.38,
+    brecha_usdt_usd: 17.91,
+    brecha_usdt_eur: 1.59,
+    brecha_eur_usd: 16.06,
     timestamp: new Date().toISOString()
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -38,27 +38,75 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
   const fetchRates = async () => {
     setIsLoading(true);
+    let success = false;
+
+    // 1. Try local server API endpoint
     try {
       const res = await fetch('/api/brecha-cambiaria');
       if (res.ok) {
         const data = await res.json();
-        if (data && (data.bcv_usd || data.usdt)) {
+        if (data && data.bcv_usd && !data.fallback) {
           setRates(prev => ({
-            bcv_usd: data.bcv_usd || prev.bcv_usd,
-            bcv_eur: data.bcv_eur || prev.bcv_eur,
-            usdt: data.usdt || ((data.bcv_usd || prev.bcv_usd) * (1 + (data.brecha_usdt_usd || 18.88) / 100)),
+            bcv_usd: Number(data.bcv_usd) || prev.bcv_usd,
+            bcv_eur: Number(data.bcv_eur) || prev.bcv_eur,
+            usdt: Number(data.usdt) || prev.usdt,
             brecha_usdt_usd: data.brecha_usdt_usd ?? prev.brecha_usdt_usd,
             brecha_usdt_eur: data.brecha_usdt_eur ?? prev.brecha_usdt_eur,
             brecha_eur_usd: data.brecha_eur_usd ?? prev.brecha_eur_usd,
             timestamp: data.timestamp || new Date().toISOString()
           }));
+          success = true;
         }
       }
     } catch (e) {
-      console.error("Error al obtener tasas:", e);
-    } finally {
-      setIsLoading(false);
+      console.warn("Backend brecha proxy failed, trying direct public feeds:", e);
     }
+
+    // 2. Direct client-side fallback to DolarApi if proxy failed
+    if (!success) {
+      try {
+        const [usdRes, eurRes, parRes] = await Promise.allSettled([
+          fetch('https://ve.dolarapi.com/v1/dolares/oficial'),
+          fetch('https://ve.dolarapi.com/v1/euros/oficial'),
+          fetch('https://ve.dolarapi.com/v1/dolares/paralelo')
+        ]);
+
+        let bcvUsd = rates.bcv_usd;
+        let bcvEur = rates.bcv_eur;
+        let usdt = rates.usdt;
+
+        if (usdRes.status === 'fulfilled' && usdRes.value.ok) {
+          const d = await usdRes.value.json();
+          if (d?.promedio) bcvUsd = Number(d.promedio);
+        }
+        if (eurRes.status === 'fulfilled' && eurRes.value.ok) {
+          const d = await eurRes.value.json();
+          if (d?.promedio) bcvEur = Number(d.promedio);
+        }
+        if (parRes.status === 'fulfilled' && parRes.value.ok) {
+          const d = await parRes.value.json();
+          if (d?.promedio) usdt = Number(d.promedio);
+        }
+
+        const brechaUsd = Number((((usdt - bcvUsd) / bcvUsd) * 100).toFixed(2));
+        const brechaEur = Number((((usdt - bcvEur) / bcvEur) * 100).toFixed(2));
+        const brechaEurUsd = Number((((bcvEur - bcvUsd) / bcvUsd) * 100).toFixed(2));
+
+        setRates({
+          bcv_usd: Number(bcvUsd.toFixed(2)),
+          bcv_eur: Number(bcvEur.toFixed(2)),
+          usdt: Number(usdt.toFixed(2)),
+          brecha_usdt_usd: brechaUsd,
+          brecha_usdt_eur: brechaEur,
+          brecha_eur_usd: brechaEurUsd,
+          timestamp: new Date().toISOString()
+        });
+      } catch (err) {
+        console.error("Direct DolarApi fallback also failed:", err);
+      }
+    }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {

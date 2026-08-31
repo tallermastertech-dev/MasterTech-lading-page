@@ -1091,15 +1091,15 @@ app.get('/settings', handleGetSettings);
 app.get('/api/inspection-slots', handleGetInspectionSlots);
 app.get('/inspection-slots', handleGetInspectionSlots);
 
-// Live Brecha Cambiaria proxy endpoint
+// Live Brecha Cambiaria proxy endpoint with multi-source resilient real-time fetching
 let brechaCache: { data: any; lastFetch: number } = {
   data: {
-    bcv_usd: 775.34,
-    bcv_eur: 897.82,
-    usdt: 922.43,
-    brecha_usdt_usd: 18.88,
-    brecha_usdt_eur: 2.66,
-    brecha_eur_usd: 15.80,
+    bcv_usd: 794.99,
+    bcv_eur: 922.69,
+    usdt: 937.38,
+    brecha_usdt_usd: 17.91,
+    brecha_usdt_eur: 1.59,
+    brecha_eur_usd: 16.06,
     timestamp: new Date().toISOString()
   },
   lastFetch: 0
@@ -1107,28 +1107,109 @@ let brechaCache: { data: any; lastFetch: number } = {
 
 app.get(['/api/brecha-cambiaria', '/brecha-cambiaria'], async (_req, res) => {
   const now = Date.now();
-  if (now - brechaCache.lastFetch < 45000 && brechaCache.data) {
+  if (now - brechaCache.lastFetch < 30000 && brechaCache.data) {
     return res.json({ success: true, ...brechaCache.data, cached: true });
   }
 
+  let bcv_usd = brechaCache.data?.bcv_usd || 794.99;
+  let bcv_eur = brechaCache.data?.bcv_eur || 922.69;
+  let usdt = brechaCache.data?.usdt || 937.38;
+  let fetchedAny = false;
+
+  // 1. Fetch Official BCV Rates from DolarApi (fastest & most reliable public BCV proxy)
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 6000);
-    const response = await fetch('https://brecha-cambiaria.com/api/latest', {
+    const timeout = setTimeout(() => controller.abort(), 4000);
+    const [usdRes, eurRes, paraleloRes] = await Promise.allSettled([
+      fetch('https://ve.dolarapi.com/v1/dolares/oficial', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } }),
+      fetch('https://ve.dolarapi.com/v1/euros/oficial', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } }),
+      fetch('https://ve.dolarapi.com/v1/dolares/paralelo', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } })
+    ]);
+    clearTimeout(timeout);
+
+    if (usdRes.status === 'fulfilled' && usdRes.value.ok) {
+      const d = await usdRes.value.json();
+      if (d && (d.promedio || d.precio)) {
+        bcv_usd = Number(d.promedio || d.precio);
+        fetchedAny = true;
+      }
+    }
+    if (eurRes.status === 'fulfilled' && eurRes.value.ok) {
+      const d = await eurRes.value.json();
+      if (d && (d.promedio || d.precio)) {
+        bcv_eur = Number(d.promedio || d.precio);
+        fetchedAny = true;
+      }
+    }
+    if (paraleloRes.status === 'fulfilled' && paraleloRes.value.ok) {
+      const d = await paraleloRes.value.json();
+      if (d && (d.promedio || d.precio)) {
+        usdt = Number(d.promedio || d.precio);
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching DolarApi rates:", err);
+  }
+
+  // 2. Fetch Live Binance P2P USDT rates (real P2P market price)
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
+    const binanceRes = await fetch('https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search', {
+      method: 'POST',
       signal: controller.signal,
-      headers: { 'User-Agent': 'MasterTech-App/2.0' }
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+      },
+      body: JSON.stringify({
+        asset: 'USDT',
+        fiat: 'VES',
+        merchantCheck: false,
+        page: 1,
+        rows: 8,
+        payTypes: [],
+        publisherType: null,
+        tradeType: 'BUY'
+      })
     });
     clearTimeout(timeout);
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data && (data.bcv_usd || data.usdt)) {
-        brechaCache = { data, lastFetch: now };
-        return res.json({ success: true, ...data });
+    if (binanceRes.ok) {
+      const binanceJson = await binanceRes.json();
+      if (binanceJson?.data && Array.isArray(binanceJson.data) && binanceJson.data.length > 0) {
+        const prices = binanceJson.data
+          .map((item: any) => Number(item?.adv?.price))
+          .filter((p: number) => !isNaN(p) && p > 0);
+        if (prices.length > 0) {
+          const avgUsdt = prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
+          usdt = Number(avgUsdt.toFixed(2));
+          fetchedAny = true;
+        }
       }
     }
-  } catch (e) {
-    console.error("Error fetching brecha-cambiaria.com:", e);
+  } catch (err) {
+    console.error("Error fetching Binance P2P:", err);
+  }
+
+  // Compute exact live gaps
+  const brecha_usdt_usd = Number((((usdt - bcv_usd) / bcv_usd) * 100).toFixed(2));
+  const brecha_usdt_eur = Number((((usdt - bcv_eur) / bcv_eur) * 100).toFixed(2));
+  const brecha_eur_usd = Number((((bcv_eur - bcv_usd) / bcv_usd) * 100).toFixed(2));
+
+  const resultData = {
+    bcv_usd: Number(bcv_usd.toFixed(2)),
+    bcv_eur: Number(bcv_eur.toFixed(2)),
+    usdt: Number(usdt.toFixed(2)),
+    brecha_usdt_usd,
+    brecha_usdt_eur,
+    brecha_eur_usd,
+    timestamp: new Date().toISOString()
+  };
+
+  if (fetchedAny) {
+    brechaCache = { data: resultData, lastFetch: now };
+    return res.json({ success: true, ...resultData });
   }
 
   return res.json({ success: true, ...brechaCache.data, fallback: true });
