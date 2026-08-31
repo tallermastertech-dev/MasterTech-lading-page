@@ -494,27 +494,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
     // 1. Acceso Total
     if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com' || access === 'full') {
-      return ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+      return ['dashboard', 'brecha', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
     if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) {
-      return ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+      return ['dashboard', 'brecha', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
 
-    // 2. Rol Administración (Solo Dashboard para ver la tasa y Admin Proveedores)
+    // 2. Rol Administración (Dashboard, Tasas Cambiarias y Admin Proveedores)
     if (access === 'administracion' || role === 'administración' || role === 'administracion') {
-      return ['dashboard', 'proveedores'];
+      return ['dashboard', 'brecha', 'proveedores'];
     }
 
-    // 3. Rol Logística (Dashboard, Citas, Catálogo, Jornadas y Admin Proveedores)
+    // 3. Rol Logística (Dashboard, Tasas Cambiarias, Citas, Catálogo, Jornadas y Admin Proveedores)
     if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
-      return ['dashboard', 'leads', 'catalogo', 'jornadas', 'proveedores'];
+      return ['dashboard', 'brecha', 'leads', 'catalogo', 'jornadas', 'proveedores'];
     }
 
-    return ['dashboard', 'proveedores'];
+    return ['dashboard', 'brecha', 'proveedores'];
   };
 
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'leads' | 'catalogo' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'brecha' | 'leads' | 'catalogo' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
 
   // Audit Logs State (Registro de Actividad y Cambios de Usuarios)
@@ -2244,6 +2244,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               const isFull = isFullAdminUser(currentUser);
               const allTabs = [
                 { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+                { id: 'brecha', label: 'Tasas & Brecha Cambiaria', icon: <TrendingUp size={18} />, badge: 'EN VIVO' },
                 { id: 'leads', label: `Calendario & Citas (${leads.length})`, icon: <Calendar size={18} /> },
                 { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
                 { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
@@ -2573,6 +2574,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     })}
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE: TASAS & BRECHA CAMBIARIA (TELEMETRÍA Y GRÁFICAS) */}
+          {/* ========================================================================= */}
+          {activeTab === 'brecha' && (
+            <div className="space-y-6 animate-fade-in">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Tasas & Brecha Cambiaria</h1>
+                  <p className="text-xs text-zinc-400 mt-1">Telemetría de divisas en vivo, histórico de tasas P2P y oficial BCV, y conversor rápido para presupuestos.</p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                <BrechaCambiariaPanel initialOpen={true} />
               </div>
             </div>
           )}

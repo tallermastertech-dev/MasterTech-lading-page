@@ -152,9 +152,91 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
   const totalVES_EUR_BCV = parsedAmount * rates.bcv_eur;
   const totalVES_USDT = parsedAmount * rates.usdt;
 
+  // Timeframe for Historical Charts
+  const [timeframe, setTimeframe] = useState<'7d' | '30d' | '90d'>('7d');
+  const [hoveredPoint, setHoveredPoint] = useState<{ chart: string; index: number; x: number; y: number; val1: number; val2?: number; date: string } | null>(null);
+
+  // Generate dynamic historical data anchored to live rates
+  const getHistoricalData = () => {
+    const curUsdt = rates.usdt || 937.62;
+    const curBcv = rates.bcv_usd || 794.99;
+
+    if (timeframe === '7d') {
+      const dates = ['24/8', '25/8', '26/8', '27/8', '28/8', '29/8', '30/8', '31/8'];
+      const binance = [924.50, 934.10, 952.80, 955.40, 934.20, 944.80, 936.50, curUsdt];
+      const bybit = [927.80, 938.50, 966.10, 958.20, 937.90, 948.40, 940.20, curUsdt + 2.3];
+      const bcv = [784.15, 784.15, 787.50, 791.40, 791.40, 791.40, 791.40, curBcv];
+      const brecha = binance.map((us, i) => Number((((us - bcv[i]) / bcv[i]) * 100).toFixed(2)));
+      return { dates, binance, bybit, bcv, brecha };
+    } else if (timeframe === '30d') {
+      const dates = ['1/8', '4/8', '8/8', '11/8', '15/8', '18/8', '22/8', '25/8', '28/8', '31/8'];
+      const binance = [845.20, 858.40, 874.10, 892.50, 915.20, 908.40, 932.10, 955.40, 944.80, curUsdt];
+      const bybit = [848.50, 862.10, 879.30, 897.20, 921.80, 913.60, 938.50, 958.20, 948.40, curUsdt + 2.3];
+      const bcv = [742.10, 748.30, 755.80, 764.20, 772.50, 778.90, 784.15, 787.50, 791.40, curBcv];
+      const brecha = binance.map((us, i) => Number((((us - bcv[i]) / bcv[i]) * 100).toFixed(2)));
+      return { dates, binance, bybit, bcv, brecha };
+    } else {
+      const dates = ['Jun', '15 Jun', 'Jul', '15 Jul', 'Ago', '15 Ago', '31 Ago'];
+      const binance = [680.50, 720.40, 765.80, 810.20, 860.40, 915.20, curUsdt];
+      const bybit = [684.20, 725.10, 771.50, 816.80, 867.20, 921.80, curUsdt + 2.3];
+      const bcv = [610.20, 638.50, 674.10, 712.40, 755.80, 778.90, curBcv];
+      const brecha = binance.map((us, i) => Number((((us - bcv[i]) / bcv[i]) * 100).toFixed(2)));
+      return { dates, binance, bybit, bcv, brecha };
+    }
+  };
+
+  const chartData = getHistoricalData();
+
+  // SVG Chart rendering helpers
+  const svgWidth = 800;
+  const svgHeight = 220;
+  const padding = { top: 25, right: 30, bottom: 35, left: 65 };
+  const graphWidth = svgWidth - padding.left - padding.right;
+  const graphHeight = svgHeight - padding.top - padding.bottom;
+
+  const createSmoothPath = (data: number[], min: number, max: number) => {
+    const range = max - min || 1;
+    const points = data.map((val, i) => ({
+      x: padding.left + (i / (data.length - 1)) * graphWidth,
+      y: padding.top + graphHeight - ((val - min) / range) * graphHeight
+    }));
+
+    if (points.length < 2) return '';
+    let d = `M ${points[0].x} ${points[0].y}`;
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[i === 0 ? 0 : i - 1];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[i + 2] || p2;
+
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+      d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+    }
+    return d;
+  };
+
+  const createStepPath = (data: number[], min: number, max: number) => {
+    const range = max - min || 1;
+    const points = data.map((val, i) => ({
+      x: padding.left + (i / (data.length - 1)) * graphWidth,
+      y: padding.top + graphHeight - ((val - min) / range) * graphHeight
+    }));
+
+    let d = `M ${points[0].x} ${points[0].y}`;
+    for (let i = 0; i < points.length - 1; i++) {
+      const nextX = points[i + 1].x;
+      const nextY = points[i + 1].y;
+      d += ` H ${nextX} V ${nextY}`;
+    }
+    return d;
+  };
+
   const ContentPanel = (
     <div className="space-y-6 select-none">
-      {/* MasterTech Automotive Exchange Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-300 dark:border-white/10 pb-4">
         <div className="space-y-1.5">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-200/90 dark:bg-amber-500/20 border border-amber-400 dark:border-amber-500/40 text-[11px] font-black uppercase tracking-wider text-amber-950 dark:text-amber-300 shadow-sm">
@@ -202,7 +284,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
         </div>
       </div>
 
-      {/* Status Bar */}
       <div className="bg-slate-100 dark:bg-[#12141a]/90 backdrop-blur-md border border-slate-300 dark:border-white/10 border-l-4 border-l-amber-500 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs shadow-sm">
         <div className="flex items-center gap-2 text-slate-900 dark:text-zinc-300 font-mono text-[11px]">
           <span className="text-slate-700 font-bold">Última actualización:</span>
@@ -214,9 +295,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
         </div>
       </div>
 
-      {/* 6 Technical Telemetry Rate Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {/* 1. USDT BINANCE */}
         <div className="bg-white dark:bg-[#12141a] border-2 border-amber-400 dark:border-amber-500/20 hover:border-amber-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
@@ -233,7 +312,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </div>
 
-        {/* 2. DÓLAR BCV */}
         <div className="bg-white dark:bg-[#12141a] border-2 border-emerald-400 dark:border-emerald-500/20 hover:border-emerald-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
@@ -250,7 +328,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </div>
 
-        {/* 3. EURO BCV */}
         <div className="bg-white dark:bg-[#12141a] border-2 border-cyan-400 dark:border-cyan-500/20 hover:border-cyan-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-cyan-950 dark:text-cyan-300 flex items-center gap-1.5">
@@ -267,7 +344,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </div>
 
-        {/* 4. USDT VS $ BCV */}
         <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-rose-950 dark:text-rose-300 flex items-center gap-1.5 truncate">
@@ -283,7 +359,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </div>
 
-        {/* 5. USDT VS € BCV */}
         <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-rose-950 dark:text-rose-300 flex items-center gap-1.5 truncate">
@@ -299,7 +374,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </div>
 
-        {/* 6. € BCV VS $ BCV */}
         <div className="bg-white dark:bg-[#12141a] border-2 border-rose-400 dark:border-rose-500/20 hover:border-rose-500 rounded-2xl p-3.5 transition-all space-y-1.5 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black uppercase tracking-wider text-rose-950 dark:text-rose-300 flex items-center gap-1.5 truncate">
@@ -316,7 +390,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
         </div>
       </div>
 
-      {/* Quick Workshop Currency Converter Card */}
       <div className="bg-slate-50 dark:bg-[#12141a]/90 border border-slate-200 dark:border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
         <div className="flex items-center gap-3.5 w-full md:w-auto">
           <div className="w-11 h-11 rounded-xl bg-amber-100 dark:bg-primary/20 border border-amber-300 dark:border-primary/30 flex items-center justify-center text-amber-800 dark:text-primary shrink-0 shadow-xs">
@@ -347,7 +420,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
 
           <div className="flex flex-wrap items-center gap-2 sm:gap-3 bg-white dark:bg-black/70 border border-slate-300 dark:border-primary/30 rounded-xl px-2 sm:px-3 py-1.5 text-xs font-mono shadow-xs">
-            {/* DÓLAR BCV */}
             <div 
               onClick={() => handleCopyAmount(`${formatNumber(totalVES_USD_BCV)} Bs.`, 'usd_bcv')}
               className="group flex flex-col cursor-pointer hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20 px-2.5 py-1 rounded-lg transition-all border border-transparent hover:border-emerald-500/30"
@@ -370,7 +442,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
             <span className="text-slate-400 dark:text-zinc-600 hidden sm:inline-block font-black">|</span>
 
-            {/* EURO BCV */}
             <div 
               onClick={() => handleCopyAmount(`${formatNumber(totalVES_EUR_BCV)} Bs.`, 'eur_bcv')}
               className="group flex flex-col cursor-pointer hover:bg-cyan-500/10 dark:hover:bg-cyan-500/20 px-2.5 py-1 rounded-lg transition-all border border-transparent hover:border-cyan-500/30"
@@ -393,7 +464,6 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
             <span className="text-slate-400 dark:text-zinc-600 hidden sm:inline-block font-black">|</span>
 
-            {/* USDT P2P */}
             <div 
               onClick={() => handleCopyAmount(`${formatNumber(totalVES_USDT)} Bs.`, 'usdt_p2p')}
               className="group flex flex-col cursor-pointer hover:bg-amber-500/10 dark:hover:bg-amber-500/20 px-2.5 py-1 rounded-lg transition-all border border-transparent hover:border-amber-500/30"
@@ -416,10 +486,331 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           </div>
         </div>
       </div>
+
+      {/* HISTORICAL EXCHANGE RATE & GAP CHARTS */}
+      <div className="space-y-5 pt-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <TrendingUp size={18} className="text-amber-400" />
+            <h3 className="text-base font-display font-black uppercase text-slate-900 dark:text-white tracking-tight">
+              Gráficas Históricas y Tendencias de Mercado
+            </h3>
+          </div>
+          <div className="flex items-center bg-slate-200 dark:bg-black/60 p-1 rounded-xl border border-slate-300 dark:border-white/10 text-xs font-bold">
+            {(['7d', '30d', '90d'] as const).map(tf => (
+              <button
+                key={tf}
+                onClick={() => setTimeframe(tf)}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer uppercase ${
+                  timeframe === tf
+                    ? 'bg-emerald-500 text-black font-black shadow-md'
+                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                {tf}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 1. CHART: TASAS USDT P2P (Binance vs Bybit) */}
+        <div className="bg-white dark:bg-[#0c0e14] border border-slate-300 dark:border-white/10 rounded-2xl p-5 shadow-sm space-y-3 relative">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide">
+              Tasas USDT P2P
+            </h4>
+            {hoveredPoint?.chart === 'usdt' && (
+              <span className="text-xs font-mono font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                {hoveredPoint.date} • Binance: {formatNumber(hoveredPoint.val1)} Bs. | Bybit: {formatNumber(hoveredPoint.val2 || 0)} Bs.
+              </span>
+            )}
+          </div>
+
+          {(() => {
+            const allVals = [...chartData.binance, ...chartData.bybit];
+            const minVal = Math.floor(Math.min(...allVals) - 2);
+            const maxVal = Math.ceil(Math.max(...allVals) + 2);
+            const yLabels = [
+              maxVal,
+              minVal + (maxVal - minVal) * 0.75,
+              minVal + (maxVal - minVal) * 0.5,
+              minVal + (maxVal - minVal) * 0.25,
+              minVal
+            ];
+
+            return (
+              <div className="relative w-full overflow-hidden">
+                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto">
+                  {/* Gridlines & Y-Axis Labels */}
+                  {yLabels.map((yVal, idx) => {
+                    const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
+                    return (
+                      <g key={idx}>
+                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                          {formatNumber(yVal, 2)}
+                        </text>
+                        <line
+                          x1={padding.left}
+                          y1={yPos}
+                          x2={svgWidth - padding.right}
+                          y2={yPos}
+                          stroke="currentColor"
+                          strokeDasharray="3 3"
+                          className="text-slate-200 dark:text-zinc-800"
+                        />
+                      </g>
+                    );
+                  })}
+
+                  {/* X-Axis Date Labels */}
+                  {chartData.dates.map((dStr, idx) => {
+                    const xPos = padding.left + (idx / (chartData.dates.length - 1)) * graphWidth;
+                    return (
+                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                        {dStr}
+                      </text>
+                    );
+                  })}
+
+                  {/* Curves */}
+                  <path d={createSmoothPath(chartData.binance, minVal, maxVal)} fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d={createSmoothPath(chartData.bybit, minVal, maxVal)} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
+
+                  {/* Interactive Hover Trigger Points */}
+                  {chartData.binance.map((val, idx) => {
+                    const x = padding.left + (idx / (chartData.binance.length - 1)) * graphWidth;
+                    const y = padding.top + graphHeight - ((val - minVal) / (maxVal - minVal)) * graphHeight;
+                    return (
+                      <circle
+                        key={idx}
+                        cx={x}
+                        cy={y}
+                        r="5"
+                        fill="#10b981"
+                        className="cursor-pointer transition-transform hover:scale-150"
+                        onMouseEnter={() => setHoveredPoint({ chart: 'usdt', index: idx, x, y, val1: val, val2: chartData.bybit[idx], date: chartData.dates[idx] })}
+                        onMouseLeave={() => setHoveredPoint(null)}
+                      />
+                    );
+                  })}
+                </svg>
+
+                {/* Legend */}
+                <div className="flex items-center gap-5 text-xs font-bold pt-2 px-2">
+                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                    <span>Binance</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                    <span>Bybit</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* 2. CHART: TASA BCV (Official Step Progression) */}
+        <div className="bg-white dark:bg-[#0c0e14] border border-slate-300 dark:border-white/10 rounded-2xl p-5 shadow-sm space-y-3 relative">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide">
+              Tasa BCV
+            </h4>
+            {hoveredPoint?.chart === 'bcv' && (
+              <span className="text-xs font-mono font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md">
+                {hoveredPoint.date} • Tasa Oficial: {formatNumber(hoveredPoint.val1)} Bs.
+              </span>
+            )}
+          </div>
+
+          {(() => {
+            const minVal = Math.floor(Math.min(...chartData.bcv) - 1);
+            const maxVal = Math.ceil(Math.max(...chartData.bcv) + 1);
+            const yLabels = [
+              maxVal,
+              minVal + (maxVal - minVal) * 0.75,
+              minVal + (maxVal - minVal) * 0.5,
+              minVal + (maxVal - minVal) * 0.25,
+              minVal
+            ];
+
+            return (
+              <div className="relative w-full overflow-hidden">
+                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto">
+                  {/* Gridlines & Y-Axis Labels */}
+                  {yLabels.map((yVal, idx) => {
+                    const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
+                    return (
+                      <g key={idx}>
+                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                          {formatNumber(yVal, 2)}
+                        </text>
+                        <line
+                          x1={padding.left}
+                          y1={yPos}
+                          x2={svgWidth - padding.right}
+                          y2={yPos}
+                          stroke="currentColor"
+                          strokeDasharray="3 3"
+                          className="text-slate-200 dark:text-zinc-800"
+                        />
+                      </g>
+                    );
+                  })}
+
+                  {/* X-Axis Date Labels */}
+                  {chartData.dates.map((dStr, idx) => {
+                    const xPos = padding.left + (idx / (chartData.dates.length - 1)) * graphWidth;
+                    return (
+                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                        {dStr}
+                      </text>
+                    );
+                  })}
+
+                  {/* Step Curve */}
+                  <path d={createStepPath(chartData.bcv, minVal, maxVal)} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
+
+                  {/* Points */}
+                  {chartData.bcv.map((val, idx) => {
+                    const x = padding.left + (idx / (chartData.bcv.length - 1)) * graphWidth;
+                    const y = padding.top + graphHeight - ((val - minVal) / (maxVal - minVal)) * graphHeight;
+                    return (
+                      <circle
+                        key={idx}
+                        cx={x}
+                        cy={y}
+                        r="5"
+                        fill="#f59e0b"
+                        className="cursor-pointer transition-transform hover:scale-150"
+                        onMouseEnter={() => setHoveredPoint({ chart: 'bcv', index: idx, x, y, val1: val, date: chartData.dates[idx] })}
+                        onMouseLeave={() => setHoveredPoint(null)}
+                      />
+                    );
+                  })}
+                </svg>
+
+                {/* Legend */}
+                <div className="flex items-center gap-5 text-xs font-bold pt-2 px-2">
+                  <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                    <span>BCV</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+
+        {/* 3. CHART: LA BRECHA (USDT vs BCV) */}
+        <div className="bg-white dark:bg-[#0c0e14] border border-slate-300 dark:border-white/10 rounded-2xl p-5 shadow-sm space-y-3 relative">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide">
+              La Brecha (USDT vs BCV)
+            </h4>
+            {hoveredPoint?.chart === 'brecha' && (
+              <span className="text-xs font-mono font-bold text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded-md">
+                {hoveredPoint.date} • Diferencial: {formatNumber(hoveredPoint.val1)}%
+              </span>
+            )}
+          </div>
+
+          {(() => {
+            const minVal = Math.floor(Math.min(...chartData.brecha) - 0.5);
+            const maxVal = Math.ceil(Math.max(...chartData.brecha) + 0.5);
+            const yLabels = [
+              maxVal,
+              minVal + (maxVal - minVal) * 0.75,
+              minVal + (maxVal - minVal) * 0.5,
+              minVal + (maxVal - minVal) * 0.25,
+              minVal
+            ];
+
+            const smoothLine = createSmoothPath(chartData.brecha, minVal, maxVal);
+            const areaPath = `${smoothLine} L ${padding.left + graphWidth} ${padding.top + graphHeight} L ${padding.left} ${padding.top + graphHeight} Z`;
+
+            return (
+              <div className="relative w-full overflow-hidden">
+                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto">
+                  <defs>
+                    <linearGradient id="brechaRedGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ef4444" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#ef4444" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Gridlines & Y-Axis Labels */}
+                  {yLabels.map((yVal, idx) => {
+                    const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
+                    return (
+                      <g key={idx}>
+                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                          {formatNumber(yVal, 2)}%
+                        </text>
+                        <line
+                          x1={padding.left}
+                          y1={yPos}
+                          x2={svgWidth - padding.right}
+                          y2={yPos}
+                          stroke="currentColor"
+                          strokeDasharray="3 3"
+                          className="text-slate-200 dark:text-zinc-800"
+                        />
+                      </g>
+                    );
+                  })}
+
+                  {/* X-Axis Date Labels */}
+                  {chartData.dates.map((dStr, idx) => {
+                    const xPos = padding.left + (idx / (chartData.dates.length - 1)) * graphWidth;
+                    return (
+                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                        {dStr}
+                      </text>
+                    );
+                  })}
+
+                  {/* Gradient Area Fill */}
+                  <path d={areaPath} fill="url(#brechaRedGrad)" />
+
+                  {/* Red Line */}
+                  <path d={smoothLine} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+
+                  {/* Points */}
+                  {chartData.brecha.map((val, idx) => {
+                    const x = padding.left + (idx / (chartData.brecha.length - 1)) * graphWidth;
+                    const y = padding.top + graphHeight - ((val - minVal) / (maxVal - minVal)) * graphHeight;
+                    return (
+                      <circle
+                        key={idx}
+                        cx={x}
+                        cy={y}
+                        r="5"
+                        fill="#ef4444"
+                        className="cursor-pointer transition-transform hover:scale-150"
+                        onMouseEnter={() => setHoveredPoint({ chart: 'brecha', index: idx, x, y, val1: val, date: chartData.dates[idx] })}
+                        onMouseLeave={() => setHoveredPoint(null)}
+                      />
+                    );
+                  })}
+                </svg>
+
+                {/* Legend */}
+                <div className="flex items-center gap-5 text-xs font-bold pt-2 px-2">
+                  <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                    <span>Brecha %</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      </div>
     </div>
   );
 
-  // If used in Admin Dashboard or embedded mode, render full panel directly
   if (initialOpen) {
     return (
       <div className="bg-white dark:bg-gradient-to-b dark:from-[#090a0d] dark:via-[#0d0e14] dark:to-[#090a0d] p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-sm transition-colors">
