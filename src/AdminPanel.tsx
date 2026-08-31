@@ -2392,11 +2392,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </button>
               </div>
 
-              {/* Live Automotive Exchange Telemetry & Budget Calculator Panel (Placed First on Top) */}
-              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                <BrechaCambiariaPanel initialOpen={true} />
-              </div>
-
               {/* Segregated Metrics Grid */}
               {(() => {
                 const jobApps = leads.filter(l => getLeadCategory(l) === 'trabajo');
