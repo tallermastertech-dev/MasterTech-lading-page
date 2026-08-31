@@ -154,7 +154,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
   // Timeframe for Historical Charts
   const [timeframe, setTimeframe] = useState<'7d' | '30d' | '90d'>('7d');
-  const [hoveredPoint, setHoveredPoint] = useState<{ chart: string; index: number; x: number; y: number; val1: number; val2?: number; date: string } | null>(null);
+  const [hoverIndex, setHoverIndex] = useState<{ chart: 'usdt' | 'bcv' | 'brecha'; index: number } | null>(null);
 
   // Generate dynamic historical data anchored to live rates
   const getHistoricalData = () => {
@@ -187,12 +187,22 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
 
   const chartData = getHistoricalData();
 
-  // SVG Chart rendering helpers
+  // SVG Chart Dimensions & Configuration
   const svgWidth = 800;
   const svgHeight = 220;
   const padding = { top: 25, right: 30, bottom: 35, left: 65 };
   const graphWidth = svgWidth - padding.left - padding.right;
   const graphHeight = svgHeight - padding.top - padding.bottom;
+
+  const handleChartMouseMove = (chart: 'usdt' | 'bcv' | 'brecha', e: React.MouseEvent<SVGSVGElement>, dataLength: number) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const svgX = (mouseX / rect.width) * svgWidth;
+    const clampedX = Math.max(padding.left, Math.min(padding.left + graphWidth, svgX));
+    const rawIdx = Math.round(((clampedX - padding.left) / graphWidth) * (dataLength - 1));
+    const safeIdx = Math.max(0, Math.min(dataLength - 1, rawIdx));
+    setHoverIndex({ chart, index: safeIdx });
+  };
 
   const createSmoothPath = (data: number[], min: number, max: number) => {
     const range = max - min || 1;
@@ -226,12 +236,15 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       y: padding.top + graphHeight - ((val - min) / range) * graphHeight
     }));
 
+    if (points.length === 0) return '';
     let d = `M ${points[0].x} ${points[0].y}`;
-    for (let i = 0; i < points.length - 1; i++) {
-      const nextX = points[i + 1].x;
-      const nextY = points[i + 1].y;
-      d += ` H ${nextX} V ${nextY}`;
+    for (let i = 1; i < points.length; i++) {
+      const x = points[i].x;
+      const y = points[i].y;
+      d += ` H ${x} V ${y}`;
     }
+    // Continue step horizontally to the full right boundary
+    d += ` H ${padding.left + graphWidth}`;
     return d;
   };
 
@@ -519,9 +532,9 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide">
               Tasas USDT P2P
             </h4>
-            {hoveredPoint?.chart === 'usdt' && (
-              <span className="text-xs font-mono font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                {hoveredPoint.date} • Binance: {formatNumber(hoveredPoint.val1)} Bs. | Bybit: {formatNumber(hoveredPoint.val2 || 0)} Bs.
+            {hoverIndex?.chart === 'usdt' && (
+              <span className="text-xs font-mono font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md transition-all">
+                {chartData.dates[hoverIndex.index]} • Binance: <strong className="text-emerald-400">{formatNumber(chartData.binance[hoverIndex.index])} Bs.</strong> | Bybit: <strong className="text-blue-400">{formatNumber(chartData.bybit[hoverIndex.index])} Bs.</strong>
               </span>
             )}
           </div>
@@ -538,15 +551,25 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
               minVal
             ];
 
+            const activeIdx = hoverIndex?.chart === 'usdt' ? hoverIndex.index : null;
+            const activeX = activeIdx !== null ? padding.left + (activeIdx / (chartData.binance.length - 1)) * graphWidth : null;
+            const activeBinanceY = activeIdx !== null ? padding.top + graphHeight - ((chartData.binance[activeIdx] - minVal) / (maxVal - minVal)) * graphHeight : null;
+            const activeBybitY = activeIdx !== null ? padding.top + graphHeight - ((chartData.bybit[activeIdx] - minVal) / (maxVal - minVal)) * graphHeight : null;
+
             return (
               <div className="relative w-full overflow-hidden">
-                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto">
+                <svg
+                  viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                  className="w-full h-auto cursor-crosshair select-none"
+                  onMouseMove={(e) => handleChartMouseMove('usdt', e, chartData.binance.length)}
+                  onMouseLeave={() => setHoverIndex(null)}
+                >
                   {/* Gridlines & Y-Axis Labels */}
                   {yLabels.map((yVal, idx) => {
                     const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
                     return (
                       <g key={idx}>
-                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold pointer-events-none">
                           {formatNumber(yVal, 2)}
                         </text>
                         <line
@@ -556,7 +579,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                           y2={yPos}
                           stroke="currentColor"
                           strokeDasharray="3 3"
-                          className="text-slate-200 dark:text-zinc-800"
+                          className="text-slate-200 dark:text-zinc-800 pointer-events-none"
                         />
                       </g>
                     );
@@ -566,33 +589,36 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                   {chartData.dates.map((dStr, idx) => {
                     const xPos = padding.left + (idx / (chartData.dates.length - 1)) * graphWidth;
                     return (
-                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold pointer-events-none">
                         {dStr}
                       </text>
                     );
                   })}
 
                   {/* Curves */}
-                  <path d={createSmoothPath(chartData.binance, minVal, maxVal)} fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" />
-                  <path d={createSmoothPath(chartData.bybit, minVal, maxVal)} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d={createSmoothPath(chartData.binance, minVal, maxVal)} fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" className="pointer-events-none" />
+                  <path d={createSmoothPath(chartData.bybit, minVal, maxVal)} fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" className="pointer-events-none" />
 
-                  {/* Interactive Hover Trigger Points */}
-                  {chartData.binance.map((val, idx) => {
-                    const x = padding.left + (idx / (chartData.binance.length - 1)) * graphWidth;
-                    const y = padding.top + graphHeight - ((val - minVal) / (maxVal - minVal)) * graphHeight;
-                    return (
-                      <circle
-                        key={idx}
-                        cx={x}
-                        cy={y}
-                        r="5"
-                        fill="#10b981"
-                        className="cursor-pointer transition-transform hover:scale-150"
-                        onMouseEnter={() => setHoveredPoint({ chart: 'usdt', index: idx, x, y, val1: val, val2: chartData.bybit[idx], date: chartData.dates[idx] })}
-                        onMouseLeave={() => setHoveredPoint(null)}
+                  {/* Crosshair Cursor Tracking */}
+                  {activeX !== null && (
+                    <g className="pointer-events-none">
+                      <line
+                        x1={activeX}
+                        y1={padding.top}
+                        x2={activeX}
+                        y2={padding.top + graphHeight}
+                        stroke="#64748b"
+                        strokeWidth="1.5"
+                        strokeDasharray="3 3"
                       />
-                    );
-                  })}
+                      {activeBinanceY !== null && (
+                        <circle cx={activeX} cy={activeBinanceY} r="6" fill="#10b981" stroke="#ffffff" strokeWidth="2" />
+                      )}
+                      {activeBybitY !== null && (
+                        <circle cx={activeX} cy={activeBybitY} r="6" fill="#3b82f6" stroke="#ffffff" strokeWidth="2" />
+                      )}
+                    </g>
+                  )}
                 </svg>
 
                 {/* Legend */}
@@ -617,9 +643,9 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide">
               Tasa BCV
             </h4>
-            {hoveredPoint?.chart === 'bcv' && (
-              <span className="text-xs font-mono font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md">
-                {hoveredPoint.date} • Tasa Oficial: {formatNumber(hoveredPoint.val1)} Bs.
+            {hoverIndex?.chart === 'bcv' && (
+              <span className="text-xs font-mono font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md transition-all">
+                {chartData.dates[hoverIndex.index]} • Tasa Oficial: <strong className="text-amber-400">{formatNumber(chartData.bcv[hoverIndex.index])} Bs.</strong>
               </span>
             )}
           </div>
@@ -635,15 +661,24 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
               minVal
             ];
 
+            const activeIdx = hoverIndex?.chart === 'bcv' ? hoverIndex.index : null;
+            const activeX = activeIdx !== null ? padding.left + (activeIdx / (chartData.bcv.length - 1)) * graphWidth : null;
+            const activeBcvY = activeIdx !== null ? padding.top + graphHeight - ((chartData.bcv[activeIdx] - minVal) / (maxVal - minVal)) * graphHeight : null;
+
             return (
               <div className="relative w-full overflow-hidden">
-                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto">
+                <svg
+                  viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                  className="w-full h-auto cursor-crosshair select-none"
+                  onMouseMove={(e) => handleChartMouseMove('bcv', e, chartData.bcv.length)}
+                  onMouseLeave={() => setHoverIndex(null)}
+                >
                   {/* Gridlines & Y-Axis Labels */}
                   {yLabels.map((yVal, idx) => {
                     const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
                     return (
                       <g key={idx}>
-                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold pointer-events-none">
                           {formatNumber(yVal, 2)}
                         </text>
                         <line
@@ -653,7 +688,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                           y2={yPos}
                           stroke="currentColor"
                           strokeDasharray="3 3"
-                          className="text-slate-200 dark:text-zinc-800"
+                          className="text-slate-200 dark:text-zinc-800 pointer-events-none"
                         />
                       </g>
                     );
@@ -663,32 +698,32 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                   {chartData.dates.map((dStr, idx) => {
                     const xPos = padding.left + (idx / (chartData.dates.length - 1)) * graphWidth;
                     return (
-                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold pointer-events-none">
                         {dStr}
                       </text>
                     );
                   })}
 
                   {/* Step Curve */}
-                  <path d={createStepPath(chartData.bcv, minVal, maxVal)} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d={createStepPath(chartData.bcv, minVal, maxVal)} fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" className="pointer-events-none" />
 
-                  {/* Points */}
-                  {chartData.bcv.map((val, idx) => {
-                    const x = padding.left + (idx / (chartData.bcv.length - 1)) * graphWidth;
-                    const y = padding.top + graphHeight - ((val - minVal) / (maxVal - minVal)) * graphHeight;
-                    return (
-                      <circle
-                        key={idx}
-                        cx={x}
-                        cy={y}
-                        r="5"
-                        fill="#f59e0b"
-                        className="cursor-pointer transition-transform hover:scale-150"
-                        onMouseEnter={() => setHoveredPoint({ chart: 'bcv', index: idx, x, y, val1: val, date: chartData.dates[idx] })}
-                        onMouseLeave={() => setHoveredPoint(null)}
+                  {/* Crosshair Cursor Tracking */}
+                  {activeX !== null && (
+                    <g className="pointer-events-none">
+                      <line
+                        x1={activeX}
+                        y1={padding.top}
+                        x2={activeX}
+                        y2={padding.top + graphHeight}
+                        stroke="#64748b"
+                        strokeWidth="1.5"
+                        strokeDasharray="3 3"
                       />
-                    );
-                  })}
+                      {activeBcvY !== null && (
+                        <circle cx={activeX} cy={activeBcvY} r="6" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" />
+                      )}
+                    </g>
+                  )}
                 </svg>
 
                 {/* Legend */}
@@ -709,9 +744,9 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             <h4 className="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wide">
               La Brecha (USDT vs BCV)
             </h4>
-            {hoveredPoint?.chart === 'brecha' && (
-              <span className="text-xs font-mono font-bold text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded-md">
-                {hoveredPoint.date} • Diferencial: {formatNumber(hoveredPoint.val1)}%
+            {hoverIndex?.chart === 'brecha' && (
+              <span className="text-xs font-mono font-bold text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded-md transition-all">
+                {chartData.dates[hoverIndex.index]} • Diferencial: <strong className="text-rose-400">{formatNumber(chartData.brecha[hoverIndex.index])}%</strong>
               </span>
             )}
           </div>
@@ -730,9 +765,18 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
             const smoothLine = createSmoothPath(chartData.brecha, minVal, maxVal);
             const areaPath = `${smoothLine} L ${padding.left + graphWidth} ${padding.top + graphHeight} L ${padding.left} ${padding.top + graphHeight} Z`;
 
+            const activeIdx = hoverIndex?.chart === 'brecha' ? hoverIndex.index : null;
+            const activeX = activeIdx !== null ? padding.left + (activeIdx / (chartData.brecha.length - 1)) * graphWidth : null;
+            const activeBrechaY = activeIdx !== null ? padding.top + graphHeight - ((chartData.brecha[activeIdx] - minVal) / (maxVal - minVal)) * graphHeight : null;
+
             return (
               <div className="relative w-full overflow-hidden">
-                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-auto">
+                <svg
+                  viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                  className="w-full h-auto cursor-crosshair select-none"
+                  onMouseMove={(e) => handleChartMouseMove('brecha', e, chartData.brecha.length)}
+                  onMouseLeave={() => setHoverIndex(null)}
+                >
                   <defs>
                     <linearGradient id="brechaRedGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#ef4444" stopOpacity="0.25" />
@@ -745,7 +789,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                     const yPos = padding.top + (idx / (yLabels.length - 1)) * graphHeight;
                     return (
                       <g key={idx}>
-                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                        <text x={padding.left - 10} y={yPos + 4} textAnchor="end" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold pointer-events-none">
                           {formatNumber(yVal, 2)}%
                         </text>
                         <line
@@ -755,7 +799,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                           y2={yPos}
                           stroke="currentColor"
                           strokeDasharray="3 3"
-                          className="text-slate-200 dark:text-zinc-800"
+                          className="text-slate-200 dark:text-zinc-800 pointer-events-none"
                         />
                       </g>
                     );
@@ -765,35 +809,35 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
                   {chartData.dates.map((dStr, idx) => {
                     const xPos = padding.left + (idx / (chartData.dates.length - 1)) * graphWidth;
                     return (
-                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold">
+                      <text key={idx} x={xPos} y={svgHeight - 10} textAnchor="middle" className="text-[10px] font-mono fill-slate-500 dark:fill-zinc-500 font-bold pointer-events-none">
                         {dStr}
                       </text>
                     );
                   })}
 
                   {/* Gradient Area Fill */}
-                  <path d={areaPath} fill="url(#brechaRedGrad)" />
+                  <path d={areaPath} fill="url(#brechaRedGrad)" className="pointer-events-none" />
 
                   {/* Red Line */}
-                  <path d={smoothLine} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d={smoothLine} fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" className="pointer-events-none" />
 
-                  {/* Points */}
-                  {chartData.brecha.map((val, idx) => {
-                    const x = padding.left + (idx / (chartData.brecha.length - 1)) * graphWidth;
-                    const y = padding.top + graphHeight - ((val - minVal) / (maxVal - minVal)) * graphHeight;
-                    return (
-                      <circle
-                        key={idx}
-                        cx={x}
-                        cy={y}
-                        r="5"
-                        fill="#ef4444"
-                        className="cursor-pointer transition-transform hover:scale-150"
-                        onMouseEnter={() => setHoveredPoint({ chart: 'brecha', index: idx, x, y, val1: val, date: chartData.dates[idx] })}
-                        onMouseLeave={() => setHoveredPoint(null)}
+                  {/* Crosshair Cursor Tracking */}
+                  {activeX !== null && (
+                    <g className="pointer-events-none">
+                      <line
+                        x1={activeX}
+                        y1={padding.top}
+                        x2={activeX}
+                        y2={padding.top + graphHeight}
+                        stroke="#64748b"
+                        strokeWidth="1.5"
+                        strokeDasharray="3 3"
                       />
-                    );
-                  })}
+                      {activeBrechaY !== null && (
+                        <circle cx={activeX} cy={activeBrechaY} r="6" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
+                      )}
+                    </g>
+                  )}
                 </svg>
 
                 {/* Legend */}
