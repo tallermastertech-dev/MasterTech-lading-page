@@ -1438,6 +1438,7 @@ app.post(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-con
               vehiculo: v.vehiculo || '',
               estado: v.estado || 'espera_tecnico',
               posicion: v.posicion || 'cola',
+              prioridad: v.prioridad || 'media',
               notas_internas: v.notasInternas || '',
               updated_at: new Date().toISOString()
             });

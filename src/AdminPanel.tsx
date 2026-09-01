@@ -671,6 +671,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   // CONTROL DE TALLER: Tipos, Estados y Persistencia Multi-Vehículo
   // =========================================================================
   type TallerStatus = 'espera_tecnico' | 'aprobado' | 'espera_repuesto' | 'espera_cliente';
+  type TallerPriority = 'urgente' | 'alta' | 'media' | 'baja';
 
   interface MechanicWorkTask {
     id: string;
@@ -684,6 +685,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     vehiculo: string;
     estado: TallerStatus;
     posicion?: 'elevador' | 'cola';
+    prioridad?: TallerPriority;
     tareas: MechanicWorkTask[];
     notasInternas?: string;
     fechaIngreso?: string;
@@ -724,6 +726,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       ...v,
       estado: v.estado || 'aprobado',
       posicion: v.posicion || 'cola',
+      prioridad: v.prioridad || 'media',
       tareas: (v.tareas || []).map((t: any) => ({
         ...t,
         estado: t.estado || (t.completada ? 'aprobado' : v.estado || 'aprobado')
@@ -734,6 +737,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       ...bay,
       vehiculos: vehs
     };
+  };
+
+  const TALLER_PRIORITY_CONFIG: Record<TallerPriority, { label: string; shortLabel: string; badgeClass: string; icon: string }> = {
+    urgente: {
+      label: 'Urgente / Inmediato',
+      shortLabel: 'URGENTE',
+      badgeClass: 'bg-red-500/20 text-red-300 border-red-500/50 shadow-sm shadow-red-500/20',
+      icon: '⚡'
+    },
+    alta: {
+      label: 'Prioridad Alta',
+      shortLabel: 'ALTA',
+      badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+      icon: '🔥'
+    },
+    media: {
+      label: 'Prioridad Media',
+      shortLabel: 'MEDIA',
+      badgeClass: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+      icon: '⏳'
+    },
+    baja: {
+      label: 'Prioridad Normal / Baja',
+      shortLabel: 'NORMAL',
+      badgeClass: 'bg-zinc-800 text-zinc-400 border-zinc-700',
+      icon: '🟢'
+    }
   };
 
   const DEFAULT_TALLER_BAYS: MechanicBayItem[] = [
@@ -3006,101 +3036,101 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
                 </div>
 
-              {/* Barra de Métricas y Filtros Rápidos por Estado Operativo Global */}
-              {(() => {
-                const allVehicles = tallerBays.flatMap(b => b.vehiculos || []);
-                const countTotalVehicles = allVehicles.length;
-                const countEsperaTecnico = allVehicles.filter(v => v.estado === 'espera_tecnico').length;
-                const countAprobado = allVehicles.filter(v => v.estado === 'aprobado').length;
-                const countEsperaRepuesto = allVehicles.filter(v => v.estado === 'espera_repuesto').length;
-                const countEsperaCliente = allVehicles.filter(v => v.estado === 'espera_cliente').length;
+                {/* Barra de Métricas y Filtros Rápidos por Estado Operativo Global (Solo visible para Administradores) */}
+                {!isTallerReadOnly && (() => {
+                  const allVehicles = tallerBays.flatMap(b => b.vehiculos || []);
+                  const countTotalVehicles = allVehicles.length;
+                  const countEsperaTecnico = allVehicles.filter(v => v.estado === 'espera_tecnico').length;
+                  const countAprobado = allVehicles.filter(v => v.estado === 'aprobado').length;
+                  const countEsperaRepuesto = allVehicles.filter(v => v.estado === 'espera_repuesto').length;
+                  const countEsperaCliente = allVehicles.filter(v => v.estado === 'espera_cliente').length;
 
-                return (
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setBayStatusFilter('TODOS')}
-                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
-                        bayStatusFilter === 'TODOS'
-                          ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
-                          : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
-                      }`}
-                    >
-                      <span className="text-[10px] font-black uppercase tracking-wider block">Total Vehículos</span>
-                      <div className="text-2xl font-black text-white mt-0.5">{countTotalVehicles}</div>
-                      <span className="text-[10px] text-zinc-500 block truncate">{tallerBays.length} bahías activas</span>
-                    </button>
+                  return (
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setBayStatusFilter('TODOS')}
+                        className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
+                          bayStatusFilter === 'TODOS'
+                            ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
+                            : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
+                        }`}
+                      >
+                        <span className="text-[10px] font-black uppercase tracking-wider block">Total Vehículos</span>
+                        <div className="text-2xl font-black text-white mt-0.5">{countTotalVehicles}</div>
+                        <span className="text-[10px] text-zinc-500 block truncate">{tallerBays.length} bahías activas</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setBayStatusFilter('espera_tecnico')}
-                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
-                        bayStatusFilter === 'espera_tecnico'
-                          ? 'bg-blue-500/20 border-blue-500 text-white shadow-lg'
-                          : 'bg-[#12141a] border-blue-500/30 text-blue-400 hover:border-blue-500'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider block">Espera Técnico</span>
-                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-                      </div>
-                      <div className="text-2xl font-black text-white mt-0.5">{countEsperaTecnico}</div>
-                      <span className="text-[10px] text-blue-300/70 block truncate">🔵 Por iniciar</span>
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => setBayStatusFilter('espera_tecnico')}
+                        className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
+                          bayStatusFilter === 'espera_tecnico'
+                            ? 'bg-blue-500/20 border-blue-500 text-white shadow-lg'
+                            : 'bg-[#12141a] border-blue-500/30 text-blue-400 hover:border-blue-500'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-wider block">Espera Técnico</span>
+                          <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        </div>
+                        <div className="text-2xl font-black text-white mt-0.5">{countEsperaTecnico}</div>
+                        <span className="text-[10px] text-blue-300/70 block truncate">🔵 Por iniciar</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setBayStatusFilter('aprobado')}
-                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
-                        bayStatusFilter === 'aprobado'
-                          ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-lg'
-                          : 'bg-[#12141a] border-emerald-500/30 text-emerald-400 hover:border-emerald-500'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider block">Aprobado</span>
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                      </div>
-                      <div className="text-2xl font-black text-white mt-0.5">{countAprobado}</div>
-                      <span className="text-[10px] text-emerald-300/70 block truncate">🟢 En ejecución</span>
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => setBayStatusFilter('aprobado')}
+                        className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
+                          bayStatusFilter === 'aprobado'
+                            ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-lg'
+                            : 'bg-[#12141a] border-emerald-500/30 text-emerald-400 hover:border-emerald-500'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-wider block">Aprobado</span>
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        </div>
+                        <div className="text-2xl font-black text-white mt-0.5">{countAprobado}</div>
+                        <span className="text-[10px] text-emerald-300/70 block truncate">🟢 En ejecución</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setBayStatusFilter('espera_repuesto')}
-                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
-                        bayStatusFilter === 'espera_repuesto'
-                          ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
-                          : 'bg-[#12141a] border-amber-500/30 text-amber-400 hover:border-amber-500'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider block">Espera Repuesto</span>
-                        <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                      </div>
-                      <div className="text-2xl font-black text-white mt-0.5">{countEsperaRepuesto}</div>
-                      <span className="text-[10px] text-amber-300/70 block truncate">🟡 En almacén</span>
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => setBayStatusFilter('espera_repuesto')}
+                        className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
+                          bayStatusFilter === 'espera_repuesto'
+                            ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
+                            : 'bg-[#12141a] border-amber-500/30 text-amber-400 hover:border-amber-500'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-wider block">Espera Repuesto</span>
+                          <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                        </div>
+                        <div className="text-2xl font-black text-white mt-0.5">{countEsperaRepuesto}</div>
+                        <span className="text-[10px] text-amber-300/70 block truncate">🟡 En almacén</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setBayStatusFilter('espera_cliente')}
-                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
-                        bayStatusFilter === 'espera_cliente'
-                          ? 'bg-red-500/20 border-red-500 text-white shadow-lg'
-                          : 'bg-[#12141a] border-red-500/30 text-red-400 hover:border-red-500'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider block">Espera Cliente</span>
-                        <span className="w-2 h-2 rounded-full bg-red-400"></span>
-                      </div>
-                      <div className="text-2xl font-black text-white mt-0.5">{countEsperaCliente}</div>
-                      <span className="text-[10px] text-red-300/70 block truncate">🔴 Por autorizar</span>
-                    </button>
-                  </div>
-                );
-              })()}
+                      <button
+                        type="button"
+                        onClick={() => setBayStatusFilter('espera_cliente')}
+                        className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
+                          bayStatusFilter === 'espera_cliente'
+                            ? 'bg-red-500/20 border-red-500 text-white shadow-lg'
+                            : 'bg-[#12141a] border-red-500/30 text-red-400 hover:border-red-500'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-wider block">Espera Cliente</span>
+                          <span className="w-2 h-2 rounded-full bg-red-400"></span>
+                        </div>
+                        <div className="text-2xl font-black text-white mt-0.5">{countEsperaCliente}</div>
+                        <span className="text-[10px] text-red-300/70 block truncate">🔴 Por autorizar</span>
+                      </button>
+                    </div>
+                  );
+                })()}
 
               {/* Barra de Búsqueda de Bahías, Mecánicos y Vehículos */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#12141a] p-3 rounded-2xl border border-white/10">
@@ -3327,7 +3357,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               <span>{v.vehiculo || "Vehículo sin identificar"}</span>
                                             </div>
                                             
-                                            <div className="flex items-center gap-2 mt-1">
+                                            <div className="flex items-center gap-1.5 flex-wrap mt-1">
                                               <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${vStatusCfg.badgeClass}`}>
                                                 {vStatusCfg.shortLabel}
                                               </span>
@@ -3339,6 +3369,43 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               }`}>
                                                 {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
                                               </span>
+
+                                              {/* Badge de Prioridad */}
+                                              {(() => {
+                                                const pKey: TallerPriority = (v.prioridad as TallerPriority) || 'media';
+                                                const pCfg = TALLER_PRIORITY_CONFIG[pKey] || TALLER_PRIORITY_CONFIG.media;
+
+                                                if (isTallerReadOnly) {
+                                                  return (
+                                                    <span className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border ${pCfg.badgeClass}`}>
+                                                      <span>{pCfg.icon}</span>
+                                                      <span>{pCfg.shortLabel}</span>
+                                                    </span>
+                                                  );
+                                                }
+
+                                                return (
+                                                  <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                      e.stopPropagation();
+                                                      const cycle: TallerPriority[] = ['media', 'alta', 'urgente', 'baja'];
+                                                      const curIdx = cycle.indexOf(pKey);
+                                                      const nextPrio = cycle[(curIdx + 1) % cycle.length];
+                                                      const updated = [...tallerBays];
+                                                      const bayVehs = [...updated[originalIdx].vehiculos];
+                                                      bayVehs[vIdx] = { ...bayVehs[vIdx], prioridad: nextPrio };
+                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                      saveTallerControl(updated);
+                                                    }}
+                                                    title={`Prioridad: ${pCfg.label} (Clic para cambiar)`}
+                                                    className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border transition-transform hover:scale-105 cursor-pointer ${pCfg.badgeClass}`}
+                                                  >
+                                                    <span>{pCfg.icon}</span>
+                                                    <span>{pCfg.shortLabel}</span>
+                                                  </button>
+                                                );
+                                              })()}
                                             </div>
                                           </div>
                                         </div>
@@ -3376,39 +3443,82 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       {/* Contenido Desplegable al Seleccionar el Vehículo */}
                                       {isExpanded && (
                                         <div className="p-3.5 pt-0 border-t border-white/5 space-y-3 mt-1 animate-fade-in">
-                                          {/* Posición & Alternador Rápido */}
-                                          <div className="flex items-center justify-between pt-2">
-                                            <span className="text-[10px] font-black uppercase text-zinc-400">
-                                              Ubicación en Taller:
-                                            </span>
-                                            {isTallerReadOnly ? (
-                                              <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
-                                                v.posicion === 'elevador'
-                                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-                                              }`}>
-                                                {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
-                                              </div>
-                                            ) : (
-                                              <button
-                                                type="button"
-                                                onClick={() => {
-                                                  const updated = [...tallerBays];
-                                                  const bayVehs = [...updated[originalIdx].vehiculos];
-                                                  const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
-                                                  bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
-                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                  saveTallerControl(updated);
-                                                }}
-                                                className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
+                                          {/* Posición & Prioridad */}
+                                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                                            {/* 1. Ubicación */}
+                                            <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5">
+                                              <span className="text-[10px] font-black uppercase text-zinc-400">
+                                                Ubicación:
+                                              </span>
+                                              {isTallerReadOnly ? (
+                                                <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
                                                   v.posicion === 'elevador'
-                                                    ? 'bg-amber-500 text-black font-black shadow'
-                                                    : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
-                                                }`}
-                                              >
-                                                {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
-                                              </button>
-                                            )}
+                                                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                                    : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                                }`}>
+                                                  {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
+                                                </div>
+                                              ) : (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => {
+                                                    const updated = [...tallerBays];
+                                                    const bayVehs = [...updated[originalIdx].vehiculos];
+                                                    const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
+                                                    bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
+                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                    saveTallerControl(updated);
+                                                  }}
+                                                  className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
+                                                    v.posicion === 'elevador'
+                                                      ? 'bg-amber-500 text-black font-black shadow'
+                                                      : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
+                                                  }`}
+                                                >
+                                                  {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
+                                                </button>
+                                              )}
+                                            </div>
+
+                                            {/* 2. Prioridad */}
+                                            <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5">
+                                              <span className="text-[10px] font-black uppercase text-zinc-400">
+                                                Prioridad:
+                                              </span>
+                                              {(() => {
+                                                const pKey: TallerPriority = (v.prioridad as TallerPriority) || 'media';
+                                                const pCfg = TALLER_PRIORITY_CONFIG[pKey] || TALLER_PRIORITY_CONFIG.media;
+
+                                                if (isTallerReadOnly) {
+                                                  return (
+                                                    <span className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase flex items-center gap-1 border ${pCfg.badgeClass}`}>
+                                                      <span>{pCfg.icon}</span>
+                                                      <span>{pCfg.label}</span>
+                                                    </span>
+                                                  );
+                                                }
+
+                                                return (
+                                                  <select
+                                                    value={pKey}
+                                                    onChange={(e) => {
+                                                      const newPrio = e.target.value as TallerPriority;
+                                                      const updated = [...tallerBays];
+                                                      const bayVehs = [...updated[originalIdx].vehiculos];
+                                                      bayVehs[vIdx] = { ...bayVehs[vIdx], prioridad: newPrio };
+                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                      saveTallerControl(updated);
+                                                    }}
+                                                    className={`font-mono text-[10px] font-bold px-2 py-1 rounded-lg border outline-none cursor-pointer ${pCfg.badgeClass}`}
+                                                  >
+                                                    <option value="urgente" className="bg-[#12141a] text-red-300">⚡ Urgente / Inmediato</option>
+                                                    <option value="alta" className="bg-[#12141a] text-amber-300">🔥 Prioridad Alta</option>
+                                                    <option value="media" className="bg-[#12141a] text-blue-300">⏳ Prioridad Media</option>
+                                                    <option value="baja" className="bg-[#12141a] text-zinc-300">🟢 Normal / Baja</option>
+                                                  </select>
+                                                );
+                                              })()}
+                                            </div>
                                           </div>
 
                                           {/* Selector de Estado Operativo (4 Estados Exactos) */}
@@ -3822,9 +3932,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             )}
 
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                              <div className="sm:col-span-2">
+                              <div className="sm:col-span-3">
                                 <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                                  Vehículo & Placa
+                                  Vehículo & Placa *
                                 </label>
                                 <input
                                   type="text"
@@ -3844,7 +3954,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                               <div>
                                 <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                                  Posición
+                                  Ubicación
                                 </label>
                                 <select
                                   value={editingBay.vehiculos[modalActiveVehIdx].posicion || 'cola'}
@@ -3862,30 +3972,52 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   <option value="cola">En Cola / Espera</option>
                                 </select>
                               </div>
-                            </div>
 
-                            {/* Estado Operativo del Vehículo */}
-                            <div>
-                              <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                                Estado Operativo *
-                              </label>
-                              <select
-                                value={editingBay.vehiculos[modalActiveVehIdx].estado}
-                                onChange={(e) => {
-                                  const updatedVehs = [...editingBay.vehiculos];
-                                  updatedVehs[modalActiveVehIdx] = {
-                                    ...updatedVehs[modalActiveVehIdx],
-                                    estado: e.target.value as TallerStatus
-                                  };
-                                  setEditingBay({ ...editingBay, vehiculos: updatedVehs });
-                                }}
-                                className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
-                              >
-                                <option value="espera_tecnico">🔵 En espera de técnico</option>
-                                <option value="aprobado">🟢 Aprobado</option>
-                                <option value="espera_repuesto">🟡 En espera de repuesto</option>
-                                <option value="espera_cliente">🔴 En espera de respuesta del cliente</option>
-                              </select>
+                              <div>
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                  Prioridad
+                                </label>
+                                <select
+                                  value={editingBay.vehiculos[modalActiveVehIdx].prioridad || 'media'}
+                                  onChange={(e) => {
+                                    const updatedVehs = [...editingBay.vehiculos];
+                                    updatedVehs[modalActiveVehIdx] = {
+                                      ...updatedVehs[modalActiveVehIdx],
+                                      prioridad: e.target.value as TallerPriority
+                                    };
+                                    setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                  }}
+                                  className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                                >
+                                  <option value="urgente">⚡ Urgente</option>
+                                  <option value="alta">🔥 Alta</option>
+                                  <option value="media">⏳ Media</option>
+                                  <option value="baja">🟢 Baja / Normal</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                  Estado Operativo *
+                                </label>
+                                <select
+                                  value={editingBay.vehiculos[modalActiveVehIdx].estado}
+                                  onChange={(e) => {
+                                    const updatedVehs = [...editingBay.vehiculos];
+                                    updatedVehs[modalActiveVehIdx] = {
+                                      ...updatedVehs[modalActiveVehIdx],
+                                      estado: e.target.value as TallerStatus
+                                    };
+                                    setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                  }}
+                                  className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                                >
+                                  <option value="espera_tecnico">🔵 Espera Técnico</option>
+                                  <option value="aprobado">🟢 Aprobado</option>
+                                  <option value="espera_repuesto">🟡 Espera Repuesto</option>
+                                  <option value="espera_cliente">🔴 Espera Cliente</option>
+                                </select>
+                              </div>
                             </div>
 
                             {/* Tareas del Vehículo Seleccionado */}
