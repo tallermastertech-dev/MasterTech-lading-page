@@ -1374,6 +1374,7 @@ app.get(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-cont
             vehiculo: v.vehiculo || v.nombre || 'Vehículo',
             estado: v.estado || 'espera_tecnico',
             posicion: v.posicion || 'cola',
+            prioridad: v.prioridad || 'media',
             notasInternas: v.notas_internas || v.notasInternas || '',
             fechaIngreso: v.fecha_ingreso || v.created_at || new Date().toISOString(),
             tareas: tasksByVeh[v.id] || []
