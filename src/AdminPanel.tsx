@@ -3921,34 +3921,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             />
                           </div>
                         </div>
-
-                        {/* Galería de fotos predeterminadas */}
-                        <div>
-                          <span className="text-[10px] text-zinc-400 block mb-1.5">O elige una foto del taller:</span>
-                          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                            {[
-                              { label: 'Mecánica', url: '/assets/servicio-mecanica.jpg' },
-                              { label: 'Electricidad', url: '/assets/servicio-electricidad.jpg' },
-                              { label: 'Diagnóstico', url: '/assets/servicio-scanner.jpg' },
-                              { label: 'Frenos', url: '/assets/servicio-frenos.jpg' },
-                              { label: 'A/C', url: '/assets/servicio-aire.jpg' }
-                            ].map((p, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                onClick={() => setEditingBay({ ...editingBay, mecanicoFoto: p.url })}
-                                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[10px] font-bold shrink-0 transition-all ${
-                                  editingBay.mecanicoFoto === p.url
-                                    ? 'bg-amber-500 text-black border-amber-500 font-black shadow-md'
-                                    : 'bg-black/40 text-zinc-300 border-white/10 hover:border-white/20'
-                                }`}
-                              >
-                                <img src={p.url} alt={p.label} className="w-4 h-4 rounded-full object-cover" />
-                                <span>{p.label}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
                       </div>
 
                       {/* 3. Selector de Vehículo en Modal */}
