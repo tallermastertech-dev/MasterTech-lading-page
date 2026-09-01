@@ -3625,76 +3625,79 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             [bay.id]: isExpanded ? '__CLOSED__' : v.id
                                           });
                                         }}
-                                        className="p-3.5 flex items-center justify-between gap-3 cursor-pointer"
+                                        className="p-3 sm:p-3.5 space-y-2 cursor-pointer"
                                       >
-                                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                                          {/* Icono de Agarre Trello / Mover */}
-                                          {!isTallerReadOnly && (
-                                            <div
-                                              className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-amber-400 p-0.5 shrink-0"
-                                              title="Arrastra para mover de técnico o cambiar de orden"
-                                            >
-                                              <GripVertical size={15} />
-                                            </div>
-                                          )}
+                                        {/* Fila 1: Grip + Estado Dot + Título del Vehículo + Acciones Derecha */}
+                                        <div className="flex items-center justify-between gap-2.5">
+                                          <div className="flex items-center gap-2 min-w-0 flex-1">
+                                            {!isTallerReadOnly && (
+                                              <div
+                                                className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-amber-400 p-0.5 shrink-0"
+                                                title="Arrastra para mover de técnico o cambiar de orden"
+                                              >
+                                                <GripVertical size={14} />
+                                              </div>
+                                            )}
+                                            <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${vStatusCfg.dotClass} ${v.estado === 'aprobado' ? 'animate-pulse' : ''}`}></span>
+                                            <span className="text-sm font-black text-white truncate leading-tight">
+                                              {v.vehiculo || "Vehículo sin identificar"}
+                                            </span>
+                                          </div>
 
-                                          <span className={`w-3 h-3 rounded-full shrink-0 ${vStatusCfg.dotClass} ${v.estado === 'aprobado' ? 'animate-pulse' : ''}`}></span>
-                                          
-                                          <div className="min-w-0 flex-1">
-                                            <div className="text-sm font-black text-white truncate flex items-center gap-2">
-                                              <span>{v.vehiculo || "Vehículo sin identificar"}</span>
-                                              <span className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase ${
-                                                v.posicion === 'elevador'
-                                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-                                              }`}>
-                                                {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
+                                          {/* Acciones Derecha */}
+                                          <div className="flex items-center gap-1.5 shrink-0">
+                                            {totalTasksCount > 0 && (
+                                              <span className="text-[10px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg">
+                                                {completedTasksCount}/{totalTasksCount}
                                               </span>
+                                            )}
 
-                                              {/* Badge PRIORIDAD */}
-                                              {(v.prioridad === 'alta' || v.prioridad === 'urgente' || (v as any).prioridad === true) && (
-                                                <span className="text-[9px] font-mono px-2 py-0.5 rounded-md font-black uppercase flex items-center gap-1 border bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-sm shadow-amber-500/20 animate-pulse">
-                                                  <Flame size={11} className="text-amber-400 shrink-0" />
-                                                  <span>PRIORIDAD</span>
-                                                </span>
-                                              )}
-                                            </div>
-                                            
-                                            <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                                              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${vStatusCfg.badgeClass}`}>
-                                                {vStatusCfg.shortLabel}
-                                              </span>
+                                            {!isTallerReadOnly && (
+                                              <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                                  setEditingBayIndex(originalIdx);
+                                                  setModalActiveVehIdx(vIdx);
+                                                  setIsBayModalOpen(true);
+                                                }}
+                                                className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-amber-400 hover:text-white transition-colors cursor-pointer"
+                                                title="Editar vehículo y trabajos autorizados"
+                                              >
+                                                <Edit size={13} />
+                                              </button>
+                                            )}
+
+                                            <div className={`p-1 text-zinc-400 rounded-lg transition-transform duration-200 ${isExpanded ? 'rotate-180 text-amber-400' : ''}`}>
+                                              <ChevronDown size={15} />
                                             </div>
                                           </div>
                                         </div>
 
-                                        <div className="flex items-center gap-1.5 shrink-0">
-                                          {totalTasksCount > 0 && (
-                                            <span className="text-[10px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg">
-                                              {completedTasksCount}/{totalTasksCount}
+                                        {/* Fila 2: Badges alineados limpiamente debajo del título */}
+                                        <div className="flex items-center gap-1.5 flex-wrap pl-6">
+                                          {/* Badge de Estado Operativo */}
+                                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${vStatusCfg.badgeClass}`}>
+                                            {vStatusCfg.shortLabel}
+                                          </span>
+
+                                          {/* Badge Ubicación / Elevador */}
+                                          <span className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase ${
+                                            v.posicion === 'elevador'
+                                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                              : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                          }`}>
+                                            {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
+                                          </span>
+
+                                          {/* Badge PRIORIDAD */}
+                                          {(v.prioridad === 'alta' || v.prioridad === 'urgente' || (v as any).prioridad === true) && (
+                                            <span className="text-[9px] font-mono px-2 py-0.5 rounded-md font-black uppercase flex items-center gap-1 border bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-sm shadow-amber-500/20 animate-pulse">
+                                              <Flame size={10} className="text-amber-400 shrink-0" />
+                                              <span>PRIORIDAD</span>
                                             </span>
                                           )}
-
-                                          {!isTallerReadOnly && (
-                                            <button
-                                              type="button"
-                                              onClick={(e) => {
-                                                e.stopPropagation();
-                                                setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
-                                                setEditingBayIndex(originalIdx);
-                                                setModalActiveVehIdx(vIdx);
-                                                setIsBayModalOpen(true);
-                                              }}
-                                              className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-amber-400 hover:text-white transition-colors cursor-pointer"
-                                              title="Editar vehículo y trabajos autorizados"
-                                            >
-                                              <Edit size={13} />
-                                            </button>
-                                          )}
-
-                                          <div className={`p-1 text-zinc-400 rounded-lg transition-transform duration-200 ${isExpanded ? 'rotate-180 text-amber-400' : ''}`}>
-                                            <ChevronDown size={16} />
-                                          </div>
                                         </div>
                                       </div>
 
