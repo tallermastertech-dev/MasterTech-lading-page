@@ -487,7 +487,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   const getAllowedTabsForUser = (user: any): string[] => {
-    if (!user) return ['dashboard', 'brecha', 'control-taller'];
+    if (!user) return ['control-taller'];
     const email = (user.email || '').toLowerCase().trim();
     const role = (user.role || '').toLowerCase().trim();
     const access = (user.accessLevel || '').toLowerCase().trim();
@@ -500,17 +500,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
 
-    // 2. Rol Administración & Taller (Dashboard, Tasas Cambiarias, Control de Taller y Admin Proveedores)
-    if (access === 'administracion' || role === 'administración' || role === 'administracion' || role.includes('taller') || role.includes('mecanic')) {
+    // 2. Rol Exclusivo Control de Taller (SOLO tiene acceso al panel de Control de Taller)
+    if (access === 'control_taller' || role === 'control de taller' || role.includes('control de taller') || role.includes('jefe de taller') || role.includes('mecanic')) {
+      return ['control-taller'];
+    }
+
+    // 3. Rol Administración (Dashboard, Tasas Cambiarias, Control de Taller y Admin Proveedores)
+    if (access === 'administracion' || role.includes('administra') || role.includes('admin')) {
       return ['dashboard', 'brecha', 'control-taller', 'proveedores'];
     }
 
-    // 3. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Jornadas y Admin Proveedores)
+    // 4. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Jornadas y Admin Proveedores)
     if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores'];
     }
 
-    return ['dashboard', 'brecha', 'control-taller', 'proveedores'];
+    return ['control-taller'];
   };
 
   // Active Navigation Tab
@@ -6161,6 +6166,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <span className={`inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-0.5 rounded-full border ${
                                   isFull 
                                     ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-500/40' 
+                                    : (u.accessLevel === 'control_taller' || u.role === 'Control de Taller')
+                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
                                     : (u.accessLevel === 'administracion' || u.role === 'Administración')
                                     ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-950 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40'
                                     : 'bg-blue-100 dark:bg-blue-500/20 text-blue-950 dark:text-blue-300 border-blue-300 dark:border-blue-500/40'
@@ -6169,6 +6176,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                     <>
                                       <Crown size={11} className="text-amber-700 dark:text-amber-300" />
                                       <span>Acceso Total</span>
+                                    </>
+                                  ) : (u.accessLevel === 'control_taller' || u.role === 'Control de Taller') ? (
+                                    <>
+                                      <Wrench size={11} className="text-amber-400" />
+                                      <span>Control de Taller (Acceso Único)</span>
                                     </>
                                   ) : (u.accessLevel === 'administracion' || u.role === 'Administración') ? (
                                     <>
@@ -6305,15 +6317,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           Cargo / Función en el Taller
                         </label>
                         <select
-                          value={editingUser.role || 'Asesor Logística'}
+                          value={editingUser.role || 'Control de Taller'}
                           onChange={(e) => {
                             const newRole = e.target.value;
                             const isFull = newRole.includes('CEO') || newRole.includes('Director') || newRole.includes('Marketing') || newRole.includes('Super');
+                            const isTaller = newRole === 'Control de Taller' || newRole.toLowerCase().includes('taller') || newRole.toLowerCase().includes('mecanic');
                             const isAdmin = newRole.includes('Administra') || newRole.includes('Admin');
                             setEditingUser({ 
                               ...editingUser, 
                               role: newRole,
-                              accessLevel: isFull ? 'full' : isAdmin ? 'administracion' : 'logistica'
+                              accessLevel: isFull ? 'full' : isTaller ? 'control_taller' : isAdmin ? 'administracion' : 'logistica'
                             });
                           }}
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400 cursor-pointer"
@@ -6323,6 +6336,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <option value="Administración">Administración</option>
                           <option value="Asesor Logística">Asesor Logística</option>
                           <option value="Coordinadora Logística">Coordinadora Logística</option>
+                          <option value="Control de Taller">Control de Taller</option>
                         </select>
                       </div>
 
@@ -6332,12 +6346,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           Nivel de Permisos en el Panel
                         </label>
                         <select
-                          value={editingUser.accessLevel || (editingUser.role === 'Administración' ? 'administracion' : isFullAdminUser(editingUser) ? 'full' : 'logistica')}
+                          value={editingUser.accessLevel || (editingUser.role === 'Control de Taller' ? 'control_taller' : editingUser.role === 'Administración' ? 'administracion' : isFullAdminUser(editingUser) ? 'full' : 'logistica')}
                           onChange={(e) => setEditingUser({ ...editingUser, accessLevel: e.target.value })}
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400 cursor-pointer"
                         >
-                          <option value="full">Super Administrador (Acceso Total: Todas las 9 pestañas del Panel)</option>
-                          <option value="administracion">Administración (Acceso exclusivo a Dashboard y Admin Proveedores)</option>
+                          <option value="control_taller">Control de Taller (Acceso ÚNICO y exclusivo a la sección Control de Taller)</option>
+                          <option value="full">Super Administrador (Acceso Total: Todas las pestañas del Panel)</option>
+                          <option value="administracion">Administración (Dashboard, Tasas Cambiarias y Admin Proveedores)</option>
                           <option value="logistica">Logística & Almacén (Dashboard, Citas, Catálogo, Jornadas y Admin Proveedores)</option>
                         </select>
                       </div>
