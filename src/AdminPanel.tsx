@@ -72,7 +72,8 @@ import {
   Sun,
   Moon,
   Banknote,
-  Smartphone
+  Smartphone,
+  Camera
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -3201,7 +3202,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           {/* 1. ENCABEZADO DE LA TARJETA: Mecánico + Especialidad + Bahía */}
                           <div className="flex items-start justify-between gap-3 border-b border-white/5 pb-3">
                             <div className="flex items-center gap-3 min-w-0">
-                              <div className="w-12 h-12 rounded-2xl overflow-hidden bg-black/50 border border-white/10 shrink-0 relative">
+                              <div className="w-12 h-12 rounded-2xl overflow-hidden bg-black/50 border border-white/10 shrink-0 relative group/avatar">
                                 <img
                                   src={bay.mecanicoFoto || "/assets/servicio-mecanica.jpg"}
                                   alt={bay.mecanicoNombre}
@@ -3213,6 +3214,38 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <div className="absolute inset-0 flex items-center justify-center text-zinc-500 font-bold text-sm bg-black/40 -z-10">
                                   <User size={18} />
                                 </div>
+
+                                {!isTallerReadOnly && (
+                                  <label
+                                    title="Cambiar foto del mecánico"
+                                    className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer text-white text-[8px] font-bold"
+                                  >
+                                    <Camera size={13} className="text-amber-400" />
+                                    <span className="text-[7px] mt-0.5 text-amber-300">Cambiar</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      className="hidden"
+                                      onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                          const reader = new FileReader();
+                                          reader.onloadend = () => {
+                                            const base64 = reader.result as string;
+                                            const updated = [...tallerBays];
+                                            updated[originalIdx] = {
+                                              ...updated[originalIdx],
+                                              mecanicoFoto: base64,
+                                              updatedAt: new Date().toISOString()
+                                            };
+                                            saveTallerControl(updated);
+                                          };
+                                          reader.readAsDataURL(file);
+                                        }
+                                      }}
+                                    />
+                                  </label>
+                                )}
                               </div>
 
                               <div className="min-w-0">
@@ -3780,32 +3813,93 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
                       </div>
 
-                      {/* 2. Bahía y Foto */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                            Número / Nombre de Bahía
-                          </label>
-                          <input
-                            type="text"
-                            value={editingBay.bahiaNumero || ''}
-                            onChange={(e) => setEditingBay({ ...editingBay, bahiaNumero: e.target.value })}
-                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white outline-none"
-                            placeholder="Ej. Bahía #1"
-                          />
+                      {/* 2. Bahía y Foto del Mecánico */}
+                      <div className="space-y-3 p-3.5 bg-black/30 rounded-2xl border border-white/10">
+                        <label className="text-[10px] font-black uppercase text-amber-400 block">
+                          Foto del Mecánico & Bahía
+                        </label>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                          {/* Avatar Preview + Botón de Subir */}
+                          <div className="flex items-center gap-3 sm:col-span-2">
+                            <div className="w-14 h-14 rounded-2xl overflow-hidden bg-black/60 border border-white/20 shrink-0 relative">
+                              <img
+                                src={editingBay.mecanicoFoto || "/assets/servicio-mecanica.jpg"}
+                                alt="Foto técnico"
+                                className="w-full h-full object-cover"
+                                onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center text-zinc-500 font-bold bg-black/40 -z-10">
+                                <User size={20} />
+                              </div>
+                            </div>
+
+                            <div className="flex-1 space-y-1">
+                              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-bold cursor-pointer transition-colors">
+                                <Camera size={13} />
+                                <span>Subir Foto del Mecánico</span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      const reader = new FileReader();
+                                      reader.onloadend = () => {
+                                        setEditingBay({ ...editingBay, mecanicoFoto: reader.result as string });
+                                      };
+                                      reader.readAsDataURL(file);
+                                    }
+                                  }}
+                                />
+                              </label>
+                              <span className="text-[10px] text-zinc-400 block">
+                                Sube una foto desde tu computadora o celular
+                              </span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                              Número / Nombre de Bahía
+                            </label>
+                            <input
+                              type="text"
+                              value={editingBay.bahiaNumero || ''}
+                              onChange={(e) => setEditingBay({ ...editingBay, bahiaNumero: e.target.value })}
+                              className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                              placeholder="Ej. Bahía #1"
+                            />
+                          </div>
                         </div>
 
+                        {/* Galería de fotos predeterminadas */}
                         <div>
-                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                            URL Foto de Perfil
-                          </label>
-                          <input
-                            type="text"
-                            value={editingBay.mecanicoFoto || ''}
-                            onChange={(e) => setEditingBay({ ...editingBay, mecanicoFoto: e.target.value })}
-                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white outline-none"
-                            placeholder="/assets/servicio-mecanica.jpg"
-                          />
+                          <span className="text-[10px] text-zinc-400 block mb-1.5">O elige una foto del taller:</span>
+                          <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                            {[
+                              { label: 'Mecánica', url: '/assets/servicio-mecanica.jpg' },
+                              { label: 'Electricidad', url: '/assets/servicio-electricidad.jpg' },
+                              { label: 'Diagnóstico', url: '/assets/servicio-scanner.jpg' },
+                              { label: 'Frenos', url: '/assets/servicio-frenos.jpg' },
+                              { label: 'A/C', url: '/assets/servicio-aire.jpg' }
+                            ].map((p, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setEditingBay({ ...editingBay, mecanicoFoto: p.url })}
+                                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[10px] font-bold shrink-0 transition-all ${
+                                  editingBay.mecanicoFoto === p.url
+                                    ? 'bg-amber-500 text-black border-amber-500 font-black shadow-md'
+                                    : 'bg-black/40 text-zinc-300 border-white/10 hover:border-white/20'
+                                }`}
+                              >
+                                <img src={p.url} alt={p.label} className="w-4 h-4 rounded-full object-cover" />
+                                <span>{p.label}</span>
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       </div>
 
