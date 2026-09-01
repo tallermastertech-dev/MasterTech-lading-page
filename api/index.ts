@@ -1337,7 +1337,63 @@ app.get(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-cont
       } catch (e) {}
     }
     
-    // Si la tabla dedicada taller_control existe en Supabase, intentamos consultar directamente
+    // 1. Intento de consulta en tablas relacionales vehiculos_taller y tareas_vehiculo
+    try {
+      const { data: vehData, error: vehErr } = await supabase
+        .from('vehiculos_taller')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (!vehErr && Array.isArray(vehData) && vehData.length > 0) {
+        const { data: taskData } = await supabase
+          .from('tareas_vehiculo')
+          .select('*');
+
+        const tasksByVeh: Record<string, any[]> = {};
+        if (Array.isArray(taskData)) {
+          for (const t of taskData) {
+            const vId = t.vehiculo_id || t.vehiculoId;
+            if (vId) {
+              if (!tasksByVeh[vId]) tasksByVeh[vId] = [];
+              tasksByVeh[vId].push({
+                id: t.id,
+                descripcion: t.descripcion,
+                completada: t.completado === true || t.completada === true
+              });
+            }
+          }
+        }
+
+        // Agrupar por mecánico/bahía si existen bahías base
+        const groupedMap = new Map<string, any[]>();
+        for (const v of vehData) {
+          const mName = v.mecanico_nombre || v.mecanicoNombre || 'Beltran Lopez';
+          const bayVehObj = {
+            id: v.id,
+            vehiculo: v.vehiculo || v.nombre || 'Vehículo',
+            estado: v.estado || 'espera_tecnico',
+            posicion: v.posicion || 'cola',
+            notasInternas: v.notas_internas || v.notasInternas || '',
+            fechaIngreso: v.fecha_ingreso || v.created_at || new Date().toISOString(),
+            tareas: tasksByVeh[v.id] || []
+          };
+          if (!groupedMap.has(mName)) groupedMap.set(mName, []);
+          groupedMap.get(mName)!.push(bayVehObj);
+        }
+
+        if (Array.isArray(bays) && bays.length > 0) {
+          bays = bays.map(b => {
+            const mVehs = groupedMap.get(b.mecanicoNombre);
+            if (mVehs) {
+              return { ...b, vehiculos: mVehs };
+            }
+            return b;
+          });
+        }
+      }
+    } catch (e) {}
+
+    // 2. Consulta de respaldo en tabla taller_control
     try {
       const { data } = await supabase.from('taller_control').select('*');
       if (data && Array.isArray(data) && data.length > 0) {
@@ -1365,7 +1421,52 @@ app.post(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-con
       await supabase.from('settings').upsert([{ key: 'TALLER_CONTROL_JSON', value: jsonStr }], { onConflict: 'key' });
     } catch (e) {}
 
-    // 2. Intento de persistencia en tabla taller_control si existe
+    // 2. Persistencia en tabla relacional 1 a Muchos: vehiculos_taller y tareas_vehiculo
+    try {
+      const allVehiclesToUpsert: any[] = [];
+      const allTasksToUpsert: any[] = [];
+
+      for (const bay of bays) {
+        const mName = bay.mecanicoNombre || 'Técnico';
+        const vehs = Array.isArray(bay.vehiculos) ? bay.vehiculos : [];
+        for (const v of vehs) {
+          if (v && v.id) {
+            allVehiclesToUpsert.push({
+              id: v.id,
+              mecanico_nombre: mName,
+              vehiculo: v.vehiculo || '',
+              estado: v.estado || 'espera_tecnico',
+              posicion: v.posicion || 'cola',
+              notas_internas: v.notasInternas || '',
+              updated_at: new Date().toISOString()
+            });
+
+            const tasks = Array.isArray(v.tareas) ? v.tareas : [];
+            for (const t of tasks) {
+              if (t && t.id) {
+                allTasksToUpsert.push({
+                  id: t.id,
+                  vehiculo_id: v.id,
+                  descripcion: t.descripcion || '',
+                  completado: t.completada === true || t.completado === true
+                });
+              }
+            }
+          }
+        }
+      }
+
+      if (allVehiclesToUpsert.length > 0) {
+        await supabase.from('vehiculos_taller').upsert(allVehiclesToUpsert, { onConflict: 'id' });
+      }
+      if (allTasksToUpsert.length > 0) {
+        await supabase.from('tareas_vehiculo').upsert(allTasksToUpsert, { onConflict: 'id' });
+      }
+    } catch (e) {
+      console.warn("Notice: Tablas relacionales vehiculos_taller/tareas_vehiculo no creadas aún o en migración:", e);
+    }
+
+    // 3. Persistencia en tabla taller_control si existe
     try {
       for (const b of bays) {
         if (b && b.id) {

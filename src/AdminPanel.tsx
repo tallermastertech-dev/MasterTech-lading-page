@@ -3380,35 +3380,60 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           </div>
 
                                           {/* Checklist de Trabajos Autorizados (SIN PRECIOS) */}
-                                          <div className="space-y-1.5">
-                                            <div className="flex items-center justify-between">
-                                              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                                                <CheckCircle2 size={12} className="text-primary" />
-                                                <span>Trabajos Autorizados ({completedTasksCount}/{totalTasksCount})</span>
+                                          <div className="space-y-2">
+                                            <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-1">
+                                              <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5 min-w-0">
+                                                <CheckCircle2 size={12} className="text-primary shrink-0" />
+                                                <span className="truncate">LISTA DE TRABAJOS / TAREAS MECÁNICAS AUTORIZADAS (SIN PRECIOS)</span>
                                               </span>
-                                              {totalTasksCount > 0 && (
-                                                <span className="font-mono text-[9px] font-bold text-amber-400">
-                                                  {Math.round((completedTasksCount / totalTasksCount) * 100)}%
-                                                </span>
-                                              )}
+
+                                              <div className="flex items-center gap-2 shrink-0">
+                                                {totalTasksCount > 0 && (
+                                                  <span className="font-mono text-[9px] font-bold text-zinc-400">
+                                                    {completedTasksCount}/{totalTasksCount} ({Math.round((completedTasksCount / totalTasksCount) * 100)}%)
+                                                  </span>
+                                                )}
+                                                <button
+                                                  type="button"
+                                                  onClick={() => {
+                                                    const newTask: MechanicWorkTask = {
+                                                      id: `task-${Date.now()}`,
+                                                      descripcion: "Nuevo trabajo mecánico autorizado...",
+                                                      completada: false
+                                                    };
+                                                    const updated = [...tallerBays];
+                                                    const bayVehs = [...updated[originalIdx].vehiculos];
+                                                    bayVehs[vIdx] = {
+                                                      ...bayVehs[vIdx],
+                                                      tareas: [...(bayVehs[vIdx].tareas || []), newTask]
+                                                    };
+                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                    saveTallerControl(updated);
+                                                  }}
+                                                  className="px-2 py-0.5 bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/30 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                                                >
+                                                  <Plus size={10} />
+                                                  <span>+ Añadir Tarea</span>
+                                                </button>
+                                              </div>
                                             </div>
 
-                                            <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1 scrollbar-thin">
+                                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1 scrollbar-thin">
                                               {(v.tareas || []).length === 0 ? (
                                                 <div className="p-2.5 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
-                                                  Sin tareas asignadas a este vehículo.
+                                                  Sin tareas asignadas a este vehículo. Presiona "+ Añadir Tarea".
                                                 </div>
                                               ) : (
                                                 v.tareas.map((task, tIdx) => (
                                                   <div
                                                     key={task.id || tIdx}
-                                                    className={`p-2 rounded-xl border text-xs flex items-start justify-between gap-2 transition-all ${
+                                                    className={`p-2 rounded-xl border text-xs flex items-center justify-between gap-2.5 transition-all ${
                                                       task.completada
-                                                        ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400 line-through'
+                                                        ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400'
                                                         : 'bg-black/40 border-white/10 text-white'
                                                     }`}
                                                   >
-                                                    <label className="flex items-start gap-2 flex-1 cursor-pointer min-w-0">
+                                                    <label className="flex items-center gap-2.5 flex-1 cursor-pointer min-w-0">
                                                       <input
                                                         type="checkbox"
                                                         checked={task.completada}
@@ -3424,11 +3449,26 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                           updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
                                                           saveTallerControl(updated);
                                                         }}
-                                                        className="mt-0.5 w-3.5 h-3.5 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
+                                                        className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
                                                       />
-                                                      <span className="text-[11px] leading-snug font-medium break-words">
-                                                        {task.descripcion}
-                                                      </span>
+                                                      <input
+                                                        type="text"
+                                                        value={task.descripcion}
+                                                        onChange={(e) => {
+                                                          const updated = [...tallerBays];
+                                                          const bayVehs = [...updated[originalIdx].vehiculos];
+                                                          const vehTasks = [...bayVehs[vIdx].tareas];
+                                                          vehTasks[tIdx] = {
+                                                            ...vehTasks[tIdx],
+                                                            descripcion: e.target.value
+                                                          };
+                                                          bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                          updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                          saveTallerControl(updated);
+                                                        }}
+                                                        placeholder="Descripción de la tarea autorizada..."
+                                                        className={`w-full bg-transparent outline-none text-xs font-medium ${task.completada ? 'line-through text-zinc-500' : 'text-white'}`}
+                                                      />
                                                     </label>
 
                                                     <button
@@ -3441,10 +3481,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                         updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
                                                         saveTallerControl(updated);
                                                       }}
-                                                      className="text-zinc-500 hover:text-red-400 p-0.5 shrink-0 transition-colors cursor-pointer"
+                                                      className="text-zinc-500 hover:text-red-400 p-1 rounded-lg hover:bg-red-500/10 shrink-0 transition-colors cursor-pointer"
                                                       title="Eliminar Tarea"
                                                     >
-                                                      <X size={11} />
+                                                      <Trash2 size={13} />
                                                     </button>
                                                   </div>
                                                 ))
@@ -3476,7 +3516,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                     setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: '' });
                                                   }
                                                 }}
-                                                placeholder="+ Añadir trabajo aprobado..."
+                                                placeholder="+ Escribe un trabajo y presiona Enter..."
                                                 className="w-full bg-black/40 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
                                               />
                                               <button
@@ -3821,8 +3861,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             {/* Tareas del Vehículo Seleccionado */}
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
-                                <label className="text-[10px] font-black uppercase text-zinc-400 block">
-                                  Tareas / Trabajos Autorizados (SIN PRECIOS)
+                                <label className="text-[10px] font-black uppercase text-amber-400 block">
+                                  LISTA DE TRABAJOS / TAREAS MECÁNICAS AUTORIZADAS (SIN PRECIOS)
                                 </label>
                                 <button
                                   type="button"
