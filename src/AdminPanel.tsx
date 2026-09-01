@@ -671,6 +671,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     id: string;
     descripcion: string;
     completada: boolean;
+    estado?: TallerStatus;
   }
 
   interface MechanicAssignedVehicle {
@@ -700,14 +701,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Helper: Normalizar estructura de bahía asegurando lista de vehículos
   const normalizeBayVehicles = (bay: any): MechanicBayItem => {
-    if (Array.isArray(bay?.vehiculos) && bay.vehiculos.length > 0) {
-      return bay as MechanicBayItem;
-    }
-    if (bay?.vehiculo || (bay?.tareas && bay.tareas.length > 0)) {
-      return {
-        ...bay,
-        vehiculos: [
-          {
+    let vehs = Array.isArray(bay?.vehiculos) && bay.vehiculos.length > 0
+      ? bay.vehiculos
+      : (bay?.vehiculo || (bay?.tareas && bay.tareas.length > 0)
+        ? [{
             id: `veh-${bay.id || Date.now()}-1`,
             vehiculo: bay.vehiculo || 'Vehículo en Bahía',
             estado: (bay.estado as TallerStatus) || 'aprobado',
@@ -715,13 +712,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             tareas: Array.isArray(bay.tareas) ? bay.tareas : [],
             notasInternas: bay.notasInternas || '',
             fechaIngreso: new Date().toISOString()
-          }
-        ]
-      };
-    }
+          }]
+        : []);
+
+    vehs = vehs.map((v: any) => ({
+      ...v,
+      estado: v.estado || 'aprobado',
+      posicion: v.posicion || 'cola',
+      tareas: (v.tareas || []).map((t: any) => ({
+        ...t,
+        estado: t.estado || (t.completada ? 'aprobado' : v.estado || 'aprobado')
+      }))
+    }));
+
     return {
       ...bay,
-      vehiculos: []
+      vehiculos: vehs
     };
   };
 
@@ -739,9 +745,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           estado: "aprobado",
           posicion: "elevador",
           tareas: [
-            { id: "t-1", descripcion: "Diagnóstico computarizado OBD2 y reprogramación de mapa ECU", completada: true },
-            { id: "t-2", descripcion: "Limpieza y calibración de 6 inyectores por ultrasonido", completada: false },
-            { id: "t-3", descripcion: "Reemplazo preventivo de bujías de Iridio y filtro de combustible", completada: false }
+            { id: "t-1", descripcion: "Diagnóstico computarizado OBD2 y reprogramación de mapa ECU", completada: true, estado: "aprobado" },
+            { id: "t-2", descripcion: "Limpieza y calibración de 6 inyectores por ultrasonido", completada: false, estado: "aprobado" },
+            { id: "t-3", descripcion: "Reemplazo preventivo de bujías de Iridio y filtro de combustible", completada: false, estado: "espera_repuesto" }
           ],
           notasInternas: "Cliente autorizó todos los trabajos mecánicos en presupuesto inicial.",
           fechaIngreso: new Date().toISOString()
@@ -752,8 +758,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           estado: "espera_tecnico",
           posicion: "cola",
           tareas: [
-            { id: "t-4", descripcion: "Escaneo de sensores de oxígeno y calibración de cuerpo de aceleración", completada: false },
-            { id: "t-5", descripcion: "Revisión preventiva de fluidos y aceite de transmisión", completada: false }
+            { id: "t-4", descripcion: "Escaneo de sensores de oxígeno y calibración de cuerpo de aceleración", completada: false, estado: "espera_tecnico" },
+            { id: "t-5", descripcion: "Revisión preventiva de fluidos y aceite de transmisión", completada: false, estado: "espera_tecnico" }
           ],
           notasInternas: "Vehículo en cola para entrar a elevador al terminar 4Runner.",
           fechaIngreso: new Date().toISOString()
@@ -774,9 +780,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           estado: "espera_repuesto",
           posicion: "elevador",
           tareas: [
-            { id: "t-6", descripcion: "Desmontaje de cárter y revisión de empacaduras de tapa de válvulas", completada: true },
-            { id: "t-7", descripcion: "Sustitución de bomba de agua y termostato original", completada: false },
-            { id: "t-8", descripcion: "Instalación y sincronización de kit de cadena de tiempo", completada: false }
+            { id: "t-6", descripcion: "Desmontaje de cárter y revisión de empacaduras de tapa de válvulas", completada: true, estado: "aprobado" },
+            { id: "t-7", descripcion: "Sustitución de bomba de agua y termostato original", completada: false, estado: "espera_repuesto" },
+            { id: "t-8", descripcion: "Instalación y sincronización de kit de cadena de tiempo", completada: false, estado: "espera_cliente" }
           ],
           notasInternas: "Esperando llegada de bomba de agua desde almacén de repuestos.",
           fechaIngreso: new Date().toISOString()
@@ -3428,76 +3434,112 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               </div>
                                             </div>
 
-                                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1 scrollbar-thin">
+                                            <div className="space-y-2 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
                                               {(v.tareas || []).length === 0 ? (
                                                 <div className="p-2.5 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
                                                   Sin tareas asignadas a este vehículo. Presiona "+ Añadir Tarea".
                                                 </div>
                                               ) : (
-                                                v.tareas.map((task, tIdx) => (
-                                                  <div
-                                                    key={task.id || tIdx}
-                                                    className={`p-2 rounded-xl border text-xs flex items-center justify-between gap-2.5 transition-all ${
-                                                      task.completada
-                                                        ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400'
-                                                        : 'bg-black/40 border-white/10 text-white'
-                                                    }`}
-                                                  >
-                                                    <label className="flex items-center gap-2.5 flex-1 cursor-pointer min-w-0">
-                                                      <input
-                                                        type="checkbox"
-                                                        checked={task.completada}
-                                                        onChange={() => {
-                                                          const updated = [...tallerBays];
-                                                          const bayVehs = [...updated[originalIdx].vehiculos];
-                                                          const vehTasks = [...bayVehs[vIdx].tareas];
-                                                          vehTasks[tIdx] = {
-                                                            ...vehTasks[tIdx],
-                                                            completada: !vehTasks[tIdx].completada
-                                                          };
-                                                          bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                          updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                          saveTallerControl(updated);
-                                                        }}
-                                                        className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
-                                                      />
-                                                      <input
-                                                        type="text"
-                                                        value={task.descripcion}
-                                                        onChange={(e) => {
-                                                          const updated = [...tallerBays];
-                                                          const bayVehs = [...updated[originalIdx].vehiculos];
-                                                          const vehTasks = [...bayVehs[vIdx].tareas];
-                                                          vehTasks[tIdx] = {
-                                                            ...vehTasks[tIdx],
-                                                            descripcion: e.target.value
-                                                          };
-                                                          bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                          updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                          saveTallerControl(updated);
-                                                        }}
-                                                        placeholder="Descripción de la tarea autorizada..."
-                                                        className={`w-full bg-transparent outline-none text-xs font-medium ${task.completada ? 'line-through text-zinc-500' : 'text-white'}`}
-                                                      />
-                                                    </label>
+                                                v.tareas.map((task, tIdx) => {
+                                                  const tStatus = task.estado || (task.completada ? 'aprobado' : 'espera_tecnico');
+                                                  const tStatusCfg = TALLER_STATUS_CONFIG[tStatus] || TALLER_STATUS_CONFIG.espera_tecnico;
 
-                                                    <button
-                                                      type="button"
-                                                      onClick={() => {
-                                                        const updated = [...tallerBays];
-                                                        const bayVehs = [...updated[originalIdx].vehiculos];
-                                                        const vehTasks = bayVehs[vIdx].tareas.filter((_, i) => i !== tIdx);
-                                                        bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                        updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                        saveTallerControl(updated);
-                                                      }}
-                                                      className="text-zinc-500 hover:text-red-400 p-1 rounded-lg hover:bg-red-500/10 shrink-0 transition-colors cursor-pointer"
-                                                      title="Eliminar Tarea"
+                                                  return (
+                                                    <div
+                                                      key={task.id || tIdx}
+                                                      className={`p-2.5 rounded-xl border text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition-all ${
+                                                        task.completada
+                                                          ? 'bg-emerald-500/5 border-emerald-500/20'
+                                                          : 'bg-black/50 border-white/10 hover:border-white/20'
+                                                      }`}
                                                     >
-                                                      <Trash2 size={13} />
-                                                    </button>
-                                                  </div>
-                                                ))
+                                                      <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                                                        <input
+                                                          type="checkbox"
+                                                          checked={task.completada}
+                                                          onChange={() => {
+                                                            const updated = [...tallerBays];
+                                                            const bayVehs = [...updated[originalIdx].vehiculos];
+                                                            const vehTasks = [...bayVehs[vIdx].tareas];
+                                                            const willBeCompleted = !vehTasks[tIdx].completada;
+                                                            vehTasks[tIdx] = {
+                                                              ...vehTasks[tIdx],
+                                                              completada: willBeCompleted,
+                                                              estado: willBeCompleted ? 'aprobado' : (vehTasks[tIdx].estado || 'espera_tecnico')
+                                                            };
+                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                            saveTallerControl(updated);
+                                                          }}
+                                                          className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
+                                                        />
+                                                        <input
+                                                          type="text"
+                                                          value={task.descripcion}
+                                                          onChange={(e) => {
+                                                            const updated = [...tallerBays];
+                                                            const bayVehs = [...updated[originalIdx].vehiculos];
+                                                            const vehTasks = [...bayVehs[vIdx].tareas];
+                                                            vehTasks[tIdx] = {
+                                                              ...vehTasks[tIdx],
+                                                              descripcion: e.target.value
+                                                            };
+                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                            saveTallerControl(updated);
+                                                          }}
+                                                          placeholder="Descripción de la tarea autorizada..."
+                                                          className={`w-full bg-black/40 border border-white/10 hover:border-white/20 focus:border-amber-400 rounded-lg px-2.5 py-1.5 text-xs font-semibold outline-none transition-all ${
+                                                            task.completada ? 'line-through text-zinc-500' : 'text-white focus:text-amber-300'
+                                                          }`}
+                                                        />
+                                                      </div>
+
+                                                      {/* Selector de Estado por Tarea + Botón Eliminar */}
+                                                      <div className="flex items-center justify-between sm:justify-end gap-1.5 shrink-0">
+                                                        <select
+                                                          value={tStatus}
+                                                          onChange={(e) => {
+                                                            const newSt = e.target.value as TallerStatus;
+                                                            const updated = [...tallerBays];
+                                                            const bayVehs = [...updated[originalIdx].vehiculos];
+                                                            const vehTasks = [...bayVehs[vIdx].tareas];
+                                                            vehTasks[tIdx] = {
+                                                              ...vehTasks[tIdx],
+                                                              estado: newSt,
+                                                              completada: newSt === 'aprobado' ? vehTasks[tIdx].completada : false
+                                                            };
+                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                            saveTallerControl(updated);
+                                                          }}
+                                                          className={`text-[10px] font-bold rounded-lg px-2 py-1 outline-none cursor-pointer border transition-all ${tStatusCfg.badgeClass}`}
+                                                        >
+                                                          <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">🟢 Aprobado</option>
+                                                          <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">🟡 Espera Repuesto</option>
+                                                          <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">🔴 Espera Cliente</option>
+                                                          <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">🔵 Espera Técnico</option>
+                                                        </select>
+
+                                                        <button
+                                                          type="button"
+                                                          onClick={() => {
+                                                            const updated = [...tallerBays];
+                                                            const bayVehs = [...updated[originalIdx].vehiculos];
+                                                            const vehTasks = bayVehs[vIdx].tareas.filter((_, i) => i !== tIdx);
+                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                            saveTallerControl(updated);
+                                                          }}
+                                                          className="text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 shrink-0 transition-colors cursor-pointer"
+                                                          title="Eliminar Tarea"
+                                                        >
+                                                          <Trash2 size={13} />
+                                                        </button>
+                                                      </div>
+                                                    </div>
+                                                  );
+                                                })
                                               )}
                                             </div>
 
@@ -3896,47 +3938,85 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 </button>
                               </div>
 
-                              <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                                {(editingBay.vehiculos[modalActiveVehIdx].tareas || []).map((t, idx) => (
-                                  <div key={t.id || idx} className="flex items-center gap-2">
-                                    <input
-                                      type="checkbox"
-                                      checked={t.completada}
-                                      onChange={() => {
-                                        const updatedVehs = [...editingBay.vehiculos];
-                                        const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
-                                        tasks[idx].completada = !tasks[idx].completada;
-                                        updatedVehs[modalActiveVehIdx].tareas = tasks;
-                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
-                                      }}
-                                      className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 cursor-pointer shrink-0"
-                                    />
-                                    <input
-                                      type="text"
-                                      value={t.descripcion}
-                                      onChange={(e) => {
-                                        const updatedVehs = [...editingBay.vehiculos];
-                                        const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
-                                        tasks[idx].descripcion = e.target.value;
-                                        updatedVehs[modalActiveVehIdx].tareas = tasks;
-                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
-                                      }}
-                                      placeholder="Descripción del trabajo mecánico..."
-                                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-primary"
-                                    />
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const updatedVehs = [...editingBay.vehiculos];
-                                        updatedVehs[modalActiveVehIdx].tareas = updatedVehs[modalActiveVehIdx].tareas.filter((_, i) => i !== idx);
-                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
-                                      }}
-                                      className="text-zinc-500 hover:text-red-400 p-1.5 shrink-0"
-                                    >
-                                      <Trash2 size={12} />
-                                    </button>
-                                  </div>
-                                ))}
+                              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                                {(editingBay.vehiculos[modalActiveVehIdx].tareas || []).map((t, idx) => {
+                                  const tSt = t.estado || (t.completada ? 'aprobado' : 'espera_tecnico');
+                                  const tStCfg = TALLER_STATUS_CONFIG[tSt] || TALLER_STATUS_CONFIG.espera_tecnico;
+
+                                  return (
+                                    <div key={t.id || idx} className="p-2 rounded-xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                                        <input
+                                          type="checkbox"
+                                          checked={t.completada}
+                                          onChange={() => {
+                                            const updatedVehs = [...editingBay.vehiculos];
+                                            const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
+                                            const willBeCompleted = !tasks[idx].completada;
+                                            tasks[idx] = {
+                                              ...tasks[idx],
+                                              completada: willBeCompleted,
+                                              estado: willBeCompleted ? 'aprobado' : (tasks[idx].estado || 'espera_tecnico')
+                                            };
+                                            updatedVehs[modalActiveVehIdx].tareas = tasks;
+                                            setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                          }}
+                                          className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 cursor-pointer shrink-0"
+                                        />
+                                        <input
+                                          type="text"
+                                          value={t.descripcion}
+                                          onChange={(e) => {
+                                            const updatedVehs = [...editingBay.vehiculos];
+                                            const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
+                                            tasks[idx].descripcion = e.target.value;
+                                            updatedVehs[modalActiveVehIdx].tareas = tasks;
+                                            setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                          }}
+                                          placeholder="Descripción del trabajo mecánico..."
+                                          className="w-full bg-black/40 border border-white/10 rounded-lg p-1.5 text-xs text-white outline-none focus:border-primary font-medium"
+                                        />
+                                      </div>
+
+                                      <div className="flex items-center justify-between sm:justify-end gap-1.5 shrink-0">
+                                        <select
+                                          value={tSt}
+                                          onChange={(e) => {
+                                            const newSt = e.target.value as TallerStatus;
+                                            const updatedVehs = [...editingBay.vehiculos];
+                                            const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
+                                            tasks[idx] = {
+                                              ...tasks[idx],
+                                              estado: newSt,
+                                              completada: newSt === 'aprobado' ? tasks[idx].completada : false
+                                            };
+                                            updatedVehs[modalActiveVehIdx].tareas = tasks;
+                                            setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                          }}
+                                          className={`text-[10px] font-bold rounded-lg px-2 py-1 outline-none cursor-pointer border transition-all ${tStCfg.badgeClass}`}
+                                        >
+                                          <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">🟢 Aprobado</option>
+                                          <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">🟡 Espera Repuesto</option>
+                                          <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">🔴 Espera Cliente</option>
+                                          <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">🔵 Espera Técnico</option>
+                                        </select>
+
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updatedVehs = [...editingBay.vehiculos];
+                                            updatedVehs[modalActiveVehIdx].tareas = updatedVehs[modalActiveVehIdx].tareas.filter((_, i) => i !== idx);
+                                            setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                          }}
+                                          className="text-zinc-500 hover:text-red-400 p-1.5 shrink-0 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                                          title="Eliminar Tarea"
+                                        >
+                                          <Trash2 size={13} />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             </div>
 

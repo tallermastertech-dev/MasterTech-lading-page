@@ -1358,7 +1358,8 @@ app.get(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-cont
               tasksByVeh[vId].push({
                 id: t.id,
                 descripcion: t.descripcion,
-                completada: t.completado === true || t.completada === true
+                completada: t.completado === true || t.completada === true,
+                estado: t.estado || (t.completado ? 'aprobado' : 'espera_tecnico')
               });
             }
           }
@@ -1448,7 +1449,8 @@ app.post(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-con
                   id: t.id,
                   vehiculo_id: v.id,
                   descripcion: t.descripcion || '',
-                  completado: t.completada === true || t.completado === true
+                  completado: t.completada === true || t.completado === true,
+                  estado: t.estado || 'aprobado'
                 });
               }
             }
