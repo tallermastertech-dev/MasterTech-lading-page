@@ -3480,39 +3480,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
                                               </button>
                                             )}
-                                          {/* Posición en Taller */}
-                                          <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5 pt-2">
-                                            <span className="text-[10px] font-black uppercase text-zinc-400">
-                                              Ubicación en Taller:
-                                            </span>
-                                            {isTallerReadOnly ? (
-                                              <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
-                                                v.posicion === 'elevador'
-                                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-                                              }`}>
-                                                {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
-                                              </div>
-                                            ) : (
-                                              <button
-                                                type="button"
-                                                onClick={() => {
-                                                  const updated = [...tallerBays];
-                                                  const bayVehs = [...updated[originalIdx].vehiculos];
-                                                  const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
-                                                  bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
-                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                  saveTallerControl(updated);
-                                                }}
-                                                className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
-                                                  v.posicion === 'elevador'
-                                                    ? 'bg-amber-500 text-black font-black shadow'
-                                                    : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
-                                                }`}
-                                              >
-                                                {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
-                                              </button>
-                                            )}
                                           </div>
 
                                           {/* Selector de Estado Operativo (4 Estados Exactos) */}
