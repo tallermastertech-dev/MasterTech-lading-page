@@ -3370,62 +3370,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
                                               </span>
 
-                                              {/* Botón / Badge PRIORIDAD */}
-                                              {(() => {
-                                                const isPriorityActive = v.prioridad === 'alta' || v.prioridad === 'urgente';
-
-                                                return (
-                                                  <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                      e.stopPropagation();
-                                                      const willBePriority = !isPriorityActive;
-                                                      const nextPrio: TallerPriority = willBePriority ? 'alta' : 'media';
-
-                                                      const updated = [...tallerBays];
-                                                      const bayVehs = [...(updated[originalIdx].vehiculos || [])];
-                                                      const currentTarget = {
-                                                        ...bayVehs[vIdx],
-                                                        prioridad: nextPrio,
-                                                        posicion: (willBePriority ? 'elevador' : bayVehs[vIdx].posicion) as 'elevador' | 'cola'
-                                                      };
-
-                                                      let reorderedVehs: MechanicAssignedVehicle[] = [...bayVehs];
-                                                      reorderedVehs[vIdx] = currentTarget;
-
-                                                      // Al activar PRIORIDAD, moverlo de inmediato al primer puesto del mecánico
-                                                      if (willBePriority && vIdx > 0) {
-                                                        const others = reorderedVehs.filter((_, idx) => idx !== vIdx).map(o => ({
-                                                          ...o,
-                                                          posicion: 'cola' as const
-                                                        }));
-                                                        reorderedVehs = [currentTarget, ...others];
-                                                      }
-
-                                                      updated[originalIdx] = {
-                                                        ...updated[originalIdx],
-                                                        vehiculos: reorderedVehs,
-                                                        updatedAt: new Date().toISOString()
-                                                      };
-
-                                                      saveTallerControl(updated);
-                                                      setExpandedVehiclesMap(prev => ({
-                                                        ...prev,
-                                                        [bay.id]: currentTarget.id
-                                                      }));
-                                                    }}
-                                                    title={isPriorityActive ? "Prioridad Activa (1er lugar). Clic para quitar prioridad." : "Clic para asignar PRIORIDAD y mover al 1er lugar."}
-                                                    className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border transition-all hover:scale-105 cursor-pointer shadow-sm ${
-                                                      isPriorityActive 
-                                                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-amber-500/20 animate-pulse' 
-                                                        : 'bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10'
-                                                    }`}
-                                                  >
-                                                    {isPriorityActive && <span>🔥</span>}
-                                                    <span>PRIORIDAD</span>
-                                                  </button>
-                                                );
-                                              })()}
+                                              {/* Badge PRIORIDAD: Solo aparece si fue activada desde la creación/edición del vehículo */}
+                                              {(v.prioridad === 'alta' || v.prioridad === 'urgente' || (v as any).prioridad === true) && (
+                                                <span className="text-[9px] font-mono px-2 py-0.5 rounded-md font-black uppercase flex items-center gap-1 border bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-sm shadow-amber-500/20 animate-pulse">
+                                                  <span>🔥</span>
+                                                  <span>PRIORIDAD</span>
+                                                </span>
+                                              )}
                                             </div>
                                           </div>
                                         </div>
@@ -3463,108 +3414,72 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       {/* Contenido Desplegable al Seleccionar el Vehículo */}
                                       {isExpanded && (
                                         <div className="p-3.5 pt-0 border-t border-white/5 space-y-3 mt-1 animate-fade-in">
-                                          {/* Posición & Prioridad */}
-                                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
-                                            {/* 1. Ubicación */}
-                                            <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5">
-                                              <span className="text-[10px] font-black uppercase text-zinc-400">
-                                                Ubicación:
-                                              </span>
-                                              {isTallerReadOnly ? (
-                                                <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
+                                          {/* Posición en Taller */}
+                                          <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5 pt-2">
+                                            <span className="text-[10px] font-black uppercase text-zinc-400">
+                                              Ubicación en Taller:
+                                            </span>
+                                            {isTallerReadOnly ? (
+                                              <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
+                                                v.posicion === 'elevador'
+                                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                              }`}>
+                                                {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
+                                              </div>
+                                            ) : (
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  const updated = [...tallerBays];
+                                                  const bayVehs = [...updated[originalIdx].vehiculos];
+                                                  const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
+                                                  bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
+                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                  saveTallerControl(updated);
+                                                }}
+                                                className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
                                                   v.posicion === 'elevador'
-                                                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                                    : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-                                                }`}>
-                                                  {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
-                                                </div>
-                                              ) : (
-                                                <button
-                                                  type="button"
-                                                  onClick={() => {
-                                                    const updated = [...tallerBays];
-                                                    const bayVehs = [...updated[originalIdx].vehiculos];
-                                                    const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
-                                                    bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
-                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                    saveTallerControl(updated);
-                                                  }}
-                                                  className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
-                                                    v.posicion === 'elevador'
-                                                      ? 'bg-amber-500 text-black font-black shadow'
-                                                      : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
-                                                  }`}
-                                                >
-                                                  {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
-                                                </button>
-                                              )}
-                                            </div>
-
-                                            {/* 2. Prioridad */}
-                                            <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5">
-                                              <span className="text-[10px] font-black uppercase text-zinc-400">
-                                                Prioridad:
-                                              </span>
-                                              {(() => {
-                                                const pKey: TallerPriority = (v.prioridad as TallerPriority) || 'media';
-                                                const pCfg = TALLER_PRIORITY_CONFIG[pKey] || TALLER_PRIORITY_CONFIG.media;
-
-                                                if (isTallerReadOnly) {
-                                                  return (
-                                                    <span className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase flex items-center gap-1 border ${pCfg.badgeClass}`}>
-                                                      <span>{pCfg.icon}</span>
-                                                      <span>{pCfg.label}</span>
-                                                    </span>
-                                                  );
-                                                }
-
-                                                return (
-                                                  <select
-                                                    value={pKey}
-                                                    onChange={(e) => {
-                                                      const newPrio = e.target.value as TallerPriority;
-                                                      const isNowHighPrio = newPrio === 'alta' || newPrio === 'urgente';
-                                                      const updated = [...tallerBays];
-                                                      const bayVehs = [...(updated[originalIdx].vehiculos || [])];
-                                                      const currentTarget = {
-                                                        ...bayVehs[vIdx],
-                                                        prioridad: newPrio,
-                                                        posicion: (isNowHighPrio ? 'elevador' : bayVehs[vIdx].posicion) as 'elevador' | 'cola'
-                                                      };
-
-                                                      let reorderedVehs: MechanicAssignedVehicle[] = [...bayVehs];
-                                                      reorderedVehs[vIdx] = currentTarget;
-
-                                                      if (isNowHighPrio && vIdx > 0) {
-                                                        const others = reorderedVehs.filter((_, idx) => idx !== vIdx).map(o => ({
-                                                          ...o,
-                                                          posicion: 'cola' as const
-                                                        }));
-                                                        reorderedVehs = [currentTarget, ...others];
-                                                      }
-
-                                                      updated[originalIdx] = {
-                                                        ...updated[originalIdx],
-                                                        vehiculos: reorderedVehs,
-                                                        updatedAt: new Date().toISOString()
-                                                      };
-
-                                                      saveTallerControl(updated);
-                                                      setExpandedVehiclesMap(prev => ({
-                                                        ...prev,
-                                                        [bay.id]: currentTarget.id
-                                                      }));
-                                                    }}
-                                                    className={`font-mono text-[10px] font-bold px-2 py-1 rounded-lg border outline-none cursor-pointer ${pCfg.badgeClass}`}
-                                                  >
-                                                    <option value="urgente" className="bg-[#12141a] text-red-300">⚡ Urgente / Inmediato</option>
-                                                    <option value="alta" className="bg-[#12141a] text-amber-300">🔥 Prioridad Alta</option>
-                                                    <option value="media" className="bg-[#12141a] text-blue-300">⏳ Prioridad Media</option>
-                                                    <option value="baja" className="bg-[#12141a] text-zinc-300">🟢 Normal / Baja</option>
-                                                  </select>
-                                                );
-                                              })()}
-                                            </div>
+                                                    ? 'bg-amber-500 text-black font-black shadow'
+                                                    : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
+                                                }`}
+                                              >
+                                                {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
+                                              </button>
+                                            )}
+                                          {/* Posición en Taller */}
+                                          <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5 pt-2">
+                                            <span className="text-[10px] font-black uppercase text-zinc-400">
+                                              Ubicación en Taller:
+                                            </span>
+                                            {isTallerReadOnly ? (
+                                              <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
+                                                v.posicion === 'elevador'
+                                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                              }`}>
+                                                {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
+                                              </div>
+                                            ) : (
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  const updated = [...tallerBays];
+                                                  const bayVehs = [...updated[originalIdx].vehiculos];
+                                                  const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
+                                                  bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
+                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                  saveTallerControl(updated);
+                                                }}
+                                                className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
+                                                  v.posicion === 'elevador'
+                                                    ? 'bg-amber-500 text-black font-black shadow'
+                                                    : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
+                                                }`}
+                                              >
+                                                {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
+                                              </button>
+                                            )}
                                           </div>
 
                                           {/* Selector de Estado Operativo (4 Estados Exactos) */}
@@ -4020,25 +3935,43 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               </div>
 
                               <div>
-                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                <label className="text-[10px] font-black uppercase text-amber-400 block mb-1">
                                   Prioridad
                                 </label>
                                 <select
                                   value={editingBay.vehiculos[modalActiveVehIdx].prioridad || 'media'}
                                   onChange={(e) => {
+                                    const newPrio = e.target.value as TallerPriority;
+                                    const isHighPrio = newPrio === 'alta' || newPrio === 'urgente';
                                     const updatedVehs = [...editingBay.vehiculos];
                                     updatedVehs[modalActiveVehIdx] = {
                                       ...updatedVehs[modalActiveVehIdx],
-                                      prioridad: e.target.value as TallerPriority
+                                      prioridad: newPrio,
+                                      posicion: isHighPrio ? 'elevador' : updatedVehs[modalActiveVehIdx].posicion
                                     };
+
+                                    if (isHighPrio && modalActiveVehIdx > 0) {
+                                      const target = updatedVehs[modalActiveVehIdx];
+                                      const others = updatedVehs.filter((_, i) => i !== modalActiveVehIdx).map(o => ({
+                                        ...o,
+                                        posicion: 'cola' as const
+                                      }));
+                                      setEditingBay({ ...editingBay, vehiculos: [target, ...others] });
+                                      setModalActiveVehIdx(0);
+                                      return;
+                                    }
+
                                     setEditingBay({ ...editingBay, vehiculos: updatedVehs });
                                   }}
-                                  className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                                  className={`w-full bg-black/50 border rounded-xl p-2.5 font-bold outline-none cursor-pointer transition-colors ${
+                                    editingBay.vehiculos[modalActiveVehIdx].prioridad === 'alta' || editingBay.vehiculos[modalActiveVehIdx].prioridad === 'urgente'
+                                      ? 'border-amber-500/80 text-amber-300 bg-amber-500/10'
+                                      : 'border-white/10 text-white focus:border-primary'
+                                  }`}
                                 >
-                                  <option value="urgente">⚡ Urgente</option>
-                                  <option value="alta">🔥 Alta</option>
-                                  <option value="media">⏳ Media</option>
-                                  <option value="baja">🟢 Baja / Normal</option>
+                                  <option value="media">Sin Prioridad (Normal)</option>
+                                  <option value="alta">🔥 PRIORIDAD (1er Lugar)</option>
+                                  <option value="urgente">⚡ URGENTE (1er Lugar)</option>
                                 </select>
                               </div>
 
