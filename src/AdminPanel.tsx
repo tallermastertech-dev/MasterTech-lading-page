@@ -3370,37 +3370,31 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
                                               </span>
 
-                                              {/* Badge & Selector de Prioridad (Mueve el carro al 1er lugar del mecánico) */}
+                                              {/* Botón / Badge PRIORIDAD */}
                                               {(() => {
-                                                const pKey: TallerPriority = (v.prioridad as TallerPriority) || 'media';
-                                                const pCfg = TALLER_PRIORITY_CONFIG[pKey] || TALLER_PRIORITY_CONFIG.media;
-                                                const isPriorityActive = pKey === 'alta' || pKey === 'urgente';
+                                                const isPriorityActive = v.prioridad === 'alta' || v.prioridad === 'urgente';
 
                                                 return (
                                                   <button
                                                     type="button"
                                                     onClick={(e) => {
                                                       e.stopPropagation();
-                                                      // Ciclo: normal (media/baja) -> alta -> urgente -> normal
-                                                      let nextPrio: TallerPriority = 'alta';
-                                                      if (pKey === 'alta') nextPrio = 'urgente';
-                                                      else if (pKey === 'urgente') nextPrio = 'media';
-                                                      else nextPrio = 'alta';
+                                                      const willBePriority = !isPriorityActive;
+                                                      const nextPrio: TallerPriority = willBePriority ? 'alta' : 'media';
 
-                                                      const isNowHighPrio = nextPrio === 'alta' || nextPrio === 'urgente';
                                                       const updated = [...tallerBays];
                                                       const bayVehs = [...(updated[originalIdx].vehiculos || [])];
                                                       const currentTarget = {
                                                         ...bayVehs[vIdx],
                                                         prioridad: nextPrio,
-                                                        posicion: (isNowHighPrio ? 'elevador' : bayVehs[vIdx].posicion) as 'elevador' | 'cola'
+                                                        posicion: (willBePriority ? 'elevador' : bayVehs[vIdx].posicion) as 'elevador' | 'cola'
                                                       };
 
                                                       let reorderedVehs: MechanicAssignedVehicle[] = [...bayVehs];
                                                       reorderedVehs[vIdx] = currentTarget;
 
-                                                      // Si se activa prioridad, moverlo de INMEDIATO al primer lugar (índice 0) del mecánico
-                                                      if (isNowHighPrio && vIdx > 0) {
+                                                      // Al activar PRIORIDAD, moverlo de inmediato al primer puesto del mecánico
+                                                      if (willBePriority && vIdx > 0) {
                                                         const others = reorderedVehs.filter((_, idx) => idx !== vIdx).map(o => ({
                                                           ...o,
                                                           posicion: 'cola' as const
@@ -3420,15 +3414,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                         [bay.id]: currentTarget.id
                                                       }));
                                                     }}
-                                                    title={`Prioridad: ${pCfg.label} (Clic para asignar o cambiar. Mueve el carro al 1er lugar)`}
+                                                    title={isPriorityActive ? "Prioridad Activa (1er lugar). Clic para quitar prioridad." : "Clic para asignar PRIORIDAD y mover al 1er lugar."}
                                                     className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border transition-all hover:scale-105 cursor-pointer shadow-sm ${
                                                       isPriorityActive 
-                                                        ? `${pCfg.badgeClass} ring-1 ring-amber-400/40 animate-pulse` 
+                                                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-amber-500/20 animate-pulse' 
                                                         : 'bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10'
                                                     }`}
                                                   >
-                                                    <span>{pCfg.icon}</span>
-                                                    <span>{isPriorityActive ? `${pCfg.shortLabel} #1` : '+ Prioridad'}</span>
+                                                    {isPriorityActive && <span>🔥</span>}
+                                                    <span>PRIORIDAD</span>
                                                   </button>
                                                 );
                                               })()}
