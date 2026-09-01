@@ -2915,77 +2915,96 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           {/* ========================================================================= */}
           {/* MODULE: CONTROL DE TALLER (MONITOREO OPERATIVO MULTI-VEHÍCULO POR MECÁNICO) */}
           {/* ========================================================================= */}
-          {activeTab === 'control-taller' && (
-            <div className="space-y-6 animate-fade-in">
-              {/* Header Principal de Control de Taller */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                <div>
-                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight flex items-center gap-2.5">
-                    <Wrench className="text-amber-400" size={24} />
-                    <span>Control de Taller</span>
-                  </h1>
-                  <p className="text-xs text-zinc-400 mt-1">
-                    Monitoreo operativo de bahías y cola de vehículos por mecánico en tiempo real.
-                  </p>
+          {activeTab === 'control-taller' && (() => {
+            const isTallerReadOnly = Boolean(
+              currentUser && (
+                currentUser.accessLevel === 'control_taller' || 
+                currentUser.role === 'Control de Taller'
+              )
+            );
+
+            return (
+              <div className="space-y-6 animate-fade-in">
+                {/* Header Principal de Control de Taller */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <div>
+                    <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight flex items-center gap-2.5">
+                      <Wrench className="text-amber-400" size={24} />
+                      <span>Control de Taller</span>
+                    </h1>
+                    <p className="text-xs text-zinc-400 mt-1">
+                      {isTallerReadOnly
+                        ? 'Pantalla de monitoreo operativo y seguimiento de vehículos en tiempo real (Modo Consulta).'
+                        : 'Monitoreo operativo de bahías y cola de vehículos por mecánico en tiempo real.'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    {isTallerReadOnly ? (
+                      <div className="px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 shadow-sm">
+                        <Eye size={14} />
+                        <span>Modo Monitoreo / Consulta</span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newBay: MechanicBayItem = {
+                            id: `bay-${Date.now()}`,
+                            mecanicoNombre: "Nuevo Mecánico",
+                            mecanicoEspecialidad: "Técnico Automotriz",
+                            mecanicoFoto: "/assets/servicio-mecanica.jpg",
+                            bahiaNumero: `Bahía #${tallerBays.length + 1}`,
+                            vehiculos: [
+                              {
+                                id: `veh-${Date.now()}-1`,
+                                vehiculo: "Nuevo Vehículo",
+                                estado: "espera_tecnico",
+                                posicion: "elevador",
+                                tareas: [],
+                                notasInternas: "",
+                                fechaIngreso: new Date().toISOString()
+                              }
+                            ],
+                            updatedAt: new Date().toISOString()
+                          };
+                          const updated = [...tallerBays, newBay];
+                          saveTallerControl(updated);
+                          setEditingBay({ ...newBay });
+                          setEditingBayIndex(updated.length - 1);
+                          setModalActiveVehIdx(0);
+                          setIsBayModalOpen(true);
+                        }}
+                        className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
+                      >
+                        <Plus size={16} />
+                        <span>Añadir Bahía / Técnico</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => fetchTallerControl()}
+                      className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
+                      title="Recargar datos desde Supabase"
+                    >
+                      <RefreshCw size={14} className={isSavingTallerControl ? "animate-spin" : ""} />
+                      <span>Sincronizar</span>
+                    </button>
+
+                    {!isTallerReadOnly && (
+                      <button
+                        type="button"
+                        onClick={() => saveTallerControl(tallerBays)}
+                        disabled={isSavingTallerControl}
+                        className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg cursor-pointer"
+                      >
+                        {isSavingTallerControl ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                        <span>{savedTallerSuccess ? '¡Guardado en Supabase!' : 'Guardar en Supabase'}</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
-
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newBay: MechanicBayItem = {
-                        id: `bay-${Date.now()}`,
-                        mecanicoNombre: "Nuevo Mecánico",
-                        mecanicoEspecialidad: "Técnico Automotriz",
-                        mecanicoFoto: "/assets/servicio-mecanica.jpg",
-                        bahiaNumero: `Bahía #${tallerBays.length + 1}`,
-                        vehiculos: [
-                          {
-                            id: `veh-${Date.now()}-1`,
-                            vehiculo: "Nuevo Vehículo",
-                            estado: "espera_tecnico",
-                            posicion: "elevador",
-                            tareas: [],
-                            notasInternas: "",
-                            fechaIngreso: new Date().toISOString()
-                          }
-                        ],
-                        updatedAt: new Date().toISOString()
-                      };
-                      const updated = [...tallerBays, newBay];
-                      saveTallerControl(updated);
-                      setEditingBay({ ...newBay });
-                      setEditingBayIndex(updated.length - 1);
-                      setModalActiveVehIdx(0);
-                      setIsBayModalOpen(true);
-                    }}
-                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
-                  >
-                    <Plus size={16} />
-                    <span>Añadir Bahía / Técnico</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => fetchTallerControl()}
-                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
-                    title="Recargar datos desde Supabase"
-                  >
-                    <RefreshCw size={14} className={isSavingTallerControl ? "animate-spin" : ""} />
-                    <span>Sincronizar</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => saveTallerControl(tallerBays)}
-                    disabled={isSavingTallerControl}
-                    className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg cursor-pointer"
-                  >
-                    {isSavingTallerControl ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
-                    <span>{savedTallerSuccess ? '¡Guardado en Supabase!' : 'Guardar en Supabase'}</span>
-                  </button>
-                </div>
-              </div>
 
               {/* Barra de Métricas y Filtros Rápidos por Estado Operativo Global */}
               {(() => {
@@ -3185,7 +3204,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 {vehiclesList.length} {vehiclesList.length === 1 ? 'Vehículo' : 'Vehículos'}
                               </span>
 
-                              {tallerBays.length > 1 && (
+                              {tallerBays.length > 1 && !isTallerReadOnly && (
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -3209,9 +3228,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <Car size={13} className="text-primary" />
                                 <span>Vehículos en Cola / Bahía ({vehiclesList.length})</span>
                               </span>
-                              <button
-                                type="button"
-                                onClick={() => {
+                              {!isTallerReadOnly && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
                                     setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
                                     setEditingBayIndex(originalIdx);
                                     const newVehId = `veh-${Date.now()}`;
@@ -3234,14 +3254,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   <Plus size={11} />
                                   <span>+ Añadir Carro</span>
                                 </button>
+                              )}
                             </div>
 
                             {vehiclesList.length === 0 ? (
                               <div className="p-4 bg-black/20 border border-dashed border-white/10 rounded-2xl text-center">
                                 <span className="text-zinc-500 text-xs italic block mb-2">Sin vehículos en bahía</span>
-                                <button
-                                  type="button"
-                                  onClick={() => {
+                                {!isTallerReadOnly && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
                                       setEditingBay({ ...bay, vehiculos: [] });
                                       setEditingBayIndex(originalIdx);
                                       const newVehId = `veh-${Date.now()}`;
@@ -3258,15 +3280,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       setModalActiveVehIdx(0);
                                       setIsBayModalOpen(true);
                                     }}
-                                  className="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold cursor-pointer"
-                                >
-                                  + Asignar Vehículo
-                                </button>
+                                    className="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold cursor-pointer"
+                                  >
+                                    + Asignar Vehículo
+                                  </button>
+                                )}
                               </div>
                             ) : (
                               <div className="space-y-2">
                                 {vehiclesList.map((v, vIdx) => {
-                                  // Por defecto el primer vehículo o el seleccionado está abierto para ver tareas y modificar
+                                  // Por defecto el primer vehículo o el seleccionado está abierto para ver tareas
                                   const isExpanded = expandedVehiclesMap[bay.id]
                                     ? (expandedVehiclesMap[bay.id] === v.id)
                                     : (vIdx === 0);
@@ -3327,20 +3350,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             </span>
                                           )}
 
-                                          <button
-                                            type="button"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
-                                              setEditingBayIndex(originalIdx);
-                                              setModalActiveVehIdx(vIdx);
-                                              setIsBayModalOpen(true);
-                                            }}
-                                            className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-amber-400 hover:text-white transition-colors cursor-pointer"
-                                            title="Editar vehículo y trabajos autorizados"
-                                          >
-                                            <Edit size={13} />
-                                          </button>
+                                          {!isTallerReadOnly && (
+                                            <button
+                                              type="button"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                                setEditingBayIndex(originalIdx);
+                                                setModalActiveVehIdx(vIdx);
+                                                setIsBayModalOpen(true);
+                                              }}
+                                              className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-amber-400 hover:text-white transition-colors cursor-pointer"
+                                              title="Editar vehículo y trabajos autorizados"
+                                            >
+                                              <Edit size={13} />
+                                            </button>
+                                          )}
 
                                           <div className={`p-1 text-zinc-400 rounded-lg transition-transform duration-200 ${isExpanded ? 'rotate-180 text-amber-400' : ''}`}>
                                             <ChevronDown size={16} />
@@ -3356,24 +3381,34 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             <span className="text-[10px] font-black uppercase text-zinc-400">
                                               Ubicación en Taller:
                                             </span>
-                                            <button
-                                              type="button"
-                                              onClick={() => {
-                                                const updated = [...tallerBays];
-                                                const bayVehs = [...updated[originalIdx].vehiculos];
-                                                const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
-                                                bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
-                                                updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                saveTallerControl(updated);
-                                              }}
-                                              className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
+                                            {isTallerReadOnly ? (
+                                              <div className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase ${
                                                 v.posicion === 'elevador'
-                                                  ? 'bg-amber-500 text-black font-black shadow'
-                                                  : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
-                                              }`}
-                                            >
-                                              {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
-                                            </button>
+                                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                                                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                              }`}>
+                                                {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
+                                              </div>
+                                            ) : (
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  const updated = [...tallerBays];
+                                                  const bayVehs = [...updated[originalIdx].vehiculos];
+                                                  const nextPos = bayVehs[vIdx].posicion === 'elevador' ? 'cola' : 'elevador';
+                                                  bayVehs[vIdx] = { ...bayVehs[vIdx], posicion: nextPos };
+                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                  saveTallerControl(updated);
+                                                }}
+                                                className={`text-[10px] font-mono px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
+                                                  v.posicion === 'elevador'
+                                                    ? 'bg-amber-500 text-black font-black shadow'
+                                                    : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
+                                                }`}
+                                              >
+                                                {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
+                                              </button>
+                                            )}
                                           </div>
 
                                           {/* Selector de Estado Operativo (4 Estados Exactos) */}
@@ -3382,31 +3417,38 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               Estado Operativo
                                             </label>
 
-                                            <select
-                                              value={v.estado}
-                                              onChange={(e) => {
-                                                const newSt = e.target.value as TallerStatus;
-                                                const updated = [...tallerBays];
-                                                const bayVehs = [...updated[originalIdx].vehiculos];
-                                                bayVehs[vIdx] = { ...bayVehs[vIdx], estado: newSt };
-                                                updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                saveTallerControl(updated);
-                                              }}
-                                              className={`w-full font-bold text-xs rounded-xl p-2.5 outline-none cursor-pointer border transition-all ${vStatusCfg.badgeClass}`}
-                                            >
-                                              <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">
-                                                🔵 En espera de técnico
-                                              </option>
-                                              <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">
-                                                🟢 Aprobado
-                                              </option>
-                                              <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">
-                                                🟡 En espera de repuesto
-                                              </option>
-                                              <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">
-                                                🔴 En espera de respuesta del cliente
-                                              </option>
-                                            </select>
+                                            {isTallerReadOnly ? (
+                                              <div className={`w-full font-bold text-xs rounded-xl p-2.5 border flex items-center gap-2 ${vStatusCfg.badgeClass}`}>
+                                                <span className={`w-2.5 h-2.5 rounded-full ${vStatusCfg.dotClass} ${v.estado === 'aprobado' ? 'animate-pulse' : ''}`}></span>
+                                                <span>{vStatusCfg.label}</span>
+                                              </div>
+                                            ) : (
+                                              <select
+                                                value={v.estado}
+                                                onChange={(e) => {
+                                                  const newSt = e.target.value as TallerStatus;
+                                                  const updated = [...tallerBays];
+                                                  const bayVehs = [...updated[originalIdx].vehiculos];
+                                                  bayVehs[vIdx] = { ...bayVehs[vIdx], estado: newSt };
+                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                  saveTallerControl(updated);
+                                                }}
+                                                className={`w-full font-bold text-xs rounded-xl p-2.5 outline-none cursor-pointer border transition-all ${vStatusCfg.badgeClass}`}
+                                              >
+                                                <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">
+                                                  🔵 En espera de técnico
+                                                </option>
+                                                <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">
+                                                  🟢 Aprobado
+                                                </option>
+                                                <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">
+                                                  🟡 En espera de repuesto
+                                                </option>
+                                                <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">
+                                                  🔴 En espera de respuesta del cliente
+                                                </option>
+                                              </select>
+                                            )}
                                           </div>
 
                                           {/* Checklist de Trabajos Autorizados (SIN PRECIOS) */}
@@ -3423,27 +3465,29 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                     {completedTasksCount}/{totalTasksCount} ({Math.round((completedTasksCount / totalTasksCount) * 100)}%)
                                                   </span>
                                                 )}
-                                                <button
-                                                  type="button"
-                                                  onClick={() => {
-                                                    setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
-                                                    setEditingBayIndex(originalIdx);
-                                                    setModalActiveVehIdx(vIdx);
-                                                    setIsBayModalOpen(true);
-                                                  }}
-                                                  className="px-2 py-0.5 bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/30 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
-                                                  title="Gestionar y editar trabajos autorizados"
-                                                >
-                                                  <Plus size={10} />
-                                                  <span>+ Añadir Tarea</span>
-                                                </button>
+                                                {!isTallerReadOnly && (
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                      setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                                      setEditingBayIndex(originalIdx);
+                                                      setModalActiveVehIdx(vIdx);
+                                                      setIsBayModalOpen(true);
+                                                    }}
+                                                    className="px-2 py-0.5 bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/30 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                                                    title="Gestionar y editar trabajos autorizados"
+                                                  >
+                                                    <Plus size={10} />
+                                                    <span>+ Añadir Tarea</span>
+                                                  </button>
+                                                )}
                                               </div>
                                             </div>
 
                                             <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1 scrollbar-thin">
                                               {(v.tareas || []).length === 0 ? (
                                                 <div className="p-2.5 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
-                                                  Sin tareas asignadas. Haz clic en "+ Añadir Tarea" para registrar trabajos.
+                                                  Sin tareas asignadas a este vehículo.
                                                 </div>
                                               ) : (
                                                 v.tareas.map((task, tIdx) => {
@@ -3460,11 +3504,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                       }`}
                                                     >
                                                       {/* Checkbox y Texto Completo 100% Legible */}
-                                                      <label className="flex items-start gap-2.5 flex-1 min-w-0 cursor-pointer select-none">
+                                                      <label className={`flex items-start gap-2.5 flex-1 min-w-0 select-none ${isTallerReadOnly ? 'cursor-default' : 'cursor-pointer'}`}>
                                                         <input
                                                           type="checkbox"
                                                           checked={task.completada}
+                                                          disabled={isTallerReadOnly}
                                                           onChange={() => {
+                                                            if (isTallerReadOnly) return;
                                                             const updated = [...tallerBays];
                                                             const bayVehs = [...updated[originalIdx].vehiculos];
                                                             const vehTasks = [...bayVehs[vIdx].tareas];
@@ -3478,7 +3524,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                             updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
                                                             saveTallerControl(updated);
                                                           }}
-                                                          className="mt-0.5 w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
+                                                          className="mt-0.5 w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer disabled:cursor-default disabled:opacity-80 shrink-0"
                                                         />
                                                         <span className={`text-xs leading-snug font-medium break-words ${
                                                           task.completada ? 'line-through text-zinc-500' : 'text-zinc-100'
@@ -3488,31 +3534,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                       </label>
 
                                                       {/* Círculo indicador con el color que corresponde */}
-                                                      <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                          const stateCycle: TallerStatus[] = ['espera_tecnico', 'aprobado', 'espera_repuesto', 'espera_cliente'];
-                                                          const currentIdx = stateCycle.indexOf(tStatus);
-                                                          const nextSt = stateCycle[(currentIdx + 1) % stateCycle.length];
-                                                          
-                                                          const updated = [...tallerBays];
-                                                          const bayVehs = [...updated[originalIdx].vehiculos];
-                                                          const vehTasks = [...bayVehs[vIdx].tareas];
-                                                          vehTasks[tIdx] = {
-                                                            ...vehTasks[tIdx],
-                                                            estado: nextSt,
-                                                            completada: nextSt === 'aprobado' ? vehTasks[tIdx].completada : false
-                                                          };
-                                                          bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                          updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                          saveTallerControl(updated);
-                                                        }}
-                                                        title={`Estado actual: ${tStatusCfg.label} (Clic para cambiar)`}
-                                                        className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[10px] font-bold shrink-0 cursor-pointer transition-all hover:scale-105 ${tStatusCfg.badgeClass}`}
-                                                      >
-                                                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${tStatusCfg.dotClass} ${tStatus === 'aprobado' ? 'animate-pulse' : ''}`}></span>
-                                                        <span className="font-mono text-[9px]">{tStatusCfg.shortLabel}</span>
-                                                      </button>
+                                                      {isTallerReadOnly ? (
+                                                        <div
+                                                          className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[10px] font-bold shrink-0 ${tStatusCfg.badgeClass}`}
+                                                        >
+                                                          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${tStatusCfg.dotClass} ${tStatus === 'aprobado' ? 'animate-pulse' : ''}`}></span>
+                                                          <span className="font-mono text-[9px]">{tStatusCfg.shortLabel}</span>
+                                                        </div>
+                                                      ) : (
+                                                        <button
+                                                          type="button"
+                                                          onClick={() => {
+                                                            const stateCycle: TallerStatus[] = ['espera_tecnico', 'aprobado', 'espera_repuesto', 'espera_cliente'];
+                                                            const currentIdx = stateCycle.indexOf(tStatus);
+                                                            const nextSt = stateCycle[(currentIdx + 1) % stateCycle.length];
+                                                            
+                                                            const updated = [...tallerBays];
+                                                            const bayVehs = [...updated[originalIdx].vehiculos];
+                                                            const vehTasks = [...bayVehs[vIdx].tareas];
+                                                            vehTasks[tIdx] = {
+                                                              ...vehTasks[tIdx],
+                                                              estado: nextSt,
+                                                              completada: nextSt === 'aprobado' ? vehTasks[tIdx].completada : false
+                                                            };
+                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                            saveTallerControl(updated);
+                                                          }}
+                                                          title={`Estado actual: ${tStatusCfg.label} (Clic para cambiar)`}
+                                                          className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[10px] font-bold shrink-0 cursor-pointer transition-all hover:scale-105 ${tStatusCfg.badgeClass}`}
+                                                        >
+                                                          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${tStatusCfg.dotClass} ${tStatus === 'aprobado' ? 'animate-pulse' : ''}`}></span>
+                                                          <span className="font-mono text-[9px]">{tStatusCfg.shortLabel}</span>
+                                                        </button>
+                                                      )}
                                                     </div>
                                                   );
                                                 })
@@ -3529,26 +3584,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           )}
 
                                           {/* Botón para Liberar / Entregar Carro */}
-                                          <div className="pt-2 border-t border-white/5 flex items-center justify-end">
-                                            <button
-                                              type="button"
-                                              onClick={() => {
-                                                if (!window.confirm(`¿Liberar y desasignar "${v.vehiculo}" de ${bay.mecanicoNombre}?`)) return;
-                                                const updated = [...tallerBays];
-                                                const bayVehs = updated[originalIdx].vehiculos.filter((_, i) => i !== vIdx);
-                                                updated[originalIdx] = {
-                                                  ...updated[originalIdx],
-                                                  vehiculos: bayVehs,
-                                                  updatedAt: new Date().toISOString()
-                                                };
-                                                saveTallerControl(updated);
-                                              }}
-                                              className="text-red-400 hover:text-red-300 text-[10px] font-bold flex items-center gap-1.5 cursor-pointer py-1 px-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-all"
-                                            >
-                                              <LogOut size={12} />
-                                              <span>Liberar / Entregar Carro</span>
-                                            </button>
-                                          </div>
+                                          {!isTallerReadOnly && (
+                                            <div className="pt-2 border-t border-white/5 flex items-center justify-end">
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  if (!window.confirm(`¿Liberar y desasignar "${v.vehiculo}" de ${bay.mecanicoNombre}?`)) return;
+                                                  const updated = [...tallerBays];
+                                                  const bayVehs = updated[originalIdx].vehiculos.filter((_, i) => i !== vIdx);
+                                                  updated[originalIdx] = {
+                                                    ...updated[originalIdx],
+                                                    vehiculos: bayVehs,
+                                                    updatedAt: new Date().toISOString()
+                                                  };
+                                                  saveTallerControl(updated);
+                                                }}
+                                                className="text-red-400 hover:text-red-300 text-[10px] font-bold flex items-center gap-1.5 cursor-pointer py-1 px-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-all"
+                                              >
+                                                <LogOut size={12} />
+                                                <span>Liberar / Entregar Carro</span>
+                                              </button>
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                     </div>
@@ -3560,21 +3617,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
 
                         {/* 3. ACCIÓN INFERIOR DE LA TARJETA */}
-                        <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
-                              setEditingBayIndex(originalIdx);
-                              setModalActiveVehIdx(0);
-                              setIsBayModalOpen(true);
-                            }}
-                            className="w-full py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                          >
-                            <Edit size={13} className="text-primary" />
-                            <span>Editar Bahía / Vehículos</span>
-                          </button>
-                        </div>
+                        {!isTallerReadOnly && (
+                          <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                setEditingBayIndex(originalIdx);
+                                setModalActiveVehIdx(0);
+                                setIsBayModalOpen(true);
+                              }}
+                              className="w-full py-2.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                            >
+                              <Edit size={13} className="text-primary" />
+                              <span>Editar Bahía / Vehículos</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -4010,7 +4069,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               )}
             </div>
-          )}
+            );
+          })()}
 
           {/* ========================================================================= */}
           {/* MODULE 2: GESTOR DE CITAS Y SOLICITUDES (SEGREGADAS POR ÁREA) */}
