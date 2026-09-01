@@ -73,7 +73,9 @@ import {
   Moon,
   Banknote,
   Smartphone,
-  Camera
+  Camera,
+  Flame,
+  ArrowUpCircle
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -3076,7 +3078,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <span className="w-2 h-2 rounded-full bg-blue-400"></span>
                         </div>
                         <div className="text-2xl font-black text-white mt-0.5">{countEsperaTecnico}</div>
-                        <span className="text-[10px] text-blue-300/70 block truncate">🔵 Por iniciar</span>
+                        <span className="text-[10px] text-blue-300/80 flex items-center gap-1 mt-0.5">
+                          <Clock size={11} />
+                          <span>Por iniciar</span>
+                        </span>
                       </button>
 
                       <button
@@ -3093,7 +3098,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         </div>
                         <div className="text-2xl font-black text-white mt-0.5">{countAprobado}</div>
-                        <span className="text-[10px] text-emerald-300/70 block truncate">🟢 En ejecución</span>
+                        <span className="text-[10px] text-emerald-300/80 flex items-center gap-1 mt-0.5">
+                          <CheckCircle2 size={11} />
+                          <span>En ejecución</span>
+                        </span>
                       </button>
 
                       <button
@@ -3110,7 +3118,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <span className="w-2 h-2 rounded-full bg-amber-400"></span>
                         </div>
                         <div className="text-2xl font-black text-white mt-0.5">{countEsperaRepuesto}</div>
-                        <span className="text-[10px] text-amber-300/70 block truncate">🟡 En almacén</span>
+                        <span className="text-[10px] text-amber-300/80 flex items-center gap-1 mt-0.5">
+                          <Package size={11} />
+                          <span>En almacén</span>
+                        </span>
                       </button>
 
                       <button
@@ -3127,7 +3138,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <span className="w-2 h-2 rounded-full bg-red-400"></span>
                         </div>
                         <div className="text-2xl font-black text-white mt-0.5">{countEsperaCliente}</div>
-                        <span className="text-[10px] text-red-300/70 block truncate">🔴 Por autorizar</span>
+                        <span className="text-[10px] text-red-300/80 flex items-center gap-1 mt-0.5">
+                          <AlertCircle size={11} />
+                          <span>Por autorizar</span>
+                        </span>
                       </button>
                     </div>
                   );
@@ -3406,7 +3420,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               {/* Badge PRIORIDAD: Solo aparece si fue activada desde la creación/edición del vehículo */}
                                               {(v.prioridad === 'alta' || v.prioridad === 'urgente' || (v as any).prioridad === true) && (
                                                 <span className="text-[9px] font-mono px-2 py-0.5 rounded-md font-black uppercase flex items-center gap-1 border bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-sm shadow-amber-500/20 animate-pulse">
-                                                  <span>🔥</span>
+                                                  <Flame size={11} className="text-amber-400 shrink-0" />
                                                   <span>PRIORIDAD</span>
                                                 </span>
                                               )}
@@ -3458,7 +3472,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                   ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                                                   : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
                                               }`}>
-                                                {v.posicion === 'elevador' ? '⚡ En Elevador' : '⏳ En Cola'}
+                                                {v.posicion === 'elevador' ? (
+                                                  <span className="flex items-center gap-1"><ArrowUpCircle size={11} className="text-amber-400" /> En Elevador</span>
+                                                ) : (
+                                                  <span className="flex items-center gap-1"><Clock size={11} className="text-zinc-400" /> En Cola</span>
+                                                )}
                                               </div>
                                             ) : (
                                               <button
@@ -3477,7 +3495,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                     : 'bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700'
                                                 }`}
                                               >
-                                                {v.posicion === 'elevador' ? '⚡ En Elevador (Principal)' : '⏳ En Cola / Espera'}
+                                                {v.posicion === 'elevador' ? (
+                                                  <span className="flex items-center gap-1"><ArrowUpCircle size={11} /> En Elevador (Principal)</span>
+                                                ) : (
+                                                  <span className="flex items-center gap-1"><Clock size={11} /> En Cola / Espera</span>
+                                                )}
                                               </button>
                                             )}
                                           </div>
@@ -3507,16 +3529,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 className={`w-full font-bold text-xs rounded-xl p-2.5 outline-none cursor-pointer border transition-all ${vStatusCfg.badgeClass}`}
                                               >
                                                 <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">
-                                                  🔵 En espera de técnico
+                                                  En espera de técnico
                                                 </option>
                                                 <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">
-                                                  🟢 Aprobado
+                                                  Aprobado
                                                 </option>
                                                 <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">
-                                                  🟡 En espera de repuesto
+                                                  En espera de repuesto
                                                 </option>
                                                 <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">
-                                                  🔴 En espera de respuesta del cliente
+                                                  En espera de respuesta del cliente
                                                 </option>
                                               </select>
                                             )}
@@ -4031,8 +4053,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   }`}
                                 >
                                   <option value="media">Sin Prioridad (Normal)</option>
-                                  <option value="alta">🔥 PRIORIDAD (1er Lugar)</option>
-                                  <option value="urgente">⚡ URGENTE (1er Lugar)</option>
+                                  <option value="alta">PRIORIDAD (1er Lugar)</option>
+                                  <option value="urgente">URGENTE (1er Lugar)</option>
                                 </select>
                               </div>
 
@@ -4052,10 +4074,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   }}
                                   className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
                                 >
-                                  <option value="espera_tecnico">🔵 Espera Técnico</option>
-                                  <option value="aprobado">🟢 Aprobado</option>
-                                  <option value="espera_repuesto">🟡 Espera Repuesto</option>
-                                  <option value="espera_cliente">🔴 Espera Cliente</option>
+                                  <option value="espera_tecnico">Espera Técnico</option>
+                                  <option value="aprobado">Aprobado</option>
+                                  <option value="espera_repuesto">Espera Repuesto</option>
+                                  <option value="espera_cliente">Espera Cliente</option>
                                 </select>
                               </div>
                             </div>
@@ -4145,10 +4167,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           }}
                                           className={`text-[10px] font-bold rounded-lg px-2 py-1 outline-none cursor-pointer border transition-all ${tStCfg.badgeClass}`}
                                         >
-                                          <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">🟢 Aprobado</option>
-                                          <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">🟡 Espera Repuesto</option>
-                                          <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">🔴 Espera Cliente</option>
-                                          <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">🔵 Espera Técnico</option>
+                                          <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">Aprobado</option>
+                                          <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">Espera Repuesto</option>
+                                          <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">Espera Cliente</option>
+                                          <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">Espera Técnico</option>
                                         </select>
 
                                         <button
