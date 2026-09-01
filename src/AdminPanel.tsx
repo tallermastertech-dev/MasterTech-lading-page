@@ -3212,31 +3212,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const newVehId = `veh-${Date.now()}`;
-                                  const newVeh: MechanicAssignedVehicle = {
-                                    id: newVehId,
-                                    vehiculo: "Nuevo Vehículo en Cola",
-                                    estado: "espera_tecnico",
-                                    posicion: vehiclesList.length === 0 ? "elevador" : "cola",
-                                    tareas: [],
-                                    notasInternas: "",
-                                    fechaIngreso: new Date().toISOString()
-                                  };
-                                  const updated = [...tallerBays];
-                                  const updatedVehs = [...(updated[originalIdx].vehiculos || []), newVeh];
-                                  updated[originalIdx] = {
-                                    ...updated[originalIdx],
-                                    vehiculos: updatedVehs,
-                                    updatedAt: new Date().toISOString()
-                                  };
-                                  saveTallerControl(updated);
-                                  setExpandedVehiclesMap({ ...expandedVehiclesMap, [bay.id]: newVehId });
-                                }}
-                                className="text-primary hover:text-amber-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer bg-primary/10 hover:bg-primary/20 px-2 py-0.5 rounded-md transition-colors"
-                              >
-                                <Plus size={11} />
-                                <span>+ Añadir Carro</span>
-                              </button>
+                                    setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                    setEditingBayIndex(originalIdx);
+                                    const newVehId = `veh-${Date.now()}`;
+                                    const newVeh: MechanicAssignedVehicle = {
+                                      id: newVehId,
+                                      vehiculo: "Nuevo Vehículo (Modelo / Placa)",
+                                      estado: "espera_tecnico",
+                                      posicion: (bay.vehiculos || []).length === 0 ? "elevador" : "cola",
+                                      tareas: [],
+                                      notasInternas: "",
+                                      fechaIngreso: new Date().toISOString()
+                                    };
+                                    const updatedVehs = [...(bay.vehiculos || []), newVeh];
+                                    setEditingBay({ ...bay, vehiculos: updatedVehs });
+                                    setModalActiveVehIdx(updatedVehs.length - 1);
+                                    setIsBayModalOpen(true);
+                                  }}
+                                  className="text-primary hover:text-amber-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer bg-primary/10 hover:bg-primary/20 px-2 py-0.5 rounded-md transition-colors"
+                                >
+                                  <Plus size={11} />
+                                  <span>+ Añadir Carro</span>
+                                </button>
                             </div>
 
                             {vehiclesList.length === 0 ? (
@@ -3245,25 +3242,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    const newVehId = `veh-${Date.now()}`;
-                                    const newVeh: MechanicAssignedVehicle = {
-                                      id: newVehId,
-                                      vehiculo: "Nuevo Vehículo",
-                                      estado: "espera_tecnico",
-                                      posicion: "elevador",
-                                      tareas: [],
-                                      notasInternas: "",
-                                      fechaIngreso: new Date().toISOString()
-                                    };
-                                    const updated = [...tallerBays];
-                                    updated[originalIdx] = {
-                                      ...updated[originalIdx],
-                                      vehiculos: [newVeh],
-                                      updatedAt: new Date().toISOString()
-                                    };
-                                    saveTallerControl(updated);
-                                    setExpandedVehiclesMap({ ...expandedVehiclesMap, [bay.id]: newVehId });
-                                  }}
+                                      setEditingBay({ ...bay, vehiculos: [] });
+                                      setEditingBayIndex(originalIdx);
+                                      const newVehId = `veh-${Date.now()}`;
+                                      const newVeh: MechanicAssignedVehicle = {
+                                        id: newVehId,
+                                        vehiculo: "Nuevo Vehículo (Modelo / Placa)",
+                                        estado: "espera_tecnico",
+                                        posicion: "elevador",
+                                        tareas: [],
+                                        notasInternas: "",
+                                        fechaIngreso: new Date().toISOString()
+                                      };
+                                      setEditingBay({ ...bay, vehiculos: [newVeh] });
+                                      setModalActiveVehIdx(0);
+                                      setIsBayModalOpen(true);
+                                    }}
                                   className="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold cursor-pointer"
                                 >
                                   + Asignar Vehículo
@@ -3272,12 +3266,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             ) : (
                               <div className="space-y-2">
                                 {vehiclesList.map((v, vIdx) => {
-                                  // Determinar si este vehículo está actualmente desplegado
-                                  const currentExpandedId = expandedVehiclesMap[bay.id] !== undefined 
-                                    ? expandedVehiclesMap[bay.id] 
-                                    : (vehiclesList.find(veh => veh.posicion === 'elevador')?.id || vehiclesList[0]?.id);
+                                  // Por defecto el primer vehículo o el seleccionado está abierto para ver tareas y modificar
+                                  const isExpanded = expandedVehiclesMap[bay.id]
+                                    ? (expandedVehiclesMap[bay.id] === v.id)
+                                    : (vIdx === 0);
                                   
-                                  const isExpanded = currentExpandedId === v.id;
                                   const vStatusCfg = TALLER_STATUS_CONFIG[v.estado] || TALLER_STATUS_CONFIG.espera_tecnico;
                                   const completedTasksCount = (v.tareas || []).filter(t => t.completada).length;
                                   const totalTasksCount = (v.tareas || []).length;
@@ -3298,7 +3291,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                         onClick={() => {
                                           setExpandedVehiclesMap({
                                             ...expandedVehiclesMap,
-                                            [bay.id]: isExpanded ? null : v.id
+                                            [bay.id]: isExpanded ? '__CLOSED__' : v.id
                                           });
                                         }}
                                         className="p-3.5 flex items-center justify-between gap-3 cursor-pointer select-none"
@@ -3333,6 +3326,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               {completedTasksCount}/{totalTasksCount}
                                             </span>
                                           )}
+
+                                          <button
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                              setEditingBayIndex(originalIdx);
+                                              setModalActiveVehIdx(vIdx);
+                                              setIsBayModalOpen(true);
+                                            }}
+                                            className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-amber-400 hover:text-white transition-colors cursor-pointer"
+                                            title="Editar vehículo y trabajos autorizados"
+                                          >
+                                            <Edit size={13} />
+                                          </button>
+
                                           <div className={`p-1 text-zinc-400 rounded-lg transition-transform duration-200 ${isExpanded ? 'rotate-180 text-amber-400' : ''}`}>
                                             <ChevronDown size={16} />
                                           </div>
