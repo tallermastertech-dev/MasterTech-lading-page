@@ -2956,6 +2956,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                   <button
                     type="button"
+                    onClick={() => fetchTallerControl()}
+                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
+                    title="Recargar datos desde Supabase"
+                  >
+                    <RefreshCw size={14} className={isSavingTallerControl ? "animate-spin" : ""} />
+                    <span>Sincronizar</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => saveTallerControl(tallerBays)}
                     disabled={isSavingTallerControl}
                     className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg cursor-pointer"
