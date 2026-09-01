@@ -81,7 +81,8 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowLeftRight,
-  ChevronsUp
+  ChevronsUp,
+  GripVertical
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -972,6 +973,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     notasFinales: string;
   } | null>(null);
 
+  // Estados de Arrastrar y Soltar (Drag and Drop estilo Trello / Kanban)
+  const [draggedVehInfo, setDraggedVehInfo] = useState<{ sourceBayIdx: number; sourceVehIdx: number; vehId: string } | null>(null);
+  const [dragOverBayIdx, setDragOverBayIdx] = useState<number | null>(null);
+  const [dragOverVehIdx, setDragOverVehIdx] = useState<number | null>(null);
+
   const saveTallerEntregas = async (updatedEntregas: TallerEntregaRecord[]) => {
     setTallerEntregas(updatedEntregas);
     localStorage.setItem('mastertech_taller_entregas_cache', JSON.stringify(updatedEntregas));
@@ -987,6 +993,67 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } catch (e) {
       console.warn("Error guardando historial de entregas:", e);
     }
+  };
+
+  // Función para mover vehículos arrastrando estilo Trello
+  const handleMoveVehicleDnd = (sourceBayIdx: number, sourceVehIdx: number, targetBayIdx: number, targetVehIdx?: number) => {
+    if (sourceBayIdx === targetBayIdx && sourceVehIdx === targetVehIdx) {
+      setDraggedVehInfo(null);
+      setDragOverBayIdx(null);
+      setDragOverVehIdx(null);
+      return;
+    }
+
+    const updated = [...tallerBays];
+    const sourceVehs = [...(updated[sourceBayIdx]?.vehiculos || [])];
+    if (!sourceVehs[sourceVehIdx]) {
+      setDraggedVehInfo(null);
+      setDragOverBayIdx(null);
+      setDragOverVehIdx(null);
+      return;
+    }
+
+    const [movedVehicle] = sourceVehs.splice(sourceVehIdx, 1);
+
+    if (sourceBayIdx === targetBayIdx) {
+      // Reordenar dentro del mismo técnico / bahía
+      const insertAt = typeof targetVehIdx === 'number' ? targetVehIdx : sourceVehs.length;
+      sourceVehs.splice(insertAt, 0, movedVehicle);
+
+      // Si quedó en 1er lugar (posición 0), se promueve a elevador
+      if (insertAt === 0) {
+        sourceVehs[0] = { ...sourceVehs[0], posicion: 'elevador' };
+      }
+      updated[sourceBayIdx] = {
+        ...updated[sourceBayIdx],
+        vehiculos: sourceVehs,
+        updatedAt: new Date().toISOString()
+      };
+    } else {
+      // Mover a otra bahía / técnico
+      updated[sourceBayIdx] = {
+        ...updated[sourceBayIdx],
+        vehiculos: sourceVehs,
+        updatedAt: new Date().toISOString()
+      };
+
+      const destVehs = [...(updated[targetBayIdx]?.vehiculos || [])];
+      const insertAt = typeof targetVehIdx === 'number' ? targetVehIdx : destVehs.length;
+      destVehs.splice(insertAt, 0, movedVehicle);
+      if (insertAt === 0 || destVehs.length === 1) {
+        destVehs[insertAt] = { ...destVehs[insertAt], posicion: 'elevador' };
+      }
+      updated[targetBayIdx] = {
+        ...updated[targetBayIdx],
+        vehiculos: destVehs,
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    saveTallerControl(updated);
+    setDraggedVehInfo(null);
+    setDragOverBayIdx(null);
+    setDragOverVehIdx(null);
   };
 
   // Sincronizar Control de Taller con Supabase
@@ -3295,7 +3362,32 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     return (
                       <div
                         key={bay.id || originalIdx}
-                        className="bg-[#12141a] p-5 rounded-3xl border border-white/10 space-y-4 flex flex-col justify-between transition-all shadow-xl hover:shadow-2xl relative group"
+                        onDragOver={(e) => {
+                          if (!isTallerReadOnly && draggedVehInfo) {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                            if (dragOverBayIdx !== originalIdx) {
+                              setDragOverBayIdx(originalIdx);
+                            }
+                          }
+                        }}
+                        onDragLeave={(e) => {
+                          if (e.currentTarget === e.target && dragOverBayIdx === originalIdx) {
+                            setDragOverBayIdx(null);
+                          }
+                        }}
+                        onDrop={(e) => {
+                          if (!isTallerReadOnly && draggedVehInfo) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleMoveVehicleDnd(draggedVehInfo.sourceBayIdx, draggedVehInfo.sourceVehIdx, originalIdx);
+                          }
+                        }}
+                        className={`bg-[#12141a] p-5 rounded-3xl border transition-all shadow-xl hover:shadow-2xl relative group space-y-4 flex flex-col justify-between ${
+                          dragOverBayIdx === originalIdx && draggedVehInfo && draggedVehInfo.sourceBayIdx !== originalIdx
+                            ? 'border-amber-400/80 ring-2 ring-amber-400/40 bg-amber-500/5'
+                            : 'border-white/10'
+                        }`}
                       >
                         <div className="space-y-4">
                           {/* 1. ENCABEZADO DE LA TARJETA: Mecánico + Especialidad + Bahía */}
@@ -3417,9 +3509,31 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             </div>
 
                             {vehiclesList.length === 0 ? (
-                              <div className="p-4 bg-black/20 border border-dashed border-white/10 rounded-2xl text-center">
-                                <span className="text-zinc-500 text-xs italic block mb-2">Sin vehículos en bahía</span>
-                                {!isTallerReadOnly && (
+                              <div
+                                onDragOver={(e) => {
+                                  if (!isTallerReadOnly && draggedVehInfo) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setDragOverBayIdx(originalIdx);
+                                  }
+                                }}
+                                onDrop={(e) => {
+                                  if (!isTallerReadOnly && draggedVehInfo) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleMoveVehicleDnd(draggedVehInfo.sourceBayIdx, draggedVehInfo.sourceVehIdx, originalIdx, 0);
+                                  }
+                                }}
+                                className={`p-5 bg-black/20 border-2 border-dashed rounded-2xl text-center transition-all ${
+                                  dragOverBayIdx === originalIdx && draggedVehInfo
+                                    ? 'border-amber-400 bg-amber-500/10 scale-102'
+                                    : 'border-white/10'
+                                }`}
+                              >
+                                <span className="text-zinc-500 text-xs italic block mb-2">
+                                  {draggedVehInfo ? '👉 Suelta aquí para asignar este vehículo' : 'Sin vehículos en bahía'}
+                                </span>
+                                {!isTallerReadOnly && !draggedVehInfo && (
                                   <button
                                     type="button"
                                     onClick={() => {
@@ -3448,7 +3562,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             ) : (
                               <div className="space-y-2">
                                 {vehiclesList.map((v, vIdx) => {
-                                  // Por defecto el primer vehículo o el seleccionado está abierto para ver tareas
                                   const isExpanded = expandedVehiclesMap[bay.id]
                                     ? (expandedVehiclesMap[bay.id] === v.id)
                                     : (vIdx === 0);
@@ -3456,16 +3569,52 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   const vStatusCfg = TALLER_STATUS_CONFIG[v.estado] || TALLER_STATUS_CONFIG.espera_tecnico;
                                   const completedTasksCount = (v.tareas || []).filter(t => t.completada).length;
                                   const totalTasksCount = (v.tareas || []).length;
-                                  const quickInputKey = `${bay.id}-${v.id}`;
-                                  const quickInputVal = quickTaskInputs[quickInputKey] || '';
+                                  const isBeingDragged = draggedVehInfo?.sourceBayIdx === originalIdx && draggedVehInfo?.sourceVehIdx === vIdx;
+                                  const isDragTarget = dragOverBayIdx === originalIdx && dragOverVehIdx === vIdx && !isBeingDragged;
 
                                   return (
                                     <div
                                       key={v.id || vIdx}
-                                      className={`rounded-2xl border transition-all ${
-                                        isExpanded
-                                          ? `bg-[#161822] ${vStatusCfg.borderCardClass} shadow-lg ring-1 ring-white/10`
-                                          : 'bg-black/40 border-white/10 hover:border-white/20 hover:bg-black/60'
+                                      draggable={!isTallerReadOnly}
+                                      onDragStart={(e) => {
+                                        if (!isTallerReadOnly) {
+                                          e.stopPropagation();
+                                          setDraggedVehInfo({ sourceBayIdx: originalIdx, sourceVehIdx: vIdx, vehId: v.id });
+                                          e.dataTransfer.setData('text/plain', JSON.stringify({ sourceBayIdx: originalIdx, sourceVehIdx: vIdx, vehId: v.id }));
+                                          e.dataTransfer.effectAllowed = 'move';
+                                        }
+                                      }}
+                                      onDragEnd={() => {
+                                        setDraggedVehInfo(null);
+                                        setDragOverBayIdx(null);
+                                        setDragOverVehIdx(null);
+                                      }}
+                                      onDragOver={(e) => {
+                                        if (!isTallerReadOnly && draggedVehInfo) {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          e.dataTransfer.dropEffect = 'move';
+                                          if (dragOverBayIdx !== originalIdx || dragOverVehIdx !== vIdx) {
+                                            setDragOverBayIdx(originalIdx);
+                                            setDragOverVehIdx(vIdx);
+                                          }
+                                        }
+                                      }}
+                                      onDrop={(e) => {
+                                        if (!isTallerReadOnly && draggedVehInfo) {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          handleMoveVehicleDnd(draggedVehInfo.sourceBayIdx, draggedVehInfo.sourceVehIdx, originalIdx, vIdx);
+                                        }
+                                      }}
+                                      className={`rounded-2xl border transition-all select-none ${
+                                        isBeingDragged
+                                          ? 'opacity-30 border-dashed border-amber-400 scale-[0.98]'
+                                          : isDragTarget
+                                            ? 'border-t-4 border-t-amber-400 bg-amber-500/10 shadow-lg scale-101'
+                                            : isExpanded
+                                              ? `bg-[#161822] ${vStatusCfg.borderCardClass} shadow-lg ring-1 ring-white/10`
+                                              : 'bg-black/40 border-white/10 hover:border-white/20 hover:bg-black/60'
                                       }`}
                                     >
                                       {/* Cabecera Principal del Vehículo (Clickeable para Desplegar / Colapsar) */}
@@ -3476,9 +3625,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             [bay.id]: isExpanded ? '__CLOSED__' : v.id
                                           });
                                         }}
-                                        className="p-3.5 flex items-center justify-between gap-3 cursor-pointer select-none"
+                                        className="p-3.5 flex items-center justify-between gap-3 cursor-pointer"
                                       >
-                                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                                          {/* Icono de Agarre Trello / Mover */}
+                                          {!isTallerReadOnly && (
+                                            <div
+                                              className="cursor-grab active:cursor-grabbing text-zinc-500 hover:text-amber-400 p-0.5 shrink-0"
+                                              title="Arrastra para mover de técnico o cambiar de orden"
+                                            >
+                                              <GripVertical size={15} />
+                                            </div>
+                                          )}
+
                                           <span className={`w-3 h-3 rounded-full shrink-0 ${vStatusCfg.dotClass} ${v.estado === 'aprobado' ? 'animate-pulse' : ''}`}></span>
                                           
                                           <div className="min-w-0 flex-1">
@@ -3492,7 +3651,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
                                               </span>
 
-                                              {/* Badge PRIORIDAD: Solo aparece si fue activada desde la creación/edición del vehículo */}
+                                              {/* Badge PRIORIDAD */}
                                               {(v.prioridad === 'alta' || v.prioridad === 'urgente' || (v as any).prioridad === true) && (
                                                 <span className="text-[9px] font-mono px-2 py-0.5 rounded-md font-black uppercase flex items-center gap-1 border bg-amber-500/20 text-amber-300 border-amber-500/60 ring-1 ring-amber-400/40 shadow-sm shadow-amber-500/20 animate-pulse">
                                                   <Flame size={11} className="text-amber-400 shrink-0" />
@@ -3514,51 +3673,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             <span className="text-[10px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg">
                                               {completedTasksCount}/{totalTasksCount}
                                             </span>
-                                          )}
-
-                                          {/* Botones de Reordenar Arriba / Abajo (Orden dentro del técnico) */}
-                                          {!isTallerReadOnly && vehiclesList.length > 1 && (
-                                            <div className="flex items-center gap-0.5 bg-black/40 border border-white/5 rounded-lg p-0.5" onClick={(e) => e.stopPropagation()}>
-                                              {vIdx > 0 && (
-                                                <button
-                                                  type="button"
-                                                  title="Mover arriba / Poner antes"
-                                                  onClick={() => {
-                                                    const updated = [...tallerBays];
-                                                    const bayVehs = [...updated[originalIdx].vehiculos];
-                                                    const temp = bayVehs[vIdx];
-                                                    bayVehs[vIdx] = bayVehs[vIdx - 1];
-                                                    bayVehs[vIdx - 1] = temp;
-                                                    if (vIdx - 1 === 0) {
-                                                      bayVehs[0] = { ...bayVehs[0], posicion: 'elevador' };
-                                                    }
-                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                    saveTallerControl(updated);
-                                                  }}
-                                                  className="p-1 rounded-md hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
-                                                >
-                                                  <ArrowUp size={12} />
-                                                </button>
-                                              )}
-                                              {vIdx < vehiclesList.length - 1 && (
-                                                <button
-                                                  type="button"
-                                                  title="Mover abajo / Poner después"
-                                                  onClick={() => {
-                                                    const updated = [...tallerBays];
-                                                    const bayVehs = [...updated[originalIdx].vehiculos];
-                                                    const temp = bayVehs[vIdx];
-                                                    bayVehs[vIdx] = bayVehs[vIdx + 1];
-                                                    bayVehs[vIdx + 1] = temp;
-                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                    saveTallerControl(updated);
-                                                  }}
-                                                  className="p-1 rounded-md hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
-                                                >
-                                                  <ArrowDown size={12} />
-                                                </button>
-                                              )}
-                                            </div>
                                           )}
 
                                           {!isTallerReadOnly && (
@@ -3587,92 +3701,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       {/* Contenido Desplegable al Seleccionar el Vehículo */}
                                       {isExpanded && (
                                         <div className="p-3.5 pt-0 border-t border-white/5 space-y-3 mt-1 animate-fade-in">
-                                          {/* Barra de Mover de Cubículo / Transferir a otro Técnico */}
-                                          {!isTallerReadOnly && tallerBays.length > 1 && (
-                                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                                              <span className="text-[10px] font-black uppercase text-amber-300 flex items-center gap-1.5">
-                                                <ArrowLeftRight size={13} className="text-amber-400 shrink-0" />
-                                                <span>Mover a otro Técnico / Bahía:</span>
-                                              </span>
-
-                                              <div className="flex items-center gap-1.5 flex-wrap">
-                                                {/* Mover a bahía anterior (izquierda) */}
-                                                {originalIdx > 0 && (
-                                                  <button
-                                                    type="button"
-                                                    title={`Mover a ${tallerBays[originalIdx - 1].mecanicoNombre}`}
-                                                    onClick={() => {
-                                                      const updated = [...tallerBays];
-                                                      const sourceVehs = [...updated[originalIdx].vehiculos];
-                                                      const [movedVeh] = sourceVehs.splice(vIdx, 1);
-                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: sourceVehs, updatedAt: new Date().toISOString() };
-                                                      
-                                                      const destIdx = originalIdx - 1;
-                                                      const destVehs = [...(updated[destIdx].vehiculos || []), movedVeh];
-                                                      updated[destIdx] = { ...updated[destIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
-                                                      saveTallerControl(updated);
-                                                    }}
-                                                    className="px-2 py-1 bg-black/50 hover:bg-black/80 border border-white/10 hover:border-amber-400 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
-                                                  >
-                                                    <ArrowLeft size={11} />
-                                                    <span>{tallerBays[originalIdx - 1].mecanicoNombre.split(' ')[0]}</span>
-                                                  </button>
-                                                )}
-
-                                                {/* Selector rápido a cualquier técnico */}
-                                                <select
-                                                  defaultValue=""
-                                                  onChange={(e) => {
-                                                    const targetBayIdx = parseInt(e.target.value, 10);
-                                                    if (!isNaN(targetBayIdx) && targetBayIdx !== originalIdx && tallerBays[targetBayIdx]) {
-                                                      const updated = [...tallerBays];
-                                                      const sourceVehs = [...updated[originalIdx].vehiculos];
-                                                      const [movedVeh] = sourceVehs.splice(vIdx, 1);
-                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: sourceVehs, updatedAt: new Date().toISOString() };
-                                                      
-                                                      const destVehs = [...(updated[targetBayIdx].vehiculos || []), movedVeh];
-                                                      updated[targetBayIdx] = { ...updated[targetBayIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
-                                                      saveTallerControl(updated);
-                                                    }
-                                                  }}
-                                                  className="bg-black/60 border border-amber-500/40 text-amber-300 rounded-lg text-[10px] font-bold px-2 py-1 outline-none cursor-pointer"
-                                                >
-                                                  <option value="" disabled>Seleccionar técnico...</option>
-                                                  {tallerBays.map((b, bIdx) => (
-                                                    bIdx !== originalIdx && (
-                                                      <option key={b.id || bIdx} value={bIdx} className="bg-[#12141a] text-white">
-                                                        {b.mecanicoNombre} ({b.vehiculos?.length || 0} veh.)
-                                                      </option>
-                                                    )
-                                                  ))}
-                                                </select>
-
-                                                {/* Mover a bahía siguiente (derecha) */}
-                                                {originalIdx < tallerBays.length - 1 && (
-                                                  <button
-                                                    type="button"
-                                                    title={`Mover a ${tallerBays[originalIdx + 1].mecanicoNombre}`}
-                                                    onClick={() => {
-                                                      const updated = [...tallerBays];
-                                                      const sourceVehs = [...updated[originalIdx].vehiculos];
-                                                      const [movedVeh] = sourceVehs.splice(vIdx, 1);
-                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: sourceVehs, updatedAt: new Date().toISOString() };
-                                                      
-                                                      const destIdx = originalIdx + 1;
-                                                      const destVehs = [...(updated[destIdx].vehiculos || []), movedVeh];
-                                                      updated[destIdx] = { ...updated[destIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
-                                                      saveTallerControl(updated);
-                                                    }}
-                                                    className="px-2 py-1 bg-black/50 hover:bg-black/80 border border-white/10 hover:border-amber-400 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
-                                                  >
-                                                    <span>{tallerBays[originalIdx + 1].mecanicoNombre.split(' ')[0]}</span>
-                                                    <ArrowRight size={11} />
-                                                  </button>
-                                                )}
-                                              </div>
-                                            </div>
-                                          )}
-
                                           {/* Posición en Taller */}
                                           <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5 pt-2">
                                             <span className="text-[10px] font-black uppercase text-zinc-400">
