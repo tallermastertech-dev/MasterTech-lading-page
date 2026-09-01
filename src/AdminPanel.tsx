@@ -711,8 +711,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     vehiculo?: string;
     estado?: TallerStatus;
     tareas?: MechanicWorkTask[];
-    notasInternas?: string;
     updatedAt?: string;
+  }
+
+  interface TallerEntregaRecord {
+    id: string;
+    vehiculo: string;
+    mecanicoNombre: string;
+    mecanicoEspecialidad?: string;
+    bahiaNumero?: string;
+    fechaIngreso?: string;
+    fechaEntrega: string;
+    entregadoPor: string;
+    entregadoPorEmail?: string;
+    tareasRealizadas: MechanicWorkTask[];
+    notasFinales?: string;
   }
 
   // Helper: Normalizar estructura de bahía asegurando lista de vehículos
@@ -939,6 +952,42 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [quickTaskInputs, setQuickTaskInputs] = useState<Record<string, string>>({});
   const [baySearchQuery, setBaySearchQuery] = useState('');
   const [bayStatusFilter, setBayStatusFilter] = useState<string>('TODOS');
+  const [tallerEntregas, setTallerEntregas] = useState<TallerEntregaRecord[]>(() => {
+    try {
+      const stored = localStorage.getItem('mastertech_taller_entregas_cache');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return [];
+  });
+  const [isHistorialModalOpen, setIsHistorialModalOpen] = useState(false);
+  const [entregasSearchQuery, setEntregasSearchQuery] = useState('');
+  const [confirmingEntregaData, setConfirmingEntregaData] = useState<{
+    originalIdx: number;
+    vIdx: number;
+    veh: MechanicAssignedVehicle;
+    bay: MechanicBayItem;
+    notasFinales: string;
+  } | null>(null);
+
+  const saveTallerEntregas = async (updatedEntregas: TallerEntregaRecord[]) => {
+    setTallerEntregas(updatedEntregas);
+    localStorage.setItem('mastertech_taller_entregas_cache', JSON.stringify(updatedEntregas));
+    try {
+      await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ HISTORIAL_ENTREGAS_JSON: JSON.stringify(updatedEntregas) })
+      });
+    } catch (e) {
+      console.warn("Error guardando historial de entregas:", e);
+    }
+  };
 
   // Sincronizar Control de Taller con Supabase
   const saveTallerControl = async (updatedBays: MechanicBayItem[]) => {
@@ -1687,6 +1736,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         if (Array.isArray(b) && b.length > 0) {
           setTallerBays(b);
           localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(b));
+        }
+      } catch (e) {}
+    }
+    if (merged.HISTORIAL_ENTREGAS_JSON) {
+      try {
+        const h = typeof merged.HISTORIAL_ENTREGAS_JSON === 'string' ? JSON.parse(merged.HISTORIAL_ENTREGAS_JSON) : merged.HISTORIAL_ENTREGAS_JSON;
+        if (Array.isArray(h)) {
+          setTallerEntregas(h);
+          localStorage.setItem('mastertech_taller_entregas_cache', JSON.stringify(h));
         }
       } catch (e) {}
     }
@@ -3034,6 +3092,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                     <button
                       type="button"
+                      onClick={() => setIsHistorialModalOpen(true)}
+                      className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:text-white hover:bg-amber-500/20 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                      title="Ver registro histórico de vehículos liberados y entregados"
+                    >
+                      <History size={14} />
+                      <span>Historial Entregas ({tallerEntregas.length})</span>
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => fetchTallerControl()}
                       className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
                       title="Recargar datos desde Supabase"
@@ -3820,24 +3888,25 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                                           {/* Botón para Liberar / Entregar Carro */}
                                           {!isTallerReadOnly && (
-                                            <div className="pt-2 border-t border-white/5 flex items-center justify-end">
+                                            <div className="pt-2 border-t border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                                              <span className="text-[10px] text-zinc-500 italic">
+                                                Al entregar, se generará el registro oficial con fecha y responsable.
+                                              </span>
                                               <button
                                                 type="button"
                                                 onClick={() => {
-                                                  if (!window.confirm(`¿Liberar y desasignar "${v.vehiculo}" de ${bay.mecanicoNombre}?`)) return;
-                                                  const updated = [...tallerBays];
-                                                  const bayVehs = updated[originalIdx].vehiculos.filter((_, i) => i !== vIdx);
-                                                  updated[originalIdx] = {
-                                                    ...updated[originalIdx],
-                                                    vehiculos: bayVehs,
-                                                    updatedAt: new Date().toISOString()
-                                                  };
-                                                  saveTallerControl(updated);
+                                                  setConfirmingEntregaData({
+                                                    originalIdx,
+                                                    vIdx,
+                                                    veh: v,
+                                                    bay: bay,
+                                                    notasFinales: v.notasInternas || ''
+                                                  });
                                                 }}
-                                                className="text-red-400 hover:text-red-300 text-[10px] font-bold flex items-center gap-1.5 cursor-pointer py-1 px-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-all"
+                                                className="text-amber-400 hover:text-black hover:bg-amber-400 border border-amber-500/40 text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer py-1.5 px-3 rounded-xl bg-amber-500/10 transition-all shadow-sm"
                                               >
-                                                <LogOut size={12} />
-                                                <span>Liberar / Entregar Carro</span>
+                                                <CheckCircle2 size={13} />
+                                                <span>Liberar / Entregar Vehículo</span>
                                               </button>
                                             </div>
                                           )}
@@ -4513,6 +4582,361 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </button>
                       </div>
                     </form>
+                  </div>
+                </div>
+              )}
+
+              {/* MODAL 1: CONFIRMACIÓN Y REGISTRO DE ENTREGA / LIBERACIÓN DE VEHÍCULO */}
+              {confirmingEntregaData && (
+                <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in">
+                  <div className="bg-[#12141a] border border-amber-500/30 rounded-3xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 my-auto">
+                    <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                          <CheckCircle2 size={22} />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-black text-white">Liberar & Entregar Vehículo</h3>
+                          <p className="text-[11px] text-zinc-400">Registro oficial de salida del taller</p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setConfirmingEntregaData(null)}
+                        className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+
+                    <div className="space-y-3 text-xs">
+                      {/* Ficha Resumen del Vehículo y Encargado */}
+                      <div className="p-3.5 bg-black/40 border border-white/10 rounded-2xl space-y-2.5">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <span className="text-[10px] font-black uppercase text-zinc-400 block">Vehículo:</span>
+                            <span className="text-sm font-black text-white">{confirmingEntregaData.veh.vehiculo}</span>
+                          </div>
+                          <span className="text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            Listo para entrega
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-white/5 text-[11px]">
+                          <div>
+                            <span className="text-[10px] font-black uppercase text-amber-400 block">Mecánico Encargado:</span>
+                            <span className="text-white font-bold">{confirmingEntregaData.bay.mecanicoNombre}</span>
+                            <span className="text-[10px] text-zinc-400 block truncate">{confirmingEntregaData.bay.mecanicoEspecialidad}</span>
+                          </div>
+
+                          <div>
+                            <span className="text-[10px] font-black uppercase text-blue-400 block">Entregado Por:</span>
+                            <span className="text-white font-bold">{currentUser?.name || 'Administrador MasterTech'}</span>
+                            <span className="text-[10px] text-zinc-400 block">{currentUser?.role || 'Super Administrador'}</span>
+                          </div>
+                        </div>
+
+                        <div className="pt-1 border-t border-white/5 flex items-center justify-between text-[10px] text-zinc-400 font-mono">
+                          <span>Fecha/Hora de Entrega:</span>
+                          <span className="text-amber-300 font-bold">{new Date().toLocaleString('es-VE', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                        </div>
+                      </div>
+
+                      {/* Resumen de Tareas Realizadas */}
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-black uppercase text-zinc-400 block">
+                          Trabajos Mecánicos Registrados ({(confirmingEntregaData.veh.tareas || []).filter(t => t.completada).length}/{(confirmingEntregaData.veh.tareas || []).length}):
+                        </span>
+                        <div className="max-h-32 overflow-y-auto space-y-1 pr-1 scrollbar-thin">
+                          {(confirmingEntregaData.veh.tareas || []).length === 0 ? (
+                            <span className="text-[11px] text-zinc-500 italic block p-1.5 bg-black/20 rounded-lg">Sin lista de tareas adjunta.</span>
+                          ) : (
+                            confirmingEntregaData.veh.tareas.map((t, tIdx) => (
+                              <div key={t.id || tIdx} className="flex items-center gap-2 p-1.5 rounded-lg bg-black/30 border border-white/5 text-[11px]">
+                                <span className={`w-2 h-2 rounded-full shrink-0 ${t.completada ? 'bg-emerald-400' : 'bg-zinc-600'}`}></span>
+                                <span className={`truncate ${t.completada ? 'text-zinc-200' : 'text-zinc-500'}`}>{t.descripcion}</span>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Observaciones Finales de Entrega */}
+                      <div>
+                        <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                          Observaciones / Notas Finales de Entrega
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={confirmingEntregaData.notasFinales}
+                          onChange={(e) => setConfirmingEntregaData({ ...confirmingEntregaData, notasFinales: e.target.value })}
+                          placeholder="Ej. Vehículo probado en ruta, entregado conforme al cliente..."
+                          className="w-full bg-black/40 border border-white/10 focus:border-amber-400 rounded-xl p-2.5 text-white outline-none text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => setConfirmingEntregaData(null)}
+                        className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white font-bold transition-all cursor-pointer text-xs"
+                      >
+                        Cancelar
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          const { originalIdx, vIdx, veh, bay, notasFinales } = confirmingEntregaData;
+                          const newRecord: TallerEntregaRecord = {
+                            id: `entrega-${Date.now()}`,
+                            vehiculo: veh.vehiculo || "Vehículo sin identificar",
+                            mecanicoNombre: bay.mecanicoNombre || "Técnico MasterTech",
+                            mecanicoEspecialidad: bay.mecanicoEspecialidad || "Especialista Automotriz",
+                            bahiaNumero: bay.bahiaNumero || `Bahía #${originalIdx + 1}`,
+                            fechaIngreso: veh.fechaIngreso || new Date().toISOString(),
+                            fechaEntrega: new Date().toISOString(),
+                            entregadoPor: currentUser?.name || 'Administrador MasterTech',
+                            entregadoPorEmail: currentUser?.email || 'admin@tallermastertech.com',
+                            tareasRealizadas: Array.isArray(veh.tareas) ? veh.tareas : [],
+                            notasFinales: notasFinales.trim() || veh.notasInternas || ''
+                          };
+
+                          const updatedEntregas = [newRecord, ...tallerEntregas];
+                          await saveTallerEntregas(updatedEntregas);
+
+                          // Remover vehículo de la bahía activa
+                          const updatedBays = [...tallerBays];
+                          const bayVehs = [...(updatedBays[originalIdx].vehiculos || [])];
+                          bayVehs.splice(vIdx, 1);
+                          updatedBays[originalIdx] = {
+                            ...updatedBays[originalIdx],
+                            vehiculos: bayVehs,
+                            updatedAt: new Date().toISOString()
+                          };
+                          saveTallerControl(updatedBays);
+
+                          // Registrar en Auditoría
+                          try {
+                            recordAuditLog({
+                              action: 'ENTREGA_VEHICULO',
+                              category: 'TALLER',
+                              details: `Vehículo "${newRecord.vehiculo}" entregado y liberado exitosamente. Mecánico responsable: ${newRecord.mecanicoNombre}. Entregado por: ${newRecord.entregadoPor}`,
+                              userName: currentUser?.name,
+                              userEmail: currentUser?.email,
+                              userRole: currentUser?.role
+                            });
+                          } catch (e) {}
+
+                          setConfirmingEntregaData(null);
+                        }}
+                        className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black flex items-center gap-1.5 transition-all shadow-lg cursor-pointer text-xs"
+                      >
+                        <CheckCircle2 size={14} />
+                        <span>Confirmar Entrega y Registrar</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* MODAL 2: HISTORIAL COMPLETO DE VEHÍCULOS ENTREGADOS / LIBERADOS */}
+              {isHistorialModalOpen && (
+                <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in">
+                  <div className="bg-[#12141a] border border-white/10 rounded-3xl p-5 sm:p-6 w-full max-w-4xl shadow-2xl space-y-4 my-auto max-h-[90vh] flex flex-col">
+                    <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3 shrink-0">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                          <History size={22} />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-black text-white">Historial de Entregas</h3>
+                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                              {tallerEntregas.length} {tallerEntregas.length === 1 ? 'vehículo entregado' : 'vehículos entregados'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-zinc-400 mt-0.5">Registro auditado de vehículos liberados, fecha exacta y encargado responsable.</p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setIsHistorialModalOpen(false)}
+                        className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+
+                    {/* Barra de Búsqueda y Filtros en Historial */}
+                    <div className="flex items-center justify-between gap-3 bg-black/40 p-2.5 rounded-2xl border border-white/10 shrink-0">
+                      <div className="relative flex-1">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                        <input
+                          type="text"
+                          value={entregasSearchQuery}
+                          onChange={(e) => setEntregasSearchQuery(e.target.value)}
+                          placeholder="Buscar por vehículo, placa, mecánico o persona que entregó..."
+                          className="w-full bg-black/50 border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {tallerEntregas.length > 0 && isFullAdminUser(currentUser) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!window.confirm('¿Seguro que deseas vaciar el historial de entregas? Esta acción es irreversible.')) return;
+                            saveTallerEntregas([]);
+                          }}
+                          className="px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold transition-all cursor-pointer shrink-0"
+                        >
+                          Limpiar Historial
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Lista de Registros Históricos */}
+                    <div className="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin">
+                      {(() => {
+                        const filtered = tallerEntregas.filter(r => {
+                          if (!entregasSearchQuery) return true;
+                          const q = entregasSearchQuery.toLowerCase();
+                          return (
+                            (r.vehiculo || '').toLowerCase().includes(q) ||
+                            (r.mecanicoNombre || '').toLowerCase().includes(q) ||
+                            (r.entregadoPor || '').toLowerCase().includes(q) ||
+                            (r.notasFinales || '').toLowerCase().includes(q)
+                          );
+                        });
+
+                        if (filtered.length === 0) {
+                          return (
+                            <div className="p-10 text-center bg-black/30 rounded-2xl border border-dashed border-white/10 text-zinc-500 space-y-2">
+                              <History size={32} className="mx-auto text-zinc-600" />
+                              <div className="text-sm font-bold text-zinc-400">
+                                {entregasSearchQuery ? 'No hay entregas que coincidan con la búsqueda' : 'Aún no hay vehículos liberados o entregados'}
+                              </div>
+                              <p className="text-xs text-zinc-500">
+                                Cuando entregues un vehículo desde el Control de Taller, se registrará aquí con su fecha, mecánico encargado y usuario que autorizó.
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        return filtered.map((rec) => {
+                          const completedTasks = (rec.tareasRealizadas || []).filter(t => t.completada).length;
+                          const totalTasks = (rec.tareasRealizadas || []).length;
+                          const formattedDate = new Date(rec.fechaEntrega).toLocaleString('es-VE', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                          });
+
+                          return (
+                            <div
+                              key={rec.id}
+                              className="p-4 rounded-2xl bg-black/40 border border-white/10 hover:border-amber-500/30 transition-all space-y-3"
+                            >
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2.5">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                                    <CheckCircle2 size={16} />
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-black text-white">{rec.vehiculo}</h4>
+                                    <span className="text-[10px] text-zinc-500 font-mono">ID: {rec.id}</span>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-mono font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-xl">
+                                    📅 {formattedDate}
+                                  </span>
+
+                                  {isFullAdminUser(currentUser) && (
+                                    <button
+                                      type="button"
+                                      title="Eliminar este registro"
+                                      onClick={() => {
+                                        if (!window.confirm(`¿Eliminar el registro de entrega de "${rec.vehiculo}"?`)) return;
+                                        const updated = tallerEntregas.filter(r => r.id !== rec.id);
+                                        saveTallerEntregas(updated);
+                                      }}
+                                      className="p-1 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                                    >
+                                      <Trash2 size={13} />
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                <div className="p-2.5 bg-black/30 rounded-xl border border-white/5 space-y-0.5">
+                                  <span className="text-[9px] font-black uppercase text-amber-400 block">Mecánico Encargado</span>
+                                  <span className="font-bold text-white block truncate">{rec.mecanicoNombre}</span>
+                                  {rec.mecanicoEspecialidad && (
+                                    <span className="text-[10px] text-zinc-400 block truncate">{rec.mecanicoEspecialidad}</span>
+                                  )}
+                                </div>
+
+                                <div className="p-2.5 bg-black/30 rounded-xl border border-white/5 space-y-0.5">
+                                  <span className="text-[9px] font-black uppercase text-blue-400 block">Entregado Por</span>
+                                  <span className="font-bold text-white block truncate">{rec.entregadoPor}</span>
+                                  {rec.entregadoPorEmail && (
+                                    <span className="text-[10px] text-zinc-400 block truncate font-mono">{rec.entregadoPorEmail}</span>
+                                  )}
+                                </div>
+
+                                <div className="p-2.5 bg-black/30 rounded-xl border border-white/5 space-y-0.5">
+                                  <span className="text-[9px] font-black uppercase text-emerald-400 block">Trabajos Realizados</span>
+                                  <span className="font-bold text-white block font-mono">
+                                    {totalTasks > 0 ? `${completedTasks}/${totalTasks} tareas (${Math.round((completedTasks/totalTasks)*100)}%)` : 'Sin lista de tareas'}
+                                  </span>
+                                  <span className="text-[10px] text-zinc-400 block">100% Verificado</span>
+                                </div>
+                              </div>
+
+                              {/* Tareas realizadas desplegables / resumen */}
+                              {totalTasks > 0 && (
+                                <div className="p-2.5 bg-black/20 rounded-xl border border-white/5 space-y-1">
+                                  <span className="text-[9px] font-black uppercase text-zinc-400 block">Lista de Tareas Mecánicas:</span>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {rec.tareasRealizadas.map((t, tIdx) => (
+                                      <span
+                                        key={t.id || tIdx}
+                                        className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-zinc-300 flex items-center gap-1"
+                                      >
+                                        <CheckCircle2 size={10} className="text-emerald-400 shrink-0" />
+                                        <span>{t.descripcion}</span>
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {rec.notasFinales && (
+                                <div className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 text-[11px] text-zinc-300 italic flex items-start gap-2">
+                                  <FileText size={12} className="text-amber-400 shrink-0 mt-0.5" />
+                                  <span>{rec.notasFinales}</span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+
+                    <div className="flex items-center justify-end pt-3 border-t border-white/10 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setIsHistorialModalOpen(false)}
+                        className="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold transition-all text-xs cursor-pointer"
+                      >
+                        Cerrar Historial
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
