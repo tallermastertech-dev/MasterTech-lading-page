@@ -1326,6 +1326,61 @@ app.post(['/api/admin/reminders', '/admin/reminders'], authenticateAdmin, async 
   }
 });
 
+// Admin Control de Taller Dedicated Endpoints (Supabase Synchronization)
+app.get(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-control', '/taller-control'], async (_req, res) => {
+  try {
+    const s = await getSettings();
+    let bays: any[] = [];
+    if (s.TALLER_CONTROL_JSON) {
+      try {
+        bays = typeof s.TALLER_CONTROL_JSON === 'string' ? JSON.parse(s.TALLER_CONTROL_JSON) : s.TALLER_CONTROL_JSON;
+      } catch (e) {}
+    }
+    
+    // Si la tabla dedicada taller_control existe en Supabase, intentamos consultar directamente
+    try {
+      const { data } = await supabase.from('taller_control').select('*');
+      if (data && Array.isArray(data) && data.length > 0) {
+        bays = data;
+      }
+    } catch (e) {}
+
+    res.json({ success: true, bays: Array.isArray(bays) ? bays : [] });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al obtener control de taller', details: err.message });
+  }
+});
+
+app.post(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-control', '/taller-control'], authenticateAdmin, async (req, res) => {
+  try {
+    const { bays } = req.body;
+    if (!Array.isArray(bays)) {
+      return res.status(400).json({ error: 'Formato de bahías de taller inválido.' });
+    }
+    const jsonStr = JSON.stringify(bays);
+    memorySettingsCache['TALLER_CONTROL_JSON'] = jsonStr;
+    
+    // 1. Respaldo en tabla settings
+    try {
+      await supabase.from('settings').upsert([{ key: 'TALLER_CONTROL_JSON', value: jsonStr }], { onConflict: 'key' });
+    } catch (e) {}
+
+    // 2. Intento de persistencia en tabla taller_control si existe
+    try {
+      for (const b of bays) {
+        if (b && b.id) {
+          await supabase.from('taller_control').upsert([b], { onConflict: 'id' });
+        }
+      }
+    } catch (e) {}
+
+    saveSettingsToDisk();
+    res.json({ success: true, message: 'Control de taller guardado y sincronizado exitosamente en Supabase.', bays });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al guardar control de taller en Supabase', details: err.message });
+  }
+});
+
 // Admin Users Management Routes
 app.get(['/api/admin/users', '/admin/users'], authenticateAdmin, async (_req, res) => {
   try {

@@ -487,34 +487,34 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   const getAllowedTabsForUser = (user: any): string[] => {
-    if (!user) return ['dashboard', 'brecha'];
+    if (!user) return ['dashboard', 'brecha', 'control-taller'];
     const email = (user.email || '').toLowerCase().trim();
     const role = (user.role || '').toLowerCase().trim();
     const access = (user.accessLevel || '').toLowerCase().trim();
 
     // 1. Acceso Total
     if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com' || access === 'full') {
-      return ['dashboard', 'brecha', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
     if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) {
-      return ['dashboard', 'brecha', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
 
-    // 2. Rol Administración (Dashboard, Tasas Cambiarias y Admin Proveedores)
-    if (access === 'administracion' || role === 'administración' || role === 'administracion') {
-      return ['dashboard', 'brecha', 'proveedores'];
+    // 2. Rol Administración & Taller (Dashboard, Tasas Cambiarias, Control de Taller y Admin Proveedores)
+    if (access === 'administracion' || role === 'administración' || role === 'administracion' || role.includes('taller') || role.includes('mecanic')) {
+      return ['dashboard', 'brecha', 'control-taller', 'proveedores'];
     }
 
-    // 3. Rol Logística (Dashboard, Tasas Cambiarias, Citas, Catálogo, Jornadas y Admin Proveedores)
+    // 3. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Jornadas y Admin Proveedores)
     if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
-      return ['dashboard', 'brecha', 'leads', 'catalogo', 'jornadas', 'proveedores'];
+      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores'];
     }
 
-    return ['dashboard', 'brecha', 'proveedores'];
+    return ['dashboard', 'brecha', 'control-taller', 'proveedores'];
   };
 
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'brecha' | 'leads' | 'catalogo' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'brecha' | 'control-taller' | 'leads' | 'catalogo' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
 
   // Audit Logs State (Registro de Actividad y Cambios de Usuarios)
@@ -662,34 +662,182 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     prioridad: 'media'
   });
 
-  const saveReminders = async (updated: any[]) => {
-    setReminders(updated);
+  // =========================================================================
+  // CONTROL DE TALLER: Tipos, Estados y Persistencia
+  // =========================================================================
+  type TallerStatus = 'espera_tecnico' | 'aprobado' | 'espera_repuesto' | 'espera_cliente';
+
+  interface MechanicWorkTask {
+    id: string;
+    descripcion: string;
+    completada: boolean;
+  }
+
+  interface MechanicBayItem {
+    id: string;
+    mecanicoNombre: string;
+    mecanicoEspecialidad: string;
+    mecanicoFoto?: string;
+    bahiaNumero?: string;
+    vehiculo: string;
+    estado: TallerStatus;
+    tareas: MechanicWorkTask[];
+    notasInternas?: string;
+    updatedAt?: string;
+  }
+
+  const DEFAULT_TALLER_BAYS: MechanicBayItem[] = [
+    {
+      id: "bay-1",
+      mecanicoNombre: "Beltran Lopez",
+      mecanicoEspecialidad: "Master Tech - Diagnóstico & Reprogramación",
+      mecanicoFoto: "/assets/servicio-mecanica.jpg",
+      bahiaNumero: "Bahía #1",
+      vehiculo: "Toyota 4Runner 2025 - ABC12D",
+      estado: "aprobado",
+      tareas: [
+        { id: "t-1", descripcion: "Diagnóstico computarizado OBD2 y reprogramación de mapa ECU", completada: true },
+        { id: "t-2", descripcion: "Limpieza y calibración de 6 inyectores por ultrasonido", completada: false },
+        { id: "t-3", descripcion: "Reemplazo preventivo de bujías de Iridio y filtro de combustible", completada: false }
+      ],
+      notasInternas: "Cliente autorizó todos los trabajos mecánicos en presupuesto inicial.",
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "bay-2",
+      mecanicoNombre: "Aaron Rivas",
+      mecanicoEspecialidad: "Especialista en Mecánica Mayor & Motores",
+      mecanicoFoto: "/assets/servicio-electricidad.jpg",
+      bahiaNumero: "Bahía #2",
+      vehiculo: "Ford F-150 Lariat 2023 - GHK89X",
+      estado: "espera_repuesto",
+      tareas: [
+        { id: "t-4", descripcion: "Desmontaje de cárter y revisión de empacaduras de tapa de válvulas", completada: true },
+        { id: "t-5", descripcion: "Sustitución de bomba de agua y termostato original", completada: false },
+        { id: "t-6", descripcion: "Instalación y sincronización de kit de cadena de tiempo", completada: false }
+      ],
+      notasInternas: "Esperando llegada de bomba de agua desde almacén de repuestos.",
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "bay-3",
+      mecanicoNombre: "Jesus Mata",
+      mecanicoEspecialidad: "Especialista en Suspensión, Frenos & Climatización A/A",
+      mecanicoFoto: "/assets/servicio-climatizacion.jpg",
+      bahiaNumero: "Bahía #3",
+      vehiculo: "Chevrolet Tahoe 2022 - KLM45P",
+      estado: "espera_tecnico",
+      tareas: [
+        { id: "t-7", descripcion: "Reemplazo de pastillas de frenos cerámicas delanteras y traseras", completada: false },
+        { id: "t-8", descripcion: "Rectificación de discos de freno ventilados", completada: false },
+        { id: "t-9", descripcion: "Recarga de refrigerante R134a y sustitución de microfiltro de cabina", completada: false }
+      ],
+      notasInternas: "Vehículo posicionado en elevador listo para inicio de desmontaje.",
+      updatedAt: new Date().toISOString()
+    }
+  ];
+
+  const TALLER_STATUS_CONFIG: Record<TallerStatus, { label: string; shortLabel: string; badgeClass: string; dotClass: string; borderCardClass: string }> = {
+    espera_tecnico: {
+      label: 'En espera de técnico',
+      shortLabel: 'Espera Técnico',
+      badgeClass: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+      dotClass: 'bg-blue-400',
+      borderCardClass: 'border-blue-500/30 hover:border-blue-500/60'
+    },
+    aprobado: {
+      label: 'Aprobado',
+      shortLabel: 'Aprobado',
+      badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+      dotClass: 'bg-emerald-400',
+      borderCardClass: 'border-emerald-500/30 hover:border-emerald-500/60'
+    },
+    espera_repuesto: {
+      label: 'En espera de repuesto',
+      shortLabel: 'Espera Repuesto',
+      badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+      dotClass: 'bg-amber-400',
+      borderCardClass: 'border-amber-500/30 hover:border-amber-500/60'
+    },
+    espera_cliente: {
+      label: 'En espera de respuesta del cliente',
+      shortLabel: 'Espera Cliente',
+      badgeClass: 'bg-red-500/20 text-red-300 border-red-500/40',
+      dotClass: 'bg-red-400',
+      borderCardClass: 'border-red-500/30 hover:border-red-500/60'
+    }
+  };
+
+  // State: Bahías y Control de Taller
+  const [tallerBays, setTallerBays] = useState<MechanicBayItem[]>(() => {
     try {
-      localStorage.setItem('mastertech_reminders_cache', JSON.stringify(updated));
-      const serialized = JSON.stringify(updated.slice(0, 300));
-      
-      // Save directly to dedicated Supabase reminders endpoint
-      await fetch('/api/admin/reminders', {
+      const stored = localStorage.getItem('mastertech_taller_control_cache');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return DEFAULT_TALLER_BAYS;
+  });
+
+  const [isBayModalOpen, setIsBayModalOpen] = useState(false);
+  const [editingBay, setEditingBay] = useState<MechanicBayItem | null>(null);
+  const [editingBayIndex, setEditingBayIndex] = useState<number | null>(null);
+  const [isSavingTallerControl, setIsSavingTallerControl] = useState(false);
+  const [savedTallerSuccess, setSavedTallerSuccess] = useState(false);
+  const [quickTaskInputs, setQuickTaskInputs] = useState<Record<string, string>>({});
+  const [baySearchQuery, setBaySearchQuery] = useState('');
+  const [bayStatusFilter, setBayStatusFilter] = useState<string>('TODOS');
+
+  // Sincronizar Control de Taller con Supabase
+  const saveTallerControl = async (updatedBays: MechanicBayItem[]) => {
+    setTallerBays(updatedBays);
+    try {
+      localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(updatedBays));
+      setIsSavingTallerControl(true);
+
+      // 1. Endpoint dedicado
+      await fetch('/api/admin/taller-control', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({ reminders: updated })
+        body: JSON.stringify({ bays: updatedBays })
       });
 
-      // Also backup to settings
+      // 2. Respaldo directo en settings
       await fetch('/api/settings', {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({ SAVED_REMINDERS: serialized })
+        body: JSON.stringify({ TALLER_CONTROL_JSON: JSON.stringify(updatedBays) })
       });
+
+      setSavedTallerSuccess(true);
+      setTimeout(() => setSavedTallerSuccess(false), 3000);
     } catch (e) {
-      console.warn("Reminders Supabase sync notice:", e);
+      console.warn("Taller control Supabase sync notice:", e);
+    } finally {
+      setIsSavingTallerControl(false);
     }
+  };
+
+  const fetchTallerControl = async () => {
+    try {
+      const res = await fetch(`/api/admin/taller-control?t=${Date.now()}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.bays && Array.isArray(data.bays) && data.bays.length > 0) {
+          setTallerBays(data.bays);
+          localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(data.bays));
+        }
+      }
+    } catch (e) {}
   };
 
   // Solicitud de Permisos de Notificaciones Push Nativas y Registro de Service Worker para Segundo Plano
@@ -1380,6 +1528,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }
       } catch (e) {}
     }
+    if (merged.TALLER_CONTROL_JSON) {
+      try {
+        const b = typeof merged.TALLER_CONTROL_JSON === 'string' ? JSON.parse(merged.TALLER_CONTROL_JSON) : merged.TALLER_CONTROL_JSON;
+        if (Array.isArray(b) && b.length > 0) {
+          setTallerBays(b);
+          localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(b));
+        }
+      } catch (e) {}
+    }
   };
 
   // Fetch Leads
@@ -1418,6 +1575,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   useEffect(() => {
     fetchSettings();
+    fetchTallerControl();
   }, []);
 
   // Fetch Admin Users
@@ -1445,6 +1603,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     if (token) {
       fetchLeads();
       fetchReminders();
+      fetchTallerControl();
       fetchAdminUsers();
     }
   }, [token]);
@@ -2292,6 +2451,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               const allTabs = [
                 { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
                 { id: 'brecha', label: 'Tasas & Brecha Cambiaria', icon: <TrendingUp size={18} />, badge: 'EN VIVO' },
+                { id: 'control-taller', label: `Control de Taller (${tallerBays.length})`, icon: <Wrench size={18} />, badge: 'TALLER' },
                 { id: 'leads', label: `Calendario & Citas (${leads.length})`, icon: <Calendar size={18} /> },
                 { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
                 { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
@@ -2635,6 +2795,780 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                 <BrechaCambiariaPanel initialOpen={true} />
               </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE: CONTROL DE TALLER (MONITOREO OPERATIVO DE BAHÍAS Y MECÁNICOS) */}
+          {/* ========================================================================= */}
+          {activeTab === 'control-taller' && (
+            <div className="space-y-6 animate-fade-in">
+              {/* Header Principal de Control de Taller */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight flex items-center gap-2.5">
+                    <Wrench className="text-amber-400" size={24} />
+                    <span>Control de Taller</span>
+                  </h1>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Monitoreo operativo en tiempo real de bahías, mecánicos asignados, estados de servicio y tareas mecánicas autorizadas.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newBay: MechanicBayItem = {
+                        id: `bay-${Date.now()}`,
+                        mecanicoNombre: "Nuevo Mecánico",
+                        mecanicoEspecialidad: "Técnico Automotriz",
+                        mecanicoFoto: "/assets/servicio-mecanica.jpg",
+                        bahiaNumero: `Bahía #${tallerBays.length + 1}`,
+                        vehiculo: "",
+                        estado: "espera_tecnico",
+                        tareas: [],
+                        notasInternas: "",
+                        updatedAt: new Date().toISOString()
+                      };
+                      const updated = [...tallerBays, newBay];
+                      saveTallerControl(updated);
+                      setEditingBay({ ...newBay });
+                      setEditingBayIndex(updated.length - 1);
+                      setIsBayModalOpen(true);
+                    }}
+                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
+                  >
+                    <Plus size={16} />
+                    <span>Añadir Bahía / Técnico</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => saveTallerControl(tallerBays)}
+                    disabled={isSavingTallerControl}
+                    className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg cursor-pointer"
+                  >
+                    {isSavingTallerControl ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                    <span>{savedTallerSuccess ? '¡Guardado en Supabase!' : 'Guardar en Supabase'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Barra de Métricas y Filtros Rápidos por Estado Operativo */}
+              {(() => {
+                const countEsperaTecnico = tallerBays.filter(b => b.estado === 'espera_tecnico').length;
+                const countAprobado = tallerBays.filter(b => b.estado === 'aprobado').length;
+                const countEsperaRepuesto = tallerBays.filter(b => b.estado === 'espera_repuesto').length;
+                const countEsperaCliente = tallerBays.filter(b => b.estado === 'espera_cliente').length;
+
+                return (
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setBayStatusFilter('TODOS')}
+                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                        bayStatusFilter === 'TODOS'
+                          ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
+                          : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
+                      }`}
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-wider block">Total Bahías</span>
+                      <div className="text-2xl font-black text-white mt-1">{tallerBays.length}</div>
+                      <span className="text-[10px] text-zinc-500 block truncate">Técnicos activos</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBayStatusFilter('espera_tecnico')}
+                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                        bayStatusFilter === 'espera_tecnico'
+                          ? 'bg-blue-500/20 border-blue-500 text-white shadow-lg'
+                          : 'bg-[#12141a] border-blue-500/30 text-blue-400 hover:border-blue-500'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider block">Espera Técnico</span>
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                      </div>
+                      <div className="text-2xl font-black text-white mt-1">{countEsperaTecnico}</div>
+                      <span className="text-[10px] text-blue-300/70 block truncate">🔵 Por iniciar</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBayStatusFilter('aprobado')}
+                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                        bayStatusFilter === 'aprobado'
+                          ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-lg'
+                          : 'bg-[#12141a] border-emerald-500/30 text-emerald-400 hover:border-emerald-500'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider block">Aprobado</span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                      </div>
+                      <div className="text-2xl font-black text-white mt-1">{countAprobado}</div>
+                      <span className="text-[10px] text-emerald-300/70 block truncate">🟢 En ejecución</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBayStatusFilter('espera_repuesto')}
+                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                        bayStatusFilter === 'espera_repuesto'
+                          ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
+                          : 'bg-[#12141a] border-amber-500/30 text-amber-400 hover:border-amber-500'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider block">Espera Repuesto</span>
+                        <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                      </div>
+                      <div className="text-2xl font-black text-white mt-1">{countEsperaRepuesto}</div>
+                      <span className="text-[10px] text-amber-300/70 block truncate">🟡 En almacén</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setBayStatusFilter('espera_cliente')}
+                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                        bayStatusFilter === 'espera_cliente'
+                          ? 'bg-red-500/20 border-red-500 text-white shadow-lg'
+                          : 'bg-[#12141a] border-red-500/30 text-red-400 hover:border-red-500'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider block">Espera Cliente</span>
+                        <span className="w-2 h-2 rounded-full bg-red-400"></span>
+                      </div>
+                      <div className="text-2xl font-black text-white mt-1">{countEsperaCliente}</div>
+                      <span className="text-[10px] text-red-300/70 block truncate">🔴 Por autorizar</span>
+                    </button>
+                  </div>
+                );
+              })()}
+
+              {/* Barra de Búsqueda de Bahías y Mecánicos */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#12141a] p-3 rounded-2xl border border-white/10">
+                <div className="relative w-full sm:w-80">
+                  <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                  <input
+                    type="text"
+                    value={baySearchQuery}
+                    onChange={(e) => setBaySearchQuery(e.target.value)}
+                    placeholder="Buscar por mecánico, vehículo o placa..."
+                    className="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
+                  />
+                  {baySearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setBaySearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                    >
+                      <X size={13} />
+                    </button>
+                  )}
+                </div>
+
+                <span className="text-[11px] font-mono text-zinc-400 font-bold shrink-0">
+                  Mostrando <strong>{tallerBays.filter(b => {
+                    if (bayStatusFilter !== 'TODOS' && b.estado !== bayStatusFilter) return false;
+                    if (baySearchQuery.trim()) {
+                      const q = baySearchQuery.toLowerCase();
+                      const matchMec = (b.mecanicoNombre || '').toLowerCase().includes(q);
+                      const matchVeh = (b.vehiculo || '').toLowerCase().includes(q);
+                      const matchBahia = (b.bahiaNumero || '').toLowerCase().includes(q);
+                      const matchTareas = (b.tareas || []).some(t => (t.descripcion || '').toLowerCase().includes(q));
+                      return matchMec || matchVeh || matchBahia || matchTareas;
+                    }
+                    return true;
+                  }).length}</strong> de {tallerBays.length} bahías operativas
+                </span>
+              </div>
+
+              {/* Grilla de Tarjetas por Mecánico (Idéntica a la estructura visual de "Equipo & Accesos") */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {tallerBays
+                  .map((bay, originalIdx) => ({ bay, originalIdx }))
+                  .filter(({ bay }) => {
+                    if (bayStatusFilter !== 'TODOS' && bay.estado !== bayStatusFilter) return false;
+                    if (baySearchQuery.trim()) {
+                      const q = baySearchQuery.toLowerCase();
+                      const matchMec = (bay.mecanicoNombre || '').toLowerCase().includes(q);
+                      const matchVeh = (bay.vehiculo || '').toLowerCase().includes(q);
+                      const matchBahia = (bay.bahiaNumero || '').toLowerCase().includes(q);
+                      const matchTareas = (bay.tareas || []).some(t => (t.descripcion || '').toLowerCase().includes(q));
+                      return matchMec || matchVeh || matchBahia || matchTareas;
+                    }
+                    return true;
+                  })
+                  .map(({ bay, originalIdx }) => {
+                    const statusCfg = TALLER_STATUS_CONFIG[bay.estado] || TALLER_STATUS_CONFIG.espera_tecnico;
+                    const completedTasksCount = (bay.tareas || []).filter(t => t.completada).length;
+                    const totalTasksCount = (bay.tareas || []).length;
+                    const quickInputVal = quickTaskInputs[bay.id] || '';
+
+                    return (
+                      <div
+                        key={bay.id || originalIdx}
+                        className={`bg-[#12141a] p-5 rounded-2xl border ${statusCfg.borderCardClass} space-y-4 flex flex-col justify-between transition-all shadow-xl hover:shadow-2xl relative group`}
+                      >
+                        <div className="space-y-4">
+                          {/* Header de la Tarjeta: Foto + Mecánico + Especialidad + Bahía */}
+                          <div className="flex items-start justify-between gap-3 border-b border-white/5 pb-3.5">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-12 h-12 rounded-xl overflow-hidden bg-black/50 border border-white/10 shrink-0 relative">
+                                <img
+                                  src={bay.mecanicoFoto || "/assets/servicio-mecanica.jpg"}
+                                  alt={bay.mecanicoNombre}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    (e.target as HTMLElement).style.display = 'none';
+                                  }}
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center text-zinc-500 font-bold text-sm bg-black/40 -z-10">
+                                  <User size={20} />
+                                </div>
+                              </div>
+
+                              <div className="min-w-0">
+                                <div className="font-black text-white text-base leading-tight truncate">
+                                  {bay.mecanicoNombre}
+                                </div>
+                                <div className="text-[11px] font-bold text-amber-400 truncate mt-0.5">
+                                  {bay.mecanicoEspecialidad || "Especialista Técnico"}
+                                </div>
+                                <span className="inline-block mt-1 font-mono text-[9px] font-black uppercase text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
+                                  {bay.bahiaNumero || `Bahía #${originalIdx + 1}`}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Acciones de Tarjeta (Eliminar si hay más de 1) */}
+                            {tallerBays.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (!window.confirm(`¿Deseas eliminar la ficha de bahía de ${bay.mecanicoNombre}?`)) return;
+                                  const updated = tallerBays.filter((_, i) => i !== originalIdx);
+                                  saveTallerControl(updated);
+                                }}
+                                className="text-zinc-600 hover:text-red-400 p-1.5 rounded-lg bg-white/5 hover:bg-red-500/10 transition-colors cursor-pointer"
+                                title="Eliminar Bahía"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Vehículo Asignado */}
+                          <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
+                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-zinc-400">
+                              <span className="flex items-center gap-1.5">
+                                <Car size={13} className="text-primary" />
+                                <span>Vehículo Asignado</span>
+                              </span>
+                              {bay.vehiculo && (
+                                <span className="font-mono text-[9px] text-zinc-500">En bahía</span>
+                              )}
+                            </div>
+
+                            <div className="text-sm font-black text-white truncate">
+                              {bay.vehiculo ? (
+                                <span className="text-white font-bold">{bay.vehiculo}</span>
+                              ) : (
+                                <span className="text-zinc-500 italic text-xs font-normal">Sin vehículo asignado (Bahía disponible)</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Estado Operativo (4 Estados Exactos con Selector Rápido) */}
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-black uppercase tracking-wider text-zinc-400 block">
+                              Estado Operativo
+                            </label>
+
+                            <div className="relative">
+                              <select
+                                value={bay.estado}
+                                onChange={(e) => {
+                                  const newSt = e.target.value as TallerStatus;
+                                  const updated = [...tallerBays];
+                                  updated[originalIdx] = {
+                                    ...updated[originalIdx],
+                                    estado: newSt,
+                                    updatedAt: new Date().toISOString()
+                                  };
+                                  saveTallerControl(updated);
+                                }}
+                                className={`w-full font-bold text-xs rounded-xl p-2.5 outline-none cursor-pointer border transition-all ${statusCfg.badgeClass}`}
+                              >
+                                <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">
+                                  🔵 En espera de técnico
+                                </option>
+                                <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">
+                                  🟢 Aprobado
+                                </option>
+                                <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">
+                                  🟡 En espera de repuesto
+                                </option>
+                                <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">
+                                  🔴 En espera de respuesta del cliente
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          {/* Lista de Trabajos / Tareas Mecánicas Autorizadas (SIN PRECIOS) */}
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+                                <CheckCircle2 size={12} className="text-primary" />
+                                <span>Trabajos Autorizados ({completedTasksCount}/{totalTasksCount})</span>
+                              </span>
+                              {totalTasksCount > 0 && (
+                                <span className="font-mono text-[9px] font-bold text-amber-400">
+                                  {Math.round((completedTasksCount / totalTasksCount) * 100)}%
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Checklist de Tareas */}
+                            <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
+                              {(bay.tareas || []).length === 0 ? (
+                                <div className="p-3 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
+                                  Sin tareas asignadas aún.
+                                </div>
+                              ) : (
+                                bay.tareas.map((task, tIdx) => (
+                                  <div
+                                    key={task.id || tIdx}
+                                    className={`p-2 rounded-xl border text-xs flex items-start justify-between gap-2 transition-all ${
+                                      task.completada
+                                        ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400 line-through'
+                                        : 'bg-black/40 border-white/10 text-white'
+                                    }`}
+                                  >
+                                    <label className="flex items-start gap-2.5 flex-1 cursor-pointer min-w-0">
+                                      <input
+                                        type="checkbox"
+                                        checked={task.completada}
+                                        onChange={() => {
+                                          const updated = [...tallerBays];
+                                          const bayTasks = [...updated[originalIdx].tareas];
+                                          bayTasks[tIdx] = {
+                                            ...bayTasks[tIdx],
+                                            completada: !bayTasks[tIdx].completada
+                                          };
+                                          updated[originalIdx] = {
+                                            ...updated[originalIdx],
+                                            tareas: bayTasks,
+                                            updatedAt: new Date().toISOString()
+                                          };
+                                          saveTallerControl(updated);
+                                        }}
+                                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
+                                      />
+                                      <span className="text-[11px] leading-snug font-medium break-words">
+                                        {task.descripcion}
+                                      </span>
+                                    </label>
+
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = [...tallerBays];
+                                        const bayTasks = updated[originalIdx].tareas.filter((_, i) => i !== tIdx);
+                                        updated[originalIdx] = {
+                                          ...updated[originalIdx],
+                                          tareas: bayTasks,
+                                          updatedAt: new Date().toISOString()
+                                        };
+                                        saveTallerControl(updated);
+                                      }}
+                                      className="text-zinc-500 hover:text-red-400 p-0.5 shrink-0 transition-colors cursor-pointer"
+                                      title="Eliminar Tarea"
+                                    >
+                                      <X size={12} />
+                                    </button>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+
+                            {/* Input Rápido para Añadir Trabajo Aprobado */}
+                            <div className="flex items-center gap-1.5 pt-1">
+                              <input
+                                type="text"
+                                value={quickInputVal}
+                                onChange={(e) => setQuickTaskInputs({ ...quickTaskInputs, [bay.id]: e.target.value })}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' && quickInputVal.trim()) {
+                                    e.preventDefault();
+                                    const newTask: MechanicWorkTask = {
+                                      id: `task-${Date.now()}`,
+                                      descripcion: quickInputVal.trim(),
+                                      completada: false
+                                    };
+                                    const updated = [...tallerBays];
+                                    updated[originalIdx] = {
+                                      ...updated[originalIdx],
+                                      tareas: [...(updated[originalIdx].tareas || []), newTask],
+                                      updatedAt: new Date().toISOString()
+                                    };
+                                    saveTallerControl(updated);
+                                    setQuickTaskInputs({ ...quickTaskInputs, [bay.id]: '' });
+                                  }
+                                }}
+                                placeholder="+ Añadir trabajo aprobado..."
+                                className="w-full bg-black/40 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
+                              />
+                              <button
+                                type="button"
+                                disabled={!quickInputVal.trim()}
+                                onClick={() => {
+                                  if (!quickInputVal.trim()) return;
+                                  const newTask: MechanicWorkTask = {
+                                    id: `task-${Date.now()}`,
+                                    descripcion: quickInputVal.trim(),
+                                    completada: false
+                                  };
+                                  const updated = [...tallerBays];
+                                  updated[originalIdx] = {
+                                    ...updated[originalIdx],
+                                    tareas: [...(updated[originalIdx].tareas || []), newTask],
+                                    updatedAt: new Date().toISOString()
+                                  };
+                                  saveTallerControl(updated);
+                                  setQuickTaskInputs({ ...quickTaskInputs, [bay.id]: '' });
+                                }}
+                                className="p-1.5 bg-primary/20 hover:bg-primary text-primary hover:text-black rounded-xl transition-all disabled:opacity-30 cursor-pointer shrink-0"
+                                title="Añadir Trabajo"
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Notas Internas (si existen) */}
+                          {bay.notasInternas && (
+                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-[11px] text-zinc-300 leading-relaxed flex items-start gap-2">
+                              <FileText size={12} className="text-amber-400 shrink-0 mt-0.5" />
+                              <span className="italic">{bay.notasInternas}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Botones de Acción Inferiores de la Tarjeta */}
+                        <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingBay({ ...bay, tareas: [...(bay.tareas || [])] });
+                              setEditingBayIndex(originalIdx);
+                              setIsBayModalOpen(true);
+                            }}
+                            className="flex-1 py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                          >
+                            <Edit size={13} className="text-primary" />
+                            <span>Editar Bahía / Tareas</span>
+                          </button>
+
+                          {bay.vehiculo && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (!window.confirm(`¿Liberar la bahía de ${bay.mecanicoNombre}? Se desasignará el vehículo.`)) return;
+                                const updated = [...tallerBays];
+                                updated[originalIdx] = {
+                                  ...updated[originalIdx],
+                                  vehiculo: '',
+                                  estado: 'espera_tecnico',
+                                  tareas: [],
+                                  notasInternas: '',
+                                  updatedAt: new Date().toISOString()
+                                };
+                                saveTallerControl(updated);
+                              }}
+                              className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-300 border border-white/10 transition-all cursor-pointer"
+                              title="Liberar Bahía"
+                            >
+                              <LogOut size={13} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+
+              {/* MODAL DE EDICIÓN RÁPIDA DE BAHÍA / MECÁNICO (PARA ASESORES DE LOGÍSTICA) */}
+              {isBayModalOpen && editingBay && editingBayIndex !== null && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+                  <div className="bg-[#12141a] border border-white/20 rounded-3xl p-6 max-w-xl w-full space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <div className="flex items-center gap-2">
+                        <Wrench size={18} className="text-primary" />
+                        <h3 className="font-display font-black text-lg text-white uppercase tracking-wider">
+                          Editar Bahía & Asignación
+                        </h3>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsBayModalOpen(false);
+                          setEditingBay(null);
+                          setEditingBayIndex(null);
+                        }}
+                        className="text-zinc-400 hover:text-white p-1 rounded-lg bg-white/5"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (editingBayIndex !== null) {
+                          const updated = [...tallerBays];
+                          updated[editingBayIndex] = {
+                            ...editingBay,
+                            updatedAt: new Date().toISOString()
+                          };
+                          saveTallerControl(updated);
+                          setIsBayModalOpen(false);
+                          setEditingBay(null);
+                          setEditingBayIndex(null);
+                        }
+                      }}
+                      className="space-y-4 text-xs"
+                    >
+                      {/* Mecánico y Especialidad */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                            Nombre del Mecánico *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={editingBay.mecanicoNombre}
+                            onChange={(e) => setEditingBay({ ...editingBay, mecanicoNombre: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                            placeholder="Ej. Beltran Lopez"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                            Especialidad / Área *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={editingBay.mecanicoEspecialidad}
+                            onChange={(e) => setEditingBay({ ...editingBay, mecanicoEspecialidad: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-amber-300 font-bold outline-none"
+                            placeholder="Ej. Master Tech - Diagnóstico"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Bahía y Foto */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                            Número / Nombre de Bahía
+                          </label>
+                          <input
+                            type="text"
+                            value={editingBay.bahiaNumero || ''}
+                            onChange={(e) => setEditingBay({ ...editingBay, bahiaNumero: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white outline-none"
+                            placeholder="Ej. Bahía #1"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                            URL Foto de Perfil
+                          </label>
+                          <input
+                            type="text"
+                            value={editingBay.mecanicoFoto || ''}
+                            onChange={(e) => setEditingBay({ ...editingBay, mecanicoFoto: e.target.value })}
+                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white outline-none"
+                            placeholder="/assets/servicio-mecanica.jpg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Vehículo Asignado */}
+                      <div className="space-y-2 p-3 bg-black/30 rounded-2xl border border-white/10">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-black uppercase text-primary block">
+                            Vehículo Asignado
+                          </label>
+                          <span className="text-[10px] text-zinc-400">Marca, Modelo, Año y Placa</span>
+                        </div>
+
+                        {/* Selector Rápido de Citas Activas en el Calendario */}
+                        {leads.length > 0 && (
+                          <div>
+                            <span className="text-[10px] text-zinc-400 block mb-1">
+                              O selecciona un vehículo de las citas del calendario:
+                            </span>
+                            <select
+                              onChange={(e) => {
+                                if (e.target.value) {
+                                  setEditingBay({ ...editingBay, vehiculo: e.target.value });
+                                }
+                              }}
+                              className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none text-xs cursor-pointer font-bold mb-2"
+                              defaultValue=""
+                            >
+                              <option value="" disabled>── Seleccionar de citas agendadas ──</option>
+                              {leads.slice(0, 25).map(l => (
+                                <option key={l.id} value={`${l.vehiculo || 'Vehículo'} (${l.nombre || 'Cliente'})`}>
+                                  {l.vehiculo || 'Vehículo'} - {l.nombre} ({l.servicio || 'Servicio'})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        <input
+                          type="text"
+                          value={editingBay.vehiculo || ''}
+                          onChange={(e) => setEditingBay({ ...editingBay, vehiculo: e.target.value })}
+                          className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                          placeholder="Ej. Toyota 4Runner 2025 - ABC12D"
+                        />
+                      </div>
+
+                      {/* Estado Operativo (4 Estados Exactos) */}
+                      <div>
+                        <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                          Estado Operativo *
+                        </label>
+                        <select
+                          value={editingBay.estado}
+                          onChange={(e) => setEditingBay({ ...editingBay, estado: e.target.value as TallerStatus })}
+                          className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                        >
+                          <option value="espera_tecnico">🔵 En espera de técnico</option>
+                          <option value="aprobado">🟢 Aprobado</option>
+                          <option value="espera_repuesto">🟡 En espera de repuesto</option>
+                          <option value="espera_cliente">🔴 En espera de respuesta del cliente</option>
+                        </select>
+                      </div>
+
+                      {/* Lista de Trabajos Mecánicos Autorizados (Sin precios) */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-black uppercase text-zinc-400 block">
+                            Lista de Trabajos / Tareas Mecánicas Autorizadas (SIN PRECIOS)
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newTask: MechanicWorkTask = {
+                                id: `task-${Date.now()}`,
+                                descripcion: "Nuevo trabajo autorizado...",
+                                completada: false
+                              };
+                              setEditingBay({
+                                ...editingBay,
+                                tareas: [...(editingBay.tareas || []), newTask]
+                              });
+                            }}
+                            className="px-2 py-1 bg-white/5 hover:bg-white/10 text-primary border border-white/10 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                          >
+                            <Plus size={12} />
+                            <span>Añadir Tarea</span>
+                          </button>
+                        </div>
+
+                        <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                          {(editingBay.tareas || []).map((t, idx) => (
+                            <div key={t.id || idx} className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={t.completada}
+                                onChange={() => {
+                                  const updatedTasks = [...editingBay.tareas];
+                                  updatedTasks[idx].completada = !updatedTasks[idx].completada;
+                                  setEditingBay({ ...editingBay, tareas: updatedTasks });
+                                }}
+                                className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 cursor-pointer shrink-0"
+                              />
+                              <input
+                                type="text"
+                                value={t.descripcion}
+                                onChange={(e) => {
+                                  const updatedTasks = [...editingBay.tareas];
+                                  updatedTasks[idx].descripcion = e.target.value;
+                                  setEditingBay({ ...editingBay, tareas: updatedTasks });
+                                }}
+                                placeholder="Descripción del trabajo mecánico..."
+                                className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-primary"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updatedTasks = editingBay.tareas.filter((_, i) => i !== idx);
+                                  setEditingBay({ ...editingBay, tareas: updatedTasks });
+                                }}
+                                className="text-zinc-500 hover:text-red-400 p-1.5 shrink-0"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Notas u Observaciones Internas */}
+                      <div>
+                        <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                          Notas Internas de Taller / Asesor
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={editingBay.notasInternas || ''}
+                          onChange={(e) => setEditingBay({ ...editingBay, notasInternas: e.target.value })}
+                          placeholder="Ej. Esperando respuesta de presupuesto adicional de frenos..."
+                          className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white outline-none"
+                        />
+                      </div>
+
+                      {/* Botones de Acción del Modal */}
+                      <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsBayModalOpen(false);
+                            setEditingBay(null);
+                            setEditingBayIndex(null);
+                          }}
+                          className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white font-bold transition-all cursor-pointer"
+                        >
+                          Cancelar
+                        </button>
+
+                        <button
+                          type="submit"
+                          className="px-5 py-2.5 rounded-xl bg-primary hover:bg-amber-400 text-black font-black flex items-center gap-2 transition-all shadow-lg cursor-pointer"
+                        >
+                          <Save size={15} />
+                          <span>Guardar Cambios</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
