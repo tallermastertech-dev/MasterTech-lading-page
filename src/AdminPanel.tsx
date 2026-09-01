@@ -2982,16 +2982,27 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <button
                         type="button"
                         onClick={() => {
+                          const availableTeamList = teamMembers && teamMembers.length > 0
+                            ? teamMembers
+                            : [
+                                { id: 'tm-1', name: "Beltran Lopez", role: "Master Tech - Diagnóstico & Reprogramación", img: "/assets/servicio-mecanica.jpg" },
+                                { id: 'tm-2', name: "Aaron Rivas", role: "Especialista en Motores y Cajas Automáticas", img: "/assets/servicio-electricidad.jpg" },
+                                { id: 'tm-3', name: "Jesus Mata", role: "Especialista en Frenos, Suspensión y A/C", img: "/assets/servicio-frenos.jpg" }
+                              ];
+
+                          const assignedNames = new Set(tallerBays.map(b => (b.mecanicoNombre || '').trim().toLowerCase()));
+                          const nextMember = availableTeamList.find(m => m.name && !assignedNames.has(m.name.trim().toLowerCase())) || availableTeamList[0];
+
                           const newBay: MechanicBayItem = {
                             id: `bay-${Date.now()}`,
-                            mecanicoNombre: "Nuevo Mecánico",
-                            mecanicoEspecialidad: "Técnico Automotriz",
-                            mecanicoFoto: "/assets/servicio-mecanica.jpg",
+                            mecanicoNombre: nextMember.name || "Nuevo Especialista",
+                            mecanicoEspecialidad: nextMember.role || nextMember.desc || "Especialista Técnico",
+                            mecanicoFoto: nextMember.img || "/assets/servicio-mecanica.jpg",
                             bahiaNumero: `Bahía #${tallerBays.length + 1}`,
                             vehiculos: [
                               {
                                 id: `veh-${Date.now()}-1`,
-                                vehiculo: "Nuevo Vehículo",
+                                vehiculo: "Nuevo Vehículo (Modelo / Placa)",
                                 estado: "espera_tecnico",
                                 posicion: "elevador",
                                 tareas: [],
@@ -3768,36 +3779,87 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       }}
                       className="space-y-4 text-xs"
                     >
-                      {/* 1. Datos del Técnico */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                            Nombre del Mecánico *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={editingBay.mecanicoNombre}
-                            onChange={(e) => setEditingBay({ ...editingBay, mecanicoNombre: e.target.value })}
-                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
-                            placeholder="Ej. Beltran Lopez"
-                          />
-                        </div>
+                      {/* 1. Datos del Técnico & Vinculación con Equipo Taller */}
+                      {(() => {
+                        const availableTeamList = teamMembers && teamMembers.length > 0
+                          ? teamMembers
+                          : [
+                              { id: 'tm-1', name: "Beltran Lopez", role: "Master Tech - Diagnóstico & Reprogramación", img: "/assets/servicio-mecanica.jpg" },
+                              { id: 'tm-2', name: "Aaron Rivas", role: "Especialista en Motores y Cajas Automáticas", img: "/assets/servicio-electricidad.jpg" },
+                              { id: 'tm-3', name: "Jesus Mata", role: "Especialista en Frenos, Suspensión y A/C", img: "/assets/servicio-frenos.jpg" }
+                            ];
 
-                        <div>
-                          <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                            Especialidad / Área *
-                          </label>
-                          <input
-                            type="text"
-                            required
-                            value={editingBay.mecanicoEspecialidad}
-                            onChange={(e) => setEditingBay({ ...editingBay, mecanicoEspecialidad: e.target.value })}
-                            className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-amber-300 font-bold outline-none"
-                            placeholder="Ej. Master Tech - Diagnóstico"
-                          />
-                        </div>
-                      </div>
+                        return (
+                          <div className="space-y-3 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-2xl">
+                            <div className="flex items-center justify-between">
+                              <label className="text-[10px] font-black uppercase text-amber-400 flex items-center gap-1.5">
+                                <UserCheck size={14} className="text-amber-400" />
+                                <span>Vincular con Especialista de Equipo Taller:</span>
+                              </label>
+                              <span className="text-[10px] text-zinc-400 font-mono">
+                                {availableTeamList.length} registrados
+                              </span>
+                            </div>
+
+                            <select
+                              value={
+                                availableTeamList.find(m => m.name?.trim().toLowerCase() === editingBay.mecanicoNombre?.trim().toLowerCase())?.id || 
+                                availableTeamList.find(m => m.name?.trim().toLowerCase() === editingBay.mecanicoNombre?.trim().toLowerCase())?.name || 
+                                ''
+                              }
+                              onChange={(e) => {
+                                const selected = availableTeamList.find(m => String(m.id) === e.target.value || m.name === e.target.value);
+                                if (selected) {
+                                  setEditingBay({
+                                    ...editingBay,
+                                    mecanicoNombre: selected.name,
+                                    mecanicoEspecialidad: selected.role || selected.desc || editingBay.mecanicoEspecialidad,
+                                    mecanicoFoto: selected.img || editingBay.mecanicoFoto
+                                  });
+                                }
+                              }}
+                              className="w-full bg-black/70 border border-amber-500/40 focus:border-amber-400 rounded-xl p-2.5 text-xs text-amber-300 font-bold outline-none cursor-pointer"
+                            >
+                              <option value="">-- Seleccionar Especialista de Equipo Taller --</option>
+                              {availableTeamList.map((m, idx) => (
+                                <option key={m.id || idx} value={m.id || m.name} className="bg-[#12141a] text-white font-medium">
+                                  {m.name} — {m.role || 'Especialista'}
+                                </option>
+                              ))}
+                            </select>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                              <div>
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                  Nombre del Mecánico *
+                                </label>
+                                <input
+                                  type="text"
+                                  required
+                                  value={editingBay.mecanicoNombre}
+                                  onChange={(e) => setEditingBay({ ...editingBay, mecanicoNombre: e.target.value })}
+                                  className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                                  placeholder="Ej. Beltran Lopez"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                  Especialidad / Área *
+                                </label>
+                                <input
+                                  type="text"
+                                  required
+                                  value={editingBay.mecanicoEspecialidad}
+                                  onChange={(e) => setEditingBay({ ...editingBay, mecanicoEspecialidad: e.target.value })}
+                                  className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-amber-300 font-bold outline-none"
+                                  placeholder="Ej. Master Tech - Diagnóstico"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })()}
 
                       {/* 2. Bahía y Foto del Mecánico */}
                       <div className="space-y-3 p-3.5 bg-black/30 rounded-2xl border border-white/10">
