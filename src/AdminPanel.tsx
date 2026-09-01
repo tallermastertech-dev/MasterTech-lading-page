@@ -75,7 +75,13 @@ import {
   Smartphone,
   Camera,
   Flame,
-  ArrowUpCircle
+  ArrowUpCircle,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowLeftRight,
+  ChevronsUp
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -3410,13 +3416,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           <div className="min-w-0 flex-1">
                                             <div className="text-sm font-black text-white truncate flex items-center gap-2">
                                               <span>{v.vehiculo || "Vehículo sin identificar"}</span>
-                                            </div>
-                                            
-                                            <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                                              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${vStatusCfg.badgeClass}`}>
-                                                {vStatusCfg.shortLabel}
-                                              </span>
-
                                               <span className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase ${
                                                 v.posicion === 'elevador'
                                                   ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -3433,14 +3432,65 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 </span>
                                               )}
                                             </div>
+                                            
+                                            <div className="flex items-center gap-1.5 flex-wrap mt-1">
+                                              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${vStatusCfg.badgeClass}`}>
+                                                {vStatusCfg.shortLabel}
+                                              </span>
+                                            </div>
                                           </div>
                                         </div>
 
-                                        <div className="flex items-center gap-2 shrink-0">
+                                        <div className="flex items-center gap-1.5 shrink-0">
                                           {totalTasksCount > 0 && (
                                             <span className="text-[10px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg">
                                               {completedTasksCount}/{totalTasksCount}
                                             </span>
+                                          )}
+
+                                          {/* Botones de Reordenar Arriba / Abajo (Orden dentro del técnico) */}
+                                          {!isTallerReadOnly && vehiclesList.length > 1 && (
+                                            <div className="flex items-center gap-0.5 bg-black/40 border border-white/5 rounded-lg p-0.5" onClick={(e) => e.stopPropagation()}>
+                                              {vIdx > 0 && (
+                                                <button
+                                                  type="button"
+                                                  title="Mover arriba / Poner antes"
+                                                  onClick={() => {
+                                                    const updated = [...tallerBays];
+                                                    const bayVehs = [...updated[originalIdx].vehiculos];
+                                                    const temp = bayVehs[vIdx];
+                                                    bayVehs[vIdx] = bayVehs[vIdx - 1];
+                                                    bayVehs[vIdx - 1] = temp;
+                                                    if (vIdx - 1 === 0) {
+                                                      bayVehs[0] = { ...bayVehs[0], posicion: 'elevador' };
+                                                    }
+                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                    saveTallerControl(updated);
+                                                  }}
+                                                  className="p-1 rounded-md hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+                                                >
+                                                  <ArrowUp size={12} />
+                                                </button>
+                                              )}
+                                              {vIdx < vehiclesList.length - 1 && (
+                                                <button
+                                                  type="button"
+                                                  title="Mover abajo / Poner después"
+                                                  onClick={() => {
+                                                    const updated = [...tallerBays];
+                                                    const bayVehs = [...updated[originalIdx].vehiculos];
+                                                    const temp = bayVehs[vIdx];
+                                                    bayVehs[vIdx] = bayVehs[vIdx + 1];
+                                                    bayVehs[vIdx + 1] = temp;
+                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                    saveTallerControl(updated);
+                                                  }}
+                                                  className="p-1 rounded-md hover:bg-amber-500/20 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer"
+                                                >
+                                                  <ArrowDown size={12} />
+                                                </button>
+                                              )}
+                                            </div>
                                           )}
 
                                           {!isTallerReadOnly && (
@@ -3469,6 +3519,92 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                       {/* Contenido Desplegable al Seleccionar el Vehículo */}
                                       {isExpanded && (
                                         <div className="p-3.5 pt-0 border-t border-white/5 space-y-3 mt-1 animate-fade-in">
+                                          {/* Barra de Mover de Cubículo / Transferir a otro Técnico */}
+                                          {!isTallerReadOnly && tallerBays.length > 1 && (
+                                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                                              <span className="text-[10px] font-black uppercase text-amber-300 flex items-center gap-1.5">
+                                                <ArrowLeftRight size={13} className="text-amber-400 shrink-0" />
+                                                <span>Mover a otro Técnico / Bahía:</span>
+                                              </span>
+
+                                              <div className="flex items-center gap-1.5 flex-wrap">
+                                                {/* Mover a bahía anterior (izquierda) */}
+                                                {originalIdx > 0 && (
+                                                  <button
+                                                    type="button"
+                                                    title={`Mover a ${tallerBays[originalIdx - 1].mecanicoNombre}`}
+                                                    onClick={() => {
+                                                      const updated = [...tallerBays];
+                                                      const sourceVehs = [...updated[originalIdx].vehiculos];
+                                                      const [movedVeh] = sourceVehs.splice(vIdx, 1);
+                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: sourceVehs, updatedAt: new Date().toISOString() };
+                                                      
+                                                      const destIdx = originalIdx - 1;
+                                                      const destVehs = [...(updated[destIdx].vehiculos || []), movedVeh];
+                                                      updated[destIdx] = { ...updated[destIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
+                                                      saveTallerControl(updated);
+                                                    }}
+                                                    className="px-2 py-1 bg-black/50 hover:bg-black/80 border border-white/10 hover:border-amber-400 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                                                  >
+                                                    <ArrowLeft size={11} />
+                                                    <span>{tallerBays[originalIdx - 1].mecanicoNombre.split(' ')[0]}</span>
+                                                  </button>
+                                                )}
+
+                                                {/* Selector rápido a cualquier técnico */}
+                                                <select
+                                                  defaultValue=""
+                                                  onChange={(e) => {
+                                                    const targetBayIdx = parseInt(e.target.value, 10);
+                                                    if (!isNaN(targetBayIdx) && targetBayIdx !== originalIdx && tallerBays[targetBayIdx]) {
+                                                      const updated = [...tallerBays];
+                                                      const sourceVehs = [...updated[originalIdx].vehiculos];
+                                                      const [movedVeh] = sourceVehs.splice(vIdx, 1);
+                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: sourceVehs, updatedAt: new Date().toISOString() };
+                                                      
+                                                      const destVehs = [...(updated[targetBayIdx].vehiculos || []), movedVeh];
+                                                      updated[targetBayIdx] = { ...updated[targetBayIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
+                                                      saveTallerControl(updated);
+                                                    }
+                                                  }}
+                                                  className="bg-black/60 border border-amber-500/40 text-amber-300 rounded-lg text-[10px] font-bold px-2 py-1 outline-none cursor-pointer"
+                                                >
+                                                  <option value="" disabled>Seleccionar técnico...</option>
+                                                  {tallerBays.map((b, bIdx) => (
+                                                    bIdx !== originalIdx && (
+                                                      <option key={b.id || bIdx} value={bIdx} className="bg-[#12141a] text-white">
+                                                        {b.mecanicoNombre} ({b.vehiculos?.length || 0} veh.)
+                                                      </option>
+                                                    )
+                                                  ))}
+                                                </select>
+
+                                                {/* Mover a bahía siguiente (derecha) */}
+                                                {originalIdx < tallerBays.length - 1 && (
+                                                  <button
+                                                    type="button"
+                                                    title={`Mover a ${tallerBays[originalIdx + 1].mecanicoNombre}`}
+                                                    onClick={() => {
+                                                      const updated = [...tallerBays];
+                                                      const sourceVehs = [...updated[originalIdx].vehiculos];
+                                                      const [movedVeh] = sourceVehs.splice(vIdx, 1);
+                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: sourceVehs, updatedAt: new Date().toISOString() };
+                                                      
+                                                      const destIdx = originalIdx + 1;
+                                                      const destVehs = [...(updated[destIdx].vehiculos || []), movedVeh];
+                                                      updated[destIdx] = { ...updated[destIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
+                                                      saveTallerControl(updated);
+                                                    }}
+                                                    className="px-2 py-1 bg-black/50 hover:bg-black/80 border border-white/10 hover:border-amber-400 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                                                  >
+                                                    <span>{tallerBays[originalIdx + 1].mecanicoNombre.split(' ')[0]}</span>
+                                                    <ArrowRight size={11} />
+                                                  </button>
+                                                )}
+                                              </div>
+                                            </div>
+                                          )}
+
                                           {/* Posición en Taller */}
                                           <div className="flex items-center justify-between p-2 rounded-xl bg-black/20 border border-white/5 pt-2">
                                             <span className="text-[10px] font-black uppercase text-zinc-400">
@@ -3952,24 +4088,113 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           </button>
                         </div>
 
-                        {/* Pestañas de Selección de Vehículo en Modal */}
+                        {/* Pestañas de Selección de Vehículo en Modal con Reordenamiento y Transferencia */}
                         {(editingBay.vehiculos || []).length > 0 && (
-                          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-                            {editingBay.vehiculos.map((v, idx) => (
-                              <button
-                                key={v.id || idx}
-                                type="button"
-                                onClick={() => setModalActiveVehIdx(idx)}
-                                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shrink-0 ${
-                                  modalActiveVehIdx === idx
-                                    ? 'bg-primary text-black font-black shadow'
-                                    : 'bg-black/50 text-zinc-400 hover:text-white border border-white/10'
-                                }`}
-                              >
-                                <span>{v.vehiculo ? v.vehiculo.split(' - ')[0] : `Vehículo #${idx + 1}`}</span>
-                                <span className="text-[9px] opacity-70">({v.posicion === 'elevador' ? 'Elevador' : 'Cola'})</span>
-                              </button>
-                            ))}
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between gap-2 overflow-x-auto pb-1">
+                              <div className="flex items-center gap-1.5 flex-1 min-w-0 overflow-x-auto">
+                                {editingBay.vehiculos.map((v, idx) => (
+                                  <button
+                                    key={v.id || idx}
+                                    type="button"
+                                    onClick={() => setModalActiveVehIdx(idx)}
+                                    className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shrink-0 ${
+                                      modalActiveVehIdx === idx
+                                        ? 'bg-primary text-black font-black shadow'
+                                        : 'bg-black/50 text-zinc-400 hover:text-white border border-white/10'
+                                    }`}
+                                  >
+                                    <span>{v.vehiculo ? v.vehiculo.split(' - ')[0] : `Vehículo #${idx + 1}`}</span>
+                                    <span className="text-[9px] opacity-70">({v.posicion === 'elevador' ? 'Elevador' : 'Cola'})</span>
+                                  </button>
+                                ))}
+                              </div>
+
+                              {/* Botones de Reordenar Vehículo Activo en Modal */}
+                              {(editingBay.vehiculos || []).length > 1 && (
+                                <div className="flex items-center gap-1 shrink-0 bg-black/40 border border-white/10 p-1 rounded-xl">
+                                  <button
+                                    type="button"
+                                    disabled={modalActiveVehIdx === 0}
+                                    title="Mover vehículo hacia arriba / 1er lugar"
+                                    onClick={() => {
+                                      if (modalActiveVehIdx > 0) {
+                                        const updatedVehs = [...editingBay.vehiculos];
+                                        const temp = updatedVehs[modalActiveVehIdx];
+                                        updatedVehs[modalActiveVehIdx] = updatedVehs[modalActiveVehIdx - 1];
+                                        updatedVehs[modalActiveVehIdx - 1] = temp;
+                                        if (modalActiveVehIdx - 1 === 0) {
+                                          updatedVehs[0] = { ...updatedVehs[0], posicion: 'elevador' };
+                                        }
+                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                        setModalActiveVehIdx(modalActiveVehIdx - 1);
+                                      }
+                                    }}
+                                    className="p-1 rounded-lg bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                                  >
+                                    <ArrowUp size={12} />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={modalActiveVehIdx === (editingBay.vehiculos || []).length - 1}
+                                    title="Mover vehículo hacia abajo"
+                                    onClick={() => {
+                                      if (modalActiveVehIdx < (editingBay.vehiculos || []).length - 1) {
+                                        const updatedVehs = [...editingBay.vehiculos];
+                                        const temp = updatedVehs[modalActiveVehIdx];
+                                        updatedVehs[modalActiveVehIdx] = updatedVehs[modalActiveVehIdx + 1];
+                                        updatedVehs[modalActiveVehIdx + 1] = temp;
+                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                        setModalActiveVehIdx(modalActiveVehIdx + 1);
+                                      }
+                                    }}
+                                    className="p-1 rounded-lg bg-white/5 hover:bg-amber-500/20 text-zinc-300 hover:text-amber-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                                  >
+                                    <ArrowDown size={12} />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Transferir vehículo activo a otro técnico */}
+                            {tallerBays.length > 1 && editingBayIndex !== null && (
+                              <div className="flex items-center justify-between gap-2 p-2 bg-black/40 border border-white/5 rounded-xl">
+                                <span className="text-[10px] text-zinc-400 font-bold flex items-center gap-1">
+                                  <ArrowLeftRight size={11} className="text-amber-400" />
+                                  <span>Transferir este vehículo a otro técnico:</span>
+                                </span>
+                                <select
+                                  defaultValue=""
+                                  onChange={(e) => {
+                                    const targetBayIdx = parseInt(e.target.value, 10);
+                                    if (!isNaN(targetBayIdx) && targetBayIdx !== editingBayIndex && tallerBays[targetBayIdx]) {
+                                      const vehicleToMove = editingBay.vehiculos[modalActiveVehIdx];
+                                      const remainingVehs = editingBay.vehiculos.filter((_, i) => i !== modalActiveVehIdx);
+                                      
+                                      const updated = [...tallerBays];
+                                      updated[editingBayIndex] = { ...editingBay, vehiculos: remainingVehs, updatedAt: new Date().toISOString() };
+                                      
+                                      const destVehs = [...(updated[targetBayIdx].vehiculos || []), vehicleToMove];
+                                      updated[targetBayIdx] = { ...updated[targetBayIdx], vehiculos: destVehs, updatedAt: new Date().toISOString() };
+                                      
+                                      saveTallerControl(updated);
+                                      setEditingBay({ ...editingBay, vehiculos: remainingVehs });
+                                      setModalActiveVehIdx(Math.max(0, modalActiveVehIdx - 1));
+                                    }
+                                  }}
+                                  className="bg-black/60 border border-amber-500/40 text-amber-300 rounded-lg text-[10px] font-bold px-2 py-1 outline-none cursor-pointer"
+                                >
+                                  <option value="" disabled>Seleccionar destino...</option>
+                                  {tallerBays.map((b, bIdx) => (
+                                    bIdx !== editingBayIndex && (
+                                      <option key={b.id || bIdx} value={bIdx} className="bg-[#12141a] text-white">
+                                        {b.mecanicoNombre} ({b.vehiculos?.length || 0} veh.)
+                                      </option>
+                                    )
+                                  ))}
+                                </select>
+                              </div>
+                            )}
                           </div>
                         )}
 
