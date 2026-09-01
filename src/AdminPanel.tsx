@@ -3396,6 +3396,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           </div>
 
                                           {/* Checklist de Trabajos Autorizados (SIN PRECIOS) */}
+                                          <div className="space-y-2">
                                             <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-1">
                                               <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5 min-w-0">
                                                 <CheckCircle2 size={12} className="text-primary shrink-0" />
