@@ -663,7 +663,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   });
 
   // =========================================================================
-  // CONTROL DE TALLER: Tipos, Estados y Persistencia
+  // CONTROL DE TALLER: Tipos, Estados y Persistencia Multi-Vehículo
   // =========================================================================
   type TallerStatus = 'espera_tecnico' | 'aprobado' | 'espera_repuesto' | 'espera_cliente';
 
@@ -673,18 +673,57 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     completada: boolean;
   }
 
+  interface MechanicAssignedVehicle {
+    id: string;
+    vehiculo: string;
+    estado: TallerStatus;
+    posicion?: 'elevador' | 'cola';
+    tareas: MechanicWorkTask[];
+    notasInternas?: string;
+    fechaIngreso?: string;
+  }
+
   interface MechanicBayItem {
     id: string;
     mecanicoNombre: string;
     mecanicoEspecialidad: string;
     mecanicoFoto?: string;
     bahiaNumero?: string;
-    vehiculo: string;
-    estado: TallerStatus;
-    tareas: MechanicWorkTask[];
+    vehiculos: MechanicAssignedVehicle[];
+    // Compatibilidad retroactiva
+    vehiculo?: string;
+    estado?: TallerStatus;
+    tareas?: MechanicWorkTask[];
     notasInternas?: string;
     updatedAt?: string;
   }
+
+  // Helper: Normalizar estructura de bahía asegurando lista de vehículos
+  const normalizeBayVehicles = (bay: any): MechanicBayItem => {
+    if (Array.isArray(bay?.vehiculos) && bay.vehiculos.length > 0) {
+      return bay as MechanicBayItem;
+    }
+    if (bay?.vehiculo || (bay?.tareas && bay.tareas.length > 0)) {
+      return {
+        ...bay,
+        vehiculos: [
+          {
+            id: `veh-${bay.id || Date.now()}-1`,
+            vehiculo: bay.vehiculo || 'Vehículo en Bahía',
+            estado: (bay.estado as TallerStatus) || 'aprobado',
+            posicion: 'elevador',
+            tareas: Array.isArray(bay.tareas) ? bay.tareas : [],
+            notasInternas: bay.notasInternas || '',
+            fechaIngreso: new Date().toISOString()
+          }
+        ]
+      };
+    }
+    return {
+      ...bay,
+      vehiculos: []
+    };
+  };
 
   const DEFAULT_TALLER_BAYS: MechanicBayItem[] = [
     {
@@ -693,14 +732,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       mecanicoEspecialidad: "Master Tech - Diagnóstico & Reprogramación",
       mecanicoFoto: "/assets/servicio-mecanica.jpg",
       bahiaNumero: "Bahía #1",
-      vehiculo: "Toyota 4Runner 2025 - ABC12D",
-      estado: "aprobado",
-      tareas: [
-        { id: "t-1", descripcion: "Diagnóstico computarizado OBD2 y reprogramación de mapa ECU", completada: true },
-        { id: "t-2", descripcion: "Limpieza y calibración de 6 inyectores por ultrasonido", completada: false },
-        { id: "t-3", descripcion: "Reemplazo preventivo de bujías de Iridio y filtro de combustible", completada: false }
+      vehiculos: [
+        {
+          id: "veh-1",
+          vehiculo: "Toyota 4Runner 2025 - ABC12D",
+          estado: "aprobado",
+          posicion: "elevador",
+          tareas: [
+            { id: "t-1", descripcion: "Diagnóstico computarizado OBD2 y reprogramación de mapa ECU", completada: true },
+            { id: "t-2", descripcion: "Limpieza y calibración de 6 inyectores por ultrasonido", completada: false },
+            { id: "t-3", descripcion: "Reemplazo preventivo de bujías de Iridio y filtro de combustible", completada: false }
+          ],
+          notasInternas: "Cliente autorizó todos los trabajos mecánicos en presupuesto inicial.",
+          fechaIngreso: new Date().toISOString()
+        },
+        {
+          id: "veh-2",
+          vehiculo: "Toyota Fortuner 4.0L 2023 - XY890Z",
+          estado: "espera_tecnico",
+          posicion: "cola",
+          tareas: [
+            { id: "t-4", descripcion: "Escaneo de sensores de oxígeno y calibración de cuerpo de aceleración", completada: false },
+            { id: "t-5", descripcion: "Revisión preventiva de fluidos y aceite de transmisión", completada: false }
+          ],
+          notasInternas: "Vehículo en cola para entrar a elevador al terminar 4Runner.",
+          fechaIngreso: new Date().toISOString()
+        }
       ],
-      notasInternas: "Cliente autorizó todos los trabajos mecánicos en presupuesto inicial.",
       updatedAt: new Date().toISOString()
     },
     {
@@ -709,14 +767,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       mecanicoEspecialidad: "Especialista en Mecánica Mayor & Motores",
       mecanicoFoto: "/assets/servicio-electricidad.jpg",
       bahiaNumero: "Bahía #2",
-      vehiculo: "Ford F-150 Lariat 2023 - GHK89X",
-      estado: "espera_repuesto",
-      tareas: [
-        { id: "t-4", descripcion: "Desmontaje de cárter y revisión de empacaduras de tapa de válvulas", completada: true },
-        { id: "t-5", descripcion: "Sustitución de bomba de agua y termostato original", completada: false },
-        { id: "t-6", descripcion: "Instalación y sincronización de kit de cadena de tiempo", completada: false }
+      vehiculos: [
+        {
+          id: "veh-3",
+          vehiculo: "Ford F-150 Lariat 2023 - GHK89X",
+          estado: "espera_repuesto",
+          posicion: "elevador",
+          tareas: [
+            { id: "t-6", descripcion: "Desmontaje de cárter y revisión de empacaduras de tapa de válvulas", completada: true },
+            { id: "t-7", descripcion: "Sustitución de bomba de agua y termostato original", completada: false },
+            { id: "t-8", descripcion: "Instalación y sincronización de kit de cadena de tiempo", completada: false }
+          ],
+          notasInternas: "Esperando llegada de bomba de agua desde almacén de repuestos.",
+          fechaIngreso: new Date().toISOString()
+        },
+        {
+          id: "veh-4",
+          vehiculo: "Chevrolet Silverado 5.3L 2021 - JKL34M",
+          estado: "aprobado",
+          posicion: "cola",
+          tareas: [
+            { id: "t-9", descripcion: "Cambio de kit de empacaduras y sellos de admisión", completada: false },
+            { id: "t-10", descripcion: "Lavado químico de motor y prueba de presión de compresión", completada: false }
+          ],
+          notasInternas: "Repuestos completos listos para iniciar trabajo.",
+          fechaIngreso: new Date().toISOString()
+        }
       ],
-      notasInternas: "Esperando llegada de bomba de agua desde almacén de repuestos.",
       updatedAt: new Date().toISOString()
     },
     {
@@ -725,14 +802,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       mecanicoEspecialidad: "Especialista en Suspensión, Frenos & Climatización A/A",
       mecanicoFoto: "/assets/servicio-climatizacion.jpg",
       bahiaNumero: "Bahía #3",
-      vehiculo: "Chevrolet Tahoe 2022 - KLM45P",
-      estado: "espera_tecnico",
-      tareas: [
-        { id: "t-7", descripcion: "Reemplazo de pastillas de frenos cerámicas delanteras y traseras", completada: false },
-        { id: "t-8", descripcion: "Rectificación de discos de freno ventilados", completada: false },
-        { id: "t-9", descripcion: "Recarga de refrigerante R134a y sustitución de microfiltro de cabina", completada: false }
+      vehiculos: [
+        {
+          id: "veh-5",
+          vehiculo: "Chevrolet Tahoe 2022 - KLM45P",
+          estado: "espera_tecnico",
+          posicion: "elevador",
+          tareas: [
+            { id: "t-11", descripcion: "Reemplazo de pastillas de frenos cerámicas delanteras y traseras", completada: false },
+            { id: "t-12", descripcion: "Rectificación de discos de freno ventilados", completada: false },
+            { id: "t-13", descripcion: "Recarga de refrigerante R134a y sustitución de microfiltro de cabina", completada: false }
+          ],
+          notasInternas: "Vehículo posicionado en elevador listo para inicio de desmontaje.",
+          fechaIngreso: new Date().toISOString()
+        },
+        {
+          id: "veh-6",
+          vehiculo: "Jeep Grand Cherokee 2024 - MN678Q",
+          estado: "espera_cliente",
+          posicion: "cola",
+          tareas: [
+            { id: "t-14", descripcion: "Diagnóstico de fuga en evaporador de aire acondicionado", completada: true },
+            { id: "t-15", descripcion: "Reemplazo de amortiguadores delanteros bilaterales", completada: false }
+          ],
+          notasInternas: "En espera de llamada de autorización de cliente.",
+          fechaIngreso: new Date().toISOString()
+        }
       ],
-      notasInternas: "Vehículo posicionado en elevador listo para inicio de desmontaje.",
       updatedAt: new Date().toISOString()
     }
   ];
@@ -774,15 +870,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       const stored = localStorage.getItem('mastertech_taller_control_cache');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map(normalizeBayVehicles);
+        }
       }
     } catch (e) {}
     return DEFAULT_TALLER_BAYS;
   });
 
+  const [selectedVehiclesMap, setSelectedVehiclesMap] = useState<Record<string, number>>({});
   const [isBayModalOpen, setIsBayModalOpen] = useState(false);
   const [editingBay, setEditingBay] = useState<MechanicBayItem | null>(null);
   const [editingBayIndex, setEditingBayIndex] = useState<number | null>(null);
+  const [modalActiveVehIdx, setModalActiveVehIdx] = useState<number>(0);
   const [isSavingTallerControl, setIsSavingTallerControl] = useState(false);
   const [savedTallerSuccess, setSavedTallerSuccess] = useState(false);
   const [quickTaskInputs, setQuickTaskInputs] = useState<Record<string, string>>({});
@@ -791,9 +891,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Sincronizar Control de Taller con Supabase
   const saveTallerControl = async (updatedBays: MechanicBayItem[]) => {
-    setTallerBays(updatedBays);
+    const normalized = updatedBays.map(normalizeBayVehicles);
+    setTallerBays(normalized);
     try {
-      localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(updatedBays));
+      localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(normalized));
       setIsSavingTallerControl(true);
 
       // 1. Endpoint dedicado
@@ -803,7 +904,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({ bays: updatedBays })
+        body: JSON.stringify({ bays: normalized })
       });
 
       // 2. Respaldo directo en settings
@@ -813,7 +914,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({ TALLER_CONTROL_JSON: JSON.stringify(updatedBays) })
+        body: JSON.stringify({ TALLER_CONTROL_JSON: JSON.stringify(normalized) })
       });
 
       setSavedTallerSuccess(true);
@@ -833,8 +934,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       if (res.ok) {
         const data = await res.json();
         if (data.bays && Array.isArray(data.bays) && data.bays.length > 0) {
-          setTallerBays(data.bays);
-          localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(data.bays));
+          const normalized = data.bays.map(normalizeBayVehicles);
+          setTallerBays(normalized);
+          localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(normalized));
         }
       }
     } catch (e) {}
@@ -2799,7 +2901,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           )}
 
           {/* ========================================================================= */}
-          {/* MODULE: CONTROL DE TALLER (MONITOREO OPERATIVO DE BAHÍAS Y MECÁNICOS) */}
+          {/* MODULE: CONTROL DE TALLER (MONITOREO OPERATIVO MULTI-VEHÍCULO POR MECÁNICO) */}
           {/* ========================================================================= */}
           {activeTab === 'control-taller' && (
             <div className="space-y-6 animate-fade-in">
@@ -2811,7 +2913,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <span>Control de Taller</span>
                   </h1>
                   <p className="text-xs text-zinc-400 mt-1">
-                    Monitoreo operativo en tiempo real de bahías, mecánicos asignados, estados de servicio y tareas mecánicas autorizadas.
+                    Monitoreo operativo de bahías y cola de vehículos por mecánico en tiempo real.
                   </p>
                 </div>
 
@@ -2825,16 +2927,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         mecanicoEspecialidad: "Técnico Automotriz",
                         mecanicoFoto: "/assets/servicio-mecanica.jpg",
                         bahiaNumero: `Bahía #${tallerBays.length + 1}`,
-                        vehiculo: "",
-                        estado: "espera_tecnico",
-                        tareas: [],
-                        notasInternas: "",
+                        vehiculos: [
+                          {
+                            id: `veh-${Date.now()}-1`,
+                            vehiculo: "Nuevo Vehículo",
+                            estado: "espera_tecnico",
+                            posicion: "elevador",
+                            tareas: [],
+                            notasInternas: "",
+                            fechaIngreso: new Date().toISOString()
+                          }
+                        ],
                         updatedAt: new Date().toISOString()
                       };
                       const updated = [...tallerBays, newBay];
                       saveTallerControl(updated);
                       setEditingBay({ ...newBay });
                       setEditingBayIndex(updated.length - 1);
+                      setModalActiveVehIdx(0);
                       setIsBayModalOpen(true);
                     }}
                     className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
@@ -2855,33 +2965,35 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               </div>
 
-              {/* Barra de Métricas y Filtros Rápidos por Estado Operativo */}
+              {/* Barra de Métricas y Filtros Rápidos por Estado Operativo Global */}
               {(() => {
-                const countEsperaTecnico = tallerBays.filter(b => b.estado === 'espera_tecnico').length;
-                const countAprobado = tallerBays.filter(b => b.estado === 'aprobado').length;
-                const countEsperaRepuesto = tallerBays.filter(b => b.estado === 'espera_repuesto').length;
-                const countEsperaCliente = tallerBays.filter(b => b.estado === 'espera_cliente').length;
+                const allVehicles = tallerBays.flatMap(b => b.vehiculos || []);
+                const countTotalVehicles = allVehicles.length;
+                const countEsperaTecnico = allVehicles.filter(v => v.estado === 'espera_tecnico').length;
+                const countAprobado = allVehicles.filter(v => v.estado === 'aprobado').length;
+                const countEsperaRepuesto = allVehicles.filter(v => v.estado === 'espera_repuesto').length;
+                const countEsperaCliente = allVehicles.filter(v => v.estado === 'espera_cliente').length;
 
                 return (
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                     <button
                       type="button"
                       onClick={() => setBayStatusFilter('TODOS')}
-                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
                         bayStatusFilter === 'TODOS'
                           ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
                           : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-white/20'
                       }`}
                     >
-                      <span className="text-[10px] font-black uppercase tracking-wider block">Total Bahías</span>
-                      <div className="text-2xl font-black text-white mt-1">{tallerBays.length}</div>
-                      <span className="text-[10px] text-zinc-500 block truncate">Técnicos activos</span>
+                      <span className="text-[10px] font-black uppercase tracking-wider block">Total Vehículos</span>
+                      <div className="text-2xl font-black text-white mt-0.5">{countTotalVehicles}</div>
+                      <span className="text-[10px] text-zinc-500 block truncate">{tallerBays.length} bahías activas</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setBayStatusFilter('espera_tecnico')}
-                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
                         bayStatusFilter === 'espera_tecnico'
                           ? 'bg-blue-500/20 border-blue-500 text-white shadow-lg'
                           : 'bg-[#12141a] border-blue-500/30 text-blue-400 hover:border-blue-500'
@@ -2891,14 +3003,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <span className="text-[10px] font-black uppercase tracking-wider block">Espera Técnico</span>
                         <span className="w-2 h-2 rounded-full bg-blue-400"></span>
                       </div>
-                      <div className="text-2xl font-black text-white mt-1">{countEsperaTecnico}</div>
+                      <div className="text-2xl font-black text-white mt-0.5">{countEsperaTecnico}</div>
                       <span className="text-[10px] text-blue-300/70 block truncate">🔵 Por iniciar</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setBayStatusFilter('aprobado')}
-                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
                         bayStatusFilter === 'aprobado'
                           ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-lg'
                           : 'bg-[#12141a] border-emerald-500/30 text-emerald-400 hover:border-emerald-500'
@@ -2908,14 +3020,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <span className="text-[10px] font-black uppercase tracking-wider block">Aprobado</span>
                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                       </div>
-                      <div className="text-2xl font-black text-white mt-1">{countAprobado}</div>
+                      <div className="text-2xl font-black text-white mt-0.5">{countAprobado}</div>
                       <span className="text-[10px] text-emerald-300/70 block truncate">🟢 En ejecución</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setBayStatusFilter('espera_repuesto')}
-                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
                         bayStatusFilter === 'espera_repuesto'
                           ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
                           : 'bg-[#12141a] border-amber-500/30 text-amber-400 hover:border-amber-500'
@@ -2925,14 +3037,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <span className="text-[10px] font-black uppercase tracking-wider block">Espera Repuesto</span>
                         <span className="w-2 h-2 rounded-full bg-amber-400"></span>
                       </div>
-                      <div className="text-2xl font-black text-white mt-1">{countEsperaRepuesto}</div>
+                      <div className="text-2xl font-black text-white mt-0.5">{countEsperaRepuesto}</div>
                       <span className="text-[10px] text-amber-300/70 block truncate">🟡 En almacén</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setBayStatusFilter('espera_cliente')}
-                      className={`p-3.5 rounded-2xl border transition-all text-left cursor-pointer ${
+                      className={`p-3 rounded-2xl border transition-all text-left cursor-pointer ${
                         bayStatusFilter === 'espera_cliente'
                           ? 'bg-red-500/20 border-red-500 text-white shadow-lg'
                           : 'bg-[#12141a] border-red-500/30 text-red-400 hover:border-red-500'
@@ -2942,14 +3054,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <span className="text-[10px] font-black uppercase tracking-wider block">Espera Cliente</span>
                         <span className="w-2 h-2 rounded-full bg-red-400"></span>
                       </div>
-                      <div className="text-2xl font-black text-white mt-1">{countEsperaCliente}</div>
+                      <div className="text-2xl font-black text-white mt-0.5">{countEsperaCliente}</div>
                       <span className="text-[10px] text-red-300/70 block truncate">🔴 Por autorizar</span>
                     </button>
                   </div>
                 );
               })()}
 
-              {/* Barra de Búsqueda de Bahías y Mecánicos */}
+              {/* Barra de Búsqueda de Bahías, Mecánicos y Vehículos */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#12141a] p-3 rounded-2xl border border-white/10">
                 <div className="relative w-full sm:w-80">
                   <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
@@ -2972,53 +3084,53 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
 
                 <span className="text-[11px] font-mono text-zinc-400 font-bold shrink-0">
-                  Mostrando <strong>{tallerBays.filter(b => {
-                    if (bayStatusFilter !== 'TODOS' && b.estado !== bayStatusFilter) return false;
-                    if (baySearchQuery.trim()) {
-                      const q = baySearchQuery.toLowerCase();
-                      const matchMec = (b.mecanicoNombre || '').toLowerCase().includes(q);
-                      const matchVeh = (b.vehiculo || '').toLowerCase().includes(q);
-                      const matchBahia = (b.bahiaNumero || '').toLowerCase().includes(q);
-                      const matchTareas = (b.tareas || []).some(t => (t.descripcion || '').toLowerCase().includes(q));
-                      return matchMec || matchVeh || matchBahia || matchTareas;
-                    }
-                    return true;
-                  }).length}</strong> de {tallerBays.length} bahías operativas
+                  <strong>{tallerBays.length}</strong> mecánicos en línea • <strong>{tallerBays.reduce((acc, b) => acc + (b.vehiculos?.length || 0), 0)}</strong> vehículos en taller
                 </span>
               </div>
 
-              {/* Grilla de Tarjetas por Mecánico (Idéntica a la estructura visual de "Equipo & Accesos") */}
+              {/* Grilla de Tarjetas por Mecánico (Estructura Limpia y Multi-Vehículo) */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {tallerBays
                   .map((bay, originalIdx) => ({ bay, originalIdx }))
                   .filter(({ bay }) => {
-                    if (bayStatusFilter !== 'TODOS' && bay.estado !== bayStatusFilter) return false;
+                    const vehiclesList = bay.vehiculos || [];
+                    if (bayStatusFilter !== 'TODOS') {
+                      const hasVehicleWithStatus = vehiclesList.some(v => v.estado === bayStatusFilter);
+                      if (!hasVehicleWithStatus) return false;
+                    }
                     if (baySearchQuery.trim()) {
                       const q = baySearchQuery.toLowerCase();
                       const matchMec = (bay.mecanicoNombre || '').toLowerCase().includes(q);
-                      const matchVeh = (bay.vehiculo || '').toLowerCase().includes(q);
                       const matchBahia = (bay.bahiaNumero || '').toLowerCase().includes(q);
-                      const matchTareas = (bay.tareas || []).some(t => (t.descripcion || '').toLowerCase().includes(q));
-                      return matchMec || matchVeh || matchBahia || matchTareas;
+                      const matchVeh = vehiclesList.some(v => 
+                        (v.vehiculo || '').toLowerCase().includes(q) ||
+                        (v.tareas || []).some(t => (t.descripcion || '').toLowerCase().includes(q))
+                      );
+                      return matchMec || matchBahia || matchVeh;
                     }
                     return true;
                   })
                   .map(({ bay, originalIdx }) => {
-                    const statusCfg = TALLER_STATUS_CONFIG[bay.estado] || TALLER_STATUS_CONFIG.espera_tecnico;
-                    const completedTasksCount = (bay.tareas || []).filter(t => t.completada).length;
-                    const totalTasksCount = (bay.tareas || []).length;
-                    const quickInputVal = quickTaskInputs[bay.id] || '';
+                    const vehiclesList = bay.vehiculos || [];
+                    const currentSelectedIdx = Math.min(selectedVehiclesMap[bay.id] || 0, Math.max(0, vehiclesList.length - 1));
+                    const activeVehicle = vehiclesList[currentSelectedIdx] || null;
+                    const statusCfg = activeVehicle ? (TALLER_STATUS_CONFIG[activeVehicle.estado] || TALLER_STATUS_CONFIG.espera_tecnico) : TALLER_STATUS_CONFIG.espera_tecnico;
+                    
+                    const completedTasksCount = activeVehicle ? (activeVehicle.tareas || []).filter(t => t.completada).length : 0;
+                    const totalTasksCount = activeVehicle ? (activeVehicle.tareas || []).length : 0;
+                    const quickInputKey = `${bay.id}-${activeVehicle?.id || 'default'}`;
+                    const quickInputVal = quickTaskInputs[quickInputKey] || '';
 
                     return (
                       <div
                         key={bay.id || originalIdx}
                         className={`bg-[#12141a] p-5 rounded-2xl border ${statusCfg.borderCardClass} space-y-4 flex flex-col justify-between transition-all shadow-xl hover:shadow-2xl relative group`}
                       >
-                        <div className="space-y-4">
-                          {/* Header de la Tarjeta: Foto + Mecánico + Especialidad + Bahía */}
-                          <div className="flex items-start justify-between gap-3 border-b border-white/5 pb-3.5">
+                        <div className="space-y-3.5">
+                          {/* 1. ENCABEZADO DE LA TARJETA: Mecánico + Especialidad + Bahía */}
+                          <div className="flex items-start justify-between gap-3 border-b border-white/5 pb-3">
                             <div className="flex items-center gap-3 min-w-0">
-                              <div className="w-12 h-12 rounded-xl overflow-hidden bg-black/50 border border-white/10 shrink-0 relative">
+                              <div className="w-11 h-11 rounded-xl overflow-hidden bg-black/50 border border-white/10 shrink-0 relative">
                                 <img
                                   src={bay.mecanicoFoto || "/assets/servicio-mecanica.jpg"}
                                   alt={bay.mecanicoNombre}
@@ -3028,7 +3140,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   }}
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center text-zinc-500 font-bold text-sm bg-black/40 -z-10">
-                                  <User size={20} />
+                                  <User size={18} />
                                 </div>
                               </div>
 
@@ -3045,228 +3157,382 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               </div>
                             </div>
 
-                            {/* Acciones de Tarjeta (Eliminar si hay más de 1) */}
-                            {tallerBays.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (!window.confirm(`¿Deseas eliminar la ficha de bahía de ${bay.mecanicoNombre}?`)) return;
-                                  const updated = tallerBays.filter((_, i) => i !== originalIdx);
-                                  saveTallerControl(updated);
-                                }}
-                                className="text-zinc-600 hover:text-red-400 p-1.5 rounded-lg bg-white/5 hover:bg-red-500/10 transition-colors cursor-pointer"
-                                title="Eliminar Bahía"
-                              >
-                                <Trash2 size={13} />
-                              </button>
-                            )}
-                          </div>
-
-                          {/* Vehículo Asignado */}
-                          <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
-                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-zinc-400">
-                              <span className="flex items-center gap-1.5">
-                                <Car size={13} className="text-primary" />
-                                <span>Vehículo Asignado</span>
+                            {/* Badge de Cantidad de Carros en Cola */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <span className="font-mono text-[10px] font-black text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-lg">
+                                {vehiclesList.length} {vehiclesList.length === 1 ? 'Carro' : 'Carros'}
                               </span>
-                              {bay.vehiculo && (
-                                <span className="font-mono text-[9px] text-zinc-500">En bahía</span>
-                              )}
-                            </div>
 
-                            <div className="text-sm font-black text-white truncate">
-                              {bay.vehiculo ? (
-                                <span className="text-white font-bold">{bay.vehiculo}</span>
-                              ) : (
-                                <span className="text-zinc-500 italic text-xs font-normal">Sin vehículo asignado (Bahía disponible)</span>
+                              {tallerBays.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (!window.confirm(`¿Deseas eliminar la bahía de ${bay.mecanicoNombre}?`)) return;
+                                    const updated = tallerBays.filter((_, i) => i !== originalIdx);
+                                    saveTallerControl(updated);
+                                  }}
+                                  className="text-zinc-600 hover:text-red-400 p-1 rounded-lg hover:bg-red-500/10 transition-colors cursor-pointer"
+                                  title="Eliminar Bahía"
+                                >
+                                  <Trash2 size={12} />
+                                </button>
                               )}
                             </div>
                           </div>
 
-                          {/* Estado Operativo (4 Estados Exactos con Selector Rápido) */}
+                          {/* 2. SELECTOR DE VEHÍCULOS / MINI PESTAÑAS (MULTI-VEHÍCULO) */}
                           <div className="space-y-1.5">
-                            <label className="text-[10px] font-black uppercase tracking-wider text-zinc-400 block">
-                              Estado Operativo
-                            </label>
-
-                            <div className="relative">
-                              <select
-                                value={bay.estado}
-                                onChange={(e) => {
-                                  const newSt = e.target.value as TallerStatus;
-                                  const updated = [...tallerBays];
-                                  updated[originalIdx] = {
-                                    ...updated[originalIdx],
-                                    estado: newSt,
-                                    updatedAt: new Date().toISOString()
-                                  };
-                                  saveTallerControl(updated);
-                                }}
-                                className={`w-full font-bold text-xs rounded-xl p-2.5 outline-none cursor-pointer border transition-all ${statusCfg.badgeClass}`}
-                              >
-                                <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">
-                                  🔵 En espera de técnico
-                                </option>
-                                <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">
-                                  🟢 Aprobado
-                                </option>
-                                <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">
-                                  🟡 En espera de repuesto
-                                </option>
-                                <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">
-                                  🔴 En espera de respuesta del cliente
-                                </option>
-                              </select>
-                            </div>
-                          </div>
-
-                          {/* Lista de Trabajos / Tareas Mecánicas Autorizadas (SIN PRECIOS) */}
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                                <CheckCircle2 size={12} className="text-primary" />
-                                <span>Trabajos Autorizados ({completedTasksCount}/{totalTasksCount})</span>
+                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-zinc-400">
+                              <span>Vehículos en Cola / Asignados</span>
+                              <span className="text-[9px] font-mono text-zinc-500">
+                                {vehiclesList.length > 0 ? `Seleccionado ${currentSelectedIdx + 1}/${vehiclesList.length}` : '0 carros'}
                               </span>
-                              {totalTasksCount > 0 && (
-                                <span className="font-mono text-[9px] font-bold text-amber-400">
-                                  {Math.round((completedTasksCount / totalTasksCount) * 100)}%
-                                </span>
-                              )}
                             </div>
 
-                            {/* Checklist de Tareas */}
-                            <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
-                              {(bay.tareas || []).length === 0 ? (
-                                <div className="p-3 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
-                                  Sin tareas asignadas aún.
-                                </div>
-                              ) : (
-                                bay.tareas.map((task, tIdx) => (
-                                  <div
-                                    key={task.id || tIdx}
-                                    className={`p-2 rounded-xl border text-xs flex items-start justify-between gap-2 transition-all ${
-                                      task.completada
-                                        ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400 line-through'
-                                        : 'bg-black/40 border-white/10 text-white'
-                                    }`}
-                                  >
-                                    <label className="flex items-start gap-2.5 flex-1 cursor-pointer min-w-0">
-                                      <input
-                                        type="checkbox"
-                                        checked={task.completada}
-                                        onChange={() => {
-                                          const updated = [...tallerBays];
-                                          const bayTasks = [...updated[originalIdx].tareas];
-                                          bayTasks[tIdx] = {
-                                            ...bayTasks[tIdx],
-                                            completada: !bayTasks[tIdx].completada
-                                          };
-                                          updated[originalIdx] = {
-                                            ...updated[originalIdx],
-                                            tareas: bayTasks,
-                                            updatedAt: new Date().toISOString()
-                                          };
-                                          saveTallerControl(updated);
-                                        }}
-                                        className="mt-0.5 w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
-                                      />
-                                      <span className="text-[11px] leading-snug font-medium break-words">
-                                        {task.descripcion}
-                                      </span>
-                                    </label>
+                            {vehiclesList.length > 0 ? (
+                              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                                {vehiclesList.map((v, vIdx) => {
+                                  const isSelected = vIdx === currentSelectedIdx;
+                                  const vCfg = TALLER_STATUS_CONFIG[v.estado] || TALLER_STATUS_CONFIG.espera_tecnico;
+                                  const shortModel = v.vehiculo ? v.vehiculo.split(' - ')[0] : `Vehículo ${vIdx + 1}`;
 
+                                  return (
                                     <button
+                                      key={v.id || vIdx}
                                       type="button"
-                                      onClick={() => {
-                                        const updated = [...tallerBays];
-                                        const bayTasks = updated[originalIdx].tareas.filter((_, i) => i !== tIdx);
-                                        updated[originalIdx] = {
-                                          ...updated[originalIdx],
-                                          tareas: bayTasks,
-                                          updatedAt: new Date().toISOString()
-                                        };
-                                        saveTallerControl(updated);
-                                      }}
-                                      className="text-zinc-500 hover:text-red-400 p-0.5 shrink-0 transition-colors cursor-pointer"
-                                      title="Eliminar Tarea"
+                                      onClick={() => setSelectedVehiclesMap({ ...selectedVehiclesMap, [bay.id]: vIdx })}
+                                      className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer border ${
+                                        isSelected
+                                          ? 'bg-amber-500/20 text-white border-amber-500/60 shadow-md ring-1 ring-amber-400/30'
+                                          : 'bg-black/40 text-zinc-400 hover:text-white border-white/10 hover:border-white/20'
+                                      }`}
                                     >
-                                      <X size={12} />
+                                      <span className={`w-2 h-2 rounded-full ${vCfg.dotClass}`}></span>
+                                      <span className="truncate max-w-[110px]">{shortModel}</span>
+                                      {v.posicion === 'elevador' && (
+                                        <span className="text-[8px] bg-amber-500/30 text-amber-300 px-1 py-0.2 rounded font-mono uppercase">
+                                          Elevador
+                                        </span>
+                                      )}
                                     </button>
-                                  </div>
-                                ))
-                              )}
-                            </div>
+                                  );
+                                })}
 
-                            {/* Input Rápido para Añadir Trabajo Aprobado */}
-                            <div className="flex items-center gap-1.5 pt-1">
-                              <input
-                                type="text"
-                                value={quickInputVal}
-                                onChange={(e) => setQuickTaskInputs({ ...quickTaskInputs, [bay.id]: e.target.value })}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter' && quickInputVal.trim()) {
-                                    e.preventDefault();
-                                    const newTask: MechanicWorkTask = {
-                                      id: `task-${Date.now()}`,
-                                      descripcion: quickInputVal.trim(),
-                                      completada: false
+                                {/* Botón rápido para añadir vehículo a la cola */}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newVeh: MechanicAssignedVehicle = {
+                                      id: `veh-${Date.now()}`,
+                                      vehiculo: "Nuevo Vehículo en Cola",
+                                      estado: "espera_tecnico",
+                                      posicion: vehiclesList.length === 0 ? "elevador" : "cola",
+                                      tareas: [],
+                                      notasInternas: "",
+                                      fechaIngreso: new Date().toISOString()
+                                    };
+                                    const updated = [...tallerBays];
+                                    const updatedVehs = [...(updated[originalIdx].vehiculos || []), newVeh];
+                                    updated[originalIdx] = {
+                                      ...updated[originalIdx],
+                                      vehiculos: updatedVehs,
+                                      updatedAt: new Date().toISOString()
+                                    };
+                                    saveTallerControl(updated);
+                                    setSelectedVehiclesMap({ ...selectedVehiclesMap, [bay.id]: updatedVehs.length - 1 });
+                                  }}
+                                  className="p-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-400 hover:text-white rounded-xl transition-all shrink-0 cursor-pointer"
+                                  title="Añadir otro vehículo a la cola"
+                                >
+                                  <Plus size={13} />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="p-3 bg-black/20 border border-dashed border-white/10 rounded-xl text-center">
+                                <span className="text-zinc-500 text-xs italic block mb-2">Sin vehículos en bahía</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newVeh: MechanicAssignedVehicle = {
+                                      id: `veh-${Date.now()}`,
+                                      vehiculo: "Nuevo Vehículo",
+                                      estado: "espera_tecnico",
+                                      posicion: "elevador",
+                                      tareas: [],
+                                      notasInternas: "",
+                                      fechaIngreso: new Date().toISOString()
                                     };
                                     const updated = [...tallerBays];
                                     updated[originalIdx] = {
                                       ...updated[originalIdx],
-                                      tareas: [...(updated[originalIdx].tareas || []), newTask],
+                                      vehiculos: [newVeh],
                                       updatedAt: new Date().toISOString()
                                     };
                                     saveTallerControl(updated);
-                                    setQuickTaskInputs({ ...quickTaskInputs, [bay.id]: '' });
-                                  }
-                                }}
-                                placeholder="+ Añadir trabajo aprobado..."
-                                className="w-full bg-black/40 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
-                              />
-                              <button
-                                type="button"
-                                disabled={!quickInputVal.trim()}
-                                onClick={() => {
-                                  if (!quickInputVal.trim()) return;
-                                  const newTask: MechanicWorkTask = {
-                                    id: `task-${Date.now()}`,
-                                    descripcion: quickInputVal.trim(),
-                                    completada: false
-                                  };
-                                  const updated = [...tallerBays];
-                                  updated[originalIdx] = {
-                                    ...updated[originalIdx],
-                                    tareas: [...(updated[originalIdx].tareas || []), newTask],
-                                    updatedAt: new Date().toISOString()
-                                  };
-                                  saveTallerControl(updated);
-                                  setQuickTaskInputs({ ...quickTaskInputs, [bay.id]: '' });
-                                }}
-                                className="p-1.5 bg-primary/20 hover:bg-primary text-primary hover:text-black rounded-xl transition-all disabled:opacity-30 cursor-pointer shrink-0"
-                                title="Añadir Trabajo"
-                              >
-                                <Plus size={14} />
-                              </button>
-                            </div>
+                                    setSelectedVehiclesMap({ ...selectedVehiclesMap, [bay.id]: 0 });
+                                  }}
+                                  className="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold cursor-pointer"
+                                >
+                                  + Asignar Vehículo
+                                </button>
+                              </div>
+                            )}
                           </div>
 
-                          {/* Notas Internas (si existen) */}
-                          {bay.notasInternas && (
-                            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-[11px] text-zinc-300 leading-relaxed flex items-start gap-2">
-                              <FileText size={12} className="text-amber-400 shrink-0 mt-0.5" />
-                              <span className="italic">{bay.notasInternas}</span>
+                          {/* 3. DETALLE COMPACTO DEL VEHÍCULO ACTIVO */}
+                          {activeVehicle && (
+                            <div className="space-y-3 pt-1">
+                              {/* Tarjeta de Vehículo y Posición */}
+                              <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
+                                <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-zinc-400">
+                                  <span className="flex items-center gap-1.5">
+                                    <Car size={13} className="text-primary" />
+                                    <span>Vehículo Activo</span>
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updated = [...tallerBays];
+                                        const bayVehs = [...updated[originalIdx].vehiculos];
+                                        const nextPos = bayVehs[currentSelectedIdx].posicion === 'elevador' ? 'cola' : 'elevador';
+                                        bayVehs[currentSelectedIdx] = {
+                                          ...bayVehs[currentSelectedIdx],
+                                          posicion: nextPos
+                                        };
+                                        updated[originalIdx] = {
+                                          ...updated[originalIdx],
+                                          vehiculos: bayVehs,
+                                          updatedAt: new Date().toISOString()
+                                        };
+                                        saveTallerControl(updated);
+                                      }}
+                                      className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase transition-colors cursor-pointer ${
+                                        activeVehicle.posicion === 'elevador'
+                                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                          : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                                      }`}
+                                      title="Clic para cambiar entre Elevador y Cola"
+                                    >
+                                      {activeVehicle.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className="text-sm font-black text-white truncate">
+                                  {activeVehicle.vehiculo || "Vehículo sin identificar"}
+                                </div>
+                              </div>
+
+                              {/* Selector de Estado Operativo (4 Estados Exactos) */}
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-black uppercase tracking-wider text-zinc-400 block">
+                                  Estado Operativo
+                                </label>
+
+                                <select
+                                  value={activeVehicle.estado}
+                                  onChange={(e) => {
+                                    const newSt = e.target.value as TallerStatus;
+                                    const updated = [...tallerBays];
+                                    const bayVehs = [...updated[originalIdx].vehiculos];
+                                    bayVehs[currentSelectedIdx] = {
+                                      ...bayVehs[currentSelectedIdx],
+                                      estado: newSt
+                                    };
+                                    updated[originalIdx] = {
+                                      ...updated[originalIdx],
+                                      vehiculos: bayVehs,
+                                      updatedAt: new Date().toISOString()
+                                    };
+                                    saveTallerControl(updated);
+                                  }}
+                                  className={`w-full font-bold text-xs rounded-xl p-2.5 outline-none cursor-pointer border transition-all ${statusCfg.badgeClass}`}
+                                >
+                                  <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">
+                                    🔵 En espera de técnico
+                                  </option>
+                                  <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">
+                                    🟢 Aprobado
+                                  </option>
+                                  <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">
+                                    🟡 En espera de repuesto
+                                  </option>
+                                  <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">
+                                    🔴 En espera de respuesta del cliente
+                                  </option>
+                                </select>
+                              </div>
+
+                              {/* Checklist de Trabajos Autorizados (SIN PRECIOS) */}
+                              <div className="space-y-1.5">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+                                    <CheckCircle2 size={12} className="text-primary" />
+                                    <span>Trabajos Autorizados ({completedTasksCount}/{totalTasksCount})</span>
+                                  </span>
+                                  {totalTasksCount > 0 && (
+                                    <span className="font-mono text-[9px] font-bold text-amber-400">
+                                      {Math.round((completedTasksCount / totalTasksCount) * 100)}%
+                                    </span>
+                                  )}
+                                </div>
+
+                                <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1 scrollbar-thin">
+                                  {(activeVehicle.tareas || []).length === 0 ? (
+                                    <div className="p-2.5 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
+                                      Sin tareas asignadas a este vehículo.
+                                    </div>
+                                  ) : (
+                                    activeVehicle.tareas.map((task, tIdx) => (
+                                      <div
+                                        key={task.id || tIdx}
+                                        className={`p-2 rounded-xl border text-xs flex items-start justify-between gap-2 transition-all ${
+                                          task.completada
+                                            ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400 line-through'
+                                            : 'bg-black/40 border-white/10 text-white'
+                                        }`}
+                                      >
+                                        <label className="flex items-start gap-2 flex-1 cursor-pointer min-w-0">
+                                          <input
+                                            type="checkbox"
+                                            checked={task.completada}
+                                            onChange={() => {
+                                              const updated = [...tallerBays];
+                                              const bayVehs = [...updated[originalIdx].vehiculos];
+                                              const vehTasks = [...bayVehs[currentSelectedIdx].tareas];
+                                              vehTasks[tIdx] = {
+                                                ...vehTasks[tIdx],
+                                                completada: !vehTasks[tIdx].completada
+                                              };
+                                              bayVehs[currentSelectedIdx] = {
+                                                ...bayVehs[currentSelectedIdx],
+                                                tareas: vehTasks
+                                              };
+                                              updated[originalIdx] = {
+                                                ...updated[originalIdx],
+                                                vehiculos: bayVehs,
+                                                updatedAt: new Date().toISOString()
+                                              };
+                                              saveTallerControl(updated);
+                                            }}
+                                            className="mt-0.5 w-3.5 h-3.5 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
+                                          />
+                                          <span className="text-[11px] leading-snug font-medium break-words">
+                                            {task.descripcion}
+                                          </span>
+                                        </label>
+
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const updated = [...tallerBays];
+                                            const bayVehs = [...updated[originalIdx].vehiculos];
+                                            const vehTasks = bayVehs[currentSelectedIdx].tareas.filter((_, i) => i !== tIdx);
+                                            bayVehs[currentSelectedIdx] = {
+                                              ...bayVehs[currentSelectedIdx],
+                                              tareas: vehTasks
+                                            };
+                                            updated[originalIdx] = {
+                                              ...updated[originalIdx],
+                                              vehiculos: bayVehs,
+                                              updatedAt: new Date().toISOString()
+                                            };
+                                            saveTallerControl(updated);
+                                          }}
+                                          className="text-zinc-500 hover:text-red-400 p-0.5 shrink-0 transition-colors cursor-pointer"
+                                          title="Eliminar Tarea"
+                                        >
+                                          <X size={11} />
+                                        </button>
+                                      </div>
+                                    ))
+                                  )}
+                                </div>
+
+                                {/* Input Rápido para Añadir Trabajo Aprobado */}
+                                <div className="flex items-center gap-1.5 pt-0.5">
+                                  <input
+                                    type="text"
+                                    value={quickInputVal}
+                                    onChange={(e) => setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: e.target.value })}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter' && quickInputVal.trim()) {
+                                        e.preventDefault();
+                                        const newTask: MechanicWorkTask = {
+                                          id: `task-${Date.now()}`,
+                                          descripcion: quickInputVal.trim(),
+                                          completada: false
+                                        };
+                                        const updated = [...tallerBays];
+                                        const bayVehs = [...updated[originalIdx].vehiculos];
+                                        bayVehs[currentSelectedIdx] = {
+                                          ...bayVehs[currentSelectedIdx],
+                                          tareas: [...(bayVehs[currentSelectedIdx].tareas || []), newTask]
+                                        };
+                                        updated[originalIdx] = {
+                                          ...updated[originalIdx],
+                                          vehiculos: bayVehs,
+                                          updatedAt: new Date().toISOString()
+                                        };
+                                        saveTallerControl(updated);
+                                        setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: '' });
+                                      }
+                                    }}
+                                    placeholder="+ Añadir trabajo aprobado..."
+                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
+                                  />
+                                  <button
+                                    type="button"
+                                    disabled={!quickInputVal.trim()}
+                                    onClick={() => {
+                                      if (!quickInputVal.trim()) return;
+                                      const newTask: MechanicWorkTask = {
+                                        id: `task-${Date.now()}`,
+                                        descripcion: quickInputVal.trim(),
+                                        completada: false
+                                      };
+                                      const updated = [...tallerBays];
+                                      const bayVehs = [...updated[originalIdx].vehiculos];
+                                      bayVehs[currentSelectedIdx] = {
+                                        ...bayVehs[currentSelectedIdx],
+                                        tareas: [...(bayVehs[currentSelectedIdx].tareas || []), newTask]
+                                      };
+                                      updated[originalIdx] = {
+                                        ...updated[originalIdx],
+                                        vehiculos: bayVehs,
+                                        updatedAt: new Date().toISOString()
+                                      };
+                                      saveTallerControl(updated);
+                                      setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: '' });
+                                    }}
+                                    className="p-1.5 bg-primary/20 hover:bg-primary text-primary hover:text-black rounded-xl transition-all disabled:opacity-30 cursor-pointer shrink-0"
+                                    title="Añadir Trabajo"
+                                  >
+                                    <Plus size={13} />
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Notas Rápidas del Asesor */}
+                              {activeVehicle.notasInternas && (
+                                <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-[11px] text-zinc-300 leading-relaxed flex items-start gap-2">
+                                  <FileText size={12} className="text-amber-400 shrink-0 mt-0.5" />
+                                  <span className="italic truncate">{activeVehicle.notasInternas}</span>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
 
-                        {/* Botones de Acción Inferiores de la Tarjeta */}
+                        {/* 4. ACCIONES INFERIORES DE LA TARJETA */}
                         <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
                           <button
                             type="button"
                             onClick={() => {
-                              setEditingBay({ ...bay, tareas: [...(bay.tareas || [])] });
+                              setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
                               setEditingBayIndex(originalIdx);
+                              setModalActiveVehIdx(currentSelectedIdx);
                               setIsBayModalOpen(true);
                             }}
                             className="flex-1 py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
@@ -3275,24 +3541,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             <span>Editar Bahía / Tareas</span>
                           </button>
 
-                          {bay.vehiculo && (
+                          {activeVehicle && (
                             <button
                               type="button"
                               onClick={() => {
-                                if (!window.confirm(`¿Liberar la bahía de ${bay.mecanicoNombre}? Se desasignará el vehículo.`)) return;
+                                if (!window.confirm(`¿Liberar y desasignar "${activeVehicle.vehiculo}" de ${bay.mecanicoNombre}?`)) return;
                                 const updated = [...tallerBays];
+                                const bayVehs = updated[originalIdx].vehiculos.filter((_, i) => i !== currentSelectedIdx);
                                 updated[originalIdx] = {
                                   ...updated[originalIdx],
-                                  vehiculo: '',
-                                  estado: 'espera_tecnico',
-                                  tareas: [],
-                                  notasInternas: '',
+                                  vehiculos: bayVehs,
                                   updatedAt: new Date().toISOString()
                                 };
                                 saveTallerControl(updated);
+                                setSelectedVehiclesMap({ ...selectedVehiclesMap, [bay.id]: 0 });
                               }}
                               className="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-300 border border-white/10 transition-all cursor-pointer"
-                              title="Liberar Bahía"
+                              title="Liberar este vehículo"
                             >
                               <LogOut size={13} />
                             </button>
@@ -3303,7 +3568,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   })}
               </div>
 
-              {/* MODAL DE EDICIÓN RÁPIDA DE BAHÍA / MECÁNICO (PARA ASESORES DE LOGÍSTICA) */}
+              {/* MODAL DE EDICIÓN RÁPIDA DE BAHÍA Y VEHÍCULOS (MULTI-VEHÍCULO) */}
               {isBayModalOpen && editingBay && editingBayIndex !== null && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
                   <div className="bg-[#12141a] border border-white/20 rounded-3xl p-6 max-w-xl w-full space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl relative">
@@ -3311,7 +3576,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <div className="flex items-center gap-2">
                         <Wrench size={18} className="text-primary" />
                         <h3 className="font-display font-black text-lg text-white uppercase tracking-wider">
-                          Editar Bahía & Asignación
+                          Editar Bahía & Cola de Vehículos
                         </h3>
                       </div>
                       <button
@@ -3344,7 +3609,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       }}
                       className="space-y-4 text-xs"
                     >
-                      {/* Mecánico y Especialidad */}
+                      {/* 1. Datos del Técnico */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
@@ -3375,7 +3640,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
                       </div>
 
-                      {/* Bahía y Foto */}
+                      {/* 2. Bahía y Foto */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
@@ -3404,143 +3669,268 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
                       </div>
 
-                      {/* Vehículo Asignado */}
+                      {/* 3. Selector de Vehículo en Modal */}
                       <div className="space-y-2 p-3 bg-black/30 rounded-2xl border border-white/10">
                         <div className="flex items-center justify-between">
                           <label className="text-[10px] font-black uppercase text-primary block">
-                            Vehículo Asignado
-                          </label>
-                          <span className="text-[10px] text-zinc-400">Marca, Modelo, Año y Placa</span>
-                        </div>
-
-                        {/* Selector Rápido de Citas Activas en el Calendario */}
-                        {leads.length > 0 && (
-                          <div>
-                            <span className="text-[10px] text-zinc-400 block mb-1">
-                              O selecciona un vehículo de las citas del calendario:
-                            </span>
-                            <select
-                              onChange={(e) => {
-                                if (e.target.value) {
-                                  setEditingBay({ ...editingBay, vehiculo: e.target.value });
-                                }
-                              }}
-                              className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none text-xs cursor-pointer font-bold mb-2"
-                              defaultValue=""
-                            >
-                              <option value="" disabled>── Seleccionar de citas agendadas ──</option>
-                              {leads.slice(0, 25).map(l => (
-                                <option key={l.id} value={`${l.vehiculo || 'Vehículo'} (${l.nombre || 'Cliente'})`}>
-                                  {l.vehiculo || 'Vehículo'} - {l.nombre} ({l.servicio || 'Servicio'})
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        )}
-
-                        <input
-                          type="text"
-                          value={editingBay.vehiculo || ''}
-                          onChange={(e) => setEditingBay({ ...editingBay, vehiculo: e.target.value })}
-                          className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
-                          placeholder="Ej. Toyota 4Runner 2025 - ABC12D"
-                        />
-                      </div>
-
-                      {/* Estado Operativo (4 Estados Exactos) */}
-                      <div>
-                        <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                          Estado Operativo *
-                        </label>
-                        <select
-                          value={editingBay.estado}
-                          onChange={(e) => setEditingBay({ ...editingBay, estado: e.target.value as TallerStatus })}
-                          className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
-                        >
-                          <option value="espera_tecnico">🔵 En espera de técnico</option>
-                          <option value="aprobado">🟢 Aprobado</option>
-                          <option value="espera_repuesto">🟡 En espera de repuesto</option>
-                          <option value="espera_cliente">🔴 En espera de respuesta del cliente</option>
-                        </select>
-                      </div>
-
-                      {/* Lista de Trabajos Mecánicos Autorizados (Sin precios) */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[10px] font-black uppercase text-zinc-400 block">
-                            Lista de Trabajos / Tareas Mecánicas Autorizadas (SIN PRECIOS)
+                            Gestionar Vehículos Asignados ({editingBay.vehiculos?.length || 0})
                           </label>
                           <button
                             type="button"
                             onClick={() => {
-                              const newTask: MechanicWorkTask = {
-                                id: `task-${Date.now()}`,
-                                descripcion: "Nuevo trabajo autorizado...",
-                                completada: false
+                              const newVeh: MechanicAssignedVehicle = {
+                                id: `veh-${Date.now()}`,
+                                vehiculo: "Nuevo Vehículo en Cola",
+                                estado: "espera_tecnico",
+                                posicion: "cola",
+                                tareas: [],
+                                notasInternas: "",
+                                fechaIngreso: new Date().toISOString()
                               };
-                              setEditingBay({
-                                ...editingBay,
-                                tareas: [...(editingBay.tareas || []), newTask]
-                              });
+                              const updatedVehs = [...(editingBay.vehiculos || []), newVeh];
+                              setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                              setModalActiveVehIdx(updatedVehs.length - 1);
                             }}
-                            className="px-2 py-1 bg-white/5 hover:bg-white/10 text-primary border border-white/10 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                            className="px-2 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer"
                           >
-                            <Plus size={12} />
-                            <span>Añadir Tarea</span>
+                            <Plus size={11} />
+                            <span>Añadir Vehículo</span>
                           </button>
                         </div>
 
-                        <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                          {(editingBay.tareas || []).map((t, idx) => (
-                            <div key={t.id || idx} className="flex items-center gap-2">
-                              <input
-                                type="checkbox"
-                                checked={t.completada}
-                                onChange={() => {
-                                  const updatedTasks = [...editingBay.tareas];
-                                  updatedTasks[idx].completada = !updatedTasks[idx].completada;
-                                  setEditingBay({ ...editingBay, tareas: updatedTasks });
+                        {/* Pestañas de Selección de Vehículo en Modal */}
+                        {(editingBay.vehiculos || []).length > 0 && (
+                          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+                            {editingBay.vehiculos.map((v, idx) => (
+                              <button
+                                key={v.id || idx}
+                                type="button"
+                                onClick={() => setModalActiveVehIdx(idx)}
+                                className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shrink-0 ${
+                                  modalActiveVehIdx === idx
+                                    ? 'bg-primary text-black font-black shadow'
+                                    : 'bg-black/50 text-zinc-400 hover:text-white border border-white/10'
+                                }`}
+                              >
+                                <span>{v.vehiculo ? v.vehiculo.split(' - ')[0] : `Vehículo #${idx + 1}`}</span>
+                                <span className="text-[9px] opacity-70">({v.posicion === 'elevador' ? 'Elevador' : 'Cola'})</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Formulario del Vehículo Seleccionado */}
+                        {editingBay.vehiculos && editingBay.vehiculos[modalActiveVehIdx] && (
+                          <div className="space-y-3 pt-2 border-t border-white/5">
+                            {/* Selector Rápido de Citas de Calendario */}
+                            {leads.length > 0 && (
+                              <div>
+                                <span className="text-[10px] text-zinc-400 block mb-1">
+                                  Asignar desde citas agendadas:
+                                </span>
+                                <select
+                                  onChange={(e) => {
+                                    if (e.target.value) {
+                                      const updatedVehs = [...editingBay.vehiculos];
+                                      updatedVehs[modalActiveVehIdx] = {
+                                        ...updatedVehs[modalActiveVehIdx],
+                                        vehiculo: e.target.value
+                                      };
+                                      setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                    }
+                                  }}
+                                  className="w-full bg-black/60 border border-white/10 rounded-xl p-2 text-white outline-none text-xs cursor-pointer font-bold mb-1"
+                                  defaultValue=""
+                                >
+                                  <option value="" disabled>── Seleccionar de citas agendadas ──</option>
+                                  {leads.slice(0, 25).map(l => (
+                                    <option key={l.id} value={`${l.vehiculo || 'Vehículo'} (${l.nombre || 'Cliente'})`}>
+                                      {l.vehiculo || 'Vehículo'} - {l.nombre} ({l.servicio || 'Servicio'})
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div className="sm:col-span-2">
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                  Vehículo & Placa
+                                </label>
+                                <input
+                                  type="text"
+                                  value={editingBay.vehiculos[modalActiveVehIdx].vehiculo || ''}
+                                  onChange={(e) => {
+                                    const updatedVehs = [...editingBay.vehiculos];
+                                    updatedVehs[modalActiveVehIdx] = {
+                                      ...updatedVehs[modalActiveVehIdx],
+                                      vehiculo: e.target.value
+                                    };
+                                    setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                  }}
+                                  className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none"
+                                  placeholder="Ej. Toyota 4Runner 2025 - ABC12D"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                  Posición
+                                </label>
+                                <select
+                                  value={editingBay.vehiculos[modalActiveVehIdx].posicion || 'cola'}
+                                  onChange={(e) => {
+                                    const updatedVehs = [...editingBay.vehiculos];
+                                    updatedVehs[modalActiveVehIdx] = {
+                                      ...updatedVehs[modalActiveVehIdx],
+                                      posicion: e.target.value as 'elevador' | 'cola'
+                                    };
+                                    setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                  }}
+                                  className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                                >
+                                  <option value="elevador">En Elevador (Principal)</option>
+                                  <option value="cola">En Cola / Espera</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            {/* Estado Operativo del Vehículo */}
+                            <div>
+                              <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                Estado Operativo *
+                              </label>
+                              <select
+                                value={editingBay.vehiculos[modalActiveVehIdx].estado}
+                                onChange={(e) => {
+                                  const updatedVehs = [...editingBay.vehiculos];
+                                  updatedVehs[modalActiveVehIdx] = {
+                                    ...updatedVehs[modalActiveVehIdx],
+                                    estado: e.target.value as TallerStatus
+                                  };
+                                  setEditingBay({ ...editingBay, vehiculos: updatedVehs });
                                 }}
-                                className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 cursor-pointer shrink-0"
-                              />
+                                className="w-full bg-black/50 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white font-bold outline-none cursor-pointer"
+                              >
+                                <option value="espera_tecnico">🔵 En espera de técnico</option>
+                                <option value="aprobado">🟢 Aprobado</option>
+                                <option value="espera_repuesto">🟡 En espera de repuesto</option>
+                                <option value="espera_cliente">🔴 En espera de respuesta del cliente</option>
+                              </select>
+                            </div>
+
+                            {/* Tareas del Vehículo Seleccionado */}
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <label className="text-[10px] font-black uppercase text-zinc-400 block">
+                                  Tareas / Trabajos Autorizados (SIN PRECIOS)
+                                </label>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const newTask: MechanicWorkTask = {
+                                      id: `task-${Date.now()}`,
+                                      descripcion: "Nuevo trabajo autorizado...",
+                                      completada: false
+                                    };
+                                    const updatedVehs = [...editingBay.vehiculos];
+                                    updatedVehs[modalActiveVehIdx] = {
+                                      ...updatedVehs[modalActiveVehIdx],
+                                      tareas: [...(updatedVehs[modalActiveVehIdx].tareas || []), newTask]
+                                    };
+                                    setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                  }}
+                                  className="px-2 py-1 bg-white/5 hover:bg-white/10 text-primary border border-white/10 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus size={11} />
+                                  <span>Añadir Tarea</span>
+                                </button>
+                              </div>
+
+                              <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                                {(editingBay.vehiculos[modalActiveVehIdx].tareas || []).map((t, idx) => (
+                                  <div key={t.id || idx} className="flex items-center gap-2">
+                                    <input
+                                      type="checkbox"
+                                      checked={t.completada}
+                                      onChange={() => {
+                                        const updatedVehs = [...editingBay.vehiculos];
+                                        const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
+                                        tasks[idx].completada = !tasks[idx].completada;
+                                        updatedVehs[modalActiveVehIdx].tareas = tasks;
+                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                      }}
+                                      className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 cursor-pointer shrink-0"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={t.descripcion}
+                                      onChange={(e) => {
+                                        const updatedVehs = [...editingBay.vehiculos];
+                                        const tasks = [...updatedVehs[modalActiveVehIdx].tareas];
+                                        tasks[idx].descripcion = e.target.value;
+                                        updatedVehs[modalActiveVehIdx].tareas = tasks;
+                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                      }}
+                                      placeholder="Descripción del trabajo mecánico..."
+                                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-primary"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const updatedVehs = [...editingBay.vehiculos];
+                                        updatedVehs[modalActiveVehIdx].tareas = updatedVehs[modalActiveVehIdx].tareas.filter((_, i) => i !== idx);
+                                        setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                      }}
+                                      className="text-zinc-500 hover:text-red-400 p-1.5 shrink-0"
+                                    >
+                                      <Trash2 size={12} />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Notas Internas */}
+                            <div>
+                              <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
+                                Notas Internas del Asesor
+                              </label>
                               <input
                                 type="text"
-                                value={t.descripcion}
+                                value={editingBay.vehiculos[modalActiveVehIdx].notasInternas || ''}
                                 onChange={(e) => {
-                                  const updatedTasks = [...editingBay.tareas];
-                                  updatedTasks[idx].descripcion = e.target.value;
-                                  setEditingBay({ ...editingBay, tareas: updatedTasks });
+                                  const updatedVehs = [...editingBay.vehiculos];
+                                  updatedVehs[modalActiveVehIdx] = {
+                                    ...updatedVehs[modalActiveVehIdx],
+                                    notasInternas: e.target.value
+                                  };
+                                  setEditingBay({ ...editingBay, vehiculos: updatedVehs });
                                 }}
-                                placeholder="Descripción del trabajo mecánico..."
-                                className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-primary"
+                                placeholder="Ej. Esperando repuesto original desde almacén..."
+                                className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2 text-white outline-none"
                               />
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const updatedTasks = editingBay.tareas.filter((_, i) => i !== idx);
-                                  setEditingBay({ ...editingBay, tareas: updatedTasks });
-                                }}
-                                className="text-zinc-500 hover:text-red-400 p-1.5 shrink-0"
-                              >
-                                <Trash2 size={13} />
-                              </button>
                             </div>
-                          ))}
-                        </div>
-                      </div>
 
-                      {/* Notas u Observaciones Internas */}
-                      <div>
-                        <label className="text-[10px] font-black uppercase text-zinc-400 block mb-1">
-                          Notas Internas de Taller / Asesor
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={editingBay.notasInternas || ''}
-                          onChange={(e) => setEditingBay({ ...editingBay, notasInternas: e.target.value })}
-                          placeholder="Ej. Esperando respuesta de presupuesto adicional de frenos..."
-                          className="w-full bg-black/40 border border-white/10 focus:border-primary rounded-xl p-2.5 text-white outline-none"
-                        />
+                            {/* Eliminar vehículo de la cola */}
+                            {editingBay.vehiculos.length > 1 && (
+                              <div className="pt-1 flex justify-end">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updatedVehs = editingBay.vehiculos.filter((_, i) => i !== modalActiveVehIdx);
+                                    setEditingBay({ ...editingBay, vehiculos: updatedVehs });
+                                    setModalActiveVehIdx(0);
+                                  }}
+                                  className="text-red-400 hover:text-red-300 text-[10px] font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Trash2 size={11} />
+                                  <span>Eliminar este vehículo de la cola</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {/* Botones de Acción del Modal */}
