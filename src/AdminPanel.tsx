@@ -3503,14 +3503,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                           : 'bg-black/40 border-white/10 hover:border-white/20'
                                                       }`}
                                                     >
-                                                      {/* Checkbox y Texto Completo 100% Legible */}
-                                                      <label className={`flex items-start gap-2.5 flex-1 min-w-0 select-none ${isTallerReadOnly ? 'cursor-default' : 'cursor-pointer'}`}>
+                                                      {/* Checkbox y Texto Completo 100% Legible e Interactivo */}
+                                                      <label className="flex items-start gap-2.5 flex-1 min-w-0 select-none cursor-pointer py-0.5 group">
                                                         <input
                                                           type="checkbox"
                                                           checked={task.completada}
-                                                          disabled={isTallerReadOnly}
                                                           onChange={() => {
-                                                            if (isTallerReadOnly) return;
                                                             const updated = [...tallerBays];
                                                             const bayVehs = [...updated[originalIdx].vehiculos];
                                                             const vehTasks = [...bayVehs[vIdx].tareas];
@@ -3524,10 +3522,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                             updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
                                                             saveTallerControl(updated);
                                                           }}
-                                                          className="mt-0.5 w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer disabled:cursor-default disabled:opacity-80 shrink-0"
+                                                          className="mt-0.5 w-4 h-4 rounded border-white/30 bg-black/50 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0 transition-all hover:border-emerald-400"
                                                         />
-                                                        <span className={`text-xs leading-snug font-medium break-words ${
-                                                          task.completada ? 'line-through text-zinc-500' : 'text-zinc-100'
+                                                        <span className={`text-xs leading-snug font-medium break-words transition-colors ${
+                                                          task.completada ? 'line-through text-zinc-500' : 'text-zinc-100 group-hover:text-amber-300'
                                                         }`}>
                                                           {task.descripcion}
                                                         </span>
