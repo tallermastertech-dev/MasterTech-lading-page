@@ -3396,11 +3396,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           </div>
 
                                           {/* Checklist de Trabajos Autorizados (SIN PRECIOS) */}
-                                          <div className="space-y-2">
                                             <div className="flex items-center justify-between gap-2 border-b border-white/5 pb-1">
                                               <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5 min-w-0">
                                                 <CheckCircle2 size={12} className="text-primary shrink-0" />
-                                                <span className="truncate">LISTA DE TRABAJOS / TAREAS MECÁNICAS AUTORIZADAS (SIN PRECIOS)</span>
+                                                <span className="truncate">LISTA DE TRABAJOS / TAREAS MECÁNICAS AUTORIZADAS</span>
                                               </span>
 
                                               <div className="flex items-center gap-2 shrink-0">
@@ -3412,21 +3411,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 <button
                                                   type="button"
                                                   onClick={() => {
-                                                    const newTask: MechanicWorkTask = {
-                                                      id: `task-${Date.now()}`,
-                                                      descripcion: "Nuevo trabajo mecánico autorizado...",
-                                                      completada: false
-                                                    };
-                                                    const updated = [...tallerBays];
-                                                    const bayVehs = [...updated[originalIdx].vehiculos];
-                                                    bayVehs[vIdx] = {
-                                                      ...bayVehs[vIdx],
-                                                      tareas: [...(bayVehs[vIdx].tareas || []), newTask]
-                                                    };
-                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                    saveTallerControl(updated);
+                                                    setEditingBay({ ...bay, vehiculos: [...(bay.vehiculos || [])] });
+                                                    setEditingBayIndex(originalIdx);
+                                                    setModalActiveVehIdx(vIdx);
+                                                    setIsBayModalOpen(true);
                                                   }}
                                                   className="px-2 py-0.5 bg-primary/20 hover:bg-primary text-primary hover:text-black border border-primary/30 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                                                  title="Gestionar y editar trabajos autorizados"
                                                 >
                                                   <Plus size={10} />
                                                   <span>+ Añadir Tarea</span>
@@ -3434,10 +3425,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                               </div>
                                             </div>
 
-                                            <div className="space-y-2 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
+                                            <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1 scrollbar-thin">
                                               {(v.tareas || []).length === 0 ? (
                                                 <div className="p-2.5 text-center bg-black/20 rounded-xl border border-dashed border-white/10 text-zinc-500 text-[11px] italic">
-                                                  Sin tareas asignadas a este vehículo. Presiona "+ Añadir Tarea".
+                                                  Sin tareas asignadas. Haz clic en "+ Añadir Tarea" para registrar trabajos.
                                                 </div>
                                               ) : (
                                                 v.tareas.map((task, tIdx) => {
@@ -3447,13 +3438,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                   return (
                                                     <div
                                                       key={task.id || tIdx}
-                                                      className={`p-2.5 rounded-xl border text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition-all ${
+                                                      className={`p-2.5 rounded-xl border text-xs flex items-center justify-between gap-3 transition-all ${
                                                         task.completada
-                                                          ? 'bg-emerald-500/5 border-emerald-500/20'
-                                                          : 'bg-black/50 border-white/10 hover:border-white/20'
+                                                          ? 'bg-emerald-500/5 border-emerald-500/20 text-zinc-400'
+                                                          : 'bg-black/40 border-white/10 hover:border-white/20'
                                                       }`}
                                                     >
-                                                      <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                                                      {/* Checkbox y Texto Completo 100% Legible */}
+                                                      <label className="flex items-start gap-2.5 flex-1 min-w-0 cursor-pointer select-none">
                                                         <input
                                                           type="checkbox"
                                                           checked={task.completada}
@@ -3471,131 +3463,45 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                             updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
                                                             saveTallerControl(updated);
                                                           }}
-                                                          className="w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
+                                                          className="mt-0.5 w-4 h-4 rounded border-white/20 bg-black/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer shrink-0"
                                                         />
-                                                        <input
-                                                          type="text"
-                                                          value={task.descripcion}
-                                                          onChange={(e) => {
-                                                            const updated = [...tallerBays];
-                                                            const bayVehs = [...updated[originalIdx].vehiculos];
-                                                            const vehTasks = [...bayVehs[vIdx].tareas];
-                                                            vehTasks[tIdx] = {
-                                                              ...vehTasks[tIdx],
-                                                              descripcion: e.target.value
-                                                            };
-                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                            saveTallerControl(updated);
-                                                          }}
-                                                          placeholder="Descripción de la tarea autorizada..."
-                                                          className={`w-full bg-black/40 border border-white/10 hover:border-white/20 focus:border-amber-400 rounded-lg px-2.5 py-1.5 text-xs font-semibold outline-none transition-all ${
-                                                            task.completada ? 'line-through text-zinc-500' : 'text-white focus:text-amber-300'
-                                                          }`}
-                                                        />
-                                                      </div>
+                                                        <span className={`text-xs leading-snug font-medium break-words ${
+                                                          task.completada ? 'line-through text-zinc-500' : 'text-zinc-100'
+                                                        }`}>
+                                                          {task.descripcion}
+                                                        </span>
+                                                      </label>
 
-                                                      {/* Selector de Estado por Tarea + Botón Eliminar */}
-                                                      <div className="flex items-center justify-between sm:justify-end gap-1.5 shrink-0">
-                                                        <select
-                                                          value={tStatus}
-                                                          onChange={(e) => {
-                                                            const newSt = e.target.value as TallerStatus;
-                                                            const updated = [...tallerBays];
-                                                            const bayVehs = [...updated[originalIdx].vehiculos];
-                                                            const vehTasks = [...bayVehs[vIdx].tareas];
-                                                            vehTasks[tIdx] = {
-                                                              ...vehTasks[tIdx],
-                                                              estado: newSt,
-                                                              completada: newSt === 'aprobado' ? vehTasks[tIdx].completada : false
-                                                            };
-                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                            saveTallerControl(updated);
-                                                          }}
-                                                          className={`text-[10px] font-bold rounded-lg px-2 py-1 outline-none cursor-pointer border transition-all ${tStatusCfg.badgeClass}`}
-                                                        >
-                                                          <option value="aprobado" className="bg-[#12141a] text-emerald-300 font-bold">🟢 Aprobado</option>
-                                                          <option value="espera_repuesto" className="bg-[#12141a] text-amber-300 font-bold">🟡 Espera Repuesto</option>
-                                                          <option value="espera_cliente" className="bg-[#12141a] text-red-300 font-bold">🔴 Espera Cliente</option>
-                                                          <option value="espera_tecnico" className="bg-[#12141a] text-blue-300 font-bold">🔵 Espera Técnico</option>
-                                                        </select>
-
-                                                        <button
-                                                          type="button"
-                                                          onClick={() => {
-                                                            const updated = [...tallerBays];
-                                                            const bayVehs = [...updated[originalIdx].vehiculos];
-                                                            const vehTasks = bayVehs[vIdx].tareas.filter((_, i) => i !== tIdx);
-                                                            bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
-                                                            updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                            saveTallerControl(updated);
-                                                          }}
-                                                          className="text-zinc-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 shrink-0 transition-colors cursor-pointer"
-                                                          title="Eliminar Tarea"
-                                                        >
-                                                          <Trash2 size={13} />
-                                                        </button>
-                                                      </div>
+                                                      {/* Círculo indicador con el color que corresponde */}
+                                                      <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                          const stateCycle: TallerStatus[] = ['espera_tecnico', 'aprobado', 'espera_repuesto', 'espera_cliente'];
+                                                          const currentIdx = stateCycle.indexOf(tStatus);
+                                                          const nextSt = stateCycle[(currentIdx + 1) % stateCycle.length];
+                                                          
+                                                          const updated = [...tallerBays];
+                                                          const bayVehs = [...updated[originalIdx].vehiculos];
+                                                          const vehTasks = [...bayVehs[vIdx].tareas];
+                                                          vehTasks[tIdx] = {
+                                                            ...vehTasks[tIdx],
+                                                            estado: nextSt,
+                                                            completada: nextSt === 'aprobado' ? vehTasks[tIdx].completada : false
+                                                          };
+                                                          bayVehs[vIdx] = { ...bayVehs[vIdx], tareas: vehTasks };
+                                                          updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                          saveTallerControl(updated);
+                                                        }}
+                                                        title={`Estado actual: ${tStatusCfg.label} (Clic para cambiar)`}
+                                                        className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[10px] font-bold shrink-0 cursor-pointer transition-all hover:scale-105 ${tStatusCfg.badgeClass}`}
+                                                      >
+                                                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${tStatusCfg.dotClass} ${tStatus === 'aprobado' ? 'animate-pulse' : ''}`}></span>
+                                                        <span className="font-mono text-[9px]">{tStatusCfg.shortLabel}</span>
+                                                      </button>
                                                     </div>
                                                   );
                                                 })
                                               )}
-                                            </div>
-
-                                            {/* Input Rápido para Añadir Trabajo Aprobado */}
-                                            <div className="flex items-center gap-1.5 pt-0.5">
-                                              <input
-                                                type="text"
-                                                value={quickInputVal}
-                                                onChange={(e) => setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: e.target.value })}
-                                                onKeyDown={(e) => {
-                                                  if (e.key === 'Enter' && quickInputVal.trim()) {
-                                                    e.preventDefault();
-                                                    const newTask: MechanicWorkTask = {
-                                                      id: `task-${Date.now()}`,
-                                                      descripcion: quickInputVal.trim(),
-                                                      completada: false
-                                                    };
-                                                    const updated = [...tallerBays];
-                                                    const bayVehs = [...updated[originalIdx].vehiculos];
-                                                    bayVehs[vIdx] = {
-                                                      ...bayVehs[vIdx],
-                                                      tareas: [...(bayVehs[vIdx].tareas || []), newTask]
-                                                    };
-                                                    updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                    saveTallerControl(updated);
-                                                    setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: '' });
-                                                  }
-                                                }}
-                                                placeholder="+ Escribe un trabajo y presiona Enter..."
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
-                                              />
-                                              <button
-                                                type="button"
-                                                disabled={!quickInputVal.trim()}
-                                                onClick={() => {
-                                                  if (!quickInputVal.trim()) return;
-                                                  const newTask: MechanicWorkTask = {
-                                                    id: `task-${Date.now()}`,
-                                                    descripcion: quickInputVal.trim(),
-                                                    completada: false
-                                                  };
-                                                  const updated = [...tallerBays];
-                                                  const bayVehs = [...updated[originalIdx].vehiculos];
-                                                  bayVehs[vIdx] = {
-                                                    ...bayVehs[vIdx],
-                                                    tareas: [...(bayVehs[vIdx].tareas || []), newTask]
-                                                  };
-                                                  updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
-                                                  saveTallerControl(updated);
-                                                  setQuickTaskInputs({ ...quickTaskInputs, [quickInputKey]: '' });
-                                                }}
-                                                className="p-1.5 bg-primary/20 hover:bg-primary text-primary hover:text-black rounded-xl transition-all disabled:opacity-30 cursor-pointer shrink-0"
-                                                title="Añadir Trabajo"
-                                              >
-                                                <Plus size={13} />
-                                              </button>
                                             </div>
                                           </div>
 
