@@ -3269,9 +3269,6 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 <div className="text-[11px] font-bold text-amber-400 truncate mt-0.5">
                                   {bay.mecanicoEspecialidad || "Especialista Técnico"}
                                 </div>
-                                <span className="inline-block mt-1 font-mono text-[9px] font-black uppercase text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
-                                  {bay.bahiaNumero || `Bahía #${originalIdx + 1}`}
-                                </span>
                               </div>
                             </div>
 
