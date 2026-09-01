@@ -3370,39 +3370,65 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                 {v.posicion === 'elevador' ? 'En Elevador' : 'En Cola'}
                                               </span>
 
-                                              {/* Badge de Prioridad */}
+                                              {/* Badge & Selector de Prioridad (Mueve el carro al 1er lugar del mecánico) */}
                                               {(() => {
                                                 const pKey: TallerPriority = (v.prioridad as TallerPriority) || 'media';
                                                 const pCfg = TALLER_PRIORITY_CONFIG[pKey] || TALLER_PRIORITY_CONFIG.media;
-
-                                                if (isTallerReadOnly) {
-                                                  return (
-                                                    <span className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border ${pCfg.badgeClass}`}>
-                                                      <span>{pCfg.icon}</span>
-                                                      <span>{pCfg.shortLabel}</span>
-                                                    </span>
-                                                  );
-                                                }
+                                                const isPriorityActive = pKey === 'alta' || pKey === 'urgente';
 
                                                 return (
                                                   <button
                                                     type="button"
                                                     onClick={(e) => {
                                                       e.stopPropagation();
-                                                      const cycle: TallerPriority[] = ['media', 'alta', 'urgente', 'baja'];
-                                                      const curIdx = cycle.indexOf(pKey);
-                                                      const nextPrio = cycle[(curIdx + 1) % cycle.length];
+                                                      // Ciclo: normal (media/baja) -> alta -> urgente -> normal
+                                                      let nextPrio: TallerPriority = 'alta';
+                                                      if (pKey === 'alta') nextPrio = 'urgente';
+                                                      else if (pKey === 'urgente') nextPrio = 'media';
+                                                      else nextPrio = 'alta';
+
+                                                      const isNowHighPrio = nextPrio === 'alta' || nextPrio === 'urgente';
                                                       const updated = [...tallerBays];
-                                                      const bayVehs = [...updated[originalIdx].vehiculos];
-                                                      bayVehs[vIdx] = { ...bayVehs[vIdx], prioridad: nextPrio };
-                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                      const bayVehs = [...(updated[originalIdx].vehiculos || [])];
+                                                      const currentTarget = {
+                                                        ...bayVehs[vIdx],
+                                                        prioridad: nextPrio,
+                                                        posicion: (isNowHighPrio ? 'elevador' : bayVehs[vIdx].posicion) as 'elevador' | 'cola'
+                                                      };
+
+                                                      let reorderedVehs: MechanicAssignedVehicle[] = [...bayVehs];
+                                                      reorderedVehs[vIdx] = currentTarget;
+
+                                                      // Si se activa prioridad, moverlo de INMEDIATO al primer lugar (índice 0) del mecánico
+                                                      if (isNowHighPrio && vIdx > 0) {
+                                                        const others = reorderedVehs.filter((_, idx) => idx !== vIdx).map(o => ({
+                                                          ...o,
+                                                          posicion: 'cola' as const
+                                                        }));
+                                                        reorderedVehs = [currentTarget, ...others];
+                                                      }
+
+                                                      updated[originalIdx] = {
+                                                        ...updated[originalIdx],
+                                                        vehiculos: reorderedVehs,
+                                                        updatedAt: new Date().toISOString()
+                                                      };
+
                                                       saveTallerControl(updated);
+                                                      setExpandedVehiclesMap(prev => ({
+                                                        ...prev,
+                                                        [bay.id]: currentTarget.id
+                                                      }));
                                                     }}
-                                                    title={`Prioridad: ${pCfg.label} (Clic para cambiar)`}
-                                                    className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border transition-transform hover:scale-105 cursor-pointer ${pCfg.badgeClass}`}
+                                                    title={`Prioridad: ${pCfg.label} (Clic para asignar o cambiar. Mueve el carro al 1er lugar)`}
+                                                    className={`text-[9px] font-mono px-2 py-0.5 rounded-md font-bold uppercase flex items-center gap-1 border transition-all hover:scale-105 cursor-pointer shadow-sm ${
+                                                      isPriorityActive 
+                                                        ? `${pCfg.badgeClass} ring-1 ring-amber-400/40 animate-pulse` 
+                                                        : 'bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white border-white/10'
+                                                    }`}
                                                   >
                                                     <span>{pCfg.icon}</span>
-                                                    <span>{pCfg.shortLabel}</span>
+                                                    <span>{isPriorityActive ? `${pCfg.shortLabel} #1` : '+ Prioridad'}</span>
                                                   </button>
                                                 );
                                               })()}
@@ -3503,11 +3529,37 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                                     value={pKey}
                                                     onChange={(e) => {
                                                       const newPrio = e.target.value as TallerPriority;
+                                                      const isNowHighPrio = newPrio === 'alta' || newPrio === 'urgente';
                                                       const updated = [...tallerBays];
-                                                      const bayVehs = [...updated[originalIdx].vehiculos];
-                                                      bayVehs[vIdx] = { ...bayVehs[vIdx], prioridad: newPrio };
-                                                      updated[originalIdx] = { ...updated[originalIdx], vehiculos: bayVehs, updatedAt: new Date().toISOString() };
+                                                      const bayVehs = [...(updated[originalIdx].vehiculos || [])];
+                                                      const currentTarget = {
+                                                        ...bayVehs[vIdx],
+                                                        prioridad: newPrio,
+                                                        posicion: (isNowHighPrio ? 'elevador' : bayVehs[vIdx].posicion) as 'elevador' | 'cola'
+                                                      };
+
+                                                      let reorderedVehs: MechanicAssignedVehicle[] = [...bayVehs];
+                                                      reorderedVehs[vIdx] = currentTarget;
+
+                                                      if (isNowHighPrio && vIdx > 0) {
+                                                        const others = reorderedVehs.filter((_, idx) => idx !== vIdx).map(o => ({
+                                                          ...o,
+                                                          posicion: 'cola' as const
+                                                        }));
+                                                        reorderedVehs = [currentTarget, ...others];
+                                                      }
+
+                                                      updated[originalIdx] = {
+                                                        ...updated[originalIdx],
+                                                        vehiculos: reorderedVehs,
+                                                        updatedAt: new Date().toISOString()
+                                                      };
+
                                                       saveTallerControl(updated);
+                                                      setExpandedVehiclesMap(prev => ({
+                                                        ...prev,
+                                                        [bay.id]: currentTarget.id
+                                                      }));
                                                     }}
                                                     className={`font-mono text-[10px] font-bold px-2 py-1 rounded-lg border outline-none cursor-pointer ${pCfg.badgeClass}`}
                                                   >
