@@ -1502,17 +1502,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
               onClick={() => setIsCartOpen(true)}
-              className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-[#202D36] via-primary to-[#5C7896] text-white font-black text-xs uppercase tracking-wider py-3.5 px-5 rounded-full shadow-2xl shadow-primary/40 border border-[#7598B9]/30 flex items-center gap-3 hover:scale-105 transition-all cursor-pointer"
+              className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-amber-500 via-amber-400 to-primary text-black font-black text-xs uppercase tracking-wider py-3.5 px-6 rounded-full shadow-2xl shadow-amber-500/40 border border-amber-300 flex items-center gap-3.5 hover:scale-105 transition-all cursor-pointer ring-4 ring-black/50"
             >
               <div className="relative">
-                <ShoppingCart size={20} />
-                <span className="absolute -top-2.5 -right-2.5 bg-white text-black font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-primary">
+                <ShoppingCart size={20} className="text-black" />
+                <span className="absolute -top-2.5 -right-2.5 bg-black text-amber-300 font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-amber-400">
                   {cartTotalItems}
                 </span>
               </div>
-              <div className="flex flex-col items-start leading-none">
-                <span className="text-[10px] opacity-80">Mi Carrito</span>
-                <span className="text-sm font-black">${cartTotalAmount.toFixed(2)} USD</span>
+              <div className="flex flex-col items-start leading-none text-black">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-black/85">Mi Carrito</span>
+                <span className="text-sm font-black text-black">${cartTotalAmount.toFixed(2)} USD</span>
               </div>
             </motion.button>
           )}
@@ -1528,18 +1528,18 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="bg-[#1c262e] border border-primary/40 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col"
+                className="bg-[#12141a] border border-amber-500/40 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col"
               >
                 {/* Header */}
-                <div className="p-4 sm:p-5 border-b border-white/10 bg-gradient-to-r from-[#202D36] via-[#1c262e] to-[#141b21] flex items-center justify-between">
+                <div className="p-4 sm:p-5 border-b border-white/10 bg-gradient-to-r from-[#1c1810] via-[#12141a] to-[#1c1810] flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-md shrink-0">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md shrink-0">
                       <ShoppingCart size={20} />
                     </div>
                     <div>
                       <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2">
                         <span>Mi Carrito de Repuestos</span>
-                        <span className="text-[10px] bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded-full font-bold">
+                        <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold">
                           {cartTotalItems} {cartTotalItems === 1 ? 'pieza' : 'piezas'}
                         </span>
                       </h2>
@@ -1610,7 +1610,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                 {item.product.partNumber && (
                                   <span className="text-[10px] font-mono text-zinc-400 block mt-0.5">#{item.product.partNumber}</span>
                                 )}
-                                <span className="text-xs font-black text-primary block mt-0.5">{item.product.price} <span className="text-[10px] text-zinc-400 font-normal">/ c/u</span></span>
+                                <span className="text-xs font-black text-amber-400 block mt-0.5">{item.product.price} <span className="text-[10px] text-zinc-400 font-normal">/ c/u</span></span>
                               </div>
 
                               {/* Quantity Controls */}
@@ -1618,7 +1618,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, -1)}
-                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-primary text-white flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
+                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-primary hover:text-black text-white flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
                                 >
                                   <Minus size={12} />
                                 </button>
@@ -1626,7 +1626,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, 1)}
-                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-primary text-white flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
+                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-primary hover:text-black text-white flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
                                 >
                                   <Plus size={12} />
                                 </button>
@@ -1649,21 +1649,21 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </div>
 
                       {/* Order Calculation Summary Box */}
-                      <div className="bg-gradient-to-r from-[#202D36]/80 via-[#1c262e] to-[#202D36]/80 border border-primary/40 p-4 rounded-2xl space-y-2">
+                      <div className="bg-gradient-to-r from-amber-500/10 via-[#161822] to-amber-500/10 border border-amber-500/30 p-4 rounded-2xl space-y-2">
                         <div className="flex justify-between items-center text-xs text-zinc-400">
                           <span>Cantidad Total de Repuestos:</span>
                           <span className="font-bold text-white">{cartTotalItems} unidades</span>
                         </div>
                         <div className="flex justify-between items-center pt-2 border-t border-white/10 text-sm font-black">
                           <span className="text-white uppercase tracking-wider">Monto Total Estimado:</span>
-                          <span className="text-xl text-primary font-display">${cartTotalAmount.toFixed(2)} USD</span>
+                          <span className="text-xl text-amber-400 font-display">${cartTotalAmount.toFixed(2)} USD</span>
                         </div>
                       </div>
 
                       {/* Customer Inputs */}
                       <div className="space-y-3 bg-white/5 p-3.5 rounded-2xl border border-white/10">
                         <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                          <User size={13} className="text-primary" />
+                          <User size={13} className="text-amber-400" />
                           <span>Datos del Solicitante (Para Enviar Presupuesto)</span>
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
