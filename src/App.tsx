@@ -883,10 +883,6 @@ export default function App() {
 
       {/* Global CSS for custom styles */}
       <style>{`
-        .text-outline {
-          color: transparent;
-          -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-        }
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }

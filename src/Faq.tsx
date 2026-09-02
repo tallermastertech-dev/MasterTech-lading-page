@@ -132,13 +132,13 @@ export default function Faq() {
                 ))}
               </div>
 
-              {/* Right Column: "¿Tienes otra pregunta?" CTA Card (Purple Box) */}
+              {/* Right Column: "¿Tienes otra pregunta?" CTA Card */}
               <div className="lg:col-span-5 lg:sticky lg:top-28">
-                <div className="glass-card p-8 text-center border-white/10 shadow-2xl relative overflow-hidden bg-gradient-to-b from-[#181a24] to-[#111218]">
+                <div className="glass-card p-8 text-center border-white/10 shadow-2xl relative overflow-hidden">
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto mb-6 shadow-[0_0_20px_rgba(194,164,114,0.2)]">
                     <ArrowRight className="w-8 h-8 -rotate-45" />
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-display font-black uppercase tracking-tight text-white mb-3">
+                  <h3 className="text-2xl sm:text-3xl font-display font-black uppercase tracking-tight mb-3">
                     ¿Tienes otra pregunta?
                   </h3>
                   <p className="text-zinc-400 text-sm sm:text-base mb-8 leading-relaxed">

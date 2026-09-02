@@ -271,35 +271,34 @@ export default function Nosotros() {
             {/* Team Grid */}
             <div className={`grid gap-8 mb-20 ${teamMembers.length === 1 ? 'md:grid-cols-1 max-w-md mx-auto' : teamMembers.length === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
               {teamMembers.map((member, i) => (
-                <div key={member.id || i} className="glass-card overflow-hidden group flex flex-col h-full border border-primary/20 hover:border-primary/60 transition-all duration-300 shadow-2xl rounded-3xl bg-[#121417]">
+                <div key={member.id || i} className="glass-card overflow-hidden group flex flex-col h-full border border-primary/20 hover:border-primary/60 transition-all duration-300 shadow-2xl rounded-3xl">
                   {/* Photo Container */}
-                  <div className="h-64 sm:h-72 overflow-hidden relative shrink-0 bg-[#0D0D0D]">
+                  <div className="h-64 sm:h-72 overflow-hidden relative shrink-0 bg-black/40">
                     <img 
                       src={member.img || "/assets/servicio-mecanica.jpg"} 
                       alt={member.name} 
                       onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500" 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#121417] via-[#121417]/20 to-transparent pointer-events-none" />
                   </div>
 
                   {/* Card Content Area */}
-                  <div className="p-6 sm:p-7 flex flex-col flex-1 bg-[#121417] relative z-20 text-center items-center justify-between">
+                  <div className="p-6 sm:p-7 flex flex-col flex-1 relative z-20 text-center items-center justify-between">
                     <div className="w-full flex flex-col items-center">
                       {/* Role Badge */}
                       <div className="mb-3.5 flex justify-center w-full">
-                        <span className="inline-block text-[10px] sm:text-[11px] font-black text-primary uppercase tracking-widest bg-[#0D0D0D]/80 border border-primary/40 px-4 py-1.5 rounded-full shadow-md backdrop-blur-sm">
+                        <span className="inline-block text-[10px] sm:text-[11px] font-black text-primary uppercase tracking-widest bg-primary/10 border border-primary/40 px-4 py-1.5 rounded-full shadow-md backdrop-blur-sm">
                           {member.role || 'ESPECIALISTA'}
                         </span>
                       </div>
                       
                       {/* Member Name */}
-                      <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight mb-2.5 text-center group-hover:text-primary transition-colors">
+                      <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight mb-2.5 text-center group-hover:text-primary transition-colors">
                         {member.name}
                       </h3>
 
                       {/* Profile Description */}
-                      <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed font-normal text-center max-w-xs mx-auto">
+                      <p className="text-xs sm:text-sm leading-relaxed font-normal text-center max-w-xs mx-auto text-zinc-400">
                         {member.desc}
                       </p>
                     </div>
@@ -309,7 +308,7 @@ export default function Nosotros() {
             </div>
 
             {/* CTA Box - Unirse al Equipo MasterTech */}
-            <div className="bg-gradient-to-b from-white/10 via-[#16181D] to-[#0E1013] border border-primary/30 rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-2xl relative overflow-hidden group">
+            <div className="glass-card border border-primary/30 rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-40 h-40 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
               
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
@@ -317,11 +316,11 @@ export default function Nosotros() {
                 <span>Oportunidades & Talento</span>
               </div>
               
-              <h3 className="text-2xl sm:text-4xl font-black mb-3 text-white tracking-tight leading-tight">
+              <h3 className="text-2xl sm:text-4xl font-black mb-3 tracking-tight leading-tight">
                 ¿Quieres formar parte del <span className="text-primary italic">equipo MasterTech</span>?
               </h3>
               
-              <p className="text-zinc-300 text-sm sm:text-base mb-8 leading-relaxed max-w-lg mx-auto">
+              <p className="text-zinc-400 text-sm sm:text-base mb-8 leading-relaxed max-w-lg mx-auto">
                 Buscamos profesionales apasionados por la precisión mecánica, el diagnóstico automotriz y la excelencia en el servicio. Completa tu postulación y adjunta tu currículum.
               </p>
               

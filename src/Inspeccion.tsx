@@ -195,16 +195,16 @@ export default function Inspeccion() {
 
             <div className="grid md:grid-cols-2 gap-6">
               {/* Card 1: Línea de Inspección Paga */}
-              <div className="bg-gradient-to-b from-white/10 to-white/5 border border-primary/40 hover:border-primary rounded-3xl p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group shadow-xl">
+              <div className="glass-card border border-primary/40 hover:border-primary rounded-3xl p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group shadow-xl">
                 <div className="absolute top-0 right-0 bg-primary/20 border-b border-l border-primary/30 px-4 py-1.5 rounded-bl-2xl text-[11px] font-black text-primary uppercase tracking-wider">
                   Recomendado
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-white mb-2">Línea de Inspección Paga</h3>
-                  <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-black mb-2">Línea de Inspección Paga</h3>
+                  <p className="text-sm mb-6 leading-relaxed">
                     Evaluación técnica profunda e integral de más de 100pts con scanner profesional y entrega de informe técnico.
                   </p>
-                  <ul className="space-y-3 mb-8 text-sm text-zinc-300">
+                  <ul className="space-y-3 mb-8 text-sm">
                     <li className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                       <span>Escaneo especializado de todos los módulos</span>
@@ -225,20 +225,20 @@ export default function Inspeccion() {
                 </div>
                 <button 
                   onClick={() => { setSelectedService("Línea de inspección paga"); setIsModalOpen(true); }}
-                  className="btn-primary font-black py-4 px-6 rounded-2xl w-full text-center flex items-center justify-center gap-2 text-base shadow-lg"
+                  className="btn-primary font-black py-4 px-6 rounded-2xl w-full text-center flex items-center justify-center gap-2 text-base shadow-lg cursor-pointer"
                 >
                   RESERVAR INSPECCIÓN PAGA <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Card 2: Inspección Compra Venta */}
-              <div className="bg-gradient-to-b from-white/10 to-white/5 border border-white/10 hover:border-primary/60 rounded-3xl p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group shadow-xl">
+              <div className="glass-card border border-white/10 hover:border-primary/60 rounded-3xl p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group shadow-xl">
                 <div>
-                  <h3 className="text-2xl font-black text-white mb-2">Inspección Compra Venta</h3>
-                  <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+                  <h3 className="text-2xl font-black mb-2">Inspección Compra Venta</h3>
+                  <p className="text-sm mb-6 leading-relaxed">
                     Peritaje pre-compra y pre-venta completo para verificar el estado real del vehículo antes de cerrar el negocio.
                   </p>
-                  <ul className="space-y-3 mb-8 text-sm text-zinc-300">
+                  <ul className="space-y-3 mb-8 text-sm">
                     <li className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                       <span>Peritaje de estructura, carrocería y latonería</span>
@@ -259,7 +259,7 @@ export default function Inspeccion() {
                 </div>
                 <button 
                   onClick={() => { setSelectedService("Inspección Compra Venta"); setIsModalOpen(true); }}
-                  className="bg-white/10 hover:bg-primary hover:text-black border border-white/20 hover:border-primary text-white font-black py-4 px-6 rounded-2xl w-full text-center transition-all duration-300 flex items-center justify-center gap-2 text-base"
+                  className="btn-secondary font-black py-4 px-6 rounded-2xl w-full text-center transition-all duration-300 flex items-center justify-center gap-2 text-base cursor-pointer"
                 >
                   RESERVAR COMPRA VENTA <ArrowRight className="w-5 h-5" />
                 </button>

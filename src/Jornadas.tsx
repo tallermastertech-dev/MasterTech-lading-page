@@ -362,7 +362,7 @@ export default function Jornadas() {
             className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight uppercase leading-[1.1] mb-6 max-w-4xl mx-auto"
           >
             <span style={{ color: '#ffffff' }}>TECNOLOGÍA DE ALTO NIVEL</span> <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#C2A472] to-amber-400 italic block mt-1">
+            <span className="text-amber-400 italic block mt-1 font-black" style={{ color: '#fbbf24' }}>
               CON PRECIOS DE JORNADA
             </span>
           </motion.h1>
