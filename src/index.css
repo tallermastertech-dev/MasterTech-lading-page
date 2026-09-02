@@ -318,6 +318,71 @@ body.theme-light {
   font-weight: 800 !important;
 }
 
+/* ========================================================================= */
+/* INSTALACIONES SECTION — always dark regardless of theme                   */
+/* ========================================================================= */
+.instalaciones-section {
+  background-color: #0a0b0f !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .instalaciones-section,
+body.theme-light .instalaciones-section {
+  background-color: #0d0f14 !important;
+  color: #ffffff !important;
+}
+
+/* All headings and text inside instalaciones stay light */
+html.theme-light .instalaciones-section h2,
+html.theme-light .instalaciones-section h3,
+html.theme-light .instalaciones-section p,
+html.theme-light .instalaciones-section span,
+body.theme-light .instalaciones-section h2,
+body.theme-light .instalaciones-section h3,
+body.theme-light .instalaciones-section p,
+body.theme-light .instalaciones-section span {
+  color: inherit !important;
+}
+
+html.theme-light .instalaciones-section h2,
+body.theme-light .instalaciones-section h2 {
+  color: #ffffff !important;
+}
+
+html.theme-light .instalaciones-section h3,
+body.theme-light .instalaciones-section h3 {
+  color: #f1f5f9 !important;
+}
+
+html.theme-light .instalaciones-section p,
+html.theme-light .instalaciones-section .text-zinc-400,
+body.theme-light .instalaciones-section p,
+body.theme-light .instalaciones-section .text-zinc-400 {
+  color: #94a3b8 !important;
+}
+
+/* ========================================================================= */
+/* BOOKING FORM SECTION — fix contact icon boxes & text in light mode        */
+/* ========================================================================= */
+.theme-light .booking-contact-link .contact-icon-box {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.theme-light .booking-contact-link .contact-label {
+  color: #64748b !important;
+}
+
+.theme-light .booking-contact-link .contact-value {
+  color: #0f172a !important;
+}
+
+.theme-light .booking-form-card {
+  background-color: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 4px 24px -4px rgba(15, 23, 42, 0.10) !important;
+}
+
 .theme-light select option {
   background-color: #ffffff !important;
   color: #0f172a !important;

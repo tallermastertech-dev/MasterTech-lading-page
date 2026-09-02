@@ -581,15 +581,13 @@ export default function App() {
         </div>
       </section>
 
-
-
       {/* Instalaciones Section */}
-      <section id="instalaciones" className="py-32 px-6 bg-[#0a0b0f] relative overflow-hidden">
+      <section id="instalaciones" className="instalaciones-section py-32 px-6 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row gap-20 items-center">
             <div className="flex-1">
-              <h2 className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-8">NUESTRAS <br/><span className="text-primary italic">INSTALACIONES</span></h2>
+              <h2 className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-8" style={{ color: '#ffffff' }}>NUESTRAS <br/><span className="text-primary italic">INSTALACIONES</span></h2>
               <div className="space-y-8">
                 {[
                   { title: "Área de Recepción", desc: "Atención al cliente personalizada y elaboración de presupuestos transparentes.", icon: <User className="w-6 h-6 text-primary icon-glow" /> },
@@ -599,15 +597,15 @@ export default function App() {
                 ].map((item, i) => {
                   const Content = (
                     <div className={`flex gap-6 items-start ${item.href ? 'group/inst hover:bg-white/5 p-3 -m-3 rounded-2xl transition-all border border-transparent hover:border-primary/30 cursor-pointer' : ''}`}>
-                      <div className="mt-1 w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover/inst:border-primary/50 group-hover/inst:bg-primary/10 transition-all">
+                      <div className="mt-1 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover/inst:bg-primary/10 group-hover/inst:border-primary/50" style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
                         {item.icon}
                       </div>
                       <div>
-                        <h3 className="text-xl font-black mb-2 flex items-center gap-2 group-hover/inst:text-primary transition-colors">
+                        <h3 className="text-xl font-black mb-2 flex items-center gap-2 group-hover/inst:text-primary transition-colors" style={{ color: '#f1f5f9' }}>
                           <span>{item.title}</span>
                           {item.href && <ArrowRight size={16} className="text-primary opacity-0 group-hover/inst:opacity-100 group-hover/inst:translate-x-1 transition-all" />}
                         </h3>
-                        <p className="text-zinc-400 text-sm leading-relaxed">{item.desc}</p>
+                        <p className="text-sm leading-relaxed" style={{ color: '#94a3b8' }}>{item.desc}</p>
                         {item.href && (
                           <span className="inline-flex items-center gap-1 text-xs font-bold text-primary mt-2 group-hover/inst:underline">
                             Explorar Catálogo de Repuestos →
@@ -639,7 +637,6 @@ export default function App() {
 
 
 
-
       {/* Booking Form */}
       <section id="contacto" className="py-16 md:py-32 px-3 sm:px-6">
         <div className="max-w-7xl mx-auto">
@@ -656,34 +653,34 @@ export default function App() {
                     href={config.WHATSAPP_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-4 sm:gap-6 group cursor-pointer"
+                    className="booking-contact-link flex items-center gap-4 sm:gap-6 group cursor-pointer"
                   >
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                    <div className="contact-icon-box w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
                       <Phone size={20} className="sm:w-6 sm:h-6" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">WhatsApp Directo</p>
-                      <p className="text-base sm:text-xl font-black text-white truncate">{config.PHONE_NUMBER}</p>
+                      <p className="contact-label text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">WhatsApp Directo</p>
+                      <p className="contact-value text-base sm:text-xl font-black text-white truncate">{config.PHONE_NUMBER}</p>
                     </div>
                   </a>
                   <a 
                     href={config.GOOGLE_MAPS_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-4 sm:gap-6 group cursor-pointer"
+                    className="booking-contact-link flex items-center gap-4 sm:gap-6 group cursor-pointer"
                   >
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                    <div className="contact-icon-box w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
                       <MapPin size={20} className="sm:w-6 sm:h-6" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">Ubicación</p>
-                      <p className="text-base sm:text-xl font-black text-white truncate">Porlamar, Nueva Esparta</p>
+                      <p className="contact-label text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">Ubicación</p>
+                      <p className="contact-value text-base sm:text-xl font-black text-white truncate">Porlamar, Nueva Esparta</p>
                     </div>
                   </a>
                 </div>
               </div>
 
-              <div className="bg-white/5 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-white/10">
+              <div className="booking-form-card p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)' }}>
                 {formStatus === 'success' ? (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 sm:py-20">
                     <CheckCircle2 className="w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-6" />
