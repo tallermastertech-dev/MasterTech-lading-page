@@ -149,14 +149,21 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 w-[420px] bg-[#12141a]/95 border border-white/15 backdrop-blur-2xl rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  className="absolute top-full left-1/2 -translate-x-1/2 w-[420px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  style={{
+                    backgroundColor: '#12141a',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    color: '#ffffff'
+                  }}
                 >
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2.5">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-1">
+                  <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1" style={{ color: '#C2A472' }}>
                       <Wrench size={12} />
                       <span>Especialidades Principales</span>
                     </span>
-                    <span className="text-[10px] text-zinc-400 font-bold">Diagnóstico Computarizado</span>
+                    <span className="text-[10px] font-bold" style={{ color: '#71717a' }}>Diagnóstico Computarizado</span>
                   </div>
 
                   <div className="space-y-1">
@@ -164,23 +171,25 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       <a
                         key={i}
                         href={opt.href}
-                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-white/10 transition-colors group/item"
+                        className="flex items-start gap-3 p-2.5 rounded-xl transition-colors group/item"
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = ''; }}
                       >
                         <MasterTechIconBadge icon={opt.icon} />
                         <div>
-                          <div className="text-white font-bold text-xs group-hover/item:text-primary transition-colors leading-snug">{opt.title}</div>
-                          <div className="text-[11px] text-zinc-400 font-normal leading-tight mt-0.5">{opt.desc}</div>
+                          <div className="font-bold text-xs leading-snug" style={{ color: '#e2e8f0' }}>{opt.title}</div>
+                          <div className="text-[11px] font-normal leading-tight mt-0.5" style={{ color: '#71717a' }}>{opt.desc}</div>
                         </div>
                       </a>
                     ))}
                   </div>
 
-                  <div className="pt-3 border-t border-white/10 mt-3 flex items-center justify-between gap-2">
-                    <span className="text-[11px] text-zinc-300 font-bold flex items-center gap-1.5 shrink-0">
-                      <Cpu size={13} className="text-primary" />
+                  <div className="pt-3 mt-3 flex items-center justify-between gap-2" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                    <span className="text-[11px] font-bold flex items-center gap-1.5 shrink-0" style={{ color: '#cbd5e1' }}>
+                      <Cpu size={13} style={{ color: '#C2A472' }} />
                       <span>Escáner Multimarca</span>
                     </span>
-                    <a href="/servicios" className="flex items-center gap-1 text-xs text-primary font-black hover:underline whitespace-nowrap shrink-0">
+                    <a href="/servicios" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap shrink-0" style={{ color: '#C2A472' }}>
                       <span>Ver Todos los Servicios</span>
                       <ArrowRight size={12} />
                     </a>
@@ -213,16 +222,25 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="absolute top-full right-0 w-[440px] bg-[#12141a]/95 border border-white/15 backdrop-blur-2xl rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  className="absolute top-full right-0 w-[440px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  style={{ 
+                    backgroundColor: '#12141a',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    color: '#ffffff'
+                  }}
                 >
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2.5">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-1">
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1" style={{ color: '#C2A472' }}>
                       <Package size={12} />
                       <span>Categorías de Repuestos</span>
                     </span>
-                    <span className="text-[10px] text-green-400 font-bold bg-green-500/10 px-2 py-0.5 rounded-full">Stock en Taller</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: '#4ade80', backgroundColor: 'rgba(74,222,128,0.12)' }}>Stock en Taller</span>
                   </div>
 
+                  {/* Options List */}
                   <div className="space-y-1">
                     {catalogOptions.map((opt, i) => (
                       <a
@@ -230,22 +248,28 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                         href={opt.href}
                         className={`flex items-start gap-3 p-3 rounded-xl transition-all group/item ${
                           opt.isUSA
-                            ? 'bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-blue-900/60 border border-blue-500/50 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20 mt-2 relative overflow-hidden'
-                            : 'hover:bg-white/10'
+                            ? 'mt-2 relative overflow-hidden'
+                            : ''
                         }`}
+                        style={opt.isUSA ? {
+                          background: 'linear-gradient(to right, rgba(23,37,84,0.9), rgba(15,23,42,0.95), rgba(23,37,84,0.7))',
+                          border: '1px solid rgba(96,165,250,0.5)'
+                        } : {}}
+                        onMouseEnter={e => { if (!opt.isUSA) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
+                        onMouseLeave={e => { if (!opt.isUSA) (e.currentTarget as HTMLElement).style.backgroundColor = ''; }}
                       >
                         {opt.isUSA && (
-                          <div className="absolute top-2.5 right-2.5 flex items-center gap-1 bg-blue-500/20 border border-blue-400/40 text-blue-300 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full">
-                            <Plane size={10} className="animate-pulse text-blue-400" />
+                          <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.2)', border: '1px solid rgba(96,165,250,0.4)' }}>
+                            <Plane size={10} className="animate-pulse" style={{ color: '#60a5fa' }} />
                             <span>EXPRESS USA</span>
                           </div>
                         )}
                         <MasterTechIconBadge icon={opt.icon} isUSA={opt.isUSA} />
                         <div className="flex-1 pr-16">
-                          <div className={`font-bold text-xs leading-snug transition-colors ${opt.isUSA ? 'text-white group-hover/item:text-blue-300' : 'text-white group-hover/item:text-primary'}`}>
+                          <div className="font-bold text-xs leading-snug" style={{ color: opt.isUSA ? '#ffffff' : '#e2e8f0' }}>
                             {opt.title}
                           </div>
-                          <div className="text-[11px] text-zinc-400 font-normal leading-tight mt-0.5">
+                          <div className="text-[11px] font-normal leading-tight mt-0.5" style={{ color: opt.isUSA ? '#94a3b8' : '#71717a' }}>
                             {opt.desc}
                           </div>
                         </div>
@@ -253,12 +277,13 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                     ))}
                   </div>
 
-                  <div className="pt-3 border-t border-white/10 mt-3 flex items-center justify-between gap-3">
-                    <span className="text-[11px] text-blue-400 font-bold flex items-center gap-1.5 shrink-0">
-                      <Globe size={13} className="text-blue-400" />
+                  {/* Footer */}
+                  <div className="pt-3 mt-3 flex items-center justify-between gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                    <span className="text-[11px] font-bold flex items-center gap-1.5 shrink-0" style={{ color: '#60a5fa' }}>
+                      <Globe size={13} style={{ color: '#60a5fa' }} />
                       <span>Logística Directa EE.UU.</span>
                     </span>
-                    <a href="/catalogo" className="flex items-center gap-1 text-xs text-primary font-black hover:underline whitespace-nowrap shrink-0">
+                    <a href="/catalogo" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap shrink-0" style={{ color: '#C2A472' }}>
                       <span>Explorar Catálogo</span>
                       <ArrowRight size={12} />
                     </a>
