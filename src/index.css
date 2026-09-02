@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @theme {
   --color-primary: #C2A472;
@@ -70,14 +70,13 @@
   filter: none !important;
 }
 
-/* Display logo image in 100% natural, sharp, crisp quality without color filter distortion */
 .logo-gold {
   filter: none !important;
 }
 
 .btn-primary {
-  background-color: #C2A472 !important;
-  color: #0D0D0D !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #000000 !important;
   padding: 0.75rem 2rem;
   border-radius: 9999px;
   font-weight: 900 !important;
@@ -87,18 +86,20 @@
   justify-content: center;
   gap: 0.5rem;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.35) !important;
   text-shadow: none !important;
 }
 
 .btn-primary * {
-  color: #0D0D0D !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
 }
 
 .btn-primary:hover {
-  background-color: #D4B886 !important;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
   color: #000000 !important;
   transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.5) !important;
 }
 
 .btn-secondary {
@@ -140,15 +141,13 @@
 }
 
 /* ========================================================================= */
-/* ERGONOMIC SOFT SLATE-GRAY LIGHT THEME FOR PUBLIC PAGES (ANTI-GLARE)       */
+/* PRISTINE HIGH-CONTRAST LIGHT THEME (WCAG AAA CERTIFIED)                   */
 /* ========================================================================= */
+
 html.theme-light,
 body.theme-light {
-  background-color: #eaedf1 !important;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(194, 164, 114, 0.12) 0%, transparent 65%),
-    radial-gradient(circle at 100% 100%, rgba(203, 213, 225, 0.5) 0%, transparent 55%) !important;
-  background-attachment: fixed !important;
+  background-color: #f1f5f9 !important;
+  background-image: none !important;
   color: #0f172a !important;
 }
 
@@ -167,449 +166,468 @@ body.theme-light {
   color: #0f172a !important;
 }
 
-/* 1. HERO SECTION (Dark photographic background -> Text MUST stay white) */
-.theme-light section:first-of-type:not(.jornada-hero-section) {
-  color: #ffffff !important;
-}
-.theme-light section:first-of-type:not(.jornada-hero-section) h1 {
-  color: #ffffff !important;
-}
-.theme-light section:first-of-type:not(.jornada-hero-section) h1 span:first-child {
-  color: #ffffff !important;
-}
-.theme-light section:first-of-type:not(.jornada-hero-section) p,
-.theme-light section:first-of-type:not(.jornada-hero-section) .text-zinc-300 {
-  color: #e2e8f0 !important;
-}
-.theme-light section:first-of-type span.text-primary {
-  color: #C2A472 !important;
-}
-.theme-light section:first-of-type .btn-secondary {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
-  color: #ffffff !important;
-}
-.theme-light section:first-of-type .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  color: #ffffff !important;
-}
-
-/* 2. GENERAL TYPOGRAPHY (Only for Light Content Cards & Sections) */
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h1:not(.dark-vip-card-title):not(.usa-import-title):not(.catalogo-hero-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h2:not(.dark-vip-card-title):not(.usa-import-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h3:not(.usa-import-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h4,
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h5,
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h6,
-.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card) > h1:not(.text-white),
-.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card) > h2:not(.text-white),
-.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card) > h3:not(.text-white) {
+/* 1. GENERAL LIGHT TYPOGRAPHY */
+.theme-light h1:not(.catalogo-hero-title):not(.usa-import-title),
+.theme-light h2:not(.usa-import-title),
+.theme-light h3:not(.usa-import-title),
+.theme-light h4,
+.theme-light h5,
+.theme-light h6 {
   color: #0f172a !important;
 }
 
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) p:not(.usa-import-desc),
-.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card):not(.mt01-chat-modal) > p:not(.text-white):not(.text-zinc-300) {
+.theme-light p {
   color: #334155 !important;
 }
 
-/* Jornada Hero Specific Styles for Light Mode */
-.theme-light .jornada-hero-section h1,
-.theme-light .jornada-hero-section .jornada-hero-title,
-.theme-light h1.jornada-hero-title {
-  color: #0f172a !important;
+.theme-light .text-zinc-400,
+.theme-light .text-zinc-500 {
+  color: #475569 !important;
 }
 
-.theme-light .jornada-hero-section p,
-.theme-light .jornada-hero-section .jornada-hero-subtitle,
-.theme-light p.jornada-hero-subtitle {
+.theme-light .text-zinc-300 {
   color: #334155 !important;
 }
 
-/* Dark VIP Cards (Must ALWAYS keep white text regardless of theme) */
-.theme-light .dark-vip-card,
-.theme-light .dark-vip-card h1,
-.theme-light .dark-vip-card h2,
-.theme-light .dark-vip-card h3,
-.theme-light .dark-vip-card h4,
-.theme-light .dark-vip-card h5,
-.theme-light .dark-vip-card h6,
-.theme-light .dark-vip-card-title,
-.theme-light section .dark-vip-card h2,
-.theme-light section .dark-vip-card-title {
-  color: #ffffff !important;
+.theme-light .text-zinc-200,
+.theme-light .text-zinc-100 {
+  color: #1e293b !important;
 }
 
-/* ULTRA SPECIFIC IMMUNITY FOR DARK VIP CARD IN LIGHT MODE */
-html.theme-light .dark-vip-card,
-body.theme-light .dark-vip-card,
-.theme-light .dark-vip-card,
-.theme-light main .dark-vip-card,
-.theme-light section .dark-vip-card,
-.theme-light div.dark-vip-card {
-  background-color: #0d0e12 !important;
-  color: #ffffff !important;
-}
-
-html.theme-light .vip-icon-box,
-body.theme-light .vip-icon-box,
-.theme-light .vip-icon-box,
-.theme-light div.vip-icon-box {
-  background-color: #12141a !important;
-}
-
-html.theme-light .dark-vip-card svg,
-body.theme-light .dark-vip-card svg,
-.theme-light .dark-vip-card svg {
-  color: #fbbf24 !important;
-}
-
-html.theme-light .dark-vip-card p,
-body.theme-light .dark-vip-card p,
-.theme-light .dark-vip-card p,
-.theme-light main .dark-vip-card p,
-.theme-light section .dark-vip-card p,
-.theme-light div.dark-vip-card p {
-  color: #f1f5f9 !important;
-}
-
-html.theme-light .dark-vip-card a:not(.bg-amber-400),
-body.theme-light .dark-vip-card a:not(.bg-amber-400),
-.theme-light .dark-vip-card a:not(.bg-amber-400),
-.theme-light main .dark-vip-card a:not(.bg-amber-400),
-.theme-light section .dark-vip-card a:not(.bg-amber-400),
-.theme-light div.dark-vip-card a:not(.bg-amber-400) {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.35) !important;
-}
-
-html.theme-light .dark-vip-card a:not(.bg-amber-400) span,
-body.theme-light .dark-vip-card a:not(.bg-amber-400) span,
-.theme-light .dark-vip-card a:not(.bg-amber-400) span {
-  color: #ffffff !important;
-  background-color: transparent !important;
-}
-
-/* Protect MT-01 AI Chat Modal from light theme color distortion */
-html.theme-light .mt01-chat-modal,
-body.theme-light .mt01-chat-modal,
-.theme-light .mt01-chat-modal,
-.theme-light div.mt01-chat-modal {
-  background-color: #0d0e12 !important;
-  color: #f1f5f9 !important;
-}
-
-html.theme-light .mt01-chat-header,
-body.theme-light .mt01-chat-header,
-.theme-light .mt01-chat-header,
-.theme-light div.mt01-chat-header {
-  background-color: #12141a !important;
-  color: #ffffff !important;
-}
-
-html.theme-light .mt01-chat-modal h3,
-body.theme-light .mt01-chat-modal h3,
-.theme-light .mt01-chat-modal h3,
-.theme-light .mt01-chat-header h3 {
-  color: #ffffff !important;
-}
-
-html.theme-light .mt01-chat-header span,
-body.theme-light .mt01-chat-header span,
-.theme-light .mt01-chat-header span {
-  color: #94a3b8 !important;
-}
-
-html.theme-light .mt01-chat-modal button.hdr-btn,
-body.theme-light .mt01-chat-modal button.hdr-btn,
-.theme-light .mt01-chat-modal button.hdr-btn,
-html.theme-light .mt01-chat-modal button.mt01-hdr-btn,
-body.theme-light .mt01-chat-modal button.mt01-hdr-btn,
-.theme-light .mt01-chat-modal button.mt01-hdr-btn {
-  background-color: #1e222d !important;
-  color: #fbbf24 !important;
-  border: 1px solid rgba(194, 164, 114, 0.45) !important;
-}
-
-html.theme-light .mt01-chat-modal button.hdr-btn svg,
-body.theme-light .mt01-chat-modal button.hdr-btn svg,
-html.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
-body.theme-light .mt01-chat-modal button.mt01-hdr-btn svg {
-  color: #fbbf24 !important;
-  stroke: #fbbf24 !important;
-  fill: none !important;
-}
-
-html.theme-light .mt01-chat-modal button.hdr-btn:hover,
-body.theme-light .mt01-chat-modal button.hdr-btn:hover,
-html.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
-body.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover {
-  background-color: rgba(251, 191, 36, 0.25) !important;
-  color: #fbbf24 !important;
-  border-color: #fbbf24 !important;
-}
-
-.theme-light .mt01-chat-modal .bot-bubble p {
-  color: #f1f5f9 !important;
-}
-
-.theme-light .mt01-chat-modal .bot-bubble strong {
-  color: #fde047 !important;
-}
-
-.theme-light .mt01-chat-modal input {
-  color: #ffffff !important;
-  background-color: #000000 !important;
-}
-
-/* 3. NAVBAR IN LIGHT MODE */
-.theme-light nav {
-  background-color: rgba(241, 244, 248, 0.96) !important;
-  border-bottom: 1px solid #cbd5e1 !important;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08) !important;
-}
-.theme-light nav a:not(.btn-primary) {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-.theme-light nav a:not(.btn-primary) span {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-.theme-light nav a:not(.btn-primary) svg {
-  color: #0f172a !important;
-}
-.theme-light nav a:hover {
-  color: #C2A472 !important;
-}
-.theme-light nav a.text-primary,
-.theme-light nav span.text-primary {
-  color: #92400e !important;
+/* Rich Legible Amber for Gold Accents in Light Mode (7.5:1 Contrast) */
+.theme-light span.text-primary,
+.theme-light a.text-primary,
+.theme-light .text-primary {
+  color: #b45309 !important;
   font-weight: 900 !important;
 }
-.theme-light nav .text-white {
+
+/* 2. LIGHT GLASS CARDS & CONTAINERS */
+.theme-light .glass-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08) !important;
+}
+
+.theme-light .glass-card:hover {
+  background: #ffffff !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.12) !important;
+}
+
+.theme-light .glass-card h1,
+.theme-light .glass-card h2,
+.theme-light .glass-card h3,
+.theme-light .glass-card h4,
+.theme-light .glass-card span.text-white {
   color: #0f172a !important;
 }
-.theme-light nav .text-zinc-300,
-.theme-light nav .text-zinc-400 {
+
+.theme-light .glass-card p,
+.theme-light .glass-card span.text-zinc-400,
+.theme-light .glass-card span.text-zinc-300 {
   color: #334155 !important;
+}
+
+.theme-light .glass-card div[class*="bg-white/5"],
+.theme-light .glass-card div[class*="bg-black/40"],
+.theme-light .glass-card div[class*="bg-black/50"] {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+.theme-light .glass-card div[class*="bg-white/5"] p.text-white,
+.theme-light .glass-card div[class*="bg-white/5"] span.text-white {
+  color: #0f172a !important;
+}
+
+/* 3. LIGHT MODE FORM INPUTS & CONTROLS */
+.theme-light input,
+.theme-light select,
+.theme-light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
   font-weight: 600 !important;
 }
 
-/* Mega Dropdowns in Light Mode */
-.theme-light nav [class*="bg-[#12141a]"]:not(.mt01-chat-modal):not(.mt01-chat-header),
-.theme-light nav [class*="bg-[#0d0e12]"]:not(.mt01-chat-modal):not(.mt01-chat-header) {
+.theme-light input:focus,
+.theme-light select:focus,
+.theme-light textarea:focus {
+  border-color: #d97706 !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15) !important;
   background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 15px 35px -5px rgba(15, 23, 42, 0.15) !important;
 }
-.theme-light nav [class*="border-white/"] {
-  border-color: #e2e8f0 !important;
+
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #64748b !important;
 }
-.theme-light nav div[class*="border-b"] span {
+
+.theme-light label {
+  color: #1e293b !important;
+  font-weight: 800 !important;
+}
+
+.theme-light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+/* 4. LIGHT MODE BUTTONS */
+.theme-light .btn-primary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.35) !important;
+}
+
+.theme-light .btn-primary * {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+.theme-light .btn-primary:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+  box-shadow: 0 8px 25px rgba(217, 119, 6, 0.5) !important;
+}
+
+.theme-light section:not(:first-of-type) .btn-secondary {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
   color: #0f172a !important;
   font-weight: 800 !important;
 }
-.theme-light nav div[class*="border-b"] span.text-primary {
-  color: #78350f !important;
+
+.theme-light section:not(:first-of-type) .btn-secondary:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #000000 !important;
 }
-.theme-light nav a[class*="group/item"] {
+
+/* WhatsApp Buttons in Light Mode */
+.theme-light a[href*="whatsapp"],
+.theme-light a[href*="wa.me"],
+.theme-light a[href*="wa.link"],
+.theme-light a[class*="group/btn"] {
+  background-color: #25D366 !important;
+  border: 1px solid #16a34a !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+.theme-light a[href*="whatsapp"] *,
+.theme-light a[href*="wa.me"] *,
+.theme-light a[href*="wa.link"] *,
+.theme-light a[class*="group/btn"] * {
+  color: #000000 !important;
+  fill: #000000 !important;
+}
+
+/* 5. LIGHT NAVBAR & MEGA DROPDOWNS */
+.theme-light nav {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08) !important;
+}
+
+.theme-light nav a {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.theme-light nav a:hover {
+  color: #b45309 !important;
+}
+
+.theme-light nav a.text-primary,
+.theme-light nav span.text-primary {
+  color: #b45309 !important;
+  font-weight: 900 !important;
+}
+
+.theme-light nav .text-white {
   color: #0f172a !important;
 }
+
+.theme-light nav [class*="bg-[#0D0D0D]"],
+.theme-light nav [class*="bg-[#12141a]"],
+.theme-light nav [class*="bg-[#0d0e12]"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 20px 45px -5px rgba(15, 23, 42, 0.16) !important;
+}
+
 .theme-light nav a[class*="group/item"]:hover {
-  background-color: #f1f4f8 !important;
+  background-color: #f1f5f9 !important;
 }
-.theme-light nav a[class*="group/item"] div {
-  color: #0f172a !important;
-}
+
 .theme-light nav a[class*="group/item"] .text-white {
   color: #0f172a !important;
   font-weight: 800 !important;
 }
+
 .theme-light nav a[class*="group/item"] .text-zinc-400 {
   color: #475569 !important;
-  font-weight: 500 !important;
 }
 
-/* USA Import Card inside Dropdown */
-.theme-light nav a[class*="from-blue-950"] {
-  background: #eff6ff !important;
-  border-color: #93c5fd !important;
-}
-.theme-light nav a[class*="from-blue-950"] .text-white {
-  color: #1e3a8a !important;
-  font-weight: 800 !important;
-}
-.theme-light nav a[class*="from-blue-950"] .text-zinc-400 {
-  color: #1e40af !important;
-  font-weight: 500 !important;
-}
-.theme-light nav a[class*="from-blue-950"] div[class*="bg-blue-500/20"] {
-  background-color: #dbeafe !important;
-  border-color: #93c5fd !important;
-}
-.theme-light nav a[class*="from-blue-950"] div[class*="bg-blue-500/20"] span {
-  color: #1e40af !important;
-  font-weight: 900 !important;
-}
-
-/* Icon Badges in Dropdown */
 .theme-light nav a[class*="group/item"] div[class*="rounded-xl"] {
-  background-color: #f1f4f8 !important;
+  background-color: #f8fafc !important;
   border-color: #cbd5e1 !important;
 }
+
 .theme-light nav a[class*="group/item"] div[class*="rounded-xl"] svg {
-  color: #78350f !important;
-}
-.theme-light nav a[class*="from-blue-950"] div[class*="rounded-xl"] {
-  background-color: #dbeafe !important;
-  border-color: #93c5fd !important;
-}
-.theme-light nav a[class*="from-blue-950"] div[class*="rounded-xl"] svg {
-  color: #1d4ed8 !important;
+  color: #b45309 !important;
 }
 
-/* Dropdown Footer Links */
-.theme-light nav div[class*="border-t"] span {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-.theme-light nav div[class*="border-t"] a {
-  color: #92400e !important;
-  font-weight: 900 !important;
+/* 6. LIGHT FOOTER */
+.theme-light footer {
+  background-color: #f1f5f9 !important;
+  border-top: 1px solid #cbd5e1 !important;
 }
 
-/* Brecha Cambiaria Floating Modal & Trigger in Light Mode (Anti-Glare / Soft Matte) */
-.theme-light .brecha-telemetria-popup,
-.theme-light div[class*="brecha-telemetria-popup"] {
-  background-color: #f1f4f8 !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 20px 45px -5px rgba(15, 23, 42, 0.18) !important;
-  color: #0f172a !important;
-}
-
-/* Header & General Text */
-.theme-light .brecha-telemetria-popup h2,
-.theme-light .brecha-telemetria-popup h3,
-.theme-light .brecha-telemetria-popup span[class*="font-display"] {
+.theme-light footer h4 {
   color: #0f172a !important;
   font-weight: 900 !important;
 }
-.theme-light .brecha-telemetria-popup .text-zinc-400,
-.theme-light .brecha-telemetria-popup .text-zinc-300 {
+
+.theme-light footer a,
+.theme-light footer p,
+.theme-light footer span {
   color: #334155 !important;
   font-weight: 600 !important;
 }
-.theme-light .brecha-telemetria-popup button {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
+
+.theme-light footer a:hover {
+  color: #b45309 !important;
 }
 
-/* 3 Currency Rate Cards ($ BCV, € BCV, USDT) */
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
+/* 7. INSTALACIONES SECTION IN LIGHT MODE */
+.theme-light #instalaciones,
+.theme-light section[id="instalaciones"] {
+  background-color: #f8fafc !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div div[class*="font-mono"] {
+
+.theme-light #instalaciones h2,
+.theme-light #instalaciones h3,
+.theme-light section[id="instalaciones"] h2,
+.theme-light section[id="instalaciones"] h3 {
   color: #0f172a !important;
   font-weight: 900 !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) {
-  border-color: #86efac !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) span:first-child {
-  color: #14532d !important;
+
+.theme-light #instalaciones span.text-primary,
+.theme-light section[id="instalaciones"] span.text-primary {
+  color: #b45309 !important;
   font-weight: 900 !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(1) span[class*="bg-emerald-"] {
-  background-color: #dcfce7 !important;
-  color: #14532d !important;
-  font-weight: 800 !important;
+
+.theme-light #instalaciones p,
+.theme-light section[id="instalaciones"] p {
+  color: #334155 !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) {
-  border-color: #93c5fd !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) span:first-child {
-  color: #1e3a8a !important;
-  font-weight: 900 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(2) span[class*="bg-cyan-"] {
-  background-color: #dbeafe !important;
-  color: #1e40af !important;
-  font-weight: 800 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) {
+
+.theme-light #instalaciones div[class*="bg-white/5"] {
+  background-color: #fef3c7 !important;
   border-color: #fcd34d !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) span:first-child {
-  color: #78350f !important;
+
+.theme-light #instalaciones div[class*="bg-white/5"] svg {
+  color: #b45309 !important;
+}
+
+/* 8. CATALOGO COMPONENT SPECIFIC LIGHT STYLING */
+
+/* Popular Categories (8 Cards) */
+.theme-light .catalogo-category-card {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06) !important;
+}
+
+.theme-light .catalogo-category-card:hover {
+  border-color: #f59e0b !important;
+  background-color: #f8fafc !important;
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.15) !important;
+}
+
+.theme-light .catalogo-category-card h4 {
+  color: #0f172a !important;
   font-weight: 900 !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="grid-cols-3"] > div:nth-child(3) span[class*="bg-amber-"] {
+
+.theme-light .catalogo-category-card span.category-count {
+  color: #b45309 !important;
+  font-weight: 800 !important;
+}
+
+.theme-light .catalogo-category-card.is-selected {
   background-color: #fef3c7 !important;
-  color: #78350f !important;
-  font-weight: 800 !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2) !important;
 }
 
-/* Brecha Cards (Diferencial %) */
-.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] {
-  background-color: #ffffff !important;
-  border: 1px solid #fca5a5 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] div:first-child {
-  color: #881337 !important;
-  font-weight: 800 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="border-rose-500"] div[class*="font-mono"] {
-  color: #be123c !important;
-  font-weight: 900 !important;
-}
-
-/* Calculator Section */
-.theme-light .brecha-telemetria-popup div[class*="border-white/15"] {
-  background-color: #e2e8f0 !important;
-  border: 1px solid #cbd5e1 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="border-white/15"] span {
-  color: #0f172a !important;
-  font-weight: 900 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] span {
-  color: #334155 !important;
-  font-weight: 800 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="border-amber-500/40"] input {
-  color: #0f172a !important;
-  font-weight: 900 !important;
-  background-color: transparent !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] {
+/* Product Grid Cards */
+.theme-light .catalogo-product-card {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05) !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-white {
+
+.theme-light .catalogo-product-card:hover {
+  border-color: #f59e0b !important;
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.16) !important;
+}
+
+.theme-light .catalogo-product-card h3 {
   color: #0f172a !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
 }
-.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-emerald-400 {
-  color: #14532d !important;
-  font-weight: 900 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-cyan-400 {
-  color: #1e40af !important;
-  font-weight: 900 !important;
-}
-.theme-light .brecha-telemetria-popup div[class*="bg-black/50"] span.text-amber-400 {
-  color: #78350f !important;
+
+.theme-light .catalogo-product-card .product-price,
+.theme-light .catalogo-product-card span.text-amber-500 {
+  color: #b45309 !important;
   font-weight: 900 !important;
 }
 
-/* Floating Rates Trigger Pill (bottom-left) in Light Mode */
+.theme-light .catalogo-product-card span.text-zinc-400 {
+  color: #64748b !important;
+}
+
+.theme-light .catalogo-product-card .product-cart-btn {
+  background-color: #fef3c7 !important;
+  border: 1px solid #fcd34d !important;
+  color: #78350f !important;
+}
+
+.theme-light .catalogo-product-card .product-cart-btn:hover {
+  background-color: #fde68a !important;
+  color: #000000 !important;
+}
+
+/* Category Filter Tabs Toolbar */
+.theme-light div[class*="overflow-x-auto"] button {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 800 !important;
+}
+
+.theme-light div[class*="overflow-x-auto"] button[class*="bg-primary"] {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+/* Floating Cart Trigger Button */
+.catalogo-floating-cart,
+.theme-light .catalogo-floating-cart {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%) !important;
+  border: 2px solid #fef08a !important;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.45) !important;
+  color: #000000 !important;
+}
+.catalogo-floating-cart *,
+.theme-light .catalogo-floating-cart * {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+/* 9. DARK CONTAINER IMMUNITY (HERO, PROMO CARDS, USA BANNER, MODALS) */
+.theme-light section:first-of-type:not(.jornada-hero-section),
+.theme-light .catalogo-hero-card,
+.theme-light .catalogo-promo-card,
+.theme-light .catalogo-usa-banner,
+.theme-light .dark-vip-card,
+.theme-light .usa-import-modal,
+.theme-light .mt01-chat-modal {
+  color: #ffffff !important;
+}
+
+.theme-light section:first-of-type:not(.jornada-hero-section) h1,
+.theme-light section:first-of-type:not(.jornada-hero-section) h1 span:first-child,
+.theme-light .catalogo-hero-card h1,
+.theme-light .catalogo-hero-card h1 span:not(.text-amber-400),
+.theme-light .catalogo-promo-card h3,
+.theme-light .catalogo-usa-banner h2,
+.theme-light .dark-vip-card h2,
+.theme-light .dark-vip-card h3,
+.theme-light .usa-import-modal h2,
+.theme-light .mt01-chat-modal h3 {
+  color: #ffffff !important;
+}
+
+.theme-light section:first-of-type:not(.jornada-hero-section) p,
+.theme-light .catalogo-hero-card p,
+.theme-light .catalogo-promo-card p,
+.theme-light .catalogo-usa-banner p,
+.theme-light .dark-vip-card p,
+.theme-light .usa-import-modal p,
+.theme-light .mt01-chat-modal p {
+  color: #cbd5e1 !important;
+}
+
+.theme-light section:first-of-type:not(.jornada-hero-section) span.text-primary,
+.theme-light .catalogo-hero-card span.text-amber-400,
+.theme-light .dark-vip-card svg {
+  color: #fbbf24 !important;
+}
+
+.theme-light .catalogo-hero-card {
+  background: linear-gradient(180deg, #161822 0%, #11131a 50%, #0D0D0D 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+}
+
+.theme-light .promo-card-frenos {
+  background: linear-gradient(135deg, #221010 0%, #151114 50%, #000000 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.45) !important;
+}
+.theme-light .promo-card-frenos .promo-tag,
+.theme-light .promo-card-frenos h3 span,
+.theme-light .promo-card-frenos button span,
+.theme-light .promo-card-frenos button svg {
+  color: #f87171 !important;
+}
+
+.theme-light .promo-card-suspension {
+  background: linear-gradient(135deg, #221a0f 0%, #151310 50%, #000000 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.45) !important;
+}
+.theme-light .promo-card-suspension .promo-tag,
+.theme-light .promo-card-suspension h3 span,
+.theme-light .promo-card-suspension button span,
+.theme-light .promo-card-suspension button svg {
+  color: #fbbf24 !important;
+}
+
+.theme-light .promo-card-motor {
+  background: linear-gradient(135deg, #0e1726 0%, #10141c 50%, #000000 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.45) !important;
+}
+.theme-light .promo-card-motor .promo-tag,
+.theme-light .promo-card-motor h3 span,
+.theme-light .promo-card-motor button span,
+.theme-light .promo-card-motor button svg {
+  color: #60a5fa !important;
+}
+
+.theme-light .catalogo-usa-banner {
+  background: linear-gradient(135deg, #0d1527 0%, #161f30 50%, #10141d 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.4) !important;
+}
+
+.theme-light .dark-vip-card {
+  background-color: #0d0e12 !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+}
+
+.theme-light .usa-import-modal,
+.theme-light .mt01-chat-modal {
+  background-color: #0d0e12 !important;
+}
+
+/* 10. FLOATING RATES TRIGGER (Bottom-Left) */
 .theme-light div[class*="fixed bottom-4 left-"] button {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
@@ -627,1065 +645,37 @@ body.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover {
   color: #92400e !important;
   font-weight: 900 !important;
 }
-.theme-light div[class*="fixed bottom-4 left-"] button .text-zinc-600 {
-  color: #94a3b8 !important;
-}
 
-/* Brands Ticker in Light Mode */
+/* 11. BRANDS MARQUEE IN LIGHT MODE */
 .theme-light .animate-marquee div {
   color: rgba(15, 23, 42, 0.45) !important;
   font-weight: 900 !important;
 }
 .theme-light .animate-marquee div:hover {
-  color: #92400e !important;
+  color: #b45309 !important;
 }
 .theme-light section[class*="bg-black/40"] {
-  background-color: #f1f4f8 !important;
-  border-color: #cbd5e1 !important;
-}
-.theme-light section[class*="bg-black/40"] div[class*="bg-gradient-to-r"] {
-  background: linear-gradient(to right, #eaedf1, transparent) !important;
-}
-.theme-light section[class*="bg-black/40"] div[class*="bg-gradient-to-l"] {
-  background: linear-gradient(to left, #eaedf1, transparent) !important;
-}
-
-/* 4. INSTALACIONES SECTION */
-.theme-light #instalaciones,
-.theme-light section[id="instalaciones"] {
-  background-color: #f1f4f8 !important;
-}
-.theme-light #instalaciones h2,
-.theme-light #instalaciones h3,
-.theme-light #instalaciones h3 span,
-.theme-light section[id="instalaciones"] h2,
-.theme-light section[id="instalaciones"] h3,
-.theme-light section[id="instalaciones"] h3 span {
-  color: #0f172a !important;
-  font-weight: 900 !important;
-}
-.theme-light #instalaciones p,
-.theme-light #instalaciones .text-zinc-400,
-.theme-light section[id="instalaciones"] p {
-  color: #1e293b !important;
-  font-weight: 500 !important;
-}
-.theme-light #instalaciones div.group\/inst {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-}
-.theme-light #instalaciones div[class*="bg-white/5"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-
-/* 5. TEAM MEMBERS CARDS & RECRUITMENT CTA (Nosotros) */
-.theme-light div[class*="bg-[#121417]"],
-.theme-light div[class*="bg-[#16181D]"],
-.theme-light div[class*="bg-[#0E1013]"],
-.theme-light div[class*="from-white/10"],
-.theme-light div[class*="from-white/10"][class*="via-[#16181D]"] {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  background-image: none !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08) !important;
-}
-.theme-light div[class*="bg-[#121417]"] h3,
-.theme-light div[class*="bg-[#121417]"] .text-white,
-.theme-light div[class*="from-white/10"] h3,
-.theme-light div[class*="from-white/10"] .text-white,
-.theme-light div[class*="from-white/10"] h3 span:not(.text-primary) {
-  color: #0f172a !important;
-  font-weight: 900 !important;
-}
-.theme-light div[class*="bg-[#121417]"] p,
-.theme-light div[class*="from-white/10"] p,
-.theme-light div[class*="from-white/10"] .text-zinc-300 {
-  color: #334155 !important;
-  font-weight: 500 !important;
-}
-.theme-light div[class*="bg-[#121417]"] span[class*="bg-[#0D0D0D]/80"] {
-  background-color: #fef3c7 !important;
-  border-color: #fcd34d !important;
-  color: #78350f !important;
-}
-
-/* 6. GLASS CARDS, SERVICES & FIX OVERLAY SCRIMS */
-.theme-light .glass-card {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06) !important;
-}
-.theme-light .glass-card:hover {
-  background: #ffffff !important;
-  border-color: #C2A472 !important;
-  box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.12) !important;
-}
-
-/* CRITICAL: Keep image overlay scrims transparent so photos are never blocked! */
-.theme-light div.absolute[class*="inset-0"][class*="bg-black"],
-.theme-light .glass-card div.absolute[class*="inset-0"] {
-  background-color: transparent !important;
-}
-.theme-light .glass-card img {
-  opacity: 1 !important;
-  display: block !important;
-}
-.theme-light .glass-card div[class*="top-4 left-4"] {
-  background-color: rgba(255, 255, 255, 0.85) !important;
-  border: 1px solid #cbd5e1 !important;
-}
-
-.theme-light .glass-card h1,
-.theme-light .glass-card h2,
-.theme-light .glass-card h3,
-.theme-light .glass-card h4,
-.theme-light .glass-card span.text-white,
-.theme-light .glass-card button span {
-  color: #0f172a !important;
-}
-.theme-light .glass-card p,
-.theme-light .glass-card .text-zinc-400,
-.theme-light .glass-card .text-zinc-300 {
-  color: #334155 !important;
-}
-
-/* Service Card WhatsApp button in Light Mode */
-.theme-light .glass-card a[href*="whatsapp"],
-.theme-light .glass-card a[href*="wa.me"],
-.theme-light .glass-card a[class*="group/btn"] {
-  background-color: #25D366 !important;
-  border: 1px solid #16a34a !important;
-  color: #ffffff !important;
-  font-weight: 800 !important;
-}
-.theme-light .glass-card a[href*="whatsapp"] *,
-.theme-light .glass-card a[href*="wa.me"] *,
-.theme-light .glass-card a[class*="group/btn"] * {
-  color: #ffffff !important;
-  fill: #ffffff !important;
-}
-
-/* FAQ Accordions */
-.theme-light .glass-card button {
-  color: #0f172a !important;
-}
-.theme-light .glass-card button span {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-
-/* Catalogo Filters & Search Toolbar */
-.theme-light div[class*="overflow-x-auto"] button {
-  background-color: #ffffff !important;
-  color: #1e293b !important;
-  border: 1px solid #cbd5e1 !important;
-  font-weight: 800 !important;
-}
-.theme-light div[class*="overflow-x-auto"] button span {
-  color: #1e293b !important;
-}
-.theme-light div[class*="overflow-x-auto"] button[class*="bg-primary"] {
-  background-color: #C2A472 !important;
-  border-color: #b3935a !important;
-  color: #000000 !important;
-}
-.theme-light div[class*="overflow-x-auto"] button[class*="bg-primary"] span {
-  color: #000000 !important;
-  font-weight: 900 !important;
-}
-
-/* Mi Carrito Button in Catalogo */
-.theme-light .catalogo-cart-btn,
-.theme-light button.catalogo-cart-btn,
-.theme-light button[class*="catalogo-cart-btn"] {
-  background-color: #fef3c7 !important;
-  border: 1px solid #fcd34d !important;
-  color: #78350f !important;
-}
-.theme-light .catalogo-cart-btn span,
-.theme-light .catalogo-cart-btn svg,
-.theme-light button.catalogo-cart-btn span,
-.theme-light button.catalogo-cart-btn svg {
-  color: #78350f !important;
-  font-weight: 900 !important;
-}
-.theme-light .catalogo-cart-btn:hover,
-.theme-light button.catalogo-cart-btn:hover {
-  background-color: #fde68a !important;
-  color: #000000 !important;
-}
-.theme-light .catalogo-cart-btn:hover span,
-.theme-light .catalogo-cart-btn:hover svg {
-  color: #000000 !important;
-}
-
-/* ========================================================================= */
-/* CATALOGO PUBLIC PAGE THEME IMMUNITY & COMPONENT STYLING                  */
-/* ========================================================================= */
-
-/* 1. HERO SHOWCASE CARD (Always crisp luxury dark aesthetic) */
-.catalogo-hero-card,
-.theme-light .catalogo-hero-card,
-html.theme-light .catalogo-hero-card,
-body.theme-light .catalogo-hero-card {
-  background: linear-gradient(180deg, #161822 0%, #11131a 50%, #0D0D0D 100%) !important;
-  border: 1px solid rgba(251, 191, 36, 0.25) !important;
-  color: #ffffff !important;
-}
-.catalogo-hero-card h1,
-.theme-light .catalogo-hero-card h1,
-.theme-light main .catalogo-hero-card h1 {
-  color: #ffffff !important;
-}
-.catalogo-hero-card h1 span,
-.theme-light .catalogo-hero-card h1 span,
-.theme-light main .catalogo-hero-card h1 span {
-  color: #fbbf24 !important;
-}
-.catalogo-hero-card p,
-.theme-light .catalogo-hero-card p,
-.theme-light main .catalogo-hero-card p {
-  color: #cbd5e1 !important;
-}
-.catalogo-hero-card .hero-tag,
-.theme-light .catalogo-hero-card .hero-tag {
-  background: rgba(251, 191, 36, 0.12) !important;
-  border: 1px solid rgba(251, 191, 36, 0.35) !important;
-  color: #fbbf24 !important;
-}
-.catalogo-hero-card .hero-tag span,
-.catalogo-hero-card .hero-tag svg {
-  color: #fbbf24 !important;
-}
-.catalogo-hero-card .hero-btn-usa,
-.theme-light .catalogo-hero-card .hero-btn-usa {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #ffffff !important;
-}
-.catalogo-hero-card .hero-btn-usa span,
-.catalogo-hero-card .hero-btn-usa svg {
-  color: #ffffff !important;
-}
-.catalogo-hero-card .hero-btn-cart,
-.theme-light .catalogo-hero-card .hero-btn-cart {
-  background: rgba(251, 191, 36, 0.15) !important;
-  border: 1px solid rgba(251, 191, 36, 0.35) !important;
-  color: #fbbf24 !important;
-}
-.catalogo-hero-card .hero-btn-cart span,
-.catalogo-hero-card .hero-btn-cart svg {
-  color: #fbbf24 !important;
-}
-
-/* 2. POPULAR CATEGORIES CARDS */
-.catalogo-category-card {
-  transition: all 0.25s ease;
-}
-.theme-light .catalogo-category-card {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05) !important;
-}
-.theme-light .catalogo-category-card:hover {
-  border-color: #fbbf24 !important;
-  background-color: #f8fafc !important;
-  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.12) !important;
-}
-.theme-light .catalogo-category-card h4 {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-.theme-light .catalogo-category-card span.category-count {
-  color: #b45309 !important;
-  font-weight: 700 !important;
-}
-.theme-light .catalogo-category-card.is-selected {
-  background-color: #fef3c7 !important;
-  border-color: #f59e0b !important;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2) !important;
-}
-
-/* 3. PROMO OFFER BANNERS (High contrast luxury cards in both themes) */
-.catalogo-promo-card,
-.theme-light .catalogo-promo-card,
-html.theme-light .catalogo-promo-card,
-html.theme-light body main .catalogo-promo-card {
-  color: #ffffff !important;
-}
-.catalogo-promo-card h3,
-.theme-light .catalogo-promo-card h3,
-.theme-light main .catalogo-promo-card h3,
-html.theme-light body main .catalogo-promo-card h3 {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-.catalogo-promo-card p,
-.theme-light .catalogo-promo-card p,
-.theme-light main .catalogo-promo-card p,
-html.theme-light body main .catalogo-promo-card p {
-  color: #cbd5e1 !important;
-}
-.catalogo-promo-card button,
-.theme-light .catalogo-promo-card button,
-html.theme-light body main .catalogo-promo-card button {
-  background: transparent !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
-
-/* Card 1 (Frenos) */
-.promo-card-frenos,
-.theme-light .promo-card-frenos,
-html.theme-light body main .promo-card-frenos {
-  background: linear-gradient(135deg, #221010 0%, #151114 50%, #000000 100%) !important;
-  border: 1px solid rgba(239, 68, 68, 0.35) !important;
-}
-.promo-card-frenos .promo-tag,
-html.theme-light body main .promo-card-frenos .promo-tag,
-.promo-card-frenos h3 span,
-html.theme-light body main .promo-card-frenos h3 span,
-.promo-card-frenos button span,
-html.theme-light body main .promo-card-frenos button span,
-.promo-card-frenos button svg,
-html.theme-light body main .promo-card-frenos button svg {
-  color: #f87171 !important;
-}
-
-/* Card 2 (Suspensión) */
-.promo-card-suspension,
-.theme-light .promo-card-suspension,
-html.theme-light body main .promo-card-suspension {
-  background: linear-gradient(135deg, #221a0f 0%, #151310 50%, #000000 100%) !important;
-  border: 1px solid rgba(251, 191, 36, 0.35) !important;
-}
-.promo-card-suspension .promo-tag,
-html.theme-light body main .promo-card-suspension .promo-tag,
-.promo-card-suspension h3 span,
-html.theme-light body main .promo-card-suspension h3 span,
-.promo-card-suspension button span,
-html.theme-light body main .promo-card-suspension button span,
-.promo-card-suspension button svg,
-html.theme-light body main .promo-card-suspension button svg {
-  color: #fbbf24 !important;
-}
-
-/* Card 3 (Inyección) */
-.promo-card-motor,
-.theme-light .promo-card-motor,
-html.theme-light body main .promo-card-motor {
-  background: linear-gradient(135deg, #0e1726 0%, #10141c 50%, #000000 100%) !important;
-  border: 1px solid rgba(59, 130, 246, 0.35) !important;
-}
-.promo-card-motor .promo-tag,
-html.theme-light body main .promo-card-motor .promo-tag,
-.promo-card-motor h3 span,
-html.theme-light body main .promo-card-motor h3 span,
-.promo-card-motor button span,
-html.theme-light body main .promo-card-motor button span,
-.promo-card-motor button svg,
-html.theme-light body main .promo-card-motor button svg {
-  color: #60a5fa !important;
-}
-
-/* 4. PRODUCT GRID CARDS */
-.theme-light .catalogo-product-card {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
-}
-.theme-light .catalogo-product-card:hover {
-  border-color: #f59e0b !important;
-  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.15) !important;
-}
-.theme-light .catalogo-product-card h3 {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-.theme-light .catalogo-product-card .product-category {
-  color: #b45309 !important;
-  font-weight: 800 !important;
-}
-.theme-light .catalogo-product-card .product-price {
-  color: #b45309 !important;
-  font-weight: 900 !important;
-}
-.theme-light .catalogo-product-card .product-old-price {
-  color: #94a3b8 !important;
-}
-.theme-light .catalogo-product-card .product-cart-btn {
-  background-color: #fef3c7 !important;
-  border: 1px solid #fcd34d !important;
-  color: #78350f !important;
-}
-.theme-light .catalogo-product-card .product-cart-btn span,
-.theme-light .catalogo-product-card .product-cart-btn svg {
-  color: #78350f !important;
-}
-.theme-light .catalogo-product-card .product-cart-btn:hover {
-  background-color: #fde68a !important;
-  color: #000000 !important;
-}
-.theme-light .catalogo-product-card .product-action-btn {
-  background-color: #f1f5f9 !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #334155 !important;
-}
-.theme-light .catalogo-product-card .product-action-btn span,
-.theme-light .catalogo-product-card .product-action-btn svg {
-  color: #334155 !important;
-}
-.theme-light .catalogo-product-card .product-action-btn:hover {
-  background-color: #e2e8f0 !important;
-  color: #0f172a !important;
-}
-
-/* 5. USA IMPORT BANNER */
-.catalogo-usa-banner,
-.theme-light .catalogo-usa-banner,
-html.theme-light .catalogo-usa-banner {
-  background: linear-gradient(135deg, #0d1527 0%, #161f30 50%, #10141d 100%) !important;
-  border: 1px solid rgba(251, 191, 36, 0.4) !important;
-  color: #ffffff !important;
-}
-.catalogo-usa-banner h2,
-.theme-light .catalogo-usa-banner h2,
-.theme-light main .catalogo-usa-banner h2 {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-.catalogo-usa-banner p,
-.theme-light .catalogo-usa-banner p,
-.theme-light main .catalogo-usa-banner p {
-  color: #cbd5e1 !important;
-}
-.catalogo-usa-banner .usa-banner-btn,
-.theme-light .catalogo-usa-banner .usa-banner-btn {
-  background-color: #C2A472 !important;
-  color: #000000 !important;
-  font-weight: 900 !important;
-  border: none !important;
-  box-shadow: 0 6px 20px rgba(194, 164, 114, 0.35) !important;
-}
-.catalogo-usa-banner .usa-banner-btn * {
-  color: #000000 !important;
-}
-.catalogo-usa-banner .usa-banner-btn:hover {
-  background-color: #d4b886 !important;
-}
-
-/* 6. FLOATING CART BUTTON (Always pure high-visibility MasterTech Gold) */
-.catalogo-floating-cart,
-.theme-light .catalogo-floating-cart,
-html.theme-light .catalogo-floating-cart,
-body.theme-light .catalogo-floating-cart {
-  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%) !important;
-  border: 2px solid #fef08a !important;
-  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.45) !important;
-  color: #000000 !important;
-}
-.catalogo-floating-cart *,
-.theme-light .catalogo-floating-cart * {
-  color: #000000 !important;
-  font-weight: 900 !important;
-}
-.catalogo-floating-cart .cart-badge-count {
-  background-color: #000000 !important;
-  color: #fbbf24 !important;
-  border: 1px solid #fbbf24 !important;
-}
-
-/* Section Title text in light mode */
-.theme-light .section-heading-dark {
-  color: #0f172a !important;
-}
-.theme-light .section-subheading-dark {
-  color: #475569 !important;
-}
-
-/* 7. BADGES AND HIGHLIGHTS */
-.theme-light span[class*="bg-primary/"],
-.theme-light div[class*="bg-primary/"],
-.theme-light [class*="rounded-full"][class*="bg-primary/"],
-.theme-light [class*="rounded-full"][class*="border-primary"] {
-  background-color: #fef3c7 !important;
-  border: 1px solid #fcd34d !important;
-  color: #78350f !important;
-}
-.theme-light span[class*="bg-primary/"] *,
-.theme-light div[class*="bg-primary/"] *,
-.theme-light [class*="rounded-full"][class*="bg-primary/"] *,
-.theme-light [class*="rounded-full"][class*="border-primary"] * {
-  color: #78350f !important;
-  font-weight: 900 !important;
-}
-
-/* 8. FORMS, INPUTS, SELECT OPTIONS & POSTULACIÓN */
-.theme-light #contacto .glass-card,
-.theme-light #contacto div[class*="bg-white/5"] {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-}
-.theme-light #contacto h2,
-.theme-light #contacto h3 {
-  color: #0f172a !important;
-}
-.theme-light #contacto p,
-.theme-light #contacto label {
-  color: #334155 !important;
-  font-weight: 700;
-}
-
-/* Postulación Form & Modal in Light Mode */
-.theme-light div[class*="bg-[#101216]"],
-.theme-light div[class*="bg-[#0c0e12]"],
-.theme-light div[class*="bg-[#07080a]"],
-.theme-light div[class*="bg-[#0A0B0E]"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-.theme-light div[class*="bg-[#101216]"] h2,
-.theme-light div[class*="bg-[#101216]"] h3,
-.theme-light div[class*="bg-[#0c0e12]"] h2,
-.theme-light div[class*="bg-[#0c0e12]"] h3,
-.theme-light div[class*="bg-[#101216]"] span.text-white,
-.theme-light div[class*="bg-[#0c0e12]"] span.text-white {
-  color: #0f172a !important;
-}
-.theme-light div[class*="bg-[#101216]"] label,
-.theme-light div[class*="bg-[#0c0e12]"] label {
-  color: #1e293b !important;
-  font-weight: 800 !important;
-}
-.theme-light div[class*="bg-[#101216]"] p,
-.theme-light div[class*="bg-[#0c0e12]"] p {
-  color: #475569 !important;
-}
-.theme-light div[class*="bg-[#0c0e12]"] button[class*="bg-white/5"],
-.theme-light div[class*="bg-[#101216]"] button[class*="bg-white/5"] {
   background-color: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
-  color: #334155 !important;
-}
-.theme-light div[class*="bg-[#0c0e12]"] label[class*="border-dashed"],
-.theme-light div[class*="bg-[#101216]"] label[class*="border-dashed"] {
-  background-color: #f8fafc !important;
-  border-color: #cbd5e1 !important;
-}
-.theme-light div[class*="bg-[#0c0e12]"] label[class*="border-dashed"] span,
-.theme-light div[class*="bg-[#101216]"] label[class*="border-dashed"] span {
-  color: #0f172a !important;
 }
 
-/* Universal Inputs & Select Dropdowns */
-.theme-light input,
-.theme-light select,
-.theme-light textarea {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-  border: 1px solid #cbd5e1 !important;
-  font-weight: 700;
-}
-.theme-light input::placeholder,
-.theme-light textarea::placeholder {
-  color: #94a3b8 !important;
-}
-
-/* CRITICAL: Native Select Dropdown Options */
-.theme-light select option,
-.theme-light option {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  font-weight: 700 !important;
-}
-.theme-light select option:disabled,
-.theme-light option:disabled {
-  background-color: #f1f5f9 !important;
-  color: #94a3b8 !important;
-}
-
-/* 9. PRIMARY AND SECONDARY BUTTONS */
-.theme-light .btn-primary {
-  background-color: #C2A472 !important;
-  color: #0D0D0D !important;
-  font-weight: 900 !important;
-}
-.theme-light .btn-primary * {
-  color: #0D0D0D !important;
-}
-.theme-light section:not(:first-of-type) .btn-secondary {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-}
-.theme-light section:not(:first-of-type) .btn-secondary:hover {
-  background: #e2e8f0 !important;
-  color: #000000 !important;
-  border-color: #94a3b8 !important;
-}
-
-/* 10. MODALS & FOOTER */
-.theme-light footer {
-  background-color: #f1f4f8 !important;
-  border-top: 1px solid #cbd5e1 !important;
-}
-.theme-light footer h4,
-.theme-light footer [class*="uppercase"] {
-  color: #0f172a !important;
-  font-weight: 900 !important;
-}
-.theme-light footer a,
-.theme-light footer p,
-.theme-light footer span {
-  color: #334155 !important;
-  font-weight: 600 !important;
-}
-.theme-light footer a:hover {
-  color: #000000 !important;
-}
-
-/* 11. EXPLICIT DARK MODE HIGH-CONTRAST OVERRIDES */
-html:not(.theme-light) input,
-html:not(.theme-light) select,
-html:not(.theme-light) textarea,
-html.dark input,
-html.dark select,
-html.dark textarea,
-body.dark input,
-body.dark select,
-body.dark textarea {
-  background-color: rgba(0, 0, 0, 0.6) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-html:not(.theme-light) input::placeholder,
-html:not(.theme-light) textarea::placeholder,
-html.dark input::placeholder,
-html.dark textarea::placeholder,
-body.dark input::placeholder,
-body.dark textarea::placeholder {
-  color: #71717a !important;
-}
-
-html:not(.theme-light) select option,
-html:not(.theme-light) option,
-html.dark select option,
-html.dark option,
-body.dark select option,
-body.dark option {
-  background-color: #12141a !important;
-  color: #ffffff !important;
-  font-weight: 600 !important;
-}
-
-html:not(.theme-light) select option:disabled,
-html:not(.theme-light) option:disabled,
-html.dark select option:disabled,
-html.dark option:disabled,
-body.dark select option:disabled,
-body.dark option:disabled {
-  background-color: #0c0e12 !important;
-  color: #52525b !important;
-}
-
-html:not(.theme-light) .fixed.inset-0 [class*="bg-[#12141a]"],
-html:not(.theme-light) .fixed.inset-0 [class*="bg-[#101216]"],
-html:not(.theme-light) .fixed.inset-0 [class*="bg-[#0c0e12]"],
-html.dark .fixed.inset-0 [class*="bg-[#12141a]"],
-html.dark .fixed.inset-0 [class*="bg-[#101216]"],
-html.dark .fixed.inset-0 [class*="bg-[#0c0e12]"] {
-  background-color: #12141a !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
-}
-
-html:not(.theme-light) .fixed.inset-0 label,
-html.dark .fixed.inset-0 label {
-  color: #a1a1aa !important;
-}
-
-html:not(.theme-light) .fixed.inset-0 h2,
-html:not(.theme-light) .fixed.inset-0 h3,
-html.dark .fixed.inset-0 h2,
-html.dark .fixed.inset-0 h3 {
-  color: #ffffff !important;
-}
-
-/* ========================================================================= */
-/* LIGHT THEME HIGH-CONTRAST OVERRIDES FOR ADMIN PANEL BUTTONS & PILLS */
-/* ========================================================================= */
-.theme-light .admin-panel-container .bg-primary,
-.theme-light .admin-panel-container [class*="bg-primary"] {
-  background-color: #C2A472 !important;
-  color: #000000 !important;
-  font-weight: 900 !important;
-  border-color: #a88956 !important;
-}
-
-.theme-light .admin-panel-container .bg-primary *,
-.theme-light .admin-panel-container [class*="bg-primary"] * {
+/* 12. ADMIN PANEL COMPONENT ISOLATION */
+.theme-light .admin-panel-container .bg-primary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
   color: #000000 !important;
   font-weight: 900 !important;
 }
-
-/* Inactive Buttons & Switchers in Admin Light Mode */
 .theme-light .admin-panel-container button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) {
   background-color: #f1f5f9 !important;
   border: 1px solid #cbd5e1 !important;
   color: #0f172a !important;
-}
-
-.theme-light .admin-panel-container button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) * {
-  color: #0f172a !important;
   font-weight: 700 !important;
 }
 
-/* Category Filter Inactive Pills in Admin Light Mode */
-.theme-light .admin-panel-container div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) {
-  background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #334155 !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-}
-
-.theme-light div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) span,
-.theme-light div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) svg {
-  color: #334155 !important;
-  font-weight: 800 !important;
-}
-
-/* Active Category Pills in Light Mode */
-.theme-light button.bg-purple-500,
-.theme-light button.bg-blue-500,
-.theme-light button.bg-amber-500,
-.theme-light button.bg-cyan-500 {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-.theme-light button.bg-purple-500 *,
-.theme-light button.bg-blue-500 * {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-.theme-light button.bg-amber-500,
-.theme-light button.bg-amber-500 * {
-  color: #000000 !important;
-  font-weight: 900 !important;
-}
-
-/* Calendar Container & Day Cells in Light Mode */
-.theme-light main div[class*="bg-[#12141a]"]:not(.vip-icon-box):not(.dark-vip-card):not(.mt01-chat-modal):not(.mt01-chat-header) {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01) !important;
-}
-
-.theme-light main div[class*="min-h-"][class*="rounded-2xl"]:not(.vip-icon-box):not(.dark-vip-card) {
-  background-color: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
-
-.theme-light main div[class*="min-h-"][class*="rounded-2xl"]:not(.vip-icon-box):not(.dark-vip-card):hover {
-  border-color: #cbd5e1 !important;
-  background-color: #f1f5f9 !important;
-}
-
-/* Custom Native Date Picker Dark Theme Styling */
+/* 13. DATE PICKER THEME SYNC */
 input[type="date"] {
   color-scheme: dark;
-}
-
-/* ABSOLUTE FINAL OVERRIDE FOR DARK VIP CARD ICONS & ELEMENTS IN LIGHT MODE */
-html.theme-light .vip-icon-box,
-body.theme-light .vip-icon-box,
-.theme-light .vip-icon-box,
-.theme-light div.vip-icon-box {
-  background-color: #12141a !important;
-}
-
-html.theme-light .dark-vip-card svg,
-body.theme-light .dark-vip-card svg,
-.theme-light .dark-vip-card svg,
-.theme-light section.dark-vip-card-section svg,
-.theme-light .vip-icon-box svg,
-.theme-light svg.vip-sparkles-icon {
-  color: #fbbf24 !important;
-  stroke: #fbbf24 !important;
-  fill: none !important;
 }
 .theme-light input[type="date"] {
   color-scheme: light;
 }
-
-/* ABSOLUTE FINAL OVERRIDE FOR IMPORT USA MODAL HEADER IN LIGHT MODE */
-html.theme-light .usa-import-modal,
-body.theme-light .usa-import-modal,
-.theme-light .usa-import-modal,
-.theme-light div.usa-import-modal {
-  background-color: #12141a !important;
-  color: #ffffff !important;
-}
-
-html.theme-light .usa-import-header,
-body.theme-light .usa-import-header,
-.theme-light .usa-import-header,
-.theme-light div.usa-import-header {
-  background-color: #0f172a !important;
-  color: #ffffff !important;
-}
-
-html.theme-light .usa-import-header h2,
-body.theme-light .usa-import-header h2,
-.theme-light .usa-import-header h2 {
-  color: #ffffff !important;
-}
-
-html.theme-light .usa-import-header p,
-body.theme-light .usa-import-header p,
-.theme-light .usa-import-header p {
-  color: #cbd5e1 !important;
-}
-
-html.theme-light .usa-import-header span,
-body.theme-light .usa-import-header span,
-.theme-light .usa-import-header span {
-  color: #ffffff !important;
-}
-
-html.theme-light .usa-import-header span.text-blue-300,
-body.theme-light .usa-import-header span.text-blue-300 {
-  color: #93c5fd !important;
-}
-
-/* ABSOLUTE FINAL OVERRIDE FOR IMPORT USA MODAL FORM LABELS & INPUTS IN LIGHT MODE */
-html.theme-light .usa-import-modal label,
-body.theme-light .usa-import-modal label,
-.theme-light .usa-import-modal label,
-html.theme-light .usa-import-modal label span,
-body.theme-light .usa-import-modal label span,
-.theme-light .usa-import-modal label span {
-  color: #f1f5f9 !important;
-}
-
-html.theme-light .usa-import-modal input,
-body.theme-light .usa-import-modal input,
-html.theme-light .usa-import-modal textarea,
-body.theme-light .usa-import-modal textarea,
-html.theme-light .usa-import-modal select,
-body.theme-light .usa-import-modal select,
-.theme-light .usa-import-modal input,
-.theme-light .usa-import-modal textarea,
-.theme-light .usa-import-modal select {
-  background-color: #0d0e12 !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-/* ABSOLUTE FINAL OVERRIDE FOR PLANE ICON IN USA IMPORT MODAL IN LIGHT MODE */
-html.theme-light .usa-import-header svg.usa-plane-icon,
-body.theme-light .usa-import-header svg.usa-plane-icon,
-.theme-light .usa-import-header svg.usa-plane-icon,
-.theme-light .usa-import-header .usa-plane-icon {
-  color: #38bdf8 !important;
-  stroke: #38bdf8 !important;
-  fill: none !important;
-}
-
-/* ABSOLUTE FINAL OVERRIDE FOR MT-01 CHAT MODAL ICONS & VIN CARD IN LIGHT MODE */
-html.theme-light .mt01-chat-modal svg.mt01-bot-icon,
-body.theme-light .mt01-chat-modal svg.mt01-bot-icon,
-.theme-light .mt01-chat-modal svg.mt01-bot-icon,
-.theme-light svg.mt01-bot-icon {
-  color: #fbbf24 !important;
-  stroke: #fbbf24 !important;
-  fill: none !important;
-}
-
-html.theme-light .mt01-chat-modal svg.mt01-send-icon,
-body.theme-light .mt01-chat-modal svg.mt01-send-icon,
-.theme-light .mt01-chat-modal svg.mt01-send-icon,
-.theme-light svg.mt01-send-icon {
-  color: #0d0e12 !important;
-  stroke: #0d0e12 !important;
-  fill: none !important;
-}
-
-html.theme-light .mt01-chat-modal .vin-spec-card,
-body.theme-light .mt01-chat-modal .vin-spec-card,
-.theme-light .mt01-chat-modal .vin-spec-card {
-  background-color: #12141a !important;
-  color: #ffffff !important;
-}
-
-html.theme-light .mt01-chat-modal .vin-spec-card span,
-body.theme-light .mt01-chat-modal .vin-spec-card span,
-.theme-light .mt01-chat-modal .vin-spec-card span {
-  color: #cbd5e1 !important;
-}
-
-html.theme-light .mt01-chat-modal .vin-spec-card strong,
-body.theme-light .mt01-chat-modal .vin-spec-card strong,
-.theme-light .mt01-chat-modal .vin-spec-card strong {
-  color: #fde047 !important;
-}
-
-html.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon,
-body.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon,
-.theme-light .mt01-chat-modal .vin-spec-card svg.mt01-car-icon {
-  color: #fbbf24 !important;
-  stroke: #fbbf24 !important;
-}
-
-html.theme-light .mt01-chat-modal .mt01-loading-text,
-body.theme-light .mt01-chat-modal .mt01-loading-text,
-.theme-light .mt01-chat-modal .mt01-loading-text,
-.theme-light .mt01-loading-text {
-  color: #ffffff !important;
-}
-
-html.theme-light .mt01-chat-modal .bot-loading-bubble,
-body.theme-light .mt01-chat-modal .bot-loading-bubble,
-.theme-light .mt01-chat-modal .bot-loading-bubble {
-  background-color: #181a22 !important;
-  color: #ffffff !important;
-}
-
-/* ── ABSOLUTE FINAL OVERRIDE FOR HEADER CONTROL ICONS (RotateCcw & X) IN LIGHT AND DARK MODE ── */
-.mt01-chat-modal button.mt01-hdr-btn,
-.theme-light .mt01-chat-modal button.mt01-hdr-btn,
-html.theme-light .mt01-chat-modal button.mt01-hdr-btn,
-body.theme-light .mt01-chat-modal button.mt01-hdr-btn,
-.mt01-chat-header button.mt01-hdr-btn,
-.theme-light .mt01-chat-header button.mt01-hdr-btn {
-  background-color: #1e222d !important;
-  border: 1px solid rgba(194, 164, 114, 0.45) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
-}
-
-.mt01-chat-modal button.mt01-hdr-btn:hover,
-.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
-html.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
-body.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover,
-.mt01-chat-header button.mt01-hdr-btn:hover {
-  background-color: rgba(251, 191, 36, 0.2) !important;
-  border-color: #fbbf24 !important;
-}
-
-.mt01-chat-modal button.mt01-hdr-btn svg,
-.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
-html.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
-body.theme-light .mt01-chat-modal button.mt01-hdr-btn svg,
-.mt01-chat-modal svg.mt01-header-btn-icon,
-.theme-light .mt01-chat-modal svg.mt01-header-btn-icon,
-html.theme-light .mt01-chat-modal svg.mt01-header-btn-icon,
-body.theme-light .mt01-chat-modal svg.mt01-header-btn-icon {
-  color: #fbbf24 !important;
-  stroke: #fbbf24 !important;
-  fill: none !important;
-}
-
-/* ── TALLER STATUS BADGE IMMUNITY (HERO SECTION BADGE) ── */
-.taller-status-badge {
-  text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-}
-
-html.theme-light .taller-status-badge .taller-status-text,
-body.theme-light .taller-status-badge .taller-status-text,
-.theme-light .taller-status-badge .taller-status-text,
-.taller-status-badge .taller-status-text {
-  font-weight: 900 !important;
-  letter-spacing: 0.05em !important;
-}
-
-html.theme-light .taller-status-badge span.text-emerald-400,
-.theme-light .taller-status-badge span.text-emerald-400,
-html.theme-light .taller-status-badge .taller-status-text,
-.theme-light .taller-status-badge .taller-status-text {
-  color: #34d399 !important;
-}
-
-/* ========================================================================= */
-/* UNIVERSAL SITE-WIDE LIGHT & DARK MODE HARMONIZATION                       */
-/* ========================================================================= */
-
-/* Smooth Transitions on Theme Switch */
-body, 
-main, 
-nav, 
-footer, 
-.glass-card, 
-.catalogo-product-card, 
-.catalogo-category-card, 
-input, 
-select, 
-textarea, 
-button {
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
-}
-
-/* Light Theme Universal Text & Card Clarity */
-.theme-light .text-zinc-400,
-.theme-light .text-zinc-500 {
-  color: #475569 !important;
-}
-.theme-light .text-zinc-300 {
-  color: #334155 !important;
-}
-.theme-light .text-zinc-200,
-.theme-light .text-zinc-100 {
-  color: #1e293b !important;
-}
-
-/* Light Theme Border Colors */
-.theme-light .border-white\/5,
-.theme-light .border-white\/10,
-.theme-light .border-white\/15,
-.theme-light .border-white\/20 {
-  border-color: #cbd5e1 !important;
-}
-
-/* Light Theme Background Containers */
-.theme-light .bg-white\/5,
-.theme-light .bg-white\/10 {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04) !important;
-}
-
-/* Light Theme Modal Backdrops */
-.theme-light .bg-black\/80,
-.theme-light .bg-black\/85,
-.theme-light .bg-black\/90 {
-  background-color: rgba(15, 23, 42, 0.75) !important;
-  backdrop-filter: blur(8px) !important;
-}
-
-/* Dark Theme Universal Text Clarity */
-html:not(.theme-light) .text-zinc-400,
-html.dark .text-zinc-400 {
-  color: #94a3b8 !important;
-}
-html:not(.theme-light) .text-zinc-300,
-html.dark .text-zinc-300 {
-  color: #cbd5e1 !important;
-}
-html:not(.theme-light) .text-zinc-200,
-html:not(.theme-light) .text-zinc-100,
-html.dark .text-zinc-200,
-html.dark .text-zinc-100 {
-  color: #f1f5f9 !important;
-}
-
-/* Dark Theme Backgrounds */
-html:not(.theme-light) .bg-white\/5,
-html.dark .bg-white\/5 {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-
-
