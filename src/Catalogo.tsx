@@ -38,123 +38,123 @@ export interface CatalogItem {
 const DEFAULT_CATALOG: CatalogItem[] = [
   {
     id: 1,
-    title: "Kit Aceite Sintético Motor 5W-30 + Filtro de Aceite OEM",
-    category: "Aceites y Lubricantes",
-    price: "$45.00",
-    desc: "Aceite 100% sintético de alto rendimiento con aditivos antidesgaste de última generación. Incluye filtro de aceite de especificación original.",
-    longDesc: "Formulación avanzada que reduce el rozamiento térmico en motores modernos. Protege componentes internos durante arranques en frío y prolonga la vida útil del bloque.",
-    img: "/24214142.png",
-    badge: "Más Vendido",
-    specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite OEM", "Soporta altas temperaturas de motor"],
-    compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai, Kia",
-    partNumber: "NP-SYN-5W30-OEM",
-    stock: 15,
-    isImportedUSA: true
-  },
-  {
-    id: 2,
-    title: "Pastillas de Freno Cerámicas Premium (Juego Delantero/Trasero)",
+    title: "Juego de Coilovers & Amortiguadores Deportivos (Par)",
     category: "Frenos y Suspensión",
-    price: "$55.00",
-    desc: "Pastillas cerámicas de baja emisión de polvo, frenado silencioso y máximo agarre térmico para SUVs, 4x4 y sedanes.",
-    longDesc: "Fabricadas con fibras cerámicas avanzadas que previenen chirridos metálicos y disminuyen el desgaste de los discos de freno.",
-    img: "/assets/servicio-frenos.jpg",
-    badge: "Garantía MasterTech",
-    specs: ["Compuesto 100% cerámico antidesgaste", "Libre de ruidos y polvo metálico", "Resistencia superior a 600°C"],
-    compatibility: "Vehículos Japoneses, Americanos y Coreanos",
-    partNumber: "NP-BP-CER-8842",
+    price: "$120.00",
+    desc: "Amortiguadores dobles presurizados con nitrógeno y resortes reforzados para máxima estabilidad y absorción de impacto.",
+    longDesc: "Resortes progresivos de aleación con recubrimiento electrostático. Vástagos cromados de alta fricción para uso en asfalto y terreno exigente.",
+    img: "/assets/product_dual_shock_absorbers.jpg",
+    badge: "Más Vendido",
+    specs: ["Doble tubo a gas nitrógeno", "Resortes reforzados progresivos", "Ajuste de precarga y altura"],
+    compatibility: "Jeep, Toyota, Ford, Chevrolet, Dodge",
+    partNumber: "COIL-RD-2024-OEM",
     stock: 8,
     isImportedUSA: true
   },
   {
-    id: 3,
-    title: "Batería Automotriz Libre de Mantenimiento 600A / 700A",
+    id: 2,
+    title: "Bombillo Halógeno / LED Alta Intensidad H4 OEM",
     category: "Baterías y Electricidad",
-    price: "$85.00",
-    desc: "Batería sellada de aleación plata-calcio de alta resistencia para arranques inmediatos en clima tropical.",
-    longDesc: "Diseñada para responder a altas exigencias eléctricas de sistemas multimedia, iluminación LED y aire acondicionado.",
-    img: "/assets/instalaciones.jpg",
-    badge: "Garantía 12 Meses",
-    specs: ["Sellada libre de mantenimiento", "Alta capacidad de arranque en frío (CCA)", "Placas reforzadas contra corrosión"],
-    compatibility: "Modelos estándar y Heavy Duty",
-    partNumber: "BT-MF-600A-MT",
-    stock: 6,
+    price: "$25.00",
+    desc: "Lámpara halógena de cuarzo de alta penetración lumínica con casquillo metálico estándar P43t.",
+    longDesc: "Filamento reforzado de tungsteno que resiste vibraciones mecánicas continuas. Cristal de cuarzo bloqueador de rayos UV.",
+    img: "/assets/product_oem_bulb_light.jpg",
+    badge: "OEM Original",
+    specs: ["Casquillo P43t estándar H4", "Potencia 60/55W 12V", "Vidrio de cuarzo anti-UV"],
+    compatibility: "Universal 12V vehículos livianos y camionetas",
+    partNumber: "H4-12V-6055-GER",
+    stock: 30,
     isImportedUSA: false
   },
   {
-    id: 4,
-    title: "Kit de Filtro de Aire de Motor + Filtro de Aire de Cabina A/A",
-    category: "Filtros & Componentes OEM",
-    price: "$30.00",
-    desc: "Filtros de celulosa y carbón activado que bloquean polvo, polen y partículas finas antes de entrar al motor y cabina.",
-    longDesc: "Mantén el aire limpio dentro del vehículo y optimiza la aspiración del motor para asegurar una mezcla de combustión eficiente.",
-    img: "/assets/servicio-inyeccion.jpg",
-    badge: "Filtro Carbón Activado",
-    specs: ["Eficiencia de filtrado >99%", "Protege inyectores y flujo de aire", "Elimina malos olores en cabina"],
-    compatibility: "Amplio stock disponible para todas las marcas",
-    partNumber: "FLT-KIT-AIR-441",
-    stock: 12,
-    isImportedUSA: true
-  },
-  {
-    id: 5,
-    title: "Gas Refrigerante R134a Sintético + Aceite PAG con Tinte UV",
-    category: "Fluidos y Refrigeración",
-    price: "$35.00",
-    desc: "Refrigerante ecológico R134a de máxima pureza con trazador fluorescente UV para detección rápida de fugas.",
-    longDesc: "Relleno especializado para compresores de aire acondicionado que restaura el rendimiento de congelamiento óptimo.",
-    img: "/assets/servicio-climatizacion.jpg",
-    badge: "Frío Garantizado",
-    specs: ["Refrigerante R134a 100% puro", "Aceite PAG para lubricación del compresor", "Incluye aditivo detector de fugas UV"],
-    compatibility: "Sistemas A/A automotrices R134a",
-    partNumber: "GAS-R134A-UV",
-    stock: 20,
-    isImportedUSA: true
-  },
-  {
-    id: 6,
-    title: "Juego de Amortiguadores Reforzados Gas/Hidráulicos (Par)",
+    id: 3,
+    title: "Conjunto de Puntal de Suspensión + Disco & Cáliper Brembo",
     category: "Frenos y Suspensión",
-    price: "$120.00",
-    desc: "Amortiguadores de doble tubo presurizados con nitrógeno para estabilidad superior en terreno irregular.",
-    longDesc: "Absorben impactos y vibraciones del camino, manteniendo los neumáticos firmemente adheridos al asfalto en curvas exigentes.",
-    img: "/assets/servicio-mecanica.jpg",
-    badge: "Resistencia Heavy-Duty",
-    specs: ["Presurización por gas nitrógeno", "Vástago cromado ultrarresistente", "Retenes de baja fricción"],
-    compatibility: "SUVs, Pick-ups 4x4 y Camionetas",
-    partNumber: "AMR-HD-9082-GAS",
+    price: "$185.00",
+    desc: "Módulo completo de suspensión delantera con disco ranurado ventilado y cáliper de alto frenado.",
+    longDesc: "Ensamble integral de precisión con copela superior, muelle helicoidal, rótula de dirección y pinza de 4 pistones.",
+    img: "/assets/product_strut_brake_assembly.jpg",
+    badge: "Alto Rendimiento",
+    specs: ["Cáliper 4 pistones de alto torque", "Disco ranurado con disipación térmica", "Ensamble directo Plug & Play"],
+    compatibility: "Vehículos deportivos y SUVs seleccionadas",
+    partNumber: "STR-BRK-BREM-4P",
     stock: 4,
     isImportedUSA: true
   },
   {
+    id: 4,
+    title: "Cigüeñal Forjado de Alto Rendimiento + Juego de Pistones",
+    category: "Inyección y Motor",
+    price: "$290.00",
+    desc: "Cigüeñal de acero forjado nitrurado con 4 pistones de aluminio forjado y bielas de alta compresión.",
+    longDesc: "Balanceado dinámico de fábrica para soportar altas revoluciones y presiones de sobrealimentación de turbo.",
+    img: "/assets/product_engine_piston_crankshaft.jpg",
+    badge: "Forjado HD",
+    specs: ["Acero forjado 4340 nitrurado", "Pistones de aluminio T6", "Bielas H-Beam balanceadas"],
+    compatibility: "Motores 4 cilindros DOHC / Turbo",
+    partNumber: "CRK-PST-FORG-4C",
+    stock: 2,
+    isImportedUSA: true
+  },
+  {
+    id: 5,
+    title: "Pastillas de Freno Cerámicas Premium (Juego Delantero)",
+    category: "Frenos y Suspensión",
+    price: "$55.00",
+    desc: "Pastillas cerámicas de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
+    longDesc: "Fabricadas con fibras cerámicas avanzadas que previenen chirridos metálicos y disminuyen el desgaste de los discos.",
+    img: "/assets/promo_brakes_caliper.jpg",
+    badge: "Garantía MasterTech",
+    specs: ["Compuesto 100% cerámico", "Libre de polvo metálico", "Resistencia superior a 600°C"],
+    compatibility: "Vehículos Japoneses, Americanos y Coreanos",
+    partNumber: "NP-BP-CER-8842",
+    stock: 12,
+    isImportedUSA: true
+  },
+  {
+    id: 6,
+    title: "Turbocargador Garrett Twin Scroll con Líneas de Acero",
+    category: "Inyección y Motor",
+    price: "$340.00",
+    desc: "Turbo de geometría avanzada con carcasa pulida, rodamientos de bola y líneas de aceite malladas.",
+    longDesc: "Respuesta rápida de aceleración con mínima inercia de turbina. Optimiza la potencia y eficiencia de combustible.",
+    img: "/assets/promo_turbo_charger.jpg",
+    badge: "Turbo Power",
+    specs: ["Carcasa Twin Scroll", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
+    compatibility: "Motores gasolina y diésel turboalimentados",
+    partNumber: "TURB-GAR-TWIN-SC",
+    stock: 3,
+    isImportedUSA: true
+  },
+  {
     id: 7,
-    title: "Kit de Microfiltros, O-Rings y Sellos para Inyectores de Gasolina",
-    category: "Filtros & Componentes OEM",
-    price: "$25.00",
-    desc: "Microfiltros de mella fina de cobre y juntas o-rings de vitón resistentes a la gasolina y altas temperaturas.",
-    longDesc: "Reemplazo preventivo en mantenimiento de inyectores para evitar fugas de combustible y atascos de suciedad en la aguja de inyección.",
-    img: "/assets/servicio-inyeccion.jpg",
-    badge: "Vitón de Alta Presión",
-    specs: ["O-rings en material Vitón", "Microfiltros sintéticos lavables", "Previene fugas y goteo de combustible"],
-    compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
-    partNumber: "INJ-O-RING-VITON",
-    stock: 25,
+    title: "Kit Aceite Sintético Motor 5W-30 + Filtro de Aceite OEM",
+    category: "Aceites y Lubricantes",
+    price: "$45.00",
+    desc: "Aceite 100% sintético de alto rendimiento con aditivos antidesgaste de última generación.",
+    longDesc: "Formulación avanzada que reduce el rozamiento térmico en motores modernos. Protege en arranques en frío.",
+    img: "/24214142.png",
+    badge: "Más Vendido",
+    specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite OEM", "Soporta altas temperaturas"],
+    compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai",
+    partNumber: "NP-SYN-5W30-OEM",
+    stock: 20,
     isImportedUSA: true
   },
   {
     id: 8,
-    title: "Kit Champú Neutro Concentrado + Cera Sintética Protectora",
-    category: "Cuidado y Estética",
-    price: "$20.00",
-    desc: "Champú PH neutro espumoso y cera sintética con polímeros hidrofóbicos que repelen agua y polvo de la pintura.",
-    longDesc: "Protege la pintura contra rayos UV, excrementos de aves y lluvia ácida, aportando un brillo cristalino duradero.",
-    img: "/assets/instalaciones.jpg",
-    badge: "Efecto Espejo",
-    specs: ["Polímeros sintéticos selladores", "Protección UV de carrocería", "Biodegradable de fácil enjuague"],
-    compatibility: "Apto para todo tipo de pintura y barniz",
-    partNumber: "CAR-DET-CERA-PH",
-    stock: 10,
-    isImportedUSA: false
+    title: "Amortiguador de Competición con Ajuste de Rebote",
+    category: "Frenos y Suspensión",
+    price: "$95.00",
+    desc: "Coilover ajustable con anodizado en aluminio y válvula de control de amortiguación deportiva.",
+    longDesc: "Permite calibrar la dureza de la suspensión para carretera o circuito según la carga del vehículo.",
+    img: "/assets/promo_suspension_spring.jpg",
+    badge: "Competición",
+    specs: ["Cuerpo roscado ajustable", "Top mount de aluminio CNC", "Aceite sintético anti-cavitación"],
+    compatibility: "Sedanes y hatchbacks deportivos",
+    partNumber: "COIL-RACE-ADJ-90",
+    stock: 6,
+    isImportedUSA: true
   }
 ];
 
@@ -771,76 +771,63 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 4: PRODUCT CATALOG & NEW ARRIVALS (NUEVOS INGRESOS / CATÁLOGO) */}
         {/* ========================================================================= */}
         <section id="catalogo-grid" className="space-y-6 pt-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span className="text-[11px] font-black uppercase text-emerald-400 tracking-wider">Inventario & Stock Certificado</span>
-              </div>
-              <h2 className="section-heading-dark text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                <span>Nuevos Ingresos</span> <span className="text-amber-400 italic">& Catálogo</span>
+              <h2 className="text-2xl sm:text-3xl font-display font-black tracking-tight text-zinc-900 dark:text-white section-heading-dark flex items-center gap-2">
+                <span>New Arrivals</span> <span className="text-amber-500 font-serif italic text-xl sm:text-2xl">/ Catálogo</span>
               </h2>
+              <div className="w-16 h-0.5 bg-amber-500 mt-2 rounded-full" />
             </div>
 
-            {/* Search Box & Cart Indicator */}
-            <div className="flex items-center gap-3 w-full md:w-auto">
-              <div className="relative flex-1 md:w-72">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
+            {/* Category Filter Horizontal Links & Search Toolbar */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none">
+                {CATEGORIES.map((cat) => {
+                  const isSelected = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`text-xs sm:text-sm font-semibold transition-all whitespace-nowrap px-3 py-1.5 rounded-lg cursor-pointer ${
+                        isSelected 
+                          ? 'text-amber-500 font-bold bg-amber-500/10 border border-amber-500/30' 
+                          : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Search Box */}
+              <div className="relative w-full sm:w-60">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={15} />
                 <input 
                   type="text"
-                  placeholder="Buscar por repuesto o código..."
+                  placeholder="Buscar repuesto..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#12141a] border border-white/15 focus:border-amber-400 rounded-xl py-2.5 pl-9 pr-8 text-xs text-white placeholder:text-zinc-500 outline-none transition-all"
+                  className="w-full bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/15 focus:border-amber-400 rounded-xl py-2 pl-8 pr-7 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none transition-all shadow-sm"
                 />
                 {searchQuery && (
                   <button 
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-white"
                   >
-                    <X size={14} />
+                    <X size={13} />
                   </button>
                 )}
               </div>
-
-              <button
-                type="button"
-                onClick={() => setIsCartOpen(true)}
-                className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer shrink-0"
-              >
-                <ShoppingCart size={15} />
-                <span>Carrito ({cartTotalItems})</span>
-              </button>
             </div>
-          </div>
-
-          {/* Category Filter Tabs Bar */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 scrollbar-none">
-            {CATEGORIES.map((cat) => {
-              const isSelected = selectedCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                    isSelected 
-                      ? 'bg-amber-400 text-black font-black shadow-lg shadow-amber-400/30 scale-105' 
-                      : 'bg-white/5 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-white'
-                  }`}
-                >
-                  {cat === "Todos" && <Filter size={12} />}
-                  <span>{cat}</span>
-                </button>
-              );
-            })}
           </div>
 
           {/* Products Grid */}
           {filteredItems.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white/5 border border-white/10 rounded-3xl max-w-md mx-auto shadow-2xl">
-              <Package size={44} className="text-zinc-500 mb-4 stroke-[1.5]" />
-              <h3 className="text-xl font-bold text-white mb-2">No encontramos coincidencias</h3>
-              <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
+            <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-3xl max-w-md mx-auto shadow-sm">
+              <Package size={44} className="text-zinc-400 mb-4 stroke-[1.5]" />
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">No encontramos coincidencias</h3>
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
                 Prueba seleccionando otra categoría de repuesto o busca un término más general.
               </p>
               <button 
@@ -863,136 +850,114 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className="catalogo-product-card bg-[#12141a] border border-white/10 rounded-3xl overflow-hidden hover:border-amber-400/50 transition-all flex flex-col group shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 relative"
+                    className="catalogo-product-card bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-2xl overflow-hidden hover:border-amber-400/80 hover:shadow-xl transition-all duration-300 flex flex-col group relative"
                   >
-                    {/* Product Image Box */}
+                    {/* Product Top Image Box: Isolated White Display como en la referencia */}
                     <div 
-                      className="relative aspect-[4/3] bg-black/60 overflow-hidden cursor-pointer p-3 flex items-center justify-center" 
+                      className="relative aspect-square bg-white p-6 sm:p-8 flex items-center justify-center cursor-pointer overflow-hidden group/img"
                       onClick={() => setSelectedProduct(item)}
                     >
                       <img 
-                        src={item.img || "/assets/servicio-mecanica.jpg"} 
+                        src={item.img || "/assets/product_dual_shock_absorbers.jpg"} 
                         alt={item.title}
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
-                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/promo_brakes_caliper.jpg'; }}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-sm"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent opacity-60" />
 
                       {/* Top Badges */}
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap pointer-events-none">
                         {item.badge && (
-                          <span className="bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 rounded-md shadow uppercase tracking-wide">
+                          <span className="bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 rounded shadow uppercase tracking-wide">
                             {item.badge}
                           </span>
                         )}
                         {item.isImportedUSA && (
-                          <span className="bg-blue-600 text-white font-black text-[9px] px-2 py-0.5 rounded-md shadow uppercase tracking-wide border border-blue-400/30">
-                            USA OEM
+                          <span className="bg-blue-600 text-white font-black text-[9px] px-2 py-0.5 rounded shadow uppercase tracking-wide border border-blue-400/30">
+                            USA
                           </span>
                         )}
                       </div>
-
-                      {/* Stock indicator */}
-                      <span className={`absolute top-3 right-3 text-[9px] font-bold px-2 py-0.5 rounded-md ${
-                        (item.stock ?? 10) > 0 
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
-                          : 'bg-red-500/20 text-red-300 border border-red-500/40'
-                      }`}>
-                        {(item.stock ?? 10) > 0 ? `Stock` : 'Bajo Pedido'}
-                      </span>
                     </div>
 
-                    {/* Card Content Body */}
-                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="product-category text-[10px] font-black uppercase text-amber-400 tracking-wider truncate">
-                            {item.category}
-                          </span>
-                          {item.partNumber && (
-                            <span className="text-[9px] font-mono font-bold text-zinc-400 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
-                              #{item.partNumber}
-                            </span>
-                          )}
-                        </div>
+                    {/* Subtle Thin Divider */}
+                    <div className="w-full border-t border-zinc-100 dark:border-white/5" />
 
+                    {/* Product Details */}
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-white dark:bg-[#12141a]">
+                      <div className="space-y-1.5">
                         <h3 
                           onClick={() => setSelectedProduct(item)}
-                          className="text-xs sm:text-sm font-black text-white group-hover:text-amber-400 transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.4em]"
+                          className="text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 hover:text-amber-500 transition-colors cursor-pointer leading-relaxed line-clamp-2 min-h-[2.7em]"
                           title={item.title}
                         >
                           {item.title}
                         </h3>
 
-                        {/* Price Display */}
-                        <div className="flex items-baseline gap-2 pt-1">
-                          <span className="product-price text-base sm:text-lg font-black text-amber-400">
-                            {item.price}
-                          </span>
+                        {/* Price Section (Strikethrough Comparison + Actual Price) */}
+                        <div className="flex items-baseline gap-2 pt-0.5">
                           {numericPrice > 0 && (
-                            <span className="product-old-price text-xs text-zinc-400 line-through font-mono">
+                            <span className="text-xs text-zinc-400 line-through font-mono">
                               ${oldPrice}
                             </span>
                           )}
+                          <span className="text-sm sm:text-base font-bold text-amber-500">
+                            {item.price}
+                          </span>
                         </div>
                       </div>
 
-                      {/* Card Action Buttons */}
-                      <div className="pt-2 space-y-1.5 border-t border-white/5">
+                      {/* Actions */}
+                      <div className="pt-2 flex items-center gap-2 border-t border-zinc-100 dark:border-white/5">
                         {getItemQuantity(item.id) === 0 ? (
                           <button
                             onClick={() => addToCart(item, 1)}
-                            className="product-cart-btn w-full bg-amber-500/10 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-500/30 text-xs font-black py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                            className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                           >
                             <ShoppingCart size={13} />
-                            <span>+ Agregar al Carrito</span>
+                            <span>Añadir</span>
                           </button>
                         ) : (
-                          <div className="flex items-center justify-between bg-amber-500/20 border border-amber-400/50 rounded-xl p-1 text-xs">
+                          <div className="flex-1 flex items-center justify-between bg-amber-500/15 border border-amber-400/50 rounded-lg p-1 text-xs">
                             <button
                               onClick={() => updateCartQty(item.id, -1)}
-                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-amber-400 text-white flex items-center justify-center font-black cursor-pointer transition-colors"
-                              title="Restar 1 unidad"
+                              className="w-6 h-6 rounded bg-black/10 hover:bg-amber-400 hover:text-black text-zinc-800 dark:text-white flex items-center justify-center font-black cursor-pointer"
+                              title="Restar"
                             >
                               <Minus size={11} />
                             </button>
-                            <span className="font-bold text-white px-2 flex items-center gap-1 text-xs">
-                              <ShoppingCart size={12} className="text-amber-400" />
-                              <span>{getItemQuantity(item.id)} en carrito</span>
+                            <span className="font-bold text-zinc-900 dark:text-white px-1 text-xs">
+                              {getItemQuantity(item.id)} en carrito
                             </span>
                             <button
                               onClick={() => updateCartQty(item.id, 1)}
-                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-amber-400 text-white flex items-center justify-center font-black cursor-pointer transition-colors"
-                              title="Sumar 1 unidad"
+                              className="w-6 h-6 rounded bg-black/10 hover:bg-amber-400 hover:text-black text-zinc-800 dark:text-white flex items-center justify-center font-black cursor-pointer"
+                              title="Sumar"
                             >
                               <Plus size={11} />
                             </button>
                           </div>
                         )}
 
-                        <div className="grid grid-cols-2 gap-1.5">
-                          <a
-                            href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="product-action-btn w-full text-zinc-300 hover:text-white text-[10px] font-bold py-1.5 px-2 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
-                            title="Consultar por WhatsApp este repuesto directo"
-                          >
-                            <WhatsAppIcon size={11} />
-                            <span>WhatsApp</span>
-                          </a>
+                        <a
+                          href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 rounded-lg bg-[#25D366]/15 hover:bg-[#25D366] text-[#128C7E] hover:text-white transition-colors cursor-pointer"
+                          title="Consultar por WhatsApp"
+                        >
+                          <WhatsAppIcon size={14} />
+                        </a>
 
-                          <button
-                            onClick={() => {
-                              setSelectedProduct(item);
-                              setActiveImageIndex(0);
-                            }}
-                            className="product-action-btn w-full text-zinc-300 hover:text-white text-[10px] font-bold py-1.5 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
-                          >
-                            <span>Ver Ficha</span>
-                            <ArrowRight size={10} className="text-amber-400" />
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => {
+                            setSelectedProduct(item);
+                            setActiveImageIndex(0);
+                          }}
+                          className="p-2.5 rounded-lg border border-zinc-200 dark:border-white/10 hover:border-amber-400 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer"
+                          title="Ver Ficha Técnica"
+                        >
+                          <ZoomIn size={14} />
+                        </button>
                       </div>
                     </div>
                   </motion.div>
