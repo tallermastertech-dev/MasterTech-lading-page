@@ -194,21 +194,21 @@ body.theme-light {
   color: #ffffff !important;
 }
 
-/* 2. GENERAL TYPOGRAPHY (Outside Hero & Dark Modals) */
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h1:not(.dark-vip-card-title):not(.usa-import-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h2:not(.dark-vip-card-title):not(.usa-import-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h3:not(.usa-import-title),
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h4,
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h5,
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) h6,
-.theme-light main h1:not(.dark-vip-card-title):not(.usa-import-title),
-.theme-light main h2:not(.dark-vip-card-title):not(.usa-import-title),
-.theme-light main h3:not(.usa-import-title) {
+/* 2. GENERAL TYPOGRAPHY (Only for Light Content Cards & Sections) */
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h1:not(.dark-vip-card-title):not(.usa-import-title):not(.catalogo-hero-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h2:not(.dark-vip-card-title):not(.usa-import-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h3:not(.usa-import-title),
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h4,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h5,
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) h6,
+.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card) > h1:not(.text-white),
+.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card) > h2:not(.text-white),
+.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card) > h3:not(.text-white) {
   color: #0f172a !important;
 }
 
-.theme-light section:not(:first-of-type):not(.dark-vip-card-section) p:not(.usa-import-desc),
-.theme-light main p:not(.usa-import-desc) {
+.theme-light section:not(:first-of-type):not(.dark-vip-card-section):not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner) p:not(.usa-import-desc),
+.theme-light div:not(.catalogo-hero-card):not(.catalogo-promo-card):not(.catalogo-usa-banner):not(.dark-vip-card):not(.mt01-chat-modal) > p:not(.text-white):not(.text-zinc-300) {
   color: #334155 !important;
 }
 
@@ -1319,34 +1319,34 @@ html.dark .fixed.inset-0 h3 {
 /* ========================================================================= */
 /* LIGHT THEME HIGH-CONTRAST OVERRIDES FOR ADMIN PANEL BUTTONS & PILLS */
 /* ========================================================================= */
-.theme-light .bg-primary,
-.theme-light [class*="bg-primary"] {
+.theme-light .admin-panel-container .bg-primary,
+.theme-light .admin-panel-container [class*="bg-primary"] {
   background-color: #C2A472 !important;
   color: #000000 !important;
   font-weight: 900 !important;
   border-color: #a88956 !important;
 }
 
-.theme-light .bg-primary *,
-.theme-light [class*="bg-primary"] * {
+.theme-light .admin-panel-container .bg-primary *,
+.theme-light .admin-panel-container [class*="bg-primary"] * {
   color: #000000 !important;
   font-weight: 900 !important;
 }
 
-/* Inactive Buttons & Switchers in Light Mode */
-.theme-light button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) {
+/* Inactive Buttons & Switchers in Admin Light Mode */
+.theme-light .admin-panel-container button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) {
   background-color: #f1f5f9 !important;
   border: 1px solid #cbd5e1 !important;
   color: #0f172a !important;
 }
 
-.theme-light button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) * {
+.theme-light .admin-panel-container button:not([class*="bg-primary"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-amber"]):not([class*="bg-cyan"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not(.btn-primary) * {
   color: #0f172a !important;
   font-weight: 700 !important;
 }
 
-/* Category Filter Inactive Pills in Light Mode */
-.theme-light div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) {
+/* Category Filter Inactive Pills in Admin Light Mode */
+.theme-light .admin-panel-container div[class*="flex-wrap"] button[class*="bg-[#12141a]"]:not([class*="bg-primary"]):not([class*="bg-purple-500"]):not([class*="bg-blue-500"]):not([class*="bg-amber-500"]):not([class*="bg-cyan-500"]) {
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   color: #334155 !important;
