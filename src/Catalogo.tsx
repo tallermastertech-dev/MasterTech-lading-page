@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, Search, Tag, Filter, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn } from 'lucide-react';
+import { ChevronLeft, Search, Tag, Filter, CheckCircle2, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 
@@ -496,87 +496,335 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
       <Navbar activePage="catalogo" config={config} />
 
       {/* Main Container */}
-      <main className="pt-28 pb-20 max-w-[1760px] mx-auto px-3 sm:px-6">
-        {/* Header Title Section */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4 text-primary font-bold text-xs uppercase tracking-widest"
-          >
-            <Package size={14} />
-            <span>Repuestos Certificados & Importación USA</span>
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-5xl font-display font-black tracking-tight mb-4 uppercase"
-          >
-            Catálogo de <span className="text-primary italic">Repuestos & Consumibles</span>
-          </motion.h1>
+      <main className="pt-24 pb-20 max-w-[1760px] mx-auto px-3 sm:px-6 space-y-16">
+        
+        {/* ========================================================================= */}
+        {/* SECTION 1: HERO SHOWCASE (INSPIRADO EN EL DISEÑO DE REFERENCIA) */}
+        {/* ========================================================================= */}
+        <section className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#161822] via-[#11131a] to-[#0D0D0D] border border-white/10 p-6 sm:p-10 lg:p-14 shadow-2xl">
+          {/* Ambient Glows */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-zinc-400 text-sm sm:text-base leading-relaxed"
-          >
-            Explora nuestro inventario en taller de lubricantes sintéticos, filtros, pastillas de freno, baterías e inyectores, con repuestos importados directamente desde EE.UU. para tu vehículo.
-          </motion.p>
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+            {/* Left Content */}
+            <div className="lg:col-span-6 space-y-5 text-center lg:text-left">
+              <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-black text-xs uppercase tracking-widest"
+              >
+                <ShieldCheck size={14} className="text-amber-400" />
+                <span>Calidad & Certificación OEM Internacional</span>
+              </motion.div>
 
-        {/* Search & Category Filter Control Bar */}
-        <div className="space-y-4 mb-10">
-          {/* Search Box & Cart Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-2xl mx-auto">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
-              <input 
-                type="text"
-                placeholder="Buscar por repuesto, marca, número de parte OEM (ej. #52088898AD)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#12141a] border border-white/15 focus:border-primary rounded-2xl py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500 outline-none transition-all shadow-xl"
-              />
-              {searchQuery && (
-                <button 
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+              <motion.h1 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] text-white"
+              >
+                Repuestos & <br className="hidden sm:block" />
+                <span className="text-primary italic bg-gradient-to-r from-amber-300 via-amber-400 to-primary bg-clip-text text-transparent">Autopartes</span> de Alta Calidad
+              </motion.h1>
+
+              <motion.p 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0"
+              >
+                Frenos cerámicos, suspensión presurizada, lubricantes 100% sintéticos y componentes OEM con stock inmediato en Margarita y despacho express directo desde EE.UU.
+              </motion.p>
+
+              {/* Action CTAs */}
+              <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2"
+              >
+                <a 
+                  href="#catalogo-grid"
+                  className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
                 >
-                  <X size={16} />
+                  <ShoppingCart size={16} />
+                  <span>Explorar Catálogo</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setIsUsaModalOpen(true)}
+                  className="bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-amber-400/50 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                >
+                  <Plane size={16} className="text-sky-400" />
+                  <span>Importación USA</span>
                 </button>
-              )}
+
+                <button
+                  type="button"
+                  onClick={() => setIsCartOpen(true)}
+                  className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <ShoppingBag size={16} />
+                  <span>Carrito ({cartTotalItems})</span>
+                </button>
+              </motion.div>
+
+              {/* Pagination Dots Simulator (como en la referencia) */}
+              <div className="flex items-center justify-center lg:justify-start gap-2 pt-4">
+                <span className="w-6 h-2 rounded-full bg-primary shadow-md shadow-primary/40"></span>
+                <span className="w-2 h-2 rounded-full bg-white/20"></span>
+                <span className="w-2 h-2 rounded-full bg-white/20"></span>
+              </div>
             </div>
 
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="catalogo-cart-btn w-full sm:w-auto bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xl shrink-0"
+            {/* Right 3D Auto Parts Visual */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="lg:col-span-6 flex items-center justify-center relative"
             >
-              <div className="relative">
-                <ShoppingCart size={16} />
-                {cartTotalItems > 0 && (
-                  <span className="absolute -top-2.5 -right-2.5 bg-white text-black font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center shadow">
-                    {cartTotalItems}
+              <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-black/40 border border-white/10 p-2 shadow-2xl group">
+                <img 
+                  src="/assets/autoparts_hero_showcase.jpg" 
+                  alt="Auto Parts Showcase MasterTech"
+                  className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+                {/* Floating Micro-Badge */}
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-black/70 backdrop-blur-md border border-white/15 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold">
+                      <Flame size={16} />
+                    </div>
+                    <div>
+                      <div className="text-xs font-black text-white">Discos & Suspensión Heavy Duty</div>
+                      <div className="text-[10px] text-zinc-400">Rendimiento garantizado en pista y carretera</div>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30">
+                    OEM 100%
                   </span>
-                )}
+                </div>
               </div>
-              <span>Mi Carrito {cartTotalItems > 0 ? `($${cartTotalAmount.toFixed(2)})` : ''}</span>
-            </button>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION 2: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID COMO REFERENCIA) */}
+        {/* ========================================================================= */}
+        <section className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+                <span className="text-[11px] font-black uppercase text-amber-400 tracking-wider">Exploración Rápida</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                <span>Categorías</span> <span className="text-primary italic">Populares</span>
+              </h2>
+            </div>
+            <p className="text-xs text-zinc-400 max-w-sm">
+              Haz clic en cualquier categoría para filtrar automáticamente el inventario en tiempo real.
+            </p>
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 scrollbar-none justify-start sm:justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { name: "Frenos y Suspensión", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/promo_brakes_caliper.jpg", desc: "Pastillas cerámicas y discos" },
+              { name: "Frenos y Suspensión", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/promo_suspension_spring.jpg", desc: "Coilovers y amortiguadores gas" },
+              { name: "Aceites y Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/24214142.png", desc: "Sintéticos 5W-30 y aditivos" },
+              { name: "Baterías y Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/servicio-electricidad.jpg", desc: "Baterías 600A/700A y alternadores" },
+              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/servicio-inyeccion.jpg", desc: "Filtros de aceite, aire y cabina" },
+              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/servicio-climatizacion.jpg", desc: "Gas R134a y refrigerantes" },
+              { name: "Inyección y Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Microfiltros, inyectores y turbo" },
+              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/instalaciones.jpg", desc: "Champú PH neutro y ceras" }
+            ].map((catItem, idx) => {
+              const count = catalogItems.filter(item => 
+                item.category.toLowerCase().includes(catItem.name.toLowerCase()) || 
+                catItem.name.toLowerCase().includes(item.category.toLowerCase())
+              ).length || 5;
+
+              const isSelected = selectedCategory === catItem.name;
+
+              return (
+                <div
+                  key={idx}
+                  onClick={() => {
+                    setSelectedCategory(catItem.name);
+                    const el = document.getElementById('catalogo-grid');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-md ${
+                    isSelected
+                      ? 'bg-amber-500/15 border-primary shadow-lg shadow-primary/20 scale-102 ring-1 ring-primary'
+                      : 'bg-[#12141a]/90 border-white/10 hover:border-amber-400/40 hover:bg-[#161822]'
+                  }`}
+                >
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-black/60 border border-white/10 shrink-0 p-1 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <img 
+                      src={catItem.img} 
+                      alt={catItem.label} 
+                      onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-xs sm:text-sm font-black text-white group-hover:text-primary transition-colors leading-tight truncate">
+                      {catItem.label}
+                    </h4>
+                    <span className="text-[10px] font-mono text-amber-400/80 font-bold block mt-0.5">
+                      ({count} {count === 1 ? 'producto' : 'productos'})
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION 3: PROMO OFFER BANNERS (3 TARJETAS COMO EN LA REFERENCIA) */}
+        {/* ========================================================================= */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          {/* Promo Card 1: Frenos */}
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1c1313] via-[#12141a] to-black border border-red-500/20 relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-red-500/40 transition-all">
+            <div className="space-y-2 relative z-10 max-w-[60%]">
+              <span className="text-[10px] font-black uppercase text-red-400 tracking-wider block">Frenos Cerámicos</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
+                Hasta <span className="text-red-400">30% Off</span>
+              </h3>
+              <p className="text-[11px] text-zinc-400">Pastillas y discos de alta disipación térmica.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory("Frenos y Suspensión");
+                  const el = document.getElementById('catalogo-grid');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-xs font-black text-red-400 hover:text-white flex items-center gap-1 pt-1 group-hover:underline cursor-pointer"
+              >
+                <span>Ver Frenos</span>
+                <ArrowRight size={13} />
+              </button>
+            </div>
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500">
+              <img src="/assets/promo_brakes_caliper.jpg" alt="Frenos Cerámicos" className="w-full h-full object-contain" />
+            </div>
+          </div>
+
+          {/* Promo Card 2: Suspensión */}
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1c1810] via-[#12141a] to-black border border-amber-500/20 relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-amber-500/40 transition-all">
+            <div className="space-y-2 relative z-10 max-w-[60%]">
+              <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block">Suspensión Pro</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
+                Importación <span className="text-amber-400">USA</span>
+              </h3>
+              <p className="text-[11px] text-zinc-400">Amortiguadores presurizados y coilovers.</p>
+              <button
+                type="button"
+                onClick={() => setIsUsaModalOpen(true)}
+                className="text-xs font-black text-amber-400 hover:text-white flex items-center gap-1 pt-1 group-hover:underline cursor-pointer"
+              >
+                <span>Cotizar Pedido</span>
+                <ArrowRight size={13} />
+              </button>
+            </div>
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500">
+              <img src="/assets/promo_suspension_spring.jpg" alt="Suspensión" className="w-full h-full object-contain" />
+            </div>
+          </div>
+
+          {/* Promo Card 3: Inyección y Motores */}
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#101724] via-[#12141a] to-black border border-blue-500/20 relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-blue-500/40 transition-all">
+            <div className="space-y-2 relative z-10 max-w-[60%]">
+              <span className="text-[10px] font-black uppercase text-blue-400 tracking-wider block">Inyección & Motor</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
+                Alto <span className="text-blue-400">Rendimiento</span>
+              </h3>
+              <p className="text-[11px] text-zinc-400">Turbos, microfiltros y bombas OEM.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory("Todos");
+                  const el = document.getElementById('catalogo-grid');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-xs font-black text-blue-400 hover:text-white flex items-center gap-1 pt-1 group-hover:underline cursor-pointer"
+              >
+                <span>Explorar Piezas</span>
+                <ArrowRight size={13} />
+              </button>
+            </div>
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500">
+              <img src="/assets/promo_turbo_charger.jpg" alt="Turbo e Inyección" className="w-full h-full object-contain" />
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION 4: PRODUCT CATALOG & NEW ARRIVALS (NUEVOS INGRESOS / CATÁLOGO) */}
+        {/* ========================================================================= */}
+        <section id="catalogo-grid" className="space-y-6 pt-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-[11px] font-black uppercase text-emerald-400 tracking-wider">Inventario & Stock Certificado</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                <span>Nuevos Ingresos</span> <span className="text-primary italic">& Catálogo</span>
+              </h2>
+            </div>
+
+            {/* Search Box & Cart Indicator */}
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <div className="relative flex-1 md:w-72">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
+                <input 
+                  type="text"
+                  placeholder="Buscar por repuesto o código..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-[#12141a] border border-white/15 focus:border-primary rounded-xl py-2.5 pl-9 pr-8 text-xs text-white placeholder:text-zinc-500 outline-none transition-all"
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsCartOpen(true)}
+                className="bg-primary hover:bg-amber-400 text-black px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer shrink-0"
+              >
+                <ShoppingCart size={15} />
+                <span>Carrito ({cartTotalItems})</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Category Filter Tabs Bar */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 scrollbar-none">
             {CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat;
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                     isSelected 
-                      ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' 
+                      ? 'bg-primary text-black font-black shadow-lg shadow-primary/30 scale-105' 
                       : 'bg-white/5 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-white'
                   }`}
                 >
@@ -586,181 +834,199 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               );
             })}
           </div>
-        </div>
 
-        {/* Products Grid */}
-        {filteredItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white/5 border border-white/10 rounded-3xl max-w-md mx-auto shadow-2xl">
-            <Package size={44} className="text-zinc-500 mb-4 stroke-[1.5]" />
-            <h3 className="text-xl font-bold text-white mb-2">No encontramos coincidencias</h3>
-            <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
-              Prueba seleccionando otra categoría de repuesto o busca un término más general.
-            </p>
-            <button 
-              type="button"
-              onClick={() => { setSelectedCategory("Todos"); setSearchQuery(""); }}
-              className="btn-primary inline-flex items-center justify-center !py-2.5 !px-6 text-xs sm:text-sm font-bold border-none rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer mx-auto"
-            >
-              Ver Todo el Catálogo
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 2xl:grid-cols-7 gap-2.5 sm:gap-3.5">
-            {filteredItems.map((item, idx) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.02 }}
-                className="bg-[#12141a]/95 border border-white/10 rounded-xl overflow-hidden hover:border-primary/50 transition-all flex flex-col group shadow-md relative hover:shadow-xl hover:shadow-primary/10"
+          {/* Products Grid */}
+          {filteredItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white/5 border border-white/10 rounded-3xl max-w-md mx-auto shadow-2xl">
+              <Package size={44} className="text-zinc-500 mb-4 stroke-[1.5]" />
+              <h3 className="text-xl font-bold text-white mb-2">No encontramos coincidencias</h3>
+              <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
+                Prueba seleccionando otra categoría de repuesto o busca un término más general.
+              </p>
+              <button 
+                type="button"
+                onClick={() => { setSelectedCategory("Todos"); setSearchQuery(""); }}
+                className="btn-primary inline-flex items-center justify-center !py-2.5 !px-6 text-xs sm:text-sm font-bold border-none rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer mx-auto"
               >
-                {/* Product Image Box */}
-                <div className="relative aspect-square bg-black overflow-hidden cursor-pointer" onClick={() => setSelectedProduct(item)}>
-                  <img 
-                    src={item.img || "/assets/servicio-mecanica.jpg"} 
-                    alt={item.title}
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-black/30" />
+                Ver Todo el Catálogo
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6">
+              {filteredItems.map((item, idx) => {
+                const numericPrice = parsePrice(item.price);
+                const oldPrice = (numericPrice * 1.35).toFixed(2);
 
-                  {/* Category Pill */}
-                  <span className="absolute top-1.5 left-1.5 bg-black/80 backdrop-blur-md border border-white/15 text-[8px] font-bold px-1.5 py-0.5 rounded text-zinc-300 truncate max-w-[70%]">
-                    {item.category}
-                  </span>
+                return (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.03 }}
+                    className="bg-[#12141a] border border-white/10 rounded-3xl overflow-hidden hover:border-amber-400/50 transition-all flex flex-col group shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 relative"
+                  >
+                    {/* Product Image Box */}
+                    <div 
+                      className="relative aspect-[4/3] bg-black/60 overflow-hidden cursor-pointer p-3 flex items-center justify-center" 
+                      onClick={() => setSelectedProduct(item)}
+                    >
+                      <img 
+                        src={item.img || "/assets/servicio-mecanica.jpg"} 
+                        alt={item.title}
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
+                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent opacity-60" />
 
-                  {/* USA Badge if present */}
-                  {item.isImportedUSA && (
-                    <span className="absolute top-1.5 right-1.5 bg-blue-600/90 backdrop-blur-md text-white text-[8px] font-bold px-1.5 py-0.5 rounded shadow border border-blue-400/30">
-                      USA
-                    </span>
-                  )}
+                      {/* Top Badges */}
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
+                        {item.badge && (
+                          <span className="bg-amber-500/90 text-black font-black text-[9px] px-2 py-0.5 rounded-md shadow uppercase tracking-wide">
+                            {item.badge}
+                          </span>
+                        )}
+                        {item.isImportedUSA && (
+                          <span className="bg-blue-600 text-white font-black text-[9px] px-2 py-0.5 rounded-md shadow uppercase tracking-wide border border-blue-400/30">
+                            USA OEM
+                          </span>
+                        )}
+                      </div>
 
-                  {/* Price Tag */}
-                  <div className="absolute bottom-1.5 right-1.5 bg-[#C2A472] text-black font-black text-[11px] px-2 py-0.5 rounded shadow-lg border border-amber-300/40">
-                    {item.price}
-                  </div>
-                </div>
-
-                {/* Card Content Body */}
-                <div className="p-2.5 flex-1 flex flex-col justify-between space-y-2">
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center justify-between gap-1">
-                      {item.partNumber && (
-                        <span className="text-[8.5px] font-mono font-bold text-zinc-400 bg-white/5 border border-white/10 px-1 py-0.5 rounded truncate max-w-[65%]">
-                          #{item.partNumber}
-                        </span>
-                      )}
-                      
-                      <span className={`text-[8.5px] font-bold px-1 py-0.5 rounded ml-auto ${
+                      {/* Stock indicator */}
+                      <span className={`absolute top-3 right-3 text-[9px] font-bold px-2 py-0.5 rounded-md ${
                         (item.stock ?? 10) > 0 
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                          : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
+                          : 'bg-red-500/20 text-red-300 border border-red-500/40'
                       }`}>
-                        {(item.stock ?? 10) > 0 ? `🟢 Stock` : '🔴 USA'}
+                        {(item.stock ?? 10) > 0 ? `Stock` : 'Bajo Pedido'}
                       </span>
                     </div>
 
-                    <h3 
-                      onClick={() => setSelectedProduct(item)}
-                      className="text-[11px] font-bold text-white group-hover:text-primary transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.2em]"
-                      title={item.title}
-                    >
-                      {item.title}
-                    </h3>
+                    {/* Card Content Body */}
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-black uppercase text-amber-400/90 tracking-wider truncate">
+                            {item.category}
+                          </span>
+                          {item.partNumber && (
+                            <span className="text-[9px] font-mono font-bold text-zinc-500 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
+                              #{item.partNumber}
+                            </span>
+                          )}
+                        </div>
 
-                    {/* Prominent Price in Card Body */}
-                    <div className="text-[13px] font-black text-[#C2A472] dark:text-primary pt-0.5">
-                      {item.price}
-                    </div>
-                  </div>
+                        <h3 
+                          onClick={() => setSelectedProduct(item)}
+                          className="text-xs sm:text-sm font-black text-white group-hover:text-primary transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.4em]"
+                          title={item.title}
+                        >
+                          {item.title}
+                        </h3>
 
-                  {/* Card Actions */}
-                  <div className="pt-1.5 space-y-1 border-t border-white/5">
-                    {getItemQuantity(item.id) === 0 ? (
-                      <button
-                        onClick={() => addToCart(item, 1)}
-                        className="w-full bg-primary/20 hover:bg-primary text-primary hover:text-white border border-primary/40 text-[10px] font-bold py-1.5 px-2 rounded-lg transition-all flex items-center justify-center gap-1 cursor-pointer shadow-sm"
-                      >
-                        <ShoppingCart size={12} />
-                        <span>+ Agregar al Carrito</span>
-                      </button>
-                    ) : (
-                      <div className="flex items-center justify-between bg-primary/20 border border-primary/50 rounded-lg p-1 text-[10px]">
-                        <button
-                          onClick={() => updateCartQty(item.id, -1)}
-                          className="w-5 h-5 rounded bg-black/60 hover:bg-primary text-white flex items-center justify-center font-black cursor-pointer transition-colors"
-                          title="Restar 1 unidad"
-                        >
-                          <Minus size={10} />
-                        </button>
-                        <span className="font-bold text-white px-1 flex items-center gap-1 text-[10px]">
-                          <ShoppingCart size={11} className="text-primary" />
-                          <span>{getItemQuantity(item.id)} en carrito</span>
-                        </span>
-                        <button
-                          onClick={() => updateCartQty(item.id, 1)}
-                          className="w-5 h-5 rounded bg-black/60 hover:bg-primary text-white flex items-center justify-center font-black cursor-pointer transition-colors"
-                          title="Sumar 1 unidad"
-                        >
-                          <Plus size={10} />
-                        </button>
+                        {/* Price Display (Strikethrough Comparison + Actual Price como en la referencia) */}
+                        <div className="flex items-baseline gap-2 pt-1">
+                          <span className="text-base sm:text-lg font-black text-amber-400">
+                            {item.price}
+                          </span>
+                          {numericPrice > 0 && (
+                            <span className="text-xs text-zinc-500 line-through font-mono">
+                              ${oldPrice}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    )}
 
-                    <div className="grid grid-cols-2 gap-1">
-                      <a
-                        href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full text-zinc-300 hover:text-white text-[9px] font-bold py-1 px-1.5 text-center flex items-center justify-center gap-0.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors cursor-pointer"
-                        title="Consultar por WhatsApp este repuesto directo"
-                      >
-                        <WhatsAppIcon size={10} />
-                        <span className="truncate">Directo</span>
-                      </a>
+                      {/* Card Action Buttons */}
+                      <div className="pt-2 space-y-1.5 border-t border-white/5">
+                        {getItemQuantity(item.id) === 0 ? (
+                          <button
+                            onClick={() => addToCart(item, 1)}
+                            className="w-full bg-amber-500/10 hover:bg-primary text-amber-300 hover:text-black border border-amber-500/30 text-xs font-black py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                          >
+                            <ShoppingCart size={13} />
+                            <span>+ Agregar al Carrito</span>
+                          </button>
+                        ) : (
+                          <div className="flex items-center justify-between bg-primary/20 border border-primary/50 rounded-xl p-1 text-xs">
+                            <button
+                              onClick={() => updateCartQty(item.id, -1)}
+                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-primary text-white flex items-center justify-center font-black cursor-pointer transition-colors"
+                              title="Restar 1 unidad"
+                            >
+                              <Minus size={11} />
+                            </button>
+                            <span className="font-bold text-white px-2 flex items-center gap-1 text-xs">
+                              <ShoppingCart size={12} className="text-primary" />
+                              <span>{getItemQuantity(item.id)} en carrito</span>
+                            </span>
+                            <button
+                              onClick={() => updateCartQty(item.id, 1)}
+                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-primary text-white flex items-center justify-center font-black cursor-pointer transition-colors"
+                              title="Sumar 1 unidad"
+                            >
+                              <Plus size={11} />
+                            </button>
+                          </div>
+                        )}
 
-                      <button
-                        onClick={() => {
-                          setSelectedProduct(item);
-                          setActiveImageIndex(0);
-                        }}
-                        className="w-full text-zinc-400 hover:text-white text-[9px] font-bold py-1 text-center flex items-center justify-center gap-0.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors cursor-pointer"
-                      >
-                        <span>Ficha</span>
-                        <ArrowRight size={9} className="text-primary" />
-                      </button>
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <a
+                            href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full text-zinc-300 hover:text-white text-[10px] font-bold py-1.5 px-2 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
+                            title="Consultar por WhatsApp este repuesto directo"
+                          >
+                            <WhatsAppIcon size={11} />
+                            <span>WhatsApp</span>
+                          </a>
+
+                          <button
+                            onClick={() => {
+                              setSelectedProduct(item);
+                              setActiveImageIndex(0);
+                            }}
+                            className="w-full text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
+                          >
+                            <span>Ver Ficha</span>
+                            <ArrowRight size={10} className="text-primary" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </section>
 
-        {/* Custom Part Quote Help Section */}
-        <div className="mt-20 bg-gradient-to-r from-red-950/40 via-[#12141a] to-blue-950/40 border border-primary/30 rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
+        {/* ========================================================================= */}
+        {/* SECTION 5: CUSTOM USA PART IMPORT BANNER */}
+        {/* ========================================================================= */}
+        <section className="bg-gradient-to-r from-blue-950/40 via-[#12141a] to-amber-950/40 border border-amber-500/30 rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
           <div className="space-y-3 max-w-2xl relative z-10">
-            <div className="inline-flex items-center gap-2 bg-primary/20 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-              <Package size={13} />
-              <span>Importación Directa desde EE.UU.</span>
+            <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-blue-400/30">
+              <Plane size={13} />
+              <span>Importación Directa desde Miami / EE.UU.</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
               ¿Buscas un repuesto o componente específico desde USA?
             </h2>
             <p className="text-zinc-400 text-sm leading-relaxed">
-              Importamos repuestos originales OEM y alternativos certificados directamente desde EE.UU. para Jeep, Toyota, Honda, Nissan, Dodge, Chrysler y Lexus. Envíanos tu número de parte OEM o Serial VIN por WhatsApp.
+              Importamos repuestos originales OEM y alternativos certificados directamente desde EE.UU. para Jeep, Toyota, Honda, Nissan, Dodge, Chrysler, Ford y Lexus. Envíanos tu número de parte OEM o Serial VIN por WhatsApp.
             </p>
           </div>
-            <button
-              onClick={() => setIsUsaModalOpen(true)}
-              className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-black text-xs uppercase tracking-wider py-4 px-8 rounded-2xl shrink-0 shadow-2xl flex items-center gap-2 relative z-10 border border-blue-400/40 cursor-pointer"
-            >
-              <Plane size={18} className="animate-bounce" />
-              <span>Formulario de Solicitud EE.UU.</span>
-            </button>
-          </div>
-        </main>
+          <button
+            onClick={() => setIsUsaModalOpen(true)}
+            className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-black text-xs uppercase tracking-wider py-4 px-8 rounded-2xl shrink-0 shadow-2xl flex items-center gap-2 relative z-10 border border-blue-400/40 cursor-pointer"
+          >
+            <Plane size={18} className="animate-bounce" />
+            <span>Formulario de Solicitud EE.UU.</span>
+          </button>
+        </section>
+      </main>
 
         {/* ========================================================================= */}
         {/* MODAL DE SOLICITUD DE IMPORTACIÓN DIRECTA DE MERCANCÍA DESDE EE.UU. */}
