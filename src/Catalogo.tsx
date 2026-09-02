@@ -916,7 +916,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 4: PRODUCT CATALOG & NEW ARRIVALS (NUEVOS INGRESOS / CATÁLOGO) */}
         {/* ========================================================================= */}
         <section id="catalogo-grid" className="space-y-6 pt-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-display font-black tracking-tight text-zinc-900 dark:text-white section-heading-dark flex items-center gap-2">
                 <span>New Arrivals</span> <span className="text-amber-500 font-serif italic text-xl sm:text-2xl">/ Catálogo</span>
@@ -924,46 +924,24 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <div className="w-16 h-0.5 bg-amber-500 mt-2 rounded-full" />
             </div>
 
-            {/* Category Filter Horizontal Links & Search Toolbar */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none">
-                {CATEGORIES.map((cat) => {
-                  const isSelected = selectedCategory === cat;
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`text-xs sm:text-sm font-semibold transition-all whitespace-nowrap px-3 py-1.5 rounded-lg cursor-pointer ${
-                        isSelected 
-                          ? 'text-amber-500 font-bold bg-amber-500/10 border border-amber-500/30' 
-                          : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Search Box */}
-              <div className="relative w-full sm:w-60">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={15} />
-                <input 
-                  type="text"
-                  placeholder="Buscar repuesto..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/15 focus:border-amber-400 rounded-xl py-2 pl-8 pr-7 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none transition-all shadow-sm"
-                />
-                {searchQuery && (
-                  <button 
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-white"
-                  >
-                    <X size={13} />
-                  </button>
-                )}
-              </div>
+            {/* Search Box Only */}
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={15} />
+              <input 
+                type="text"
+                placeholder="Buscar repuesto..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/15 focus:border-amber-400 rounded-xl py-2.5 pl-9 pr-7 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none transition-all shadow-sm"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-white"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
           </div>
 
