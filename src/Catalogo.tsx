@@ -695,11 +695,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           {/* Promo Card 1: Frenos */}
           <div className="catalogo-promo-card promo-card-frenos p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-red-500/50 transition-all">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase text-red-400 tracking-wider block">Frenos Cerámicos</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
-                Hasta <span className="text-red-400">30% Off</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block" style={{ color: '#f87171' }}>Frenos Cerámicos</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight !text-white" style={{ color: '#ffffff' }}>
+                Hasta <span style={{ color: '#f87171' }}>30% Off</span>
               </h3>
-              <p className="text-[11px] text-zinc-300">Pastillas y discos de alta disipación térmica.</p>
+              <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Pastillas y discos de alta disipación térmica.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -707,13 +707,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-black text-red-400 hover:text-white flex items-center gap-1 pt-1 group-hover:underline cursor-pointer"
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
+                style={{ background: 'transparent', border: 'none', color: '#f87171', padding: 0 }}
               >
-                <span>Ver Frenos</span>
-                <ArrowRight size={13} />
+                <span style={{ color: '#f87171' }}>Ver Frenos</span>
+                <ArrowRight size={13} style={{ color: '#f87171' }} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
               <img src="/assets/promo_brakes_caliper.jpg" alt="Frenos Cerámicos" className="w-full h-full object-contain" />
             </div>
           </div>
@@ -721,21 +722,22 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           {/* Promo Card 2: Suspensión */}
           <div className="catalogo-promo-card promo-card-suspension p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-amber-500/50 transition-all">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase text-amber-400 tracking-wider block">Suspensión Pro</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
-                Importación <span className="text-amber-400">USA</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block" style={{ color: '#fbbf24' }}>Suspensión Pro</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight !text-white" style={{ color: '#ffffff' }}>
+                Importación <span style={{ color: '#fbbf24' }}>USA</span>
               </h3>
-              <p className="text-[11px] text-zinc-300">Amortiguadores presurizados y coilovers.</p>
+              <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Amortiguadores presurizados y coilovers.</p>
               <button
                 type="button"
                 onClick={() => setIsUsaModalOpen(true)}
-                className="text-xs font-black text-amber-400 hover:text-white flex items-center gap-1 pt-1 group-hover:underline cursor-pointer"
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
+                style={{ background: 'transparent', border: 'none', color: '#fbbf24', padding: 0 }}
               >
-                <span>Cotizar Pedido</span>
-                <ArrowRight size={13} />
+                <span style={{ color: '#fbbf24' }}>Cotizar Pedido</span>
+                <ArrowRight size={13} style={{ color: '#fbbf24' }} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
               <img src="/assets/promo_suspension_spring.jpg" alt="Suspensión" className="w-full h-full object-contain" />
             </div>
           </div>
@@ -743,11 +745,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           {/* Promo Card 3: Inyección y Motores */}
           <div className="catalogo-promo-card promo-card-motor p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-blue-500/50 transition-all">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase text-blue-400 tracking-wider block">Inyección & Motor</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
-                Alto <span className="text-blue-400">Rendimiento</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block" style={{ color: '#60a5fa' }}>Inyección & Motor</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight !text-white" style={{ color: '#ffffff' }}>
+                Alto <span style={{ color: '#60a5fa' }}>Rendimiento</span>
               </h3>
-              <p className="text-[11px] text-zinc-300">Turbos, microfiltros y bombas OEM.</p>
+              <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Turbos, microfiltros y bombas OEM.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -755,13 +757,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-black text-blue-400 hover:text-white flex items-center gap-1 pt-1 group-hover:underline cursor-pointer"
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
+                style={{ background: 'transparent', border: 'none', color: '#60a5fa', padding: 0 }}
               >
-                <span>Explorar Piezas</span>
-                <ArrowRight size={13} />
+                <span style={{ color: '#60a5fa' }}>Explorar Piezas</span>
+                <ArrowRight size={13} style={{ color: '#60a5fa' }} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
               <img src="/assets/promo_turbo_charger.jpg" alt="Turbo e Inyección" className="w-full h-full object-contain" />
             </div>
           </div>

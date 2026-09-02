@@ -911,62 +911,84 @@ body.theme-light .catalogo-hero-card {
 /* 3. PROMO OFFER BANNERS (High contrast luxury cards in both themes) */
 .catalogo-promo-card,
 .theme-light .catalogo-promo-card,
-html.theme-light .catalogo-promo-card {
+html.theme-light .catalogo-promo-card,
+html.theme-light body main .catalogo-promo-card {
   color: #ffffff !important;
 }
 .catalogo-promo-card h3,
 .theme-light .catalogo-promo-card h3,
-.theme-light main .catalogo-promo-card h3 {
+.theme-light main .catalogo-promo-card h3,
+html.theme-light body main .catalogo-promo-card h3 {
   color: #ffffff !important;
   font-weight: 900 !important;
 }
 .catalogo-promo-card p,
 .theme-light .catalogo-promo-card p,
-.theme-light main .catalogo-promo-card p {
+.theme-light main .catalogo-promo-card p,
+html.theme-light body main .catalogo-promo-card p {
   color: #cbd5e1 !important;
 }
 .catalogo-promo-card button,
-.theme-light .catalogo-promo-card button {
+.theme-light .catalogo-promo-card button,
+html.theme-light body main .catalogo-promo-card button {
   background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
 /* Card 1 (Frenos) */
 .promo-card-frenos,
-.theme-light .promo-card-frenos {
+.theme-light .promo-card-frenos,
+html.theme-light body main .promo-card-frenos {
   background: linear-gradient(135deg, #221010 0%, #151114 50%, #000000 100%) !important;
   border: 1px solid rgba(239, 68, 68, 0.35) !important;
 }
 .promo-card-frenos .promo-tag,
+html.theme-light body main .promo-card-frenos .promo-tag,
 .promo-card-frenos h3 span,
+html.theme-light body main .promo-card-frenos h3 span,
 .promo-card-frenos button span,
-.promo-card-frenos button svg {
+html.theme-light body main .promo-card-frenos button span,
+.promo-card-frenos button svg,
+html.theme-light body main .promo-card-frenos button svg {
   color: #f87171 !important;
 }
 
 /* Card 2 (Suspensión) */
 .promo-card-suspension,
-.theme-light .promo-card-suspension {
+.theme-light .promo-card-suspension,
+html.theme-light body main .promo-card-suspension {
   background: linear-gradient(135deg, #221a0f 0%, #151310 50%, #000000 100%) !important;
   border: 1px solid rgba(251, 191, 36, 0.35) !important;
 }
 .promo-card-suspension .promo-tag,
+html.theme-light body main .promo-card-suspension .promo-tag,
 .promo-card-suspension h3 span,
+html.theme-light body main .promo-card-suspension h3 span,
 .promo-card-suspension button span,
-.promo-card-suspension button svg {
+html.theme-light body main .promo-card-suspension button span,
+.promo-card-suspension button svg,
+html.theme-light body main .promo-card-suspension button svg {
   color: #fbbf24 !important;
 }
 
 /* Card 3 (Inyección) */
 .promo-card-motor,
-.theme-light .promo-card-motor {
+.theme-light .promo-card-motor,
+html.theme-light body main .promo-card-motor {
   background: linear-gradient(135deg, #0e1726 0%, #10141c 50%, #000000 100%) !important;
   border: 1px solid rgba(59, 130, 246, 0.35) !important;
 }
 .promo-card-motor .promo-tag,
+html.theme-light body main .promo-card-motor .promo-tag,
 .promo-card-motor h3 span,
+html.theme-light body main .promo-card-motor h3 span,
 .promo-card-motor button span,
-.promo-card-motor button svg {
+html.theme-light body main .promo-card-motor button span,
+.promo-card-motor button svg,
+html.theme-light body main .promo-card-motor button svg {
   color: #60a5fa !important;
 }
 
