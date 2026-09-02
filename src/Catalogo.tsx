@@ -1062,23 +1062,23 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             <span>Añadir</span>
                           </button>
                         ) : (
-                          <div className="flex-1 flex items-center justify-between bg-amber-500/15 border border-amber-400/50 rounded-lg p-1 text-xs">
+                          <div className="flex-1 flex items-center justify-between rounded-lg overflow-hidden border border-amber-400 bg-amber-500" style={{ minHeight: '34px' }}>
                             <button
                               onClick={() => updateCartQty(item.id, -1)}
-                              className="w-6 h-6 rounded bg-black/40 hover:bg-amber-400 hover:text-black text-white flex items-center justify-center font-black cursor-pointer transition-colors"
+                              className="w-8 h-[34px] bg-amber-600 hover:bg-amber-700 text-black flex items-center justify-center font-black cursor-pointer transition-colors shrink-0"
                               title="Restar"
                             >
-                              <Minus size={11} />
+                              <Minus size={12} />
                             </button>
-                            <span className="font-black text-amber-300 px-1 text-xs" style={{ color: '#fbbf24' }}>
+                            <span className="flex-1 text-center font-black text-black text-xs tracking-wide" style={{ color: '#000000' }}>
                               {getItemQuantity(item.id)} en carrito
                             </span>
                             <button
                               onClick={() => updateCartQty(item.id, 1)}
-                              className="w-6 h-6 rounded bg-black/40 hover:bg-amber-400 hover:text-black text-white flex items-center justify-center font-black cursor-pointer transition-colors"
+                              className="w-8 h-[34px] bg-amber-600 hover:bg-amber-700 text-black flex items-center justify-center font-black cursor-pointer transition-colors shrink-0"
                               title="Sumar"
                             >
-                              <Plus size={11} />
+                              <Plus size={12} />
                             </button>
                           </div>
                         )}
