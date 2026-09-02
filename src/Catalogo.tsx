@@ -635,14 +635,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { name: "Frenos y Suspensión", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/promo_brakes_caliper.jpg", desc: "Pastillas cerámicas y discos" },
-              { name: "Frenos y Suspensión", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/promo_suspension_spring.jpg", desc: "Coilovers y amortiguadores gas" },
-              { name: "Aceites y Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/24214142.png", desc: "Sintéticos 5W-30 y aditivos" },
-              { name: "Baterías y Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/servicio-electricidad.jpg", desc: "Baterías 600A/700A y alternadores" },
-              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/servicio-inyeccion.jpg", desc: "Filtros de aceite, aire y cabina" },
-              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/servicio-climatizacion.jpg", desc: "Gas R134a y refrigerantes" },
-              { name: "Inyección y Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Microfiltros, inyectores y turbo" },
-              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/instalaciones.jpg", desc: "Champú PH neutro y ceras" }
+              { name: "Frenos y Suspensión", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/cat_frenos_discos.jpg", desc: "Pastillas cerámicas y discos" },
+              { name: "Frenos y Suspensión", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.jpg", desc: "Coilovers y amortiguadores gas" },
+              { name: "Aceites y Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.jpg", desc: "Sintéticos 5W-30 y aditivos" },
+              { name: "Baterías y Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.jpg", desc: "Baterías AGM y alternadores" },
+              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/product_oem_bulb_light.jpg", desc: "Filtros e iluminación OEM" },
+              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/product_strut_brake_assembly.jpg", desc: "Gas R134a y refrigerantes" },
+              { name: "Inyección y Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Turbos, inyectores y pistones" },
+              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/product_engine_piston_crankshaft.jpg", desc: "Champú PH neutro y ceras" }
             ].map((catItem, idx) => {
               const count = catalogItems.filter(item => 
                 item.category.toLowerCase().includes(catItem.name.toLowerCase()) || 
