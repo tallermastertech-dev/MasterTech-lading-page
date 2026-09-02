@@ -1416,17 +1416,39 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               })()}
 
               {/* Modal Footer CTA */}
-              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/60 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
-                <span className="text-xs text-zinc-400">¿Deseas solicitar o cotizar este repuesto?</span>
-                <a
-                  href={getWhatsAppMessage(selectedProduct.title, selectedProduct.price, selectedProduct.partNumber, selectedProduct.isImportedUSA, selectedProduct.stock)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto bg-[#25D366] hover:bg-[#20ba5a] text-black text-xs font-black uppercase tracking-wider py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer"
-                >
-                  <WhatsAppIcon size={18} />
-                  <span>{(selectedProduct.stock ?? 10) === 0 ? 'Cotizar Importación USA' : 'Consultar Disponibilidad'}</span>
-                </a>
+              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs text-zinc-400">Total:</span>
+                  <span className="text-2xl font-black text-amber-400 font-mono">{selectedProduct.price}</span>
+                  {selectedProduct.isImportedUSA && (
+                    <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                  <a
+                    href={getWhatsAppMessage(selectedProduct.title, selectedProduct.price, selectedProduct.partNumber, selectedProduct.isImportedUSA, selectedProduct.stock)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3.5 rounded-xl bg-white/10 hover:bg-[#25D366] text-zinc-300 hover:text-black transition-all flex items-center justify-center cursor-pointer border border-white/15"
+                    title="Consultar por WhatsApp"
+                  >
+                    <WhatsAppIcon size={18} />
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addToCart(selectedProduct);
+                      setIsCartOpen(true);
+                      setSelectedProduct(null);
+                    }}
+                    className="flex-1 sm:flex-none bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 hover:from-amber-300 hover:to-amber-400 text-black text-xs font-black uppercase tracking-wider py-3.5 px-7 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/25 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <ShoppingCart size={17} className="text-black" />
+                    <span>Añadir al Carrito</span>
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>
