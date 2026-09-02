@@ -973,25 +973,33 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         {/* SECTION 5: CUSTOM USA PART IMPORT BANNER */}
         {/* ========================================================================= */}
-        <section className="catalogo-usa-banner rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
+        <section 
+          className="catalogo-usa-banner rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl"
+          style={{ background: 'linear-gradient(135deg, #0d1527 0%, #161f30 50%, #10141d 100%)', borderColor: 'rgba(251, 191, 36, 0.4)', color: '#ffffff' }}
+        >
           <div className="space-y-3 max-w-2xl relative z-10">
-            <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-blue-400/30">
-              <Plane size={13} />
-              <span>Importación Directa desde Miami / EE.UU.</span>
+            <div 
+              className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border"
+              style={{ backgroundColor: 'rgba(59, 130, 246, 0.25)', borderColor: 'rgba(96, 165, 250, 0.5)', color: '#93c5fd' }}
+            >
+              <Plane size={13} style={{ color: '#60a5fa' }} />
+              <span style={{ color: '#93c5fd' }}>Importación Directa desde Miami / EE.UU.</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight !text-white" style={{ color: '#ffffff' }}>
               ¿Buscas un repuesto o componente específico desde USA?
             </h2>
-            <p className="text-zinc-300 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed" style={{ color: '#cbd5e1' }}>
               Importamos repuestos originales OEM y alternativos certificados directamente desde EE.UU. para Jeep, Toyota, Honda, Nissan, Dodge, Chrysler, Ford y Lexus. Envíanos tu número de parte OEM o Serial VIN por WhatsApp.
             </p>
           </div>
           <button
+            type="button"
             onClick={() => setIsUsaModalOpen(true)}
             className="usa-banner-btn py-4 px-8 rounded-2xl shrink-0 shadow-2xl flex items-center gap-2 relative z-10 cursor-pointer font-black text-xs uppercase tracking-wider"
+            style={{ backgroundColor: '#C2A472', color: '#000000', border: 'none' }}
           >
-            <Plane size={18} className="animate-bounce" />
-            <span>Formulario de Solicitud EE.UU.</span>
+            <Plane size={18} className="animate-bounce" style={{ color: '#000000' }} />
+            <span style={{ color: '#000000', fontWeight: 900 }}>Formulario de Solicitud EE.UU.</span>
           </button>
         </section>
       </main>
