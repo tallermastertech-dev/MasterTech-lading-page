@@ -149,14 +149,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 w-[420px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
-                  style={{
-                    backgroundColor: '#12141a',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    color: '#ffffff'
-                  }}
+                  className="navbar-dropdown absolute top-full left-1/2 -translate-x-1/2 w-[420px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
                 >
                   <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                     <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1" style={{ color: '#C2A472' }}>
@@ -171,14 +164,12 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       <a
                         key={i}
                         href={opt.href}
-                        className="flex items-start gap-3 p-2.5 rounded-xl transition-colors group/item"
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = ''; }}
+                        className="navbar-dropdown-item flex items-start gap-3 p-2.5 rounded-xl transition-colors"
                       >
                         <MasterTechIconBadge icon={opt.icon} />
                         <div>
-                          <div className="font-bold text-xs leading-snug" style={{ color: '#e2e8f0' }}>{opt.title}</div>
-                          <div className="text-[11px] font-normal leading-tight mt-0.5" style={{ color: '#71717a' }}>{opt.desc}</div>
+                          <div className="nav-opt-title font-bold text-xs leading-snug">{opt.title}</div>
+                          <div className="nav-opt-desc text-[11px] font-normal leading-tight mt-0.5">{opt.desc}</div>
                         </div>
                       </a>
                     ))}
@@ -222,14 +213,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="absolute top-full right-0 w-[440px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
-                  style={{ 
-                    backgroundColor: '#12141a',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    color: '#ffffff'
-                  }}
+                  className="navbar-dropdown absolute top-full right-0 w-[440px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -246,10 +230,8 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       <a
                         key={i}
                         href={opt.href}
-                        className={`flex items-start gap-3 p-3 rounded-xl transition-all group/item ${
-                          opt.isUSA
-                            ? 'mt-2 relative overflow-hidden'
-                            : ''
+                        className={`navbar-dropdown-item flex items-start gap-3 p-3 rounded-xl transition-all ${
+                          opt.isUSA ? 'mt-2 relative overflow-hidden' : ''
                         }`}
                         style={opt.isUSA ? {
                           background: 'linear-gradient(to right, rgba(23,37,84,0.9), rgba(15,23,42,0.95), rgba(23,37,84,0.7))',
@@ -266,10 +248,10 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                         )}
                         <MasterTechIconBadge icon={opt.icon} isUSA={opt.isUSA} />
                         <div className="flex-1 pr-16">
-                          <div className="font-bold text-xs leading-snug" style={{ color: opt.isUSA ? '#ffffff' : '#e2e8f0' }}>
+                          <div className="nav-opt-title font-bold text-xs leading-snug">
                             {opt.title}
                           </div>
-                          <div className="text-[11px] font-normal leading-tight mt-0.5" style={{ color: opt.isUSA ? '#94a3b8' : '#71717a' }}>
+                          <div className="nav-opt-desc text-[11px] font-normal leading-tight mt-0.5">
                             {opt.desc}
                           </div>
                         </div>
