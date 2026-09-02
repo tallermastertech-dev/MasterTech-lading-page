@@ -36,10 +36,43 @@ export interface CatalogItem {
 }
 
 const DEFAULT_CATALOG: CatalogItem[] = [
+  // 1. Frenos & Discos
   {
     id: 1,
+    title: "Conjunto de Disco Perforado & Cáliper Brembo MasterTech",
+    category: "Frenos & Discos",
+    price: "$185.00",
+    desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper Brembo de 4 pistones.",
+    longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones para frenadas precisas.",
+    img: "/assets/cat_frenos_discos.jpg",
+    badge: "MasterTech Brembo",
+    specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
+    compatibility: "Vehículos deportivos y SUVs seleccionadas",
+    partNumber: "MT-STR-BRK-4P",
+    stock: 4,
+    isImportedUSA: true
+  },
+  {
+    id: 2,
+    title: "Pastillas de Freno Cerámicas Premium MasterTech (Juego Delantero)",
+    category: "Frenos & Discos",
+    price: "$55.00",
+    desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
+    longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuye el desgaste de los discos de freno.",
+    img: "/assets/promo_brakes_caliper.jpg",
+    badge: "MasterTech Brakes",
+    specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
+    compatibility: "Vehículos Japoneses, Americanos y Coreanos",
+    partNumber: "MT-BP-CER-8842",
+    stock: 12,
+    isImportedUSA: true
+  },
+
+  // 2. Suspensión & Amortiguadores
+  {
+    id: 3,
     title: "Juego de Coilovers & Amortiguadores MasterTech Pro (Par)",
-    category: "Frenos y Suspensión",
+    category: "Suspensión & Amortiguadores",
     price: "$120.00",
     desc: "Amortiguadores dobles MasterTech presurizados con nitrógeno y resortes reforzados para máxima estabilidad.",
     longDesc: "Línea oficial MasterTech Racing: resortes progresivos de aleación con recubrimiento electrostático y vástagos cromados de alta fricción.",
@@ -52,69 +85,9 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     isImportedUSA: true
   },
   {
-    id: 2,
-    title: "Batería MasterTech AGM Alta Potencia 600A / 700A",
-    category: "Baterías y Electricidad",
-    price: "$85.00",
-    desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
-    longDesc: "Iluminación y energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
-    img: "/assets/cat_baterias_electricidad.jpg",
-    badge: "MasterTech Power",
-    specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
-    compatibility: "Universal 12V vehículos livianos y camionetas",
-    partNumber: "MT-BAT-AGM-700",
-    stock: 15,
-    isImportedUSA: false
-  },
-  {
-    id: 3,
-    title: "Conjunto de Disco Perforado & Cáliper Brembo MasterTech",
-    category: "Frenos y Suspensión",
-    price: "$185.00",
-    desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper de alto frenado térmico.",
-    longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones.",
-    img: "/assets/cat_frenos_discos.jpg",
-    badge: "MasterTech Brembo",
-    specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
-    compatibility: "Vehículos deportivos y SUVs seleccionadas",
-    partNumber: "MT-STR-BRK-4P",
-    stock: 4,
-    isImportedUSA: true
-  },
-  {
     id: 4,
-    title: "Turbocargador MasterTech Garrett Twin Scroll con Líneas de Acero",
-    category: "Inyección y Motor",
-    price: "$340.00",
-    desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
-    longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
-    img: "/assets/promo_turbo_charger.jpg",
-    badge: "MasterTech Turbo",
-    specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
-    compatibility: "Motores gasolina y diésel turboalimentados",
-    partNumber: "MT-TURB-TWIN-SC",
-    stock: 3,
-    isImportedUSA: true
-  },
-  {
-    id: 5,
-    title: "Pastillas de Freno MasterTech Cerámicas Premium (Juego Delantero)",
-    category: "Frenos y Suspensión",
-    price: "$55.00",
-    desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
-    longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuyen el desgaste de los discos de freno.",
-    img: "/assets/promo_brakes_caliper.jpg",
-    badge: "Garantía MasterTech",
-    specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
-    compatibility: "Vehículos Japoneses, Americanos y Coreanos",
-    partNumber: "MT-BP-CER-8842",
-    stock: 12,
-    isImportedUSA: true
-  },
-  {
-    id: 6,
     title: "Coilover Deportivo MasterTech Pro con Muelle Helicoidal",
-    category: "Frenos y Suspensión",
+    category: "Suspensión & Amortiguadores",
     price: "$95.00",
     desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para pista o calle.",
     longDesc: "Ingeniería MasterTech Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas.",
@@ -126,10 +99,12 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     stock: 6,
     isImportedUSA: true
   },
+
+  // 3. Aceites & Lubricantes
   {
-    id: 7,
+    id: 5,
     title: "Kit Aceite MasterTech 100% Sintético 5W-30 + Filtro OEM",
-    category: "Aceites y Lubricantes",
+    category: "Aceites & Lubricantes",
     price: "$45.00",
     desc: "Aceite 100% sintético MasterTech con aditivos antifricción de última generación y filtro OEM.",
     longDesc: "Fórmula exclusiva MasterTech Lubricants: reduce el rozamiento térmico en motores modernos y protege en frío.",
@@ -142,9 +117,73 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     isImportedUSA: true
   },
   {
+    id: 6,
+    title: "Fluido Sintético de Transmisión Automática ATF MasterTech (Galón)",
+    category: "Aceites & Lubricantes",
+    price: "$38.00",
+    desc: "Fluido de transmisión de alto desempeño para cajas automáticas secuenciales y CVT.",
+    longDesc: "Protección térmica contra fricción y deslizamiento en cambios de marcha continuos bajo climas cálidos.",
+    img: "/assets/cat_aceites_lubricantes.jpg",
+    badge: "MasterTech Fluid",
+    specs: ["Compatible Dexron VI / Mercon LV", "Protección antidesgaste", "Alta estabilidad térmica"],
+    compatibility: "Transmisiones automáticas multimarca",
+    partNumber: "MT-ATF-SYN-4L",
+    stock: 14,
+    isImportedUSA: true
+  },
+
+  // 4. Baterías & Electricidad
+  {
+    id: 7,
+    title: "Batería MasterTech AGM Alta Potencia 600A / 700A",
+    category: "Baterías & Electricidad",
+    price: "$85.00",
+    desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
+    longDesc: "Energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
+    img: "/assets/cat_baterias_electricidad.jpg",
+    badge: "MasterTech Power",
+    specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
+    compatibility: "Universal 12V vehículos livianos y camionetas",
+    partNumber: "MT-BAT-AGM-700",
+    stock: 15,
+    isImportedUSA: false
+  },
+  {
     id: 8,
-    title: "Kit de Diagnóstico & Filtros de Inyección MasterTech",
-    category: "Filtros y Consumibles",
+    title: "Alternador de Alto Rendimiento 140A MasterTech Heavy Duty",
+    category: "Baterías & Electricidad",
+    price: "$165.00",
+    desc: "Alternador reforzado de 140 amperios con regulador interno de voltaje para alta demanda eléctrica.",
+    longDesc: "Componente MasterTech Electrical: garantiza alimentación estable para sistemas de audio, iluminación LED y aire acondicionado.",
+    img: "/assets/cat_baterias_electricidad.jpg",
+    badge: "MasterTech Heavy Duty",
+    specs: ["Salida 140 Amperios 12V", "Bobinado de cobre de alta pureza", "Regulador electrónico integrado"],
+    compatibility: "Camionetas, SUVs y sistemas con accesorios",
+    partNumber: "MT-ALT-140A-HD",
+    stock: 5,
+    isImportedUSA: true
+  },
+
+  // 5. Filtros & Consumibles
+  {
+    id: 9,
+    title: "Filtro de Aire Cónico de Alto Flujo MasterTech Performance",
+    category: "Filtros & Consumibles",
+    price: "$42.00",
+    desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor entrada de flujo de aire.",
+    longDesc: "Línea MasterTech AirFlow: maximiza la respuesta de aceleración y protege el motor contra partículas finas.",
+    img: "/assets/cat_filtros_oem.jpg",
+    badge: "MasterTech High Flow",
+    specs: ["Malla de algodón lavable", "Cuello de 3 pulgadas adaptable", "Incremento de flujo de aire hasta +25%"],
+    compatibility: "Sistemas de inducción directa y tomas universales",
+    partNumber: "MT-AF-CONE-RED",
+    stock: 18,
+    isImportedUSA: true
+  },
+  {
+    id: 10,
+    title: "Kit de Diagnóstico & Microfiltros de Inyección MasterTech",
+    category: "Filtros & Consumibles",
     price: "$35.00",
     desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
     longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
@@ -155,17 +194,115 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     partNumber: "MT-INJ-KIT-OEM",
     stock: 25,
     isImportedUSA: true
+  },
+
+  // 6. Fluidos & Climatización
+  {
+    id: 11,
+    title: "Kit de Servicio A/A Gas Refrigerante R134a + Aceite PAG MasterTech",
+    category: "Fluidos & Climatización",
+    price: "$48.00",
+    desc: "Garrafa de gas ecológico R134a MasterTech con lubricante sintético PAG para compresores de A/A.",
+    longDesc: "Enfriamiento instantáneo MasterTech: restaura la presión óptima y la temperatura del sistema de climatización.",
+    img: "/assets/cat_climatizacion.jpg",
+    badge: "MasterTech A/C",
+    specs: ["Gas refrigerante puro R134a", "Aceite sintético PAG ISO 46/100", "Detector UV antifugas incluido"],
+    compatibility: "Sistemas de aire acondicionado automotriz R134a",
+    partNumber: "MT-AC-R134A-KIT",
+    stock: 16,
+    isImportedUSA: true
+  },
+  {
+    id: 12,
+    title: "Refrigerante / Anticongelante 50/50 MasterTech Long Life (Galón)",
+    category: "Fluidos & Climatización",
+    price: "$22.00",
+    desc: "Coolant prediluido con tecnología OAT para protección del radiador, bomba de agua y bloque de motor.",
+    longDesc: "Protección térmica contra sobrecalentamiento y corrosión galvánica en motores de aluminio.",
+    img: "/assets/cat_climatizacion.jpg",
+    badge: "MasterTech Coolant",
+    specs: ["Fórmula 50/50 lista para usar", "Protección anticorrosiva OAT", "Punto de ebullición hasta 129°C"],
+    compatibility: "Todos los radiadores y motores gasolina/diésel",
+    partNumber: "MT-COOL-5050-GL",
+    stock: 30,
+    isImportedUSA: true
+  },
+
+  // 7. Inyección & Motor
+  {
+    id: 13,
+    title: "Turbocargador MasterTech Garrett Twin Scroll con Líneas de Acero",
+    category: "Inyección & Motor",
+    price: "$340.00",
+    desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
+    longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
+    img: "/assets/promo_turbo_charger.jpg",
+    badge: "MasterTech Turbo",
+    specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
+    compatibility: "Motores gasolina y diésel turboalimentados",
+    partNumber: "MT-TURB-TWIN-SC",
+    stock: 3,
+    isImportedUSA: true
+  },
+  {
+    id: 14,
+    title: "Juego de Inyectores de Alta Precisión Multi-Punto MasterTech (Set x4)",
+    category: "Inyección & Motor",
+    price: "$90.00",
+    desc: "Inyectores de combustible de respuesta ultrarrápida calibrados para pulverización perfecta.",
+    longDesc: "Máxima eficiencia de combustión MasterTech: reduce el consumo y optimiza la potencia en aceleración.",
+    img: "/assets/promo_turbo_charger.jpg",
+    badge: "MasterTech Inyección",
+    specs: ["Pulverización multi-orificio de 12 puntos", "Caudal balanceado ±1%", "Conectores estándar OEM"],
+    compatibility: "Motores 4 y 6 cilindros",
+    partNumber: "MT-INJ-FLOW-4X",
+    stock: 9,
+    isImportedUSA: true
+  },
+
+  // 8. Cuidado & Detailing
+  {
+    id: 15,
+    title: "Kit de Detailing & Cera Cerámica Hidrofóbica MasterTech Gold",
+    category: "Cuidado & Detailing",
+    price: "$38.00",
+    desc: "Sellador cerámico SiO2 con efecto hidrofóbico repelente al agua, polvo y rayos UV.",
+    longDesc: "Estética automotriz MasterTech: brillo efecto espejo con protección duradera por hasta 6 meses.",
+    img: "/assets/cat_cuidado_estetica.jpg",
+    badge: "MasterTech Detailing",
+    specs: ["Fórmula SiO2 hidrofóbica", "Brillo profundo efecto cristal", "Incluye aplicador de microfibra"],
+    compatibility: "Pinturas automotrices, vidrios y faros",
+    partNumber: "MT-CERAMIC-WAX-500",
+    stock: 22,
+    isImportedUSA: true
+  },
+  {
+    id: 16,
+    title: "Champú de Espuma Activa PH Neutro & Toallas Microfibra MasterTech",
+    category: "Cuidado & Detailing",
+    price: "$25.00",
+    desc: "Champú concentrado para cañón de espuma Snow Foam que encapsula la suciedad sin rayar la pintura.",
+    longDesc: "Limpieza profesional de carrocería MasterTech: respeta tratamientos cerámicos y ceras preexistentes.",
+    img: "/assets/cat_cuidado_estetica.jpg",
+    badge: "MasterTech Care",
+    specs: ["PH Neutro 100% seguro", "Alta densidad de espuma", "Incluye 2 toallas de 600 GSM"],
+    compatibility: "Todo tipo de carrocerías y acabados mate o brillante",
+    partNumber: "MT-SNOW-FOAM-1L",
+    stock: 28,
+    isImportedUSA: true
   }
 ];
 
 const CATEGORIES = [
   "Todos",
-  "Aceites y Lubricantes",
-  "Frenos y Suspensión",
-  "Filtros y Consumibles",
-  "Baterías y Electricidad",
-  "Fluidos y Refrigeración",
-  "Cuidado y Estética"
+  "Frenos & Discos",
+  "Suspensión & Amortiguadores",
+  "Aceites & Lubricantes",
+  "Baterías & Electricidad",
+  "Filtros & Consumibles",
+  "Fluidos & Climatización",
+  "Inyección & Motor",
+  "Cuidado & Detailing"
 ];
 
 export interface CartItem {
@@ -640,20 +777,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { name: "Frenos y Suspensión", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/cat_frenos_discos.jpg", desc: "Pastillas cerámicas y discos" },
-              { name: "Frenos y Suspensión", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.jpg", desc: "Coilovers y amortiguadores gas" },
-              { name: "Aceites y Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.jpg", desc: "Sintéticos 5W-30 y aditivos" },
-              { name: "Baterías y Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.jpg", desc: "Baterías AGM y alternadores" },
-              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/cat_filtros_oem.jpg", desc: "Filtros e iluminación OEM" },
-              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/cat_climatizacion.jpg", desc: "Gas R134a y refrigerantes" },
-              { name: "Inyección y Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Turbos, inyectores y pistones" },
-              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/cat_cuidado_estetica.jpg", desc: "Champú PH neutro y ceras" }
+              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/cat_frenos_discos.jpg", desc: "Pastillas cerámicas y discos ranurados" },
+              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.jpg", desc: "Coilovers y amortiguadores de gas" },
+              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.jpg", desc: "Sintéticos 5W-30 y fluidos ATF" },
+              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.jpg", desc: "Baterías AGM y alternadores 140A" },
+              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-amber-400" />, img: "/assets/cat_filtros_oem.jpg", desc: "Filtros de aire, aceite y microfiltros" },
+              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/cat_climatizacion.jpg", desc: "Gas R134a, refrigerantes y A/A" },
+              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Turbocargadores e inyectores" },
+              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-amber-400" />, img: "/assets/cat_cuidado_estetica.jpg", desc: "Ceras cerámicas, champú y microfibras" }
             ].map((catItem, idx) => {
-              const count = catalogItems.filter(item => 
-                item.category.toLowerCase().includes(catItem.name.toLowerCase()) || 
-                catItem.name.toLowerCase().includes(item.category.toLowerCase())
-              ).length || 5;
-
+              const count = catalogItems.filter(item => item.category === catItem.name).length;
               const isSelected = selectedCategory === catItem.name;
 
               return (
@@ -666,11 +799,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   }}
                   className={`catalogo-category-card p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-md ${
                     isSelected
-                      ? 'is-selected ring-1 ring-amber-400 bg-amber-500/15 border-amber-400'
+                      ? 'is-selected ring-2 ring-amber-400 bg-amber-500/15 border-amber-400'
                       : 'bg-[#12141a]/90 border-white/10 hover:border-amber-400/40 hover:bg-[#161822]'
                   }`}
                 >
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#0c0e14] border border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#0c0e14] border border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                     <img 
                       src={catItem.img} 
                       alt={catItem.label} 
@@ -708,7 +841,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <button
                 type="button"
                 onClick={() => {
-                  setSelectedCategory("Frenos y Suspensión");
+                  setSelectedCategory("Frenos & Discos");
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
@@ -734,11 +867,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Amortiguadores presurizados y coilovers.</p>
               <button
                 type="button"
-                onClick={() => setIsUsaModalOpen(true)}
+                onClick={() => {
+                  setSelectedCategory("Suspensión & Amortiguadores");
+                  const el = document.getElementById('catalogo-grid');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
                 style={{ background: 'transparent', border: 'none', color: '#fbbf24', padding: 0 }}
               >
-                <span style={{ color: '#fbbf24' }}>Cotizar Pedido</span>
+                <span style={{ color: '#fbbf24' }}>Ver Suspensión</span>
                 <ArrowRight size={13} style={{ color: '#fbbf24' }} />
               </button>
             </div>
@@ -758,14 +895,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <button
                 type="button"
                 onClick={() => {
-                  setSelectedCategory("Todos");
+                  setSelectedCategory("Inyección & Motor");
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
                 className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
                 style={{ background: 'transparent', border: 'none', color: '#60a5fa', padding: 0 }}
               >
-                <span style={{ color: '#60a5fa' }}>Explorar Piezas</span>
+                <span style={{ color: '#60a5fa' }}>Ver Inyección</span>
                 <ArrowRight size={13} style={{ color: '#60a5fa' }} />
               </button>
             </div>
