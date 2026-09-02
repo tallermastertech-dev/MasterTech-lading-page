@@ -148,7 +148,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$35.00",
     desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
     longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
-    img: "/assets/servicio-inyeccion.jpg",
+    img: "/assets/cat_filtros_oem.jpg",
     badge: "MasterTech OEM",
     specs: ["Sellos Vitón de alta presión", "Microfiltros de precisión", "Garantía de estanqueidad"],
     compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
@@ -644,10 +644,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               { name: "Frenos y Suspensión", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.jpg", desc: "Coilovers y amortiguadores gas" },
               { name: "Aceites y Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.jpg", desc: "Sintéticos 5W-30 y aditivos" },
               { name: "Baterías y Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.jpg", desc: "Baterías AGM y alternadores" },
-              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/servicio-inyeccion.jpg", desc: "Filtros e inyección OEM" },
-              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/servicio-climatizacion.jpg", desc: "Gas R134a y refrigerantes" },
+              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/cat_filtros_oem.jpg", desc: "Filtros e iluminación OEM" },
+              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/cat_climatizacion.jpg", desc: "Gas R134a y refrigerantes" },
               { name: "Inyección y Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Turbos, inyectores y pistones" },
-              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/instalaciones.jpg", desc: "Champú PH neutro y ceras" }
+              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/cat_cuidado_estetica.jpg", desc: "Champú PH neutro y ceras" }
             ].map((catItem, idx) => {
               const count = catalogItems.filter(item => 
                 item.category.toLowerCase().includes(catItem.name.toLowerCase()) || 
