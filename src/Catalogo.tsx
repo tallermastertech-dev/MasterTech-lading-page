@@ -43,7 +43,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$120.00",
     desc: "Amortiguadores dobles MasterTech presurizados con nitrógeno y resortes reforzados para máxima estabilidad.",
     longDesc: "Línea oficial MasterTech Racing: resortes progresivos de aleación con recubrimiento electrostático y vástagos cromados de alta fricción.",
-    img: "/assets/product_dual_shock_absorbers.jpg",
+    img: "/assets/cat_suspension_amortiguadores.jpg",
     badge: "MasterTech Pro",
     specs: ["Doble tubo a gas nitrógeno", "Certificación MasterTech OEM", "Ajuste de precarga y altura"],
     compatibility: "Jeep, Toyota, Ford, Chevrolet, Dodge",
@@ -53,27 +53,27 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   },
   {
     id: 2,
-    title: "Bombillo Halógeno / LED MasterTech OEM H4 Alta Intensidad",
+    title: "Batería MasterTech AGM Alta Potencia 600A / 700A",
     category: "Baterías y Electricidad",
-    price: "$25.00",
-    desc: "Lámpara de cuarzo MasterTech de alta penetración lumínica con casquillo metálico reforzado P43t.",
-    longDesc: "Iluminación de precisión MasterTech: filamento reforzado de tungsteno que resiste vibraciones mecánicas continuas y bloquea rayos UV.",
-    img: "/assets/product_oem_bulb_light.jpg",
-    badge: "MasterTech OEM",
-    specs: ["Casquillo P43t estándar H4", "Garantía MasterTech 12V", "Vidrio de cuarzo anti-UV"],
+    price: "$85.00",
+    desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
+    longDesc: "Iluminación y energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
+    img: "/assets/cat_baterias_electricidad.jpg",
+    badge: "MasterTech Power",
+    specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
     compatibility: "Universal 12V vehículos livianos y camionetas",
-    partNumber: "MT-LGT-H4-6055",
-    stock: 30,
+    partNumber: "MT-BAT-AGM-700",
+    stock: 15,
     isImportedUSA: false
   },
   {
     id: 3,
-    title: "Conjunto de Puntal MasterTech + Disco Ranurado & Cáliper Brembo",
+    title: "Conjunto de Disco Perforado & Cáliper Brembo MasterTech",
     category: "Frenos y Suspensión",
     price: "$185.00",
     desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper de alto frenado térmico.",
-    longDesc: "Ensamble MasterTech Performance: copela superior reforzada, muelle helicoidal, rótula de dirección y pinza de 4 pistones.",
-    img: "/assets/product_strut_brake_assembly.jpg",
+    longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones.",
+    img: "/assets/cat_frenos_discos.jpg",
     badge: "MasterTech Brembo",
     specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
     compatibility: "Vehículos deportivos y SUVs seleccionadas",
@@ -83,17 +83,17 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   },
   {
     id: 4,
-    title: "Cigüeñal Forjado MasterTech Racing + Juego de Pistones T6",
+    title: "Turbocargador MasterTech Garrett Twin Scroll con Líneas de Acero",
     category: "Inyección y Motor",
-    price: "$290.00",
-    desc: "Cigüeñal MasterTech forjado nitrurado con 4 pistones de aluminio forjado y bielas de alta compresión.",
+    price: "$340.00",
+    desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
     longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
-    img: "/assets/product_engine_piston_crankshaft.jpg",
-    badge: "MasterTech Forged",
-    specs: ["Acero forjado 4340 nitrurado", "Pistones de aluminio T6 MasterTech", "Bielas H-Beam balanceadas"],
-    compatibility: "Motores 4 cilindros DOHC / Turbo",
-    partNumber: "MT-CRK-FORG-4C",
-    stock: 2,
+    img: "/assets/promo_turbo_charger.jpg",
+    badge: "MasterTech Turbo",
+    specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
+    compatibility: "Motores gasolina y diésel turboalimentados",
+    partNumber: "MT-TURB-TWIN-SC",
+    stock: 3,
     isImportedUSA: true
   },
   {
@@ -102,7 +102,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     category: "Frenos y Suspensión",
     price: "$55.00",
     desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
-    longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuye el desgaste de los discos de freno.",
+    longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuyen el desgaste de los discos de freno.",
     img: "/assets/promo_brakes_caliper.jpg",
     badge: "Garantía MasterTech",
     specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
@@ -113,17 +113,17 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   },
   {
     id: 6,
-    title: "Turbocargador MasterTech Garrett Twin Scroll con Líneas de Acero",
-    category: "Inyección y Motor",
-    price: "$340.00",
-    desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
-    longDesc: "Ingeniería MasterTech Turbo: respuesta inmediata de aceleración con mínima inercia de turbina y máxima potencia.",
-    img: "/assets/promo_turbo_charger.jpg",
-    badge: "MasterTech Turbo",
-    specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
-    compatibility: "Motores gasolina y diésel turboalimentados",
-    partNumber: "MT-TURB-TWIN-SC",
-    stock: 3,
+    title: "Coilover Deportivo MasterTech Pro con Muelle Helicoidal",
+    category: "Frenos y Suspensión",
+    price: "$95.00",
+    desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para pista o calle.",
+    longDesc: "Ingeniería MasterTech Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas.",
+    img: "/assets/promo_suspension_spring.jpg",
+    badge: "MasterTech Pro",
+    specs: ["Muelle helicoidal reforzado", "Vástago cromado de baja fricción", "Ajuste milimétrico"],
+    compatibility: "Vehículos livianos y sedanes",
+    partNumber: "MT-SUSP-SP-90",
+    stock: 6,
     isImportedUSA: true
   },
   {
@@ -143,17 +143,17 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   },
   {
     id: 8,
-    title: "Amortiguador MasterTech Competición con Ajuste de Rebote",
-    category: "Frenos y Suspensión",
-    price: "$95.00",
-    desc: "Coilover MasterTech ajustable con anodizado en aluminio y válvula de control de amortiguación deportiva.",
-    longDesc: "Suspensión calibrada MasterTech: permite regular la dureza del tren delantero/trasero para calle o circuito.",
-    img: "/assets/cat_suspension_amortiguadores.jpg",
-    badge: "MasterTech Race",
-    specs: ["Cuerpo roscado ajustable", "Top mount de aluminio CNC MasterTech", "Aceite sintético anti-cavitación"],
-    compatibility: "Sedanes y hatchbacks deportivos",
-    partNumber: "MT-COIL-RACE-90",
-    stock: 6,
+    title: "Kit de Diagnóstico & Filtros de Inyección MasterTech",
+    category: "Filtros y Consumibles",
+    price: "$35.00",
+    desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
+    longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
+    img: "/assets/servicio-inyeccion.jpg",
+    badge: "MasterTech OEM",
+    specs: ["Sellos Vitón de alta presión", "Microfiltros de precisión", "Garantía de estanqueidad"],
+    compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
+    partNumber: "MT-INJ-KIT-OEM",
+    stock: 25,
     isImportedUSA: true
   }
 ];
@@ -639,10 +639,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               { name: "Frenos y Suspensión", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.jpg", desc: "Coilovers y amortiguadores gas" },
               { name: "Aceites y Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.jpg", desc: "Sintéticos 5W-30 y aditivos" },
               { name: "Baterías y Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.jpg", desc: "Baterías AGM y alternadores" },
-              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/product_oem_bulb_light.jpg", desc: "Filtros e iluminación OEM" },
-              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/product_strut_brake_assembly.jpg", desc: "Gas R134a y refrigerantes" },
+              { name: "Filtros y Consumibles", label: "Filtros & Componentes OEM", icon: <Package size={20} className="text-amber-400" />, img: "/assets/servicio-inyeccion.jpg", desc: "Filtros e inyección OEM" },
+              { name: "Fluidos y Refrigeración", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/servicio-climatizacion.jpg", desc: "Gas R134a y refrigerantes" },
               { name: "Inyección y Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Turbos, inyectores y pistones" },
-              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/product_engine_piston_crankshaft.jpg", desc: "Champú PH neutro y ceras" }
+              { name: "Cuidado y Estética", label: "Cuidado & Estética", icon: <Car size={20} className="text-amber-400" />, img: "/assets/instalaciones.jpg", desc: "Champú PH neutro y ceras" }
             ].map((catItem, idx) => {
               const count = catalogItems.filter(item => 
                 item.category.toLowerCase().includes(catItem.name.toLowerCase()) || 
@@ -665,12 +665,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       : 'bg-[#12141a]/90 border-white/10 hover:border-amber-400/40 hover:bg-[#161822]'
                   }`}
                 >
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-black/60 border border-white/10 shrink-0 p-1 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#0c0e14] border border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform">
                     <img 
                       src={catItem.img} 
                       alt={catItem.label} 
                       onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
 
@@ -852,16 +852,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     transition={{ delay: idx * 0.03 }}
                     className="catalogo-product-card bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-2xl overflow-hidden hover:border-amber-400/80 hover:shadow-xl transition-all duration-300 flex flex-col group relative"
                   >
-                    {/* Product Top Image Box: Isolated White Display como en la referencia */}
+                    {/* Product Top Image Box: Isolated Display without stark white clashes */}
                     <div 
-                      className="relative aspect-square bg-white p-6 sm:p-8 flex items-center justify-center cursor-pointer overflow-hidden group/img"
+                      className="relative aspect-square bg-slate-50 dark:bg-[#0c0e14] p-4 sm:p-6 flex items-center justify-center cursor-pointer overflow-hidden group/img"
                       onClick={() => setSelectedProduct(item)}
                     >
                       <img 
-                        src={item.img || "/assets/product_dual_shock_absorbers.jpg"} 
+                        src={item.img || "/assets/cat_suspension_amortiguadores.jpg"} 
                         alt={item.title}
                         onError={(e) => { (e.target as HTMLImageElement).src = '/assets/promo_brakes_caliper.jpg'; }}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-sm"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-md rounded-xl"
                       />
 
                       {/* Top Badges */}
