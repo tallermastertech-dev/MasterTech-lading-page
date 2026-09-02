@@ -1028,11 +1028,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     <div className="w-full border-t border-zinc-100 dark:border-white/5" />
 
                     {/* Product Details */}
-                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-white dark:bg-[#12141a]">
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-transparent">
                       <div className="space-y-1.5">
                         <h3 
                           onClick={() => setSelectedProduct(item)}
-                          className="text-xs sm:text-sm font-medium text-zinc-800 dark:text-zinc-200 hover:text-amber-500 transition-colors cursor-pointer leading-relaxed line-clamp-2 min-h-[2.7em]"
+                          className="product-title text-xs sm:text-sm font-bold text-white hover:text-amber-400 transition-colors cursor-pointer leading-relaxed line-clamp-2 min-h-[2.7em]"
                           title={item.title}
                         >
                           {item.title}
@@ -1045,18 +1045,18 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                               ${oldPrice}
                             </span>
                           )}
-                          <span className="text-sm sm:text-base font-bold text-amber-500">
+                          <span className="product-price text-sm sm:text-base font-black text-amber-400">
                             {item.price}
                           </span>
                         </div>
                       </div>
 
                       {/* Actions */}
-                      <div className="pt-2 flex items-center gap-2 border-t border-zinc-100 dark:border-white/5">
+                      <div className="pt-2 flex items-center gap-2 border-t border-white/10">
                         {getItemQuantity(item.id) === 0 ? (
                           <button
                             onClick={() => addToCart(item, 1)}
-                            className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                            className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm hover:scale-[1.02] active:scale-[0.98]"
                           >
                             <ShoppingCart size={13} />
                             <span>Añadir</span>
@@ -1065,17 +1065,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           <div className="flex-1 flex items-center justify-between bg-amber-500/15 border border-amber-400/50 rounded-lg p-1 text-xs">
                             <button
                               onClick={() => updateCartQty(item.id, -1)}
-                              className="w-6 h-6 rounded bg-black/10 hover:bg-amber-400 hover:text-black text-zinc-800 dark:text-white flex items-center justify-center font-black cursor-pointer"
+                              className="w-6 h-6 rounded bg-black/40 hover:bg-amber-400 hover:text-black text-white flex items-center justify-center font-black cursor-pointer transition-colors"
                               title="Restar"
                             >
                               <Minus size={11} />
                             </button>
-                            <span className="font-bold text-zinc-900 dark:text-white px-1 text-xs">
+                            <span className="font-black text-amber-300 px-1 text-xs" style={{ color: '#fbbf24' }}>
                               {getItemQuantity(item.id)} en carrito
                             </span>
                             <button
                               onClick={() => updateCartQty(item.id, 1)}
-                              className="w-6 h-6 rounded bg-black/10 hover:bg-amber-400 hover:text-black text-zinc-800 dark:text-white flex items-center justify-center font-black cursor-pointer"
+                              className="w-6 h-6 rounded bg-black/40 hover:bg-amber-400 hover:text-black text-white flex items-center justify-center font-black cursor-pointer transition-colors"
                               title="Sumar"
                             >
                               <Plus size={11} />
@@ -1087,7 +1087,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2.5 rounded-lg bg-[#25D366]/15 hover:bg-[#25D366] text-[#128C7E] hover:text-white transition-colors cursor-pointer"
+                          className="p-2.5 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-black transition-colors cursor-pointer border border-[#25D366]/40"
                           title="Consultar por WhatsApp"
                         >
                           <WhatsAppIcon size={14} />
@@ -1098,7 +1098,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             setSelectedProduct(item);
                             setActiveImageIndex(0);
                           }}
-                          className="p-2.5 rounded-lg border border-zinc-200 dark:border-white/10 hover:border-amber-400 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer"
+                          className="p-2.5 rounded-lg border border-white/10 hover:border-amber-400 text-zinc-300 hover:text-white transition-colors cursor-pointer"
                           title="Ver Ficha Técnica"
                         >
                           <ZoomIn size={14} />
