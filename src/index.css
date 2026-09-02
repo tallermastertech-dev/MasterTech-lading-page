@@ -821,100 +821,268 @@ body.theme-light .mt01-chat-modal button.mt01-hdr-btn:hover {
   color: #000000 !important;
 }
 
-/* USA Import Banner in Catalogo */
-.theme-light div[class*="from-red-950/40"] {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08) !important;
+/* ========================================================================= */
+/* CATALOGO PUBLIC PAGE THEME IMMUNITY & COMPONENT STYLING                  */
+/* ========================================================================= */
+
+/* 1. HERO SHOWCASE CARD (Always crisp luxury dark aesthetic) */
+.catalogo-hero-card,
+.theme-light .catalogo-hero-card,
+html.theme-light .catalogo-hero-card,
+body.theme-light .catalogo-hero-card {
+  background: linear-gradient(180deg, #161822 0%, #11131a 50%, #0D0D0D 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.25) !important;
+  color: #ffffff !important;
 }
-.theme-light div[class*="from-red-950/40"] h2 {
-  color: #0f172a !important;
+.catalogo-hero-card h1,
+.theme-light .catalogo-hero-card h1,
+.theme-light main .catalogo-hero-card h1 {
+  color: #ffffff !important;
 }
-.theme-light div[class*="from-red-950/40"] p {
-  color: #334155 !important;
+.catalogo-hero-card h1 span,
+.theme-light .catalogo-hero-card h1 span,
+.theme-light main .catalogo-hero-card h1 span {
+  color: #fbbf24 !important;
+}
+.catalogo-hero-card p,
+.theme-light .catalogo-hero-card p,
+.theme-light main .catalogo-hero-card p {
+  color: #cbd5e1 !important;
+}
+.catalogo-hero-card .hero-tag,
+.theme-light .catalogo-hero-card .hero-tag {
+  background: rgba(251, 191, 36, 0.12) !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+  color: #fbbf24 !important;
+}
+.catalogo-hero-card .hero-tag span,
+.catalogo-hero-card .hero-tag svg {
+  color: #fbbf24 !important;
+}
+.catalogo-hero-card .hero-btn-usa,
+.theme-light .catalogo-hero-card .hero-btn-usa {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+.catalogo-hero-card .hero-btn-usa span,
+.catalogo-hero-card .hero-btn-usa svg {
+  color: #ffffff !important;
+}
+.catalogo-hero-card .hero-btn-cart,
+.theme-light .catalogo-hero-card .hero-btn-cart {
+  background: rgba(251, 191, 36, 0.15) !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+  color: #fbbf24 !important;
+}
+.catalogo-hero-card .hero-btn-cart span,
+.catalogo-hero-card .hero-btn-cart svg {
+  color: #fbbf24 !important;
 }
 
-/* Shopping Cart Modal in Light Mode */
-.theme-light div[class*="bg-[#1c262e]"],
-.theme-light div[class*="from-[#202D36]"] {
+/* 2. POPULAR CATEGORIES CARDS */
+.catalogo-category-card {
+  transition: all 0.25s ease;
+}
+.theme-light .catalogo-category-card {
   background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-.theme-light div[class*="bg-[#1c262e]"] h2,
-.theme-light div[class*="bg-[#1c262e]"] h3,
-.theme-light div[class*="bg-[#1c262e]"] h4,
-.theme-light div[class*="bg-[#1c262e]"] span.text-white {
-  color: #0f172a !important;
-}
-.theme-light div[class*="bg-[#1c262e]"] p,
-.theme-light div[class*="bg-[#1c262e]"] .text-zinc-400 {
-  color: #334155 !important;
-}
-.theme-light div[class*="bg-[#1c262e]"] input {
-  background-color: #f8fafc !important;
   border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05) !important;
 }
-
-.theme-light [class*="bg-[#12141a]"],
-.theme-light [class*="bg-[#131620]"],
-.theme-light [class*="bg-[#0f1117]"],
-.theme-light [class*="bg-[#181a24]"],
-.theme-light [class*="bg-black/60"],
-.theme-light [class*="bg-black/70"],
-.theme-light [class*="bg-black/80"] {
-  background-color: #ffffff !important;
-  border-color: #cbd5e1 !important;
-}
-
-/* Product Detail Modal in Light Mode */
-.theme-light .fixed.inset-0 div[class*="bg-black/60"] {
-  background-color: #f1f5f9 !important;
-  border-color: #e2e8f0 !important;
-}
-.theme-light .fixed.inset-0 div[class*="bg-black/60"] span,
-.theme-light .fixed.inset-0 div[class*="bg-black/60"] button {
-  color: #0f172a !important;
-}
-.theme-light .fixed.inset-0 div[class*="bg-blue-950"] {
-  background-color: #eff6ff !important;
-  border-color: #bfdbfe !important;
-}
-.theme-light .fixed.inset-0 div[class*="bg-blue-950"] strong,
-.theme-light .fixed.inset-0 div[class*="bg-blue-950"] p {
-  color: #1e3a8a !important;
-}
-.theme-light .fixed.inset-0 div[class*="bg-black/40"] {
+.theme-light .catalogo-category-card:hover {
+  border-color: #fbbf24 !important;
   background-color: #f8fafc !important;
-  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.12) !important;
 }
-.theme-light .fixed.inset-0 div[class*="bg-[#C2A472]/10"] {
+.theme-light .catalogo-category-card h4 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+.theme-light .catalogo-category-card span.category-count {
+  color: #b45309 !important;
+  font-weight: 700 !important;
+}
+.theme-light .catalogo-category-card.is-selected {
   background-color: #fef3c7 !important;
-  border-color: #fde68a !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2) !important;
 }
-.theme-light .fixed.inset-0 div[class*="bg-[#C2A472]/10"] span,
-.theme-light .fixed.inset-0 div[class*="bg-[#C2A472]/10"] strong {
+
+/* 3. PROMO OFFER BANNERS (High contrast luxury cards in both themes) */
+.catalogo-promo-card,
+.theme-light .catalogo-promo-card,
+html.theme-light .catalogo-promo-card {
+  color: #ffffff !important;
+}
+.catalogo-promo-card h3,
+.theme-light .catalogo-promo-card h3,
+.theme-light main .catalogo-promo-card h3 {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+.catalogo-promo-card p,
+.theme-light .catalogo-promo-card p,
+.theme-light main .catalogo-promo-card p {
+  color: #cbd5e1 !important;
+}
+.catalogo-promo-card button,
+.theme-light .catalogo-promo-card button {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Card 1 (Frenos) */
+.promo-card-frenos,
+.theme-light .promo-card-frenos {
+  background: linear-gradient(135deg, #221010 0%, #151114 50%, #000000 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+.promo-card-frenos .promo-tag,
+.promo-card-frenos h3 span,
+.promo-card-frenos button span,
+.promo-card-frenos button svg {
+  color: #f87171 !important;
+}
+
+/* Card 2 (Suspensión) */
+.promo-card-suspension,
+.theme-light .promo-card-suspension {
+  background: linear-gradient(135deg, #221a0f 0%, #151310 50%, #000000 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+}
+.promo-card-suspension .promo-tag,
+.promo-card-suspension h3 span,
+.promo-card-suspension button span,
+.promo-card-suspension button svg {
+  color: #fbbf24 !important;
+}
+
+/* Card 3 (Inyección) */
+.promo-card-motor,
+.theme-light .promo-card-motor {
+  background: linear-gradient(135deg, #0e1726 0%, #10141c 50%, #000000 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+.promo-card-motor .promo-tag,
+.promo-card-motor h3 span,
+.promo-card-motor button span,
+.promo-card-motor button svg {
+  color: #60a5fa !important;
+}
+
+/* 4. PRODUCT GRID CARDS */
+.theme-light .catalogo-product-card {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
+}
+.theme-light .catalogo-product-card:hover {
+  border-color: #f59e0b !important;
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.15) !important;
+}
+.theme-light .catalogo-product-card h3 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+.theme-light .catalogo-product-card .product-category {
+  color: #b45309 !important;
+  font-weight: 800 !important;
+}
+.theme-light .catalogo-product-card .product-price {
+  color: #b45309 !important;
+  font-weight: 900 !important;
+}
+.theme-light .catalogo-product-card .product-old-price {
+  color: #94a3b8 !important;
+}
+.theme-light .catalogo-product-card .product-cart-btn {
+  background-color: #fef3c7 !important;
+  border: 1px solid #fcd34d !important;
   color: #78350f !important;
 }
-
-.theme-light section:not(:first-of-type) [class*="text-zinc-300"],
-.theme-light section:not(:first-of-type) [class*="text-zinc-400"],
-.theme-light section:not(:first-of-type) [class*="text-zinc-500"],
-.theme-light section:not(:first-of-type) [class*="text-slate-400"],
-.theme-light main [class*="text-zinc-300"],
-.theme-light main [class*="text-zinc-400"],
-.theme-light main [class*="text-zinc-500"] {
+.theme-light .catalogo-product-card .product-cart-btn span,
+.theme-light .catalogo-product-card .product-cart-btn svg {
+  color: #78350f !important;
+}
+.theme-light .catalogo-product-card .product-cart-btn:hover {
+  background-color: #fde68a !important;
+  color: #000000 !important;
+}
+.theme-light .catalogo-product-card .product-action-btn {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
   color: #334155 !important;
 }
-
-.theme-light section:not(:first-of-type) [class*="text-zinc-100"],
-.theme-light section:not(:first-of-type) [class*="text-zinc-200"],
-.theme-light section:not(:first-of-type) [class*="text-slate-100"],
-.theme-light section:not(:first-of-type) [class*="text-slate-200"],
-.theme-light main [class*="text-zinc-100"],
-.theme-light main [class*="text-zinc-200"],
-.theme-light main [class*="text-white"]:not(.btn-primary *):not([class*="bg-blue-"] *):not([class*="bg-emerald-"] *):not([class*="bg-[#25D366]"] *):not([class*="bg-green-"] *) {
+.theme-light .catalogo-product-card .product-action-btn span,
+.theme-light .catalogo-product-card .product-action-btn svg {
+  color: #334155 !important;
+}
+.theme-light .catalogo-product-card .product-action-btn:hover {
+  background-color: #e2e8f0 !important;
   color: #0f172a !important;
+}
+
+/* 5. USA IMPORT BANNER */
+.catalogo-usa-banner,
+.theme-light .catalogo-usa-banner,
+html.theme-light .catalogo-usa-banner {
+  background: linear-gradient(135deg, #0d1527 0%, #161f30 50%, #10141d 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.4) !important;
+  color: #ffffff !important;
+}
+.catalogo-usa-banner h2,
+.theme-light .catalogo-usa-banner h2,
+.theme-light main .catalogo-usa-banner h2 {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+.catalogo-usa-banner p,
+.theme-light .catalogo-usa-banner p,
+.theme-light main .catalogo-usa-banner p {
+  color: #cbd5e1 !important;
+}
+.catalogo-usa-banner .usa-banner-btn,
+.theme-light .catalogo-usa-banner .usa-banner-btn {
+  background-color: #C2A472 !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  border: none !important;
+  box-shadow: 0 6px 20px rgba(194, 164, 114, 0.35) !important;
+}
+.catalogo-usa-banner .usa-banner-btn * {
+  color: #000000 !important;
+}
+.catalogo-usa-banner .usa-banner-btn:hover {
+  background-color: #d4b886 !important;
+}
+
+/* 6. FLOATING CART BUTTON (Always pure high-visibility MasterTech Gold) */
+.catalogo-floating-cart,
+.theme-light .catalogo-floating-cart,
+html.theme-light .catalogo-floating-cart,
+body.theme-light .catalogo-floating-cart {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%) !important;
+  border: 2px solid #fef08a !important;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.45) !important;
+  color: #000000 !important;
+}
+.catalogo-floating-cart *,
+.theme-light .catalogo-floating-cart * {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+.catalogo-floating-cart .cart-badge-count {
+  background-color: #000000 !important;
+  color: #fbbf24 !important;
+  border: 1px solid #fbbf24 !important;
+}
+
+/* Section Title text in light mode */
+.theme-light .section-heading-dark {
+  color: #0f172a !important;
+}
+.theme-light .section-subheading-dark {
+  color: #475569 !important;
 }
 
 /* 7. BADGES AND HIGHLIGHTS */

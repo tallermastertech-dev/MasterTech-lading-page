@@ -501,10 +501,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         {/* SECTION 1: HERO SHOWCASE (INSPIRADO EN EL DISEÑO DE REFERENCIA) */}
         {/* ========================================================================= */}
-        <section className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#161822] via-[#11131a] to-[#0D0D0D] border border-white/10 p-6 sm:p-10 lg:p-14 shadow-2xl">
+        <section className="catalogo-hero-card relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-14 shadow-2xl">
           {/* Ambient Glows */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-10 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
             {/* Left Content */}
@@ -512,7 +512,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <motion.div 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-black text-xs uppercase tracking-widest"
+                className="hero-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-xs uppercase tracking-widest"
               >
                 <ShieldCheck size={14} className="text-amber-400" />
                 <span>Calidad & Certificación OEM Internacional</span>
@@ -525,7 +525,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] text-white"
               >
                 Repuestos & <br className="hidden sm:block" />
-                <span className="text-primary italic bg-gradient-to-r from-amber-300 via-amber-400 to-primary bg-clip-text text-transparent">Autopartes</span> de Alta Calidad
+                <span className="text-amber-400 italic">Autopartes</span> de Alta Calidad
               </motion.h1>
 
               <motion.p 
@@ -555,7 +555,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <button
                   type="button"
                   onClick={() => setIsUsaModalOpen(true)}
-                  className="bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-amber-400/50 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                  className="hero-btn-usa px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
                 >
                   <Plane size={16} className="text-sky-400" />
                   <span>Importación USA</span>
@@ -564,16 +564,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(true)}
-                  className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+                  className="hero-btn-cart px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
                 >
                   <ShoppingBag size={16} />
                   <span>Carrito ({cartTotalItems})</span>
                 </button>
               </motion.div>
 
-              {/* Pagination Dots Simulator (como en la referencia) */}
+              {/* Pagination Dots Simulator */}
               <div className="flex items-center justify-center lg:justify-start gap-2 pt-4">
-                <span className="w-6 h-2 rounded-full bg-primary shadow-md shadow-primary/40"></span>
+                <span className="w-6 h-2 rounded-full bg-amber-400 shadow-md shadow-amber-400/40"></span>
                 <span className="w-2 h-2 rounded-full bg-white/20"></span>
                 <span className="w-2 h-2 rounded-full bg-white/20"></span>
               </div>
@@ -586,7 +586,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               transition={{ delay: 0.2, duration: 0.6 }}
               className="lg:col-span-6 flex items-center justify-center relative"
             >
-              <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-black/40 border border-white/10 p-2 shadow-2xl group">
+              <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-black/50 border border-white/10 p-2 shadow-2xl group">
                 <img 
                   src="/assets/autoparts_hero_showcase.jpg" 
                   alt="Auto Parts Showcase MasterTech"
@@ -595,14 +595,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Micro-Badge */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-black/70 backdrop-blur-md border border-white/15 flex items-center justify-between">
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold">
                       <Flame size={16} />
                     </div>
                     <div>
                       <div className="text-xs font-black text-white">Discos & Suspensión Heavy Duty</div>
-                      <div className="text-[10px] text-zinc-400">Rendimiento garantizado en pista y carretera</div>
+                      <div className="text-[10px] text-zinc-300">Rendimiento garantizado en pista y carretera</div>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30">
@@ -621,14 +621,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
                 <span className="text-[11px] font-black uppercase text-amber-400 tracking-wider">Exploración Rápida</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                <span>Categorías</span> <span className="text-primary italic">Populares</span>
+              <h2 className="section-heading-dark text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                <span>Categorías</span> <span className="text-amber-400 italic">Populares</span>
               </h2>
             </div>
-            <p className="text-xs text-zinc-400 max-w-sm">
+            <p className="section-subheading-dark text-xs text-zinc-400 max-w-sm">
               Haz clic en cualquier categoría para filtrar automáticamente el inventario en tiempo real.
             </p>
           </div>
@@ -659,9 +659,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     const el = document.getElementById('catalogo-grid');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-md ${
+                  className={`catalogo-category-card p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-md ${
                     isSelected
-                      ? 'bg-amber-500/15 border-primary shadow-lg shadow-primary/20 scale-102 ring-1 ring-primary'
+                      ? 'is-selected ring-1 ring-amber-400 bg-amber-500/15 border-amber-400'
                       : 'bg-[#12141a]/90 border-white/10 hover:border-amber-400/40 hover:bg-[#161822]'
                   }`}
                 >
@@ -675,10 +675,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-white group-hover:text-primary transition-colors leading-tight truncate">
+                    <h4 className="text-xs sm:text-sm font-black text-white group-hover:text-amber-400 transition-colors leading-tight truncate">
                       {catItem.label}
                     </h4>
-                    <span className="text-[10px] font-mono text-amber-400/80 font-bold block mt-0.5">
+                    <span className="category-count text-[10px] font-mono text-amber-400/90 font-bold block mt-0.5">
                       ({count} {count === 1 ? 'producto' : 'productos'})
                     </span>
                   </div>
@@ -693,13 +693,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Promo Card 1: Frenos */}
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1c1313] via-[#12141a] to-black border border-red-500/20 relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-red-500/40 transition-all">
+          <div className="catalogo-promo-card promo-card-frenos p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-red-500/50 transition-all">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="text-[10px] font-black uppercase text-red-400 tracking-wider block">Frenos Cerámicos</span>
+              <span className="promo-tag text-[10px] font-black uppercase text-red-400 tracking-wider block">Frenos Cerámicos</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
                 Hasta <span className="text-red-400">30% Off</span>
               </h3>
-              <p className="text-[11px] text-zinc-400">Pastillas y discos de alta disipación térmica.</p>
+              <p className="text-[11px] text-zinc-300">Pastillas y discos de alta disipación térmica.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -719,13 +719,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           </div>
 
           {/* Promo Card 2: Suspensión */}
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1c1810] via-[#12141a] to-black border border-amber-500/20 relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-amber-500/40 transition-all">
+          <div className="catalogo-promo-card promo-card-suspension p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-amber-500/50 transition-all">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block">Suspensión Pro</span>
+              <span className="promo-tag text-[10px] font-black uppercase text-amber-400 tracking-wider block">Suspensión Pro</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
                 Importación <span className="text-amber-400">USA</span>
               </h3>
-              <p className="text-[11px] text-zinc-400">Amortiguadores presurizados y coilovers.</p>
+              <p className="text-[11px] text-zinc-300">Amortiguadores presurizados y coilovers.</p>
               <button
                 type="button"
                 onClick={() => setIsUsaModalOpen(true)}
@@ -741,13 +741,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           </div>
 
           {/* Promo Card 3: Inyección y Motores */}
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#101724] via-[#12141a] to-black border border-blue-500/20 relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-blue-500/40 transition-all">
+          <div className="catalogo-promo-card promo-card-motor p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-blue-500/50 transition-all">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="text-[10px] font-black uppercase text-blue-400 tracking-wider block">Inyección & Motor</span>
+              <span className="promo-tag text-[10px] font-black uppercase text-blue-400 tracking-wider block">Inyección & Motor</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight">
                 Alto <span className="text-blue-400">Rendimiento</span>
               </h3>
-              <p className="text-[11px] text-zinc-400">Turbos, microfiltros y bombas OEM.</p>
+              <p className="text-[11px] text-zinc-300">Turbos, microfiltros y bombas OEM.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -777,8 +777,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span className="text-[11px] font-black uppercase text-emerald-400 tracking-wider">Inventario & Stock Certificado</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                <span>Nuevos Ingresos</span> <span className="text-primary italic">& Catálogo</span>
+              <h2 className="section-heading-dark text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                <span>Nuevos Ingresos</span> <span className="text-amber-400 italic">& Catálogo</span>
               </h2>
             </div>
 
@@ -791,7 +791,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   placeholder="Buscar por repuesto o código..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#12141a] border border-white/15 focus:border-primary rounded-xl py-2.5 pl-9 pr-8 text-xs text-white placeholder:text-zinc-500 outline-none transition-all"
+                  className="w-full bg-[#12141a] border border-white/15 focus:border-amber-400 rounded-xl py-2.5 pl-9 pr-8 text-xs text-white placeholder:text-zinc-500 outline-none transition-all"
                 />
                 {searchQuery && (
                   <button 
@@ -806,7 +806,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
-                className="bg-primary hover:bg-amber-400 text-black px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer shrink-0"
+                className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer shrink-0"
               >
                 <ShoppingCart size={15} />
                 <span>Carrito ({cartTotalItems})</span>
@@ -824,7 +824,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                     isSelected 
-                      ? 'bg-primary text-black font-black shadow-lg shadow-primary/30 scale-105' 
+                      ? 'bg-amber-400 text-black font-black shadow-lg shadow-amber-400/30 scale-105' 
                       : 'bg-white/5 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-white'
                   }`}
                 >
@@ -863,7 +863,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className="bg-[#12141a] border border-white/10 rounded-3xl overflow-hidden hover:border-amber-400/50 transition-all flex flex-col group shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 relative"
+                    className="catalogo-product-card bg-[#12141a] border border-white/10 rounded-3xl overflow-hidden hover:border-amber-400/50 transition-all flex flex-col group shadow-xl hover:shadow-2xl hover:shadow-amber-500/10 relative"
                   >
                     {/* Product Image Box */}
                     <div 
@@ -881,7 +881,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Top Badges */}
                       <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
                         {item.badge && (
-                          <span className="bg-amber-500/90 text-black font-black text-[9px] px-2 py-0.5 rounded-md shadow uppercase tracking-wide">
+                          <span className="bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 rounded-md shadow uppercase tracking-wide">
                             {item.badge}
                           </span>
                         )}
@@ -906,11 +906,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-black uppercase text-amber-400/90 tracking-wider truncate">
+                          <span className="product-category text-[10px] font-black uppercase text-amber-400 tracking-wider truncate">
                             {item.category}
                           </span>
                           {item.partNumber && (
-                            <span className="text-[9px] font-mono font-bold text-zinc-500 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
+                            <span className="text-[9px] font-mono font-bold text-zinc-400 bg-white/5 px-1.5 py-0.5 rounded border border-white/5">
                               #{item.partNumber}
                             </span>
                           )}
@@ -918,19 +918,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                         <h3 
                           onClick={() => setSelectedProduct(item)}
-                          className="text-xs sm:text-sm font-black text-white group-hover:text-primary transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.4em]"
+                          className="text-xs sm:text-sm font-black text-white group-hover:text-amber-400 transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.4em]"
                           title={item.title}
                         >
                           {item.title}
                         </h3>
 
-                        {/* Price Display (Strikethrough Comparison + Actual Price como en la referencia) */}
+                        {/* Price Display */}
                         <div className="flex items-baseline gap-2 pt-1">
-                          <span className="text-base sm:text-lg font-black text-amber-400">
+                          <span className="product-price text-base sm:text-lg font-black text-amber-400">
                             {item.price}
                           </span>
                           {numericPrice > 0 && (
-                            <span className="text-xs text-zinc-500 line-through font-mono">
+                            <span className="product-old-price text-xs text-zinc-400 line-through font-mono">
                               ${oldPrice}
                             </span>
                           )}
@@ -942,27 +942,27 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         {getItemQuantity(item.id) === 0 ? (
                           <button
                             onClick={() => addToCart(item, 1)}
-                            className="w-full bg-amber-500/10 hover:bg-primary text-amber-300 hover:text-black border border-amber-500/30 text-xs font-black py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                            className="product-cart-btn w-full bg-amber-500/10 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-500/30 text-xs font-black py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                           >
                             <ShoppingCart size={13} />
                             <span>+ Agregar al Carrito</span>
                           </button>
                         ) : (
-                          <div className="flex items-center justify-between bg-primary/20 border border-primary/50 rounded-xl p-1 text-xs">
+                          <div className="flex items-center justify-between bg-amber-500/20 border border-amber-400/50 rounded-xl p-1 text-xs">
                             <button
                               onClick={() => updateCartQty(item.id, -1)}
-                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-primary text-white flex items-center justify-center font-black cursor-pointer transition-colors"
+                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-amber-400 text-white flex items-center justify-center font-black cursor-pointer transition-colors"
                               title="Restar 1 unidad"
                             >
                               <Minus size={11} />
                             </button>
                             <span className="font-bold text-white px-2 flex items-center gap-1 text-xs">
-                              <ShoppingCart size={12} className="text-primary" />
+                              <ShoppingCart size={12} className="text-amber-400" />
                               <span>{getItemQuantity(item.id)} en carrito</span>
                             </span>
                             <button
                               onClick={() => updateCartQty(item.id, 1)}
-                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-primary text-white flex items-center justify-center font-black cursor-pointer transition-colors"
+                              className="w-6 h-6 rounded-lg bg-black/60 hover:bg-amber-400 text-white flex items-center justify-center font-black cursor-pointer transition-colors"
                               title="Sumar 1 unidad"
                             >
                               <Plus size={11} />
@@ -975,7 +975,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full text-zinc-300 hover:text-white text-[10px] font-bold py-1.5 px-2 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
+                            className="product-action-btn w-full text-zinc-300 hover:text-white text-[10px] font-bold py-1.5 px-2 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
                             title="Consultar por WhatsApp este repuesto directo"
                           >
                             <WhatsAppIcon size={11} />
@@ -987,10 +987,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                               setSelectedProduct(item);
                               setActiveImageIndex(0);
                             }}
-                            className="w-full text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
+                            className="product-action-btn w-full text-zinc-300 hover:text-white text-[10px] font-bold py-1.5 text-center flex items-center justify-center gap-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer"
                           >
                             <span>Ver Ficha</span>
-                            <ArrowRight size={10} className="text-primary" />
+                            <ArrowRight size={10} className="text-amber-400" />
                           </button>
                         </div>
                       </div>
@@ -1005,7 +1005,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         {/* SECTION 5: CUSTOM USA PART IMPORT BANNER */}
         {/* ========================================================================= */}
-        <section className="bg-gradient-to-r from-blue-950/40 via-[#12141a] to-amber-950/40 border border-amber-500/30 rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
+        <section className="catalogo-usa-banner rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
           <div className="space-y-3 max-w-2xl relative z-10">
             <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-blue-400/30">
               <Plane size={13} />
@@ -1014,13 +1014,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
               ¿Buscas un repuesto o componente específico desde USA?
             </h2>
-            <p className="text-zinc-400 text-sm leading-relaxed">
+            <p className="text-zinc-300 text-sm leading-relaxed">
               Importamos repuestos originales OEM y alternativos certificados directamente desde EE.UU. para Jeep, Toyota, Honda, Nissan, Dodge, Chrysler, Ford y Lexus. Envíanos tu número de parte OEM o Serial VIN por WhatsApp.
             </p>
           </div>
           <button
             onClick={() => setIsUsaModalOpen(true)}
-            className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-black text-xs uppercase tracking-wider py-4 px-8 rounded-2xl shrink-0 shadow-2xl flex items-center gap-2 relative z-10 border border-blue-400/40 cursor-pointer"
+            className="usa-banner-btn py-4 px-8 rounded-2xl shrink-0 shadow-2xl flex items-center gap-2 relative z-10 cursor-pointer font-black text-xs uppercase tracking-wider"
           >
             <Plane size={18} className="animate-bounce" />
             <span>Formulario de Solicitud EE.UU.</span>
