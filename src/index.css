@@ -825,3 +825,80 @@ input[type="date"] {
 .theme-light input[type="date"] {
   color-scheme: light;
 }
+
+/* ========================================================================= */
+/* 14. JORNADA PAGE — always dark regardless of theme                         */
+/* ========================================================================= */
+html.theme-light .jornada-scope,
+body.theme-light .jornada-scope {
+  background-color: #0a0b0f !important;
+  color: #ffffff !important;
+}
+
+/* All text inside jornada page stays light */
+html.theme-light .jornada-scope h1,
+html.theme-light .jornada-scope h2,
+html.theme-light .jornada-scope h3,
+html.theme-light .jornada-scope h4,
+html.theme-light .jornada-scope p,
+html.theme-light .jornada-scope span,
+html.theme-light .jornada-scope label,
+body.theme-light .jornada-scope h1,
+body.theme-light .jornada-scope h2,
+body.theme-light .jornada-scope h3,
+body.theme-light .jornada-scope h4,
+body.theme-light .jornada-scope p,
+body.theme-light .jornada-scope span,
+body.theme-light .jornada-scope label {
+  color: inherit !important;
+}
+
+/* Section backgrounds inside jornada stay dark */
+html.theme-light .jornada-scope section,
+html.theme-light .jornada-scope main,
+html.theme-light .jornada-scope footer,
+body.theme-light .jornada-scope section,
+body.theme-light .jornada-scope main,
+body.theme-light .jornada-scope footer {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+/* Trust cards inside jornada */
+html.theme-light .jornada-scope [class*="bg-[#12141a]"],
+body.theme-light .jornada-scope [class*="bg-[#12141a]"] {
+  background-color: #12141a !important;
+}
+
+/* Inputs/selects inside jornada stay dark-styled */
+html.theme-light .jornada-scope input,
+html.theme-light .jornada-scope select,
+html.theme-light .jornada-scope textarea,
+body.theme-light .jornada-scope input,
+body.theme-light .jornada-scope select,
+body.theme-light .jornada-scope textarea {
+  background-color: rgba(0,0,0,0.5) !important;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+html.theme-light .jornada-scope input::placeholder,
+html.theme-light .jornada-scope textarea::placeholder,
+body.theme-light .jornada-scope input::placeholder,
+body.theme-light .jornada-scope textarea::placeholder {
+  color: #71717a !important;
+}
+
+/* Hero badge stays amber */
+html.theme-light .jornada-scope .jornada-hero-section .text-amber-300,
+body.theme-light .jornada-scope .jornada-hero-section .text-amber-300 {
+  color: #fcd34d !important;
+}
+
+/* Hero title white span */
+html.theme-light .jornada-scope h1 span[style*="color: rgb(255, 255, 255)"],
+html.theme-light .jornada-scope h1 span[style*="color: #ffffff"],
+body.theme-light .jornada-scope h1 span[style*="color: rgb(255, 255, 255)"],
+body.theme-light .jornada-scope h1 span[style*="color: #ffffff"] {
+  color: #ffffff !important;
+}
