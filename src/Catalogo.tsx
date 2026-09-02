@@ -522,17 +522,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] text-white"
+                className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] !text-white"
+                style={{ color: '#ffffff' }}
               >
-                Repuestos & <br className="hidden sm:block" />
-                <span className="text-amber-400 italic">Autopartes</span> de Alta Calidad
+                <span style={{ color: '#ffffff' }}>Repuestos &</span> <br className="hidden sm:block" />
+                <span style={{ color: '#fbbf24', fontStyle: 'italic' }}>Autopartes</span> <span style={{ color: '#ffffff' }}>de Alta Calidad</span>
               </motion.h1>
 
               <motion.p 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0"
+                className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0"
+                style={{ color: '#cbd5e1' }}
               >
                 Frenos cerámicos, suspensión presurizada, lubricantes 100% sintéticos y componentes OEM con stock inmediato en Margarita y despacho express directo desde EE.UU.
               </motion.p>
@@ -547,27 +549,30 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <a 
                   href="#catalogo-grid"
                   className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
+                  style={{ backgroundColor: '#C2A472', color: '#000000', border: 'none' }}
                 >
-                  <ShoppingCart size={16} />
-                  <span>Explorar Catálogo</span>
+                  <ShoppingCart size={16} style={{ color: '#000000' }} />
+                  <span style={{ color: '#000000', fontWeight: 900 }}>Explorar Catálogo</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setIsUsaModalOpen(true)}
                   className="hero-btn-usa px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.25)' }}
                 >
-                  <Plane size={16} className="text-sky-400" />
-                  <span>Importación USA</span>
+                  <Plane size={16} className="text-sky-400" style={{ color: '#38bdf8' }} />
+                  <span style={{ color: '#ffffff' }}>Importación USA</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(true)}
                   className="hero-btn-cart px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
+                  style={{ backgroundColor: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.35)' }}
                 >
-                  <ShoppingBag size={16} />
-                  <span>Carrito ({cartTotalItems})</span>
+                  <ShoppingBag size={16} style={{ color: '#fbbf24' }} />
+                  <span style={{ color: '#fbbf24' }}>Carrito ({cartTotalItems})</span>
                 </button>
               </motion.div>
 
@@ -601,8 +606,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <Flame size={16} />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-white">Discos & Suspensión Heavy Duty</div>
-                      <div className="text-[10px] text-zinc-300">Rendimiento garantizado en pista y carretera</div>
+                      <div className="text-xs font-black" style={{ color: '#ffffff' }}>Discos & Suspensión Heavy Duty</div>
+                      <div className="text-[10px]" style={{ color: '#cbd5e1' }}>Rendimiento garantizado en pista y carretera</div>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30">
