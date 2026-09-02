@@ -1587,4 +1587,83 @@ html.theme-light .taller-status-badge .taller-status-text,
   color: #34d399 !important;
 }
 
+/* ========================================================================= */
+/* UNIVERSAL SITE-WIDE LIGHT & DARK MODE HARMONIZATION                       */
+/* ========================================================================= */
+
+/* Smooth Transitions on Theme Switch */
+body, 
+main, 
+nav, 
+footer, 
+.glass-card, 
+.catalogo-product-card, 
+.catalogo-category-card, 
+input, 
+select, 
+textarea, 
+button {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Light Theme Universal Text & Card Clarity */
+.theme-light .text-zinc-400,
+.theme-light .text-zinc-500 {
+  color: #475569 !important;
+}
+.theme-light .text-zinc-300 {
+  color: #334155 !important;
+}
+.theme-light .text-zinc-200,
+.theme-light .text-zinc-100 {
+  color: #1e293b !important;
+}
+
+/* Light Theme Border Colors */
+.theme-light .border-white\/5,
+.theme-light .border-white\/10,
+.theme-light .border-white\/15,
+.theme-light .border-white\/20 {
+  border-color: #cbd5e1 !important;
+}
+
+/* Light Theme Background Containers */
+.theme-light .bg-white\/5,
+.theme-light .bg-white\/10 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Light Theme Modal Backdrops */
+.theme-light .bg-black\/80,
+.theme-light .bg-black\/85,
+.theme-light .bg-black\/90 {
+  background-color: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Dark Theme Universal Text Clarity */
+html:not(.theme-light) .text-zinc-400,
+html.dark .text-zinc-400 {
+  color: #94a3b8 !important;
+}
+html:not(.theme-light) .text-zinc-300,
+html.dark .text-zinc-300 {
+  color: #cbd5e1 !important;
+}
+html:not(.theme-light) .text-zinc-200,
+html:not(.theme-light) .text-zinc-100,
+html.dark .text-zinc-200,
+html.dark .text-zinc-100 {
+  color: #f1f5f9 !important;
+}
+
+/* Dark Theme Backgrounds */
+html:not(.theme-light) .bg-white\/5,
+html.dark .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+
 
