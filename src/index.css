@@ -818,16 +818,25 @@ body.theme-light .instalaciones-section .text-zinc-400 {
 }
 
 /* 11. BRANDS MARQUEE IN LIGHT MODE */
-.theme-light .animate-marquee div {
-  color: rgba(15, 23, 42, 0.45) !important;
-  font-weight: 900 !important;
+.theme-light .brands-ticker {
+  background-color: #e9edf2 !important;
+  border-color: #cbd5e1 !important;
 }
-.theme-light .animate-marquee div:hover {
+
+.theme-light .brands-ticker .brand-ticker-item {
+  color: rgba(15, 23, 42, 0.22) !important;
+}
+
+.theme-light .brands-ticker .brand-ticker-item:hover {
   color: #b45309 !important;
 }
-.theme-light section[class*="bg-black/40"] {
-  background-color: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
+
+.theme-light .brands-ticker .marquee-fade-left {
+  background: linear-gradient(to right, #e9edf2, transparent) !important;
+}
+
+.theme-light .brands-ticker .marquee-fade-right {
+  background: linear-gradient(to left, #e9edf2, transparent) !important;
 }
 
 /* 12. ADMIN PANEL COMPONENT ISOLATION */

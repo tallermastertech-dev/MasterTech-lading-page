@@ -568,13 +568,13 @@ export default function App() {
       </section>
 
       {/* Brands Ticker */}
-      <section className="py-6 bg-black/40 border-y border-white/5 relative overflow-hidden flex items-center">
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0d0e12] to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0d0e12] to-transparent z-10 pointer-events-none" />
+      <section className="brands-ticker py-6 border-y relative overflow-hidden flex items-center" style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderColor: 'rgba(255,255,255,0.05)' }}>
+        <div className="marquee-fade-left absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #0d0e12, transparent)' }} />
+        <div className="marquee-fade-right absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #0d0e12, transparent)' }} />
         
         <div className="animate-marquee gap-16 px-8 items-center">
           {[...brands, ...brands, ...brands, ...brands].map((brand, i) => (
-            <div key={i} className="text-2xl md:text-3xl font-display font-black text-white/10 uppercase tracking-widest hover:text-primary/80 transition-colors duration-500 whitespace-nowrap cursor-default">
+            <div key={i} className="brand-ticker-item text-2xl md:text-3xl font-display font-black uppercase tracking-widest hover:text-primary/80 transition-colors duration-500 whitespace-nowrap cursor-default" style={{ color: 'rgba(255,255,255,0.1)' }}>
               {brand}
             </div>
           ))}
