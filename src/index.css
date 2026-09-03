@@ -769,9 +769,24 @@ body.theme-light .instalaciones-section .text-zinc-400 {
 }
 
 .theme-light .usa-import-modal,
-.theme-light .mt01-chat-modal {
-  background-color: #0d0e12 !important;
+.theme-light .mt01-chat-modal,
+.theme-light .catalogo-product-modal {
+  background-color: #12141a !important;
+  color: #ffffff !important;
 }
+
+.theme-light .catalogo-product-modal h3,
+.theme-light .catalogo-product-modal h4,
+.theme-light .catalogo-product-modal strong {
+  color: #ffffff !important;
+}
+
+.theme-light .catalogo-product-modal p,
+.theme-light .catalogo-product-modal li,
+.theme-light .catalogo-product-modal span:not([class*="text-amber"]):not([class*="text-green"]):not([class*="text-blue"]):not([class*="text-[#C2A472]"]) {
+  color: #cbd5e1 !important;
+}
+
 
 /* 10. FLOATING RATES TRIGGER (Bottom-Left) */
 .theme-light div[class*="fixed bottom-4 left-"] button {

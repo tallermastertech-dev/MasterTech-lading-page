@@ -1397,7 +1397,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-[#12141a] border border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
+              className="catalogo-product-modal bg-[#12141a] border border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
             >
               {/* Modal Header */}
               <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-black/60">
@@ -1484,34 +1484,34 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           </span>
                         </div>
 
-                        <h3 className="text-xl font-bold text-white leading-snug">{selectedProduct.title}</h3>
-                        <div className="text-2xl font-black text-[#C2A472]">{selectedProduct.price}</div>
-                        <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.desc}</p>
+                        <h3 className="text-xl font-bold leading-snug" style={{ color: '#ffffff' }}>{selectedProduct.title}</h3>
+                        <div className="text-2xl font-black font-mono" style={{ color: '#C2A472' }}>{selectedProduct.price}</div>
+                        <p className="text-xs leading-relaxed" style={{ color: '#cbd5e1' }}>{selectedProduct.desc}</p>
                       </div>
                     </div>
 
                     {selectedProduct.isImportedUSA && (
                       <div className="p-4 bg-blue-950/60 border border-blue-500/40 rounded-2xl text-xs text-blue-200 flex items-center gap-3 shadow-md">
                         <div>
-                          <strong className="text-white block font-bold">Repuesto Importado Directamente desde EE.UU.</strong>
-                          <p className="text-blue-300 text-[11px] mt-0.5">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
+                          <strong className="block font-bold" style={{ color: '#ffffff' }}>Repuesto Importado Directamente desde EE.UU.</strong>
+                          <p className="text-[11px] mt-0.5" style={{ color: '#93c5fd' }}>Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
                         </div>
                       </div>
                     )}
 
                     {selectedProduct.longDesc && (
-                      <div className="space-y-2 bg-black/40 p-4 rounded-2xl border border-white/10">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Ficha Técnica & Detalles de Calidad</h4>
-                        <p className="text-zinc-300 text-xs leading-relaxed">{selectedProduct.longDesc}</p>
+                      <div className="space-y-2 rounded-2xl border p-4" style={{ backgroundColor: 'rgba(0,0,0,0.4)', borderColor: 'rgba(255,255,255,0.1)' }}>
+                        <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: '#e2e8f0' }}>Ficha Técnica &amp; Detalles de Calidad</h4>
+                        <p className="text-xs leading-relaxed" style={{ color: '#cbd5e1' }}>{selectedProduct.longDesc}</p>
                       </div>
                     )}
 
                     {selectedProduct.specs && selectedProduct.specs.length > 0 && (
                       <div className="space-y-2">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">Especificaciones Técnicas:</h4>
+                        <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: '#e2e8f0' }}>Especificaciones Técnicas:</h4>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {selectedProduct.specs.map((spec, i) => (
-                            <li key={i} className="text-xs text-zinc-300 flex items-center gap-2">
+                            <li key={i} className="text-xs flex items-center gap-2" style={{ color: '#cbd5e1' }}>
                               <CheckCircle2 size={14} className="text-[#C2A472] shrink-0" />
                               <span>{spec}</span>
                             </li>
