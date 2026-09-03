@@ -79,14 +79,9 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   ];
 
   const catalogOptions = [
-    { title: "Frenos & Discos", desc: "Pastillas cerámicas, discos ventilados y kits de freno", href: "/catalogo?cat=Frenos %26 Discos", icon: Disc },
-    { title: "Suspensión & Amortiguadores", desc: "Amortiguadores a gas nitrógeno, bujes y rótulas", href: "/catalogo?cat=Suspensión %26 Amortiguadores", icon: Zap },
+    { title: "Frenos & Discos", desc: "Pastillas cerámicas, discos ventilados y kits completos de freno", href: "/catalogo?cat=Frenos %26 Discos", icon: Disc },
     { title: "Aceites & Lubricantes", desc: "Motul, Mobil 1, Pennzoil 5W-30, 10W-40 API SP", href: "/catalogo?cat=Aceites %26 Lubricantes", icon: Droplet },
-    { title: "Baterías & Electricidad", desc: "Baterías AGM, sensores, alternadores y arranque", href: "/catalogo?cat=Baterías %26 Electricidad", icon: Zap },
-    { title: "Filtros & Consumibles", desc: "Filtros de aire, cabina carbón activado e inyectores", href: "/catalogo?cat=Filtros %26 Consumibles", icon: Filter },
-    { title: "Fluidos & Climatización", desc: "Refrigerante, líquido de frenos, gas R134a A/A", href: "/catalogo?cat=Fluidos %26 Climatización", icon: Droplet },
-    { title: "Inyección & Motor", desc: "Inyectores OEM, bobinas, sensores de motor", href: "/catalogo?cat=Inyección %26 Motor", icon: Disc },
-    { title: "Repuestos desde EE.UU.", desc: "Pedidos con número de parte OEM y logística express", href: "/catalogo?import=usa#solicitud-usa", icon: Plane, isUSA: true }
+    { title: "Filtros & Consumibles", desc: "Filtros de aire, cabina carbón activado e inyectores OEM", href: "/catalogo?cat=Filtros %26 Consumibles", icon: Filter },
   ];
 
   const faqOptions = [
@@ -217,59 +212,62 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="navbar-dropdown absolute top-full right-0 w-[520px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  className="navbar-dropdown absolute top-full right-0 w-[360px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
                 >
                   {/* Header */}
-                  <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1" style={{ color: '#C2A472' }}>
+                  <div className="flex items-center justify-between pb-2.5 mb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5" style={{ color: '#C2A472' }}>
                       <Package size={12} />
-                      <span>Categorías de Repuestos</span>
+                      Categorías Populares
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: '#4ade80', backgroundColor: 'rgba(74,222,128,0.12)' }}>Stock en Taller</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: '#4ade80', backgroundColor: 'rgba(74,222,128,0.15)', border: '1px solid rgba(74,222,128,0.25)' }}>● Stock en Taller</span>
                   </div>
 
-                  {/* Options Grid — 2 columns */}
-                  <div className="grid grid-cols-2 gap-1">
+                  {/* 3 Categories — single column */}
+                  <div className="space-y-0.5 mb-3">
                     {catalogOptions.map((opt, i) => (
                       <a
                         key={i}
                         href={opt.href}
-                        className={`navbar-dropdown-item flex items-start gap-2.5 p-2.5 rounded-xl transition-all col-span-${opt.isUSA ? '2' : '1'} ${opt.isUSA ? 'mt-1 relative overflow-hidden' : ''}`}
-                        style={opt.isUSA ? {
-                          background: 'linear-gradient(to right, rgba(23,37,84,0.9), rgba(15,23,42,0.95), rgba(23,37,84,0.7))',
-                          border: '1px solid rgba(96,165,250,0.5)'
-                        } : {}}
-                        onMouseEnter={e => { if (!opt.isUSA) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.08)'; }}
-                        onMouseLeave={e => { if (!opt.isUSA) (e.currentTarget as HTMLElement).style.backgroundColor = ''; }}
+                        className="flex items-center gap-3 p-2.5 rounded-xl transition-all group/cat"
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.07)'}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = ''}
                       >
-                        {opt.isUSA && (
-                          <div className="absolute top-2 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.2)', border: '1px solid rgba(96,165,250,0.4)' }}>
-                            <Plane size={10} className="animate-pulse" style={{ color: '#60a5fa' }} />
-                            <span>EXPRESS USA</span>
-                          </div>
-                        )}
-                        <MasterTechIconBadge icon={opt.icon} isUSA={opt.isUSA} />
-                        <div className={`flex-1 ${opt.isUSA ? 'pr-24' : ''}`}>
-                          <div className="nav-opt-title font-bold text-xs leading-snug">
-                            {opt.title}
-                          </div>
-                          <div className="nav-opt-desc text-[11px] font-normal leading-tight mt-0.5">
-                            {opt.desc}
-                          </div>
+                        {/* Icon */}
+                        <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(194,164,114,0.15)', border: '1px solid rgba(194,164,114,0.3)' }}>
+                          <opt.icon className="w-4 h-4" style={{ color: '#C2A472' }} />
                         </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-bold text-xs leading-snug" style={{ color: '#f1f5f9' }}>{opt.title}</div>
+                          <div className="text-[11px] leading-tight mt-0.5 truncate" style={{ color: '#94a3b8' }}>{opt.desc}</div>
+                        </div>
+                        <ArrowRight size={12} style={{ color: 'rgba(194,164,114,0.5)' }} className="shrink-0 group-hover/cat:translate-x-0.5 transition-transform" />
                       </a>
                     ))}
                   </div>
 
+                  {/* USA Import Card */}
+                  <a
+                    href="/catalogo?import=usa#solicitud-usa"
+                    className="flex items-center gap-3 p-3 rounded-xl relative overflow-hidden transition-all group/usa"
+                    style={{ background: 'linear-gradient(135deg, rgba(23,37,84,0.95) 0%, rgba(15,23,42,0.98) 100%)', border: '1px solid rgba(96,165,250,0.4)' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.7)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.4)'}
+                  >
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(59,130,246,0.2)', border: '1px solid rgba(96,165,250,0.4)' }}>
+                      <Plane className="w-4 h-4" style={{ color: '#60a5fa' }} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-black text-xs" style={{ color: '#ffffff' }}>Importar desde EE.UU. 🇺🇸</div>
+                      <div className="text-[11px] mt-0.5" style={{ color: '#93c5fd' }}>Repuestos OEM con número de parte · Express USA</div>
+                    </div>
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded shrink-0" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.25)', border: '1px solid rgba(96,165,250,0.4)' }}>EXPRESS</span>
+                  </a>
+
                   {/* Footer */}
-                  <div className="pt-3 mt-3 flex items-center justify-between gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span className="text-[11px] font-bold flex items-center gap-1.5 shrink-0" style={{ color: '#60a5fa' }}>
-                      <Globe size={13} style={{ color: '#60a5fa' }} />
-                      <span>Logística Directa EE.UU.</span>
-                    </span>
-                    <a href="/catalogo" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap shrink-0" style={{ color: '#C2A472' }}>
-                      <span>Ver Todo el Catálogo</span>
-                      <ArrowRight size={12} />
+                  <div className="pt-3 mt-3 flex items-center justify-end" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                    <a href="/catalogo" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap" style={{ color: '#C2A472' }}>
+                      <span>Ver Todo el Catálogo →</span>
                     </a>
                   </div>
                 </motion.div>
