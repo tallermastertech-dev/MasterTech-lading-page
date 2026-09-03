@@ -359,10 +359,26 @@ export default function Catalogo() {
   const [isSubmittingCart, setIsSubmittingCart] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
 
-  // Subtle & Elegant Cart Animations State
-  const [recentlyAddedId, setRecentlyAddedId] = useState<number | null>(null);
-  const [floatingPlusOne, setFloatingPlusOne] = useState<{ id: number; key: number } | null>(null);
+  // Perfected Cart Animations State
+  interface FlyingItem {
+    id: string;
+    startX: number;
+    startY: number;
+    targetX: number;
+    targetY: number;
+    img: string;
+  }
+  const [flyingItems, setFlyingItems] = useState<FlyingItem[]>([]);
   const [cartBump, setCartBump] = useState(0);
+  const [toastItem, setToastItem] = useState<CatalogItem | null>(null);
+
+  useEffect(() => {
+    if (!toastItem) return;
+    const timer = setTimeout(() => {
+      setToastItem(null);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [toastItem]);
 
   useEffect(() => {
     try {
@@ -370,7 +386,7 @@ export default function Catalogo() {
     } catch (e) {}
   }, [cart]);
 
-  const addToCart = (product: CatalogItem, qty: number = 1) => {
+  const addToCart = (product: CatalogItem, qty: number = 1, event?: React.MouseEvent) => {
     setCart((prev) => {
       const existingIndex = prev.findIndex(item => item.product.id === product.id);
       if (existingIndex > -1) {
@@ -381,20 +397,30 @@ export default function Catalogo() {
       return [...prev, { product, quantity: qty }];
     });
 
-    // Feedback sutil: botón muestra "¡Agregado!" brevemente
-    setRecentlyAddedId(product.id);
-    setTimeout(() => {
-      setRecentlyAddedId(prev => (prev === product.id ? null : prev));
-    }, 750);
+    // Toast flotante elegante
+    setToastItem(product);
 
-    // Sutil indicador +1 flotante
-    setFloatingPlusOne({ id: product.id, key: Date.now() });
-    setTimeout(() => {
-      setFloatingPlusOne(prev => (prev?.id === product.id ? null : prev));
-    }, 800);
+    // Esfera / Miniatura fluida hacia el carrito
+    const startX = event ? event.clientX : window.innerWidth / 2;
+    const startY = event ? event.clientY : window.innerHeight / 2;
+    const targetX = Math.max(window.innerWidth - 90, 80);
+    const targetY = Math.max(window.innerHeight - 60, 80);
+    const flyId = `fly-${Date.now()}-${Math.random()}`;
 
-    // Respiración sutil en el carrito flotante
-    setCartBump(prev => prev + 1);
+    setFlyingItems(prev => [...prev, {
+      id: flyId,
+      startX,
+      startY,
+      targetX,
+      targetY,
+      img: product.img || '/assets/cat_frenos_discos.jpg'
+    }]);
+
+    // Justo al aterrizar en el carrito (550ms), rebota el carrito y emite la onda dorada
+    setTimeout(() => {
+      setFlyingItems(prev => prev.filter(f => f.id !== flyId));
+      setCartBump(prev => prev + 1);
+    }, 550);
   };
 
   const updateCartQty = (productId: number, delta: number) => {
@@ -1070,53 +1096,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                       {/* Actions */}
                       <div className="pt-2 flex items-center gap-2 border-t border-white/10">
-                        {getItemQuantity(item.id) === 0 || recentlyAddedId === item.id ? (
-                          <div className="relative flex-1">
-                            <motion.button
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => addToCart(item, 1)}
-                              className={`w-full font-black text-xs py-2.5 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-1.5 cursor-pointer shadow-sm ${
-                                recentlyAddedId === item.id 
-                                  ? 'bg-emerald-500 text-black shadow-emerald-500/25' 
-                                  : 'bg-amber-500 hover:bg-amber-400 text-black shadow-amber-500/20'
-                              }`}
-                            >
-                              {recentlyAddedId === item.id ? (
-                                <motion.div 
-                                  initial={{ scale: 0.8, opacity: 0 }} 
-                                  animate={{ scale: 1, opacity: 1 }} 
-                                  className="flex items-center gap-1 font-black"
-                                >
-                                  <Check size={13} strokeWidth={3} />
-                                  <span>¡Agregado!</span>
-                                </motion.div>
-                              ) : (
-                                <div className="flex items-center gap-1.5">
-                                  <ShoppingCart size={13} />
-                                  <span>Añadir</span>
-                                </div>
-                              )}
-                            </motion.button>
-
-                            {/* Sutil micro +1 flotante que se desvanece suavemente */}
-                            <AnimatePresence>
-                              {floatingPlusOne?.id === item.id && (
-                                <motion.span
-                                  key={floatingPlusOne.key}
-                                  initial={{ opacity: 1, y: 0, scale: 0.85 }}
-                                  animate={{ opacity: 0, y: -22, scale: 1.1 }}
-                                  exit={{ opacity: 0 }}
-                                  transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-                                  className="absolute -top-1 left-1/2 -translate-x-1/2 font-black text-xs text-amber-300 pointer-events-none drop-shadow-[0_2px_8px_rgba(245,158,11,0.8)]"
-                                >
-                                  +1
-                                </motion.span>
-                              )}
-                            </AnimatePresence>
-                          </div>
+                        {getItemQuantity(item.id) === 0 ? (
+                          <motion.button
+                            whileTap={{ scale: 0.93 }}
+                            whileHover={{ scale: 1.02 }}
+                            onClick={(e) => addToCart(item, 1, e)}
+                            className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.95]"
+                          >
+                            <ShoppingCart size={13} />
+                            <span>Añadir</span>
+                          </motion.button>
                         ) : (
                           <motion.div 
-                            initial={{ scale: 0.9, opacity: 0 }}
+                            initial={{ scale: 0.88, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ type: "spring", stiffness: 450, damping: 25 }}
                             className="flex-1 flex items-center justify-between rounded-lg overflow-hidden border border-amber-400 bg-amber-500" 
@@ -1133,10 +1125,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                               {getItemQuantity(item.id)} en carrito
                             </span>
                             <button
-                              onClick={() => {
+                              onClick={(e) => {
                                 updateCartQty(item.id, 1);
                                 setCartBump(prev => prev + 1);
-                                setFloatingPlusOne({ id: item.id, key: Date.now() });
                               }}
                               className="w-8 h-[34px] bg-amber-600 hover:bg-amber-700 text-black flex items-center justify-center font-black cursor-pointer transition-colors shrink-0 active:bg-amber-800"
                               title="Sumar"
@@ -1699,42 +1690,117 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         )}
       </AnimatePresence>
 
-        {/* Floating Cart Button - Sutil y elegante */}
+        {/* Toast Notificación flotante de repuesto agregado */}
+        <AnimatePresence>
+          {toastItem && (
+            <motion.div
+              initial={{ opacity: 0, y: -30, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 450, damping: 25 }}
+              className="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-50 bg-[#12141c]/95 backdrop-blur-xl border border-amber-400/50 text-white py-2 px-4 rounded-2xl shadow-2xl flex items-center gap-3 max-w-[92vw] pointer-events-auto"
+              style={{ boxShadow: '0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 158, 11, 0.25)' }}
+            >
+              <div className="w-9 h-9 rounded-xl overflow-hidden bg-black border border-amber-400/40 shrink-0 shadow-sm">
+                <img src={toastItem.img} alt={toastItem.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="min-w-0 pr-1">
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 size={13} className="text-amber-400 shrink-0" />
+                  <span className="text-[11px] font-black text-amber-300 uppercase tracking-wide">¡Añadido al Carrito!</span>
+                </div>
+                <p className="text-[11px] text-zinc-300 font-medium truncate max-w-[170px] sm:max-w-[260px]">
+                  {toastItem.title}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCartOpen(true);
+                  setToastItem(null);
+                }}
+                className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl transition-all shadow-md shrink-0 cursor-pointer hover:scale-105 active:scale-95"
+              >
+                Ver Carrito
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Flying Orb to Cart Animation - Fluida y sin giros bruscos */}
+        <AnimatePresence>
+          {flyingItems.map(item => (
+            <motion.div
+              key={item.id}
+              initial={{
+                position: 'fixed',
+                left: item.startX - 22,
+                top: item.startY - 22,
+                scale: 1,
+                opacity: 1,
+                zIndex: 9999,
+                pointerEvents: 'none'
+              }}
+              animate={{
+                left: item.targetX,
+                top: [item.startY - 22, Math.min(item.startY, item.targetY) - 50, item.targetY],
+                scale: [1, 1.2, 0.45],
+                opacity: [1, 1, 0.9, 0],
+              }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{
+                duration: 0.55,
+                ease: [0.25, 1, 0.5, 1]
+              }}
+              className="w-11 h-11 rounded-full overflow-hidden border-2 border-amber-400 bg-black flex items-center justify-center pointer-events-none ring-4 ring-amber-400/20"
+              style={{ 
+                boxShadow: '0 0 20px rgba(245, 158, 11, 0.85), 0 8px 16px rgba(0,0,0,0.5)' 
+              }}
+            >
+              <img src={item.img} alt="" className="w-full h-full object-cover" />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Floating Cart Button */}
         <AnimatePresence>
           {cartTotalItems > 0 && (
             <motion.button
-              key="floating-cart-btn"
-              initial={{ opacity: 0, scale: 0.9, y: 15 }}
+              key={`cart-btn-${cartBump}`}
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ 
                 opacity: 1, 
-                scale: cartBump > 0 ? [1, 1.07, 1] : 1,
+                scale: cartBump > 0 ? [1, 1.18, 0.94, 1.05, 1] : 1,
+                rotate: cartBump > 0 ? [0, -3, 3, -1, 0] : 0,
                 y: 0 
               }}
               transition={{ 
-                duration: 0.35,
-                ease: [0.25, 1, 0.5, 1]
+                duration: cartBump > 0 ? 0.4 : 0.25,
+                type: "spring",
+                stiffness: 400,
+                damping: 18
               }}
-              exit={{ opacity: 0, scale: 0.9, y: 15 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
               onClick={() => setIsCartOpen(true)}
-              className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-amber-500 via-amber-400 to-primary text-black font-black text-xs uppercase tracking-wider py-3.5 px-6 rounded-full shadow-2xl shadow-amber-500/30 border border-amber-300 flex items-center gap-3.5 hover:scale-[1.03] transition-transform cursor-pointer ring-4 ring-black/50"
+              className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-amber-500 via-amber-400 to-primary text-black font-black text-xs uppercase tracking-wider py-3.5 px-6 rounded-full shadow-2xl shadow-amber-500/40 border border-amber-300 flex items-center gap-3.5 hover:scale-[1.03] transition-transform cursor-pointer ring-4 ring-black/50"
             >
-              {/* Sutil pulso de luz ambiental cuando se añade */}
+              {/* Ripple aura que estalla suavemente al recibir el repuesto */}
               {cartBump > 0 && (
                 <motion.span
-                  key={`pulse-${cartBump}`}
-                  initial={{ scale: 0.95, opacity: 0.7 }}
-                  animate={{ scale: 1.35, opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="absolute inset-0 rounded-full border border-amber-300 pointer-events-none"
+                  key={`glow-${cartBump}`}
+                  initial={{ scale: 0.9, opacity: 0.8 }}
+                  animate={{ scale: 1.65, opacity: 0 }}
+                  transition={{ duration: 0.55, ease: "easeOut" }}
+                  className="absolute inset-0 rounded-full border-2 border-amber-300 pointer-events-none"
                 />
               )}
               <div className="relative">
                 <ShoppingCart size={20} className="text-black" />
                 <motion.span 
                   key={`badge-${cartTotalItems}`}
-                  initial={{ scale: 1.3 }}
+                  initial={{ scale: 1.5 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 18 }}
+                  transition={{ type: "spring", stiffness: 600, damping: 15 }}
                   className="absolute -top-2.5 -right-2.5 bg-black text-amber-300 font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-amber-400"
                 >
                   {cartTotalItems}
