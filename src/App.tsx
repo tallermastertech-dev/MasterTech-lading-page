@@ -648,33 +648,38 @@ export default function App() {
                 <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-4 md:mb-8 leading-none">RESERVA TU <br /><span className="text-primary italic">CUPO</span></h2>
                 <p className="text-base sm:text-xl text-zinc-400 mb-8 md:mb-12 leading-relaxed">Estamos listos para recibirte. Completa los datos y te asignaremos un técnico especialista.</p>
                 
-                <div className="space-y-6 md:space-y-8">
+                <div className="space-y-4">
+                  {/* WhatsApp Button */}
                   <a 
                     href={config.WHATSAPP_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="booking-contact-link flex items-center gap-4 sm:gap-6 group cursor-pointer"
+                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99]"
+                    style={{ backgroundColor: '#25D366', border: '1px solid #1da851' }}
                   >
-                    <div className="contact-icon-box w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                      <Phone size={20} className="sm:w-6 sm:h-6" />
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
+                      <Phone size={20} style={{ color: '#ffffff' }} />
                     </div>
-                    <div className="min-w-0">
-                      <p className="contact-label text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">WhatsApp Directo</p>
-                      <p className="contact-value text-base sm:text-xl font-black text-white truncate">{config.PHONE_NUMBER}</p>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest mb-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>WhatsApp Directo</p>
+                      <p className="text-base sm:text-lg font-black" style={{ color: '#ffffff' }}>{config.PHONE_NUMBER}</p>
                     </div>
                   </a>
+
+                  {/* Location */}
                   <a 
                     href={config.GOOGLE_MAPS_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="booking-contact-link flex items-center gap-4 sm:gap-6 group cursor-pointer"
+                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99] location-contact-link"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}
                   >
-                    <div className="contact-icon-box w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                      <MapPin size={20} className="sm:w-6 sm:h-6" />
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(194,164,114,0.15)', border: '1px solid rgba(194,164,114,0.3)' }}>
+                      <MapPin size={20} style={{ color: '#C2A472' }} />
                     </div>
-                    <div className="min-w-0">
-                      <p className="contact-label text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">Ubicación</p>
-                      <p className="contact-value text-base sm:text-xl font-black text-white truncate">Porlamar, Nueva Esparta</p>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest mb-0.5" style={{ color: '#94a3b8' }}>Ubicación</p>
+                      <p className="text-base sm:text-lg font-black location-contact-value" style={{ color: '#f1f5f9' }}>Porlamar, Nueva Esparta</p>
                     </div>
                   </a>
                 </div>
