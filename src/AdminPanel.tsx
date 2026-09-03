@@ -102,43 +102,274 @@ export interface CatalogItem {
   desc: string;
   longDesc?: string;
   img?: string;
-  isPopular?: boolean;
+  images?: string[];
+  badge?: string;
+  specs?: string[];
+  compatibility?: string;
   partNumber?: string;
+  stock?: number;
+  isPopular?: boolean;
   isImportedUSA?: boolean;
 }
 
 const DEFAULT_CATALOG: CatalogItem[] = [
+  // 1. Frenos & Discos
   {
     id: 1,
-    title: "Kit Aceite Sintético Motor 5W-30 + Filtro de Aceite OEM",
-    category: "Aceites y Lubricantes",
-    price: "$45 USD",
-    desc: "Lubricante 100% sintético de máxima protección térmica con filtro de aceite de alta eficiencia.",
-    longDesc: "Formulado para brindar protección extrema contra el desgaste del motor a altas temperaturas. Incluye filtro de aceite OEM certificado.",
-    img: "/24214142.png",
-    images: ["/24214142.png", "/assets/servicio-mecanica.jpg"],
-    badge: "Mantenimiento Esencial",
-    partNumber: "SYN-5W30-KIT",
-    specs: ["Aceite Sintético 5W-30 (4 Litros)", "Filtro de Aceite Anti-Drenaje", "Arandela de Cárter de Cobre", "Revisión de Niveles Gratis"],
-    compatibility: "Toyota, Chevrolet, Ford, Honda, Hyundai, Kia (Motores 4 y 6 cilindros)",
+    title: "Conjunto de Disco Perforado & Cáliper Brembo MasterTech",
+    category: "Frenos & Discos",
+    price: "$185.00",
+    desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper Brembo de 4 pistones.",
+    longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones para frenadas precisas.",
+    img: "/assets/cat_frenos_discos.jpg",
+    badge: "MasterTech Brembo",
+    specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
+    compatibility: "Vehículos deportivos y SUVs seleccionadas",
+    partNumber: "MT-STR-BRK-4P",
+    stock: 4,
     isImportedUSA: true
   },
   {
     id: 2,
-    title: "Pastillas de Freno Cerámicas Delanteras Premium (Brembo/Akebono)",
-    category: "Frenos y Seguridad",
-    price: "$55 USD",
-    desc: "Pastillas de compuesto cerámico de bajo polvo y cero ruidos con máxima capacidad de frenado.",
-    longDesc: "Diseñadas para brindar frenadas precisas y silenciosas en condiciones extremas. Compuesto térmico resistente al desvanecimiento.",
-    img: "/assets/servicio-frenos.jpg",
-    images: ["/assets/servicio-frenos.jpg"],
-    badge: "Frenado de Alta Precisión",
-    partNumber: "AK-CERAMIC-DEL",
-    specs: ["Compuesto Cerámico Aislante", "Sensor de Desgaste Incluido", "Grasa Antiruido Térmica", "Limpieza de Cálipers Incluida"],
-    compatibility: "Toyota Hilux / Fortuner / 4Runner, Jeep Cherokee, Chevrolet Silverado, Ford Explorer",
+    title: "Pastillas de Freno Cerámicas Premium MasterTech (Juego Delantero)",
+    category: "Frenos & Discos",
+    price: "$55.00",
+    desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
+    longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuye el desgaste de los discos de freno.",
+    img: "/assets/promo_brakes_caliper.jpg",
+    badge: "MasterTech Brakes",
+    specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
+    compatibility: "Vehículos Japoneses, Americanos y Coreanos",
+    partNumber: "MT-BP-CER-8842",
+    stock: 12,
+    isImportedUSA: true
+  },
+
+  // 2. Suspensión & Amortiguadores
+  {
+    id: 3,
+    title: "Juego de Coilovers & Amortiguadores MasterTech Pro (Par)",
+    category: "Suspensión & Amortiguadores",
+    price: "$120.00",
+    desc: "Amortiguadores dobles MasterTech presurizados con nitrógeno y resortes reforzados para máxima estabilidad.",
+    longDesc: "Línea oficial MasterTech Racing: resortes progresivos de aleación con recubrimiento electrostático y vástagos cromados de alta fricción.",
+    img: "/assets/cat_suspension_amortiguadores.jpg",
+    badge: "MasterTech Pro",
+    specs: ["Doble tubo a gas nitrógeno", "Certificación MasterTech OEM", "Ajuste de precarga y altura"],
+    compatibility: "Jeep, Toyota, Ford, Chevrolet, Dodge",
+    partNumber: "MT-COIL-PRO-2024",
+    stock: 8,
+    isImportedUSA: true
+  },
+  {
+    id: 4,
+    title: "Coilover Deportivo MasterTech Pro con Muelle Helicoidal",
+    category: "Suspensión & Amortiguadores",
+    price: "$95.00",
+    desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para pista o calle.",
+    longDesc: "Ingeniería MasterTech Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas.",
+    img: "/assets/promo_suspension_spring.jpg",
+    badge: "MasterTech Pro",
+    specs: ["Muelle helicoidal reforzado", "Vástago cromado de baja fricción", "Ajuste milimétrico"],
+    compatibility: "Vehículos livianos y sedanes",
+    partNumber: "MT-SUSP-SP-90",
+    stock: 6,
+    isImportedUSA: true
+  },
+
+  // 3. Aceites & Lubricantes
+  {
+    id: 5,
+    title: "Kit Aceite MasterTech 100% Sintético 5W-30 + Filtro OEM",
+    category: "Aceites & Lubricantes",
+    price: "$45.00",
+    desc: "Aceite 100% sintético MasterTech con aditivos antifricción de última generación y filtro OEM.",
+    longDesc: "Fórmula exclusiva MasterTech Lubricants: reduce el rozamiento térmico en motores modernos y protege en frío.",
+    img: "/assets/cat_aceites_lubricantes.jpg",
+    badge: "MasterTech Oil",
+    specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite MasterTech", "Soporta altas temperaturas"],
+    compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai",
+    partNumber: "MT-SYN-5W30-OEM",
+    stock: 20,
+    isImportedUSA: true
+  },
+  {
+    id: 6,
+    title: "Fluido Sintético de Transmisión Automática ATF MasterTech (Galón)",
+    category: "Aceites & Lubricantes",
+    price: "$38.00",
+    desc: "Fluido de transmisión de alto desempeño para cajas automáticas secuenciales y CVT.",
+    longDesc: "Protección térmica contra fricción y deslizamiento en cambios de marcha continuos bajo climas cálidos.",
+    img: "/assets/cat_aceites_lubricantes.jpg",
+    badge: "MasterTech Fluid",
+    specs: ["Compatible Dexron VI / Mercon LV", "Protección antidesgaste", "Alta estabilidad térmica"],
+    compatibility: "Transmisiones automáticas multimarca",
+    partNumber: "MT-ATF-SYN-4L",
+    stock: 14,
+    isImportedUSA: true
+  },
+
+  // 4. Baterías & Electricidad
+  {
+    id: 7,
+    title: "Batería MasterTech AGM Alta Potencia 600A / 700A",
+    category: "Baterías & Electricidad",
+    price: "$85.00",
+    desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
+    longDesc: "Energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
+    img: "/assets/cat_baterias_electricidad.jpg",
+    badge: "MasterTech Power",
+    specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
+    compatibility: "Universal 12V vehículos livianos y camionetas",
+    partNumber: "MT-BAT-AGM-700",
+    stock: 15,
+    isImportedUSA: false
+  },
+  {
+    id: 8,
+    title: "Alternador de Alto Rendimiento 140A MasterTech Heavy Duty",
+    category: "Baterías & Electricidad",
+    price: "$165.00",
+    desc: "Alternador reforzado de 140 amperios con regulador interno de voltaje para alta demanda eléctrica.",
+    longDesc: "Componente MasterTech Electrical: garantiza alimentación estable para sistemas de audio, iluminación LED y aire acondicionado.",
+    img: "/assets/cat_baterias_electricidad.jpg",
+    badge: "MasterTech Heavy Duty",
+    specs: ["Salida 140 Amperios 12V", "Bobinado de cobre de alta pureza", "Regulador electrónico integrado"],
+    compatibility: "Camionetas, SUVs y sistemas con accesorios",
+    partNumber: "MT-ALT-140A-HD",
+    stock: 5,
+    isImportedUSA: true
+  },
+
+  // 5. Filtros & Consumibles
+  {
+    id: 9,
+    title: "Filtro de Aire Cónico de Alto Flujo MasterTech Performance",
+    category: "Filtros & Consumibles",
+    price: "$42.00",
+    desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor entrada de flujo de aire.",
+    longDesc: "Línea MasterTech AirFlow: maximiza la respuesta de aceleración y protege el motor contra partículas finas.",
+    img: "/assets/cat_filtros_oem.jpg",
+    badge: "MasterTech High Flow",
+    specs: ["Malla de algodón lavable", "Cuello de 3 pulgadas adaptable", "Incremento de flujo de aire hasta +25%"],
+    compatibility: "Sistemas de inducción directa y tomas universales",
+    partNumber: "MT-AF-CONE-RED",
+    stock: 18,
+    isImportedUSA: true
+  },
+  {
+    id: 10,
+    title: "Kit de Diagnóstico & Microfiltros de Inyección MasterTech",
+    category: "Filtros & Consumibles",
+    price: "$35.00",
+    desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
+    longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
+    img: "/assets/cat_filtros_oem.jpg",
+    badge: "MasterTech OEM",
+    specs: ["Sellos Vitón de alta presión", "Microfiltros de precisión", "Garantía de estanqueidad"],
+    compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
+    partNumber: "MT-INJ-KIT-OEM",
+    stock: 25,
+    isImportedUSA: true
+  },
+
+  // 6. Fluidos & Climatización
+  {
+    id: 11,
+    title: "Kit de Servicio A/A Gas Refrigerante R134a + Aceite PAG MasterTech",
+    category: "Fluidos & Climatización",
+    price: "$48.00",
+    desc: "Garrafa de gas ecológico R134a MasterTech con lubricante sintético PAG para compresores de A/A.",
+    longDesc: "Enfriamiento instantáneo MasterTech: restaura la presión óptima y la temperatura del sistema de climatización.",
+    img: "/assets/cat_climatizacion.jpg",
+    badge: "MasterTech A/C",
+    specs: ["Gas refrigerante puro R134a", "Aceite sintético PAG ISO 46/100", "Detector UV antifugas incluido"],
+    compatibility: "Sistemas de aire acondicionado automotriz R134a",
+    partNumber: "MT-AC-R134A-KIT",
+    stock: 16,
+    isImportedUSA: true
+  },
+  {
+    id: 12,
+    title: "Refrigerante / Anticongelante 50/50 MasterTech Long Life (Galón)",
+    category: "Fluidos & Climatización",
+    price: "$22.00",
+    desc: "Coolant prediluido con tecnología OAT para protección del radiador, bomba de agua y bloque de motor.",
+    longDesc: "Protección térmica contra sobrecalentamiento y corrosión galvánica en motores de aluminio.",
+    img: "/assets/cat_climatizacion.jpg",
+    badge: "MasterTech Coolant",
+    specs: ["Fórmula 50/50 lista para usar", "Protección anticorrosiva OAT", "Punto de ebullición hasta 129°C"],
+    compatibility: "Todos los radiadores y motores gasolina/diésel",
+    partNumber: "MT-COOL-5050-GL",
+    stock: 30,
+    isImportedUSA: true
+  },
+
+  // 7. Inyección & Motor
+  {
+    id: 13,
+    title: "Turbocargador MasterTech Garrett Twin Scroll con Líneas de Acero",
+    category: "Inyección & Motor",
+    price: "$340.00",
+    desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
+    longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
+    img: "/assets/promo_turbo_charger.jpg",
+    badge: "MasterTech Turbo",
+    specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
+    compatibility: "Motores gasolina y diésel turboalimentados",
+    partNumber: "MT-TURB-TWIN-SC",
+    stock: 3,
+    isImportedUSA: true
+  },
+  {
+    id: 14,
+    title: "Juego de Inyectores de Alta Precisión Multi-Punto MasterTech (Set x4)",
+    category: "Inyección & Motor",
+    price: "$90.00",
+    desc: "Inyectores de combustible de respuesta ultrarrápida calibrados para pulverización perfecta.",
+    longDesc: "Máxima eficiencia de combustión MasterTech: reduce el consumo y optimiza la potencia en aceleración.",
+    img: "/assets/promo_turbo_charger.jpg",
+    badge: "MasterTech Inyección",
+    specs: ["Pulverización multi-orificio de 12 puntos", "Caudal balanceado ±1%", "Conectores estándar OEM"],
+    compatibility: "Motores 4 y 6 cilindros",
+    partNumber: "MT-INJ-FLOW-4X",
+    stock: 9,
+    isImportedUSA: true
+  },
+
+  // 8. Cuidado & Detailing
+  {
+    id: 15,
+    title: "Kit de Detailing & Cera Cerámica Hidrofóbica MasterTech Gold",
+    category: "Cuidado & Detailing",
+    price: "$38.00",
+    desc: "Sellador cerámico SiO2 con efecto hidrofóbico repelente al agua, polvo y rayos UV.",
+    longDesc: "Estética automotriz MasterTech: brillo efecto espejo con protección duradera por hasta 6 meses.",
+    img: "/assets/cat_cuidado_estetica.jpg",
+    badge: "MasterTech Detailing",
+    specs: ["Fórmula SiO2 hidrofóbica", "Brillo profundo efecto cristal", "Incluye aplicador de microfibra"],
+    compatibility: "Pinturas automotrices, vidrios y faros",
+    partNumber: "MT-CERAMIC-WAX-500",
+    stock: 22,
+    isImportedUSA: true
+  },
+  {
+    id: 16,
+    title: "Champú de Espuma Activa PH Neutro & Toallas Microfibra MasterTech",
+    category: "Cuidado & Detailing",
+    price: "$25.00",
+    desc: "Champú concentrado para cañón de espuma Snow Foam que encapsula la suciedad sin rayar la pintura.",
+    longDesc: "Limpieza profesional de carrocería MasterTech: respeta tratamientos cerámicos y ceras preexistentes.",
+    img: "/assets/cat_cuidado_estetica.jpg",
+    badge: "MasterTech Care",
+    specs: ["PH Neutro 100% seguro", "Alta densidad de espuma", "Incluye 2 toallas de 600 GSM"],
+    compatibility: "Todo tipo de carrocerías y acabados mate o brillante",
+    partNumber: "MT-SNOW-FOAM-1L",
+    stock: 28,
     isImportedUSA: true
   }
 ];
+
 
 const DEFAULT_JORNADAS = [
   { id: "reprogramacion", badge: "Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
@@ -482,7 +713,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [userModalError, setUserModalError] = useState('');
   const [isSavingUser, setIsSavingUser] = useState(false);
 
-  // Permission Checker: Full Access (CEO, Director, Super Admin, Marketing), Administración (Dashboard + Proveedores), Logística (Dashboard + Citas + Catálogo + Jornadas + Proveedores)
+  // Permission Checker: Full Access (CEO, Director, Super Admin, Administrador, Marketing), Logística (Dashboard + Citas + Catálogo + Jornadas + Proveedores)
   const isFullAdminUser = (user: any) => {
     if (!user) return false;
     const email = (user.email || '').toLowerCase().trim();
@@ -491,8 +722,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
     // J. Vasquez y J. Vicente Betancourt tienen acceso total siempre
     if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com') return true;
-    if (access === 'full') return true;
-    if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) return true;
+    if (access === 'full' || access === 'admin' || access === 'administracion') return true;
+    if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super') || role.includes('admin') || role.includes('gerente') || role.includes('administra')) return true;
     return false;
   };
 
@@ -502,11 +733,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     const role = (user.role || '').toLowerCase().trim();
     const access = (user.accessLevel || '').toLowerCase().trim();
 
-    // 1. Acceso Total
-    if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com' || access === 'full') {
+    // 1. Acceso Total / Administradores
+    if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com' || access === 'full' || access === 'admin' || access === 'administracion') {
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
-    if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super')) {
+    if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super') || role.includes('admin') || role.includes('gerente') || role.includes('administra')) {
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
 
@@ -515,17 +746,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       return ['control-taller'];
     }
 
-    // 3. Rol Administración (Dashboard, Tasas Cambiarias, Control de Taller y Admin Proveedores)
-    if (access === 'administracion' || role.includes('administra') || role.includes('admin')) {
-      return ['dashboard', 'brecha', 'control-taller', 'proveedores'];
-    }
-
-    // 4. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Jornadas y Admin Proveedores)
+    // 3. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Jornadas y Admin Proveedores)
     if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores'];
     }
 
-    return ['control-taller'];
+    // Por defecto administradores tienen catálogo
+    return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores'];
   };
 
   // Active Navigation Tab
@@ -5748,12 +5975,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       setEditingProduct({
                         id: 0,
                         title: '',
-                        category: 'Mantenimiento Esencial',
-                        price: '$0 USD',
+                        category: 'Frenos & Discos',
+                        price: '$0.00',
                         desc: '',
-                        img: '/assets/servicio-mecanica.jpg',
+                        img: '/assets/cat_frenos_discos.jpg',
                         images: [],
-                        partNumber: ''
+                        partNumber: '',
+                        stock: 10,
+                        badge: 'MasterTech OEM',
+                        isImportedUSA: true
                       });
                       setIsCatalogModalOpen(true);
                     }}
@@ -7821,23 +8051,43 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Precio</label>
+                  <label className="text-zinc-400 font-bold block mb-1">Precio (USD)</label>
                   <input
                     type="text"
                     value={editingProduct.price}
                     onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+                    placeholder="Ej. $45.00"
                     className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
                   />
                 </div>
                 <div>
-                  <label className="text-zinc-400 font-bold block mb-1">Categoría</label>
-                  <input
-                    type="text"
+                  <label className="text-zinc-400 font-bold block mb-1">Categoría Oficial</label>
+                  <select
                     value={editingProduct.category}
                     onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    className="w-full bg-[#0d0e12] border border-white/15 rounded-xl p-2.5 text-white outline-none focus:border-primary cursor-pointer text-xs"
+                  >
+                    <option value="Frenos & Discos">Frenos & Discos</option>
+                    <option value="Suspensión & Amortiguadores">Suspensión & Amortiguadores</option>
+                    <option value="Aceites & Lubricantes">Aceites & Lubricantes</option>
+                    <option value="Baterías & Electricidad">Baterías & Electricidad</option>
+                    <option value="Filtros & Consumibles">Filtros & Consumibles</option>
+                    <option value="Fluidos & Climatización">Fluidos & Climatización</option>
+                    <option value="Inyección & Motor">Inyección & Motor</option>
+                    <option value="Cuidado & Detailing">Cuidado & Detailing</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Stock Disponible</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={editingProduct.stock ?? 10}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, stock: parseInt(e.target.value) || 0 })}
+                    placeholder="10"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-mono outline-none focus:border-primary"
                   />
                 </div>
               </div>

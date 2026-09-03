@@ -266,7 +266,8 @@ async function getSettings() {
     BRANDS_JSON: '["Jeep","Toyota","Honda","Dodge","Nissan","Chrysler","Lexus"]',
     FAQS_JSON: '[]',
     JORNADAS_JSON: '[]',
-    PROVEEDORES_JSON: '[]'
+    PROVEEDORES_JSON: '[]',
+    CATALOG_PRODUCTS_JSON: '[]'
   };
 
   try {

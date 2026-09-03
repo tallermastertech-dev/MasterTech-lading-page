@@ -489,20 +489,27 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
       setIsUsaModalOpen(true);
     }
 
-    let localData: any = null;
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
-    } catch (e) {}
-
-    if (localData) {
-      setConfig((prev: any) => ({ ...prev, ...localData }));
+    const loadLocalCatalog = () => {
       try {
-        if (localData.CATALOG_PRODUCTS_JSON) {
-          setCatalogItems(JSON.parse(localData.CATALOG_PRODUCTS_JSON));
+        const stored = localStorage.getItem('mastertech_settings_store');
+        if (stored) {
+          const localData = JSON.parse(stored);
+          if (localData) {
+            setConfig((prev: any) => ({ ...prev, ...localData }));
+            if (localData.CATALOG_PRODUCTS_JSON) {
+              const parsed = typeof localData.CATALOG_PRODUCTS_JSON === 'string' 
+                ? JSON.parse(localData.CATALOG_PRODUCTS_JSON) 
+                : localData.CATALOG_PRODUCTS_JSON;
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                setCatalogItems(parsed);
+              }
+            }
+          }
         }
       } catch (e) {}
-    }
+    };
+
+    loadLocalCatalog();
 
     const fetchSettings = async () => {
       try {
@@ -515,23 +522,17 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const mergeSmart = (server: any, local: any) => {
-            const res = { ...(server || {}) };
-            if (local) {
-              for (const [k, v] of Object.entries(local)) {
-                if (v !== undefined && v !== null && v !== '') {
-                  res[k] = v;
-                }
-              }
-            }
-            return res;
-          };
-          const merged = mergeSmart(data, currentLocal);
+          // Merge server data with local cache (server data authoritative for catalog if valid)
+          const merged = { ...(currentLocal || {}), ...(data || {}) };
           setConfig((prev: any) => ({ ...prev, ...merged }));
           try {
             localStorage.setItem('mastertech_settings_store', JSON.stringify(merged));
-            if (merged.CATALOG_PRODUCTS_JSON) {
-              setCatalogItems(JSON.parse(merged.CATALOG_PRODUCTS_JSON));
+            const catalogSource = data?.CATALOG_PRODUCTS_JSON || currentLocal?.CATALOG_PRODUCTS_JSON;
+            if (catalogSource) {
+              const parsed = typeof catalogSource === 'string' ? JSON.parse(catalogSource) : catalogSource;
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                setCatalogItems(parsed);
+              }
             }
           } catch (e) {}
         }
@@ -539,6 +540,20 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
     };
 
     fetchSettings();
+
+    // Listen for live updates from Admin Panel
+    const handleAdminSync = () => {
+      loadLocalCatalog();
+      fetchSettings();
+    };
+
+    window.addEventListener('mastertech_settings_updated', handleAdminSync);
+    window.addEventListener('storage', handleAdminSync);
+
+    return () => {
+      window.removeEventListener('mastertech_settings_updated', handleAdminSync);
+      window.removeEventListener('storage', handleAdminSync);
+    };
   }, []);
 
   const getCleanPhoneDigits = (phoneStr?: string): string => {
