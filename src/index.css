@@ -780,7 +780,8 @@ body.theme-light .instalaciones-section .text-zinc-400 {
 
 .theme-light .usa-import-modal,
 .theme-light .mt01-chat-modal,
-.theme-light .catalogo-product-modal {
+.theme-light .catalogo-product-modal,
+.theme-light .carrito-modal {
   background-color: #12141a !important;
   color: #ffffff !important;
 }

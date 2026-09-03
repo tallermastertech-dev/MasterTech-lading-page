@@ -1650,22 +1650,23 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="bg-[#12141a] border border-amber-500/40 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col"
+                className="carrito-modal rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col"
+                style={{ backgroundColor: '#12141a', border: '1px solid rgba(245,158,11,0.4)' }}
               >
                 {/* Header */}
-                <div className="p-4 sm:p-5 border-b border-white/10 bg-gradient-to-r from-[#1c1810] via-[#12141a] to-[#1c1810] flex items-center justify-between">
+                <div className="p-4 sm:p-5 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(to right, #1c1810, #12141a, #1c1810)' }}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md shrink-0">
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md shrink-0" style={{ backgroundColor: 'rgba(245,158,11,0.2)', border: '1px solid rgba(245,158,11,0.4)', color: '#fbbf24' }}>
                       <ShoppingCart size={20} />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2">
+                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight flex items-center gap-2" style={{ color: '#ffffff' }}>
                         <span>Mi Carrito de Repuestos</span>
-                        <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(245,158,11,0.2)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.4)' }}>
                           {cartTotalItems} {cartTotalItems === 1 ? 'pieza' : 'piezas'}
                         </span>
                       </h2>
-                      <p className="text-zinc-400 text-xs mt-0.5">
+                      <p className="text-xs mt-0.5" style={{ color: '#71717a' }}>
                         Selecciona cantidades y envía el pedido completo a nuestros asesores por WhatsApp.
                       </p>
                     </div>
@@ -1673,7 +1674,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+                    className="p-2 rounded-full transition-colors cursor-pointer"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#71717a' }}
                     title="Cerrar carrito"
                   >
                     <X size={18} />
@@ -1711,44 +1713,37 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <button
                         type="button"
                         onClick={() => setIsCartOpen(false)}
-                        className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform"
-                      >
-                        Explorar Catálogo
-                      </button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleSendCartOrder} className="space-y-4">
-                      {/* Itemized List */}
-                      <div className="space-y-3 max-h-[35vh] overflow-y-auto pr-1">
-                        {cart.map((item) => {
+                        className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-poin                          {cart.map((item) => {
                           const itemPriceNum = parsePrice(item.product.price);
                           const itemSubtotal = (itemPriceNum * item.quantity).toFixed(2);
                           return (
-                            <div key={item.product.id} className="flex items-center justify-between gap-3 p-3 bg-white/5 border border-white/10 rounded-2xl">
-                              <img src={item.product.img} alt={item.product.title} className="w-14 h-14 object-cover rounded-xl border border-white/10 bg-black shrink-0" />
+                            <div key={item.product.id} className="flex items-center justify-between gap-3 p-3 rounded-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                              <img src={item.product.img} alt={item.product.title} className="w-14 h-14 object-cover rounded-xl shrink-0" style={{ border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#000' }} />
                               
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-xs font-bold text-white truncate">{item.product.title}</h4>
+                                <h4 className="text-xs font-bold truncate" style={{ color: '#f1f5f9' }}>{item.product.title}</h4>
                                 {item.product.partNumber && (
-                                  <span className="text-[10px] font-mono text-zinc-400 block mt-0.5">#{item.product.partNumber}</span>
+                                  <span className="text-[10px] font-mono block mt-0.5" style={{ color: '#71717a' }}>#{item.product.partNumber}</span>
                                 )}
-                                <span className="text-xs font-black text-amber-400 block mt-0.5">{item.product.price} <span className="text-[10px] text-zinc-400 font-normal">/ c/u</span></span>
+                                <span className="text-xs font-black block mt-0.5" style={{ color: '#fbbf24' }}>{item.product.price} <span className="text-[10px] font-normal" style={{ color: '#71717a' }}>/ c/u</span></span>
                               </div>
 
                               {/* Quantity Controls */}
-                              <div className="flex items-center gap-1.5 bg-black/60 border border-white/15 rounded-xl p-1">
+                              <div className="flex items-center gap-1.5 rounded-xl p-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}>
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, -1)}
-                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-primary hover:text-black text-white flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
+                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors hover:bg-amber-500"
+                                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
                                 >
                                   <Minus size={12} />
                                 </button>
-                                <span className="font-bold text-xs text-white px-2 min-w-[1.5rem] text-center">{item.quantity}</span>
+                                <span className="font-bold text-xs px-2 min-w-[1.5rem] text-center" style={{ color: '#ffffff' }}>{item.quantity}</span>
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, 1)}
-                                  className="w-6 h-6 rounded-lg bg-white/10 hover:bg-primary hover:text-black text-white flex items-center justify-center font-bold text-xs cursor-pointer transition-colors"
+                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors hover:bg-amber-500"
+                                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
                                 >
                                   <Plus size={12} />
                                 </button>
@@ -1756,11 +1751,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                               {/* Subtotal & Trash */}
                               <div className="text-right shrink-0 min-w-[70px]">
-                                <span className="text-xs font-black text-white block">${itemSubtotal}</span>
+                                <span className="text-xs font-black block" style={{ color: '#ffffff' }}>${itemSubtotal}</span>
                                 <button
                                   type="button"
                                   onClick={() => removeFromCart(item.product.id)}
-                                  className="text-zinc-500 hover:text-red-400 text-[10px] mt-1 flex items-center gap-0.5 justify-end ml-auto cursor-pointer"
+                                  className="text-[10px] mt-1 flex items-center gap-0.5 justify-end ml-auto cursor-pointer hover:text-red-400 transition-colors"
+                                  style={{ color: '#71717a' }}
                                 >
                                   <Trash2 size={12} />
                                 </button>
@@ -1771,21 +1767,21 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </div>
 
                       {/* Order Calculation Summary Box */}
-                      <div className="bg-gradient-to-r from-amber-500/10 via-[#161822] to-amber-500/10 border border-amber-500/30 p-4 rounded-2xl space-y-2">
-                        <div className="flex justify-between items-center text-xs text-zinc-400">
+                      <div className="p-4 rounded-2xl space-y-2" style={{ background: 'linear-gradient(to right, rgba(245,158,11,0.1), rgba(22,24,34,1), rgba(245,158,11,0.1))', border: '1px solid rgba(245,158,11,0.3)' }}>
+                        <div className="flex justify-between items-center text-xs" style={{ color: '#71717a' }}>
                           <span>Cantidad Total de Repuestos:</span>
-                          <span className="font-bold text-white">{cartTotalItems} unidades</span>
+                          <span className="font-bold" style={{ color: '#ffffff' }}>{cartTotalItems} unidades</span>
                         </div>
-                        <div className="flex justify-between items-center pt-2 border-t border-white/10 text-sm font-black">
-                          <span className="text-white uppercase tracking-wider">Monto Total Estimado:</span>
-                          <span className="text-xl text-amber-400 font-display">${cartTotalAmount.toFixed(2)} USD</span>
+                        <div className="flex justify-between items-center pt-2 text-sm font-black" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                          <span className="uppercase tracking-wider" style={{ color: '#ffffff' }}>Monto Total Estimado:</span>
+                          <span className="text-xl font-display" style={{ color: '#fbbf24' }}>${cartTotalAmount.toFixed(2)} USD</span>
                         </div>
                       </div>
 
                       {/* Customer Inputs */}
-                      <div className="space-y-3 bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                          <User size={13} className="text-amber-400" />
+                      <div className="space-y-3 p-3.5 rounded-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                        <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#ffffff' }}>
+                          <User size={13} style={{ color: '#fbbf24' }} />
                           <span>Datos del Solicitante (Para Enviar Presupuesto)</span>
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -1795,7 +1791,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             placeholder="Tu Nombre *"
                             value={cartClient.name}
                             onChange={(e) => setCartClient({ ...cartClient, name: e.target.value })}
-                            className="w-full bg-black/70 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
                           />
                           <input
                             type="tel"
@@ -1803,14 +1800,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             placeholder="Teléfono / WhatsApp *"
                             value={cartClient.phone}
                             onChange={(e) => setCartClient({ ...cartClient, phone: e.target.value })}
-                            className="w-full bg-black/70 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
                           />
                           <input
                             type="text"
                             placeholder="Vehículo (Ej. Jeep 2018)"
                             value={cartClient.vehicle}
                             onChange={(e) => setCartClient({ ...cartClient, vehicle: e.target.value })}
-                            className="w-full bg-black/70 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-primary"
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
                           />
                         </div>
                       </div>
