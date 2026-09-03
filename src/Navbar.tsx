@@ -79,10 +79,14 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   ];
 
   const catalogOptions = [
-    { title: "Filtros & Consumibles OEM", desc: "Aire de motor, cabina carbón activado e inyectores", href: "/catalogo?cat=Filtros y Consumibles", icon: Filter },
-    { title: "Aceites & Lubricantes Sintéticos", desc: "Motul, Mobil 1, Pennzoil 5W-30, 10W-40 API SP", href: "/catalogo?cat=Aceites y Lubricantes", icon: Droplet },
-    { title: "Pastillas de Freno & Amortiguadores", desc: "Compuestos cerámicos y amortiguadores a gas nitrógeno", href: "/catalogo?cat=Frenos y Suspensión", icon: Disc },
-    { title: "Repuestos Importados desde EE.UU.", desc: "Pedidos especiales con número de parte OEM y logística express", href: "/catalogo?import=usa#solicitud-usa", icon: Plane, isUSA: true }
+    { title: "Frenos & Discos", desc: "Pastillas cerámicas, discos ventilados y kits de freno", href: "/catalogo?cat=Frenos %26 Discos", icon: Disc },
+    { title: "Suspensión & Amortiguadores", desc: "Amortiguadores a gas nitrógeno, bujes y rótulas", href: "/catalogo?cat=Suspensión %26 Amortiguadores", icon: Zap },
+    { title: "Aceites & Lubricantes", desc: "Motul, Mobil 1, Pennzoil 5W-30, 10W-40 API SP", href: "/catalogo?cat=Aceites %26 Lubricantes", icon: Droplet },
+    { title: "Baterías & Electricidad", desc: "Baterías AGM, sensores, alternadores y arranque", href: "/catalogo?cat=Baterías %26 Electricidad", icon: Zap },
+    { title: "Filtros & Consumibles", desc: "Filtros de aire, cabina carbón activado e inyectores", href: "/catalogo?cat=Filtros %26 Consumibles", icon: Filter },
+    { title: "Fluidos & Climatización", desc: "Refrigerante, líquido de frenos, gas R134a A/A", href: "/catalogo?cat=Fluidos %26 Climatización", icon: Droplet },
+    { title: "Inyección & Motor", desc: "Inyectores OEM, bobinas, sensores de motor", href: "/catalogo?cat=Inyección %26 Motor", icon: Disc },
+    { title: "Repuestos desde EE.UU.", desc: "Pedidos con número de parte OEM y logística express", href: "/catalogo?import=usa#solicitud-usa", icon: Plane, isUSA: true }
   ];
 
   const faqOptions = [
@@ -213,7 +217,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="navbar-dropdown absolute top-full right-0 w-[440px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  className="navbar-dropdown absolute top-full right-0 w-[520px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -224,15 +228,13 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: '#4ade80', backgroundColor: 'rgba(74,222,128,0.12)' }}>Stock en Taller</span>
                   </div>
 
-                  {/* Options List */}
-                  <div className="space-y-1">
+                  {/* Options Grid — 2 columns */}
+                  <div className="grid grid-cols-2 gap-1">
                     {catalogOptions.map((opt, i) => (
                       <a
                         key={i}
                         href={opt.href}
-                        className={`navbar-dropdown-item flex items-start gap-3 p-3 rounded-xl transition-all ${
-                          opt.isUSA ? 'mt-2 relative overflow-hidden' : ''
-                        }`}
+                        className={`navbar-dropdown-item flex items-start gap-2.5 p-2.5 rounded-xl transition-all col-span-${opt.isUSA ? '2' : '1'} ${opt.isUSA ? 'mt-1 relative overflow-hidden' : ''}`}
                         style={opt.isUSA ? {
                           background: 'linear-gradient(to right, rgba(23,37,84,0.9), rgba(15,23,42,0.95), rgba(23,37,84,0.7))',
                           border: '1px solid rgba(96,165,250,0.5)'
@@ -241,13 +243,13 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                         onMouseLeave={e => { if (!opt.isUSA) (e.currentTarget as HTMLElement).style.backgroundColor = ''; }}
                       >
                         {opt.isUSA && (
-                          <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.2)', border: '1px solid rgba(96,165,250,0.4)' }}>
+                          <div className="absolute top-2 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.2)', border: '1px solid rgba(96,165,250,0.4)' }}>
                             <Plane size={10} className="animate-pulse" style={{ color: '#60a5fa' }} />
                             <span>EXPRESS USA</span>
                           </div>
                         )}
                         <MasterTechIconBadge icon={opt.icon} isUSA={opt.isUSA} />
-                        <div className="flex-1 pr-16">
+                        <div className={`flex-1 ${opt.isUSA ? 'pr-24' : ''}`}>
                           <div className="nav-opt-title font-bold text-xs leading-snug">
                             {opt.title}
                           </div>
@@ -266,7 +268,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       <span>Logística Directa EE.UU.</span>
                     </span>
                     <a href="/catalogo" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap shrink-0" style={{ color: '#C2A472' }}>
-                      <span>Explorar Catálogo</span>
+                      <span>Ver Todo el Catálogo</span>
                       <ArrowRight size={12} />
                     </a>
                   </div>
