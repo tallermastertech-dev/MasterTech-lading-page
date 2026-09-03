@@ -2429,12 +2429,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Catalog Item Save
   const handleSaveCatalogItem = (product: CatalogItem) => {
-    const isEdit = product.id && catalogItems.some(p => p.id === product.id);
+    const rawPrice = String(product.price || '').replace(/[^0-9.]/g, '');
+    const formattedPrice = rawPrice && !isNaN(Number(rawPrice)) 
+      ? `$${Number(rawPrice).toFixed(2)}` 
+      : (product.price?.startsWith('$') ? product.price : (product.price ? `$${product.price}` : '$0.00'));
+    const cleanProduct = { ...product, price: formattedPrice };
+
+    const isEdit = cleanProduct.id && catalogItems.some(p => p.id === cleanProduct.id);
     let updated: CatalogItem[] = [];
     if (isEdit) {
-      updated = catalogItems.map(p => p.id === product.id ? product : p);
+      updated = catalogItems.map(p => p.id === cleanProduct.id ? cleanProduct : p);
     } else {
-      updated = [{ ...product, id: Date.now() }, ...catalogItems];
+      updated = [{ ...cleanProduct, id: Date.now() }, ...catalogItems];
     }
 
     setCatalogItems(updated);
@@ -8112,13 +8118,29 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="text-zinc-400 font-bold block mb-1">Precio (USD)</label>
-                  <input
-                    type="text"
-                    value={editingProduct.price}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-                    placeholder="Ej. $45.00"
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-primary"
-                  />
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 font-black text-amber-400 select-none text-sm pointer-events-none">$</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={String(editingProduct.price || '').replace(/^\$/, '').replace(/\s*USD$/i, '').trim()}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9.]/g, '');
+                        const parts = val.split('.');
+                        const sanitized = parts.length > 2 ? `${parts[0]}.${parts.slice(1).join('')}` : val;
+                        setEditingProduct({ ...editingProduct, price: sanitized ? `$${sanitized}` : '' });
+                      }}
+                      onBlur={() => {
+                        const clean = String(editingProduct.price || '').replace(/[^0-9.]/g, '');
+                        if (clean && !isNaN(Number(clean))) {
+                          const num = Number(clean);
+                          setEditingProduct({ ...editingProduct, price: `$${num.toFixed(2)}` });
+                        }
+                      }}
+                      placeholder="185.00"
+                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 pl-7 pr-3 text-white font-bold outline-none focus:border-primary font-mono text-sm"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="text-zinc-400 font-bold block mb-1">Categoría Oficial</label>
