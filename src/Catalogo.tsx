@@ -990,7 +990,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Badge top-left */}
                       {item.badge && (
                         <div className="absolute top-2.5 left-2.5 pointer-events-none">
-                          <span className="bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 rounded-md shadow-md uppercase tracking-wide leading-tight block max-w-[120px] truncate">
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md shadow-lg uppercase tracking-wide leading-tight block max-w-[110px] truncate" style={{ backgroundColor: '#f59e0b', color: '#000000' }}>
                             {item.badge}
                           </span>
                         </div>
@@ -999,8 +999,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* USA chip top-right */}
                       {item.isImportedUSA && (
                         <div className="absolute top-2.5 right-2.5 pointer-events-none">
-                          <span className="flex items-center gap-0.5 bg-blue-600 text-white font-black text-[9px] px-1.5 py-0.5 rounded-md shadow-md uppercase tracking-wider border border-blue-400/40">
-                            🇺🇸 USA
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md shadow-lg uppercase tracking-wider" style={{ backgroundColor: '#2563eb', color: '#ffffff', border: '1px solid rgba(147,197,253,0.5)' }}>
+                            ✈ USA
                           </span>
                         </div>
                       )}
