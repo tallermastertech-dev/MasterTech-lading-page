@@ -1798,8 +1798,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         const p = JSON.parse(s); 
         if (p.CATALOG_PRODUCTS_JSON) {
           const items = JSON.parse(p.CATALOG_PRODUCTS_JSON);
-          const isLegacy = Array.isArray(items) && (items.length <= 2 || items.some((it: any) => it.partNumber === 'SYN-5W30-KIT' || it.partNumber === 'AK-CERAMIC-DEL'));
-          if (!isLegacy && Array.isArray(items) && items.length > 0) {
+          if (Array.isArray(items)) {
             return items;
           }
         }
@@ -2023,20 +2022,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       try { 
         const p = JSON.parse(merged.CATALOG_PRODUCTS_JSON); 
         if (Array.isArray(p)) {
-          const isLegacy = p.length <= 2 || p.some((it: any) => it.partNumber === 'SYN-5W30-KIT' || it.partNumber === 'AK-CERAMIC-DEL');
-          if (isLegacy || p.length === 0) {
-            setCatalogItems(DEFAULT_CATALOG);
-            merged.CATALOG_PRODUCTS_JSON = JSON.stringify(DEFAULT_CATALOG);
-            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
-          } else {
-            setCatalogItems(p);
-          }
+          setCatalogItems(p);
         }
       } catch (e) {}
     } else {
       setCatalogItems(DEFAULT_CATALOG);
-      merged.CATALOG_PRODUCTS_JSON = JSON.stringify(DEFAULT_CATALOG);
-      try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
     }
     if (merged.JORNADAS_JSON) {
       try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
@@ -6009,22 +5999,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Catálogo de Repuestos & Productos</h1>
                   <p className="text-xs text-zinc-400 mt-1">Gestiona el inventario de repuestos visibles públicamente en `/catalogo`.</p>
                 </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <button
-                    onClick={() => {
-                      if (window.confirm('¿Deseas restaurar y sincronizar los 16 repuestos oficiales del catálogo público en este panel administrativo?')) {
-                        setCatalogItems(DEFAULT_CATALOG);
-                        handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: JSON.stringify(DEFAULT_CATALOG) });
-                      }
-                    }}
-                    disabled={savingSection === 'catalogo'}
-                    className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                    title="Cargar los 16 repuestos oficiales de /catalogo"
-                  >
-                    <RefreshCw size={14} />
-                    <span>Cargar 16 Repuestos Oficiales</span>
-                  </button>
-
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: JSON.stringify(catalogItems) })}
                     disabled={savingSection === 'catalogo'}
