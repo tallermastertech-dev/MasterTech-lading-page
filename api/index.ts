@@ -3233,6 +3233,7 @@ app.post('/api/seed', async (req, res) => {
   }
 });
 
-// Vercel serverless handler (default export)
+// Vercel serverless handler & named export for server.ts
+export { app };
 export default app;
 

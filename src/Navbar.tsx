@@ -416,7 +416,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="flex items-center gap-3 text-zinc-300 hover:text-white py-1.5 font-medium group/item"
                       >
-                        <MasterTechIconBadge icon={opt.icon} isUSA={opt.isUSA} />
+                        <MasterTechIconBadge icon={opt.icon} />
                         <span>{opt.title}</span>
                       </a>
                     ))}

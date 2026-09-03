@@ -1728,7 +1728,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <button
                         type="button"
                         onClick={() => setIsCartOpen(false)}
-                        className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-poin                          {cart.map((item) => {
+                        className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform"
+                      >
+                        Explorar Catálogo
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSendCartOrder} className="space-y-4">
+                      {/* Itemized List */}
+                      <div className="space-y-3 max-h-[35vh] overflow-y-auto pr-1">
+                        {cart.map((item) => {
                           const itemPriceNum = parsePrice(item.product.price);
                           const itemSubtotal = (itemPriceNum * item.quantity).toFixed(2);
                           return (

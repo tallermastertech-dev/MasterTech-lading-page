@@ -23,6 +23,8 @@ import {
   Plus, 
   Tag, 
   Package,
+  Info,
+  RotateCcw,
   ChevronLeft,
   List, 
   Layers, 
@@ -651,6 +653,7 @@ export const DEFAULT_PROVEEDORES: Proveedor[] = [
 interface AdminPanelProps {
   config?: any;
   onLogout?: () => void;
+  onClose?: () => void;
 }
 
 export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelProps) {
@@ -785,7 +788,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   // Helper: Log Client-Side Actions to Audit Logs
-  const logClientAction = async (action: string, category: 'AUTH' | 'CATALOGO' | 'JORNADAS' | 'CITAS' | 'USUARIOS' | 'AJUSTES' | 'CONTENIDO', details: string) => {
+  const logClientAction = async (action: string, category: 'AUTH' | 'CATALOGO' | 'JORNADAS' | 'CITAS' | 'USUARIOS' | 'AJUSTES' | 'CONTENIDO' | 'TALLER', details: string) => {
     if (!token) return;
     try {
       await fetch('/api/admin/logs', {
@@ -1489,6 +1492,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
     return () => clearInterval(checkReminderInterval);
   }, [reminders, leads]);
+
+  const saveReminders = async (newList: any[]) => {
+    setReminders(newList);
+    try {
+      localStorage.setItem('mastertech_reminders_cache', JSON.stringify(newList));
+    } catch (e) {}
+    try {
+      const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || 'admin-token';
+      await fetch(`/api/admin/reminders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${activeAuthToken}`
+        },
+        body: JSON.stringify({ reminders: newList })
+      });
+    } catch (e) {}
+  };
 
   const handleAddReminder = (e: React.FormEvent) => {
     e.preventDefault();
@@ -5003,14 +5024,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                           // Registrar en Auditoría
                           try {
-                            recordAuditLog({
-                              action: 'ENTREGA_VEHICULO',
-                              category: 'TALLER',
-                              details: `Vehículo "${newRecord.vehiculo}" entregado y liberado exitosamente. Mecánico responsable: ${newRecord.mecanicoNombre}. Entregado por: ${newRecord.entregadoPor}`,
-                              userName: currentUser?.name,
-                              userEmail: currentUser?.email,
-                              userRole: currentUser?.role
-                            });
+                            logClientAction(
+                              'Entrega de Vehículo',
+                              'TALLER',
+                              `Vehículo "${newRecord.vehiculo}" entregado y liberado exitosamente. Mecánico responsable: ${newRecord.mecanicoNombre}. Entregado por: ${newRecord.entregadoPor}`
+                            );
                           } catch (e) {}
 
                           setConfirmingEntregaData(null);
