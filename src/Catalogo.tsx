@@ -987,19 +987,23 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-md rounded-xl"
                       />
 
-                      {/* Top Badges */}
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap pointer-events-none">
-                        {item.badge && (
-                          <span className="bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 rounded shadow uppercase tracking-wide">
+                      {/* Badge top-left */}
+                      {item.badge && (
+                        <div className="absolute top-2.5 left-2.5 pointer-events-none">
+                          <span className="bg-amber-500 text-black font-black text-[9px] px-2 py-0.5 rounded-md shadow-md uppercase tracking-wide leading-tight block max-w-[120px] truncate">
                             {item.badge}
                           </span>
-                        )}
-                        {item.isImportedUSA && (
-                          <span className="bg-blue-600 text-white font-black text-[9px] px-2 py-0.5 rounded shadow uppercase tracking-wide border border-blue-400/30">
-                            USA
+                        </div>
+                      )}
+
+                      {/* USA chip top-right */}
+                      {item.isImportedUSA && (
+                        <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                          <span className="flex items-center gap-0.5 bg-blue-600 text-white font-black text-[9px] px-1.5 py-0.5 rounded-md shadow-md uppercase tracking-wider border border-blue-400/40">
+                            🇺🇸 USA
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Subtle Thin Divider */}
