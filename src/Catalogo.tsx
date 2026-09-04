@@ -1879,17 +1879,28 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </div>
                     </div>
                   ) : cart.length === 0 ? (
-                    <div className="text-center py-12 space-y-4 flex flex-col items-center justify-center">
+                    <div
+                      className="text-center py-12 space-y-4 flex flex-col items-center justify-center"
+                      style={{ color: '#ffffff' }}
+                    >
                       <ShoppingBag size={48} className="mx-auto mb-1" style={{ color: '#94a3b8' }} />
-                      <h3 className="text-lg font-black" style={{ color: '#ffffff' }}>Tu carrito está vacío</h3>
-                      <p className="text-xs max-w-xs mx-auto leading-relaxed" style={{ color: '#cbd5e1' }}>
+                      <h3
+                        className="text-lg font-black"
+                        style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
+                      >
+                        Tu carrito está vacío
+                      </h3>
+                      <p
+                        className="text-xs max-w-xs mx-auto leading-relaxed"
+                        style={{ color: '#cbd5e1', WebkitTextFillColor: '#cbd5e1' } as React.CSSProperties}
+                      >
                         Navega por nuestro catálogo y presiona "+ Agregar al Carrito" en las piezas que necesites.
                       </p>
                       <button
                         type="button"
                         onClick={() => setIsCartOpen(false)}
-                        className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform"
-                        style={{ color: '#000000', backgroundColor: '#f59e0b' }}
+                        className="!py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform rounded-full"
+                        style={{ color: '#000000', backgroundColor: '#f59e0b', WebkitTextFillColor: '#000000' } as React.CSSProperties}
                       >
                         Explorar Catálogo
                       </button>
