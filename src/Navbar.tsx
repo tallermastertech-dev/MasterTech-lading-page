@@ -91,19 +91,26 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   ];
 
   return (
-    <nav className="fixed w-full z-50 bg-[#0D0D0D]/95 backdrop-blur-xl py-3 border-b border-[#8B8D91]/20 top-0 shadow-2xl">
+    <nav
+      className="fixed w-full z-50 backdrop-blur-xl py-3 border-b top-0 shadow-2xl"
+      style={{
+        backgroundColor: 'rgba(13,13,13,0.97)',
+        borderColor: 'rgba(139,141,145,0.2)',
+        color: '#ffffff'
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative">
         <div className="flex items-center gap-3">
           <a href="/" className="cursor-pointer hover:opacity-90 transition-opacity flex items-center gap-2.5 group">
             <img src={cfg.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-8 md:h-9 w-auto object-contain shrink-0 logo-gold" />
-            <span className="font-display font-black text-lg md:text-xl tracking-tighter uppercase text-white flex items-center">
-              MASTER<span className="text-primary italic">TECH</span>
+            <span className="font-display font-black text-lg md:text-xl tracking-tighter uppercase flex items-center" style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}>
+              MASTER<span className="text-primary italic" style={{ color: '#f59e0b', WebkitTextFillColor: '#f59e0b' } as React.CSSProperties}>TECH</span>
             </span>
           </a>
         </div>
 
         {/* Desktop Links with Hover Mega Dropdowns */}
-        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs xl:text-sm font-medium text-zinc-300">
+        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs xl:text-sm font-medium" style={{ color: '#d4d4d8' }}>
           
           {/* 1. Inicio Link */}
           <a 
