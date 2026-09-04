@@ -488,7 +488,7 @@ export default function Catalogo() {
           vehiculo: clientVehicleStr,
           servicio: `Pedido Carrito (${cartTotalItems} piezas - Total: $${cartTotalAmount.toFixed(2)})`,
           status: 'Pendiente',
-          notes: `[SOLICITUD CARRITO DE REPUESTOS]\nTotal: $${cartTotalAmount.toFixed(2)} USD\nItems:\n${cart.map(i => `- ${i.quantity}x ${i.product.title} (#${i.product.partNumber || 'N/A'})`).join('\n')}`
+          notes: `[SOLICITUD CARRITO DE REPUESTOS]\nUbicación: ${cartClient.location || 'Porlamar, Isla de Margarita'}\nNotas Cliente: ${cartClient.notes || 'Ninguna'}\nTotal: $${cartTotalAmount.toFixed(2)} USD\nItems:\n${cart.map(i => `- ${i.quantity}x ${i.product.title} (#${i.product.partNumber || 'N/A'})`).join('\n')}`
         })
       });
     } catch (err) {}
@@ -2022,7 +2022,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         <button
                           type="button"
                           onClick={clearCart}
-                          className="px-3 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white text-xs font-bold border border-white/10 transition-colors cursor-pointer"
+                          className="px-4 py-3 rounded-2xl text-xs font-bold border transition-all cursor-pointer hover:bg-white/10"
+                          style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.18)', color: '#f1f5f9' }}
                         >
                           Vaciar
                         </button>
@@ -2030,7 +2031,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         <button
                           type="submit"
                           disabled={isSubmittingCart}
-                          className="flex-1 bg-[#25D366] hover:bg-[#20ba5a] text-black font-black uppercase text-xs tracking-wider py-3.5 px-6 rounded-2xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+                          className="flex-1 bg-[#25D366] hover:bg-[#20ba5a] text-black font-black uppercase text-xs tracking-wider py-3.5 px-6 rounded-2xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+                          style={{ color: '#000000' }}
                         >
                           <WhatsAppIcon size={18} />
                           <span>{isSubmittingCart ? 'Procesando...' : `Enviar Pedido (${cartTotalItems} piezas - $${cartTotalAmount.toFixed(2)})`}</span>
