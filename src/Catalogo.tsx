@@ -353,7 +353,7 @@ export default function Catalogo() {
     name: '',
     phone: '',
     vehicle: '',
-    location: 'Porlamar, Isla de Margarita',
+    location: '',
     notes: ''
   });
   const [isSubmittingCart, setIsSubmittingCart] = useState(false);
@@ -509,7 +509,7 @@ ${itemsText}
 • *Nombre:* _${clientNameStr}_
 • *Teléfono:* _${clientPhoneStr}_
 • *Vehículo:* _${clientVehicleStr}_
-• *Ubicación:* _${cartClient.location}_
+• *Ubicación:* _${cartClient.location || 'Porlamar, Isla de Margarita'}_
 
 💬 *NOTAS ADICIONALES:*
 _${cartClient.notes || 'Ninguna.'}_
@@ -1840,7 +1840,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           {cartTotalItems} {cartTotalItems === 1 ? 'pieza' : 'piezas'}
                         </span>
                       </h2>
-                      <p className="text-xs mt-0.5" style={{ color: '#71717a' }}>
+                      <p className="text-xs mt-0.5" style={{ color: '#cbd5e1' }}>
                         Selecciona cantidades y envía el pedido completo a nuestros asesores por WhatsApp.
                       </p>
                     </div>
@@ -1849,7 +1849,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <button
                     onClick={() => setIsCartOpen(false)}
                     className="p-2 rounded-full transition-colors cursor-pointer"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: '#71717a' }}
+                    style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
                     title="Cerrar carrito"
                   >
                     <X size={18} />
@@ -1860,18 +1860,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <div className="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
                   {cartSuccess ? (
                     <div className="text-center py-8 space-y-4">
-                      <div className="w-14 h-14 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto text-2xl">
-                        <CheckCircle2 size={32} />
+                      <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl shadow-lg" style={{ backgroundColor: 'rgba(34, 197, 94, 0.15)', border: '2px solid #22c55e', color: '#4ade80' }}>
+                        <CheckCircle2 size={36} />
                       </div>
-                      <h3 className="text-xl font-bold text-white">¡Pedido Enviado a WhatsApp!</h3>
-                      <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
+                      <h3 className="text-xl sm:text-2xl font-black tracking-tight" style={{ color: '#ffffff' }}>¡Pedido Enviado a WhatsApp!</h3>
+                      <p className="text-xs sm:text-sm max-w-md mx-auto leading-relaxed" style={{ color: '#e2e8f0' }}>
                         Se ha generado el desglose de tu pedido multielemento. El equipo de MasterTech revisará el stock y te confirmará disponibilidad inmediata.
                       </p>
-                      <div className="flex gap-3 justify-center pt-2">
+                      <div className="flex gap-3 justify-center pt-3">
                         <button
                           type="button"
                           onClick={() => { clearCart(); setCartSuccess(false); setIsCartOpen(false); }}
-                          className="btn-primary !py-2.5 !px-6 text-xs border-none"
+                          className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none shadow-xl cursor-pointer hover:scale-105 transition-transform"
+                          style={{ color: '#000000', backgroundColor: '#f59e0b' }}
                         >
                           Vaciar Carrito y Continuar
                         </button>
@@ -1879,15 +1880,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     </div>
                   ) : cart.length === 0 ? (
                     <div className="text-center py-12 space-y-4 flex flex-col items-center justify-center">
-                      <ShoppingBag size={48} className="mx-auto text-zinc-500 mb-1" />
-                      <h3 className="text-lg font-black text-white">Tu carrito está vacío</h3>
-                      <p className="text-zinc-400 text-xs max-w-xs mx-auto leading-relaxed">
+                      <ShoppingBag size={48} className="mx-auto mb-1" style={{ color: '#94a3b8' }} />
+                      <h3 className="text-lg font-black" style={{ color: '#ffffff' }}>Tu carrito está vacío</h3>
+                      <p className="text-xs max-w-xs mx-auto leading-relaxed" style={{ color: '#cbd5e1' }}>
                         Navega por nuestro catálogo y presiona "+ Agregar al Carrito" en las piezas que necesites.
                       </p>
                       <button
                         type="button"
                         onClick={() => setIsCartOpen(false)}
                         className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform"
+                        style={{ color: '#000000', backgroundColor: '#f59e0b' }}
                       >
                         Explorar Catálogo
                       </button>
@@ -1991,6 +1993,24 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             placeholder="Vehículo (Ej. Jeep 2018)"
                             value={cartClient.vehicle}
                             onChange={(e) => setCartClient({ ...cartClient, vehicle: e.target.value })}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                          <input
+                            type="text"
+                            placeholder="Ubicación (Ej. Porlamar, Margarita)"
+                            value={cartClient.location}
+                            onChange={(e) => setCartClient({ ...cartClient, location: e.target.value })}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
+                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Notas o detalles adicionales (Opcional)"
+                            value={cartClient.notes}
+                            onChange={(e) => setCartClient({ ...cartClient, notes: e.target.value })}
                             className="w-full rounded-xl px-3 py-2 text-xs outline-none"
                             style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
                           />
