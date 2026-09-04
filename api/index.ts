@@ -621,7 +621,7 @@ const DEFAULT_ADMIN_USERS = [
     id: 'user-jose-vicente',
     name: 'J. Vicente Betancourt',
     email: 'josevbv@gmail.com',
-    password: 'mastertech2026',
+    password: 'admin123',
     role: 'CEO - Director',
     accessLevel: 'full',
     createdAt: '2026-01-01T00:00:00.000Z'
@@ -630,7 +630,7 @@ const DEFAULT_ADMIN_USERS = [
     id: 'user-j-vasquez',
     name: 'J. Vasquez',
     email: 'jvaask16@gmail.com',
-    password: 'mastertech2026',
+    password: 'admin123',
     role: 'CEO - Director',
     accessLevel: 'full',
     createdAt: '2026-01-01T00:00:00.000Z'
@@ -639,7 +639,7 @@ const DEFAULT_ADMIN_USERS = [
     id: 'user-brenda-santaella',
     name: 'Brenda Santaella',
     email: 'bresantaella@gmail.com',
-    password: 'mastertech2026',
+    password: 'admin123',
     role: 'Asesor Logística',
     accessLevel: 'logistica',
     createdAt: '2026-01-01T00:00:00.000Z'
@@ -648,7 +648,7 @@ const DEFAULT_ADMIN_USERS = [
     id: 'user-ambar-salazar',
     name: 'Ambar Salazar',
     email: 'salferambar@gmail.com',
-    password: 'mastertech2026',
+    password: 'admin123',
     role: 'Coordinadora Logística',
     accessLevel: 'logistica',
     createdAt: '2026-01-01T00:00:00.000Z'
@@ -1597,6 +1597,30 @@ app.delete(['/api/admin/users/:id', '/admin/users/:id'], authenticateAdmin, asyn
     res.json({ success: true, message: 'Usuario eliminado correctamente.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al eliminar usuario', details: err.message });
+  }
+});
+
+// Resetear contraseñas de todos los usuarios a admin123
+app.post(['/api/admin/users/reset-passwords', '/admin/users/reset-passwords'], authenticateAdmin, async (req, res) => {
+  try {
+    const currentUsers = await getAdminUsersList();
+    const resetUsers = currentUsers.map((u: any) => ({ ...u, password: 'admin123' }));
+    const jsonStr = JSON.stringify(resetUsers);
+    await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
+
+    const { actorName, actorEmail, actorRole } = req.body || {};
+    recordAuditLog({
+      userName: actorName || 'J. Vicente Betancourt',
+      userEmail: actorEmail || 'josevbv@gmail.com',
+      userRole: actorRole || 'CEO - Director',
+      action: 'Restablecimiento de Contraseñas',
+      category: 'USUARIOS',
+      details: `Se restableció la contraseña de ${resetUsers.length} usuario(s) a "admin123".`
+    }).catch(() => {});
+
+    res.json({ success: true, message: `Contraseñas restablecidas a "admin123" para ${resetUsers.length} usuario(s).`, count: resetUsers.length });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al resetear contraseñas', details: err.message });
   }
 });
 
