@@ -239,7 +239,10 @@ export default function Nosotros() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070708] text-white flex flex-col selection:bg-primary selection:text-black">
+    <div
+      className="min-h-screen flex flex-col selection:bg-primary selection:text-black"
+      style={{ backgroundColor: '#070708', color: '#ffffff' }}
+    >
       {/* Navigation Header */}
       <Navbar activePage="nosotros" />
 
@@ -260,10 +263,16 @@ export default function Nosotros() {
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-black tracking-widest uppercase mb-4">
                 Conoce al equipo
               </div>
-              <h1 className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-6">
-                NUESTRO <span className="text-primary italic">EQUIPO</span>
+              <h1
+                className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-6"
+                style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
+              >
+                NUESTRO <span className="text-primary italic" style={{ color: '#f59e0b', WebkitTextFillColor: '#f59e0b' } as React.CSSProperties}>EQUIPO</span>
               </h1>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              <p
+                className="text-xl max-w-2xl mx-auto leading-relaxed"
+                style={{ color: '#a1a1aa', WebkitTextFillColor: '#a1a1aa' } as React.CSSProperties}
+              >
                 Profesionales apasionados por la mecánica y comprometidos con la excelencia, precisión y transparencia en cada servicio.
               </p>
             </div>
@@ -271,14 +280,22 @@ export default function Nosotros() {
             {/* Team Grid */}
             <div className={`grid gap-8 mb-20 ${teamMembers.length === 1 ? 'md:grid-cols-1 max-w-md mx-auto' : teamMembers.length === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}>
               {teamMembers.map((member, i) => (
-                <div key={member.id || i} className="glass-card overflow-hidden group flex flex-col h-full border border-primary/20 hover:border-primary/60 transition-all duration-300 shadow-2xl rounded-3xl">
+                <div
+                  key={member.id || i}
+                  className="overflow-hidden group flex flex-col h-full transition-all duration-300 shadow-2xl rounded-3xl"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(245,158,11,0.2)',
+                    backdropFilter: 'blur(12px)'
+                  }}
+                >
                   {/* Photo Container */}
-                  <div className="h-64 sm:h-72 overflow-hidden relative shrink-0 bg-black/40">
-                    <img 
-                      src={member.img || "/assets/servicio-mecanica.jpg"} 
-                      alt={member.name} 
+                  <div className="h-64 sm:h-72 overflow-hidden relative shrink-0" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                    <img
+                      src={member.img || "/assets/servicio-mecanica.jpg"}
+                      alt={member.name}
                       onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500" 
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500"
                     />
                   </div>
 
@@ -291,14 +308,20 @@ export default function Nosotros() {
                           {member.role || 'ESPECIALISTA'}
                         </span>
                       </div>
-                      
+
                       {/* Member Name */}
-                      <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight mb-2.5 text-center group-hover:text-primary transition-colors">
+                      <h3
+                        className="text-xl sm:text-2xl font-black tracking-tight leading-tight mb-2.5 text-center group-hover:text-primary transition-colors"
+                        style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
+                      >
                         {member.name}
                       </h3>
 
                       {/* Profile Description */}
-                      <p className="text-xs sm:text-sm leading-relaxed font-normal text-center max-w-xs mx-auto text-zinc-400">
+                      <p
+                        className="text-xs sm:text-sm leading-relaxed font-normal text-center max-w-xs mx-auto"
+                        style={{ color: '#a1a1aa', WebkitTextFillColor: '#a1a1aa' } as React.CSSProperties}
+                      >
                         {member.desc}
                       </p>
                     </div>
@@ -308,25 +331,39 @@ export default function Nosotros() {
             </div>
 
             {/* CTA Box - Unirse al Equipo MasterTech */}
-            <div className="glass-card border border-primary/30 rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-2xl relative overflow-hidden group">
+            <div
+              className="rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-2xl relative overflow-hidden group"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(245,158,11,0.3)',
+                backdropFilter: 'blur(12px)'
+              }}
+            >
               <div className="absolute top-0 right-0 w-40 h-40 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
-              
+
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
                 <Briefcase className="w-3.5 h-3.5" />
                 <span>Oportunidades & Talento</span>
               </div>
-              
-              <h3 className="text-2xl sm:text-4xl font-black mb-3 tracking-tight leading-tight">
-                ¿Quieres formar parte del <span className="text-primary italic">equipo MasterTech</span>?
+
+              <h3
+                className="text-2xl sm:text-4xl font-black mb-3 tracking-tight leading-tight"
+                style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
+              >
+                ¿Quieres formar parte del <span className="text-primary italic" style={{ color: '#f59e0b', WebkitTextFillColor: '#f59e0b' } as React.CSSProperties}>equipo MasterTech</span>?
               </h3>
-              
-              <p className="text-zinc-400 text-sm sm:text-base mb-8 leading-relaxed max-w-lg mx-auto">
+
+              <p
+                className="text-sm sm:text-base mb-8 leading-relaxed max-w-lg mx-auto"
+                style={{ color: '#a1a1aa', WebkitTextFillColor: '#a1a1aa' } as React.CSSProperties}
+              >
                 Buscamos profesionales apasionados por la precisión mecánica, el diagnóstico automotriz y la excelencia en el servicio. Completa tu postulación y adjunta tu currículum.
               </p>
-              
+
               <a
                 href="/postulacion"
                 className="btn-primary inline-flex items-center justify-center gap-3 !py-4 !px-9 text-sm sm:text-base font-black border-none mx-auto rounded-full shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:shadow-[0_0_35px_rgba(212,175,55,0.7)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                style={{ color: '#000000', WebkitTextFillColor: '#000000', backgroundColor: '#f59e0b' } as React.CSSProperties}
               >
                 <span>POSTULARME AL EQUIPO</span>
                 <ArrowRight className="w-5 h-5" />
