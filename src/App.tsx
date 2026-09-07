@@ -147,6 +147,7 @@ export default function App() {
   const [selectedService, setSelectedService] = useState<string>('Línea de inspección gratuita');
   const [inspectionSlotStr, setInspectionSlotStr] = useState<string>('');
   const [isInspectionSlotValid, setIsInspectionSlotValid] = useState<boolean>(false);
+  const [whatsappUrl, setWhatsappUrl] = useState<string>('');
 
   // Dynamic config initialized with static CONFIG fallback
   const [config, setConfig] = useState<any>(CONFIG);
@@ -304,6 +305,7 @@ export default function App() {
     };
     window.addEventListener('hashchange', handleHashChange);
     window.addEventListener('popstate', handleHashChange);
+    
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
       window.removeEventListener('popstate', handleHashChange);
@@ -323,6 +325,20 @@ export default function App() {
       }
     }
 
+    // Format WhatsApp Direct Link
+    const targetPhone = "584123565012";
+    let msg = `🚗 *NUEVA CITA / SOLICITUD - MASTERTECH* 🛠️\n\n`;
+    msg += `👤 *Cliente:* ${data.nombre || ''}\n`;
+    msg += `📱 *WhatsApp:* ${data.telefono || ''}\n`;
+    msg += `🚗 *Vehículo:* ${data.vehiculo || 'No especificado'}\n`;
+    msg += `🛠️ *Servicio:* ${data.servicio || selectedService || 'Línea de inspección'}\n`;
+    if (data.fecha_hora) msg += `📅 *Horario Solicitado:* ${data.fecha_hora}\n`;
+    if (data.falla) msg += `📝 *Falla / Síntoma:* ${data.falla}\n`;
+    msg += `\n_Solicitud enviada desde MasterTech Web._`;
+
+    const generatedWhatsappUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
+    setWhatsappUrl(generatedWhatsappUrl);
+
     // Create local lead object immediately for client-side storage
     const localLead = {
       id: Date.now(),
@@ -341,6 +357,11 @@ export default function App() {
       existing.unshift(localLead);
       localStorage.setItem('mastertech_leads_store', JSON.stringify(existing.slice(0, 100)));
     } catch (e) {}
+
+    // Auto-open WhatsApp in background
+    setTimeout(() => {
+      try { window.open(generatedWhatsappUrl, '_blank'); } catch (e) {}
+    }, 300);
 
     try {
       const res = await fetch('/api/leads', {
@@ -700,7 +721,18 @@ export default function App() {
                     ) : (
                       <p className="text-zinc-400 text-base sm:text-lg">Tu solicitud ha sido registrada con éxito. <br/><br/> Un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu cita.</p>
                     )}
-                    <button onClick={() => setFormStatus('idle')} className="mt-8 text-primary font-bold uppercase tracking-widest text-xs hover:underline">Solicitar otra cita</button>
+
+                    <a
+                      href={whatsappUrl || config.WHATSAPP_LINK || 'https://wa.me/584123565012'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary !bg-[#25D366] hover:!bg-[#20bd5a] !text-black font-black py-4 px-6 rounded-2xl w-full max-w-md mx-auto text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer mt-6"
+                    >
+                      <WhatsAppIcon size={20} />
+                      <span>CONFIRMAR POR WHATSAPP AHORA</span>
+                    </a>
+
+                    <button onClick={() => setFormStatus('idle')} className="mt-6 text-primary font-bold uppercase tracking-widest text-xs hover:underline block mx-auto">Solicitar otra cita</button>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">

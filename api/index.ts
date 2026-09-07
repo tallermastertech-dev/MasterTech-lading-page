@@ -27,6 +27,12 @@ const memorySettingsCache: Record<string, string> = {};
 const memoryOccupiedSlots: Record<string, string[]> = {};
 const memoryLeadsCache: any[] = [];
 
+// TTL cache for Supabase settings — reduces egress dramatically
+// Only queries Supabase once every 5 minutes regardless of traffic
+let supabaseSettingsCache: Record<string, string> | null = null;
+let supabaseSettingsCacheTime = 0;
+const SUPABASE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 // Initialize memory cache from persistent disk file on startup
 try {
   if (fs.existsSync(SETTINGS_FILE_PATH)) {
@@ -241,7 +247,9 @@ function extractSlot(text: string): { dateStr: string; timeStr: string } | null 
     };
   }
   return null;
-}// Helper: Get settings as object (Pure Supabase data priority, zero hardcoded content)
+}
+
+// Helper: Get settings as object (Pure Supabase data priority, zero hardcoded content)
 async function getSettings() {
   const defaultSettings: Record<string, string> = {
     PHONE_NUMBER: '+584123565012',
@@ -270,6 +278,12 @@ async function getSettings() {
     CATALOG_PRODUCTS_JSON: '[]'
   };
 
+  // ── TTL CACHE: skip Supabase query if data is fresh (< 5 min) ──
+  const now = Date.now();
+  if (supabaseSettingsCache && (now - supabaseSettingsCacheTime) < SUPABASE_CACHE_TTL_MS) {
+    return { ...defaultSettings, ...supabaseSettingsCache };
+  }
+
   try {
     const { data, error } = await supabase.from('settings').select('*');
     console.log(`[Supabase getSettings] Filas obtenidas de BD: ${data?.length || 0} | Error: ${error ? error.message : 'Ninguno'}`);
@@ -284,6 +298,9 @@ async function getSettings() {
           memorySettingsCache[s.key] = String(s.value);
         }
       }
+      // ── Store fresh result in TTL cache ──
+      supabaseSettingsCache = { ...settingsObj };
+      supabaseSettingsCacheTime = now;
     } else {
       // Fallback to memory cache only if DB query is empty/fails
       for (const [k, v] of Object.entries(memorySettingsCache)) {
@@ -299,8 +316,66 @@ async function getSettings() {
     return settingsObj;
   } catch (err: any) {
     console.error("[Supabase getSettings Exception]:", err);
+    // Use TTL cache if available, otherwise fall back to memory cache
+    if (supabaseSettingsCache) return { ...defaultSettings, ...supabaseSettingsCache };
     return { ...defaultSettings, ...memorySettingsCache };
   }
+}
+
+// Invalidate TTL cache immediately after a save so the next read gets fresh data
+function invalidateSettingsCache() {
+  supabaseSettingsCache = null;
+  supabaseSettingsCacheTime = 0;
+}
+
+// ── PERSISTENT CLOUD BACKUP STORAGE & GOOGLE SHEETS FOR LEADS ──
+// Operates independently of Supabase so no leads from Meta Ads are ever lost
+const BACKUP_STORAGE_URL = 'https://api.restful-api.dev/objects/ff808181a067127101a07d9670113e21';
+const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxIzUm7itb1hP8BCfbt3tWThExU_jBM9h_-kxJbGb7TlMryGA-zc01OmRnoAASU5AOM/exec';
+
+async function fetchCloudBackupLeads(): Promise<any[]> {
+  try {
+    const res = await fetch(BACKUP_STORAGE_URL, { signal: AbortSignal.timeout(3500) });
+    if (res.ok) {
+      const json: any = await res.json();
+      if (json?.data?.leads && Array.isArray(json.data.leads)) {
+        return json.data.leads;
+      }
+    }
+  } catch (e) {}
+  return [];
+}
+
+async function persistCloudBackupLeads(newOrUpdatedLead: any, isDelete = false): Promise<void> {
+  try {
+    const current = await fetchCloudBackupLeads();
+    let updated: any[] = [];
+    const leadIdStr = String(newOrUpdatedLead?.id || newOrUpdatedLead);
+    if (isDelete) {
+      updated = current.filter((l: any) => String(l?.id) !== leadIdStr);
+    } else {
+      const filtered = current.filter((l: any) => String(l?.id) !== leadIdStr);
+      updated = [newOrUpdatedLead, ...filtered].slice(0, 300);
+
+      // Google Sheet sync in background
+      fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newOrUpdatedLead),
+        signal: AbortSignal.timeout(4000)
+      }).catch(() => {});
+    }
+
+    await fetch(BACKUP_STORAGE_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'MasterTech Leads Database Backup',
+        data: { leads: updated }
+      }),
+      signal: AbortSignal.timeout(4000)
+    });
+  } catch (e) {}
 }
 
 // Stateless Token Helpers
@@ -479,6 +554,10 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
     memoryLeadsCache.unshift(newLeadObj);
     saveLeadsToDisk();
     saveSettingsToDisk();
+
+    // 3. Guaranteed Independent Cloud Backup & Google Sheets Sync (IMMUNE to Supabase issues)
+    console.log("🔥 [NUEVO LEAD RECIBIDO - META ADS BACKUP]:", JSON.stringify(newLeadObj));
+    await persistCloudBackupLeads(newLeadObj).catch(() => {});
 
     // Telegram Dispatch for Web Landing leads (Exempts Admin/Manual appointments)
     const settings = await getSettings();
@@ -827,7 +906,19 @@ async function getAllLeads(): Promise<any[]> {
     }
   } catch (e) {}
 
-  // 3. Third priority: Memory RAM cache
+  // 3. Third priority: Cloud persistent backup store (INDEPENDENT OF SUPABASE)
+  try {
+    const cloudLeads = await fetchCloudBackupLeads();
+    if (Array.isArray(cloudLeads)) {
+      for (const lead of cloudLeads) {
+        if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id)) && !combinedMap.has(String(lead.id))) {
+          combinedMap.set(String(lead.id), lead);
+        }
+      }
+    }
+  } catch (e) {}
+
+  // 4. Fourth priority: Memory RAM cache
   for (const lead of memoryLeadsCache) {
     if (lead && lead.id && !memoryDeletedLeadIds.has(String(lead.id)) && !combinedMap.has(String(lead.id))) {
       combinedMap.set(String(lead.id), lead);
@@ -977,6 +1068,8 @@ const handlePutLead = async (req: express.Request, res: express.Response) => {
   // Recalculate occupied slots immediately to free slot if status is Cancelado
   await rebuildAndPersistOccupiedSlots();
 
+  await persistCloudBackupLeads(targetLead).catch(() => {});
+
   res.json(targetLead);
 };
 
@@ -1018,6 +1111,7 @@ const handleDeleteLead = async (req: express.Request, res: express.Response) => 
   } catch (e) {}
 
   saveLeadsToDisk();
+  await persistCloudBackupLeads(idStr, true).catch(() => {});
   saveSettingsToDisk();
 
   // Recalculate occupied slots immediately to free slot on deletion
@@ -1066,6 +1160,8 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
       } catch (err) {
         console.warn("Aviso de sincronización Supabase:", err);
       }
+      // Invalidate TTL cache so next read reflects saved changes immediately
+      invalidateSettingsCache();
     }
 
     // 2. Fetch fresh updated data & guarantee 200 OK response to Admin UI

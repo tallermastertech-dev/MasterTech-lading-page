@@ -15,6 +15,7 @@ export default function Inspeccion() {
   const [selectedService, setSelectedService] = useState<string>('Línea de inspección gratuita');
   const [inspectionSlotStr, setInspectionSlotStr] = useState<string>('');
   const [isInspectionSlotValid, setIsInspectionSlotValid] = useState<boolean>(false);
+  const [whatsappUrl, setWhatsappUrl] = useState<string>('');
 
   const scrollToPaidPackages = () => {
     const el = document.getElementById('paquetes-pago');
@@ -36,6 +37,20 @@ export default function Inspeccion() {
     }
     data.vehiculo = data.vehiculo || "No especificado (Landing Inspección)";
 
+    // Format WhatsApp Direct Link
+    const targetPhone = "584123565012";
+    let msg = `🚗 *NUEVA CITA DE INSPECCIÓN - MASTERTECH* 🛠️\n\n`;
+    msg += `👤 *Cliente:* ${data.nombre || ''}\n`;
+    msg += `📱 *WhatsApp:* ${data.telefono || ''}\n`;
+    msg += `🚗 *Vehículo:* ${data.vehiculo || 'No especificado'}\n`;
+    msg += `🛠️ *Servicio:* ${data.servicio || 'Línea de inspección gratuita'}\n`;
+    if (data.fecha_hora) msg += `📅 *Horario:* ${data.fecha_hora}\n`;
+    if (data.falla) msg += `📝 *Detalles:* ${data.falla}\n`;
+    msg += `\n_Solicitud enviada desde MasterTech Web._`;
+
+    const generatedWhatsappUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
+    setWhatsappUrl(generatedWhatsappUrl);
+
     // Create local lead object immediately for client-side storage
     const localLead = {
       id: Date.now(),
@@ -54,6 +69,11 @@ export default function Inspeccion() {
       existing.unshift(localLead);
       localStorage.setItem('mastertech_leads_store', JSON.stringify(existing.slice(0, 100)));
     } catch (e) {}
+
+    // Auto-open WhatsApp in background
+    setTimeout(() => {
+      try { window.open(generatedWhatsappUrl, '_blank'); } catch (e) {}
+    }, 300);
 
     try {
       const res = await fetch('/api/leads', {
@@ -295,11 +315,24 @@ export default function Inspeccion() {
               </button>
 
               {formStatus === 'success' ? (
-                <div className="text-center py-10">
-                  <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-6" />
-                  <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">¡CUPO RESERVADO!</h3>
-                  <p className="text-zinc-400 mb-6">Tu reserva para <strong>{selectedService}</strong> ha sido recibida. Un asesor de servicio te contactará de inmediato por WhatsApp para confirmar los detalles.</p>
-                  <button onClick={() => { setFormStatus('idle'); setIsModalOpen(false); }} className="text-primary font-bold uppercase tracking-widest text-xs hover:underline">Cerrar</button>
+                <div className="text-center py-6">
+                  <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-black uppercase tracking-tighter mb-2 text-white">¡CUPO RESERVADO!</h3>
+                  <p className="text-zinc-300 text-sm mb-6">
+                    Tu reserva para <strong>{selectedService}</strong> ha sido recibida con éxito. Para confirmar tu cita al instante con un asesor:
+                  </p>
+
+                  <a
+                    href={whatsappUrl || 'https://wa.me/584123565012'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary !bg-[#25D366] hover:!bg-[#20bd5a] !text-black font-black py-4 px-6 rounded-2xl w-full text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer mb-4"
+                  >
+                    <Phone size={18} />
+                    <span>CONFIRMAR POR WHATSAPP AHORA</span>
+                  </a>
+
+                  <button onClick={() => { setFormStatus('idle'); setIsModalOpen(false); }} className="text-zinc-400 font-bold uppercase tracking-widest text-xs hover:text-white">Cerrar</button>
                 </div>
               ) : (
                 <>

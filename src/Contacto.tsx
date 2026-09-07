@@ -32,6 +32,7 @@ export default function Contacto() {
   const [isInspectionSlotValid, setIsInspectionSlotValid] = useState<boolean>(false);
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
   const [services, setServices] = useState<any[]>([]);
+  const [whatsappUrl, setWhatsappUrl] = useState<string>('');
 
   useEffect(() => {
     let localData: any = null;
@@ -85,6 +86,20 @@ export default function Contacto() {
       ? `Otro: ${data.descripcion}`
       : `${selectedService}${desc}`;
 
+    // Format WhatsApp Direct Link
+    const targetPhone = "584123565012";
+    let msg = `🚗 *NUEVA SOLICITUD / CITA - MASTERTECH* 🛠️\n\n`;
+    msg += `👤 *Cliente:* ${data.nombre || ''}\n`;
+    msg += `📱 *WhatsApp:* ${data.telefono || ''}\n`;
+    msg += `🚗 *Vehículo:* ${data.vehiculo || 'No especificado'}\n`;
+    msg += `🛠️ *Servicio:* ${data.servicio || 'Servicio General'}\n`;
+    if (data.fecha_hora) msg += `📅 *Horario:* ${data.fecha_hora}\n`;
+    if (data.descripcion) msg += `📝 *Detalles:* ${data.descripcion}\n`;
+    msg += `\n_Solicitud enviada desde MasterTech Web._`;
+
+    const generatedWhatsappUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
+    setWhatsappUrl(generatedWhatsappUrl);
+
     // Create local lead object immediately for client-side storage
     const localLead = {
       id: Date.now(),
@@ -103,6 +118,11 @@ export default function Contacto() {
       existing.unshift(localLead);
       localStorage.setItem('mastertech_leads_store', JSON.stringify(existing.slice(0, 100)));
     } catch (e) {}
+
+    // Auto-open WhatsApp in background
+    setTimeout(() => {
+      try { window.open(generatedWhatsappUrl, '_blank'); } catch (e) {}
+    }, 300);
 
     try {
       const res = await fetch('/api/leads', {
@@ -222,16 +242,16 @@ export default function Contacto() {
                         </div>
                       </a>
                       <a
-                        href={config.WHATSAPP_LINK}
+                        href={whatsappUrl || config.WHATSAPP_LINK || 'https://wa.me/584123565012'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 p-4 bg-[#25D366]/10 border border-[#25D366]/20 rounded-2xl hover:border-[#25D366]/50 hover:bg-[#25D366]/15 transition-all duration-300 group"
+                        className="flex items-center justify-center gap-3 p-4 bg-[#25D366]/20 border border-[#25D366]/40 rounded-2xl hover:border-[#25D366] hover:bg-[#25D366]/30 transition-all duration-300 group"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-[#25D366]/15 border border-[#25D366]/20 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
+                        <div className="w-9 h-9 rounded-xl bg-[#25D366]/30 border border-[#25D366]/40 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
                           <WhatsAppIcon size={18} className="fill-current" />
                         </div>
                         <div className="text-left">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Escríbenos</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Confirmar</p>
                           <p className="text-sm font-black text-[#25D366]">Chat en<br/>WhatsApp</p>
                         </div>
                       </a>
