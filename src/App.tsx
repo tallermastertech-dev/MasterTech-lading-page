@@ -46,6 +46,7 @@ import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { MT01AdvisorModal } from './components/MT01AdvisorModal';
+import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
 
 const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg 
@@ -214,12 +215,9 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // 1. Instant load from localStorage cache — zero-delay first render
-    let localData: any = null;
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
-    } catch (e) {}
+    // 1. Instant load from localStorage cache via TTL manager
+    const cached = getCachedSettings();
+    const localData = cached.data;
 
     if (localData) {
       if (localData.SUCCESS_BADGE && localData.SUCCESS_BADGE.includes('30%')) {
@@ -232,24 +230,17 @@ export default function App() {
       try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
     }
 
-    // 2. Fetch fresh settings from Supabase — server is always authoritative
-    const fetchSettings = async () => {
+    // 2. Fetch fresh settings respecting TTL (5 min cache)
+    const loadSettings = async (force = false) => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
-        if (!res.ok) return;
-        const data = await res.json();
+        const data = await fetchSettingsWithTTL({ force });
         if (!data || typeof data !== 'object') return;
 
-        // Server data wins over stale localStorage — always use fresh Supabase data
         if (data.SUCCESS_BADGE && data.SUCCESS_BADGE.includes('30%')) {
           data.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
         }
 
         setConfig((prev: any) => ({ ...prev, ...data }));
-
-        // Save fresh data to localStorage so NEXT page load is instant
-        try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
-
         try { if (data.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(data.TEAM_MEMBERS_JSON)); } catch (e) {}
         try { if (data.REVIEWS_JSON) setReviews(JSON.parse(data.REVIEWS_JSON)); } catch (e) {}
         try { if (data.BRANDS_JSON) setBrands(JSON.parse(data.BRANDS_JSON)); } catch (e) {}
@@ -262,26 +253,27 @@ export default function App() {
       }
     };
 
-    // 🚀 Actually call fetchSettings immediately on mount
-    fetchSettings();
+    // Call loadSettings (will skip network request if cache is within TTL)
+    loadSettings();
 
     // Live update listener for instant admin updates across tabs
     const handleSettingsUpdated = (e: any) => {
-      const updated = e.detail || e;
+      const updated = e?.detail || e;
       if (updated && typeof updated === 'object') {
         setConfig((prev: any) => ({ ...prev, ...updated }));
-        try { localStorage.setItem('mastertech_settings_store', JSON.stringify({ ...localData, ...updated })); } catch (e) {}
         try { if (updated.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(updated.TEAM_MEMBERS_JSON)); } catch (err) {}
         try { if (updated.REVIEWS_JSON) setReviews(JSON.parse(updated.REVIEWS_JSON)); } catch (err) {}
         try { if (updated.SERVICES_JSON) setServices(JSON.parse(updated.SERVICES_JSON)); } catch (err) {}
+      } else {
+        loadSettings(true);
       }
     };
     window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
-    window.addEventListener('storage', fetchSettings);
+    window.addEventListener('storage', () => loadSettings(true));
 
     return () => {
       window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
-      window.removeEventListener('storage', fetchSettings);
+      window.removeEventListener('storage', () => loadSettings(true));
     };
 
     // Internal router listener

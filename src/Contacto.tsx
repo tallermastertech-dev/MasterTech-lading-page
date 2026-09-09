@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
+import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
 
 const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -35,11 +36,8 @@ export default function Contacto() {
   const [whatsappUrl, setWhatsappUrl] = useState<string>('');
 
   useEffect(() => {
-    let localData: any = null;
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) localData = JSON.parse(stored);
-    } catch (e) {}
+    const cached = getCachedSettings();
+    const localData = cached.data;
 
     if (localData) {
       if (localData.SUCCESS_BADGE && localData.SUCCESS_BADGE.includes('30%')) {
@@ -49,23 +47,28 @@ export default function Contacto() {
       try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
     }
 
-    const fetchSettings = async () => {
+    const loadSettings = async (force = false) => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data && typeof data === 'object') {
-            if (data.SUCCESS_BADGE && data.SUCCESS_BADGE.includes('30%')) {
-              data.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
-            }
-            setConfig((prev: any) => ({ ...prev, ...data }));
-            try { if (data.SERVICES_JSON) setServices(JSON.parse(data.SERVICES_JSON)); } catch (e) {}
-            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
+        const data = await fetchSettingsWithTTL({ force });
+        if (data && typeof data === 'object') {
+          if (data.SUCCESS_BADGE && data.SUCCESS_BADGE.includes('30%')) {
+            data.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
           }
+          setConfig((prev: any) => ({ ...prev, ...data }));
+          try { if (data.SERVICES_JSON) setServices(JSON.parse(data.SERVICES_JSON)); } catch (e) {}
         }
       } catch (err) {}
     };
-    fetchSettings();
+    loadSettings();
+
+    const handleUpdate = () => loadSettings(true);
+    window.addEventListener('mastertech_settings_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      window.removeEventListener('mastertech_settings_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

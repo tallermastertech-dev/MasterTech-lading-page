@@ -23,6 +23,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import { fetchSettingsWithTTL } from './utils/settingsCache';
 
 const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -223,11 +224,10 @@ export default function Jornadas() {
       metaDesc.setAttribute('content', 'Reserva tu cupo en las Jornadas Especiales MasterTech: Reprogramación ECU Stage 1/2, Desactivación EGR/DPF, Cielo Estrellado Rolls-Royce, A/A y Limpieza de Inyectores en Porlamar.');
     }
 
-    const fetchSettings = async () => {
+    const fetchSettings = async (force = false) => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
+        const data = await fetchSettingsWithTTL({ force });
+        if (data) {
           let currentLocal: any = null;
           try {
             const stored = localStorage.getItem('mastertech_settings_store');
@@ -236,14 +236,14 @@ export default function Jornadas() {
 
           const merged = { ...(currentLocal || {}), ...(data || {}) };
           setConfig((prev: any) => ({ ...prev, ...merged }));
-          try { localStorage.setItem('mastertech_settings_store', JSON.stringify(merged)); } catch (e) {}
         }
       } catch (err) {}
     };
     fetchSettings();
 
-    const handleSettingsUpdated = () => fetchSettings();
+    const handleSettingsUpdated = () => fetchSettings(true);
     window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    window.addEventListener('storage', handleSettingsUpdated);
 
     // Dynamic Countdown Timer calculation
     const calculateTimeLeft = () => {

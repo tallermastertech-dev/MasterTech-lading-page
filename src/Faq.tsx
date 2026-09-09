@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import { Plus, Minus, ArrowRight, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
 
 const CONFIG_DEFAULT = {
   WHATSAPP_LINK: "https://wa.link/xnj37f",
@@ -24,48 +25,42 @@ export default function Faq() {
       return [];
     };
 
-    // 1. Initial load from local store
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) {
-        const localData = JSON.parse(stored);
-        if (localData) {
-          setConfig((prev: any) => ({ ...prev, ...localData }));
-          setFaqs(parseFaqs(localData));
-        }
-      }
-    } catch (e) {}
+    // 1. Initial load from local store via TTL cache
+    const cached = getCachedSettings();
+    if (cached.data) {
+      setConfig((prev: any) => ({ ...prev, ...cached.data }));
+      setFaqs(parseFaqs(cached.data));
+    }
 
-    // 2. Fetch authoritative fresh data from Supabase backend
-    const fetchSettings = async () => {
+    // 2. Fetch authoritative fresh data respecting TTL
+    const loadSettings = async (force = false) => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data && typeof data === 'object') {
-            setConfig((prev: any) => ({ ...prev, ...data }));
-            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
-            setFaqs(parseFaqs(data));
-          }
+        const data = await fetchSettingsWithTTL({ force });
+        if (data && typeof data === 'object') {
+          setConfig((prev: any) => ({ ...prev, ...data }));
+          setFaqs(parseFaqs(data));
         }
       } catch (err) {
-        console.error("Error cargando FAQs desde Supabase:", err);
+        console.error("Error cargando FAQs:", err);
       }
     };
-    fetchSettings();
+    loadSettings();
 
     const handleSettingsUpdated = (e: any) => {
-      const updated = e.detail || e;
+      const updated = e?.detail || e;
       if (updated && typeof updated === 'object') {
         setConfig((prev: any) => ({ ...prev, ...updated }));
         setFaqs(parseFaqs(updated));
+      } else {
+        loadSettings(true);
       }
     };
     window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
+    window.addEventListener('storage', () => loadSettings(true));
 
     return () => {
       window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
-    };
+      window.removeEventListener('storage', () => loadSettings(true));
   }, []);
 
   return (

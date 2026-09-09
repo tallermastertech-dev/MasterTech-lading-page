@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import { ChevronLeft, Wrench, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
 
 const CONFIG_DEFAULT = {
   WHATSAPP_LINK: "https://wa.link/xnj37f",
@@ -30,29 +31,20 @@ export default function Servicios() {
       return [];
     };
 
-    // 1. Initial load from local store
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) {
-        const localData = JSON.parse(stored);
-        if (localData) {
-          setConfig((prev: any) => ({ ...prev, ...localData }));
-          setServices(parseServices(localData));
-        }
-      }
-    } catch (e) {}
+    // 1. Initial load from TTL cache / local store
+    const cached = getCachedSettings();
+    if (cached.data) {
+      setConfig((prev: any) => ({ ...prev, ...cached.data }));
+      setServices(parseServices(cached.data));
+    }
 
-    // 2. Fetch authoritative fresh data from Supabase backend
+    // 2. Fetch authoritative fresh data respecting 5-min TTL
     const fetchSettings = async () => {
       try {
-        const res = await fetch(`/api/settings?t=${Date.now()}`, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data && typeof data === 'object') {
-            setConfig((prev: any) => ({ ...prev, ...data }));
-            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(data)); } catch (e) {}
-            setServices(parseServices(data));
-          }
+        const data = await fetchSettingsWithTTL();
+        if (data && typeof data === 'object') {
+          setConfig((prev: any) => ({ ...prev, ...data }));
+          setServices(parseServices(data));
         }
       } catch (err) {
         console.error("Error cargando servicios desde Supabase:", err);

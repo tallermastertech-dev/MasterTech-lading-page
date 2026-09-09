@@ -20,14 +20,15 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
 
   useEffect(() => {
     fetchOccupiedSlots();
-    const interval = setInterval(fetchOccupiedSlots, 1500);
+    // Refresh slots periodically respecting the 15-30s TTL cache
+    const interval = setInterval(fetchOccupiedSlots, 20000);
     return () => clearInterval(interval);
   }, []);
 
   const fetchOccupiedSlots = async () => {
     let occupied: Record<string, string[]> = {};
     try {
-      const res = await fetch(`/api/inspection-slots?t=${Date.now()}`, { cache: 'no-store' });
+      const res = await fetch('/api/inspection-slots');
       if (res.ok) {
         const data = await res.json();
         occupied = data.occupied || {};

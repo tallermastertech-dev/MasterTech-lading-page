@@ -428,10 +428,8 @@ const authenticateAdmin = async (req: express.Request, res: express.Response, ne
 // Handler reutilizable para GET /settings
 const handleGetSettings = async (req: express.Request, res: express.Response) => {
   try {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.setHeader('Surrogate-Control', 'no-store');
+    // TTL Cache-Control: Browser caches for 60s, Vercel Edge CDN caches for 300s (5 min), stale-while-revalidate for 600s
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
     const settings = await getSettings();
     res.json(settings);
   } catch (error) {
@@ -1181,10 +1179,8 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
 
 const handleGetInspectionSlots = async (req: express.Request, res: express.Response) => {
   try {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.setHeader('Surrogate-Control', 'no-store');
+    // TTL Cache-Control: Browser caches for 15s, Vercel Edge CDN caches for 30s, stale-while-revalidate for 60s
+    res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=30, stale-while-revalidate=60');
     const occupied = await getOccupiedSlotsMap();
     res.json({ occupied });
   } catch (err: any) {

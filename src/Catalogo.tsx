@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import { ChevronLeft, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import { fetchSettingsWithTTL } from './utils/settingsCache';
 
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
@@ -557,30 +558,25 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
 
     loadLocalCatalog();
 
-    const fetchSettings = async () => {
+    const fetchSettings = async (force = false) => {
       try {
-        const res = await fetch('/api/settings');
-        if (res.ok) {
-          const data = await res.json();
+        const data = await fetchSettingsWithTTL({ force });
+        if (data) {
           let currentLocal: any = null;
           try {
             const stored = localStorage.getItem('mastertech_settings_store');
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          // Merge server data with local cache (server data authoritative for catalog if valid)
           const merged = { ...(currentLocal || {}), ...(data || {}) };
           setConfig((prev: any) => ({ ...prev, ...merged }));
-          try {
-            localStorage.setItem('mastertech_settings_store', JSON.stringify(merged));
-            const catalogSource = data?.CATALOG_PRODUCTS_JSON || currentLocal?.CATALOG_PRODUCTS_JSON;
-            if (catalogSource) {
-              const parsed = typeof catalogSource === 'string' ? JSON.parse(catalogSource) : catalogSource;
-              if (Array.isArray(parsed) && parsed.length > 0) {
-                setCatalogItems(parsed);
-              }
+          const catalogSource = data?.CATALOG_PRODUCTS_JSON || currentLocal?.CATALOG_PRODUCTS_JSON;
+          if (catalogSource) {
+            const parsed = typeof catalogSource === 'string' ? JSON.parse(catalogSource) : catalogSource;
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setCatalogItems(parsed);
             }
-          } catch (e) {}
+          }
         }
       } catch (err) {}
     };
@@ -590,7 +586,7 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
     // Listen for live updates from Admin Panel
     const handleAdminSync = () => {
       loadLocalCatalog();
-      fetchSettings();
+      fetchSettings(true);
     };
 
     window.addEventListener('mastertech_settings_updated', handleAdminSync);

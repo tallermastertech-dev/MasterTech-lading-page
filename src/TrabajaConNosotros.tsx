@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
 
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
@@ -66,14 +67,11 @@ export default function TrabajaConNosotros() {
   const [whatsappLinkGenerated, setWhatsappLinkGenerated] = useState('');
 
   useEffect(() => {
-    // Cargar configuraciones dinámicas
-    try {
-      const stored = localStorage.getItem('mastertech_settings_store');
-      if (stored) setConfig(JSON.parse(stored));
-    } catch (e) {}
+    // Cargar configuraciones dinámicas respetando TTL cache de 5 min
+    const cached = getCachedSettings();
+    if (cached.data) setConfig(cached.data);
 
-    fetch(`/api/settings?t=${Date.now()}`)
-      .then(res => res.json())
+    fetchSettingsWithTTL()
       .then(data => {
         if (data && typeof data === 'object') setConfig(data);
       })

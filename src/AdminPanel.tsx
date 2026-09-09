@@ -89,6 +89,7 @@ import {
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { getTallerStatus } from './utils/tallerStatus';
+import { invalidateSettingsCache } from './utils/settingsCache';
 
 const WhatsAppIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -2303,7 +2304,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       setSettings(confirmedSettings);
       setSettingsForm(confirmedSettings);
       try { localStorage.setItem('mastertech_settings_store', JSON.stringify(confirmedSettings)); } catch (e) {}
-      try { window.dispatchEvent(new Event('mastertech_settings_updated')); } catch (e) {}
+      invalidateSettingsCache();
 
       setSavedSectionSuccess(sectionKey);
       logClientAction('Modificación de Ajustes', 'AJUSTES', `Guardó cambios en el módulo "${sectionKey}" del sitio web.`);
