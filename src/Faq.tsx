@@ -61,6 +61,7 @@ export default function Faq() {
     return () => {
       window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
       window.removeEventListener('storage', () => loadSettings(true));
+    };
   }, []);
 
   return (
