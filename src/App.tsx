@@ -215,6 +215,24 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    // SEO setup
+    document.title = "MasterTech | Tecnología y Precisión Automotriz";
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', 'Taller mecánico en Porlamar, Isla de Margarita. Diagnóstico por scanner, mecánica general y especializada, frenos, aire acondicionado y repuestos de calidad.');
+
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://www.tallermastertech.com/');
+
     // 1. Instant load from localStorage cache via TTL manager
     const cached = getCachedSettings();
     const localData = cached.data;
