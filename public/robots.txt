@@ -1,0 +1,12 @@
+﻿# robots.txt — Taller MasterTech
+# https://www.tallermastertech.com/
+
+User-agent: *
+Allow: /
+
+# Bloquear rutas administrativas y privadas
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://www.tallermastertech.com/sitemap.xml

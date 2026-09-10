@@ -9,27 +9,88 @@ const CONFIG_DEFAULT = {
   LOGO_URL: "/logo.png",
 };
 
+// FAQs hardcodeadas de respaldo — SEO indexables siempre (Googlebot las ve sin JS)
+const FAQS_FALLBACK = [
+  {
+    q: '¿En qué marcas de vehículos se especializan en MasterTech?',
+    a: 'Somos especialistas en Jeep y Toyota, aunque atendemos todas las marcas: Honda, Dodge, Nissan, Chrysler, Lexus y más. Contamos con escáner multimarca de nivel OEM para diagnóstico computarizado en cualquier vehículo.',
+  },
+  {
+    q: '¿Dónde está ubicado el Taller MasterTech?',
+    a: 'Estamos en Porlamar, Isla de Margarita, Nueva Esparta, Venezuela. Puedes contactarnos por WhatsApp al +58 412 356 5012 para confirmar cómo llegar o agendar tu cita.',
+  },
+  {
+    q: '¿Cuánto tiempo toma un servicio de mantenimiento preventivo?',
+    a: 'Un mantenimiento preventivo con cita previa toma entre 45 minutos y 1.5 horas, dependiendo del paquete. Contamos con sala de espera climatizada y Wi-Fi mientras esperás.',
+  },
+  {
+    q: '¿Qué incluye la línea de inspección gratuita?',
+    a: 'La inspección preventiva gratuita incluye revisión visual y computarizada de fluidos, estado del tren delantero y suspensión, frenos, sistema eléctrico y diagnóstico general del vehículo. Sin costo, con cita previa.',
+  },
+  {
+    q: '¿Cuáles son los métodos de pago aceptados?',
+    a: 'Aceptamos efectivo en USD y EUR, transferencias bancarias, Zelle, Pago Móvil y tarjeta de débito/crédito. Manejamos presupuestos transparentes antes de iniciar cualquier trabajo.',
+  },
+  {
+    q: '¿Tienen garantía los repuestos y la mano de obra?',
+    a: 'Sí. Todos los repuestos instalados y la mano de obra cuentan con garantía MasterTech. Te entregamos una orden de trabajo detallada con cada servicio realizado.',
+  },
+  {
+    q: '¿Hacen diagnóstico computarizado y escáner para Jeep y Toyota?',
+    a: 'Sí, somos especialistas en diagnóstico electrónico para Jeep y Toyota. Usamos equipos de escáner de nivel OEM para lectura de códigos DTC, monitoreo de sensores en vivo y calibración de sistemas.',
+  },
+  {
+    q: '¿Cómo agendo una cita en el taller?',
+    a: 'Puedes agendar tu cita directamente por WhatsApp al +58 412 356 5012, a través del formulario en esta página o usando la línea de inspección gratuita. Te confirmamos disponibilidad de inmediato.',
+  },
+];
+
 export default function Faq() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [faqs, setFaqs] = useState<any[]>([]);
+  const [faqs, setFaqs] = useState<any[]>(FAQS_FALLBACK);
 
   useEffect(() => {
+    // SEO — meta tags de la página FAQ
+    document.title = 'Preguntas Frecuentes | Taller MasterTech Porlamar';
+    const setMeta = (name: string, content: string, prop = false) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(prop ? 'property' : 'name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', 'Preguntas frecuentes sobre Taller MasterTech en Porlamar, Margarita: especialistas en Jeep y Toyota, métodos de pago, garantías, cómo agendar cita, diagnóstico computarizado y más.');
+    setMeta('og:title', 'Preguntas Frecuentes | Taller MasterTech Porlamar', true);
+    setMeta('og:description', 'Resolvemos tus dudas sobre servicios, pagos, garantías y cómo agendar en Taller MasterTech, Porlamar, Isla de Margarita.', true);
+
+    let linkCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://www.tallermastertech.com/faq');
+
     const parseFaqs = (dataObj: any) => {
       if (dataObj?.FAQS_JSON) {
         try {
           const parsed = JSON.parse(dataObj.FAQS_JSON);
-          if (Array.isArray(parsed)) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
         } catch (e) {}
       }
-      return [];
+      return null;
     };
 
     // 1. Initial load from local store via TTL cache
     const cached = getCachedSettings();
     if (cached.data) {
       setConfig((prev: any) => ({ ...prev, ...cached.data }));
-      setFaqs(parseFaqs(cached.data));
+      const parsed = parseFaqs(cached.data);
+      if (parsed) setFaqs(parsed);
     }
 
     // 2. Fetch authoritative fresh data respecting TTL
@@ -38,7 +99,8 @@ export default function Faq() {
         const data = await fetchSettingsWithTTL({ force });
         if (data && typeof data === 'object') {
           setConfig((prev: any) => ({ ...prev, ...data }));
-          setFaqs(parseFaqs(data));
+          const parsed = parseFaqs(data);
+          if (parsed) setFaqs(parsed);
         }
       } catch (err) {
         console.error("Error cargando FAQs:", err);
@@ -50,7 +112,8 @@ export default function Faq() {
       const updated = e?.detail || e;
       if (updated && typeof updated === 'object') {
         setConfig((prev: any) => ({ ...prev, ...updated }));
-        setFaqs(parseFaqs(updated));
+        const parsed = parseFaqs(updated);
+        if (parsed) setFaqs(parsed);
       } else {
         loadSettings(true);
       }
@@ -158,7 +221,7 @@ export default function Faq() {
 
       {/* Footer */}
       <footer className="py-5 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
-        © 2026 MASTERTECH AUTOMOTRIZ. Todos los derechos reservados.
+        © 2026 SOLUCIONES MASTERTECH C.A. Porlamar, Isla de Margarita, Venezuela. Todos los derechos reservados.
       </footer>
     </div>
   );

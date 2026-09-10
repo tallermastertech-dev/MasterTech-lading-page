@@ -50,6 +50,30 @@ export default function Nosotros() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
+    // SEO — meta tags de la página Nosotros
+    document.title = 'Nosotros | Taller MasterTech — Mecánicos en Porlamar';
+    const setMeta = (name: string, content: string, prop = false) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(prop ? 'property' : 'name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', 'Conoce al equipo de Taller MasterTech en Porlamar, Isla de Margarita. Mecánicos especializados en Jeep, Toyota y más marcas. Tecnología, transparencia y garantía en cada servicio.');
+    setMeta('og:title', 'Nosotros | Taller MasterTech Porlamar', true);
+    setMeta('og:description', 'Equipo de mecánicos especializados en Porlamar, Isla de Margarita. Conoce a los profesionales detrás de MasterTech.', true);
+
+    let linkCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://www.tallermastertech.com/nosotros');
+
     const parseTeam = (dataObj: any) => {
       if (dataObj?.TEAM_MEMBERS_JSON) {
         try {

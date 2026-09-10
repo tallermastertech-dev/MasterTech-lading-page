@@ -75,7 +75,9 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
   const servicesOptions = [
     { title: "Mecánica General & Mantenimiento", desc: "Diagnóstico de motor, aceite sintético 5W30 y filtros OEM", href: "/servicios#mecanica", icon: Wrench },
     { title: "Diagnóstico Electrónico & Inyección", desc: "Escáner computarizado multimarca y ultrasonido de inyectores", href: "/servicios#diagnostico", icon: Zap },
-    { title: "Frenos, Suspensión & Climatización A/A", desc: "Pastillas cerámicas, discos, amortiguadores y gas R134a", href: "/servicios#frenos", icon: Disc }
+    { title: "Frenos, Suspensión & Climatización A/A", desc: "Pastillas cerámicas, discos, amortiguadores y gas R134a", href: "/servicios#frenos", icon: Disc },
+    { title: "Especialista en Jeep — Margarita", desc: "Diagnóstico, mecánica y electricidad para todos los modelos Jeep", href: "/jeep", icon: Zap },
+    { title: "Especialista en Toyota — Margarita", desc: "Diagnóstico, mecánica y mantenimiento para toda la gama Toyota", href: "/toyota", icon: Wrench },
   ];
 
   const catalogOptions = [

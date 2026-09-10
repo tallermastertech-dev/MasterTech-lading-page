@@ -36,6 +36,30 @@ export default function Contacto() {
   const [whatsappUrl, setWhatsappUrl] = useState<string>('');
 
   useEffect(() => {
+    // SEO — meta tags de la página de Contacto
+    document.title = 'Contacto & Citas | Taller MasterTech Porlamar';
+    const setMeta = (name: string, content: string, prop = false) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(prop ? 'property' : 'name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', 'Agenda tu cita en Taller MasterTech, Porlamar, Isla de Margarita. Diagnóstico, mecánica, frenos, climatización y más. Contáctanos por WhatsApp al +58 412 356 5012.');
+    setMeta('og:title', 'Contacto & Citas | Taller MasterTech Porlamar', true);
+    setMeta('og:description', 'Agenda tu cita en Taller MasterTech, Porlamar, Isla de Margarita. Rápido, confiable y con garantía.', true);
+
+    let linkCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://www.tallermastertech.com/contacto');
+
     const cached = getCachedSettings();
     const localData = cached.data;
 

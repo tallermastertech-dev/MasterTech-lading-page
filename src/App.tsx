@@ -44,6 +44,8 @@ import Servicios from './Servicios';
 import Catalogo from './Catalogo';
 import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
+import Jeep from './Jeep';
+import Toyota from './Toyota';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { MT01AdvisorModal } from './components/MT01AdvisorModal';
 import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
@@ -181,6 +183,12 @@ export default function App() {
   const [isTrabajaConNosotros, setIsTrabajaConNosotros] = useState(
     window.location.pathname.toLowerCase() === '/postulacion' ||
     window.location.hash === '#postulacion'
+  );
+  const [isJeep, setIsJeep] = useState(
+    window.location.pathname.toLowerCase() === '/jeep'
+  );
+  const [isToyota, setIsToyota] = useState(
+    window.location.pathname.toLowerCase() === '/toyota'
   );
 
   // Dynamic JSON arrays for team, reviews, and brands
@@ -452,6 +460,14 @@ export default function App() {
 
   if (isTrabajaConNosotros) {
     return <TrabajaConNosotros />;
+  }
+
+  if (isJeep) {
+    return <Jeep />;
+  }
+
+  if (isToyota) {
+    return <Toyota />;
   }
 
   return (

@@ -16,26 +16,97 @@ const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?
   </svg>
 );
 
+// Fallback de servicios hardcodeados — SEO indexable cuando el backend no responde
+const SERVICES_FALLBACK = [
+  {
+    id: 'mecanica',
+    title: 'Mecánica General & Mantenimiento',
+    desc: 'Mantenimiento preventivo y correctivo: cambio de aceite sintético, correa o cadena de distribución, empacaduras, bombas de agua y afinación de motor para Jeep, Toyota y más.',
+    img: '/assets/servicio Mecanica General.jpg',
+  },
+  {
+    id: 'diagnostico',
+    title: 'Diagnóstico Electrónico & Escáner',
+    desc: 'Diagnóstico computarizado con escáner multimarca de nivel OEM. Lectura de códigos DTC, monitoreo de sensores en tiempo real y test de actuadores para detectar cualquier falla.',
+    img: '/assets/servicio Inyección Electrónica.JPG',
+  },
+  {
+    id: 'electricidad',
+    title: 'Electricidad & Electrónica Automotriz',
+    desc: 'Diagnóstico y reparación del sistema eléctrico: instalaciones, alternadores, baterías, fusibles, módulos electrónicos y electricidad general del vehículo.',
+    img: '/assets/servicio Electricidad y Electrónica.png',
+  },
+  {
+    id: 'frenos',
+    title: 'Frenos, Dirección & Suspensión',
+    desc: 'Cambio de pastillas cerámicas, rectificación de discos y tambores, amortiguadores, terminales de dirección, bujes y balanceo. Máxima seguridad en cada frenada.',
+    img: '/assets/servicio Frenos.jpg',
+  },
+  {
+    id: 'inyectores',
+    title: 'Limpieza de Inyectores por Ultrasonido',
+    desc: 'Prueba en banco computarizado de inyección, limpieza ultrasónica de inyectores, medición de caudal y sustitución de microfiltros y sellos O-ring.',
+    img: '/assets/servicio Inyección Electrónica.JPG',
+  },
+  {
+    id: 'climatizacion',
+    title: 'Climatización & Aire Acondicionado',
+    desc: 'Carga de gas refrigerante R134a, lubricación del compresor con aceite PAG sintético, detección de fugas con trazador UV y mantenimiento integral del sistema A/C.',
+    img: '/assets/servicio Climatización.jpg',
+  },
+  {
+    id: 'ecu',
+    title: 'Reprogramación ECU Stage 1 & 2',
+    desc: 'Calibración de software de motor para optimización de potencia y torque. Desactivación electrónica de EGR/DPF y remapeo de mapas de inyección para mayor rendimiento.',
+    img: '/assets/servicio Electricidad y Electrónica.png',
+  },
+];
+
 export default function Servicios() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<any>(SERVICES_FALLBACK);
 
   useEffect(() => {
+    // SEO — meta tags de la página de servicios
+    document.title = 'Servicios Automotrices en Porlamar | Taller MasterTech';
+    const setMeta = (name: string, content: string, prop = false) => {
+      const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+      let el = document.querySelector(sel) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(prop ? 'property' : 'name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+    setMeta('description', 'Servicios automotrices en Porlamar, Isla de Margarita: diagnóstico por escáner, mecánica general, frenos, suspensión, climatización A/C, limpieza de inyectores y electricidad automotriz. Especialistas en Jeep y Toyota.');
+    setMeta('og:title', 'Servicios Automotrices | Taller MasterTech Porlamar', true);
+    setMeta('og:description', 'Diagnóstico computarizado, mecánica especializada, frenos, climatización y más. Taller automotriz en Porlamar, Isla de Margarita.', true);
+
+    let linkCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.setAttribute('href', 'https://www.tallermastertech.com/servicios');
+
     const parseServices = (dataObj: any) => {
       if (dataObj?.SERVICES_JSON) {
         try {
           const parsed = JSON.parse(dataObj.SERVICES_JSON);
-          if (Array.isArray(parsed)) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
         } catch (e) {}
       }
-      return [];
+      return null;
     };
 
     // 1. Initial load from TTL cache / local store
     const cached = getCachedSettings();
     if (cached.data) {
       setConfig((prev: any) => ({ ...prev, ...cached.data }));
-      setServices(parseServices(cached.data));
+      const parsed = parseServices(cached.data);
+      if (parsed) setServices(parsed);
     }
 
     // 2. Fetch authoritative fresh data respecting 5-min TTL
@@ -44,7 +115,8 @@ export default function Servicios() {
         const data = await fetchSettingsWithTTL();
         if (data && typeof data === 'object') {
           setConfig((prev: any) => ({ ...prev, ...data }));
-          setServices(parseServices(data));
+          const parsed = parseServices(data);
+          if (parsed) setServices(parsed);
         }
       } catch (err) {
         console.error("Error cargando servicios desde Supabase:", err);
@@ -56,7 +128,8 @@ export default function Servicios() {
       const updated = e.detail || e;
       if (updated && typeof updated === 'object') {
         setConfig((prev: any) => ({ ...prev, ...updated }));
-        setServices(parseServices(updated));
+        const parsed = parseServices(updated);
+        if (parsed) setServices(parsed);
       }
     };
     window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
@@ -145,7 +218,7 @@ export default function Servicios() {
 
       {/* Footer */}
       <footer className="py-5 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
-        © 2026 MASTERTECH AUTOMOTRIZ. Todos los derechos reservados.
+        © 2026 SOLUCIONES MASTERTECH C.A. Porlamar, Isla de Margarita, Venezuela. Todos los derechos reservados.
       </footer>
 
       {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
