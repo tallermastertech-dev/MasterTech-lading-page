@@ -9,8 +9,8 @@ import path from 'path';
 dotenv.config();
 
 const app = express();
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ limit: '2mb', extended: true }));
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'placeholder-key';
@@ -142,10 +142,12 @@ setInterval(() => {
   }
 }, 10 * 60 * 1000);
 
-function createRateLimiter(maxRequests: number, windowMs: number) {
+function createRateLimiter(maxRequests: number, windowMs: number, customMessage?: string) {
   return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip || 'unknown';
-    const key = `${ip}:${req.path}`;
+    const rawIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip || req.socket.remoteAddress || 'unknown';
+    // Normalize path (ignore query strings) to prevent bypassing via random query params
+    const normalizedPath = req.path.toLowerCase().replace(/\/+$/, '');
+    const key = `${rawIp}:${normalizedPath}`;
     const now = Date.now();
 
     const entry = rateLimitStore.get(key);
@@ -156,12 +158,13 @@ function createRateLimiter(maxRequests: number, windowMs: number) {
     }
 
     if (entry.count >= maxRequests) {
-      const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
+      const retryAfter = Math.max(1, Math.ceil((entry.resetAt - now) / 1000));
       res.setHeader('Retry-After', retryAfter);
       res.setHeader('X-RateLimit-Limit', maxRequests);
       res.setHeader('X-RateLimit-Remaining', 0);
       res.status(429).json({
-        error: 'Demasiadas solicitudes. Intenta de nuevo en unos minutos.',
+        error: customMessage || 'Demasiadas solicitudes simultáneas. Sistema protegido contra inundación. Intenta de nuevo más tarde.',
+        code: 'TOO_MANY_REQUESTS',
         retryAfter,
       });
       return;
@@ -169,15 +172,59 @@ function createRateLimiter(maxRequests: number, windowMs: number) {
 
     entry.count++;
     res.setHeader('X-RateLimit-Limit', maxRequests);
-    res.setHeader('X-RateLimit-Remaining', maxRequests - entry.count);
+    res.setHeader('X-RateLimit-Remaining', Math.max(0, maxRequests - entry.count));
     next();
   };
 }
 
-// Limits: generous limits to prevent blocking legitimate admin usage
-const strictLimit = createRateLimiter(30, 15 * 60 * 1000);   // 30 req / 15 min (login)
-const standardLimit = createRateLimiter(500, 15 * 60 * 1000); // 500 req / 15 min (leads form)
-const relaxedLimit = createRateLimiter(50000, 15 * 60 * 1000); // 50000 req / 15 min (read)
+// Security Rate Limits: Strict protection against brute force and concurrent attacks
+const strictLimit = createRateLimiter(5, 15 * 60 * 1000, 'Demasiados intentos de acceso fallidos. Por seguridad, tu IP ha sido temporalmente limitada por 15 minutos.'); // 5 req / 15 min (login)
+const standardLimit = createRateLimiter(15, 60 * 60 * 1000, 'Límite de solicitudes de contacto alcanzado. Intenta nuevamente en una hora.'); // 15 req / hora (leads form)
+const globalApiLimiter = createRateLimiter(120, 60 * 1000, 'Ráfaga de solicitudes excesiva detectada. Espera un momento antes de reintentar.'); // 120 req / min (global flood protection)
+const relaxedLimit = createRateLimiter(1000, 15 * 60 * 1000); // 1000 req / 15 min (read)
+
+// =============================================================
+// SQL INJECTION & MALICIOUS INPUT DETECTION GUARD
+// =============================================================
+const SQLI_PATTERNS = [
+  /(\b(SELECT|UNION|INSERT|DELETE|UPDATE|DROP|ALTER|CREATE|TRUNCATE|EXEC|EXECUTE)\b)/i,
+  /(--|\/\*|\*\/|@@|char\s*\(|nchar\s*\(|varchar\s*\(|nvarchar\s*\()/i,
+  /('|\")\s*(OR|AND)\s*('|\")?\d+('|\")?\s*=\s*('|\")?\d+/i,
+  /('|\")\s*(OR|AND)\s*('|\")[a-zA-Z]+('|\")?\s*=\s*('|\")?[a-zA-Z]+/i,
+  /(WAITFOR\s+DELAY|BENCHMARK\s*\(|SLEEP\s*\()/i,
+  /;\s*(DROP|DELETE|UPDATE|INSERT)/i
+];
+
+function containsSqlInjection(val: unknown): boolean {
+  if (typeof val === 'string') {
+    return SQLI_PATTERNS.some(pattern => pattern.test(val));
+  }
+  if (val && typeof val === 'object' && !Array.isArray(val)) {
+    return Object.values(val as Record<string, unknown>).some(v => containsSqlInjection(v));
+  }
+  if (Array.isArray(val)) {
+    return val.some(v => containsSqlInjection(v));
+  }
+  return false;
+}
+
+const sqlInjectionGuard = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // Excluir endpoints administrativos autenticados que guarden JSON con palabras técnicas legítimas
+  if (req.path.startsWith('/api/admin') || req.path.startsWith('/admin')) {
+    return next();
+  }
+  if (containsSqlInjection(req.query) || containsSqlInjection(req.params) || containsSqlInjection(req.body)) {
+    return res.status(400).json({
+      error: 'Petición rechazada por el cortafuegos de seguridad (patrones no permitidos detectados).',
+      code: 'SECURITY_VIOLATION'
+    });
+  }
+  next();
+};
+
+// Apply global flood protection & SQL injection guard to all requests
+app.use(globalApiLimiter);
+app.use(sqlInjectionGuard);
 
 // =============================================================
 // INPUT SANITIZATION HELPERS
@@ -378,50 +425,84 @@ async function persistCloudBackupLeads(newOrUpdatedLead: any, isDelete = false):
   } catch (e) {}
 }
 
-// Stateless Token Helpers
-const generateAdminToken = () => {
-  const secret = process.env.ADMIN_PASSWORD || 'admin123';
-  const data = `admin-${Date.now()}`;
-  const hash = crypto.createHmac('sha256', secret).update(data).digest('hex');
-  return `${data}.${hash}`;
+// =============================================================
+// CRYPTOGRAPHIC TOKEN SYSTEM (HMAC-SHA256 with Expiration & Signature)
+// =============================================================
+const JWT_SECRET = process.env.ADMIN_JWT_SECRET || process.env.ADMIN_PASSWORD || 'mastertech-secret-signature-2026-production';
+const TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas de validez máxima
+
+interface TokenPayload {
+  sub: string;
+  email?: string;
+  role?: string;
+  iat: number;
+  exp: number;
+}
+
+const generateAdminToken = (user?: { id?: string; email?: string; role?: string }) => {
+  const payload: TokenPayload = {
+    sub: user?.id || 'admin-master',
+    email: user?.email || 'admin@tallermastertech.com',
+    role: user?.role || 'CEO - Director',
+    iat: Date.now(),
+    exp: Date.now() + TOKEN_TTL_MS
+  };
+  const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const signature = crypto.createHmac('sha256', JWT_SECRET).update(payloadB64).digest('base64url');
+  return `${payloadB64}.${signature}`;
 };
 
-const verifyAdminToken = (token: string) => {
-  if (!token || typeof token !== 'string') return false;
-  if (token.startsWith('admin-') || token === 'admin-token' || token.length >= 8) return true;
-  const secrets = [
-    process.env.ADMIN_PASSWORD,
-    'admin123',
-    'mastertech2026'
-  ].filter(Boolean);
-
+const verifyAdminToken = (token: string): TokenPayload | null => {
+  if (!token || typeof token !== 'string') return null;
   const parts = token.split('.');
-  if (parts.length !== 2) return false;
-  const [data, hash] = parts;
-  
-  return secrets.some(sec => {
-    const expectedHash = crypto.createHmac('sha256', sec as string).update(data).digest('hex');
-    return hash === expectedHash;
-  });
+  if (parts.length !== 2) return null;
+  const [payloadB64, signature] = parts;
+
+  try {
+    const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(payloadB64).digest('base64url');
+    const sigBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expectedSig);
+    if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+      return null;
+    }
+
+    const payload: TokenPayload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf-8'));
+    if (!payload.exp || Date.now() > payload.exp) {
+      return null; // Sesión expirada
+    }
+    return payload;
+  } catch {
+    return null;
+  }
 };
 
-// Authentication Middleware
+// Strict Authentication Middleware
 const authenticateAdmin = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // Ignorar ruta pública de login para evitar bucle de autenticación
+  if (req.path === '/api/login' || req.path === '/login' || req.path === '/api/seed') {
+    return next();
+  }
+
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'No autorizado. Se requiere token.' });
+    res.status(401).json({ error: 'Acceso no autorizado. Se requiere token de administrador válido.', code: 'UNAUTHORIZED' });
     return;
   }
   
-  const token = authHeader.split(' ')[1];
+  const token = authHeader.split(' ')[1]?.trim();
+  const verified = verifyAdminToken(token);
   
-  if (!token || (!verifyAdminToken(token) && !token.startsWith('admin-'))) {
-    res.status(401).json({ error: 'Token inválido o expirado.' });
+  if (!verified) {
+    res.status(401).json({ error: 'Token de administrador inválido o sesión expirada. Inicia sesión nuevamente.', code: 'INVALID_TOKEN' });
     return;
   }
   
+  (req as any).adminUser = verified;
   next();
 };
+
+// Global firewall: Every route starting with /api/admin or /admin requires strict authentication
+app.use(['/api/admin', '/admin'], authenticateAdmin);
 
 // --- ENDPOINTS PÚBLICOS ---
 
@@ -692,47 +773,7 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
   }
 };
 
-// Default administrative user profiles with role-based access control
-const DEFAULT_ADMIN_USERS = [
-  {
-    id: 'user-jose-vicente',
-    name: 'J. Vicente Betancourt',
-    email: 'josevbv@gmail.com',
-    password: 'admin123',
-    role: 'CEO - Director',
-    accessLevel: 'full',
-    createdAt: '2026-01-01T00:00:00.000Z'
-  },
-  {
-    id: 'user-j-vasquez',
-    name: 'J. Vasquez',
-    email: 'jvaask16@gmail.com',
-    password: 'admin123',
-    role: 'CEO - Director',
-    accessLevel: 'full',
-    createdAt: '2026-01-01T00:00:00.000Z'
-  },
-  {
-    id: 'user-brenda-santaella',
-    name: 'Brenda Santaella',
-    email: 'bresantaella@gmail.com',
-    password: 'admin123',
-    role: 'Asesor Logística',
-    accessLevel: 'logistica',
-    createdAt: '2026-01-01T00:00:00.000Z'
-  },
-  {
-    id: 'user-ambar-salazar',
-    name: 'Ambar Salazar',
-    email: 'salferambar@gmail.com',
-    password: 'admin123',
-    role: 'Coordinadora Logística',
-    accessLevel: 'logistica',
-    createdAt: '2026-01-01T00:00:00.000Z'
-  }
-];
-
-// Helper: Get admin users from settings (or fallback)
+// Helper: Get admin users from settings (or fallback from secure environment variables)
 async function getAdminUsersList(): Promise<any[]> {
   try {
     const settings = await getSettings();
@@ -741,7 +782,22 @@ async function getAdminUsersList(): Promise<any[]> {
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch (e) {}
-  return DEFAULT_ADMIN_USERS;
+
+  // Fallback seguro usando variables de entorno para bootstrap inicial
+  const masterEmail = (process.env.ADMIN_EMAIL || 'admin@tallermastertech.com').toLowerCase().trim();
+  const masterPass = process.env.ADMIN_PASSWORD || 'mastertech2026';
+
+  return [
+    {
+      id: 'master-admin-user',
+      name: 'Administrador MasterTech',
+      email: masterEmail,
+      password: masterPass,
+      role: 'CEO - Director',
+      accessLevel: 'full',
+      createdAt: new Date().toISOString()
+    }
+  ];
 }
 
 // Helper: Audit Logging System (Auditoría de Actividades de Usuarios)
@@ -763,12 +819,8 @@ async function recordAuditLog(entry: {
       } catch (e) {}
     }
 
-    const cleanEmail = (entry.userEmail && entry.userEmail !== 'admin@tallermastertech.com') 
-      ? entry.userEmail 
-      : 'josevbv@gmail.com';
-    const cleanName = (entry.userName && entry.userName !== 'Usuario' && entry.userName !== 'Administrador') 
-      ? entry.userName 
-      : 'J. Vicente Betancourt';
+    const cleanEmail = entry.userEmail || 'admin@tallermastertech.com';
+    const cleanName = entry.userName || 'Administrador MasterTech';
     const cleanRole = entry.userRole || 'CEO - Director';
 
     const newLog = {
@@ -812,8 +864,7 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
 
     const isCEO = userByEmail.role?.includes('CEO') || 
                   userByEmail.role?.includes('Director') || 
-                  userByEmail.email === 'jvaask16@gmail.com' || 
-                  userByEmail.email === 'josevbv@gmail.com';
+                  userByEmail.accessLevel === 'full';
 
     // Verificación estricta de la contraseña del usuario (o clave maestra para CEOs)
     const isPasswordCorrect = (userByEmail.password && userByEmail.password === password) ||
@@ -829,15 +880,13 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
     // Si no envió email, buscar si la contraseña coincide con la contraseña asignada a algún usuario
     matchedUser = adminUsers.find(u => u.password === password);
     if (!matchedUser && validMasterPasswords.includes(password)) {
-      matchedUser = adminUsers[0] || DEFAULT_ADMIN_USERS[0];
+      matchedUser = adminUsers[0];
     }
   }
 
   if (matchedUser) {
     const isFull = matchedUser.accessLevel === 'full' ||
-                   matchedUser.email === 'jvaask16@gmail.com' ||
-                   matchedUser.email === 'josevbv@gmail.com' ||
-                   (matchedUser.role && (matchedUser.role.includes('CEO') || matchedUser.role.includes('Director') || matchedUser.role.includes('Marketing') || matchedUser.role.includes('Super')));
+                   (matchedUser.role && (matchedUser.role.includes('CEO') || matchedUser.role.includes('Director') || matchedUser.role.includes('Marketing') || matchedUser.role.includes('Super') || matchedUser.role.includes('Admin')));
 
     const activeUser = matchedUser;
 
@@ -851,7 +900,7 @@ const handlePostLogin = async (req: express.Request, res: express.Response) => {
       details: `Inició sesión exitosamente desde el panel de control.`
     }).catch(() => {});
 
-    const token = generateAdminToken();
+    const token = generateAdminToken(activeUser);
     return res.json({
       success: true,
       token,
@@ -1360,7 +1409,7 @@ app.post('/api/settings', authenticateAdmin, handlePutSettings);
 app.post('/settings', authenticateAdmin, handlePutSettings);
 
 // Admin Proveedores Dedicated Endpoints
-app.get(['/api/admin/proveedores', '/admin/proveedores'], async (_req, res) => {
+app.get(['/api/admin/proveedores', '/admin/proveedores'], authenticateAdmin, async (_req, res) => {
   try {
     const s = await getSettings();
     let proveedores: any[] = [];
@@ -1420,7 +1469,7 @@ app.post(['/api/admin/reminders', '/admin/reminders'], authenticateAdmin, async 
 });
 
 // Admin Control de Taller Dedicated Endpoints (Supabase Synchronization)
-app.get(['/api/admin/taller-control', '/admin/taller-control', '/api/taller-control', '/taller-control'], async (_req, res) => {
+app.get(['/api/admin/taller-control', '/admin/taller-control'], authenticateAdmin, async (_req, res) => {
   try {
     const s = await getSettings();
     let bays: any[] = [];
@@ -3310,7 +3359,7 @@ Puedo ayudarte con diagnóstico avanzado en:
   }
 });
 
-app.post('/api/seed', async (req, res) => {
+app.post('/api/seed', authenticateAdmin, async (req, res) => {
   const defaultSettings = {
       PHONE_NUMBER: '+584123565012',
       WHATSAPP_LINK: 'https://wa.link/xnj37f',
@@ -3346,6 +3395,29 @@ app.post('/api/seed', async (req, res) => {
       res.json({ success: true, message: 'Settings seeded' });
   } catch(err) {
       res.status(500).json({ error: 'Seed failed' });
+  }
+});
+
+// =============================================================
+// GLOBAL SECURITY JSON-ONLY ERROR HANDLERS (NO HTML RESPONSES)
+// =============================================================
+
+// Catch-all 404 for API endpoints — always return JSON, never HTML
+app.all(['/api/*', '/api', '/admin/*', '/admin'], (_req, res) => {
+  res.status(404).json({
+    error: 'Endpoint no encontrado o recurso inaccesible.',
+    code: 'NOT_FOUND'
+  });
+});
+
+// Global Express Error Handler — guarantees strictly JSON responses (never Express default HTML stack traces)
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Unhandled server error:', err?.message || err);
+  if (!res.headersSent) {
+    res.status(err?.status || 500).json({
+      error: 'Error interno en el servidor.',
+      code: 'INTERNAL_SERVER_ERROR'
+    });
   }
 });
 

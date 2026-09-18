@@ -35,7 +35,6 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
 import { getTallerStatus } from './utils/tallerStatus';
-import AdminPanel from './AdminPanel';
 import Inspeccion from './Inspeccion';
 import Contacto from './Contacto';
 import Faq from './Faq';
@@ -154,9 +153,6 @@ export default function App() {
 
   // Dynamic config initialized with static CONFIG fallback
   const [config, setConfig] = useState<any>(CONFIG);
-  const [isAdmin, setIsAdmin] = useState(
-    window.location.pathname === '/admin' || window.location.hash === '#admin'
-  );
   const [isInspeccion, setIsInspeccion] = useState(
     window.location.pathname === '/inspeccion'
   );
@@ -304,7 +300,6 @@ export default function App() {
 
     // Internal router listener
     const handleHashChange = () => {
-      setIsAdmin(window.location.pathname === '/admin' || window.location.hash === '#admin');
       setIsInspeccion(window.location.pathname === '/inspeccion');
       setIsContacto(window.location.pathname === '/contacto');
       setIsFaq(window.location.pathname.toLowerCase() === '/faq');
@@ -415,20 +410,6 @@ export default function App() {
       setFormStatus('success');
     }
   };
-
-  if (isAdmin) {
-    return (
-      <AdminPanel 
-        onClose={() => {
-          window.location.hash = '';
-          if (window.location.pathname === '/admin') {
-            window.history.pushState({}, '', '/');
-          }
-          setIsAdmin(false);
-        }} 
-      />
-    );
-  }
 
   if (isInspeccion) {
     return <Inspeccion />;

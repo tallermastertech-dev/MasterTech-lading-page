@@ -4,12 +4,8 @@ import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
-  const env = loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
@@ -18,11 +14,17 @@ export default defineConfig(({mode}) => {
     build: {
       // Target modern browsers for smaller bundles
       target: 'es2020',
-      // Enable minification with esbuild (faster) or terser (smaller)
+      // Disable sourcemaps completely so client code cannot be reverse engineered in DevTools
+      sourcemap: false,
+      // Enable minification with esbuild
       minify: 'esbuild',
-      // Increase chunk size limit warning threshold
-      chunkSizeWarningLimit: 800,
+      // Chunk size limit warning threshold
+      chunkSizeWarningLimit: 600,
       rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+          admin: path.resolve(__dirname, 'admin.html'),
+        },
         output: {
           // Manual chunk splitting for optimal browser caching
           manualChunks: {

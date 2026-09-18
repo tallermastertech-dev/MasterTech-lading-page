@@ -724,8 +724,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     const role = (user.role || '').toLowerCase().trim();
     const access = (user.accessLevel || '').toLowerCase().trim();
 
-    // J. Vasquez y J. Vicente Betancourt tienen acceso total siempre
-    if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com') return true;
+    // Acceso total según nivel de acceso y rol verificado
     if (access === 'full' || access === 'admin' || access === 'administracion') return true;
     if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super') || role.includes('admin') || role.includes('gerente') || role.includes('administra')) return true;
     return false;
@@ -733,12 +732,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   const getAllowedTabsForUser = (user: any): string[] => {
     if (!user) return ['control-taller'];
-    const email = (user.email || '').toLowerCase().trim();
     const role = (user.role || '').toLowerCase().trim();
     const access = (user.accessLevel || '').toLowerCase().trim();
 
     // 1. Acceso Total / Administradores
-    if (email === 'jvaask16@gmail.com' || email === 'josevbv@gmail.com' || access === 'full' || access === 'admin' || access === 'administracion') {
+    if (access === 'full' || access === 'admin' || access === 'administracion') {
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
     if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super') || role.includes('admin') || role.includes('gerente') || role.includes('administra')) {
@@ -1500,7 +1498,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       localStorage.setItem('mastertech_reminders_cache', JSON.stringify(newList));
     } catch (e) {}
     try {
-      const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || 'admin-token';
+      const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || '';
       await fetch(`/api/admin/reminders`, {
         method: 'POST',
         headers: {
@@ -1936,7 +1934,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const handleSaveProveedores = async (updatedList: Proveedor[], logMsg?: string) => {
     setProveedoresList(updatedList);
     setIsSavingProveedor(true);
-    const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || 'mastertech2026';
+    const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || '';
 
     try {
       const jsonStr = JSON.stringify(updatedList);
@@ -2265,7 +2263,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Dedicated Independent Save Function for each module with strict Supabase database verification
   const handleSaveSection = async (sectionKey: string, customPayload?: any) => {
-    const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || 'admin-token';
+    const activeAuthToken = token || localStorage.getItem('mastertech_admin_token') || '';
     setSavingSection(sectionKey);
     setSavedSectionSuccess(null);
 
