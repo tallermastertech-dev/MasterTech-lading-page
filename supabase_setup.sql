@@ -66,66 +66,41 @@ CREATE INDEX IF NOT EXISTS idx_settings_key       ON public.settings (key);
 ALTER TABLE public.leads    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.settings ENABLE ROW LEVEL SECURITY;
 
--- ── LEADS ──────────────────────────────────────────────────
--- Permitir insertar, consultar, actualizar y eliminar citas (el backend valida autenticación)
+-- ── LEADS (BLINDADA: SOLO SERVICE_ROLE) ──────────────────────
 DROP POLICY IF EXISTS "leads_insert_public" ON public.leads;
 DROP POLICY IF EXISTS "leads_insert_all" ON public.leads;
-CREATE POLICY "leads_insert_all"
-  ON public.leads
-  FOR INSERT
-  WITH CHECK (true);
-
 DROP POLICY IF EXISTS "leads_select_service" ON public.leads;
 DROP POLICY IF EXISTS "leads_select_all" ON public.leads;
-CREATE POLICY "leads_select_all"
-  ON public.leads
-  FOR SELECT
-  USING (true);
-
 DROP POLICY IF EXISTS "leads_update_service" ON public.leads;
 DROP POLICY IF EXISTS "leads_update_all" ON public.leads;
-CREATE POLICY "leads_update_all"
-  ON public.leads
-  FOR UPDATE
-  USING (true)
-  WITH CHECK (true);
-
 DROP POLICY IF EXISTS "leads_delete_service" ON public.leads;
 DROP POLICY IF EXISTS "leads_delete_all" ON public.leads;
-CREATE POLICY "leads_delete_all"
+
+-- Únicamente el Backend seguro tiene acceso a la información de clientes
+CREATE POLICY "leads_service_role_all"
   ON public.leads
-  FOR DELETE
-  USING (true);
-
--- ── SETTINGS ───────────────────────────────────────────────
-DROP POLICY IF EXISTS "settings_select_public" ON public.settings;
-DROP POLICY IF EXISTS "settings_select_all" ON public.settings;
-CREATE POLICY "settings_select_all"
-  ON public.settings
-  FOR SELECT
-  USING (true);
-
-DROP POLICY IF EXISTS "settings_insert_service" ON public.settings;
-DROP POLICY IF EXISTS "settings_insert_all" ON public.settings;
-CREATE POLICY "settings_insert_all"
-  ON public.settings
-  FOR INSERT
-  WITH CHECK (true);
-
-DROP POLICY IF EXISTS "settings_update_service" ON public.settings;
-DROP POLICY IF EXISTS "settings_update_all" ON public.settings;
-CREATE POLICY "settings_update_all"
-  ON public.settings
-  FOR UPDATE
+  FOR ALL
+  TO service_role
   USING (true)
   WITH CHECK (true);
 
+-- ── SETTINGS (BLINDADA: SOLO SERVICE_ROLE) ───────────────────
+DROP POLICY IF EXISTS "settings_select_public" ON public.settings;
+DROP POLICY IF EXISTS "settings_select_all" ON public.settings;
+DROP POLICY IF EXISTS "settings_insert_service" ON public.settings;
+DROP POLICY IF EXISTS "settings_insert_all" ON public.settings;
+DROP POLICY IF EXISTS "settings_update_service" ON public.settings;
+DROP POLICY IF EXISTS "settings_update_all" ON public.settings;
 DROP POLICY IF EXISTS "settings_delete_service" ON public.settings;
 DROP POLICY IF EXISTS "settings_delete_all" ON public.settings;
-CREATE POLICY "settings_delete_all"
+
+-- Únicamente el Backend seguro tiene acceso a la tabla settings
+CREATE POLICY "settings_service_role_all"
   ON public.settings
-  FOR DELETE
-  USING (true);
+  FOR ALL
+  TO service_role
+  USING (true)
+  WITH CHECK (true);
 
 
 -- ============================================================
