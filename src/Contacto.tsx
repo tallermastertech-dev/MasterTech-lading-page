@@ -193,10 +193,10 @@ export default function Contacto() {
       </div>
 
       {/* Header */}
-      <header className="py-5 px-6 flex justify-center border-b border-white/5 bg-[#0d0e12]/90 backdrop-blur-xl relative z-10">
+      <header className="py-5 px-6 flex justify-center border-b border-slate-200 dark:border-white/5 bg-white/90 dark:bg-[#0d0e12]/90 backdrop-blur-xl relative z-10">
         <a href="/" className="cursor-pointer hover:opacity-90 transition-opacity inline-flex items-center gap-2.5">
           <img src={config.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-9 w-auto object-contain shrink-0 logo-gold" />
-          <span className="font-display font-black text-xl tracking-tighter uppercase text-white">
+          <span className="font-display font-black text-xl tracking-tighter uppercase text-slate-900 dark:text-white">
             MASTER<span className="text-primary italic">TECH</span>
           </span>
         </a>

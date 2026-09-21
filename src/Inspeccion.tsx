@@ -112,10 +112,10 @@ export default function Inspeccion() {
 
   return (
     <div className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-white overflow-x-hidden w-full max-w-full">
-      <header className="py-6 px-6 flex justify-center border-b border-white/5 bg-[#0d0e12]/90 backdrop-blur-xl">
+      <header className="py-6 px-6 flex justify-center border-b border-slate-200 dark:border-white/5 bg-white/90 dark:bg-[#0d0e12]/90 backdrop-blur-xl">
         <a href="/" className="inline-flex items-center gap-2.5 hover:opacity-90 transition-opacity">
           <img src={CONFIG.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-9 w-auto object-contain shrink-0 logo-gold" />
-          <span className="font-display font-black text-xl tracking-tighter uppercase text-white">
+          <span className="font-display font-black text-xl tracking-tighter uppercase text-slate-900 dark:text-white">
             MASTER<span className="text-primary italic">TECH</span>
           </span>
         </a>
