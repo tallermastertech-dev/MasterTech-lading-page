@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import GarantiaMasterTech from './components/GarantiaMasterTech';
 import GoogleReviewsWidget from './components/GoogleReviewsWidget';
+import FaqGarantiaPreview from './components/FaqGarantiaPreview';
 import { 
   ShieldCheck, 
   Star, 
+  HelpCircle,
   Sun, 
   Moon, 
   ArrowLeft, 
@@ -93,6 +95,14 @@ export default function PreviewTrustPack() {
               <span>Reseñas Google</span>
             </a>
 
+            <a 
+              href="#faq-preview" 
+              className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
+            >
+              <HelpCircle size={14} className="text-amber-500" />
+              <span>Preguntas Frecuentes</span>
+            </a>
+
             {/* Theme Toggle Button */}
             <button
               type="button"
@@ -119,7 +129,7 @@ export default function PreviewTrustPack() {
                 Entorno de Calibración Aislado
               </h2>
               <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                Estos componentes no son visibles en la página principal para tus clientes hasta que des la orden de activarlos. Puedes probar botones, modales, filtros y alternar el modo claro/oscuro arriba.
+                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello de Garantía</strong> (sin redundancias), el <strong>Widget de Google Maps</strong> y las <strong>Preguntas Frecuentes</strong> con la política de garantía y repuestos.
               </p>
             </div>
           </div>
@@ -137,6 +147,11 @@ export default function PreviewTrustPack() {
       {/* Component 2: Widget Dinámico de Reseñas de Google Maps */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <GoogleReviewsWidget />
+      </div>
+
+      {/* Component 3: Preguntas Frecuentes con Política de Garantía y Repuestos */}
+      <div className="border-b border-slate-200 dark:border-slate-800">
+        <FaqGarantiaPreview />
       </div>
 
       {/* Bottom Integration Proposal */}
