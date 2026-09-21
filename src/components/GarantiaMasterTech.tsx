@@ -86,27 +86,92 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             {/* Sello Shield Badge Graphic */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20">
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-4">
-                <div className="absolute inset-0 rounded-full bg-amber-500/20 dark:bg-amber-400/20 blur-xl animate-pulse" />
-                <div className="relative w-full h-full rounded-full border-2 border-dashed border-amber-400/60 flex items-center justify-center p-3">
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex flex-col items-center justify-center text-black font-black shadow-lg">
-                    <ShieldCheck size={36} className="text-slate-950 mb-0.5" />
-                    <span className="text-[9px] tracking-widest uppercase text-center font-bold leading-tight">GARANTÍA MASTERTECH</span>
-                    <span className="text-[11px] font-black text-center mt-0.5">SEGÚN SERVICIO</span>
-                  </div>
-                </div>
+            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20">
+              <div className="relative flex items-center justify-center mb-5">
+                {/* Glow behind medal */}
+                <div className="absolute inset-0 rounded-full bg-amber-500/25 dark:bg-amber-400/20 blur-2xl animate-pulse" />
+                
+                {/* Luxury Medallion SVG */}
+                <svg className="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-2xl" viewBox="0 0 160 160" fill="none">
+                  <defs>
+                    <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FDE68A" />
+                      <stop offset="25%" stopColor="#F59E0B" />
+                      <stop offset="50%" stopColor="#D97706" />
+                      <stop offset="75%" stopColor="#FBBF24" />
+                      <stop offset="100%" stopColor="#B45309" />
+                    </linearGradient>
+                    <radialGradient id="goldCenter" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#FEF08A" />
+                      <stop offset="35%" stopColor="#F59E0B" />
+                      <stop offset="75%" stopColor="#D97706" />
+                      <stop offset="100%" stopColor="#92400E" />
+                    </radialGradient>
+                    <filter id="shadowGold" x="-10%" y="-10%" width="120%" height="120%">
+                      <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.35" />
+                    </filter>
+                  </defs>
+
+                  {/* Outer notched decorative ring */}
+                  <circle cx="80" cy="80" r="76" stroke="url(#goldRim)" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.75" />
+                  <circle cx="80" cy="80" r="70" stroke="url(#goldRim)" strokeWidth="2" opacity="0.9" />
+
+                  {/* Main Medallion Body */}
+                  <circle cx="80" cy="80" r="63" fill="url(#goldCenter)" stroke="url(#goldRim)" strokeWidth="2.5" filter="url(#shadowGold)" />
+
+                  {/* Inner Fine Border */}
+                  <circle cx="80" cy="80" r="55" stroke="#FEF3C7" strokeWidth="1" strokeDasharray="3 2" opacity="0.8" />
+
+                  {/* Stars at Top */}
+                  <g fill="#0F172A" opacity="0.9">
+                    <path d="M80 34 L81.5 38.5 L86 38.5 L82.5 41 L83.8 45.5 L80 42.8 L76.2 45.5 L77.5 41 L74 38.5 L78.5 38.5 Z" />
+                    <path d="M64 38 L65 41.5 L68.5 41.5 L65.7 43.5 L66.8 47 L64 44.8 L61.2 47 L62.3 43.5 L59.5 41.5 L63 41.5 Z" transform="scale(0.85) translate(14, 5)" />
+                    <path d="M96 38 L97 41.5 L100.5 41.5 L97.7 43.5 L98.8 47 L96 44.8 L93.2 47 L94.3 41.5 L91.5 41.5 L95 41.5 Z" transform="scale(0.85) translate(16, 5)" />
+                  </g>
+
+                  {/* Center Emblem: Stylized Shield with Checkmark */}
+                  <path 
+                    d="M80 49 L98 56 C98 76 80 93 80 93 C80 93 62 76 62 56 L80 49 Z" 
+                    fill="#0F172A" 
+                    stroke="#FEF3C7" 
+                    strokeWidth="1.5" 
+                  />
+                  <path 
+                    d="M72 69 L77 75 L88 62" 
+                    fill="none" 
+                    stroke="#FBBF24" 
+                    strokeWidth="3.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                  />
+
+                  {/* Bottom Ribbon Text in Medallion */}
+                  <text x="80" y="106" textAnchor="middle" fill="#0F172A" fontSize="8.5" fontWeight="900" letterSpacing="1.8" fontFamily="sans-serif">
+                    MASTERTECH
+                  </text>
+                  <text x="80" y="116" textAnchor="middle" fill="#1E293B" fontSize="6" fontWeight="800" letterSpacing="1.2" fontFamily="sans-serif">
+                    CERTIFIED GARANTÍA
+                  </text>
+                </svg>
               </div>
 
-              <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 tracking-wider uppercase">
-                POLÍTICA DE SERVICIO
-              </span>
-              <h3 className="text-lg font-black text-slate-900 dark:text-white mt-1">
-                Respaldo en Mano de Obra
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Sujeto al trabajo realizado y repuestos provistos por el taller
-              </p>
+              <div className="space-y-1.5 max-w-xs">
+                <span className="inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono font-black text-[11px] uppercase tracking-wider">
+                  GARANTÍA POR ESCRITO
+                </span>
+                
+                <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white leading-tight">
+                  Según Mano de Obra
+                </h3>
+
+                <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                  Estipulada formalmente en tu orden de servicio
+                </p>
+
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/60 dark:border-slate-800/80">
+                  Repuestos MasterTech con respaldo • Piezas del cliente sin garantía
+                </p>
+              </div>
             </div>
 
             {/* Banner Value Proposition */}
