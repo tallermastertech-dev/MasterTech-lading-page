@@ -6,12 +6,12 @@ import {
   Cpu, 
   Gauge, 
   FileText, 
-  HelpCircle, 
   X, 
   MessageCircle, 
   Sparkles,
-  ArrowRight,
-  ShieldAlert
+  AlertTriangle,
+  PackageCheck,
+  PackageX
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -25,36 +25,36 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
   const pillars = [
     {
       icon: Wrench,
-      title: "Mano de Obra Garantizada",
-      tag: "6 Meses o 10.000 KM",
-      desc: "Todas las reparaciones mayores de motor, tren delantero, suspensión, frenos y cajas cuentan con respaldo por escrito ante cualquier defecto de instalación o ajuste.",
-      highlight: "Cobertura total en correcciones técnicas"
+      title: "Garantía según Mano de Obra Realizada",
+      tag: "Sujeto al Servicio",
+      desc: "El tiempo y alcance de la garantía dependen directamente del tipo de trabajo y mano de obra efectuada en el vehículo (motor, tren delantero, frenos, transmisión o mantenimiento). Se estipula formalmente en tu orden de servicio.",
+      highlight: "Período fijado según la labor técnica realizada"
     },
     {
-      icon: CheckCircle2,
-      title: "Repuestos 100% Genuinos OEM",
-      tag: "Trazabilidad USA",
-      desc: "Instalamos exclusivamente componentes originales de primer equipo (Mopar, Denso, Bosch, Motorcraft, Aisin). Cero repuestos genéricos o copias dudosas.",
-      highlight: "Garantía de fábrica del fabricante"
+      icon: PackageCheck,
+      title: "Repuesto Suministrado por MasterTech",
+      tag: "Con Garantía",
+      desc: "Si el repuesto es provisto directamente por nuestro taller, cuenta con garantía y respaldo tanto en la pieza OEM de primer equipo como en su correcta instalación.",
+      highlight: "Respaldo total en pieza e instalación"
     },
     {
-      icon: Cpu,
-      title: "Diagnóstico Certero de Cero Errores",
-      tag: "Protocolo Digital",
-      desc: "Escaneo computarizado previo y posterior con equipos profesionales LAUNCH. Si una reparación recomendada no soluciona la falla, no facturamos mano de obra adicional.",
-      highlight: "Reporte de escaneo entregado al cliente"
+      icon: PackageX,
+      title: "Repuesto Traído por el Cliente",
+      tag: "Sin Garantía",
+      desc: "Si el cliente decide traer su propio repuesto, el taller no puede certificar su procedencia, calidad ni autenticidad, por lo que el trabajo NO corre con garantía sobre la pieza ni fallas derivadas de la misma.",
+      highlight: "Sin cobertura sobre repuestos externos"
     },
     {
       icon: Gauge,
-      title: "Torque y Fluidos según Manual Oficial",
-      tag: "Especificación de Fábrica",
-      desc: "Ajuste milimétrico con torquímetro y lubricantes con la norma exacta requerida (Chrysler MS-6395, WS Toyota, Mercon LV). Prevenimos desgastes prematuros.",
-      highlight: "Cero improvisación técnica"
+      title: "Torque y Procedimiento de Manual",
+      tag: "Cero Improvisación",
+      desc: "Todo ensamble se ejecuta bajo especificaciones y aprietes milimétricos del fabricante automotriz, previniendo daños mecánicos y garantizando el correcto funcionamiento del sistema.",
+      highlight: "Normas y tolerancias de fábrica"
     }
   ];
 
   const handleWhatsAppInquiry = () => {
-    const text = encodeURIComponent("Hola Taller MasterTech, deseo información sobre la Garantía de Servicio y repuestos para mi vehículo.");
+    const text = encodeURIComponent("Hola Taller MasterTech, deseo consultar la garantía aplicable a un trabajo y repuestos para mi vehículo.");
     window.open(`https://wa.me/584248888000?text=${text}`, '_blank');
   };
 
@@ -68,8 +68,8 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-black tracking-wider uppercase mb-4 shadow-sm">
-            <ShieldCheck size={16} className="text-amber-500 animate-pulse" />
-            <span>Respaldo Institucional por Escrito</span>
+            <ShieldCheck size={16} className="text-amber-500" />
+            <span>Condiciones Claras y Respaldo Técnico</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
@@ -77,7 +77,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-            En un mercado con repuestos genéricos y diagnósticos improvisados, en MasterTech garantizamos cada trabajo por escrito. Tu tranquilidad y la longevidad de tu vehículo son innegociables.
+            Transparencia ante todo: la garantía depende de la mano de obra realizada en el vehículo. Los repuestos suministrados por el taller cuentan con respaldo formal, mientras que las piezas externas aportadas por el cliente no tienen garantía.
           </p>
         </div>
 
@@ -91,37 +91,37 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                 <div className="absolute inset-0 rounded-full bg-amber-500/20 dark:bg-amber-400/20 blur-xl animate-pulse" />
                 <div className="relative w-full h-full rounded-full border-2 border-dashed border-amber-400/60 flex items-center justify-center p-3">
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-yellow-600 flex flex-col items-center justify-center text-black font-black shadow-lg">
-                    <ShieldCheck size={38} className="text-slate-950 mb-0.5" />
-                    <span className="text-[10px] tracking-widest uppercase">CERTIFICADO</span>
-                    <span className="text-xs font-black">6 MESES</span>
+                    <ShieldCheck size={36} className="text-slate-950 mb-0.5" />
+                    <span className="text-[9px] tracking-widest uppercase text-center font-bold leading-tight">GARANTÍA MASTERTECH</span>
+                    <span className="text-[11px] font-black text-center mt-0.5">SEGÚN SERVICIO</span>
                   </div>
                 </div>
               </div>
 
               <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 tracking-wider uppercase">
-                SELLO OFICIAL MASTERTECH
+                POLÍTICA DE SERVICIO
               </span>
-              <h3 className="text-xl font-black text-slate-900 dark:text-white mt-1">
-                6 Meses o 10.000 KM
+              <h3 className="text-lg font-black text-slate-900 dark:text-white mt-1">
+                Respaldo en Mano de Obra
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Válido en Porlamar e Isla de Margarita
+                Sujeto al trabajo realizado y repuestos provistos por el taller
               </p>
             </div>
 
             {/* Banner Value Proposition */}
             <div className="lg:col-span-8 flex flex-col justify-center space-y-4">
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full w-fit">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full w-fit">
                 <Sparkles size={14} />
-                <span>Protocolo de Calidad Tipo Concesionario Oficial</span>
+                <span>Criterio Técnico y Transparencia</span>
               </div>
 
               <h4 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                ¿Por qué nuestra garantía marca la diferencia?
+                Reglas claras para proteger tu inversión
               </h4>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Cada intervención mecánica que ingresa a nuestras bahías de servicio es documentada digitalmente. Entregamos el reporte del escáner antes y después, comprobante de torque y la caja original de los repuestos reemplazados para total verificación.
+                Cada trabajo en MasterTech es documentado en tu orden de servicio. La duración de la garantía se determina en función de la mano de obra específica requerida. Cuando adquieres los repuestos a través de nosotros, garantizamos el resultado integral; si tú traes el repuesto, la garantía de la pieza no aplica.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -152,17 +152,30 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
+            const isNoWarranty = pillar.tag === "Sin Garantía";
             return (
               <div 
                 key={idx}
-                className="group relative rounded-2xl p-6 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/80 hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between"
+                className={`group relative rounded-2xl p-6 bg-white dark:bg-slate-900/50 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between ${
+                  isNoWarranty 
+                    ? 'border-amber-500/30 dark:border-amber-500/20 hover:border-amber-500/60' 
+                    : 'border-slate-200 dark:border-slate-800/80 hover:border-amber-500/50 dark:hover:border-amber-500/40'
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-black transition-all duration-300">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                      isNoWarranty
+                        ? 'bg-red-500/10 border border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white'
+                        : 'bg-amber-500/10 border border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black'
+                    }`}>
                       <Icon size={22} />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${
+                      isNoWarranty
+                        ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                    }`}>
                       {pillar.tag}
                     </span>
                   </div>
@@ -176,8 +189,10 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                  <CheckCircle2 size={13} className="shrink-0" />
+                <div className={`mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[11px] font-semibold ${
+                  isNoWarranty ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
+                }`}>
+                  {isNoWarranty ? <AlertTriangle size={13} className="shrink-0" /> : <CheckCircle2 size={13} className="shrink-0" />}
                   <span>{pillar.highlight}</span>
                 </div>
               </div>
@@ -204,10 +219,10 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   </div>
                   <div>
                     <h3 className="text-base font-black uppercase text-slate-900 dark:text-white">
-                      Política Oficial de Garantía
+                      Condiciones Oficiales de Garantía
                     </h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Taller MasterTech — C.A. Porlamar, Isla de Margarita
+                      Taller MasterTech — Porlamar, Isla de Margarita
                     </p>
                   </div>
                 </div>
@@ -223,42 +238,64 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                 <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-slate-700 dark:text-slate-200">
                   <p className="font-bold text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1.5">
                     <ShieldCheck size={16} />
-                    <span>Compromiso de Excelencia Técnica</span>
+                    <span>Alcance según Trabajo Realizado</span>
                   </p>
                   <p className="text-xs leading-normal">
-                    Nuestra garantía respalda la mano de obra profesional y la calidad de los repuestos suministrados por Taller MasterTech durante el período estipulado en la orden de servicio.
+                    El tiempo y cobertura de garantía aplican de forma diferenciada según la naturaleza de la mano de obra realizada en el vehículo. Cada orden de servicio especifica los términos del trabajo acordado.
                   </p>
                 </div>
 
+                {/* Diferenciación Clara de Repuestos */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-slate-800 dark:text-slate-200">
+                    <div className="flex items-center gap-1.5 font-black text-emerald-700 dark:text-emerald-400 text-xs mb-1">
+                      <PackageCheck size={16} />
+                      <span>Repuesto Provisto por MasterTech</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                      Cuenta con garantía formal sobre el componente y la mano de obra de montaje, respaldado por la calidad OEM de nuestras piezas importadas.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-slate-800 dark:text-slate-200">
+                    <div className="flex items-center gap-1.5 font-black text-red-600 dark:text-red-400 text-xs mb-1">
+                      <PackageX size={16} />
+                      <span>Repuesto Traído por el Cliente</span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                      NO corre con garantía sobre el repuesto ni fallas o daños colaterales que la pieza suministrada externamente pudiera generar en el vehículo.
+                    </p>
+                  </div>
+                </div>
+
                 <div>
                   <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
-                    1. ¿Qué cubre la garantía?
+                    1. Determinación de la Garantía por Mano de Obra
                   </h4>
                   <ul className="list-disc pl-5 space-y-1 text-xs">
-                    <li><strong>Mano de obra (6 meses o 10.000 km):</strong> Reajuste, corrección o reemplazo sin costo ante fallas imputables al montaje mecánico o calibración.</li>
-                    <li><strong>Repuestos OEM suministrados:</strong> Reemplazo directo en caso de defecto de fabricación del fabricante (Mopar, Denso, Bosch, etc.).</li>
-                    <li><strong>Garantía de Diagnóstico:</strong> Si el vehículo presenta el mismo código de falla escaneado tras la reparación, se revisa sin cobro de mano de obra de diagnóstico.</li>
+                    <li>La garantía cubre exclusivamente defectos de armado, ajuste o calibración imputables a la mano de obra realizada en nuestras bahías.</li>
+                    <li>El plazo exacto depende de la complejidad técnica del servicio (reparación mayor de motor, cajas, tren delantero, frenos o servicio preventivo) y queda registrado en tu orden o factura.</li>
                   </ul>
                 </div>
 
                 <div>
                   <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
-                    2. Exclusiones y Condiciones
+                    2. Exclusiones de la Garantía
                   </h4>
                   <ul className="list-disc pl-5 space-y-1 text-xs text-slate-500 dark:text-slate-400">
-                    <li>Repuestos suministrados externamente por el cliente (la garantía aplica solo a la mano de obra de montaje, no al componente).</li>
-                    <li>Manipulación o desmontaje posterior por talleres o personas no autorizadas por MasterTech.</li>
-                    <li>Daños derivados de accidentes, inmersión en agua marina/salina extrema o falta de lubricantes por negligencia del usuario.</li>
-                    <li>Piezas sujetas a desgaste natural (pastillas de freno por kilometraje agresivo, bombillos o gomas limpiaparabrisas).</li>
+                    <li>Repuestos suministrados externamente por el cliente o piezas de segunda mano aportadas sin certificación.</li>
+                    <li>Intervenciones posteriores, desarmados o modificaciones realizadas por talleres o mecánicos terceros ajenos a MasterTech.</li>
+                    <li>Vehículos que sufran recalentamiento por fuga de agua ajena a la reparación, falta de aceite o negligencia del usuario.</li>
+                    <li>Uso indebido del vehículo en condiciones extremas, siniestros o inmersión en agua salina.</li>
                   </ul>
                 </div>
 
                 <div>
                   <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
-                    3. Procedimiento para hacer valer tu garantía
+                    3. Proceso para Revisión
                   </h4>
                   <p className="text-xs">
-                    Basta con presentar tu número de placa o factura de servicio digital. Nuestro jefe de taller realizará la inspección inmediata en rampa sin esperas innecesarias.
+                    Para cualquier revisión técnica bajo garantía, presenta tu número de placa o comprobante de servicio digital para una inspección prioritaria en nuestras instalaciones.
                   </p>
                 </div>
               </div>
