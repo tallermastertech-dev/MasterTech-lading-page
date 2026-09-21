@@ -187,12 +187,13 @@ const relaxedLimit = createRateLimiter(1000, 15 * 60 * 1000); // 1000 req / 15 m
 // SQL INJECTION & MALICIOUS INPUT DETECTION GUARD
 // =============================================================
 const SQLI_PATTERNS = [
-  /(\b(SELECT|UNION|INSERT|DELETE|UPDATE|DROP|ALTER|CREATE|TRUNCATE|EXEC|EXECUTE)\b)/i,
-  /(--|\/\*|\*\/|@@|char\s*\(|nchar\s*\(|varchar\s*\(|nvarchar\s*\()/i,
-  /('|\")\s*(OR|AND)\s*('|\")?\d+('|\")?\s*=\s*('|\")?\d+/i,
-  /('|\")\s*(OR|AND)\s*('|\")[a-zA-Z]+('|\")?\s*=\s*('|\")?[a-zA-Z]+/i,
+  /(\bUNION\s+(ALL\s+)?SELECT\b)/i,
+  /(\b(SELECT\s+[\s\S]*?\s+FROM|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+[\s\S]*?\s+SET|DROP\s+TABLE|ALTER\s+TABLE|CREATE\s+TABLE|TRUNCATE\s+TABLE)\b)/i,
+  /(\/\*[\s\S]*?\*\/|@@|char\s*\(|nchar\s*\(|varchar\s*\(|nvarchar\s*\()/i,
+  /('|"|\b)(OR|AND)\s+('|"|\b)?\d+('|"|\b)?\s*=\s*('|"|\b)?\d+/i,
+  /('|"|\b)(OR|AND)\s+('|"|\b)?[a-zA-Z]+('|"|\b)?\s*=\s*('|"|\b)?[a-zA-Z]+/i,
   /(WAITFOR\s+DELAY|BENCHMARK\s*\(|SLEEP\s*\()/i,
-  /;\s*(DROP|DELETE|UPDATE|INSERT)/i
+  /;\s*(DROP|DELETE|UPDATE|INSERT|ALTER|TRUNCATE)\s+/i
 ];
 
 function containsSqlInjection(val: unknown): boolean {
@@ -209,8 +210,19 @@ function containsSqlInjection(val: unknown): boolean {
 }
 
 const sqlInjectionGuard = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  // Excluir endpoints administrativos autenticados que guarden JSON con palabras técnicas legítimas
-  if (req.path.startsWith('/api/admin') || req.path.startsWith('/admin')) {
+  // Excluir endpoints administrativos y de persistencia autorizada que almacenan JSON con vocabulario técnico automotriz
+  const p = req.path || '';
+  if (
+    p.startsWith('/api/admin') || 
+    p.startsWith('/admin') ||
+    p.startsWith('/api/settings') ||
+    p.startsWith('/settings') ||
+    p.startsWith('/api/autofill-part') ||
+    p.startsWith('/autofill-part') ||
+    p.startsWith('/api/leads') ||
+    p.startsWith('/leads') ||
+    req.headers.authorization
+  ) {
     return next();
   }
   if (containsSqlInjection(req.query) || containsSqlInjection(req.params) || containsSqlInjection(req.body)) {
