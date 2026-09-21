@@ -167,10 +167,6 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                 <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
                   Estipulada formalmente en tu orden de servicio
                 </p>
-
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-1.5 border-t border-slate-200/60 dark:border-slate-800/80">
-                  Repuestos MasterTech con respaldo • Piezas del cliente sin garantía
-                </p>
               </div>
             </div>
 
