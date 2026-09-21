@@ -214,7 +214,7 @@ export default function TrabajaConNosotros() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070708] text-white flex flex-col selection:bg-primary selection:text-black">
+    <div className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-black">
       {/* Navigation Header */}
       <Navbar activePage="nosotros" config={config} />
 

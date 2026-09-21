@@ -256,8 +256,7 @@ export default function Nosotros() {
 
   return (
     <div
-      className="min-h-screen flex flex-col selection:bg-primary selection:text-black"
-      style={{ backgroundColor: '#070708', color: '#ffffff' }}
+      className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-black"
     >
       {/* Navigation Header */}
       <Navbar activePage="nosotros" />
