@@ -308,10 +308,12 @@ export default function Nosotros() {
                   {/* Photo Container */}
                   <div className="h-64 sm:h-72 overflow-hidden relative shrink-0" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
                     <img
-                      src={member.img || "/assets/servicio-mecanica.jpg"}
+                      src={member.img || "/assets/servicio-mecanica.webp"}
                       alt={member.name}
-                      onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
+                      onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.webp'; }}
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-all duration-500"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
 

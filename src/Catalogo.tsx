@@ -45,7 +45,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$185.00",
     desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper Brembo de 4 pistones.",
     longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones para frenadas precisas.",
-    img: "/assets/cat_frenos_discos.jpg",
+    img: "/assets/cat_frenos_discos.webp",
     badge: "MasterTech Brembo",
     specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
     compatibility: "Vehículos deportivos y SUVs seleccionadas",
@@ -60,7 +60,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$55.00",
     desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
     longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuye el desgaste de los discos de freno.",
-    img: "/assets/promo_brakes_caliper.jpg",
+    img: "/assets/promo_brakes_caliper.webp",
     badge: "MasterTech Brakes",
     specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
     compatibility: "Vehículos Japoneses, Americanos y Coreanos",
@@ -77,7 +77,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$120.00",
     desc: "Amortiguadores dobles MasterTech presurizados con nitrógeno y resortes reforzados para máxima estabilidad.",
     longDesc: "Línea oficial MasterTech Racing: resortes progresivos de aleación con recubrimiento electrostático y vástagos cromados de alta fricción.",
-    img: "/assets/cat_suspension_amortiguadores.jpg",
+    img: "/assets/cat_suspension_amortiguadores.webp",
     badge: "MasterTech Pro",
     specs: ["Doble tubo a gas nitrógeno", "Certificación MasterTech OEM", "Ajuste de precarga y altura"],
     compatibility: "Jeep, Toyota, Ford, Chevrolet, Dodge",
@@ -92,7 +92,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$95.00",
     desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para pista o calle.",
     longDesc: "Ingeniería MasterTech Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas.",
-    img: "/assets/promo_suspension_spring.jpg",
+    img: "/assets/promo_suspension_spring.webp",
     badge: "MasterTech Pro",
     specs: ["Muelle helicoidal reforzado", "Vástago cromado de baja fricción", "Ajuste milimétrico"],
     compatibility: "Vehículos livianos y sedanes",
@@ -109,7 +109,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$45.00",
     desc: "Aceite 100% sintético MasterTech con aditivos antifricción de última generación y filtro OEM.",
     longDesc: "Fórmula exclusiva MasterTech Lubricants: reduce el rozamiento térmico en motores modernos y protege en frío.",
-    img: "/assets/cat_aceites_lubricantes.jpg",
+    img: "/assets/cat_aceites_lubricantes.webp",
     badge: "MasterTech Oil",
     specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite MasterTech", "Soporta altas temperaturas"],
     compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai",
@@ -124,7 +124,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$38.00",
     desc: "Fluido de transmisión de alto desempeño para cajas automáticas secuenciales y CVT.",
     longDesc: "Protección térmica contra fricción y deslizamiento en cambios de marcha continuos bajo climas cálidos.",
-    img: "/assets/cat_aceites_lubricantes.jpg",
+    img: "/assets/cat_aceites_lubricantes.webp",
     badge: "MasterTech Fluid",
     specs: ["Compatible Dexron VI / Mercon LV", "Protección antidesgaste", "Alta estabilidad térmica"],
     compatibility: "Transmisiones automáticas multimarca",
@@ -141,7 +141,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$85.00",
     desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
     longDesc: "Energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
-    img: "/assets/cat_baterias_electricidad.jpg",
+    img: "/assets/cat_baterias_electricidad.webp",
     badge: "MasterTech Power",
     specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
     compatibility: "Universal 12V vehículos livianos y camionetas",
@@ -156,7 +156,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$165.00",
     desc: "Alternador reforzado de 140 amperios con regulador interno de voltaje para alta demanda eléctrica.",
     longDesc: "Componente MasterTech Electrical: garantiza alimentación estable para sistemas de audio, iluminación LED y aire acondicionado.",
-    img: "/assets/cat_baterias_electricidad.jpg",
+    img: "/assets/cat_baterias_electricidad.webp",
     badge: "MasterTech Heavy Duty",
     specs: ["Salida 140 Amperios 12V", "Bobinado de cobre de alta pureza", "Regulador electrónico integrado"],
     compatibility: "Camionetas, SUVs y sistemas con accesorios",
@@ -173,7 +173,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$42.00",
     desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor entrada de flujo de aire.",
     longDesc: "Línea MasterTech AirFlow: maximiza la respuesta de aceleración y protege el motor contra partículas finas.",
-    img: "/assets/cat_filtros_oem.jpg",
+    img: "/assets/cat_filtros_oem.webp",
     badge: "MasterTech High Flow",
     specs: ["Malla de algodón lavable", "Cuello de 3 pulgadas adaptable", "Incremento de flujo de aire hasta +25%"],
     compatibility: "Sistemas de inducción directa y tomas universales",
@@ -188,7 +188,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$35.00",
     desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
     longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
-    img: "/assets/cat_filtros_oem.jpg",
+    img: "/assets/cat_filtros_oem.webp",
     badge: "MasterTech OEM",
     specs: ["Sellos Vitón de alta presión", "Microfiltros de precisión", "Garantía de estanqueidad"],
     compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
@@ -205,7 +205,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$48.00",
     desc: "Garrafa de gas ecológico R134a MasterTech con lubricante sintético PAG para compresores de A/A.",
     longDesc: "Enfriamiento instantáneo MasterTech: restaura la presión óptima y la temperatura del sistema de climatización.",
-    img: "/assets/cat_climatizacion.jpg",
+    img: "/assets/cat_climatizacion.webp",
     badge: "MasterTech A/C",
     specs: ["Gas refrigerante puro R134a", "Aceite sintético PAG ISO 46/100", "Detector UV antifugas incluido"],
     compatibility: "Sistemas de aire acondicionado automotriz R134a",
@@ -220,7 +220,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$22.00",
     desc: "Coolant prediluido con tecnología OAT para protección del radiador, bomba de agua y bloque de motor.",
     longDesc: "Protección térmica contra sobrecalentamiento y corrosión galvánica en motores de aluminio.",
-    img: "/assets/cat_climatizacion.jpg",
+    img: "/assets/cat_climatizacion.webp",
     badge: "MasterTech Coolant",
     specs: ["Fórmula 50/50 lista para usar", "Protección anticorrosiva OAT", "Punto de ebullición hasta 129°C"],
     compatibility: "Todos los radiadores y motores gasolina/diésel",
@@ -237,7 +237,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$340.00",
     desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
     longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
-    img: "/assets/promo_turbo_charger.jpg",
+    img: "/assets/promo_turbo_charger.webp",
     badge: "MasterTech Turbo",
     specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
     compatibility: "Motores gasolina y diésel turboalimentados",
@@ -252,7 +252,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$90.00",
     desc: "Inyectores de combustible de respuesta ultrarrápida calibrados para pulverización perfecta.",
     longDesc: "Máxima eficiencia de combustión MasterTech: reduce el consumo y optimiza la potencia en aceleración.",
-    img: "/assets/promo_turbo_charger.jpg",
+    img: "/assets/promo_turbo_charger.webp",
     badge: "MasterTech Inyección",
     specs: ["Pulverización multi-orificio de 12 puntos", "Caudal balanceado ±1%", "Conectores estándar OEM"],
     compatibility: "Motores 4 y 6 cilindros",
@@ -269,7 +269,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$38.00",
     desc: "Sellador cerámico SiO2 con efecto hidrofóbico repelente al agua, polvo y rayos UV.",
     longDesc: "Estética automotriz MasterTech: brillo efecto espejo con protección duradera por hasta 6 meses.",
-    img: "/assets/cat_cuidado_estetica.jpg",
+    img: "/assets/cat_cuidado_estetica.webp",
     badge: "MasterTech Detailing",
     specs: ["Fórmula SiO2 hidrofóbica", "Brillo profundo efecto cristal", "Incluye aplicador de microfibra"],
     compatibility: "Pinturas automotrices, vidrios y faros",
@@ -284,7 +284,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$25.00",
     desc: "Champú concentrado para cañón de espuma Snow Foam que encapsula la suciedad sin rayar la pintura.",
     longDesc: "Limpieza profesional de carrocería MasterTech: respeta tratamientos cerámicos y ceras preexistentes.",
-    img: "/assets/cat_cuidado_estetica.jpg",
+    img: "/assets/cat_cuidado_estetica.webp",
     badge: "MasterTech Care",
     specs: ["PH Neutro 100% seguro", "Alta densidad de espuma", "Incluye 2 toallas de 600 GSM"],
     compatibility: "Todo tipo de carrocerías y acabados mate o brillante",
@@ -414,7 +414,7 @@ export default function Catalogo() {
       startY,
       targetX,
       targetY,
-      img: product.img || '/assets/cat_frenos_discos.jpg'
+      img: product.img || '/assets/cat_frenos_discos.webp'
     }]);
 
     // Justo al aterrizar en el carrito (550ms), rebota el carrito y emite la onda dorada
@@ -787,8 +787,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             >
               <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-black/50 border border-white/10 p-2 shadow-2xl group">
                 <img 
-                  src="/assets/autoparts_hero_showcase.jpg" 
+                  src="/assets/autoparts_hero_showcase.webp" 
                   alt="Auto Parts Showcase MasterTech"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
@@ -834,14 +836,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/cat_frenos_discos.jpg", desc: "Pastillas cerámicas y discos ranurados" },
-              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.jpg", desc: "Coilovers y amortiguadores de gas" },
-              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.jpg", desc: "Sintéticos 5W-30 y fluidos ATF" },
-              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.jpg", desc: "Baterías AGM y alternadores 140A" },
-              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-amber-400" />, img: "/assets/cat_filtros_oem.jpg", desc: "Filtros de aire, aceite y microfiltros" },
-              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/cat_climatizacion.jpg", desc: "Gas R134a, refrigerantes y A/A" },
-              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.jpg", desc: "Turbocargadores e inyectores" },
-              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-amber-400" />, img: "/assets/cat_cuidado_estetica.jpg", desc: "Ceras cerámicas, champú y microfibras" }
+              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/cat_frenos_discos.webp", desc: "Pastillas cerámicas y discos ranurados" },
+              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.webp", desc: "Coilovers y amortiguadores de gas" },
+              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.webp", desc: "Sintéticos 5W-30 y fluidos ATF" },
+              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.webp", desc: "Baterías AGM y alternadores 140A" },
+              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-amber-400" />, img: "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
+              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
+              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
+              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-amber-400" />, img: "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
             ].map((catItem, idx) => {
               const count = catalogItems.filter(item => item.category === catItem.name).length;
               const isSelected = selectedCategory === catItem.name;
@@ -910,7 +912,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
-              <img src="/assets/promo_brakes_caliper.jpg" alt="Frenos Cerámicos" className="w-full h-full object-contain" />
+              <img src="/assets/promo_brakes_caliper.webp" alt="Frenos Cerámicos" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
@@ -937,7 +939,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
-              <img src="/assets/promo_suspension_spring.jpg" alt="Suspensión" className="w-full h-full object-contain" />
+              <img src="/assets/promo_suspension_spring.webp" alt="Suspensión" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
@@ -964,7 +966,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
-              <img src="/assets/promo_turbo_charger.jpg" alt="Turbo e Inyección" className="w-full h-full object-contain" />
+              <img src="/assets/promo_turbo_charger.webp" alt="Turbo e Inyección" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
         </section>
@@ -1038,9 +1040,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       onClick={() => setSelectedProduct(item)}
                     >
                       <img 
-                        src={item.img || "/assets/cat_suspension_amortiguadores.jpg"} 
+                        src={item.img || "/assets/cat_suspension_amortiguadores.webp"} 
                         alt={item.title}
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/promo_brakes_caliper.jpg'; }}
+                        loading="lazy"
+                        decoding="async"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/promo_brakes_caliper.webp'; }}
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-md rounded-xl"
                       />
 
@@ -1489,7 +1493,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               {/* Modal Body */}
               {(() => {
                 const allPhotos = [selectedProduct.img, ...(selectedProduct.images || [])].filter(Boolean);
-                const currentImg = (allPhotos && allPhotos[activeImageIndex]) || selectedProduct.img || '/assets/servicio-mecanica.jpg';
+                const currentImg = (allPhotos && allPhotos[activeImageIndex]) || selectedProduct.img || '/assets/cat_frenos_discos.webp';
 
                 return (
                   <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 max-h-[calc(90vh-135px)] pb-10 scrollbar-thin">
@@ -1505,6 +1509,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             src={currentImg} 
                             alt={selectedProduct.title} 
                             className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" 
+                            loading="lazy"
+                            decoding="async"
                           />
                           {selectedProduct.badge && (
                             <span className="absolute top-3 left-3 bg-[#C2A472] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
@@ -1531,7 +1537,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                     isActive ? 'border-[#C2A472] scale-105 shadow-md shadow-[#C2A472]/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
                                   }`}
                                 >
-                                  <img src={photo} alt="" className="w-full h-full object-cover" />
+                                  <img src={photo} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                                 </button>
                               );
                             })}
@@ -1677,6 +1683,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 src={lightboxImage}
                 alt="Repuesto en Alta Definición"
                 className="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.9)] border border-white/10"
+                decoding="async"
               />
             </motion.div>
             <span className="text-xs text-zinc-400 mt-4 font-medium tracking-wide">

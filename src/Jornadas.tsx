@@ -61,7 +61,7 @@ const JORNADAS_DATA: JornadaItem[] = [
     title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
     subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
     icon: <Zap className="w-6 h-6 text-primary" />,
-    img: "/assets/servicio-mecanica.jpg",
+    img: "/assets/servicio-mecanica.webp",
     regularPrice: "$250 USD",
     promoPrice: "$160 USD",
     discountBadge: "AHORRAS $90 USD",
@@ -88,7 +88,7 @@ const JORNADAS_DATA: JornadaItem[] = [
     title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off",
     subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.",
     icon: <Activity className="w-6 h-6 text-amber-400" />,
-    img: "/assets/servicio-electricidad.jpg",
+    img: "/assets/servicio-electricidad.webp",
     regularPrice: "$180 USD",
     promoPrice: "$120 USD",
     discountBadge: "AHORRAS $60 USD",
@@ -115,7 +115,7 @@ const JORNADAS_DATA: JornadaItem[] = [
     title: "Cielo Estrellado de Fibra Óptica LED RGBW (Starlight Headliner)",
     subtitle: "Transforma el techo interior de tu vehículo en un cielo estrellado de lujo artesanal con destellos y estrellas fugaces.",
     icon: <Sparkles className="w-6 h-6 text-purple-400" />,
-    img: "/assets/instalaciones.jpg",
+    img: "/assets/instalaciones.webp",
     regularPrice: "$380 USD",
     promoPrice: "$260 USD",
     discountBadge: "AHORRAS $120 USD",
@@ -142,7 +142,7 @@ const JORNADAS_DATA: JornadaItem[] = [
     title: "Jornada de Climatización & Recuperación de Aire Acondicionado",
     subtitle: "Restaura el frío polar de tu sistema A/A con recarga R134a de máxima pureza, aceite PAG sintético y trazador UV anti-fugas.",
     icon: <Snowflake className="w-6 h-6 text-cyan-400" />,
-    img: "/assets/servicio-climatizacion.jpg",
+    img: "/assets/servicio-climatizacion.webp",
     regularPrice: "$65 USD",
     promoPrice: "$40 USD",
     discountBadge: "AHORRAS $25 USD",
@@ -169,7 +169,7 @@ const JORNADAS_DATA: JornadaItem[] = [
     title: "Jornada de Limpieza & Calibración de Inyectores por Ultrasonido",
     subtitle: "Devuelve la suavidad al motor y elimina tirones limpiando inyectores en banco ultrasónico con reemplazo de micro-filtros.",
     icon: <Wrench className="w-6 h-6 text-emerald-400" />,
-    img: "/assets/servicio-inyeccion.jpg",
+    img: "/assets/servicio-inyeccion.webp",
     regularPrice: "$50 USD",
     promoPrice: "$30 USD",
     discountBadge: "AHORRAS $20 USD",
@@ -558,8 +558,10 @@ export default function Jornadas() {
                       <img
                         src={currentJornada.img}
                         alt={currentJornada.title}
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.jpg'; }}
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.webp'; }}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent" />
                     </div>

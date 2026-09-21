@@ -22,43 +22,43 @@ const SERVICES_FALLBACK = [
     id: 'mecanica',
     title: 'Mecánica General & Mantenimiento',
     desc: 'Mantenimiento preventivo y correctivo: cambio de aceite sintético, correa o cadena de distribución, empacaduras, bombas de agua y afinación de motor para Jeep, Toyota y más.',
-    img: '/assets/servicio Mecanica General.jpg',
+    img: '/assets/servicio-mecanica.webp',
   },
   {
     id: 'diagnostico',
     title: 'Diagnóstico Electrónico & Escáner',
     desc: 'Diagnóstico computarizado con escáner multimarca de nivel OEM. Lectura de códigos DTC, monitoreo de sensores en tiempo real y test de actuadores para detectar cualquier falla.',
-    img: '/assets/servicio Inyección Electrónica.JPG',
+    img: '/assets/servicio-inyeccion.webp',
   },
   {
     id: 'electricidad',
     title: 'Electricidad & Electrónica Automotriz',
     desc: 'Diagnóstico y reparación del sistema eléctrico: instalaciones, alternadores, baterías, fusibles, módulos electrónicos y electricidad general del vehículo.',
-    img: '/assets/servicio Electricidad y Electrónica.png',
+    img: '/assets/servicio-electricidad.webp',
   },
   {
     id: 'frenos',
     title: 'Frenos, Dirección & Suspensión',
     desc: 'Cambio de pastillas cerámicas, rectificación de discos y tambores, amortiguadores, terminales de dirección, bujes y balanceo. Máxima seguridad en cada frenada.',
-    img: '/assets/servicio Frenos.jpg',
+    img: '/assets/servicio-frenos.webp',
   },
   {
     id: 'inyectores',
     title: 'Limpieza de Inyectores por Ultrasonido',
     desc: 'Prueba en banco computarizado de inyección, limpieza ultrasónica de inyectores, medición de caudal y sustitución de microfiltros y sellos O-ring.',
-    img: '/assets/servicio Inyección Electrónica.JPG',
+    img: '/assets/servicio-inyeccion.webp',
   },
   {
     id: 'climatizacion',
     title: 'Climatización & Aire Acondicionado',
     desc: 'Carga de gas refrigerante R134a, lubricación del compresor con aceite PAG sintético, detección de fugas con trazador UV y mantenimiento integral del sistema A/C.',
-    img: '/assets/servicio Climatización.jpg',
+    img: '/assets/servicio-climatizacion.webp',
   },
   {
     id: 'ecu',
     title: 'Reprogramación ECU Stage 1 & 2',
     desc: 'Calibración de software de motor para optimización de potencia y torque. Desactivación electrónica de EGR/DPF y remapeo de mapas de inyección para mayor rendimiento.',
-    img: '/assets/servicio Electricidad y Electrónica.png',
+    img: '/assets/servicio-electricidad.webp',
   },
 ];
 
@@ -178,7 +178,13 @@ export default function Servicios() {
                 <div key={s.id || i} className="glass-card overflow-hidden hover:border-primary/50 transition-all group flex flex-col">
                   <div className="h-48 overflow-hidden relative">
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors z-10" />
-                    <img src={s.img || "/assets/instalaciones.jpg"} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <img 
+                      src={s.img || "/assets/instalaciones.webp"} 
+                      alt={s.title} 
+                      loading="lazy" 
+                      decoding="async" 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                    />
                     <div className="absolute top-4 left-4 z-20 bg-black/50 backdrop-blur-md w-12 h-12 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-primary/20 transition-colors">
                       <Wrench className="w-6 h-6 text-primary icon-glow" />
                     </div>

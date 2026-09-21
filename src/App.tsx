@@ -130,10 +130,10 @@ const CONFIG = {
   HERO_REEL_URL: "https://www.instagram.com/reel/DYQxwH6jywd/",
   GOOGLE_MAPS_EMBED: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15665.5!2d-63.8681155!3d10.9701683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c318fe358d81b01%3A0xf0c67c88a5063093!2sTaller%20MasterTech!5e0!3m2!1ses!2sve!4v1700000000000!5m2!1ses!2sve",
   GOOGLE_BUSINESS_URL: "https://maps.app.goo.gl/fybS1jW9buxQD5gv7",
-  HERO_IMG: "/assets/instalaciones.jpg",
+  HERO_IMG: "/assets/instalaciones.webp",
   LOGO_URL: "/logo.png", 
-  BEFORE_AFTER_1: "/assets/before_after_1.png",
-  BEFORE_AFTER_2: "/assets/before_after_2.png",
+  BEFORE_AFTER_1: "/assets/before_after_1.webp",
+  BEFORE_AFTER_2: "/assets/before_after_2.webp",
   SUCCESS_BADGE: "¡TIENES HASTA UN 15% DE DESCUENTO!",
   SUCCESS_TEXT: "Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita."
 };
@@ -472,8 +472,10 @@ export default function App() {
         {/* Workshop Background Image & Overlay */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <img 
-            src={config.HERO_IMG || "/assets/hero_bg_custom.jpg"} 
+            src={config.HERO_IMG || "/assets/hero_bg_custom.webp"} 
             alt="MasterTech Taller" 
+            decoding="async"
+            fetchPriority="high"
             className="w-full h-full object-cover object-center opacity-75 transition-opacity duration-300" 
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/85 via-[#0D0D0D]/55 to-[#0D0D0D]/30" />
@@ -655,7 +657,13 @@ export default function App() {
             </div>
             <div className="flex-1 relative">
               <div className="glass-card p-2 md:p-4 rotate-3 hover:rotate-0 transition-transform duration-500">
-                 <img src={config.IMG_INSTALACIONES || "/assets/instalaciones.jpg"} alt="Instalaciones MasterTech" className="rounded-2xl w-full object-cover aspect-[4/3] grayscale hover:grayscale-0 transition-all duration-700" />
+                 <img 
+                   src={config.IMG_INSTALACIONES || "/assets/instalaciones.webp"} 
+                   alt="Instalaciones MasterTech" 
+                   loading="lazy"
+                   decoding="async"
+                   className="rounded-2xl w-full object-cover aspect-[4/3] grayscale hover:grayscale-0 transition-all duration-700" 
+                 />
               </div>
             </div>
           </div>

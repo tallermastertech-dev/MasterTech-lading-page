@@ -124,7 +124,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$185.00",
     desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper Brembo de 4 pistones.",
     longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones para frenadas precisas.",
-    img: "/assets/cat_frenos_discos.jpg",
+    img: "/assets/cat_frenos_discos.webp",
     badge: "MasterTech Brembo",
     specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
     compatibility: "Vehículos deportivos y SUVs seleccionadas",
@@ -139,7 +139,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$55.00",
     desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
     longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuye el desgaste de los discos de freno.",
-    img: "/assets/promo_brakes_caliper.jpg",
+    img: "/assets/promo_brakes_caliper.webp",
     badge: "MasterTech Brakes",
     specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
     compatibility: "Vehículos Japoneses, Americanos y Coreanos",
@@ -156,7 +156,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$120.00",
     desc: "Amortiguadores dobles MasterTech presurizados con nitrógeno y resortes reforzados para máxima estabilidad.",
     longDesc: "Línea oficial MasterTech Racing: resortes progresivos de aleación con recubrimiento electrostático y vástagos cromados de alta fricción.",
-    img: "/assets/cat_suspension_amortiguadores.jpg",
+    img: "/assets/cat_suspension_amortiguadores.webp",
     badge: "MasterTech Pro",
     specs: ["Doble tubo a gas nitrógeno", "Certificación MasterTech OEM", "Ajuste de precarga y altura"],
     compatibility: "Jeep, Toyota, Ford, Chevrolet, Dodge",
@@ -171,7 +171,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$95.00",
     desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para pista o calle.",
     longDesc: "Ingeniería MasterTech Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas.",
-    img: "/assets/promo_suspension_spring.jpg",
+    img: "/assets/promo_suspension_spring.webp",
     badge: "MasterTech Pro",
     specs: ["Muelle helicoidal reforzado", "Vástago cromado de baja fricción", "Ajuste milimétrico"],
     compatibility: "Vehículos livianos y sedanes",
@@ -188,7 +188,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$45.00",
     desc: "Aceite 100% sintético MasterTech con aditivos antifricción de última generación y filtro OEM.",
     longDesc: "Fórmula exclusiva MasterTech Lubricants: reduce el rozamiento térmico en motores modernos y protege en frío.",
-    img: "/assets/cat_aceites_lubricantes.jpg",
+    img: "/assets/cat_aceites_lubricantes.webp",
     badge: "MasterTech Oil",
     specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite MasterTech", "Soporta altas temperaturas"],
     compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai",
@@ -203,7 +203,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$38.00",
     desc: "Fluido de transmisión de alto desempeño para cajas automáticas secuenciales y CVT.",
     longDesc: "Protección térmica contra fricción y deslizamiento en cambios de marcha continuos bajo climas cálidos.",
-    img: "/assets/cat_aceites_lubricantes.jpg",
+    img: "/assets/cat_aceites_lubricantes.webp",
     badge: "MasterTech Fluid",
     specs: ["Compatible Dexron VI / Mercon LV", "Protección antidesgaste", "Alta estabilidad térmica"],
     compatibility: "Transmisiones automáticas multimarca",
@@ -220,7 +220,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$85.00",
     desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
     longDesc: "Energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
-    img: "/assets/cat_baterias_electricidad.jpg",
+    img: "/assets/cat_baterias_electricidad.webp",
     badge: "MasterTech Power",
     specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
     compatibility: "Universal 12V vehículos livianos y camionetas",
@@ -235,7 +235,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$165.00",
     desc: "Alternador reforzado de 140 amperios con regulador interno de voltaje para alta demanda eléctrica.",
     longDesc: "Componente MasterTech Electrical: garantiza alimentación estable para sistemas de audio, iluminación LED y aire acondicionado.",
-    img: "/assets/cat_baterias_electricidad.jpg",
+    img: "/assets/cat_baterias_electricidad.webp",
     badge: "MasterTech Heavy Duty",
     specs: ["Salida 140 Amperios 12V", "Bobinado de cobre de alta pureza", "Regulador electrónico integrado"],
     compatibility: "Camionetas, SUVs y sistemas con accesorios",
@@ -252,7 +252,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$42.00",
     desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor entrada de flujo de aire.",
     longDesc: "Línea MasterTech AirFlow: maximiza la respuesta de aceleración y protege el motor contra partículas finas.",
-    img: "/assets/cat_filtros_oem.jpg",
+    img: "/assets/cat_filtros_oem.webp",
     badge: "MasterTech High Flow",
     specs: ["Malla de algodón lavable", "Cuello de 3 pulgadas adaptable", "Incremento de flujo de aire hasta +25%"],
     compatibility: "Sistemas de inducción directa y tomas universales",
@@ -267,7 +267,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$35.00",
     desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
     longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
-    img: "/assets/cat_filtros_oem.jpg",
+    img: "/assets/cat_filtros_oem.webp",
     badge: "MasterTech OEM",
     specs: ["Sellos Vitón de alta presión", "Microfiltros de precisión", "Garantía de estanqueidad"],
     compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
@@ -284,7 +284,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$48.00",
     desc: "Garrafa de gas ecológico R134a MasterTech con lubricante sintético PAG para compresores de A/A.",
     longDesc: "Enfriamiento instantáneo MasterTech: restaura la presión óptima y la temperatura del sistema de climatización.",
-    img: "/assets/cat_climatizacion.jpg",
+    img: "/assets/cat_climatizacion.webp",
     badge: "MasterTech A/C",
     specs: ["Gas refrigerante puro R134a", "Aceite sintético PAG ISO 46/100", "Detector UV antifugas incluido"],
     compatibility: "Sistemas de aire acondicionado automotriz R134a",
@@ -299,7 +299,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$22.00",
     desc: "Coolant prediluido con tecnología OAT para protección del radiador, bomba de agua y bloque de motor.",
     longDesc: "Protección térmica contra sobrecalentamiento y corrosión galvánica en motores de aluminio.",
-    img: "/assets/cat_climatizacion.jpg",
+    img: "/assets/cat_climatizacion.webp",
     badge: "MasterTech Coolant",
     specs: ["Fórmula 50/50 lista para usar", "Protección anticorrosiva OAT", "Punto de ebullición hasta 129°C"],
     compatibility: "Todos los radiadores y motores gasolina/diésel",
@@ -316,7 +316,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$340.00",
     desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
     longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
-    img: "/assets/promo_turbo_charger.jpg",
+    img: "/assets/promo_turbo_charger.webp",
     badge: "MasterTech Turbo",
     specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
     compatibility: "Motores gasolina y diésel turboalimentados",
@@ -331,7 +331,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$90.00",
     desc: "Inyectores de combustible de respuesta ultrarrápida calibrados para pulverización perfecta.",
     longDesc: "Máxima eficiencia de combustión MasterTech: reduce el consumo y optimiza la potencia en aceleración.",
-    img: "/assets/promo_turbo_charger.jpg",
+    img: "/assets/promo_turbo_charger.webp",
     badge: "MasterTech Inyección",
     specs: ["Pulverización multi-orificio de 12 puntos", "Caudal balanceado ±1%", "Conectores estándar OEM"],
     compatibility: "Motores 4 y 6 cilindros",
@@ -348,7 +348,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$38.00",
     desc: "Sellador cerámico SiO2 con efecto hidrofóbico repelente al agua, polvo y rayos UV.",
     longDesc: "Estética automotriz MasterTech: brillo efecto espejo con protección duradera por hasta 6 meses.",
-    img: "/assets/cat_cuidado_estetica.jpg",
+    img: "/assets/cat_cuidado_estetica.webp",
     badge: "MasterTech Detailing",
     specs: ["Fórmula SiO2 hidrofóbica", "Brillo profundo efecto cristal", "Incluye aplicador de microfibra"],
     compatibility: "Pinturas automotrices, vidrios y faros",
@@ -363,7 +363,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     price: "$25.00",
     desc: "Champú concentrado para cañón de espuma Snow Foam que encapsula la suciedad sin rayar la pintura.",
     longDesc: "Limpieza profesional de carrocería MasterTech: respeta tratamientos cerámicos y ceras preexistentes.",
-    img: "/assets/cat_cuidado_estetica.jpg",
+    img: "/assets/cat_cuidado_estetica.webp",
     badge: "MasterTech Care",
     specs: ["PH Neutro 100% seguro", "Alta densidad de espuma", "Incluye 2 toallas de 600 GSM"],
     compatibility: "Todo tipo de carrocerías y acabados mate o brillante",
@@ -375,7 +375,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
 
 
 const DEFAULT_JORNADAS = [
-  { id: "reprogramacion", badge: "Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.jpg", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
+  { id: "reprogramacion", badge: "Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.webp", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
   { id: "egr-dpf", badge: "Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
 ];
 
@@ -1023,7 +1023,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       id: "bay-1",
       mecanicoNombre: "Beltran Lopez",
       mecanicoEspecialidad: "Master Tech - Diagnóstico & Reprogramación",
-      mecanicoFoto: "/assets/servicio-mecanica.jpg",
+      mecanicoFoto: "/assets/servicio-mecanica.webp",
       bahiaNumero: "Bahía #1",
       vehiculos: [
         {
@@ -3384,7 +3384,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           const availableTeamList = teamMembers && teamMembers.length > 0
                             ? teamMembers
                             : [
-                                { id: 'tm-1', name: "Beltran Lopez", role: "Master Tech - Diagnóstico & Reprogramación", img: "/assets/servicio-mecanica.jpg" },
+                                { id: 'tm-1', name: "Beltran Lopez", role: "Master Tech - Diagnóstico & Reprogramación", img: "/assets/servicio-mecanica.webp" },
                                 { id: 'tm-2', name: "Aaron Rivas", role: "Especialista en Motores y Cajas Automáticas", img: "/assets/servicio-electricidad.jpg" },
                                 { id: 'tm-3', name: "Jesus Mata", role: "Especialista en Frenos, Suspensión y A/C", img: "/assets/servicio-frenos.jpg" }
                               ];
@@ -3396,7 +3396,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             id: `bay-${Date.now()}`,
                             mecanicoNombre: nextMember.name || "Nuevo Especialista",
                             mecanicoEspecialidad: nextMember.role || nextMember.desc || "Especialista Técnico",
-                            mecanicoFoto: nextMember.img || "/assets/servicio-mecanica.jpg",
+                            mecanicoFoto: nextMember.img || "/assets/servicio-mecanica.webp",
                             bahiaNumero: `Bahía #${tallerBays.length + 1}`,
                             vehiculos: [
                               {
@@ -3663,7 +3663,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             <div className="flex items-center gap-3 min-w-0">
                               <div className="w-12 h-12 rounded-2xl overflow-hidden bg-black/50 border border-white/10 shrink-0 relative group/avatar">
                                 <img
-                                  src={bay.mecanicoFoto || "/assets/servicio-mecanica.jpg"}
+                                  src={bay.mecanicoFoto || "/assets/servicio-mecanica.webp"}
                                   alt={bay.mecanicoNombre}
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
@@ -4288,7 +4288,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         const availableTeamList = teamMembers && teamMembers.length > 0
                           ? teamMembers
                           : [
-                              { id: 'tm-1', name: "Beltran Lopez", role: "Master Tech - Diagnóstico & Reprogramación", img: "/assets/servicio-mecanica.jpg" },
+                              { id: 'tm-1', name: "Beltran Lopez", role: "Master Tech - Diagnóstico & Reprogramación", img: "/assets/servicio-mecanica.webp" },
                               { id: 'tm-2', name: "Aaron Rivas", role: "Especialista en Motores y Cajas Automáticas", img: "/assets/servicio-electricidad.jpg" },
                               { id: 'tm-3', name: "Jesus Mata", role: "Especialista en Frenos, Suspensión y A/C", img: "/assets/servicio-frenos.jpg" }
                             ];
@@ -4376,7 +4376,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <div className="flex items-center gap-3 sm:col-span-2">
                             <div className="w-14 h-14 rounded-2xl overflow-hidden bg-black/60 border border-white/20 shrink-0 relative">
                               <img
-                                src={editingBay.mecanicoFoto || "/assets/servicio-mecanica.jpg"}
+                                src={editingBay.mecanicoFoto || "/assets/servicio-mecanica.webp"}
                                 alt="Foto técnico"
                                 className="w-full h-full object-cover"
                                 onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
@@ -6016,7 +6016,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         category: 'Frenos & Discos',
                         price: '$0.00',
                         desc: '',
-                        img: '/assets/cat_frenos_discos.jpg',
+                        img: '/assets/cat_frenos_discos.webp',
                         images: [],
                         partNumber: '',
                         stock: 10,
@@ -6046,7 +6046,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <div key={prod.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-4 space-y-3 flex flex-col justify-between">
                     <div className="space-y-3">
                       <div className="w-full h-40 rounded-xl bg-black border border-white/10 overflow-hidden relative">
-                        <img src={prod.img || "/assets/servicio-mecanica.jpg"} alt={prod.title} className="w-full h-full object-cover" />
+                        <img src={prod.img || "/assets/servicio-mecanica.webp"} alt={prod.title} className="w-full h-full object-cover" />
                         {prod.partNumber && (
                           <span className="absolute top-2 left-2 text-[9px] font-mono font-bold bg-black/80 text-amber-400 px-2 py-0.5 rounded-md border border-white/10">
                             OEM: {prod.partNumber}
@@ -6105,7 +6105,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       badge: "Jornada Especial",
                       title: "Título de la Jornada",
                       subtitle: "Descripción corta de la jornada...",
-                      img: "/assets/servicio-mecanica.jpg",
+                      img: "/assets/servicio-mecanica.webp",
                       regularPrice: "$100 USD",
                       promoPrice: "$60 USD",
                       discountBadge: "AHORRAS $40 USD",
@@ -6306,7 +6306,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
                         <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border border-white/10 shrink-0">
-                          <img src={j.img || "/assets/servicio-mecanica.jpg"} alt={j.title} className="w-full h-full object-cover" />
+                          <img src={j.img || "/assets/servicio-mecanica.webp"} alt={j.title} className="w-full h-full object-cover" />
                         </div>
                         <div>
                           <span className="text-[9px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
@@ -6943,7 +6943,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => {
-                          const updated = [...services, { id: Date.now(), title: "Nuevo Servicio", desc: "Descripción del servicio...", img: "/assets/servicio-mecanica.jpg" }];
+                          const updated = [...services, { id: Date.now(), title: "Nuevo Servicio", desc: "Descripción del servicio...", img: "/assets/servicio-mecanica.webp" }];
                           setServices(updated);
                         }}
                         className="p-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors"
@@ -7030,7 +7030,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               setServices(updated);
                             }}
                             aspectRatio={16 / 9}
-                            placeholder="/assets/servicio-mecanica.jpg"
+                            placeholder="/assets/servicio-mecanica.webp"
                           />
                         </div>
                       </div>
@@ -7050,7 +7050,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => {
-                          const updated = [...teamMembers, { id: Date.now(), name: "Nuevo Especialista", role: "ESPECIALISTA TECNICO", desc: "Descripción del cargo...", img: "/assets/servicio-mecanica.jpg" }];
+                          const updated = [...teamMembers, { id: Date.now(), name: "Nuevo Especialista", role: "ESPECIALISTA TECNICO", desc: "Descripción del cargo...", img: "/assets/servicio-mecanica.webp" }];
                           setTeamMembers(updated);
                         }}
                         className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors"
@@ -7148,7 +7148,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               setTeamMembers(updated);
                             }}
                             aspectRatio={1 / 1}
-                            placeholder="/assets/servicio-mecanica.jpg"
+                            placeholder="/assets/servicio-mecanica.webp"
                           />
                         </div>
                       </div>
@@ -7658,7 +7658,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         value={settingsForm.IMG_INSTALACIONES || ''}
                         onChange={(val) => setSettingsForm({ ...settingsForm, IMG_INSTALACIONES: val })}
                         aspectRatio={4 / 3}
-                        placeholder="/assets/instalaciones.jpg"
+                        placeholder="/assets/instalaciones.webp"
                       />
                     </div>
                   </div>
@@ -8230,7 +8230,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   value={editingProduct.img || ''}
                   onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
                   aspectRatio={4 / 3}
-                  placeholder="/assets/servicio-mecanica.jpg"
+                  placeholder="/assets/servicio-mecanica.webp"
                 />
 
                 {/* Galería Adicional Indefinida */}
@@ -8357,7 +8357,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 value={editingJornada.img || ''}
                 onChange={(val) => setEditingJornada({ ...editingJornada, img: val })}
                 aspectRatio={16 / 9}
-                placeholder="/assets/servicio-mecanica.jpg"
+                placeholder="/assets/servicio-mecanica.webp"
               />
             </div>
 
