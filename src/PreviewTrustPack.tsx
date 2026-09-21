@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import GarantiaMasterTech from './components/GarantiaMasterTech';
 import GoogleReviewsWidget from './components/GoogleReviewsWidget';
 import FaqGarantiaPreview from './components/FaqGarantiaPreview';
 import { 
@@ -9,11 +8,8 @@ import {
   Sun, 
   Moon, 
   ArrowLeft, 
-  Eye, 
   Sparkles, 
-  Layers, 
-  CheckCircle2,
-  ExternalLink
+  CheckCircle2
 } from 'lucide-react';
 
 export default function PreviewTrustPack() {
@@ -72,21 +68,13 @@ export default function PreviewTrustPack() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
-                Prueba interactiva del Sello de Garantía y Reseñas de Google Maps antes de publicar en la web oficial
+                Prueba interactiva del Widget de Reseñas y Preguntas Frecuentes con Garantía Integrada
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             {/* Quick jump links */}
-            <a 
-              href="#garantia" 
-              className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
-            >
-              <ShieldCheck size={14} className="text-amber-500" />
-              <span>Garantía</span>
-            </a>
-
             <a 
               href="#opiniones" 
               className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
@@ -99,8 +87,8 @@ export default function PreviewTrustPack() {
               href="#faq-preview" 
               className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
             >
-              <HelpCircle size={14} className="text-amber-500" />
-              <span>Preguntas Frecuentes</span>
+              <ShieldCheck size={14} className="text-amber-500" />
+              <span>Garantía & Preguntas Frecuentes</span>
             </a>
 
             {/* Theme Toggle Button */}
@@ -139,17 +127,12 @@ export default function PreviewTrustPack() {
         </div>
       </div>
 
-      {/* Component 1: Sello y Política de Garantía MasterTech */}
-      <div className="border-b border-slate-200 dark:border-slate-800">
-        <GarantiaMasterTech />
-      </div>
-
-      {/* Component 2: Widget Dinámico de Reseñas de Google Maps */}
+      {/* Component 1: Widget Dinámico de Reseñas de Google Maps */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <GoogleReviewsWidget />
       </div>
 
-      {/* Component 3: Preguntas Frecuentes con Política de Garantía y Repuestos */}
+      {/* Component 2: Preguntas Frecuentes con el Sello y Política Oficial de Garantía */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <FaqGarantiaPreview />
       </div>
