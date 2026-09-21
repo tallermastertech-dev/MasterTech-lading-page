@@ -2013,22 +2013,272 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
   if (!partNumber || typeof partNumber !== 'string' || !partNumber.trim()) {
     return res.status(400).json({ error: 'Se requiere el campo partNumber' });
   }
-  const rawNum = (partNumber || '').trim();
-  const pNum = rawNum
+  const cleanedInput = rawNum
     .replace(/^(OEM|N\/P|CODIGO|COD|PART\s*NUMBER|PARTE|N°|NUMERO|REF|REFERENCIA)\s*[:#\s]*/i, '')
     .replace(/^[:#\s]+/, '')
     .trim() || rawNum;
+  // Normalize Mopar package prefix P when followed by 7-8 digits (e.g. P68252103AF -> 68252103AF, P05184651AH -> 05184651AH)
+  const moparStripped = cleanedInput.replace(/^P(?=[0-9]{7,8})/i, '');
+  const pNum = moparStripped || cleanedInput;
   const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY || ['AQ', 'Ab8RN6Lx6TDruzrPfy2PpWA9yLO9PpBklx4LJp1ml1vyWk8ghg'].join('.');
 
   // Comprehensive OEM part number database
   const detectFromDatabase = (raw: string): any | null => {
-    const u = raw.toUpperCase();
-    const c = u.replace(/[\s\-_\.]/g, '');
+    const u = raw.toUpperCase().trim();
+    // Normalize Mopar package prefix P if present (e.g. P68252103AF -> 68252103AF)
+    const uNoP = u.replace(/^P(?=[0-9]{7,8})/i, '');
+    const c = uNoP.replace(/[\s\-_\.]/g, '');
+    const rawC = u.replace(/[\s\-_\.]/g, '');
     // Segment parsing for codes like: 6PK389-16N00-TP, 038198119, A2720100805
     const segs = u.split(/[\-_\.]/);
     const seg0 = segs[0].trim();
     const seg1 = (segs[1] || '').trim();
 
+    // ══════════════════════════════════════════════════════════════════
+    // MOPAR / JEEP / CHRYSLER / DODGE / RAM GENUINE PARTS
+    // ══════════════════════════════════════════════════════════════════
+    // Steering Tie Rod / Drag Link Left - Wrangler JL & Gladiator JT: 68252103 (AA-AF) / P68252103AF
+    if (/^68252103/i.test(c) || /^P?68252103/i.test(rawC)) {
+      return {
+        titulo: 'Barra de Dirección / Terminal Izquierdo Mopar Jeep Wrangler JL & Gladiator JT (68252103AF)',
+        categoria: 'Suspensión & Amortiguadores',
+        compatibilidad: 'Jeep Wrangler JL (2D/4D Unlimited) 2.0L Turbo & 3.6L Pentastar V6 (2018-2024); Jeep Gladiator JT 3.6L V6 & 3.0L EcoDiesel (2020-2024)',
+        descripcionCorta: 'Barra y terminal de dirección delantero izquierdo original Mopar OEM para Jeep Wrangler JL y Gladiator JT. Restablece la geometría exacta de dirección y elimina vibraciones de volante (Death Wobble).',
+        descripcionDetallada: 'Barra de acoplamiento y terminal de dirección frontal izquierdo original Mopar OEM #68252103AF (reemplaza revisiones AA, AB, AC, AD, AE). Fabricada en acero forjado grado automotriz Heavy Duty con rótula sellada pre-engrasada libre de mantenimiento y fuelle guardapolvo de neopreno de alta resistencia contra lodo, arena y condiciones off-road severas. Diseñada específicamente para restablecer la rigidez geométrica del tren delantero en puentes Dana 30 y Dana 44 (AdvanTEK M186 / M210), eliminando holguras de dirección y desgaste irregular de neumáticos.',
+        specs: [
+          'Acero forjado estructural Heavy Duty de máxima resistencia torsional',
+          'Rótula sellada pre-engrasada con fuelle de neopreno multicapa resistente a abrasión y lodo',
+          'Geometría y anclaje directo Plug & Play en ejes Dana 30 / Dana 44 (M186 / M210)',
+          'Tratamiento anticorrosivo electrostático E-Coat para máxima durabilidad off-road',
+          'Referencia OEM Mopar: 68252103AF (sustituye 68252103AA, AB, AC, AD, AE)'
+        ],
+        precio: '$165.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        partNumber: '68252103AF',
+        referencias: ['Mopar 68252103AF', 'Mopar 68252103AE', 'Mopar 68252103AD', 'Mopar 68252103AC', 'Mopar 68252103AB', 'Mopar 68252103AA']
+      };
+    }
+
+    // Steering Tie Rod / Drag Link Right - Wrangler JL & Gladiator JT: 68252104 (AA-AF)
+    if (/^68252104/i.test(c) || /^P?68252104/i.test(rawC)) {
+      return {
+        titulo: 'Barra de Dirección / Terminal Derecho Mopar Jeep Wrangler JL & Gladiator JT (68252104AF)',
+        categoria: 'Suspensión & Amortiguadores',
+        compatibilidad: 'Jeep Wrangler JL (2D/4D) 2.0L Turbo & 3.6L V6 (2018-2024); Jeep Gladiator JT 3.6L V6 & 3.0L EcoDiesel (2020-2024)',
+        descripcionCorta: 'Barra y terminal de dirección delantero derecho original Mopar OEM para Jeep Wrangler JL y Gladiator JT. Alineación de precisión y resistencia torsional Heavy Duty.',
+        descripcionDetallada: 'Barra de acoplamiento y terminal de dirección frontal derecho original Mopar OEM #68252104AF (reemplaza revisiones AA, AB, AC, AD, AE). Acero forjado con rótula sellada para puentes Dana 30 y Dana 44 en Jeep Wrangler JL y Gladiator JT.',
+        specs: [
+          'Acero forjado estructural Heavy Duty de máxima rigidez torsional',
+          'Rótula sellada libre de mantenimiento con fuelle de neopreno estanco contra agua y lodo',
+          'Montaje directo OEM en ejes Dana 30 / Dana 44 (M186 / M210)',
+          'Recubrimiento electrostático anticorrosión E-Coat',
+          'Referencia OEM Mopar: 68252104AF (reemplaza AA, AB, AC, AD, AE)'
+        ],
+        precio: '$165.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        partNumber: '68252104AF',
+        referencias: ['Mopar 68252104AF', 'Mopar 68252104AE', 'Mopar 68252104AD', 'Mopar 68252104AC']
+      };
+    }
+
+    // Steering Stabilizer / Damper - Wrangler JL & JT: 68282487
+    if (/^68282487/i.test(c) || /^P?68282487/i.test(rawC)) {
+      return {
+        titulo: 'Amortiguador de Dirección Heavy Duty Mopar Jeep Wrangler JL & Gladiator JT (68282487AA)',
+        categoria: 'Suspensión & Amortiguadores',
+        compatibilidad: 'Jeep Wrangler JL (2D/4D) 2.0L / 3.6L / 3.0L (2018-2024); Jeep Gladiator JT (2020-2024)',
+        descripcionCorta: 'Amortiguador estabilizador de dirección Mopar OEM Heavy Duty para Jeep Wrangler JL y Gladiator JT. Suprime el bamboleo de volante (Death Wobble) y absorbe irregularidades del terreno.',
+        descripcionDetallada: 'Amortiguador estabilizador de dirección frontal Mopar OEM #68282487AA. Presurizado con gas nitrógeno y doble tubo hidráulico con válvula de control progresivo. Diseñado para resistir impactos de piedras, ondulaciones y neumáticos sobredimensionados hasta 35-37 pulgadas.',
+        specs: [
+          'Doble tubo presurizado a gas nitrógeno con fluido hidráulico de alto índice de viscosidad',
+          'Válvula multi-etapa sensible a la velocidad para respuesta inmediata ante impactos',
+          'Bujes de uretano de alta densidad para máxima precisión direccional',
+          'Cuerpo con pintura electrostática anticorrosiva apta para off-road extremo',
+          'Referencia OEM Mopar: 68282487AA / 68282487AB'
+        ],
+        precio: '$120.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        partNumber: '68282487AA',
+        referencias: ['Mopar 68282487AA', 'Mopar 68282487AB', 'Fox 985-24-173']
+      };
+    }
+
+    // Oil Filter Adapter Housing & Cooler Assembly 3.6L Pentastar: 68105583 (AA-AF)
+    if (/^68105583/i.test(c) || /^P?68105583/i.test(rawC)) {
+      return {
+        titulo: 'Carcasa Base y Enfriador de Filtro de Aceite Mopar 3.6L V6 Pentastar (68105583AF)',
+        categoria: 'Inyección & Motor',
+        compatibilidad: 'Jeep Grand Cherokee WK2 3.6L (2014-2021), Jeep Wrangler JK/JL 3.6L (2014-2024), Dodge Durango 3.6L (2014-2023), RAM 1500 3.6L (2014-2024), Chrysler 300 / Town & Country 3.6L',
+        descripcionCorta: 'Conjunto enfriador de aceite y soporte de filtro original Mopar OEM. Resuelve la fuga común en la "V" del motor Pentastar 3.6L V6.',
+        descripcionDetallada: 'Conjunto enfriador de aceite de motor y carcasa de filtro original Mopar #68105583AF (sustituye 68105583AA-AE). Fabricado en material composite reforzado de alta estabilidad térmica con enfriador de placas de aluminio soldadas al vacío. Incluye sensores OEM de presión y temperatura preinstalados, juntas tóricas de vitón y filtro de aceite MO-349 instalado.',
+        specs: [
+          'Enfriador de placas de aluminio de 5 capas soldadas al vacío de alta eficiencia térmica',
+          'Cuerpo composite de alta densidad resistente a deformación térmica y presión de aceite',
+          'Incluye sensor de presión de aceite y sensor de temperatura Mopar OEM preinstalados',
+          'Juntas tóricas de fluoroelastómero (Vitón) de alta estanqueidad resistentes a refrigerante OAT',
+          'Referencia OEM Mopar: 68105583AF (reemplaza versiones AA, AB, AC, AD, AE)'
+        ],
+        precio: '$225.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/promo_turbo_charger.webp',
+        partNumber: '68105583AF',
+        referencias: ['Mopar 68105583AF', 'Mopar 68105583AE', 'Mopar 68105583AA', 'Dorman 926-876']
+      };
+    }
+
+    // Water Pump 3.6L Pentastar: 05184651 / 5184651 (AG-AH)
+    if (/^0?5184651/i.test(c) || /^P?0?5184651/i.test(rawC)) {
+      return {
+        titulo: 'Bomba de Agua Refrigeración Mopar Pentastar 3.6L V6 (05184651AH)',
+        categoria: 'Fluidos & Climatización',
+        compatibilidad: 'Jeep Grand Cherokee WK2 3.6L (2011-2022), Jeep Wrangler JK/JL 3.6L (2012-2024), Dodge Durango 3.6L, RAM 1500 3.6L Pentastar (2013-2024)',
+        descripcionCorta: 'Bomba de agua original Mopar OEM para motor 3.6L Pentastar V6. Impulsor metálico equilibrado con sello mecánico de carburo de silicio.',
+        descripcionDetallada: 'Bomba de agua original Mopar #05184651AH (reemplaza 05184651AG, 05184651AF). Diseñada para resistir cavitación y mantener un flujo continuo de refrigerante OAT hacia el bloque y culatas de aluminio del motor Pentastar. Incluye junta metálica laminada con elastómero vulcanizado.',
+        specs: [
+          'Impulsor metálico fundido equilibrado dinámicamente para cero cavitación',
+          'Sello mecánico cerámico / carburo de silicio estanco de larga duración',
+          'Rodamiento de doble hilera con grasa sintética para alta temperatura',
+          'Junta perimetral de acero inoxidable con ribete de fluoroelastómero incluida',
+          'Referencia OEM Mopar: 05184651AH (reemplaza 05184651AG, AF, AE)'
+        ],
+        precio: '$115.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/servicio-climatizacion.webp',
+        partNumber: '05184651AH',
+        referencias: ['Mopar 05184651AH', 'Mopar 05184651AG', 'Gates 43547', 'Airtex AW6184']
+      };
+    }
+
+    // Fuel Pump Module WK2 Grand Cherokee: 68066265
+    if (/^68066265/i.test(c) || /^P?68066265/i.test(rawC)) {
+      return {
+        titulo: 'Módulo Bomba de Gasolina Completo Mopar Jeep Grand Cherokee WK2 (68066265AC)',
+        categoria: 'Inyección & Motor',
+        compatibilidad: 'Jeep Grand Cherokee WK2 3.6L V6 & 5.7L HEMI V8 (2011-2021), Dodge Durango 3.6L & 5.7L (2011-2021)',
+        descripcionCorta: 'Módulo completo de bomba de combustible sumergible en tanque Mopar OEM con sensor de nivel (flotador), regulador de presión y filtro de succión integrado.',
+        descripcionDetallada: 'Conjunto de bomba de combustible original Mopar #68066265AC para Jeep Grand Cherokee WK2 y Dodge Durango. Caudal nominal 135 L/h a 58 PSI. Construida con motor de turbina sin escobillas para funcionamiento silencioso y máxima durabilidad ante mezclas de gasolina.',
+        specs: [
+          'Presión nominal regulada: 58 PSI (4.0 bar) con caudal estable de 135 L/h',
+          'Motor eléctrico de turbina balanceada de bajo consumo y bajo nivel de ruido',
+          'Sensor de nivel flotador con resistencia cerámica de contacto de oro',
+          'Incluye junta tórica de sellado de vitón para boca de tanque',
+          'Referencia OEM Mopar: 68066265AC / 68066265AB / 68066265AA'
+        ],
+        precio: '$285.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/servicio-inyeccion.webp',
+        partNumber: '68066265AC',
+        referencias: ['Mopar 68066265AC', 'Mopar 68066265AB', 'Delphi FG1073', 'Carter P76601M']
+      };
+    }
+
+    // Oil Filter Heavy Duty Mopar MO-899: 04884899 / 4884899
+    if (/^0?4884899/i.test(c) || /^P?0?4884899/i.test(rawC) || /^MO899/i.test(c)) {
+      return {
+        titulo: 'Filtro de Aceite Heavy Duty Mopar MO-899 Pentastar & HEMI (04884899AC)',
+        categoria: 'Filtros & Consumibles',
+        compatibilidad: 'Jeep Grand Cherokee 5.7L HEMI / 3.6L, Jeep Wrangler 3.8L / 3.6L, Dodge Charger / Challenger / Durango 5.7L / 6.4L, RAM 1500/2500 HEMI (2007-2024)',
+        descripcionCorta: 'Filtro de aceite roscado original Mopar MO-899 con válvula antidrenaje de silicona roja y celulosa con fibras sintéticas de 20 micras.',
+        descripcionDetallada: 'Filtro de aceite original Mopar #04884899AC (MO-899). Carcasa de acero embutido capaz de soportar picos de presión de más de 200 PSI. Válvula de alivio de presión calibrada y empaque de neopreno pre-lubricado para un sellado perfecto.',
+        specs: [
+          'Medio filtrante de microfibra sintética con eficiencia de retención de 99% a 20 micras',
+          'Válvula anti-drenaje de silicona resistente a temperaturas de -40°C a 150°C',
+          'Carcasa de acero embutido de alta presión resistente a vibraciones off-road',
+          'Válvula de derivación interna (bypass) calibrada a especificación de fábrica Stellantis',
+          'Referencia OEM Mopar: 04884899AC / MO-899'
+        ],
+        precio: '$14.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_filtros_oem.webp',
+        partNumber: '04884899AC',
+        referencias: ['Mopar 04884899AC', 'Mopar MO-899', 'Wix 57060', 'Mobil 1 M1-113A']
+      };
+    }
+
+    // Oil Filter Cartridge Mopar MO-349: 68191349 (AA-AB)
+    if (/^68191349/i.test(c) || /^P?68191349/i.test(rawC) || /^MO349/i.test(c)) {
+      return {
+        titulo: 'Elemento Filtro de Aceite Mopar MO-349 Pentastar 3.2L / 3.6L (68191349AA)',
+        categoria: 'Filtros & Consumibles',
+        compatibilidad: 'Jeep Wrangler JK/JL 3.6L (2014-2024), Jeep Grand Cherokee WK2 3.6L (2014-2022), Jeep Cherokee KL 3.2L (2014-2023), Dodge Durango 3.6L, RAM 1500 3.6L (2014-2024)',
+        descripcionCorta: 'Elemento cartucho filtrante original Mopar MO-349 con junta tórica incluida para portafiltro superior en motor 3.2L y 3.6L Pentastar.',
+        descripcionDetallada: 'Cartucho de filtro de aceite original Mopar #68191349AA (MO-349). Diseñado con pliegues simétricos de celulosa y fibras sintéticas resistentes al calor del motor Pentastar. Incluye el O-ring de nitrilo para la tapa roscada superior.',
+        specs: [
+          'Medio filtrante de alta capacidad con retención de partículas desde 20 micras',
+          'Estructura interna plástica con válvula de bypass integrada de acople preciso',
+          'Incluye junta tórica de estanqueidad para la tapa superior de la carcasa',
+          'Compatible con aceites sintéticos 0W-20 y 5W-20 con especificación Chrysler MS-6395',
+          'Referencia OEM Mopar: 68191349AA / 68191349AB / MO-349'
+        ],
+        precio: '$15.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_filtros_oem.webp',
+        partNumber: '68191349AA',
+        referencias: ['Mopar 68191349AA', 'Mopar 68191349AB', 'Mopar MO-349', 'Wix WL10010']
+      };
+    }
+
+    // A/C Compressor WK2 / Durango: 68231879
+    if (/^68231879/i.test(c) || /^P?68231879/i.test(rawC)) {
+      return {
+        titulo: 'Compresor de Aire Acondicionado Mopar OEM Jeep Grand Cherokee WK2 (68231879AC)',
+        categoria: 'Fluidos & Climatización',
+        compatibilidad: 'Jeep Grand Cherokee WK2 3.6L V6 & 5.7L V8 (2014-2021), Dodge Durango 3.6L & 5.7L (2014-2021)',
+        descripcionCorta: 'Compresor de A/C genuino Mopar / Denso con embrague electromagnético preensamblado y válvula de control de desplazamiento variable.',
+        descripcionDetallada: 'Compresor de aire acondicionado original Mopar #68231879AC para plataformas Grand Cherokee WK2 y Durango. Mecanismo de pistones axiales de carrera variable con polea de 6 canales (6PK). Carga previa de aceite sintético PAG-46 y sellos estancos para gas refrigerante R134a y R1234yf.',
+        specs: [
+          'Tecnología de pistones axiales con desplazamiento variable para óptimo consumo de combustible',
+          'Embrague electromagnético de acople suave y bobina de 12V con conector estanco OEM',
+          'Polea de 6 canales (6PK) mecanizada con rodamiento de doble hilera sellado',
+          'Pre-cargado de fábrica con aceite sintético lubricante PAG 46',
+          'Referencia OEM Mopar: 68231879AC / 68231879AB / 68231879AA'
+        ],
+        precio: '$395.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_climatizacion.webp',
+        partNumber: '68231879AC',
+        referencias: ['Mopar 68231879AC', 'Mopar 68231879AB', 'Denso 471-0865', 'UAC CO 29112C']
+      };
+    }
+
+    // Smart Mopar Detector for any other 8-digit Mopar part:
+    // Matches 68xxxxxx, 05xxxxxx, 52xxxxxx, 53xxxxxx, 56xxxxxx with optional 2 letters suffix
+    const moparMatch = c.match(/^(?:0)?(68[0-9]{6}|05[0-9]{6}|52[0-9]{6}|53[0-9]{6}|56[0-9]{6})([A-Z]{0,2})$/i);
+    if (moparMatch) {
+      const fullMoparNum = (moparMatch[1] + (moparMatch[2] || '')).toUpperCase();
+      return {
+        titulo: `Repuesto Genuino Mopar OEM Jeep / RAM / Dodge (#${fullMoparNum})`,
+        categoria: 'Suspensión & Amortiguadores',
+        compatibilidad: 'Jeep (Wrangler JL/JK, Grand Cherokee WK2), RAM 1500/2500, Dodge Durango & Chrysler — Verificar compatibilidad con VIN',
+        descripcionCorta: `Componente original Mopar Genuine Parts #${fullMoparNum} bajo estándares de fábrica Stellantis USA.`,
+        descripcionDetallada: `Repuesto original de fábrica Mopar #${fullMoparNum} para vehículos de la gama Jeep, RAM, Dodge y Chrysler. Fabricado bajo especificaciones de ingeniería original para máxima durabilidad, ajuste perfecto Plug & Play y total fiabilidad.`,
+        specs: [
+          'Fabricación con materiales y tolerancias de ingeniería original Mopar / Stellantis',
+          'Ajuste directo Plug & Play en el vehículo sin necesidad de modificaciones',
+          'Probado bajo condiciones de exigencia extrema y uso en ruta / off-road',
+          'Importación directa desde distribuidores oficiales Mopar en Estados Unidos',
+          `Número de Parte OEM Mopar: ${fullMoparNum}`
+        ],
+        precio: '$125.00',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        partNumber: fullMoparNum,
+        referencias: [`Mopar ${fullMoparNum}`, `Stellantis OEM #${fullMoparNum}`]
+      };
+    }
 
     // ══════════════════════════════════════════════════════════════════
     // LAUNCH TPMS SENSORS — LTR-03, LTR-01, LTR-02, LTR-05
@@ -2758,11 +3008,13 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
     if (!parsedJson || !parsedJson.titulo) {
       const u3 = pNum.toUpperCase();
       if (/SHOCK|AMORT|STRUT|Monroe|GABRIEL|KYB|RANCHO/i.test(u3)) parsedJson = { titulo: `Amortiguador Gas Nitrógeno/Suspensión OEM (${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Vehículos 4x4 y SUV: Jeep, Toyota, Nissan, Ford & Chevrolet Heavy Duty', descripcionCorta: 'Amortiguador gas nitrógeno doble tubo para absorción de impactos y estabilidad.', descripcionDetallada: `Amortiguador OEM #${pNum}. Control direccional en autopista y off-road.` };
+      else if (/ROD|LINK|TIE|TERMINAL|BARRA|ROTULA|SUSP/i.test(u3)) parsedJson = { titulo: `Barra / Terminal de Dirección OEM (${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Jeep Wrangler / Cherokee, Ford, GM & Toyota 4x4', descripcionCorta: 'Componente forjado de dirección y alineación de alta resistencia mecánica.', descripcionDetallada: `Terminal de dirección OEM #${pNum}. Rótula sellada libre de mantenimiento para alineación precisa.` };
       else if (/CLUTCH|EMBRAGUE|AISIN|EXEDY|LUK|SACHS/i.test(u3)) parsedJson = { titulo: `Kit Embrague / Transmisión OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Toyota, Chevrolet, Nissan, Ford & Hyundai con transmisión manual (2000-2024)', descripcionCorta: 'Kit embrague con disco de fricción, plato de presión y collarín. Acople suave sin vibraciones.', descripcionDetallada: `Kit OEM #${pNum}. Disco cerámico-orgánico. Garantía 2años/50,000km.` };
       else if (/COIL|BOBINA|COP|IGNITION/i.test(u3)) parsedJson = { titulo: `Bobina de Encendido COP OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Multimarca con sistema COP: Toyota, Ford, GM, Jeep & Nissan (2000-2024)', descripcionCorta: 'Bobina COP alta energía de chispa (>100 mJ), núcleo ferrita, conector OEM.', descripcionDetallada: `Bobina OEM #${pNum}. Chispa constante en todo el rango de RPM.` };
       else if (/BELT|CORREA|SERPENTIN|6PK|7PK|8PK/i.test(u3)) parsedJson = { titulo: `Correa Serpentín/Distribución OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Motores multimarca según longitud y sección', descripcionCorta: 'Correa EPDM reforzado con fibra poliamida, resistente a altas temperaturas.', descripcionDetallada: `Correa OEM #${pNum}. EPDM hasta 150°C. Vida útil 60,000-90,000 km.` };
       else if (/PUMP|BOMBA|WATER|COOLANT/i.test(u3)) parsedJson = { titulo: `Bomba de Agua/Refrigeración OEM (${pNum})`, categoria: 'Fluidos & Climatización', compatibilidad: 'Motores multimarca', descripcionCorta: 'Bomba impulsor metálico con sello carburo de silicio, caudal 80-120 L/min.', descripcionDetallada: `Bomba OEM #${pNum}. Resistente a anticongelante OAT/HOAT. Garantía 2 años.` };
       else if (/TRANSFER|PTU|DIFERENCIAL|CASE|MS10/i.test(u3)) parsedJson = { titulo: `Caja de Transferencia / PTU AWD OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Vehículos SUV y 4WD/AWD Ford, Jeep, Dodge, Toyota', descripcionCorta: 'Caja de transferencia / PTU para distribución de torque a las 4 ruedas.', descripcionDetallada: `Unidad OEM #${pNum}. Verifique lubricación con fluido sintético 75W-140.` };
+      else if (/^(?:P|0)?(68[0-9]{6}|05[0-9]{6}|52[0-9]{6}|53[0-9]{6}|56[0-9]{6})/i.test(u3)) parsedJson = { titulo: `Repuesto Original Mopar OEM (#${pNum.toUpperCase()})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Jeep Wrangler JL/JK, Grand Cherokee WK2, RAM 1500 & Dodge Durango', descripcionCorta: `Componente original de fábrica Mopar Stellantis OEM #${pNum}.`, descripcionDetallada: `Repuesto original Mopar #${pNum}. Fabricado bajo especificaciones de equipo original para Jeep, Dodge y RAM.`, precio: '$125.00', badge: 'Mopar Genuine Parts' };
       else parsedJson = { titulo: `Repuesto Automotriz OEM #${pNum.toUpperCase()}`, categoria: 'Filtros & Consumibles', compatibilidad: 'Consultar compatibilidad en catálogo OEM del fabricante', descripcionCorta: `Componente original o equivalente certificado OEM #${pNum}.`, descripcionDetallada: `Repuesto OEM #${pNum}. Consulte catálogo del fabricante para confirmar aplicación exacta.` };
     }
 
@@ -2796,14 +3048,16 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
         'Fabricación de alta durabilidad',
         'Garantía de instalación en taller MasterTech'
       ],
-      badge: 'Repuesto Certificado OEM',
+      badge: parsedJson?.badge || 'Repuesto Certificado OEM',
       price: cleanAiPrice,
-      partNumber: pNum
+      partNumber: parsedJson?.partNumber || pNum,
+      isImportedUSA: parsedJson?.isImportedUSA !== undefined ? parsedJson?.isImportedUSA : true,
+      img: parsedJson?.img || ''
     };
 
     return res.json({
       success: true,
-      partNumber: pNum,
+      partNumber: itemPayload.partNumber,
       item: itemPayload,
       titulo: itemPayload.title,
       categoria: itemPayload.category,
@@ -2813,6 +3067,8 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
       specs: itemPayload.specs,
       badge: itemPayload.badge,
       price: itemPayload.price,
+      isImportedUSA: itemPayload.isImportedUSA,
+      img: itemPayload.img,
       referencias: parsedJson?.referencias || []
     });
   } catch (err: any) {
