@@ -178,8 +178,8 @@ export default function FaqGarantiaPreview() {
                                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
                                   
                                   {/* Medallion Badge */}
-                                  <div className="flex flex-col items-center justify-center text-center shrink-0 p-4 rounded-xl bg-slate-950/60 border border-amber-500/30 w-full sm:w-auto">
-                                    <svg className="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-xl" viewBox="0 0 160 160" fill="none">
+                                  <div className="flex flex-col items-center justify-center text-center shrink-0 p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-amber-500/10 via-slate-950/80 to-slate-950 border border-amber-500/30 shadow-lg shadow-black/40 w-full sm:w-auto">
+                                    <svg className="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-2xl" viewBox="0 0 160 160" fill="none">
                                       <defs>
                                         <linearGradient id="faqGoldRim" x1="0%" y1="0%" x2="100%" y2="100%">
                                           <stop offset="0%" stopColor="#FDE68A" />
@@ -199,21 +199,34 @@ export default function FaqGarantiaPreview() {
                                       <circle cx="80" cy="80" r="70" stroke="url(#faqGoldRim)" strokeWidth="2" opacity="0.9" />
                                       <circle cx="80" cy="80" r="63" fill="url(#faqGoldCenter)" stroke="url(#faqGoldRim)" strokeWidth="2.5" />
                                       <circle cx="80" cy="80" r="55" stroke="#FEF3C7" strokeWidth="1" strokeDasharray="3 2" opacity="0.8" />
-                                      {/* Shield */}
+                                      
+                                      {/* 3 Stars at Top */}
+                                      <g fill="#0F172A" opacity="0.9">
+                                        <path d="M80 34 L81.5 38.5 L86 38.5 L82.5 41 L83.8 45.5 L80 42.8 L76.2 45.5 L77.5 41 L74 38.5 L78.5 38.5 Z" />
+                                        <path d="M64 38 L65 41.5 L68.5 41.5 L65.7 43.5 L66.8 47 L64 44.8 L61.2 47 L62.3 43.5 L59.5 41.5 L63 41.5 Z" transform="scale(0.85) translate(14, 5)" />
+                                        <path d="M96 38 L97 41.5 L100.5 41.5 L97.7 43.5 L98.8 47 L96 44.8 L93.2 47 L94.3 41.5 L91.5 41.5 L95 41.5 Z" transform="scale(0.85) translate(16, 5)" />
+                                      </g>
+
+                                      {/* Center Shield */}
                                       <path d="M80 49 L98 56 C98 76 80 93 80 93 C80 93 62 76 62 56 L80 49 Z" fill="#0F172A" stroke="#FEF3C7" strokeWidth="1.5" />
                                       <path d="M72 69 L77 75 L88 62" fill="none" stroke="#FBBF24" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-                                      <text x="80" y="106" textAnchor="middle" fill="#0F172A" fontSize="8.5" fontWeight="900" letterSpacing="1.8" fontFamily="sans-serif">MASTERTECH</text>
-                                      <text x="80" y="116" textAnchor="middle" fill="#1E293B" fontSize="6" fontWeight="800" letterSpacing="1.2" fontFamily="sans-serif">CERTIFIED GARANTÍA</text>
+                                      
+                                      {/* Crisp Typography */}
+                                      <text x="80" y="106" textAnchor="middle" fill="#0F172A" fontSize="8" fontWeight="900" letterSpacing="1.8" fontFamily="sans-serif">MASTERTECH</text>
+                                      <text x="80" y="116" textAnchor="middle" fill="#78350F" fontSize="6.5" fontWeight="800" letterSpacing="1.5" fontFamily="sans-serif">CERTIFICADO</text>
                                     </svg>
 
-                                    <span className="mt-2.5 inline-block px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-mono font-black text-[9px] uppercase tracking-wider">
-                                      GARANTÍA POR ESCRITO
-                                    </span>
-                                    <span className="text-xs font-black text-white mt-1">
-                                      Según Mano de Obra
+                                    {/* Upgraded Luxury Pill Badge */}
+                                    <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/50 text-amber-300 font-extrabold text-[10px] tracking-wider uppercase shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                      <ShieldCheck size={13} className="text-amber-400 shrink-0" />
+                                      <span>RESPALDO TÉCNICO OFICIAL</span>
+                                    </div>
+
+                                    <span className="text-sm font-black text-white mt-1.5 tracking-tight">
+                                      Garantía según Mano de Obra
                                     </span>
                                     <span className="text-[10px] text-slate-400 mt-0.5">
-                                      Formalmente en tu orden
+                                      Estipulada en tu orden de servicio
                                     </span>
                                   </div>
 
