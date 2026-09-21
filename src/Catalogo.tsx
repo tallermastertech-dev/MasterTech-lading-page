@@ -1077,33 +1077,40 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         </h3>
 
                         {/* Price Section (Clear Discount & Reference) */}
-                        <div className="pt-1">
+                        <div className="pt-1.5">
                           {numericPrice > 0 ? (
-                            <div className="flex flex-col gap-0.5">
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-zinc-500">
-                                  Antes:
-                                </span>
-                                <span className="text-[11px] text-slate-400 dark:text-zinc-500 line-through font-mono">
-                                  ${oldPrice}
-                                </span>
-                                <span className="inline-flex items-center text-[9px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-500/25">
+                            <div className="space-y-1">
+                              {/* Strikethrough Reference + Discount Badge */}
+                              <div className="flex items-center justify-between gap-1">
+                                <div className="flex items-center gap-1 text-slate-600 dark:text-zinc-400">
+                                  <span className="text-[11px] font-bold uppercase tracking-wider">
+                                    Antes:
+                                  </span>
+                                  <span className="text-xs sm:text-sm font-bold line-through font-mono text-slate-500 dark:text-zinc-400">
+                                    ${oldPrice}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] font-black uppercase tracking-wide bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-600/50 shadow-xs shrink-0">
                                   -26% OFF
                                 </span>
                               </div>
+
+                              {/* Main Final Price */}
                               <div className="flex items-baseline gap-1.5">
-                                <span className="product-price text-sm sm:text-base font-black text-amber-500 dark:text-amber-400 font-display">
+                                <span className="product-price text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 font-display tracking-tight">
                                   ${numericPrice.toFixed(2)}
                                 </span>
-                                <span className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase">
+                                <span className="text-xs font-black text-slate-600 dark:text-zinc-400 uppercase">
                                   USD
                                 </span>
                               </div>
                             </div>
                           ) : (
-                            <span className="product-price text-sm sm:text-base font-black text-amber-500 dark:text-amber-400">
-                              {item.price}
-                            </span>
+                            <div className="flex items-baseline gap-1.5">
+                              <span className="product-price text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 font-display tracking-tight">
+                                {item.price}
+                              </span>
+                            </div>
                           )}
                         </div>
                       </div>
