@@ -452,7 +452,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen selection:bg-primary selection:text-black bg-[#0D0D0D] overflow-x-hidden w-full max-w-full text-[#E2E8F0]">
+    <div className="theme-root min-h-screen selection:bg-primary selection:text-black overflow-x-hidden w-full max-w-full">
       {/* WhatsApp Button */}
       <a 
         href={config.WHATSAPP_LINK}
@@ -478,8 +478,8 @@ export default function App() {
             fetchPriority="high"
             className="w-full h-full object-cover object-center opacity-75 transition-opacity duration-300" 
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/85 via-[#0D0D0D]/55 to-[#0D0D0D]/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/80 via-transparent to-[#0D0D0D]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/90 via-[#0D0D0D]/60 to-[#0D0D0D]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/85 via-transparent to-[#0D0D0D]/40" />
         </div>
         
         <div className="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto relative z-10 w-full">
@@ -508,29 +508,29 @@ export default function App() {
                   </div>
                 );
               })()}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 uppercase leading-[1.05]">
+              <h1 className="text-white text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 uppercase leading-[1.05]">
                 TU VEHÍCULO MERECE <br />
-                <span className="text-primary font-black">ATENCIÓN EXPERTA</span>
+                <span className="text-amber-400 font-black">ATENCIÓN EXPERTA</span>
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg text-zinc-300 mb-6 max-w-md lg:max-w-lg leading-relaxed font-medium">
+              <p className="text-white/85 text-sm sm:text-base lg:text-lg mb-6 max-w-md lg:max-w-lg leading-relaxed font-medium">
                 Elevamos el estándar del servicio automotriz con diagnóstico avanzado, repuestos de primera y un equipo altamente capacitado listo para resolver cualquier falla.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a href="#contacto" className="btn-primary !px-7 !py-3.5 text-sm sm:text-base border-none shadow-[0_10px_30px_rgba(194,164,114,0.35)]">
                   Agendar Cita <ArrowRight className="w-4 h-4 ml-2" />
                 </a>
-                <a href="/servicios" className="btn-secondary !px-7 !py-3.5 text-sm sm:text-base bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20 text-white">
+                <a href="/servicios" className="btn-secondary !px-7 !py-3.5 text-sm sm:text-base !bg-white/10 backdrop-blur-md !border-white/20 hover:!bg-white/20 !text-white !font-bold">
                   Ver Servicios
                 </a>
               </div>
               
-              <div className="mt-6 sm:mt-8 flex items-center gap-6 text-xs sm:text-sm font-bold text-zinc-300">
+              <div className="mt-6 sm:mt-8 flex items-center gap-6 text-xs sm:text-sm font-bold text-white/80">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-primary icon-glow" />
+                  <CheckCircle2 className="w-4 h-4 text-amber-400 icon-glow" />
                   <span>Garantía Total</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-primary icon-glow" />
+                  <CheckCircle2 className="w-4 h-4 text-amber-400 icon-glow" />
                   <span>Atención VIP</span>
                 </div>
               </div>
@@ -707,21 +707,20 @@ export default function App() {
                     href={config.GOOGLE_MAPS_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99] location-contact-link"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}
+                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99] location-contact-link theme-location-card border"
                   >
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(194,164,114,0.15)', border: '1px solid rgba(194,164,114,0.3)' }}>
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 theme-icon-box border">
                       <MapPin size={20} style={{ color: '#C2A472' }} />
                     </div>
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-widest mb-0.5" style={{ color: '#94a3b8' }}>Ubicación</p>
-                      <p className="text-base sm:text-lg font-black location-contact-value" style={{ color: '#f1f5f9' }}>Porlamar, Nueva Esparta</p>
+                      <p className="text-base sm:text-lg font-black location-contact-value theme-location-value">Porlamar, Nueva Esparta</p>
                     </div>
                   </a>
                 </div>
               </div>
 
-              <div className="booking-form-card p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)' }}>
+              <div className="booking-form-card theme-form-card p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border">
                 {formStatus === 'success' ? (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 sm:py-20">
                     <CheckCircle2 className="w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-6" />
@@ -753,31 +752,31 @@ export default function App() {
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label htmlFor="lead-form-nombre" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4">Nombre</label>
-                        <input id="lead-form-nombre" required name="nombre" type="text" placeholder="Tu Nombre" className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-sm text-white" />
+                        <label htmlFor="lead-form-nombre" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Nombre</label>
+                        <input id="lead-form-nombre" required name="nombre" type="text" placeholder="Tu Nombre" className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm border" />
                       </div>
                       <div className="space-y-2">
-                        <label htmlFor="lead-form-telefono" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4">Teléfono</label>
-                        <input id="lead-form-telefono" required name="telefono" type="tel" placeholder="0412 000 0000" className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-sm text-white" />
+                        <label htmlFor="lead-form-telefono" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Teléfono</label>
+                        <input id="lead-form-telefono" required name="telefono" type="tel" placeholder="0412 000 0000" className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm border" />
                       </div>
                     </div>
                     
                     <div className="space-y-2">
-                      <label htmlFor="lead-form-vehiculo" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4">Vehículo</label>
+                      <label htmlFor="lead-form-vehiculo" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Vehículo</label>
                       <div className="relative">
-                        <Car className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-zinc-600" />
-                        <input id="lead-form-vehiculo" required name="vehiculo" type="text" placeholder="Ej: Toyota Hilux 2022" className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 sm:py-4 pl-11 sm:pl-14 pr-4 sm:pr-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-sm text-white" />
+                        <Car className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-zinc-500" />
+                        <input id="lead-form-vehiculo" required name="vehiculo" type="text" placeholder="Ej: Toyota Hilux 2022" className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 pl-11 sm:pl-14 pr-4 sm:pr-6 focus:border-primary outline-none transition-all text-sm border" />
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <label htmlFor="lead-form-servicio" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4">Servicio Requerido</label>
+                      <label htmlFor="lead-form-servicio" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Servicio Requerido</label>
                       <select 
                         id="lead-form-servicio"
                         name="servicio" 
                         value={selectedService}
                         onChange={(e) => setSelectedService(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all appearance-none cursor-pointer text-white text-sm"
+                        className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all appearance-none cursor-pointer text-sm border"
                       >
                         <option value="Línea de inspección gratuita">Línea de inspección gratuita</option>
                         {services.map((s, idx) => (
@@ -797,13 +796,13 @@ export default function App() {
                     )}
 
                     <div className="space-y-2">
-                      <label htmlFor="lead-form-falla" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4">Descripción o Falla del Vehículo</label>
+                      <label htmlFor="lead-form-falla" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Descripción o Falla del Vehículo</label>
                       <textarea 
                         id="lead-form-falla"
                         name="falla" 
                         placeholder="Describe la falla, ruido o lo que deseas realizarle a tu vehículo..." 
                         rows={2} 
-                        className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm resize-none text-white placeholder:text-zinc-700" 
+                        className="theme-input w-full rounded-xl sm:rounded-2xl py-3 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm resize-none border" 
                       />
                     </div>
 
@@ -825,7 +824,7 @@ export default function App() {
 
 
       {/* Footer */}
-      <footer className="bg-[#0a0b0f] border-t border-white/5 pt-32 pb-12 px-6">
+      <footer className="theme-footer border-t pt-20 sm:pt-32 pb-12 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-4 gap-20 mb-24">
             <div className="lg:col-span-2">
@@ -914,11 +913,11 @@ export default function App() {
 
 
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
             <p>© 2026 SOLUCIONES MASTERTECH C.A. Isla de Margarita, Venezuela. Todos los derechos reservados.</p>
-            <div className="flex gap-12">
-              <a href="#" className="hover:text-white transition-colors">Términos de Servicio</a>
-              <a href="#" className="hover:text-white transition-colors">Política de Privacidad</a>
+            <div className="flex gap-8 sm:gap-12">
+              <a href="#" className="hover:text-primary transition-colors">Términos de Servicio</a>
+              <a href="#" className="hover:text-primary transition-colors">Política de Privacidad</a>
             </div>
           </div>
         </div>

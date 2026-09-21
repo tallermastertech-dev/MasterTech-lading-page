@@ -94,12 +94,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
 
   return (
     <nav
-      className="fixed w-full z-50 backdrop-blur-xl py-3 border-b top-0 shadow-2xl"
-      style={{
-        backgroundColor: 'rgba(13,13,13,0.97)',
-        borderColor: 'rgba(139,141,145,0.2)',
-        color: '#ffffff'
-      }}
+      className="theme-navbar fixed w-full z-50 backdrop-blur-xl py-3 border-b top-0 shadow-2xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center relative">
         <div className="flex items-center gap-3">
@@ -349,7 +344,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#0d0e12]/98 border-b border-white/10 overflow-hidden"
+            className="theme-mobile-menu lg:hidden border-b overflow-hidden"
           >
             <div className="max-w-7xl mx-auto px-6 py-6 space-y-4 max-h-[80vh] overflow-y-auto">
               {/* 1. Inicio */}
