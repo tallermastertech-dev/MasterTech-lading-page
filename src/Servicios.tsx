@@ -140,7 +140,7 @@ export default function Servicios() {
   }, []);
 
   return (
-    <div className="theme-root min-h-screen selection:bg-primary selection:text-black flex flex-col overflow-x-hidden w-full max-w-full">
+    <div className="theme-root min-h-screen selection:bg-primary selection:text-black flex flex-col overflow-x-hidden w-full max-w-full bg-slate-100 dark:bg-[#0D0D0D] transition-colors duration-300">
       {/* Background glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-primary/8 blur-[140px] rounded-full" />
@@ -151,7 +151,7 @@ export default function Servicios() {
       <Navbar activePage="servicios" config={config} />
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-6 py-16 relative z-10">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-16 relative z-10">
         <div className="w-full max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -159,25 +159,25 @@ export default function Servicios() {
             transition={{ duration: 0.7 }}
           >
             {/* Title Section */}
-            <div className="text-center mb-20">
+            <div className="text-center mb-16 sm:mb-20">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6 text-primary font-bold text-xs uppercase tracking-widest">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 Catálogo de Servicios
               </div>
-              <h1 className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-6 text-slate-900 dark:text-white">
                 NUESTROS <span className="text-primary italic">SERVICIOS</span>
               </h1>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                 Soluciones integrales para tu vehículo con tecnología de punta y personal altamente capacitado.
               </p>
             </div>
 
             {/* Services Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 sm:mb-20">
               {services.map((s, i) => (
-                <div key={s.id || i} className="glass-card overflow-hidden hover:border-primary/50 transition-all group flex flex-col">
+                <div key={s.id || i} className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden hover:border-primary/50 transition-all shadow-sm hover:shadow-xl group flex flex-col">
                   <div className="h-48 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors z-10" />
+                    <div className="absolute inset-0 bg-slate-900/20 dark:bg-black/40 group-hover:bg-transparent transition-colors z-10" />
                     <img 
                       src={s.img || "/assets/instalaciones.webp"} 
                       alt={s.title} 
@@ -185,18 +185,18 @@ export default function Servicios() {
                       decoding="async" 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                     />
-                    <div className="absolute top-4 left-4 z-20 bg-black/50 backdrop-blur-md w-12 h-12 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-primary/20 transition-colors">
+                    <div className="absolute top-4 left-4 z-20 bg-white/80 dark:bg-black/50 backdrop-blur-md w-12 h-12 rounded-xl flex items-center justify-center border border-slate-200 dark:border-white/10 group-hover:bg-primary/20 transition-colors shadow-sm">
                       <Wrench className="w-6 h-6 text-primary icon-glow" />
                     </div>
                   </div>
-                  <div className="p-8 flex-1 flex flex-col">
-                    <h3 className="text-xl font-black mb-3">{s.title}</h3>
-                    <p className="text-sm text-zinc-400 leading-relaxed flex-1 mb-6">{s.desc}</p>
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                    <h3 className="text-xl font-black mb-3 text-slate-900 dark:text-white">{s.title}</h3>
+                    <p className="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed flex-1 mb-6">{s.desc}</p>
                     <a 
                       href={config.WHATSAPP_LINK}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-auto flex items-center justify-center gap-2 bg-white/5 border border-white/10 hover:border-primary hover:bg-primary/10 text-white py-3 px-4 rounded-xl font-bold transition-all group/btn"
+                      className="mt-auto flex items-center justify-center gap-2 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-primary hover:bg-primary/10 text-slate-900 dark:text-white py-3 px-4 rounded-xl font-bold transition-all group/btn"
                     >
                       Agendar ya <WhatsAppIcon size={18} className="text-primary group-hover/btn:text-white transition-colors fill-current" />
                     </a>
@@ -206,14 +206,14 @@ export default function Servicios() {
             </div>
 
             {/* CTA Box */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-10 text-center max-w-xl mx-auto">
-              <h3 className="text-3xl font-black mb-3">¿Necesitas una revisión personalizada?</h3>
-              <p className="text-zinc-400 text-sm mb-6 leading-relaxed">Contáctanos por WhatsApp para consultar sobre fallas específicas o agendar tu cita de inmediato.</p>
+            <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-10 text-center max-w-xl mx-auto shadow-sm">
+              <h3 className="text-2xl sm:text-3xl font-black mb-3 text-slate-900 dark:text-white">¿Necesitas una revisión personalizada?</h3>
+              <p className="text-slate-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Contáctanos por WhatsApp para consultar sobre fallas específicas o agendar tu cita de inmediato.</p>
               <a
                 href={config.WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary inline-flex items-center gap-3 !py-4 !px-8 text-base border-none mx-auto"
+                className="btn-primary inline-flex items-center gap-3 !py-4 !px-8 text-sm sm:text-base border-none mx-auto"
               >
                 CONSULTAR VÍA WHATSAPP <ArrowRight className="w-5 h-5" />
               </a>

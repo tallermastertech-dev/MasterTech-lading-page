@@ -695,7 +695,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         {/* SECTION 1: HERO SHOWCASE (INSPIRADO EN EL DISEÑO DE REFERENCIA) */}
         {/* ========================================================================= */}
-        <section className="catalogo-hero-card relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-14 shadow-2xl">
+        <section className="relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-14 shadow-xl border bg-white dark:bg-gradient-to-b dark:from-[#161822] dark:via-[#11131a] dark:to-[#0D0D0D] border-slate-200 dark:border-amber-400/30 transition-colors duration-300">
           {/* Ambient Glows */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -706,9 +706,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <motion.div 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="hero-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-xs uppercase tracking-widest"
+                className="hero-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-xs uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400"
               >
-                <ShieldCheck size={14} className="text-amber-400" />
+                <ShieldCheck size={14} className="text-amber-500 dark:text-amber-400" />
                 <span>Calidad & Certificación OEM Internacional</span>
               </motion.div>
 
@@ -716,19 +716,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] !text-white"
-                style={{ color: '#ffffff' }}
+                className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] text-slate-900 dark:text-white"
               >
-                <span style={{ color: '#ffffff' }}>Repuestos &</span> <br className="hidden sm:block" />
-                <span style={{ color: '#fbbf24', fontStyle: 'italic' }}>Autopartes</span> <span style={{ color: '#ffffff' }}>de Alta Calidad</span>
+                <span>Repuestos &</span> <br className="hidden sm:block" />
+                <span className="text-amber-500 dark:text-amber-400 italic">Autopartes</span> <span>de Alta Calidad</span>
               </motion.h1>
 
               <motion.p 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0"
-                style={{ color: '#cbd5e1' }}
+                className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 text-slate-600 dark:text-slate-300"
               >
                 Frenos cerámicos, suspensión presurizada, lubricantes 100% sintéticos y componentes OEM con stock inmediato en Margarita y despacho express directo desde EE.UU.
               </motion.p>
@@ -743,38 +741,35 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <a 
                   href="#catalogo-grid"
                   className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
-                  style={{ backgroundColor: '#C2A472', color: '#000000', border: 'none' }}
                 >
-                  <ShoppingCart size={16} style={{ color: '#000000' }} />
-                  <span style={{ color: '#000000', fontWeight: 900 }}>Explorar Catálogo</span>
+                  <ShoppingCart size={16} />
+                  <span>Explorar Catálogo</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setIsUsaModalOpen(true)}
-                  className="hero-btn-usa px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg"
-                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', color: '#ffffff', border: '1px solid rgba(255, 255, 255, 0.25)' }}
+                  className="px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-sm bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/25 hover:bg-slate-200 dark:hover:bg-white/20"
                 >
-                  <Plane size={16} className="text-sky-400" style={{ color: '#38bdf8' }} />
-                  <span style={{ color: '#ffffff' }}>Importación USA</span>
+                  <Plane size={16} className="text-blue-500 dark:text-sky-400" />
+                  <span>Importación USA</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(true)}
-                  className="hero-btn-cart px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
-                  style={{ backgroundColor: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.35)' }}
+                  className="px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer bg-amber-50 dark:bg-amber-400/15 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-400/35 hover:bg-amber-100 dark:hover:bg-amber-400/25"
                 >
-                  <ShoppingBag size={16} style={{ color: '#fbbf24' }} />
-                  <span style={{ color: '#fbbf24' }}>Carrito ({cartTotalItems})</span>
+                  <ShoppingBag size={16} />
+                  <span>Carrito ({cartTotalItems})</span>
                 </button>
               </motion.div>
 
               {/* Pagination Dots Simulator */}
               <div className="flex items-center justify-center lg:justify-start gap-2 pt-4">
                 <span className="w-6 h-2 rounded-full bg-amber-400 shadow-md shadow-amber-400/40"></span>
-                <span className="w-2 h-2 rounded-full bg-white/20"></span>
-                <span className="w-2 h-2 rounded-full bg-white/20"></span>
+                <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-white/20"></span>
+                <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-white/20"></span>
               </div>
             </div>
 
@@ -785,7 +780,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               transition={{ delay: 0.2, duration: 0.6 }}
               className="lg:col-span-6 flex items-center justify-center relative"
             >
-              <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-black/50 border border-white/10 p-2 shadow-2xl group">
+              <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group">
                 <img 
                   src="/assets/autoparts_hero_showcase.webp" 
                   alt="Auto Parts Showcase MasterTech"
@@ -793,20 +788,20 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   decoding="async"
                   className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 dark:from-black/60 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Micro-Badge */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15 flex items-center justify-between">
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-md">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-500 dark:text-amber-400 font-bold">
                       <Flame size={16} />
                     </div>
                     <div>
-                      <div className="text-xs font-black" style={{ color: '#ffffff' }}>Discos & Suspensión Heavy Duty</div>
-                      <div className="text-[10px]" style={{ color: '#cbd5e1' }}>Rendimiento garantizado en pista y carretera</div>
+                      <div className="text-xs font-black text-slate-900 dark:text-white">Discos & Suspensión Heavy Duty</div>
+                      <div className="text-[10px] text-slate-600 dark:text-slate-300">Rendimiento garantizado en pista y carretera</div>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30">
+                  <span className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30">
                     OEM 100%
                   </span>
                 </div>
@@ -819,17 +814,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 2: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID COMO REFERENCIA) */}
         {/* ========================================================================= */}
         <section className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-                <span className="text-[11px] font-black uppercase text-amber-400 tracking-wider">Exploración Rápida</span>
+                <span className="text-[11px] font-black uppercase text-amber-500 dark:text-amber-400 tracking-wider">Exploración Rápida</span>
               </div>
-              <h2 className="section-heading-dark text-2xl sm:text-3xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                <span>Categorías</span> <span className="text-amber-400 italic">Populares</span>
+              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                <span>Categorías</span> <span className="text-amber-500 dark:text-amber-400 italic">Populares</span>
               </h2>
             </div>
-            <p className="section-subheading-dark text-xs text-zinc-400 max-w-sm">
+            <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-sm">
               Haz clic en cualquier categoría para filtrar automáticamente el inventario en tiempo real.
             </p>
           </div>
@@ -856,13 +851,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     const el = document.getElementById('catalogo-grid');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className={`catalogo-category-card p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-md ${
+                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-sm hover:shadow-md ${
                     isSelected
                       ? 'is-selected ring-2 ring-amber-400 bg-amber-500/15 border-amber-400'
-                      : 'bg-[#12141a]/90 border-white/10 hover:border-amber-400/40 hover:bg-[#161822]'
+                      : 'bg-white dark:bg-[#12141a]/90 border-slate-200 dark:border-white/10 hover:border-amber-400/50 hover:bg-slate-50 dark:hover:bg-[#161822]'
                   }`}
                 >
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-[#0c0e14] border border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-slate-100 dark:bg-[#0c0e14] border border-slate-200 dark:border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
                     <img 
                       src={catItem.img} 
                       alt={catItem.label} 
@@ -872,10 +867,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-white group-hover:text-amber-400 transition-colors leading-tight truncate">
+                    <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-colors leading-tight truncate">
                       {catItem.label}
                     </h4>
-                    <span className="category-count text-[10px] font-mono text-amber-400/90 font-bold block mt-0.5">
+                    <span className="category-count text-[10px] font-mono text-amber-600 dark:text-amber-400/90 font-bold block mt-0.5">
                       ({count} {count === 1 ? 'producto' : 'productos'})
                     </span>
                   </div>
@@ -890,13 +885,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Promo Card 1: Frenos */}
-          <div className="catalogo-promo-card promo-card-frenos p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-red-500/50 transition-all">
+          <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-red-50/80 dark:bg-gradient-to-br dark:from-[#221010] dark:via-[#151114] dark:to-black border border-red-200 dark:border-red-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block" style={{ color: '#f87171' }}>Frenos Cerámicos</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight !text-white" style={{ color: '#ffffff' }}>
-                Hasta <span style={{ color: '#f87171' }}>30% Off</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-red-600 dark:text-[#f87171]">Frenos Cerámicos</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
+                Hasta <span className="text-red-600 dark:text-[#f87171]">30% Off</span>
               </h3>
-              <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Pastillas y discos de alta disipación térmica.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">Pastillas y discos de alta disipación térmica.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -904,26 +899,25 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
-                style={{ background: 'transparent', border: 'none', color: '#f87171', padding: 0 }}
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-red-600 dark:text-[#f87171]"
               >
-                <span style={{ color: '#f87171' }}>Ver Frenos</span>
-                <ArrowRight size={13} style={{ color: '#f87171' }} />
+                <span>Ver Frenos</span>
+                <ArrowRight size={13} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-red-100 dark:border-white/5">
               <img src="/assets/promo_brakes_caliper.webp" alt="Frenos Cerámicos" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
           {/* Promo Card 2: Suspensión */}
-          <div className="catalogo-promo-card promo-card-suspension p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-amber-500/50 transition-all">
+          <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-amber-50/80 dark:bg-gradient-to-br dark:from-[#221a0f] dark:via-[#151310] dark:to-black border border-amber-200 dark:border-amber-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block" style={{ color: '#fbbf24' }}>Suspensión Pro</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight !text-white" style={{ color: '#ffffff' }}>
-                Importación <span style={{ color: '#fbbf24' }}>USA</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-amber-600 dark:text-[#fbbf24]">Suspensión Pro</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
+                Importación <span className="text-amber-500 dark:text-[#fbbf24]">USA</span>
               </h3>
-              <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Amortiguadores presurizados y coilovers.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">Amortiguadores presurizados y coilovers.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -931,26 +925,25 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
-                style={{ background: 'transparent', border: 'none', color: '#fbbf24', padding: 0 }}
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-amber-600 dark:text-[#fbbf24]"
               >
-                <span style={{ color: '#fbbf24' }}>Ver Suspensión</span>
-                <ArrowRight size={13} style={{ color: '#fbbf24' }} />
+                <span>Ver Suspensión</span>
+                <ArrowRight size={13} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-amber-100 dark:border-white/5">
               <img src="/assets/promo_suspension_spring.webp" alt="Suspensión" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
           {/* Promo Card 3: Inyección y Motores */}
-          <div className="catalogo-promo-card promo-card-motor p-6 rounded-3xl relative overflow-hidden shadow-xl flex items-center justify-between group hover:border-blue-500/50 transition-all">
+          <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-blue-50/80 dark:bg-gradient-to-br dark:from-[#0e1726] dark:via-[#10141c] dark:to-black border border-blue-200 dark:border-blue-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block" style={{ color: '#60a5fa' }}>Inyección & Motor</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight !text-white" style={{ color: '#ffffff' }}>
-                Alto <span style={{ color: '#60a5fa' }}>Rendimiento</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-blue-600 dark:text-[#60a5fa]">Inyección & Motor</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
+                Alto <span className="text-blue-600 dark:text-[#60a5fa]">Rendimiento</span>
               </h3>
-              <p className="text-[11px]" style={{ color: '#cbd5e1' }}>Turbos, microfiltros y bombas OEM.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">Turbos, microfiltros y bombas OEM.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -958,14 +951,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer !bg-transparent !border-0 !p-0 !shadow-none"
-                style={{ background: 'transparent', border: 'none', color: '#60a5fa', padding: 0 }}
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-blue-600 dark:text-[#60a5fa]"
               >
-                <span style={{ color: '#60a5fa' }}>Ver Inyección</span>
-                <ArrowRight size={13} style={{ color: '#60a5fa' }} />
+                <span>Ver Inyección</span>
+                <ArrowRight size={13} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-[#0c0e14]/60 p-1 flex items-center justify-center">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-blue-100 dark:border-white/5">
               <img src="/assets/promo_turbo_charger.webp" alt="Turbo e Inyección" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
@@ -1075,7 +1067,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <div className="space-y-1.5">
                         <h3 
                           onClick={() => setSelectedProduct(item)}
-                          className="product-title text-xs sm:text-sm font-bold text-white hover:text-amber-400 transition-colors cursor-pointer leading-relaxed line-clamp-2 min-h-[2.7em]"
+                          className="product-title text-xs sm:text-sm font-bold text-slate-900 dark:text-white hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer leading-relaxed line-clamp-2 min-h-[2.7em]"
                           title={item.title}
                         >
                           {item.title}
@@ -1170,32 +1162,29 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 5: CUSTOM USA PART IMPORT BANNER */}
         {/* ========================================================================= */}
         <section 
-          className="catalogo-usa-banner rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl"
-          style={{ background: 'linear-gradient(135deg, #0d1527 0%, #161f30 50%, #10141d 100%)', borderColor: 'rgba(251, 191, 36, 0.4)', color: '#ffffff' }}
+          className="rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-xl border bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-100 dark:from-[#0d1527] dark:via-[#161f30] dark:to-[#10141d] border-blue-200 dark:border-amber-400/40 text-slate-900 dark:text-white transition-colors duration-300"
         >
           <div className="space-y-3 max-w-2xl relative z-10">
             <div 
-              className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border"
-              style={{ backgroundColor: 'rgba(59, 130, 246, 0.25)', borderColor: 'rgba(96, 165, 250, 0.5)', color: '#93c5fd' }}
+              className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border bg-blue-100 dark:bg-blue-500/25 border-blue-300 dark:border-blue-400/50 text-blue-700 dark:text-blue-300"
             >
-              <Plane size={13} style={{ color: '#60a5fa' }} />
-              <span style={{ color: '#93c5fd' }}>Importación Directa desde Miami / EE.UU.</span>
+              <Plane size={13} className="text-blue-600 dark:text-blue-400" />
+              <span>Importación Directa desde Miami / EE.UU.</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight !text-white" style={{ color: '#ffffff' }}>
+            <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
               ¿Buscas un repuesto o componente específico desde USA?
             </h2>
-            <p className="text-sm leading-relaxed" style={{ color: '#cbd5e1' }}>
+            <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
               Importamos repuestos originales OEM y alternativos certificados directamente desde EE.UU. para Jeep, Toyota, Honda, Nissan, Dodge, Chrysler, Ford y Lexus. Envíanos tu número de parte OEM o Serial VIN por WhatsApp.
             </p>
           </div>
           <button
             type="button"
             onClick={() => setIsUsaModalOpen(true)}
-            className="usa-banner-btn py-4 px-8 rounded-2xl shrink-0 shadow-2xl flex items-center gap-2 relative z-10 cursor-pointer font-black text-xs uppercase tracking-wider"
-            style={{ backgroundColor: '#C2A472', color: '#000000', border: 'none' }}
+            className="btn-primary py-4 px-8 rounded-2xl shrink-0 shadow-xl flex items-center gap-2 relative z-10 cursor-pointer font-black text-xs uppercase tracking-wider border-none"
           >
-            <Plane size={18} className="animate-bounce" style={{ color: '#000000' }} />
-            <span style={{ color: '#000000', fontWeight: 900 }}>Formulario de Solicitud EE.UU.</span>
+            <Plane size={18} className="animate-bounce" />
+            <span>Formulario de Solicitud EE.UU.</span>
           </button>
         </section>
       </main>

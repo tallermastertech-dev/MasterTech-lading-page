@@ -468,7 +468,7 @@ export default function App() {
       <Navbar activePage="inicio" config={config} />
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-8 lg:pt-24 lg:pb-12 px-4 sm:px-6 overflow-hidden min-h-[calc(100vh-70px)] flex flex-col justify-center items-center">
+      <section className="relative pt-20 pb-8 lg:pt-24 lg:pb-12 px-4 sm:px-6 overflow-hidden min-h-[calc(100vh-70px)] flex flex-col justify-center items-center bg-slate-100 dark:bg-[#0D0D0D] transition-colors duration-300">
         {/* Workshop Background Image & Overlay */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <img 
@@ -476,10 +476,10 @@ export default function App() {
             alt="MasterTech Taller" 
             decoding="async"
             fetchPriority="high"
-            className="w-full h-full object-cover object-center opacity-75 transition-opacity duration-300" 
+            className="w-full h-full object-cover object-center opacity-35 dark:opacity-75 transition-opacity duration-300" 
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/90 via-[#0D0D0D]/60 to-[#0D0D0D]/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/85 via-transparent to-[#0D0D0D]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-100/95 via-slate-100/75 to-slate-100/40 dark:from-[#0D0D0D]/90 dark:via-[#0D0D0D]/60 dark:to-[#0D0D0D]/30 transition-colors duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-100/95 via-transparent to-slate-100/60 dark:from-[#0D0D0D]/85 dark:via-transparent dark:to-[#0D0D0D]/40 transition-colors duration-300" />
         </div>
         
         <div className="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto relative z-10 w-full">
@@ -491,46 +491,41 @@ export default function App() {
             >
               {(() => {
                 const tallerStatus = getTallerStatus(config.IS_OPEN);
-                const textColor = tallerStatus.isOpen ? '#34d399' : '#fbbf24';
+                const textColor = tallerStatus.isOpen ? '#059669' : '#d97706';
                 return (
                   <div 
-                    className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border mb-4 text-xs font-black uppercase tracking-wider shadow-xl transition-all taller-status-badge ${tallerStatus.badgeBg} ${tallerStatus.badgeBorder}`}
-                    style={{
-                      backgroundColor: tallerStatus.isOpen ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-                      borderColor: tallerStatus.isOpen ? 'rgba(52, 211, 153, 0.4)' : 'rgba(251, 191, 36, 0.4)',
-                      color: textColor
-                    }}
+                    className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border mb-4 text-xs font-black uppercase tracking-wider shadow-sm transition-all taller-status-badge ${tallerStatus.badgeBg} ${tallerStatus.badgeBorder}`}
                   >
                     <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.dotColor} animate-pulse shrink-0`} />
-                    <span className="taller-status-text font-black" style={{ color: textColor }}>
+                    <span className="taller-status-text font-black">
                       {tallerStatus.badgeText}
                     </span>
                   </div>
                 );
               })()}
-              <h1 className="text-white text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 uppercase leading-[1.05]">
+              <h1 className="text-slate-900 dark:text-white text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 uppercase leading-[1.05]">
                 TU VEHÍCULO MERECE <br />
-                <span className="text-amber-400 font-black">ATENCIÓN EXPERTA</span>
+                <span className="text-amber-500 dark:text-amber-400 font-black">ATENCIÓN EXPERTA</span>
               </h1>
-              <p className="text-white/85 text-sm sm:text-base lg:text-lg mb-6 max-w-md lg:max-w-lg leading-relaxed font-medium">
+              <p className="text-slate-600 dark:text-white/85 text-sm sm:text-base lg:text-lg mb-6 max-w-md lg:max-w-lg leading-relaxed font-medium">
                 Elevamos el estándar del servicio automotriz con diagnóstico avanzado, repuestos de primera y un equipo altamente capacitado listo para resolver cualquier falla.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <a href="#contacto" className="btn-primary !px-7 !py-3.5 text-sm sm:text-base border-none shadow-[0_10px_30px_rgba(194,164,114,0.35)]">
                   Agendar Cita <ArrowRight className="w-4 h-4 ml-2" />
                 </a>
-                <a href="/servicios" className="btn-secondary !px-7 !py-3.5 text-sm sm:text-base !bg-white/10 backdrop-blur-md !border-white/20 hover:!bg-white/20 !text-white !font-bold">
+                <a href="/servicios" className="btn-secondary !px-7 !py-3.5 text-sm sm:text-base bg-white dark:bg-white/10 border border-slate-200 dark:border-white/20 hover:bg-slate-50 dark:hover:bg-white/20 text-slate-900 dark:text-white font-bold shadow-sm backdrop-blur-md">
                   Ver Servicios
                 </a>
               </div>
               
-              <div className="mt-6 sm:mt-8 flex items-center gap-6 text-xs sm:text-sm font-bold text-white/80">
+              <div className="mt-6 sm:mt-8 flex items-center gap-6 text-xs sm:text-sm font-bold text-slate-700 dark:text-white/80">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400 icon-glow" />
+                  <CheckCircle2 className="w-4 h-4 text-amber-500 dark:text-amber-400 icon-glow" />
                   <span>Garantía Total</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400 icon-glow" />
+                  <CheckCircle2 className="w-4 h-4 text-amber-500 dark:text-amber-400 icon-glow" />
                   <span>Atención VIP</span>
                 </div>
               </div>
@@ -546,7 +541,7 @@ export default function App() {
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-primary/10 rounded-[2.5rem] blur-3xl -z-10" />
               
               {/* Glassmorphic Frame matching user screenshot */}
-              <div className="relative bg-[#12141a]/90 backdrop-blur-xl border border-white/20 shadow-[0_30px_70px_rgba(0,0,0,0.9)] rounded-[2.2rem] lg:rounded-[2.5rem] p-2 overflow-hidden">
+              <div className="relative bg-white/80 dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-[0_30px_70px_rgba(0,0,0,0.9)] rounded-[2.2rem] lg:rounded-[2.5rem] p-2 overflow-hidden transition-all duration-300">
                 <div className="w-full aspect-[9/16] rounded-[1.8rem] lg:rounded-[2rem] overflow-hidden bg-black relative flex items-center justify-center">
                   {isDirectVideoUrl(config.HERO_REEL_URL) ? (
                     <video 
@@ -612,13 +607,15 @@ export default function App() {
       </section>
 
       {/* Instalaciones Section */}
-      <section id="instalaciones" className="instalaciones-section py-32 px-6 relative overflow-hidden">
+      <section id="instalaciones" className="py-20 lg:py-32 px-4 sm:px-6 relative overflow-hidden bg-slate-50 dark:bg-[#0a0b0f] transition-colors duration-300">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-col lg:flex-row gap-20 items-center">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
             <div className="flex-1">
-              <h2 className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-8" style={{ color: '#ffffff' }}>NUESTRAS <br/><span className="text-primary italic">INSTALACIONES</span></h2>
-              <div className="space-y-8">
+              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-8 text-slate-900 dark:text-white">
+                NUESTRAS <br/><span className="text-primary italic">INSTALACIONES</span>
+              </h2>
+              <div className="space-y-6 sm:space-y-8">
                 {[
                   { title: "Área de Recepción", desc: "Atención al cliente personalizada y elaboración de presupuestos transparentes.", icon: <User className="w-6 h-6 text-primary icon-glow" /> },
                   { title: "Sala de Espera VIP", desc: "Zona cómoda y climatizada con café de cortesía y conexión Wi-Fi de alta velocidad.", icon: <Clock className="w-6 h-6 text-primary icon-glow" /> },
@@ -626,16 +623,16 @@ export default function App() {
                   { title: "Software de Gestión", desc: "Control de inventario, órdenes de trabajo e historial detallado de tu vehículo.", icon: <Search className="w-6 h-6 text-primary icon-glow" /> }
                 ].map((item, i) => {
                   const Content = (
-                    <div className={`flex gap-6 items-start ${item.href ? 'group/inst hover:bg-white/5 p-3 -m-3 rounded-2xl transition-all border border-transparent hover:border-primary/30 cursor-pointer' : ''}`}>
-                      <div className="mt-1 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover/inst:bg-primary/10 group-hover/inst:border-primary/50" style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                    <div className={`flex gap-4 sm:gap-6 items-start ${item.href ? 'group/inst hover:bg-slate-100 dark:hover:bg-white/5 p-3 -m-3 rounded-2xl transition-all border border-transparent hover:border-primary/30 cursor-pointer' : ''}`}>
+                      <div className="mt-1 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover/inst:bg-primary/10 group-hover/inst:border-primary/50 bg-white dark:bg-white/6 border border-slate-200 dark:border-white/12 shadow-sm">
                         {item.icon}
                       </div>
                       <div>
-                        <h3 className="text-xl font-black mb-2 flex items-center gap-2 group-hover/inst:text-primary transition-colors" style={{ color: '#f1f5f9' }}>
+                        <h3 className="text-lg sm:text-xl font-black mb-1.5 sm:mb-2 flex items-center gap-2 group-hover/inst:text-primary transition-colors text-slate-900 dark:text-[#f1f5f9]">
                           <span>{item.title}</span>
                           {item.href && <ArrowRight size={16} className="text-primary opacity-0 group-hover/inst:opacity-100 group-hover/inst:translate-x-1 transition-all" />}
                         </h3>
-                        <p className="text-sm leading-relaxed" style={{ color: '#94a3b8' }}>{item.desc}</p>
+                        <p className="text-sm leading-relaxed text-slate-600 dark:text-[#94a3b8]">{item.desc}</p>
                         {item.href && (
                           <span className="inline-flex items-center gap-1 text-xs font-bold text-primary mt-2 group-hover/inst:underline">
                             Explorar Catálogo de Repuestos →
@@ -655,8 +652,8 @@ export default function App() {
                 })}
               </div>
             </div>
-            <div className="flex-1 relative">
-              <div className="glass-card p-2 md:p-4 rotate-3 hover:rotate-0 transition-transform duration-500">
+            <div className="flex-1 relative w-full max-w-lg lg:max-w-none">
+              <div className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl p-2 md:p-4 shadow-xl rotate-2 hover:rotate-0 transition-transform duration-500">
                  <img 
                    src={config.IMG_INSTALACIONES || "/assets/instalaciones.webp"} 
                    alt="Instalaciones MasterTech" 
@@ -676,13 +673,13 @@ export default function App() {
       {/* Booking Form */}
       <section id="contacto" className="py-16 md:py-32 px-3 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="glass-card p-4 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden mt-8 md:mt-16">
+          <div className="p-4 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden mt-8 md:mt-16 rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 shadow-xl transition-colors duration-300">
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -mr-48 -mt-48 pointer-events-none" />
             
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 relative z-10">
               <div>
-                <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-4 md:mb-8 leading-none">RESERVA TU <br /><span className="text-primary italic">CUPO</span></h2>
-                <p className="text-base sm:text-xl text-zinc-400 mb-8 md:mb-12 leading-relaxed">Estamos listos para recibirte. Completa los datos y te asignaremos un técnico especialista.</p>
+                <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-4 md:mb-8 leading-none text-slate-900 dark:text-white">RESERVA TU <br /><span className="text-primary italic">CUPO</span></h2>
+                <p className="text-base sm:text-xl text-slate-600 dark:text-zinc-400 mb-8 md:mb-12 leading-relaxed">Estamos listos para recibirte. Completa los datos y te asignaremos un técnico especialista.</p>
                 
                 <div className="space-y-4">
                   {/* WhatsApp Button */}
@@ -707,20 +704,20 @@ export default function App() {
                     href={config.GOOGLE_MAPS_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99] location-contact-link theme-location-card border"
+                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99] border bg-slate-50 dark:bg-white/6 border-slate-200 dark:border-white/12 shadow-sm"
                   >
                     <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 theme-icon-box border">
                       <MapPin size={20} style={{ color: '#C2A472' }} />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest mb-0.5" style={{ color: '#94a3b8' }}>Ubicación</p>
-                      <p className="text-base sm:text-lg font-black location-contact-value theme-location-value">Porlamar, Nueva Esparta</p>
+                      <p className="text-[10px] font-black uppercase tracking-widest mb-0.5 text-slate-500 dark:text-zinc-400">Ubicación</p>
+                      <p className="text-base sm:text-lg font-black text-slate-900 dark:text-[#f1f5f9]">Porlamar, Nueva Esparta</p>
                     </div>
                   </a>
                 </div>
               </div>
 
-              <div className="booking-form-card theme-form-card p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border">
+              <div className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 shadow-sm">
                 {formStatus === 'success' ? (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 sm:py-20">
                     <CheckCircle2 className="w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-6" />

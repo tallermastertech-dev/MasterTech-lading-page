@@ -256,13 +256,13 @@ export default function Nosotros() {
 
   return (
     <div
-      className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-black"
+      className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-black bg-slate-100 dark:bg-[#070708] transition-colors duration-300"
     >
       {/* Navigation Header */}
       <Navbar activePage="nosotros" />
 
       {/* Main Content */}
-      <main className="flex-1 pt-32 pb-24 relative overflow-hidden">
+      <main className="flex-1 pt-28 sm:pt-32 pb-24 relative overflow-hidden">
         {/* Background Decorative Lighting */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-1/2 right-10 w-[400px] h-[400px] bg-yellow-500/5 rounded-full blur-[160px] pointer-events-none" />
@@ -278,16 +278,10 @@ export default function Nosotros() {
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-black tracking-widest uppercase mb-4">
                 Conoce al equipo
               </div>
-              <h1
-                className="text-5xl lg:text-7xl font-display font-black tracking-tighter mb-6"
-                style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
-              >
-                NUESTRO <span className="text-primary italic" style={{ color: '#f59e0b', WebkitTextFillColor: '#f59e0b' } as React.CSSProperties}>EQUIPO</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-6 text-slate-900 dark:text-white">
+                NUESTRO <span className="text-primary italic">EQUIPO</span>
               </h1>
-              <p
-                className="text-xl max-w-2xl mx-auto leading-relaxed"
-                style={{ color: '#a1a1aa', WebkitTextFillColor: '#a1a1aa' } as React.CSSProperties}
-              >
+              <p className="text-base sm:text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                 Profesionales apasionados por la mecánica y comprometidos con la excelencia, precisión y transparencia en cada servicio.
               </p>
             </div>
@@ -297,15 +291,10 @@ export default function Nosotros() {
               {teamMembers.map((member, i) => (
                 <div
                   key={member.id || i}
-                  className="overflow-hidden group flex flex-col h-full transition-all duration-300 shadow-2xl rounded-3xl"
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(245,158,11,0.2)',
-                    backdropFilter: 'blur(12px)'
-                  }}
+                  className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden group flex flex-col h-full transition-all duration-300 shadow-sm hover:shadow-xl hover:border-primary/50"
                 >
                   {/* Photo Container */}
-                  <div className="h-64 sm:h-72 overflow-hidden relative shrink-0" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                  <div className="h-64 sm:h-72 overflow-hidden relative shrink-0 bg-slate-100 dark:bg-black/40">
                     <img
                       src={member.img || "/assets/servicio-mecanica.webp"}
                       alt={member.name}
@@ -321,24 +310,18 @@ export default function Nosotros() {
                     <div className="w-full flex flex-col items-center">
                       {/* Role Badge */}
                       <div className="mb-3.5 flex justify-center w-full">
-                        <span className="inline-block text-[10px] sm:text-[11px] font-black text-primary uppercase tracking-widest bg-primary/10 border border-primary/40 px-4 py-1.5 rounded-full shadow-md backdrop-blur-sm">
+                        <span className="inline-block text-[10px] sm:text-[11px] font-black text-primary uppercase tracking-widest bg-primary/10 border border-primary/40 px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm">
                           {member.role || 'ESPECIALISTA'}
                         </span>
                       </div>
 
                       {/* Member Name */}
-                      <h3
-                        className="text-xl sm:text-2xl font-black tracking-tight leading-tight mb-2.5 text-center group-hover:text-primary transition-colors"
-                        style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
-                      >
+                      <h3 className="text-xl sm:text-2xl font-black tracking-tight leading-tight mb-2.5 text-center text-slate-900 dark:text-white group-hover:text-primary transition-colors">
                         {member.name}
                       </h3>
 
                       {/* Profile Description */}
-                      <p
-                        className="text-xs sm:text-sm leading-relaxed font-normal text-center max-w-xs mx-auto"
-                        style={{ color: '#a1a1aa', WebkitTextFillColor: '#a1a1aa' } as React.CSSProperties}
-                      >
+                      <p className="text-xs sm:text-sm leading-relaxed font-normal text-center max-w-xs mx-auto text-slate-600 dark:text-zinc-400">
                         {member.desc}
                       </p>
                     </div>
@@ -348,14 +331,7 @@ export default function Nosotros() {
             </div>
 
             {/* CTA Box - Unirse al Equipo MasterTech */}
-            <div
-              className="rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-2xl relative overflow-hidden group"
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(245,158,11,0.3)',
-                backdropFilter: 'blur(12px)'
-              }}
-            >
+            <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-amber-500/30 rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-sm dark:shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-40 h-40 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
 
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold tracking-widest uppercase mb-4 shadow-sm">
@@ -363,24 +339,17 @@ export default function Nosotros() {
                 <span>Oportunidades & Talento</span>
               </div>
 
-              <h3
-                className="text-2xl sm:text-4xl font-black mb-3 tracking-tight leading-tight"
-                style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
-              >
-                ¿Quieres formar parte del <span className="text-primary italic" style={{ color: '#f59e0b', WebkitTextFillColor: '#f59e0b' } as React.CSSProperties}>equipo MasterTech</span>?
+              <h3 className="text-2xl sm:text-4xl font-black mb-3 tracking-tight leading-tight text-slate-900 dark:text-white">
+                ¿Quieres formar parte del <span className="text-primary italic">equipo MasterTech</span>?
               </h3>
 
-              <p
-                className="text-sm sm:text-base mb-8 leading-relaxed max-w-lg mx-auto"
-                style={{ color: '#a1a1aa', WebkitTextFillColor: '#a1a1aa' } as React.CSSProperties}
-              >
+              <p className="text-sm sm:text-base mb-8 leading-relaxed max-w-lg mx-auto text-slate-600 dark:text-zinc-300">
                 Buscamos profesionales apasionados por la precisión mecánica, el diagnóstico automotriz y la excelencia en el servicio. Completa tu postulación y adjunta tu currículum.
               </p>
 
               <a
                 href="/postulacion"
                 className="btn-primary inline-flex items-center justify-center gap-3 !py-4 !px-9 text-sm sm:text-base font-black border-none mx-auto rounded-full shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:shadow-[0_0_35px_rgba(212,175,55,0.7)] transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                style={{ color: '#000000', WebkitTextFillColor: '#000000', backgroundColor: '#f59e0b' } as React.CSSProperties}
               >
                 <span>POSTULARME AL EQUIPO</span>
                 <ArrowRight className="w-5 h-5" />
