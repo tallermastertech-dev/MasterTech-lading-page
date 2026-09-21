@@ -450,7 +450,10 @@ export default function Catalogo() {
   };
 
   const parsePrice = (priceStr: string): number => {
-    const num = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+    if (!priceStr) return 0;
+    const match = String(priceStr).match(/(\d+(?:\.\d+)?)/);
+    if (!match) return 0;
+    const num = parseFloat(match[1]);
     return isNaN(num) ? 0 : num;
   };
 
@@ -1080,8 +1083,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                               ${oldPrice}
                             </span>
                           )}
-                          <span className="product-price text-sm sm:text-base font-black text-amber-400">
-                            {item.price}
+                          <span className="product-price text-sm sm:text-base font-black text-amber-500 dark:text-amber-400">
+                            {numericPrice > 0 ? `$${numericPrice.toFixed(2)}` : item.price}
                           </span>
                         </div>
                       </div>
@@ -1552,7 +1555,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         </div>
 
                         <h3 className="text-xl font-bold leading-snug" style={{ color: '#ffffff' }}>{selectedProduct.title}</h3>
-                        <div className="text-2xl font-black font-mono" style={{ color: '#C2A472' }}>{selectedProduct.price}</div>
+                        <div className="text-2xl font-black font-mono" style={{ color: '#C2A472' }}>
+                          {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)}` : selectedProduct.price}
+                        </div>
                         <p className="text-xs leading-relaxed" style={{ color: '#cbd5e1' }}>{selectedProduct.desc}</p>
                       </div>
                     </div>
@@ -1601,7 +1606,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <div className="p-4 sm:p-6 border-t border-white/10 bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
                 <div className="flex items-baseline gap-2">
                   <span className="text-xs text-zinc-400">Total:</span>
-                  <span className="text-2xl font-black text-amber-400 font-mono">{selectedProduct.price}</span>
+                  <span className="text-2xl font-black text-amber-400 font-mono">
+                    {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)}` : selectedProduct.price}
+                  </span>
                   {selectedProduct.isImportedUSA && (
                     <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
                   )}

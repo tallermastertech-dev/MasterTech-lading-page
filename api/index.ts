@@ -2035,7 +2035,7 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
           'Compatible herramientas: LAUNCH X431, TPMS Pad, Autel MaxiTPMS, Bartec TECH600',
           'Transmite presión, temperatura, voltaje batería e ID sensor a la ECU en tiempo real'
         ],
-        precio: '$35 USD / unidad — Set de 4 sensores: $120-140 USD',
+        precio: '$35.00',
         badge: 'Importación Directa USA',
         referencias: [
           'LAUNCH LTR-03 (OEM ref. original)',
@@ -2059,7 +2059,7 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
           'Batería litio sellada: 5-8 años / 160,000 km',
           'Compatibilidad herramientas LAUNCH X431 y CRP series'
         ],
-        precio: '$28 USD / unidad — Set de 4: $95-105 USD',
+        precio: '$28.00',
         badge: 'Importación Directa USA',
         referencias: ['LAUNCH LTR-01', 'Autel MX-Sensor 433MHz', 'Hamaton HP-PRO 433MHz']
       };
@@ -2078,7 +2078,7 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
           'Batería litio sellada: 5-8 años vida útil',
           'Compatibilidad: LAUNCH X431, Autel MaxiTPMS, Bartec TECH300'
         ],
-        precio: '$28 USD / unidad — Set de 4: $95-105 USD',
+        precio: '$28.00',
         badge: 'Importación Directa USA',
         referencias: ['LAUNCH LTR-02', 'Schrader EZ-Sensor 28353 (315MHz)', 'Autel MX-Sensor 315MHz']
       };
@@ -2101,7 +2101,7 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
           'Compatible: Autel MaxiTPMS TS601/TS608/ITS600, LAUNCH X431',
           'Válvula aluminio anodizado con tuerca de bronce M7x0.75'
         ],
-        precio: '$38 USD / unidad — Set de 4: $135-150 USD',
+        precio: '$38.00',
         badge: 'Importación Directa USA',
         referencias: ['Autel MX-Sensor 433/315', 'LAUNCH LTR-03', 'Schrader EZ-Sensor 28353']
       };
@@ -2124,7 +2124,7 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
           'Compatible: Bartec, Autel, LAUNCH, OTC, Snap-on, Hunter',
           'Válvula metal recubrimiento nitruro de titanio anticorrosión'
         ],
-        precio: '$35-45 USD / unidad — Set de 4: $130-170 USD',
+        precio: '$35.00',
         badge: 'Importación Directa USA',
         referencias: ['Schrader 28053 (315MHz)', 'Schrader 28353 (433MHz)', 'Autel MX-Sensor', 'LAUNCH LTR-03']
       };
@@ -2714,7 +2714,7 @@ COMPATIBILIDAD: Se ESPECIFICO con Marca+Modelo+Cilindrada+Codigo Motor+Rango Ani
 PRECIOS MERCADO REAL: filtro cabina $12-28, filtro aceite $8-25, sensor MAF $45-150, sensor O2 $30-120, sensor ECT/TPS $20-80, inyector $35-120, cuerpo aceleracion $80-250, bobina COP $25-85, bujias set-4 $30-120, bomba gasolina $80-220, bomba agua $35-150, termostato $15-50, radiador $120-350, correa serpentin $20-55, kit cadena $150-450, amortiguador unitario $45-180, pastillas set-2 $30-120, disco freno $40-150, kit embrague $150-450, semieje CV $80-220, cubo rueda $60-180, compresor A/C $180-650, motor arranque $80-250, alternador $90-280, transfer case PTU $350-750.
 
 DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
-{"titulo":"[Tipo ESPECIFICO de repuesto NO generico con Marca+Modelo+Motorizacion+Anios]","categoria":"[Inyección & Motor | Frenos & Discos | Suspensión & Amortiguadores | Aceites & Lubricantes | Baterías & Electricidad | Filtros & Consumibles | Fluidos & Climatización | Cuidado & Detailing]","compatibilidad":"[Marca Modelo Cilindrada Codigo-Motor Anios — varios vehiculos con punto y coma]","descripcionCorta":"[1-2 oraciones tecnicas con material y beneficio clave]","descripcionDetallada":"[Descripcion tecnica completa con material, dimensiones, especificaciones, temperatura de operacion e intervalo de reemplazo]","specs":["[Material o composicion exacta del repuesto]","[Dimensiones o capacidad principal]","[Parametros electricos o mecanicos clave]","[Intervalo de reemplazo o vida util]","[Norma o numero OEM original equivalente]"],"precio":"[$XX USD estimacion mercado real]","referencias":["[Numero OEM original exacto del fabricante]","[Equivalente aftermarket Marca + Numero]","[Otra referencia cruzada importante]"]}`;
+{"titulo":"[Tipo ESPECIFICO de repuesto NO generico con Marca+Modelo+Motorizacion+Anios]","categoria":"[Inyección & Motor | Frenos & Discos | Suspensión & Amortiguadores | Aceites & Lubricantes | Baterías & Electricidad | Filtros & Consumibles | Fluidos & Climatización | Cuidado & Detailing]","compatibilidad":"[Marca Modelo Cilindrada Codigo-Motor Anios — varios vehiculos con punto y coma]","descripcionCorta":"[1-2 oraciones tecnicas con material y beneficio clave]","descripcionDetallada":"[Descripcion tecnica completa con material, dimensiones, especificaciones, temperatura de operacion e intervalo de reemplazo]","specs":["[Material o composicion exacta del repuesto]","[Dimensiones o capacidad principal]","[Parametros electricos o mecanicos clave]","[Intervalo de reemplazo o vida util]","[Norma o numero OEM original equivalente]"],"precio":"[$XX.XX (solo monto numerico con signo $, ej: $45.00)]","referencias":["[Numero OEM original exacto del fabricante]","[Equivalente aftermarket Marca + Numero]","[Otra referencia cruzada importante]"]}`;
 
       const geminiModels = ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'];
       for (const model of geminiModels) {
@@ -2770,6 +2770,9 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
 
     const finalCategory = normalizeCategory(parsedJson?.categoria || parsedJson?.category || '');
 
+    const matchAiPrice = String(parsedJson?.precio || '').match(/(\d+(?:\.\d+)?)/);
+    const cleanAiPrice = matchAiPrice ? `$${parseFloat(matchAiPrice[1]).toFixed(2)}` : '$35.00';
+
     const itemPayload = {
       title: parsedJson?.titulo || ('Repuesto OEM #' + pNum),
       category: finalCategory,
@@ -2782,7 +2785,7 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
         'Garantía de instalación en taller MasterTech'
       ],
       badge: 'Repuesto Certificado OEM',
-      price: parsedJson?.precio || '$35 USD',
+      price: cleanAiPrice,
       partNumber: pNum
     };
 

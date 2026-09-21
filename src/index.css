@@ -281,6 +281,21 @@ html.theme-light .brands-ticker .marquee-fade-right { background: linear-gradien
   color: #cbd5e1 !important;
 }
 
+/* Glass Card Adaptive Utility */
+.glass-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  color: #0f172a;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.dark .glass-card,
+html:not(.theme-light) .glass-card {
+  background-color: #12141a;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 /* Floating rates trigger */
 html.theme-light .brecha-bubble-trigger {
   background-color: #ffffff !important;

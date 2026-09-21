@@ -152,10 +152,10 @@ export default function Faq() {
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 Centro de ayuda
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black tracking-tighter mb-3">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black tracking-tighter mb-3 text-slate-900 dark:text-white">
                 PREGUNTAS <span className="text-primary italic">FRECUENTES</span>
               </h1>
-              <p className="text-base sm:text-lg text-zinc-400 max-w-xl mx-auto font-medium">
+              <p className="text-base sm:text-lg text-slate-600 dark:text-zinc-400 max-w-xl mx-auto font-medium">
                 Resolvemos tus dudas más comunes de forma transparente.
               </p>
             </div>
@@ -163,15 +163,15 @@ export default function Faq() {
             {/* 2-Column Grid Layout matching screenshot */}
             <div className="grid lg:grid-cols-12 gap-8 items-start">
               
-              {/* Left Column: FAQ Accordion List (Green Box) */}
+              {/* Left Column: FAQ Accordion List */}
               <div className="lg:col-span-7 space-y-4">
                 {faqs.map((faq, i) => (
-                  <div key={i} className="glass-card overflow-hidden">
+                  <div key={i} className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
                     <button 
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full text-left p-5 sm:p-6 flex justify-between items-center hover:bg-white/5 transition-colors cursor-pointer"
+                      className="w-full text-left p-5 sm:p-6 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
                     >
-                      <span className="font-bold text-base sm:text-lg pr-4 text-white leading-snug">{faq.q}</span>
+                      <span className="font-bold text-base sm:text-lg pr-4 text-slate-900 dark:text-white leading-snug">{faq.q}</span>
                       {openFaq === i ? <Minus className="w-5 h-5 text-primary shrink-0" /> : <Plus className="w-5 h-5 text-primary shrink-0" />}
                     </button>
                     <AnimatePresence>
@@ -181,7 +181,7 @@ export default function Faq() {
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                         >
-                          <div className="p-5 sm:p-6 pt-0 text-zinc-400 leading-relaxed border-t border-white/5 mt-1 text-sm sm:text-base">
+                          <div className="p-5 sm:p-6 pt-0 text-slate-600 dark:text-zinc-400 leading-relaxed border-t border-slate-100 dark:border-white/5 mt-1 text-sm sm:text-base">
                             {faq.a}
                           </div>
                         </motion.div>
@@ -193,14 +193,14 @@ export default function Faq() {
 
               {/* Right Column: "¿Tienes otra pregunta?" CTA Card */}
               <div className="lg:col-span-5 lg:sticky lg:top-28">
-                <div className="glass-card p-8 text-center border-white/10 shadow-2xl relative overflow-hidden">
+                <div className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl p-8 text-center shadow-xl relative overflow-hidden">
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto mb-6 shadow-[0_0_20px_rgba(194,164,114,0.2)]">
                     <ArrowRight className="w-8 h-8 -rotate-45" />
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-display font-black uppercase tracking-tight mb-3">
+                  <h3 className="text-2xl sm:text-3xl font-display font-black uppercase tracking-tight mb-3 text-slate-900 dark:text-white">
                     ¿Tienes otra pregunta?
                   </h3>
-                  <p className="text-zinc-400 text-sm sm:text-base mb-8 leading-relaxed">
+                  <p className="text-slate-600 dark:text-zinc-400 text-sm sm:text-base mb-8 leading-relaxed">
                     Nuestro equipo de asesores está disponible en WhatsApp para ayudarte al instante.
                   </p>
                   <a
@@ -220,7 +220,7 @@ export default function Faq() {
       </main>
 
       {/* Footer */}
-      <footer className="py-5 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
+      <footer className="py-5 text-center text-slate-500 dark:text-zinc-500 text-xs border-t border-slate-200 dark:border-white/5 relative z-10 bg-slate-100 dark:bg-black/40">
         © 2026 SOLUCIONES MASTERTECH C.A. Porlamar, Isla de Margarita, Venezuela. Todos los derechos reservados.
       </footer>
     </div>

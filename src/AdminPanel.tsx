@@ -2418,7 +2418,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         if (data.success) {
           const item = data.item || data;
           const rawPrice = item.price || item.precio || prev.price || '';
-          const cleanPrice = rawPrice ? (String(rawPrice).startsWith('$') ? String(rawPrice) : `$${rawPrice}`) : '$45.00';
+          const matchPrice = String(rawPrice).match(/(\d+(?:\.\d+)?)/);
+          const cleanPrice = matchPrice ? `$${parseFloat(matchPrice[1]).toFixed(2)}` : '$45.00';
           setEditingProduct(prev => {
             if (!prev) return null;
             return {
@@ -2450,10 +2451,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Catalog Item Save
   const handleSaveCatalogItem = (product: CatalogItem) => {
-    const rawPrice = String(product.price || '').replace(/[^0-9.]/g, '');
-    const formattedPrice = rawPrice && !isNaN(Number(rawPrice)) 
-      ? `$${Number(rawPrice).toFixed(2)}` 
-      : (product.price?.startsWith('$') ? product.price : (product.price ? `$${product.price}` : '$0.00'));
+    const matchP = String(product.price || '').match(/(\d+(?:\.\d+)?)/);
+    const formattedPrice = matchP ? `$${parseFloat(matchP[1]).toFixed(2)}` : (product.price?.startsWith('$') ? product.price : (product.price ? `$${product.price}` : '$0.00'));
     const cleanProduct = { ...product, price: formattedPrice };
 
     const isEdit = cleanProduct.id && catalogItems.some(p => p.id === cleanProduct.id);
