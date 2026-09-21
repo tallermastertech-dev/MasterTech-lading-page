@@ -156,29 +156,128 @@ html.theme-light .text-primary {
   font-weight: 700 !important;
 }
 
-/* Zinc text colors adaptive */
-html.theme-light .text-zinc-100,
-html.theme-light .text-zinc-200 { color: #1e293b !important; }
-html.theme-light .text-zinc-300  { color: #334155 !important; }
-html.theme-light .text-zinc-400,
-html.theme-light .text-zinc-500  { color: #475569 !important; }
-html.theme-light .text-zinc-600  { color: #64748b !important; }
+/* Zinc text colors adaptive — ONLY inside light-mode non-dark zones */
+html.theme-light :not(.admin-theme-dark):not(.admin-theme-dark *):not(.catalogo-product-modal):not(.catalogo-product-modal *):not(.usa-import-modal):not(.usa-import-modal *):not(.carrito-modal):not(.carrito-modal *):not(.mt01-chat-modal):not(.mt01-chat-modal *):not(.catalogo-hero-card):not(.catalogo-hero-card *):not(.catalogo-promo-card):not(.catalogo-promo-card *):not(.catalogo-usa-banner):not(.catalogo-usa-banner *):not(.dark-vip-card):not(.dark-vip-card *):not(.instalaciones-section):not(.instalaciones-section *):not(.jornada-scope):not(.jornada-scope *).text-zinc-100,
+html.theme-light :not(.admin-theme-dark):not(.admin-theme-dark *):not(.catalogo-product-modal *):not(.usa-import-modal *):not(.carrito-modal *):not(.mt01-chat-modal *):not(.catalogo-hero-card *):not(.catalogo-promo-card *):not(.catalogo-usa-banner *):not(.dark-vip-card *):not(.instalaciones-section *):not(.jornada-scope *).text-zinc-200 { color: #1e293b !important; }
 
-/* White text adaptive */
-html.theme-light .text-white { color: #0f172a !important; }
+html.theme-light :not(.admin-theme-dark *):not(.catalogo-product-modal *):not(.usa-import-modal *):not(.carrito-modal *):not(.mt01-chat-modal *):not(.catalogo-hero-card *):not(.catalogo-promo-card *):not(.catalogo-usa-banner *):not(.dark-vip-card *):not(.instalaciones-section *):not(.jornada-scope *).text-zinc-300 { color: #334155 !important; }
 
-/* Headings */
-html.theme-light h1,
-html.theme-light h2,
-html.theme-light h3,
-html.theme-light h4,
-html.theme-light h5,
-html.theme-light h6 {
+html.theme-light :not(.admin-theme-dark *):not(.catalogo-product-modal *):not(.usa-import-modal *):not(.carrito-modal *):not(.mt01-chat-modal *):not(.instalaciones-section *):not(.jornada-scope *).text-zinc-400,
+html.theme-light :not(.admin-theme-dark *):not(.catalogo-product-modal *):not(.usa-import-modal *):not(.carrito-modal *):not(.mt01-chat-modal *):not(.instalaciones-section *):not(.jornada-scope *).text-zinc-500 { color: #475569 !important; }
+
+html.theme-light :not(.admin-theme-dark *):not(.instalaciones-section *):not(.jornada-scope *).text-zinc-600 { color: #64748b !important; }
+
+/* White text adaptive — ONLY in light sections, NOT in dark modals or admin dark mode */
+html.theme-light :not(.admin-theme-dark):not(.admin-theme-dark *):not(.catalogo-product-modal):not(.catalogo-product-modal *):not(.usa-import-modal):not(.usa-import-modal *):not(.carrito-modal):not(.carrito-modal *):not(.mt01-chat-modal):not(.mt01-chat-modal *):not(.catalogo-hero-card):not(.catalogo-hero-card *):not(.catalogo-promo-card):not(.catalogo-promo-card *):not(.catalogo-usa-banner):not(.catalogo-usa-banner *):not(.dark-vip-card):not(.dark-vip-card *):not(.instalaciones-section):not(.instalaciones-section *):not(.jornada-scope):not(.jornada-scope *).text-white { color: #0f172a !important; }
+
+/* Headings — ONLY in light zones */
+html.theme-light :not(.admin-theme-dark) h1:not(.instalaciones-section h1):not(.jornada-scope h1):not(.catalogo-hero-card h1),
+html.theme-light :not(.admin-theme-dark) h2:not(.instalaciones-section h2):not(.jornada-scope h2):not(.catalogo-usa-banner h2):not(.dark-vip-card h2),
+html.theme-light :not(.admin-theme-dark) h3:not(.instalaciones-section h3):not(.jornada-scope h3):not(.catalogo-promo-card h3):not(.catalogo-product-modal h3):not(.dark-vip-card h3):not(.mt01-chat-modal h3),
+html.theme-light :not(.admin-theme-dark) h4:not(.jornada-scope h4),
+html.theme-light :not(.admin-theme-dark) h5,
+html.theme-light :not(.admin-theme-dark) h6 {
   color: #0f172a !important;
 }
 
-/* Paragraphs */
-html.theme-light p { color: #334155 !important; }
+/* Paragraphs — ONLY in light zones */
+html.theme-light :not(.admin-theme-dark) p:not(.instalaciones-section p):not(.jornada-scope p):not(.catalogo-hero-card p):not(.catalogo-promo-card p):not(.catalogo-usa-banner p):not(.catalogo-product-modal p):not(.usa-import-modal p):not(.dark-vip-card p):not(.mt01-chat-modal p) { color: #334155 !important; }
+
+/* ============================================================
+   DARK ZONE ABSOLUTE PROTECTION
+   Force ALL text inside intentionally-dark sections to stay white
+   These rules MUST come after the broad overrides above
+   ============================================================ */
+
+/* Admin panel dark mode — total immunity */
+.admin-theme-dark,
+.admin-theme-dark * {
+  /* admin panel manages its own colors via inline <style> — do not touch */
+}
+
+/* Public site dark modals — text stays light */
+html.theme-light .catalogo-product-modal,
+html.theme-light .usa-import-modal,
+html.theme-light .carrito-modal,
+html.theme-light .mt01-chat-modal {
+  color: #e2e8f0 !important;
+}
+html.theme-light .catalogo-product-modal h1,
+html.theme-light .catalogo-product-modal h2,
+html.theme-light .catalogo-product-modal h3,
+html.theme-light .catalogo-product-modal h4,
+html.theme-light .usa-import-modal h1,
+html.theme-light .usa-import-modal h2,
+html.theme-light .usa-import-modal h3,
+html.theme-light .carrito-modal h2,
+html.theme-light .carrito-modal h3,
+html.theme-light .mt01-chat-modal h3 { color: #ffffff !important; }
+
+html.theme-light .catalogo-product-modal p,
+html.theme-light .catalogo-product-modal span,
+html.theme-light .catalogo-product-modal label,
+html.theme-light .catalogo-product-modal li,
+html.theme-light .usa-import-modal p,
+html.theme-light .usa-import-modal span,
+html.theme-light .usa-import-modal label,
+html.theme-light .carrito-modal p,
+html.theme-light .carrito-modal span,
+html.theme-light .mt01-chat-modal p,
+html.theme-light .mt01-chat-modal span { color: #cbd5e1 !important; }
+
+html.theme-light .catalogo-product-modal .text-white,
+html.theme-light .usa-import-modal .text-white,
+html.theme-light .carrito-modal .text-white,
+html.theme-light .mt01-chat-modal .text-white { color: #ffffff !important; }
+
+html.theme-light .catalogo-product-modal .text-zinc-300,
+html.theme-light .catalogo-product-modal .text-zinc-400,
+html.theme-light .usa-import-modal .text-zinc-300,
+html.theme-light .usa-import-modal .text-zinc-400,
+html.theme-light .carrito-modal .text-zinc-300,
+html.theme-light .carrito-modal .text-zinc-400 { color: #94a3b8 !important; }
+
+/* Dark intentional cards — text stays light */
+html.theme-light .catalogo-hero-card .text-white,
+html.theme-light .catalogo-promo-card .text-white,
+html.theme-light .catalogo-usa-banner .text-white,
+html.theme-light .dark-vip-card .text-white { color: #ffffff !important; }
+
+html.theme-light .catalogo-hero-card p,
+html.theme-light .catalogo-hero-card span,
+html.theme-light .catalogo-promo-card p,
+html.theme-light .catalogo-promo-card span,
+html.theme-light .catalogo-usa-banner p,
+html.theme-light .catalogo-usa-banner span,
+html.theme-light .dark-vip-card p,
+html.theme-light .dark-vip-card span { color: #cbd5e1 !important; }
+
+/* Instalaciones section — always dark */
+html.theme-light .instalaciones-section h1,
+html.theme-light .instalaciones-section h2,
+html.theme-light .instalaciones-section h3,
+html.theme-light .instalaciones-section h4 { color: #ffffff !important; }
+html.theme-light .instalaciones-section p,
+html.theme-light .instalaciones-section span,
+html.theme-light .instalaciones-section .text-white { color: #94a3b8 !important; }
+html.theme-light .instalaciones-section .text-zinc-300,
+html.theme-light .instalaciones-section .text-zinc-400 { color: #94a3b8 !important; }
+html.theme-light .instalaciones-section h3 { color: #f1f5f9 !important; }
+html.theme-light .instalaciones-section h2 { color: #ffffff !important; }
+
+/* Jornada scope — always dark */
+html.theme-light .jornada-scope h1,
+html.theme-light .jornada-scope h2,
+html.theme-light .jornada-scope h3,
+html.theme-light .jornada-scope h4 { color: #ffffff !important; }
+html.theme-light .jornada-scope p,
+html.theme-light .jornada-scope span,
+html.theme-light .jornada-scope label,
+html.theme-light .jornada-scope .text-white { color: #cbd5e1 !important; }
+html.theme-light .jornada-scope .text-amber-300,
+html.theme-light .jornada-scope .text-amber-400 { color: #fcd34d !important; }
+html.theme-light .jornada-scope .text-zinc-300 { color: #94a3b8 !important; }
+
 
 /* ============================================================
    GLASS CARD
