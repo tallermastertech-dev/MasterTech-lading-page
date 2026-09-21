@@ -1076,16 +1076,35 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           {item.title}
                         </h3>
 
-                        {/* Price Section (Strikethrough Comparison + Actual Price) */}
-                        <div className="flex items-baseline gap-2 pt-0.5">
-                          {numericPrice > 0 && (
-                            <span className="text-xs text-zinc-400 line-through font-mono">
-                              ${oldPrice}
+                        {/* Price Section (Clear Discount & Reference) */}
+                        <div className="pt-1">
+                          {numericPrice > 0 ? (
+                            <div className="flex flex-col gap-0.5">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-zinc-500">
+                                  Antes:
+                                </span>
+                                <span className="text-[11px] text-slate-400 dark:text-zinc-500 line-through font-mono">
+                                  ${oldPrice}
+                                </span>
+                                <span className="inline-flex items-center text-[9px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 rounded border border-emerald-500/25">
+                                  -26% OFF
+                                </span>
+                              </div>
+                              <div className="flex items-baseline gap-1.5">
+                                <span className="product-price text-sm sm:text-base font-black text-amber-500 dark:text-amber-400 font-display">
+                                  ${numericPrice.toFixed(2)}
+                                </span>
+                                <span className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase">
+                                  USD
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="product-price text-sm sm:text-base font-black text-amber-500 dark:text-amber-400">
+                              {item.price}
                             </span>
                           )}
-                          <span className="product-price text-sm sm:text-base font-black text-amber-500 dark:text-amber-400">
-                            {numericPrice > 0 ? `$${numericPrice.toFixed(2)}` : item.price}
-                          </span>
                         </div>
                       </div>
 
@@ -1555,10 +1574,31 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         </div>
 
                         <h3 className="text-xl font-bold leading-snug" style={{ color: '#ffffff' }}>{selectedProduct.title}</h3>
-                        <div className="text-2xl font-black font-mono" style={{ color: '#C2A472' }}>
-                          {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)}` : selectedProduct.price}
-                        </div>
-                        <p className="text-xs leading-relaxed" style={{ color: '#cbd5e1' }}>{selectedProduct.desc}</p>
+                        {parsePrice(selectedProduct.price) > 0 ? (
+                          <div className="pt-1.5 space-y-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-xs text-zinc-400">Antes:</span>
+                              <span className="text-sm text-zinc-500 line-through font-mono">
+                                ${(parsePrice(selectedProduct.price) * 1.35).toFixed(2)} USD
+                              </span>
+                              <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                                -26% OFERTA
+                              </span>
+                            </div>
+                            <div className="flex items-baseline gap-2">
+                              <span className="text-3xl font-black font-mono text-amber-400">
+                                ${parsePrice(selectedProduct.price).toFixed(2)}
+                              </span>
+                              <span className="text-xs font-bold text-zinc-400">USD</span>
+                              <span className="text-[11px] text-emerald-400 font-semibold ml-1">
+                                (Ahorras ${(parsePrice(selectedProduct.price) * 0.35).toFixed(2)} USD)
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-2xl font-black font-mono text-amber-400">{selectedProduct.price}</div>
+                        )}
+                        <p className="text-xs leading-relaxed mt-1" style={{ color: '#cbd5e1' }}>{selectedProduct.desc}</p>
                       </div>
                     </div>
 
@@ -1604,15 +1644,37 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
               {/* Modal Footer CTA */}
               <div className="p-4 sm:p-6 border-t border-white/10 bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xs text-zinc-400">Total:</span>
-                  <span className="text-2xl font-black text-amber-400 font-mono">
-                    {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)}` : selectedProduct.price}
-                  </span>
-                  {selectedProduct.isImportedUSA && (
-                    <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
-                  )}
-                </div>
+                {parsePrice(selectedProduct.price) > 0 ? (
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] text-zinc-400">Antes:</span>
+                      <span className="text-xs text-zinc-500 line-through font-mono">
+                        ${(parsePrice(selectedProduct.price) * 1.35).toFixed(2)}
+                      </span>
+                      <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/20 px-1.5 py-0.2 rounded border border-emerald-500/30">
+                        -26% OFF
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-xs text-zinc-400">Oferta:</span>
+                      <span className="text-2xl font-black text-amber-400 font-mono">
+                        ${parsePrice(selectedProduct.price).toFixed(2)}
+                      </span>
+                      <span className="text-xs font-bold text-zinc-400">USD</span>
+                      {selectedProduct.isImportedUSA && (
+                        <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30 ml-1">Envío Directo</span>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xs text-zinc-400">Total:</span>
+                    <span className="text-2xl font-black text-amber-400 font-mono">{selectedProduct.price}</span>
+                    {selectedProduct.isImportedUSA && (
+                      <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
+                    )}
+                  </div>
+                )}
 
                 <div className="flex items-center gap-2.5 w-full sm:w-auto">
                   <a
