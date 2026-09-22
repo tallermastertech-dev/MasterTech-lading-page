@@ -286,16 +286,17 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
             <div className="lg:col-span-8 flex flex-col justify-center space-y-4">
               <div className="inline-flex items-center gap-2 text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full w-fit">
                 <Sparkles size={14} />
-                <span>Criterio Técnico y Transparencia</span>
+                <span>Respaldo Técnico y Garantía Escrita</span>
               </div>
 
               <h4 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                Reglas claras para proteger tu inversión
+                Transparencia total para proteger tu inversión
               </h4>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Cada trabajo en MasterTech es documentado en tu orden de servicio. La duración de la garantía se determina en función de la mano de obra específica requerida. Cuando adquieres los repuestos a través de nosotros, garantizamos el resultado integral; si tú traes el repuesto, la garantía de la pieza no aplica.
+                Cada intervención en MasterTech queda certificada en tu orden de servicio digital con trazabilidad completa. Avalamos al 100% la mano de obra especializada y los repuestos suministrados por nuestro taller. Cero sorpresas ni letras pequeñas: sabes con exactitud el alcance de tu cobertura antes de retirar tu vehículo.
               </p>
+
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
