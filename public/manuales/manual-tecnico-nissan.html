@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Técnico Nissan (2021-2027) | Taller MasterTech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --dark-bg: #0d1117;
+      --dark-card: #161b22;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      background-color: #f8fafc;
+      line-height: 1.55;
+      font-size: 13px;
+      padding: 24px;
+    }
+    .page-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 36px 40px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+    /* Action Bar (Only on Screen) */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-print {
+      background: #dc2626;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+    .btn-print:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+    }
+    .btn-back {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-back:hover {
+      background: #cbd5e1;
+    }
+
+    /* MasterTech Official Header */
+    .mastertech-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+    .brand-col {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+    .brand-title span {
+      color: #ef4444;
+      font-style: italic;
+    }
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .header-meta {
+      text-align: right;
+      font-size: 10px;
+      color: #475569;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .header-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #fecaca;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Manual Title Banner */
+    .manual-banner {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      color: #ffffff;
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-left: 6px solid #ef4444;
+      position: relative;
+    }
+    .manual-brand-tag {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .manual-brand-tag .accent {
+      color: #ef4444;
+    }
+    .manual-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #cbd5e1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .models-box {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 11px;
+      color: #e2e8f0;
+    }
+    .models-box strong {
+      color: #fca5a5;
+      font-weight: 800;
+    }
+
+    /* Chapter Headings */
+    .chapter-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #0f172a;
+      border-left: 4px solid #ef4444;
+      padding-left: 10px;
+      margin: 28px 0 14px 0;
+    }
+
+    /* Item Blocks & Callouts */
+    .tech-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+    .tech-card-header {
+      font-weight: 800;
+      font-size: 12.5px;
+      color: #0f172a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .tech-card-header::before {
+      content: "•";
+      color: #ef4444;
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 0;
+    }
+    .tech-card p {
+      font-size: 12px;
+      color: #334155;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .tech-card p:last-child {
+      margin-bottom: 0;
+    }
+    .highlight-pill {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+    .tech-sublist {
+      margin-left: 18px;
+      margin-top: 6px;
+      font-size: 11.5px;
+      color: #334155;
+    }
+    .tech-sublist li {
+      margin-bottom: 4px;
+    }
+
+    /* Mileage Badges */
+    .mileage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      margin: 18px 0 10px 0;
+      border-left: 3px solid #ef4444;
+    }
+
+    /* Tables */
+    .table-container {
+      margin: 14px 0 20px 0;
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+    th {
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      padding: 10px 12px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 10.5px;
+      border-bottom: 1px solid #0f172a;
+    }
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .torque-cell {
+      font-weight: 800;
+      color: #b91c1c;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    /* Service Book Box */
+    .service-book {
+      border: 2px dashed #94a3b8;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+      page-break-inside: avoid;
+    }
+    .client-data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 20px;
+      margin: 14px 0 18px 0;
+      font-size: 12px;
+    }
+    .data-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .data-label {
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+    .data-line {
+      flex: 1;
+      border-bottom: 1px solid #64748b;
+      min-height: 16px;
+    }
+
+    /* MasterTech Official Footer */
+    .mastertech-footer {
+      margin-top: 36px;
+      padding-top: 14px;
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+        font-size: 11px;
+      }
+      .action-bar {
+        display: none !important;
+      }
+      .page-container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .manual-banner {
+        background: #0d1117 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      th {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .mileage-badge {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .highlight-pill {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .header-badge {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Actions -->
+  <div class="action-bar">
+    <button class="btn btn-back" onclick="window.history.back()">← Regresar al Panel</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+  </div>
+
+  <div class="page-container">
+
+    <!-- Official Header -->
+    <header class="mastertech-header">
+      <div class="brand-col">
+        <img src="/logo.png" alt="MasterTech Logo" class="brand-logo">
+        <div>
+          <div class="brand-title">MASTER<span>TECH</span></div>
+          <div class="brand-sub">Centro Especializado de Ingeniería Automotriz</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="header-badge">Edición Técnica Venezuela</div>
+        <div>Condiciones Severas / Zonas Costeras</div>
+        <div>Porlamar, Isla de Margarita | +58 412-3565012</div>
+      </div>
+    </header>
+
+    <!-- Banner -->
+    <div class="manual-banner">
+      <div class="manual-brand-tag">NISSAN <span class="accent">SERVICE</span></div>
+      <div class="manual-title">MANUAL TÉCNICO Y PLAN DE CONTROL DE SERVICIOS (2021–2027)</div>
+      <div class="models-box">
+        <strong>Modelos aplicables:</strong> Versa, Sentra, Altima, Kicks, Rogue, Murano, Pathfinder, Frontier, Z.
+      </div>
+    </div>
+
+    <!-- CAPÍTULO 1 -->
+    <h2 class="chapter-title">CAPÍTULO 1: CONSIDERACIONES TÉCNICAS NISSAN EN VENEZUELA</h2>
+
+    <div class="tech-card">
+      <div class="tech-card-header">Sensibilidad Extrema en Cajas CVT Jatco (Xtronic)</div>
+      <p>Las transmisiones Jatco son las más sensibles a la temperatura y a la calidad del fluido de todo el mercado. Usar un lubricante genérico "multivehículo" o dejar pasar el kilometraje destruye las poleas cónicas y la banda metálica.</p>
+      <p><em>Fluido Requerido:</em> Uso exclusivo de fluido <strong>Genuine Nissan NS-3</strong> (de color verde).</p>
+      <p><em>Conteo de Deterioro por Escáner:</em> Durante el servicio a la caja CVT, es obligatorio ingresar con escáner para reiniciar el contador de deterioro del fluido CVT (<em>CVT Fluid Deterioration Date</em>).</p>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-card-header">Motores VC-Turbo (Compresión Variable 1.5T / 2.0T) y GDI Puros</div>
+      <p>Los modelos Rogue, Altima y Murano modernos usan inyección directa pura sin inyector de puerto.</p>
+      <p>Requieren descarbonización física/química de las válvulas de admisión cada 40.000 km para corregir pérdidas de potencia y fallas de encendido (<em>misfires</em>) provocadas por la recirculación de gases y la gasolina local.</p>
+    </div>
+
+    <!-- CAPÍTULO 2 -->
+    <h2 class="chapter-title">CAPÍTULO 2: PAUTA DE MANTENIMIENTO NISSAN POR KILOMETRAJE</h2>
+
+    <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo)</div>
+    <div class="tech-card">
+      <p><strong>• Motor:</strong> Cambio de aceite full sintético API SP / ILSAC GF-6 (viscosidades 0W-20 o 5W-30 según indicación del fabricante) y filtro de aceite original.</p>
+      <p><strong>• Escudo Antisalitre y Baterías:</strong> Limpieza de bornes de batería. En modelos con sistema Auto Start-Stop, si se desconecta o cambia la batería EFB/AGM, es obligatorio el registro del módulo BMS vía escáner.</p>
+      <p><strong>• Frenos:</strong> Desarmado y lubricación de pasadores de caliper con grasa sintética para frenos (PTFE/Cerámica).</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 10.000 km (Fluidos y Neumáticos)</div>
+    <div class="tech-card">
+      <p><strong>• Líquido de Frenos (DOT 3 / DOT 4):</strong> Reemplazo anual obligatorio. La humedad del aire marino degrada rápidamente el fluido y oxida el módulo de válvulas del sistema ABS/ESP.</p>
+      <p><strong>• Filtro de Aire y Cabina:</strong> Reemplazar obligatoriamente. Prohibido soplado con aire a presión para no expandir los poros del elemento filtrante.</p>
+      <p><strong>• Rotación de Neumáticos:</strong></p>
+      <ul class="tech-sublist">
+        <li>Sedanes y Crossovers (Versa, Sentra, Kicks): <strong>80 lb·ft (108 Nm)</strong>.</li>
+        <li>Suvs Grandes / Pickup (Rogue, Pathfinder, Frontier): <strong>98 a 113 lb·ft (133-153 Nm)</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 20.000 km (Afinación y Diagnóstico de Encendido)</div>
+    <div class="tech-card">
+      <p><strong>• Inspección de Bujías de Iridio:</strong> Revisión del aislador cerámico. La gasolina local suele dejar depósitos rojizos (contaminación por hierro/plomo). Reemplazar si hay rastro de fugas de corriente a masa.</p>
+      <p><strong>• Limpieza de Inyección:</strong> Tratamiento en tanque con aditivos de alta concentración de PEA para proteger los inyectores de alta presión GDI.</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 30.000 km (Transmisión CVT Xtronic y AWD)</div>
+    <div class="tech-card">
+      <p><strong>• Cajas CVT Jatco (NS-3):</strong></p>
+      <ul class="tech-sublist">
+        <li>Drenaje por gravedad del fluido viejo y llenado con Nissan Genuine NS-3.</li>
+        <li>Reemplazo del filtro de cartucho (ubicado detrás del enfriador de aceite de la caja) y reemplazo del filtro de malla del cárter.</li>
+        <li>Reseteo del contador de degradación de aceite con escáner.</li>
+      </ul>
+      <p><strong>• Diferencial Trasero y Transfer (AWD / 4x4):</strong> Cambio de aceite lubricante de engranajes hipoidales API GL-5 80W-90 o 75W-85.</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 40.000 km (Mantenimiento Mayor GDI / VC-Turbo)</div>
+    <div class="tech-card">
+      <p><strong>• Descarbonización de Válvulas de Admisión:</strong> Tratamiento por química presurizada o walnut blasting (chorro de esferas de nogal) en los motores VC-Turbo y GDI directos para eliminar la costra de carbón de las válvulas.</p>
+      <p><strong>• Filtro de Gasolina (Tanque):</strong> Reemplazo del cartucho del módulo sumergido de la bomba para evitar fallas por sobrecalentamiento eléctrico.</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 50.000 a 60.000 km (Transmisiones Automáticas Tradicionales)</div>
+    <div class="tech-card">
+      <p><strong>• Pathfinder / Frontier (Cajas AT de 9 Velocidades):</strong> Reemplazo del fluido por gravedad utilizando Nissan Matic-S / Matic-HD.</p>
+    </div>
+
+    <!-- CAPÍTULO 3 -->
+    <div class="page-break"></div>
+    <h2 class="chapter-title" style="margin-top: 24px;">CAPÍTULO 3: TABLA DE TORQUES ESPECÍFICOS NISSAN</h2>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Especificación Técnica / Fluido</th>
+            <th>Torque de Ajuste</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Bujías (Motores HR16DE, MR20DD, KR15DDT)</strong></td>
+            <td>Rosca Fina Delgado</td>
+            <td class="torque-cell">10 a 12 lb·ft (14-16 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tapón de Cárter de Aceite Motor</strong></td>
+            <td>Arandela de aluminio nueva</td>
+            <td class="torque-cell">25 lb·ft (34 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tuercas de Rueda (Versa, Sentra, Kicks)</strong></td>
+            <td>Patrón en estrella</td>
+            <td class="torque-cell">80 lb·ft (108 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tuercas de Rueda (Pathfinder, Frontier)</strong></td>
+            <td>Patrón en estrella</td>
+            <td class="torque-cell">100 lb·ft (135 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tapón de Drenaje Caja CVT Jatco</strong></td>
+            <td>Arandela de cobre/aluminio nueva</td>
+            <td class="torque-cell">25 lb·ft (34 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tapón de Filtro Cartucho CVT</strong></td>
+            <td>O-ring nuevo</td>
+            <td class="torque-cell">18 lb·ft (25 Nm)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LIBRETA DE CONTROL DE SERVICIOS -->
+    <div class="service-book">
+      <h2 style="font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a; margin-bottom: 6px;">
+        LIBRETA DE CONTROL DE SERVICIOS: NISSAN
+      </h2>
+      <p style="font-size: 10px; color: #64748b; font-weight: 600;">Control avalado por Taller MasterTech. Exigir firma y sello técnico en cada servicio realizado.</p>
+
+      <div class="client-data-grid">
+        <div class="data-row">
+          <span class="data-label">Propietario:</span>
+          <span class="data-line"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Teléfono:</span>
+          <span class="data-line"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Modelo:</span>
+          <span class="data-line"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Año:</span>
+          <span class="data-line" style="max-width: 80px;"></span>
+          <span class="data-label" style="margin-left: 10px;">VIN:</span>
+          <span class="data-line"></span>
+        </div>
+      </div>
+
+      <div class="table-container" style="margin: 0;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 100px;">FECHA</th>
+              <th style="width: 90px;">KM</th>
+              <th style="width: 150px;">TIPO DE SERVICIO</th>
+              <th>DETALLE DE FLUIDOS / REPUESTOS</th>
+              <th style="width: 130px; text-align: center;">FIRMA / SELLO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>5.000 KM</td>
+              <td><strong>Servicio Resguardo</strong></td>
+              <td>Aceite Full Sintético + Filtro OEM</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>10.000 KM</td>
+              <td><strong>Fluidos & Neumáticos</strong></td>
+              <td>Rotación + Liq. Frenos DOT 4</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>20.000 KM</td>
+              <td><strong>Afinación Encendido</strong></td>
+              <td>Aditivo PEA + Revisión Bujías</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>30.000 KM</td>
+              <td><strong>Transmisión & AWD</strong></td>
+              <td>Fluido Genuine NS-3 + Filtro CVT</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>40.000 KM</td>
+              <td><strong>Mayor GDI / Turbo</strong></td>
+              <td>Descarbonización Válvulas GDI</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>50.000 KM</td>
+              <td><strong>Transmisión Mayor</strong></td>
+              <td>Mantenimiento Caja AT9 (Matic-S)</td>
+              <td style="height: 38px;"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mastertech-footer">
+      <div>Taller MasterTech C.A. — Av. 4 de Mayo c/c Calle Fermín, Porlamar, Isla de Margarita</div>
+      <div>Certificación Técnica Oficial MasterTech | tallermastertech.com</div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

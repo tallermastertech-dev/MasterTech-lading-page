@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Técnico Toyota (2021-2027) | Taller MasterTech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ef4444;
+      --primary-dark: #dc2626;
+      --dark-bg: #0d1117;
+      --dark-card: #161b22;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      background-color: #f8fafc;
+      line-height: 1.55;
+      font-size: 13px;
+      padding: 24px;
+    }
+    .page-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 36px 40px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+    /* Action Bar */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-print {
+      background: #dc2626;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+    .btn-print:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+    }
+    .btn-back {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-back:hover {
+      background: #cbd5e1;
+    }
+
+    /* MasterTech Official Header */
+    .mastertech-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+    .brand-col {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+    .brand-title span {
+      color: #ef4444;
+      font-style: italic;
+    }
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .header-meta {
+      text-align: right;
+      font-size: 10px;
+      color: #475569;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .header-badge {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #fecaca;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Manual Title Banner */
+    .manual-banner {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      color: #ffffff;
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-left: 6px solid #ef4444;
+    }
+    .manual-brand-tag {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .manual-brand-tag .accent {
+      color: #ef4444;
+    }
+    .manual-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #cbd5e1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .models-box {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 11px;
+      color: #e2e8f0;
+    }
+    .models-box strong {
+      color: #fca5a5;
+      font-weight: 800;
+    }
+
+    /* Chapter Headings */
+    .chapter-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #0f172a;
+      border-left: 4px solid #ef4444;
+      padding-left: 10px;
+      margin: 28px 0 14px 0;
+    }
+
+    /* Item Blocks */
+    .tech-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+    .tech-card-header {
+      font-weight: 800;
+      font-size: 12.5px;
+      color: #0f172a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .tech-card-header::before {
+      content: "•";
+      color: #ef4444;
+      font-weight: 900;
+      font-size: 16px;
+      line-height: 0;
+    }
+    .tech-card p {
+      font-size: 12px;
+      color: #334155;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .tech-card p:last-child {
+      margin-bottom: 0;
+    }
+    .tech-sublist {
+      margin-left: 18px;
+      margin-top: 6px;
+      font-size: 11.5px;
+      color: #334155;
+    }
+    .tech-sublist li {
+      margin-bottom: 4px;
+    }
+
+    /* Mileage Badges */
+    .mileage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      margin: 18px 0 10px 0;
+      border-left: 3px solid #ef4444;
+    }
+
+    /* Tables */
+    .table-container {
+      margin: 14px 0 20px 0;
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+    th {
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      padding: 10px 12px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 10.5px;
+      border-bottom: 1px solid #0f172a;
+    }
+    td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .torque-cell {
+      font-weight: 800;
+      color: #b91c1c;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    /* Service Book Box */
+    .service-book {
+      border: 2px dashed #94a3b8;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+      page-break-inside: avoid;
+    }
+    .client-data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 20px;
+      margin: 14px 0 18px 0;
+      font-size: 12px;
+    }
+    .data-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .data-label {
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+    .data-line {
+      flex: 1;
+      border-bottom: 1px solid #64748b;
+      min-height: 16px;
+    }
+
+    /* MasterTech Official Footer */
+    .mastertech-footer {
+      margin-top: 36px;
+      padding-top: 14px;
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+        font-size: 11px;
+      }
+      .action-bar {
+        display: none !important;
+      }
+      .page-container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .manual-banner {
+        background: #0d1117 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      th {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .mileage-badge {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .header-badge {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Actions -->
+  <div class="action-bar">
+    <button class="btn btn-back" onclick="window.history.back()">← Regresar al Panel</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+  </div>
+
+  <div class="page-container">
+
+    <!-- Official Header -->
+    <header class="mastertech-header">
+      <div class="brand-col">
+        <img src="/logo.png" alt="MasterTech Logo" class="brand-logo">
+        <div>
+          <div class="brand-title">MASTER<span>TECH</span></div>
+          <div class="brand-sub">Centro Especializado de Ingeniería Automotriz</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="header-badge">Edición Técnica Venezuela</div>
+        <div>Condiciones Severas / Zonas Costeras</div>
+        <div>Porlamar, Isla de Margarita | +58 412-3565012</div>
+      </div>
+    </header>
+
+    <!-- Banner -->
+    <div class="manual-banner">
+      <div class="manual-brand-tag">TOYOTA <span class="accent">SERVICE</span></div>
+      <div class="manual-title">MANUAL TÉCNICO Y PLAN DE CONTROL DE SERVICIOS (2021–2027)</div>
+      <div class="models-box">
+        <strong>Modelos aplicables:</strong> Yaris Cross, Corolla, Corolla GR, RAV4, Camry, Highlander, Sienna, 4Runner, Tacoma, Tundra, Land Cruiser, Sequoia.
+      </div>
+    </div>
+
+    <!-- CAPÍTULO 1 -->
+    <h2 class="chapter-title">CAPÍTULO 1: CONSIDERACIONES TÉCNICAS TOYOTA EN VENEZUELA</h2>
+
+    <div class="tech-card">
+      <div class="tech-card-header">Tecnología de Inyección D-4S (Mixta)</div>
+      <p>La mayoría de los motores Dynamic Force (Corolla 2.0L, RAV4 2.5L, Tacoma 2.4T/3.5L, Tundra 3.4T V6) emplean inyectores en el puerto de admisión e inyectores directos en el cilindro. La inyección de puerto lava las válvulas automáticamente, reduciendo radicalmente la acumulación de carbón en comparación con la competencia.</p>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-card-header">Transmisiones CVT Direct Shift (K120) y e-CVT</div>
+      <p>Poseen un engranaje físico de arranque (<em>Launch Gear</em>) para primera marcha antes de pasar a las poleas y la banda metálica.</p>
+      <p><em>Regla de nivelación:</em> No poseen varilla. La medición del nivel de aceite CVT FE o TC se realiza únicamente por reboce a una temperatura controlada de 35°C a 45°C monitoreada mediante escáner en el puerto OBD2.</p>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-card-header">Aceites de Ultra-Baja Viscosidad (0W-16 / 0W-20)</div>
+      <p>Los motores Dynamic Force poseen bombas de aceite de desplazamiento variable impulsadas por la computadora. El uso de aceites gruesos (15W-40 o 20W-50) bloquea los actuadores del sistema VVT-iE (eléctrico) y destruye el motor por falta de lubricación en frío. Exigir norma API SP / ILSAC GF-6.</p>
+    </div>
+
+    <!-- CAPÍTULO 2 -->
+    <h2 class="chapter-title">CAPÍTULO 2: PAUTA DE MANTENIMIENTO TOYOTA POR KILOMETRAJE</h2>
+
+    <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo)</div>
+    <div class="tech-card">
+      <p><strong>• Motor:</strong> Cambio de aceite full sintético API SP / ILSAC GF-6 (0W-16 o 0W-20 según la tapa de llenado) y filtro de aceite genuino Toyota.</p>
+      <p><strong>• Modelos Híbridos (RAV4, Sienna, Highlander, Corolla Cross):</strong> Limpieza obligatoria del filtro de la rejilla de enfriamiento de la batería de alto voltaje (ubicado bajo el asiento trasero). Si se tupa de polvo, la batería híbrida se sobrecalienta y se degrada.</p>
+      <p><strong>• Frenos y Tren Delantero:</strong> Engrase de pasadores de mordaza con grasa sintética con base de cerámica o PTFE. Inspección de bujes de suspensión.</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 10.000 km (Fluidos Higroscópicos y Neumáticos)</div>
+    <div class="tech-card">
+      <p><strong>• Líquido de Frenos (DOT 3 / DOT 4):</strong> Reemplazo del fluido por tiempo (máximo 12 a 18 meses) evaluando con probador de conductividad (debe marcar menos del 3% de humedad) debido a la humedad costera.</p>
+      <p><strong>• Filtros de Aire:</strong> Reemplazo directo del filtro de aire del motor y de cabina. Prohibido soplar con aire a presión.</p>
+      <p><strong>• Rotación y Torque de Ruedas:</strong></p>
+      <ul class="tech-sublist">
+        <li>Sedanes/Crossovers (Corolla, Yaris Cross): <strong>76 lb·ft (103 Nm)</strong>.</li>
+        <li>Camionetas/Rústicos (RAV4, 4Runner, Tacoma, Tundra): <strong>103 lb·ft (140 Nm)</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 20.000 km (Sistema de Combustible)</div>
+    <div class="tech-card">
+      <p><strong>• Inyección Mixta D-4S:</strong> Desmontaje y limpieza ultrasónica de los 4 o 6 inyectores de puerto. Reemplazo de O-rings.</p>
+      <p><strong>• Inyección Directa y Aditivos:</strong> Aplicación en tanque de aditivo descarbonizante con tecnología PEA (Poliéter amina) para proteger la bomba de alta presión (HPFP) de los sedimentos locales.</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 30.000 km (Cajas CVT / e-CVT / Tracción 4x4)</div>
+    <div class="tech-card">
+      <p><strong>• Cajas CVT / e-CVT:</strong> Cambio de fluido Toyota CVT FE (o fluido Toyota e-CVT para híbridos) por gravedad (drain & fill). Cambio de filtro de cárter de cartucho y ajuste de nivel por reboce a 40°C.</p>
+      <p><strong>• Diferenciales y Transfer (4x4 / AWD):</strong> Reemplazo de aceite en diferencial delantero, trasero y transfer con lubricante API GL-5 75W-85 o 80W-90.</p>
+      <p><em>Aviso Diferenciales LSD:</em> En camionetas con bloqueo o embrague multidisco (como Tacoma / 4Runner TRD), usar únicamente aceite API GL-5 LS o agregar modificador de fricción.</p>
+    </div>
+
+    <div class="mileage-badge">⏱ Cada 50.000 a 60.000 km (Transmisiones Automáticas Convencionales)</div>
+    <div class="tech-card">
+      <p><strong>• Cajas de 6, 8 y 10 Velocidades (Direct Shift - AT):</strong> Reemplazo por gravedad de fluido Toyota ATF WS. Se descarta la diálisis presurizada a máquina para evitar desprendimiento de sedimentos hacia el cuerpo de válvulas.</p>
+    </div>
+
+    <!-- CAPÍTULO 3 -->
+    <div class="page-break"></div>
+    <h2 class="chapter-title" style="margin-top: 24px;">CAPÍTULO 3: TABLA DE TORQUES ESPECÍFICOS TOYOTA</h2>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Especificación Técnica / Fluido</th>
+            <th>Torque de Ajuste</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Bujías (Rosca Fina Dynamic Force)</strong></td>
+            <td>Iridio Largo Alcance</td>
+            <td class="torque-cell">11 lb·ft (15 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Bujías (Rosca Tradicional V6 4.0L / 2.7L)</strong></td>
+            <td>Iridio / Platino</td>
+            <td class="torque-cell">13 a 15 lb·ft (18-20 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tapón de Cárter de Aceite</strong></td>
+            <td>Arandela de aplastamiento nueva</td>
+            <td class="torque-cell">27 lb·ft (37 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tuercas de Rueda (M12 - Autos)</strong></td>
+            <td>Apriete en estrella</td>
+            <td class="torque-cell">76 lb·ft (103 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tuercas de Rueda (M14 - Camionetas)</strong></td>
+            <td>Apriete en estrella</td>
+            <td class="torque-cell">103 lb·ft (140 Nm)</td>
+          </tr>
+          <tr>
+            <td><strong>Tapón Drenaje / Reboce Caja CVT</strong></td>
+            <td>Toyota Genuine CVT FE / TC</td>
+            <td class="torque-cell">30 lb·ft (40 Nm)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LIBRETA DE CONTROL DE SERVICIOS -->
+    <div class="service-book">
+      <h2 style="font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a; margin-bottom: 6px;">
+        LIBRETA DE CONTROL DE SERVICIOS: TOYOTA
+      </h2>
+      <p style="font-size: 10px; color: #64748b; font-weight: 600;">Control avalado por Taller MasterTech. Exigir firma y sello técnico en cada servicio realizado.</p>
+
+      <div class="client-data-grid">
+        <div class="data-row">
+          <span class="data-label">Propietario:</span>
+          <span class="data-line"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Teléfono:</span>
+          <span class="data-line"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Modelo:</span>
+          <span class="data-line"></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Año:</span>
+          <span class="data-line" style="max-width: 80px;"></span>
+          <span class="data-label" style="margin-left: 10px;">VIN:</span>
+          <span class="data-line"></span>
+        </div>
+      </div>
+
+      <div class="table-container" style="margin: 0;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 100px;">FECHA</th>
+              <th style="width: 90px;">KM</th>
+              <th style="width: 150px;">TIPO DE SERVICIO</th>
+              <th>DETALLE DE FLUIDOS / REPUESTOS</th>
+              <th style="width: 130px; text-align: center;">FIRMA / SELLO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>5.000 KM</td>
+              <td><strong>Servicio Resguardo</strong></td>
+              <td>Aceite 0W-16/0W-20 API SP + Filtro OEM</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>10.000 KM</td>
+              <td><strong>Fluidos & Neumáticos</strong></td>
+              <td>Rotación + Liq. Frenos DOT 4</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>20.000 KM</td>
+              <td><strong>Combustible D-4S</strong></td>
+              <td>Limpieza Inyectores D-4S / PEA</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>30.000 KM</td>
+              <td><strong>Transmisión & 4x4</strong></td>
+              <td>Mantenimiento CVT FE / Drivetrain</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>40.000 KM</td>
+              <td><strong>Módulo Gasolina</strong></td>
+              <td>Filtro de Gasolina Módulo Tanque</td>
+              <td style="height: 38px;"></td>
+            </tr>
+            <tr>
+              <td>___ / ___ / ______</td>
+              <td>50.000 KM</td>
+              <td><strong>Transmisión AT</strong></td>
+              <td>Aceite Toyota ATF WS (Cajas AT8/10)</td>
+              <td style="height: 38px;"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mastertech-footer">
+      <div>Taller MasterTech C.A. — Av. 4 de Mayo c/c Calle Fermín, Porlamar, Isla de Margarita</div>
+      <div>Certificación Técnica Oficial MasterTech | tallermastertech.com</div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

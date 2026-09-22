@@ -88,6 +88,7 @@ import {
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import ManualesTecnicosPanel from './components/ManualesTecnicosPanel';
 import { getTallerStatus } from './utils/tallerStatus';
 import { invalidateSettingsCache } from './utils/settingsCache';
 
@@ -737,28 +738,28 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
     // 1. Acceso Total / Administradores
     if (access === 'full' || access === 'admin' || access === 'administracion') {
-      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'manuales', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
     if (role.includes('ceo') || role.includes('director') || role.includes('marketing') || role.includes('super') || role.includes('admin') || role.includes('gerente') || role.includes('administra')) {
-      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
+      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'manuales', 'jornadas', 'proveedores', 'contenido', 'usuarios', 'settings', 'auditoria'];
     }
 
-    // 2. Rol Exclusivo Control de Taller (SOLO tiene acceso al panel de Control de Taller)
+    // 2. Rol Exclusivo Control de Taller (Acceso a Control de Taller y Manuales Técnicos OEM)
     if (access === 'control_taller' || role === 'control de taller' || role.includes('control de taller') || role.includes('jefe de taller') || role.includes('mecanic')) {
-      return ['control-taller'];
+      return ['control-taller', 'manuales'];
     }
 
-    // 3. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Jornadas y Admin Proveedores)
+    // 3. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Manuales Técnicos, Jornadas y Admin Proveedores)
     if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
-      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores'];
+      return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'manuales', 'jornadas', 'proveedores'];
     }
 
-    // Por defecto administradores tienen catálogo
-    return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'jornadas', 'proveedores'];
+    // Por defecto administradores tienen catálogo y manuales
+    return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'manuales', 'jornadas', 'proveedores'];
   };
 
   // Active Navigation Tab
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'brecha' | 'control-taller' | 'leads' | 'catalogo' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'brecha' | 'control-taller' | 'leads' | 'catalogo' | 'manuales' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
   const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
 
   // Audit Logs State (Registro de Actividad y Cambios de Usuarios)
@@ -3162,6 +3163,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 { id: 'control-taller', label: `Control de Taller (${tallerBays.length})`, icon: <Wrench size={18} />, badge: 'TALLER' },
                 { id: 'leads', label: `Calendario & Citas (${leads.length})`, icon: <Calendar size={18} /> },
                 { id: 'catalogo', label: 'Catálogo Repuestos', icon: <Package size={18} /> },
+                { id: 'manuales', label: 'Manuales Técnicos OEM', icon: <FileText size={18} />, badge: 'PDF' },
                 { id: 'jornadas', label: 'Jornadas VIP', icon: <Zap size={18} />, badge: 'PROMO' },
                 { id: 'proveedores', label: `Admin Proveedores (${proveedoresList.length})`, icon: <Building2 size={18} /> },
                 { id: 'contenido', label: 'Contenidos Sitio Web', icon: <Layers size={18} /> },
@@ -6248,6 +6250,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 ))}
               </div>
             </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* MODULE: CENTRO DE MANUALES TÉCNICOS OEM & PAUTAS DE SERVICIO VENEZUELA */}
+          {/* ========================================================================= */}
+          {activeTab === 'manuales' && (
+            <ManualesTecnicosPanel />
           )}
 
           {/* ========================================================================= */}
