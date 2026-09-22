@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   ShieldCheck, 
   Wrench, 
@@ -10,6 +11,7 @@ import {
   Sparkles,
   AlertTriangle,
   PackageCheck,
+  PackageX,
   Clock,
   Cpu,
   CreditCard,
@@ -342,125 +344,134 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
       </div>
 
       {/* Modal de Términos de Garantía */}
-      <AnimatePresence>
-        {isTermsModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white dark:bg-[#11141c] border border-slate-200 dark:border-white/10 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl text-slate-900 dark:text-white"
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {isTermsModalOpen && (
+            <div 
+              className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+              onClick={() => setIsTermsModalOpen(false)}
             >
-              <div className="flex justify-between items-center border-b border-slate-200 dark:border-white/10 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500">
-                    <ShieldCheck size={22} />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white dark:bg-[#11141c] border border-slate-200 dark:border-white/10 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl text-slate-900 dark:text-white relative"
+              >
+                <div className="flex justify-between items-center border-b border-slate-200 dark:border-white/10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500">
+                      <ShieldCheck size={22} />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-black uppercase text-slate-900 dark:text-white">
+                        Condiciones Oficiales de Garantía
+                      </h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Taller MasterTech — Porlamar, Isla de Margarita
+                      </p>
+                    </div>
                   </div>
+                  <button 
+                    type="button"
+                    onClick={() => setIsTermsModalOpen(false)} 
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="space-y-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-slate-700 dark:text-slate-200">
+                    <p className="font-bold text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1.5">
+                      <ShieldCheck size={16} />
+                      <span>Alcance según Trabajo Realizado</span>
+                    </p>
+                    <p className="text-xs leading-normal">
+                      El tiempo y cobertura de garantía aplican de forma diferenciada según la naturaleza de la mano de obra realizada en el vehículo. Cada orden de servicio especifica los términos del trabajo acordado.
+                    </p>
+                  </div>
+
+                  {/* Diferenciación Clara de Repuestos */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-slate-800 dark:text-slate-200">
+                      <div className="flex items-center gap-1.5 font-black text-emerald-700 dark:text-emerald-400 text-xs mb-1">
+                        <PackageCheck size={16} />
+                        <span>Repuesto Provisto por MasterTech</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                        Cuenta con garantía formal sobre el componente y la mano de obra de montaje, respaldado por la calidad OEM de nuestras piezas importadas.
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-slate-800 dark:text-slate-200">
+                      <div className="flex items-center gap-1.5 font-black text-red-600 dark:text-red-400 text-xs mb-1">
+                        <PackageX size={16} />
+                        <span>Repuesto Traído por el Cliente</span>
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                        NO corre con garantía sobre el repuesto ni fallas o daños colaterales que la pieza suministrada externamente pudiera generar en el vehículo.
+                      </p>
+                    </div>
+                  </div>
+
                   <div>
-                    <h3 className="text-base font-black uppercase text-slate-900 dark:text-white">
-                      Condiciones Oficiales de Garantía
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Taller MasterTech — Porlamar, Isla de Margarita
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setIsTermsModalOpen(false)} 
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="space-y-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-slate-700 dark:text-slate-200">
-                  <p className="font-bold text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1.5">
-                    <ShieldCheck size={16} />
-                    <span>Alcance según Trabajo Realizado</span>
-                  </p>
-                  <p className="text-xs leading-normal">
-                    El tiempo y cobertura de garantía aplican de forma diferenciada según la naturaleza de la mano de obra realizada en el vehículo. Cada orden de servicio especifica los términos del trabajo acordado.
-                  </p>
-                </div>
-
-                {/* Diferenciación Clara de Repuestos */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-slate-800 dark:text-slate-200">
-                    <div className="flex items-center gap-1.5 font-black text-emerald-700 dark:text-emerald-400 text-xs mb-1">
-                      <PackageCheck size={16} />
-                      <span>Repuesto Provisto por MasterTech</span>
-                    </div>
-                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
-                      Cuenta con garantía formal sobre el componente y la mano de obra de montaje, respaldado por la calidad OEM de nuestras piezas importadas.
-                    </p>
+                    <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
+                      1. Determinación de la Garantía por Mano de Obra
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-xs">
+                      <li>La garantía cubre exclusivamente defectos de armado, ajuste o calibración imputables a la mano de obra realizada en nuestras bahías.</li>
+                      <li>El plazo exacto depende de la complejidad técnica del servicio (reparación mayor de motor, cajas, tren delantero, frenos o servicio preventivo) y queda registrado en tu orden o factura.</li>
+                    </ul>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-slate-800 dark:text-slate-200">
-                    <div className="flex items-center gap-1.5 font-black text-red-600 dark:text-red-400 text-xs mb-1">
-                      <PackageX size={16} />
-                      <span>Repuesto Traído por el Cliente</span>
-                    </div>
-                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
-                      NO corre con garantía sobre el repuesto ni fallas o daños colaterales que la pieza suministrada externamente pudiera generar en el vehículo.
+                  <div>
+                    <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
+                      2. Exclusiones de la Garantía
+                    </h4>
+                    <ul className="list-disc pl-5 space-y-1 text-xs text-slate-500 dark:text-slate-400">
+                      <li>Repuestos suministrados externamente por el cliente o piezas de segunda mano aportadas sin certificación.</li>
+                      <li>Intervenciones posteriores, desarmados o modificaciones realizadas por talleres o mecánicos terceros ajenos a MasterTech.</li>
+                      <li>Vehículos que sufran recalentamiento por fuga de agua ajena a la reparación, falta de aceite o negligencia del usuario.</li>
+                      <li>Uso indebido del vehículo en condiciones extremas, siniestros o inmersión en agua salina.</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
+                      3. Proceso para Revisión
+                    </h4>
+                    <p className="text-xs">
+                      Para cualquier revisión técnica bajo garantía, presenta tu número de placa o comprobante de servicio digital para una inspección prioritaria en nuestras instalaciones.
                     </p>
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
-                    1. Determinación de la Garantía por Mano de Obra
-                  </h4>
-                  <ul className="list-disc pl-5 space-y-1 text-xs">
-                    <li>La garantía cubre exclusivamente defectos de armado, ajuste o calibración imputables a la mano de obra realizada en nuestras bahías.</li>
-                    <li>El plazo exacto depende de la complejidad técnica del servicio (reparación mayor de motor, cajas, tren delantero, frenos o servicio preventivo) y queda registrado en tu orden o factura.</li>
-                  </ul>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200 dark:border-white/10">
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppInquiry}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  >
+                    <MessageCircle size={15} />
+                    <span>Consultar con el Jefe de Taller</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsTermsModalOpen(false)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                  >
+                    Cerrar
+                  </button>
                 </div>
-
-                <div>
-                  <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
-                    2. Exclusiones de la Garantía
-                  </h4>
-                  <ul className="list-disc pl-5 space-y-1 text-xs text-slate-500 dark:text-slate-400">
-                    <li>Repuestos suministrados externamente por el cliente o piezas de segunda mano aportadas sin certificación.</li>
-                    <li>Intervenciones posteriores, desarmados o modificaciones realizadas por talleres o mecánicos terceros ajenos a MasterTech.</li>
-                    <li>Vehículos que sufran recalentamiento por fuga de agua ajena a la reparación, falta de aceite o negligencia del usuario.</li>
-                    <li>Uso indebido del vehículo en condiciones extremas, siniestros o inmersión en agua salina.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-wider text-xs mb-2">
-                    3. Proceso para Revisión
-                  </h4>
-                  <p className="text-xs">
-                    Para cualquier revisión técnica bajo garantía, presenta tu número de placa o comprobante de servicio digital para una inspección prioritaria en nuestras instalaciones.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200 dark:border-white/10">
-                <button
-                  type="button"
-                  onClick={handleWhatsAppInquiry}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                >
-                  <MessageCircle size={15} />
-                  <span>Consultar con el Jefe de Taller</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsTermsModalOpen(false)}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors cursor-pointer"
-                >
-                  Cerrar
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 }
