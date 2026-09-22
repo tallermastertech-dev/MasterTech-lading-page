@@ -563,8 +563,8 @@ export default function ManualesTecnicosPanel() {
       <div className="rounded-2xl bg-[#0f1218] border border-white/10 shadow-xl overflow-hidden">
         
         {/* Sub-navigation tabs: Chapters */}
-        <div className="px-6 py-3 bg-[#151922] border-b border-white/10 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-1 sm:gap-2">
+        <div className="px-4 sm:px-6 py-3 bg-[#151922] border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full pb-1 sm:pb-0">
             <button
               onClick={() => setActiveChapter('cap1')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
