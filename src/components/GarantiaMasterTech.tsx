@@ -196,24 +196,24 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
         <div className="relative rounded-3xl p-6 sm:p-10 mb-12 bg-slate-50 dark:bg-[#0e1219]/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-red-500/5">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            {/* Sello Shield Badge Graphic - Premium MasterTech Seal (siempre oscuro) */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#111827] via-[#0e1219] to-[#080a0e] border border-red-500/50 shadow-[0_0_0_1px_rgba(239,68,68,0.15),0_0_60px_-10px_rgba(239,68,68,0.4),0_25px_50px_-12px_rgba(0,0,0,0.6)] relative overflow-hidden group">
+            {/* Sello Shield Badge Graphic - Premium MasterTech Seal */}
+            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-2xl bg-white dark:bg-gradient-to-b dark:from-[#111827] dark:via-[#0e1219] dark:to-[#080a0e] border border-red-500/40 shadow-[0_0_0_1px_rgba(239,68,68,0.1),0_0_40px_-10px_rgba(239,68,68,0.3),0_8px_30px_-8px_rgba(0,0,0,0.12)] dark:shadow-[0_0_0_1px_rgba(239,68,68,0.15),0_0_60px_-10px_rgba(239,68,68,0.4),0_25px_50px_-12px_rgba(0,0,0,0.6)] relative overflow-hidden group">
               
               {/* Dot-grid background */}
-              <div className="absolute inset-0 bg-[radial-gradient(#ef4444_1px,transparent_1px)] [background-size:18px_18px] opacity-[0.06] pointer-events-none" />
+              <div className="absolute inset-0 bg-[radial-gradient(#ef4444_1px,transparent_1px)] [background-size:18px_18px] opacity-[0.03] dark:opacity-[0.06] pointer-events-none" />
               
               {/* Top laser line */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent" />
               
               {/* Ambient glows */}
-              <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-52 h-24 bg-red-600/20 blur-3xl rounded-full pointer-events-none" />
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-40 h-20 bg-red-500/10 blur-2xl rounded-full pointer-events-none" />
+              <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-52 h-24 bg-red-600/10 dark:bg-red-600/20 blur-3xl rounded-full pointer-events-none" />
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-40 h-20 bg-red-500/5 dark:bg-red-500/10 blur-2xl rounded-full pointer-events-none" />
 
               {/* Content */}
               <div className="relative z-10 flex flex-col items-center w-full gap-4">
 
                 {/* Top pill */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 font-mono text-[9px] tracking-[0.2em] uppercase">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 dark:text-red-400 font-mono text-[9px] tracking-[0.2em] uppercase">
                   <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                   <span>CERTIFICACIÓN TÉCNICA</span>
                 </div>
@@ -222,13 +222,14 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                 <div className="relative flex items-center justify-center w-36 h-36 sm:w-40 sm:h-40">
                   {/* Spinning gradient ring */}
                   <div className="absolute inset-0 rounded-full p-[3px] animate-spin" style={{animationDuration:'8s', background:'conic-gradient(from 0deg, #ef4444, #ff8c00, #ef4444, transparent, transparent)'}}>
+                    {/* Interior SIEMPRE oscuro — el logo y blend-mode lo requieren */}
                     <div className="w-full h-full rounded-full bg-[#0e1219]" />
                   </div>
                   {/* Inner ring */}
                   <div className="absolute inset-[5px] rounded-full border border-red-500/20" />
                   {/* Glow pulse */}
                   <div className="absolute inset-[10px] rounded-full bg-red-500/10 blur-md animate-pulse" style={{animationDuration:'3s'}} />
-                  {/* Logo */}
+                  {/* Logo — mix-blend-screen funciona porque el círculo interior es siempre oscuro */}
                   <img
                     src="/logo.png"
                     alt="Logo MasterTech"
@@ -238,10 +239,10 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
 
                 {/* Brand text */}
                 <div className="space-y-0.5">
-                  <div className="font-display font-black text-xl tracking-[0.15em] uppercase text-white">
+                  <div className="font-display font-black text-xl tracking-[0.15em] uppercase text-slate-900 dark:text-white">
                     MASTER<span className="text-red-500 italic">TECH</span>
                   </div>
-                  <div className="text-[10px] font-black tracking-[0.25em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-red-400">
+                  <div className="text-[10px] font-black tracking-[0.25em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-red-500 dark:from-red-400 dark:via-rose-300 dark:to-red-400">
                     SELLO DE GARANTÍA OFICIAL
                   </div>
                 </div>
@@ -252,32 +253,33 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                 {/* Stats */}
                 <div className="flex items-center justify-center gap-4 w-full">
                   <div className="flex flex-col items-center">
-                    <span className="text-red-400 font-black text-lg leading-none">3–6</span>
-                    <span className="text-slate-400 text-[9px] font-medium tracking-widest uppercase mt-0.5">Meses</span>
+                    <span className="text-red-500 dark:text-red-400 font-black text-lg leading-none">3–6</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[9px] font-medium tracking-widest uppercase mt-0.5">Meses</span>
                   </div>
-                  <div className="w-px h-8 bg-slate-700" />
+                  <div className="w-px h-8 bg-slate-200 dark:bg-slate-700" />
                   <div className="flex flex-col items-center">
-                    <span className="text-emerald-400 font-black text-lg leading-none">OEM</span>
-                    <span className="text-slate-400 text-[9px] font-medium tracking-widest uppercase mt-0.5">Repuestos</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-black text-lg leading-none">OEM</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[9px] font-medium tracking-widest uppercase mt-0.5">Repuestos</span>
                   </div>
-                  <div className="w-px h-8 bg-slate-700" />
+                  <div className="w-px h-8 bg-slate-200 dark:bg-slate-700" />
                   <div className="flex flex-col items-center">
-                    <span className="text-amber-400 font-black text-lg leading-none">100%</span>
-                    <span className="text-slate-400 text-[9px] font-medium tracking-widest uppercase mt-0.5">Escrita</span>
+                    <span className="text-amber-500 dark:text-amber-400 font-black text-lg leading-none">100%</span>
+                    <span className="text-slate-500 dark:text-slate-400 text-[9px] font-medium tracking-widest uppercase mt-0.5">Escrita</span>
                   </div>
                 </div>
 
                 {/* Badge */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-200 text-[10px] font-bold">
-                  <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-[10px] font-bold">
+                  <ShieldCheck size={13} className="text-emerald-500 dark:text-emerald-400 shrink-0" />
                   <span>Según Mano de Obra Realizada</span>
                 </div>
 
-                <p className="text-[9px] text-slate-500 font-medium tracking-wide">
+                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-medium tracking-wide">
                   Estipulada en tu orden de servicio
                 </p>
               </div>
             </div>
+
 
 
             {/* Banner Value Proposition */}
