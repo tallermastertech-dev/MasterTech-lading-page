@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import GarantiaMasterTech from './components/GarantiaMasterTech';
 import GoogleReviewsWidget from './components/GoogleReviewsWidget';
-import FaqGarantiaPreview from './components/FaqGarantiaPreview';
 import { 
   ShieldCheck, 
   Star, 
-  HelpCircle,
   Sun, 
   Moon, 
   ArrowLeft, 
@@ -80,8 +78,8 @@ export default function PreviewTrustPack() {
               href="#garantia" 
               className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
             >
-              <ShieldCheck size={14} className="text-amber-500" />
-              <span>Garantía</span>
+              <ShieldCheck size={14} className="text-red-500" />
+              <span>Garantía & 8 FAQs</span>
             </a>
 
             <a 
@@ -90,14 +88,6 @@ export default function PreviewTrustPack() {
             >
               <Star size={14} className="text-blue-500" />
               <span>Reseñas Google</span>
-            </a>
-
-            <a 
-              href="#faq-preview" 
-              className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
-            >
-              <HelpCircle size={14} className="text-amber-500" />
-              <span>Preguntas Frecuentes</span>
             </a>
 
             {/* Theme Toggle Button */}
@@ -116,9 +106,9 @@ export default function PreviewTrustPack() {
 
       {/* Hero Notice */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-4">
-        <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-slate-800 dark:text-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="p-4 sm:p-5 rounded-2xl bg-red-500/10 border border-red-500/30 text-slate-800 dark:text-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-xl bg-amber-500/20 text-amber-500 shrink-0 mt-0.5 sm:mt-0">
+            <div className="p-2 rounded-xl bg-red-500/20 text-red-500 shrink-0 mt-0.5 sm:mt-0">
               <Sparkles size={20} />
             </div>
             <div>
@@ -126,17 +116,17 @@ export default function PreviewTrustPack() {
                 Entorno de Calibración Aislado
               </h2>
               <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello y las 4 Tarjetas de Garantía</strong>, el <strong>Widget de Google Maps</strong> y las <strong>Preguntas Frecuentes</strong>.
+                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello Oficial con Logo MasterTech</strong>, las <strong>8 Tarjetas FAQ adaptadas</strong> y el <strong>Widget de Google Maps</strong>.
               </p>
             </div>
           </div>
           <div className="text-xs font-mono text-slate-500 shrink-0">
-            Ruta: <span className="font-bold text-amber-600 dark:text-amber-400">/preview-confianza</span>
+            Ruta: <span className="font-bold text-red-600 dark:text-red-400">/preview-confianza</span>
           </div>
         </div>
       </div>
 
-      {/* Component 1: Sello y Política de Garantía MasterTech (Banner + 4 Tarjetas) */}
+      {/* Component 1: Sello y Política de Garantía MasterTech con las 8 Tarjetas FAQ */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <GarantiaMasterTech />
       </div>
@@ -144,11 +134,6 @@ export default function PreviewTrustPack() {
       {/* Component 2: Widget Dinámico de Reseñas de Google Maps */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <GoogleReviewsWidget />
-      </div>
-
-      {/* Component 3: Preguntas Frecuentes con Política de Garantía y Repuestos */}
-      <div className="border-b border-slate-200 dark:border-slate-800">
-        <FaqGarantiaPreview />
       </div>
 
       {/* Bottom Integration Proposal */}

@@ -10,7 +10,11 @@ import {
   Sparkles,
   AlertTriangle,
   PackageCheck,
-  PackageX
+  PackageX,
+  Clock,
+  Cpu,
+  CreditCard,
+  Lock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -27,28 +31,88 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
       title: "Garantía según Mano de Obra Realizada",
       tag: "Sujeto al Servicio",
       desc: "El tiempo y alcance de la garantía dependen directamente del tipo de trabajo y mano de obra efectuada en el vehículo (motor, tren delantero, frenos, transmisión o mantenimiento). Se estipula formalmente en tu orden de servicio.",
-      highlight: "Período fijado según la labor técnica realizada"
+      highlight: "Período fijado según la labor técnica realizada",
+      tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+      iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
     },
     {
       icon: PackageCheck,
       title: "Repuesto Suministrado por MasterTech",
       tag: "Con Garantía",
       desc: "Si el repuesto es provisto directamente por nuestro taller, cuenta con garantía y respaldo tanto en la pieza OEM de primer equipo como en su correcta instalación.",
-      highlight: "Respaldo total en pieza e instalación"
+      highlight: "Respaldo total en pieza e instalación",
+      tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+      iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
     },
     {
       icon: PackageX,
       title: "Repuesto Traído por el Cliente",
       tag: "Sin Garantía",
       desc: "Si el cliente decide traer su propio repuesto, el taller no puede certificar su procedencia, calidad ni autenticidad, por lo que el trabajo NO corre con garantía sobre la pieza ni fallas derivadas de la misma.",
-      highlight: "Sin cobertura sobre repuestos externos"
+      highlight: "Sin cobertura sobre repuestos externos",
+      tagStyle: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
+      iconStyle: "bg-red-500/10 border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white",
+      footerStyle: "text-amber-600 dark:text-amber-400",
+      isNoWarranty: true
     },
     {
       icon: Gauge,
       title: "Torque y Procedimiento de Manual",
       tag: "Cero Improvisación",
       desc: "Todo ensamble se ejecuta bajo especificaciones y aprietes milimétricos del fabricante automotriz, previniendo daños mecánicos y garantizando el correcto funcionamiento del sistema.",
-      highlight: "Normas y tolerancias de fábrica"
+      highlight: "Normas y tolerancias de fábrica",
+      tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+      iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: Clock,
+      title: "¿Cuánto toma un servicio preventivo básico?",
+      tag: "Tiempo Estimado",
+      desc: "Con cita previa toma entre 45 minutos y 1.5 horas (aceite sintético, filtros OEM, niveles y revisión en rampa). Puedes esperar cómodamente en nuestra sala climatizada con Wi-Fi.",
+      highlight: "Entrega rápida con turno agendado",
+      tagStyle: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+      iconStyle: "bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500 group-hover:text-white",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: Cpu,
+      title: "¿Qué tecnología usan para diagnóstico?",
+      tag: "Jeep & Toyota OEM",
+      desc: "Disponemos de escáneres multimarca y dedicados de nivel concesionario (Launch X431, Autel MaxiSys y software oficial para Chrysler/Jeep/RAM y Toyota), osciloscopio y calibración de sensores.",
+      highlight: "Diagnóstico computarizado de precisión",
+      tagStyle: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
+      iconStyle: "bg-cyan-500/10 border-cyan-500/20 text-cyan-500 group-hover:bg-cyan-500 group-hover:text-white",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: CreditCard,
+      title: "¿Cuáles son los métodos de pago aceptados?",
+      tag: "Tasa Oficial BCV",
+      desc: "Aceptamos Bolívares a Tasa Oficial BCV del día sin recargos (Pago Móvil y transferencias), Dólares y Euros en efectivo, Zelle y USDT Binance P2P. Presupuestos transparentes sin sorpresas.",
+      highlight: "Sin sobreprecios, tasa oficial BCV",
+      tagStyle: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      iconStyle: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: Lock,
+      title: "¿Puedo dejar mi vehículo varios días?",
+      tag: "Seguridad 24/7",
+      desc: "Sí. Nuestras instalaciones cuentan con estacionamiento techado cerrado, circuito cerrado de cámaras (CCTV), vigilancia privada nocturna y póliza de custodia de taller.",
+      highlight: "Instalaciones techadas y vigiladas 24/7",
+      tagStyle: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+      iconStyle: "bg-purple-500/10 border-purple-500/20 text-purple-500 group-hover:bg-purple-500 group-hover:text-white",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
     }
   ];
 
@@ -167,10 +231,10 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                 </button>
 
                 <a
-                  href="#faq-preview"
+                  href="#faq-cards"
                   className="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold text-xs transition-all flex items-center gap-2"
                 >
-                  <span>Ver en Preguntas Frecuentes</span>
+                  <span>Ver las 8 Preguntas Frecuentes</span>
                 </a>
 
                 <button
@@ -187,39 +251,31 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
           </div>
         </div>
 
-        {/* 4 Pillars Grid (Las 4 Tarjetas Solicitadas) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 8 Tarjetas FAQ y Respaldo Técnico (Grid de 4 Columnas) */}
+        <div id="faq-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 scroll-mt-24">
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
-            const isNoWarranty = pillar.tag === "Sin Garantía";
+            const isNoWarranty = pillar.isNoWarranty;
             return (
               <div 
                 key={idx}
                 className={`group relative rounded-2xl p-6 bg-white dark:bg-slate-900/50 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between ${
                   isNoWarranty 
                     ? 'border-red-500/30 dark:border-red-500/20 hover:border-red-500/60' 
-                    : 'border-slate-200 dark:border-slate-800/80 hover:border-red-500/50 dark:hover:border-red-500/40'
+                    : 'border-slate-200 dark:border-slate-800/80 hover:border-amber-500/50 dark:hover:border-amber-500/40'
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                      isNoWarranty
-                        ? 'bg-red-500/10 border border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white'
-                        : 'bg-red-500/10 border border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white'
-                    }`}>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${pillar.iconStyle}`}>
                       <Icon size={22} />
                     </div>
-                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${
-                      isNoWarranty
-                        ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
-                    }`}>
+                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${pillar.tagStyle}`}>
                       {pillar.tag}
                     </span>
                   </div>
 
-                  <h4 className="text-base font-bold text-slate-900 dark:text-white mb-2 group-hover:text-red-500 transition-colors">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white mb-2 group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-colors">
                     {pillar.title}
                   </h4>
 
@@ -228,10 +284,8 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   </p>
                 </div>
 
-                <div className={`mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[11px] font-semibold ${
-                  isNoWarranty ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'
-                }`}>
-                  {isNoWarranty ? <AlertTriangle size={13} className="shrink-0" /> : <CheckCircle2 size={13} className="shrink-0" />}
+                <div className={`mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[11px] font-semibold ${pillar.footerStyle}`}>
+                  {isNoWarranty ? <AlertTriangle size={13} className="shrink-0" /> : <CheckCircle2 size={13} className="shrink-0 text-emerald-500" />}
                   <span>{pillar.highlight}</span>
                 </div>
               </div>
