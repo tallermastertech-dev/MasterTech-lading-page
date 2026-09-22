@@ -375,10 +375,19 @@
     }
 
     /* Print Styles */
+    @page {
+      size: auto;
+      margin: 0mm;
+    }
     @media print {
+      @page {
+        size: auto;
+        margin: 0mm;
+      }
       body {
         background: #ffffff;
-        padding: 0;
+        padding: 14mm 16mm;
+        margin: 0;
         font-size: 11px;
       }
       .action-bar {
