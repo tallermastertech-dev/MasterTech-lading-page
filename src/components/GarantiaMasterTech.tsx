@@ -232,15 +232,14 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   {/* Red glow pulse */}
                   <div className="absolute inset-[10px] rounded-full bg-red-500/10 blur-md animate-pulse" style={{animationDuration:'3s'}} />
 
-                  {/* Logo card */}
-                  <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-b from-[#1a1f2e] to-[#0b0d14] border border-slate-700/60 flex items-center justify-center shadow-2xl group-hover:border-red-500/50 transition-all duration-500">
-                    <img
-                      src="/logo.png"
-                      alt="Logo MasterTech"
-                      className="w-16 h-16 sm:w-20 sm:h-20 object-contain filter drop-shadow-[0_0_18px_rgba(239,68,68,0.65)] group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
+                  {/* Logo — sin caja, flotando */}
+                  <img
+                    src="/logo.png"
+                    alt="Logo MasterTech"
+                    className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 object-contain filter drop-shadow-[0_0_22px_rgba(239,68,68,0.75)] group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
+
 
                 {/* Brand typography */}
                 <div className="space-y-0.5">
