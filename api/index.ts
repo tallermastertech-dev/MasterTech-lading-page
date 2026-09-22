@@ -147,7 +147,11 @@ function createRateLimiter(maxRequests: number, windowMs: number, customMessage?
     const rawIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip || req.socket.remoteAddress || 'unknown';
     // Normalize path (ignore query strings) to prevent bypassing via random query params
     const normalizedPath = req.path.toLowerCase().replace(/\/+$/, '');
-    const key = `${rawIp}:${normalizedPath}`;
+    // For login routes: include email in key so shared IPs (office/taller networks) don't block each other
+    const emailSuffix = (normalizedPath.includes('login') && req.body?.email)
+      ? `:${String(req.body.email).toLowerCase().trim()}`
+      : '';
+    const key = `${rawIp}:${normalizedPath}${emailSuffix}`;
     const now = Date.now();
 
     const entry = rateLimitStore.get(key);
@@ -178,7 +182,7 @@ function createRateLimiter(maxRequests: number, windowMs: number, customMessage?
 }
 
 // Security Rate Limits: Strict protection against brute force and concurrent attacks
-const strictLimit = createRateLimiter(5, 15 * 60 * 1000, 'Demasiados intentos de acceso fallidos. Por seguridad, tu IP ha sido temporalmente limitada por 15 minutos.'); // 5 req / 15 min (login)
+const strictLimit = createRateLimiter(20, 5 * 60 * 1000, 'Demasiados intentos de acceso fallidos. Por seguridad, tu IP ha sido temporalmente limitada por 5 minutos.'); // 20 req / 5 min (login) — increased to avoid blocking shared IPs
 const standardLimit = createRateLimiter(15, 60 * 60 * 1000, 'Límite de solicitudes de contacto alcanzado. Intenta nuevamente en una hora.'); // 15 req / hora (leads form)
 const globalApiLimiter = createRateLimiter(120, 60 * 1000, 'Ráfaga de solicitudes excesiva detectada. Espera un momento antes de reintentar.'); // 120 req / min (global flood protection)
 const relaxedLimit = createRateLimiter(1000, 15 * 60 * 1000); // 1000 req / 15 min (read)
@@ -1413,6 +1417,15 @@ app.post('/api/logout', authenticateAdmin, async (_req, res) => {
 app.post('/logout', authenticateAdmin, async (_req, res) => {
   res.json({ success: true, message: 'Sesión cerrada correctamente.' });
 });
+
+// Emergency endpoint: clear all rate limit blocks (admin only — requires valid token)
+app.post(['/api/admin/clear-ratelimit', '/admin/clear-ratelimit'], authenticateAdmin, (_req, res) => {
+  const sizeBefore = rateLimitStore.size;
+  rateLimitStore.clear();
+  console.log(`[Admin] Rate limit store cleared. Entries removed: ${sizeBefore}`);
+  res.json({ success: true, message: `Bloqueos de rate limit eliminados. Entradas borradas: ${sizeBefore}` });
+});
+
 
 app.get('/api/verify-token', authenticateAdmin, (_req, res) => {
   res.json({ valid: true });
