@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Manual Técnico Honda (2021-2027) | Taller MasterTech</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -615,12 +618,17 @@
         size: letter;
         margin: 8mm 10mm;
       }
-      body {
+      html, body {
+        width: 100% !important;
+        min-width: 100% !important;
         background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
-        font-size: 9.5px !important;
-        line-height: 1.35 !important;
+        font-size: 10.5px !important;
+        line-height: 1.4 !important;
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
       .action-bar {
         display: none !important;
@@ -631,186 +639,259 @@
         padding: 0 !important;
         margin: 0 !important;
         max-width: 100% !important;
+        width: 100% !important;
       }
       .doc-reference-bar {
-        padding: 3px 8px !important;
-        margin-bottom: 8px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 5px 10px !important;
+        margin-bottom: 10px !important;
         background: #f1f5f9 !important;
-        border-color: #cbd5e1 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+      }
+      .doc-reference-left {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
       }
       .doc-pill {
-        font-size: 7.5px !important;
-        padding: 2px 6px !important;
+        font-size: 8px !important;
+        font-weight: 900 !important;
+        padding: 2.5px 7px !important;
         background: #0f172a !important;
         color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        border-radius: 4px !important;
       }
       .doc-ref-text {
-        font-size: 9.5px !important;
+        font-size: 10.5px !important;
+        font-weight: 900 !important;
+        color: #0f172a !important;
       }
       .mastertech-header {
-        padding-bottom: 8px !important;
-        margin-bottom: 10px !important;
-        border-bottom-width: 2px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        border-bottom: 2px solid #0f172a !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 12px !important;
+      }
+      .brand-col {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 12px !important;
+        width: auto !important;
       }
       .brand-logo {
-        height: 42px !important;
+        width: 48px !important;
+        height: 48px !important;
       }
       .brand-title {
-        font-size: 15px !important;
+        font-size: 18px !important;
+        font-weight: 900 !important;
       }
       .brand-sub {
         font-size: 8px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.12em !important;
       }
       .header-meta {
-        font-size: 8.5px !important;
+        text-align: right !important;
+        width: auto !important;
+        font-size: 9px !important;
+        line-height: 1.35 !important;
       }
       .header-badge {
+        display: inline-block !important;
         font-size: 8px !important;
-        padding: 2px 6px !important;
+        font-weight: 900 !important;
+        padding: 2px 7px !important;
         background: #fee2e2 !important;
         color: #991b1b !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        border: 1px solid #fecaca !important;
+        border-radius: 4px !important;
+        margin-bottom: 2px !important;
       }
       .manual-banner {
         background: #0d1117 !important;
-        padding: 10px 14px !important;
-        margin-bottom: 10px !important;
-        border-left-width: 5px !important;
+        padding: 12px 16px !important;
+        margin-bottom: 12px !important;
+        border-left: 5px solid #ef4444 !important;
         border-radius: 8px !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
       }
       .manual-brand-tag {
-        font-size: 18px !important;
+        font-size: 20px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
       }
       .manual-title {
-        font-size: 11px !important;
-        margin-top: 3px !important;
+        font-size: 11.5px !important;
+        font-weight: 900 !important;
+        margin-top: 4px !important;
       }
       .manual-subtitle {
-        font-size: 8.5px !important;
+        font-size: 9px !important;
+        font-weight: 700 !important;
       }
       .models-box {
         margin-top: 6px !important;
         padding-top: 5px !important;
-        font-size: 8.5px !important;
+        font-size: 9px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
       }
       .chapter-title {
-        font-size: 12px !important;
-        margin: 10px 0 8px 0 !important;
+        font-size: 12.5px !important;
+        font-weight: 900 !important;
+        margin: 12px 0 8px 0 !important;
         padding-left: 8px !important;
-        border-left-width: 4px !important;
+        border-left: 4px solid #ef4444 !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
       }
       .mileage-block {
+        display: block !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 7px !important;
       }
       .mileage-badge {
         background: #0f172a !important;
         color: #ffffff !important;
-        font-size: 8.5px !important;
-        padding: 2.5px 7px !important;
+        font-size: 9.5px !important;
+        font-weight: 900 !important;
+        padding: 3px 8px !important;
         margin: 0 0 3px 0 !important;
         border-radius: 4px !important;
+        border-left: 3px solid #ef4444 !important;
         display: inline-block !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
         page-break-after: avoid !important;
         break-after: avoid !important;
       }
       .tech-card {
         background: #f8fafc !important;
-        border: 1px solid #e2e8f0 !important;
-        padding: 5px 9px !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 7px 11px !important;
         margin-bottom: 0 !important;
         border-radius: 6px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
       }
       .tech-card-header {
-        font-size: 9.5px !important;
+        font-size: 10.5px !important;
+        font-weight: 800 !important;
         margin-bottom: 2px !important;
       }
       .tech-card p {
-        font-size: 8.5px !important;
-        line-height: 1.32 !important;
-        margin-bottom: 2px !important;
+        font-size: 9.5px !important;
+        line-height: 1.38 !important;
+        color: #334155 !important;
+        margin-bottom: 2.5px !important;
       }
       .tech-card p:last-child {
         margin-bottom: 0 !important;
       }
       .tech-sublist {
         margin: 2px 0 2px 14px !important;
-        font-size: 8.5px !important;
+        font-size: 9px !important;
       }
       .tech-sublist li {
-        margin-bottom: 1px !important;
+        margin-bottom: 1.5px !important;
       }
       .table-container {
-        margin: 6px 0 8px 0 !important;
+        margin: 6px 0 10px 0 !important;
+        border: 1px solid #cbd5e1 !important;
         border-radius: 6px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      table {
+        width: 100% !important;
+        font-size: 9.5px !important;
       }
       th {
         background: #0f172a !important;
         color: #ffffff !important;
         padding: 5px 8px !important;
-        font-size: 8.5px !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        font-size: 9px !important;
+        font-weight: 900 !important;
+        text-transform: uppercase !important;
       }
       td {
         padding: 4px 8px !important;
-        font-size: 8.5px !important;
+        font-size: 9px !important;
+        border-bottom: 1px solid #e2e8f0 !important;
       }
       .torque-cell {
-        font-size: 9px !important;
+        font-size: 9.5px !important;
+        font-weight: 900 !important;
+        color: #dc2626 !important;
       }
       .service-book {
         margin-top: 10px !important;
         padding: 10px 12px !important;
+        border: 2px dashed #94a3b8 !important;
         border-radius: 8px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        background: #ffffff !important;
       }
       .service-book h2 {
         font-size: 11px !important;
-        margin-bottom: 3px !important;
+        font-weight: 900 !important;
+        margin-bottom: 2px !important;
+        color: #0f172a !important;
       }
       .service-book p {
         font-size: 8px !important;
-        margin-bottom: 6px !important;
+        color: #64748b !important;
+        margin-bottom: 5px !important;
       }
       .client-data-grid {
-        margin: 6px 0 8px 0 !important;
-        gap: 4px 14px !important;
-        font-size: 8.5px !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        margin: 5px 0 7px 0 !important;
+        gap: 3px 14px !important;
+        font-size: 9px !important;
+      }
+      .data-row {
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 5px !important;
+      }
+      .data-label {
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        font-size: 9px !important;
       }
       .data-line {
+        flex: 1 !important;
+        border-bottom: 1px solid #64748b !important;
         min-height: 12px !important;
       }
       .service-book table th {
-        padding: 4px 6px !important;
+        padding: 3px 6px !important;
         font-size: 8px !important;
       }
       .service-book table td {
-        height: 24px !important;
+        height: 22px !important;
         padding: 2px 6px !important;
         font-size: 8px !important;
       }
       .mastertech-footer {
         margin-top: 10px !important;
         padding-top: 6px !important;
+        border-top: 1px solid #cbd5e1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
         font-size: 8px !important;
+        color: #64748b !important;
       }
       .page-break {
         display: none !important;
