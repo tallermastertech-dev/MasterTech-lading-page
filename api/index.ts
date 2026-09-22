@@ -791,29 +791,60 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
 
 // Helper: Get admin users from settings (or fallback from secure environment variables)
 async function getAdminUsersList(): Promise<any[]> {
+  const masterEmail = (process.env.ADMIN_EMAIL || 'admin@tallermastertech.com').toLowerCase().trim();
+  const masterPass = process.env.ADMIN_PASSWORD || 'mastertech2026';
+
+  const masterUser = {
+    id: 'master-admin-user',
+    name: 'Administrador MasterTech',
+    email: masterEmail,
+    password: masterPass,
+    role: 'CEO - Director',
+    accessLevel: 'full',
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    // Force a fresh read from Supabase directly (bypass TTL cache for user list)
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'ADMIN_USERS_JSON')
+      .single();
+
+    if (error) {
+      console.warn('[getAdminUsersList] Supabase error:', error.message);
+    }
+
+    const rawValue = data?.value;
+    if (rawValue) {
+      const parsed = JSON.parse(rawValue);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Merge: ensure master admin is always included even if not in DB list
+        const hasMaster = parsed.some(u => (u.email || '').toLowerCase().trim() === masterEmail);
+        console.log(`[getAdminUsersList] Loaded ${parsed.length} users from DB. Master present: ${hasMaster}`);
+        if (!hasMaster) return [masterUser, ...parsed];
+        return parsed;
+      }
+    }
+  } catch (e: any) {
+    console.warn('[getAdminUsersList] Exception parsing ADMIN_USERS_JSON:', e?.message);
+  }
+
+  // Fallback: also try from settings cache
   try {
     const settings = await getSettings();
     if (settings.ADMIN_USERS_JSON) {
       const parsed = JSON.parse(settings.ADMIN_USERS_JSON);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        console.log(`[getAdminUsersList] Loaded ${parsed.length} users from settings cache.`);
+        return parsed;
+      }
     }
   } catch (e) {}
 
-  // Fallback seguro usando variables de entorno para bootstrap inicial
-  const masterEmail = (process.env.ADMIN_EMAIL || 'admin@tallermastertech.com').toLowerCase().trim();
-  const masterPass = process.env.ADMIN_PASSWORD || 'mastertech2026';
-
-  return [
-    {
-      id: 'master-admin-user',
-      name: 'Administrador MasterTech',
-      email: masterEmail,
-      password: masterPass,
-      role: 'CEO - Director',
-      accessLevel: 'full',
-      createdAt: new Date().toISOString()
-    }
-  ];
+  console.log('[getAdminUsersList] Falling back to master admin only.');
+  return [masterUser];
 }
 
 // Helper: Audit Logging System (Auditoría de Actividades de Usuarios)
