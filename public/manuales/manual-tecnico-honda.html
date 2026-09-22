@@ -475,7 +475,20 @@
         print-color-adjust: exact;
       }
       .page-break {
-        page-break-before: always;
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+      .chapter-title {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      .mileage-badge {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      .tech-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
   </style>
@@ -543,6 +556,7 @@
     </div>
 
     <!-- CAPÍTULO 2 -->
+    <div class="page-break"></div>
     <h2 class="chapter-title">CAPÍTULO 2: PAUTA DE MANTENIMIENTO HONDA POR KILOMETRAJE</h2>
 
     <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo Base)</div>
