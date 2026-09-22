@@ -236,7 +236,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   <img
                     src="/logo.png"
                     alt="Logo MasterTech"
-                    className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 object-contain filter drop-shadow-[0_0_22px_rgba(239,68,68,0.75)] group-hover:scale-110 transition-transform duration-500"
+                    className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 object-contain mix-blend-screen filter drop-shadow-[0_0_22px_rgba(239,68,68,0.75)] group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>
 
