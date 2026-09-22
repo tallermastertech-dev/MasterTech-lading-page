@@ -10,11 +10,13 @@ import {
   Sparkles,
   AlertTriangle,
   PackageCheck,
-  PackageX,
   Clock,
   Cpu,
   CreditCard,
-  Lock
+  Lock,
+  Car,
+  Camera,
+  Truck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -28,9 +30,9 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
   const pillars = [
     {
       icon: Wrench,
-      title: "Garantía según Mano de Obra Realizada",
+      title: "¿Qué garantía tienen los trabajos realizados?",
       tag: "Sujeto al Servicio",
-      desc: "El tiempo y alcance de la garantía dependen directamente del tipo de trabajo y mano de obra efectuada en el vehículo (motor, tren delantero, frenos, transmisión o mantenimiento). Se estipula formalmente en tu orden de servicio.",
+      desc: "Respaldamos la mano de obra realizada según la complejidad técnica del trabajo (motor, tren delantero, frenos, transmisión o mantenimiento). El tiempo y cobertura quedan fijados formalmente en tu orden de servicio digital.",
       highlight: "Período fijado según la labor técnica realizada",
       tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
       iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
@@ -39,34 +41,34 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
     },
     {
       icon: PackageCheck,
-      title: "Repuesto Suministrado por MasterTech",
-      tag: "Con Garantía",
-      desc: "Si el repuesto es provisto directamente por nuestro taller, cuenta con garantía y respaldo tanto en la pieza OEM de primer equipo como en su correcta instalación.",
-      highlight: "Respaldo total en pieza e instalación",
+      title: "¿Puedo llevar mis propios repuestos al taller?",
+      tag: "Política de Piezas",
+      desc: "Sí puedes traerlos y garantizamos el montaje profesional. No obstante, para garantía total de la pieza y cobertura ante fallas del componente, recomendamos repuestos originales OEM suministrados directamente por el taller.",
+      highlight: "Garantía integral con repuestos MasterTech",
       tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
       iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
       footerStyle: "text-emerald-600 dark:text-emerald-400",
       isNoWarranty: false
     },
     {
-      icon: PackageX,
-      title: "Repuesto Traído por el Cliente",
-      tag: "Sin Garantía",
-      desc: "Si el cliente decide traer su propio repuesto, el taller no puede certificar su procedencia, calidad ni autenticidad, por lo que el trabajo NO corre con garantía sobre la pieza ni fallas derivadas de la misma.",
-      highlight: "Sin cobertura sobre repuestos externos",
+      icon: Car,
+      title: "¿Atienden solo Jeep y Toyota o cualquier marca?",
+      tag: "Todas las Marcas",
+      desc: "Somos especialistas certificados en Jeep y Toyota con software y escáneres OEM dedicados, pero nuestro equipo atiende mantenimiento preventivo, frenos, suspensión y mecánica general para todas las marcas del parque automotor.",
+      highlight: "Atención multimarca con estándar de concesionario",
       tagStyle: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
       iconStyle: "bg-red-500/10 border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white",
-      footerStyle: "text-amber-600 dark:text-amber-400",
-      isNoWarranty: true
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
     },
     {
-      icon: Gauge,
-      title: "Torque y Procedimiento de Manual",
-      tag: "Cero Improvisación",
-      desc: "Todo ensamble se ejecuta bajo especificaciones y aprietes milimétricos del fabricante automotriz, previniendo daños mecánicos y garantizando el correcto funcionamiento del sistema.",
-      highlight: "Normas y tolerancias de fábrica",
-      tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
-      iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
+      icon: Camera,
+      title: "¿Me avisan antes de hacer trabajos adicionales?",
+      tag: "Cero Sorpresas",
+      desc: "Jamás se ejecuta una reparación ni se reemplaza una pieza sin tu aprobación previa. Te enviamos reporte fotográfico, video de la falla y presupuesto detallado vía WhatsApp para tu visto bueno antes de proceder.",
+      highlight: "Aprobación previa con fotos y videos por WhatsApp",
+      tagStyle: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      iconStyle: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white",
       footerStyle: "text-emerald-600 dark:text-emerald-400",
       isNoWarranty: false
     },
@@ -74,7 +76,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
       icon: Clock,
       title: "¿Cuánto toma un servicio preventivo básico?",
       tag: "Tiempo Estimado",
-      desc: "Con cita previa toma entre 45 minutos y 1.5 horas (aceite sintético, filtros OEM, niveles y revisión en rampa). Puedes esperar cómodamente en nuestra sala climatizada con Wi-Fi.",
+      desc: "Con cita previa toma entre 45 minutos y 1.5 horas (aceite sintético, filtros OEM, niveles y revisión de seguridad en rampa). Puedes esperar cómodamente en nuestra sala climatizada con Wi-Fi.",
       highlight: "Entrega rápida con turno agendado",
       tagStyle: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
       iconStyle: "bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500 group-hover:text-white",
@@ -83,9 +85,9 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
     },
     {
       icon: Cpu,
-      title: "¿Qué tecnología usan para diagnóstico?",
+      title: "¿Qué tecnología usan para diagnóstico y fallas?",
       tag: "Jeep & Toyota OEM",
-      desc: "Disponemos de escáneres multimarca y dedicados de nivel concesionario (Launch X431, Autel MaxiSys y software oficial para Chrysler/Jeep/RAM y Toyota), osciloscopio y calibración de sensores.",
+      desc: "Disponemos de escáneres multimarca y dedicados de nivel concesionario (Launch X431, Autel MaxiSys y software oficial para Chrysler/Jeep/RAM y Toyota), osciloscopio y calibración electrónica de sensores.",
       highlight: "Diagnóstico computarizado de precisión",
       tagStyle: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
       iconStyle: "bg-cyan-500/10 border-cyan-500/20 text-cyan-500 group-hover:bg-cyan-500 group-hover:text-white",
@@ -93,10 +95,32 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
       isNoWarranty: false
     },
     {
+      icon: Gauge,
+      title: "¿Aplican aprietes y torques según manual de fábrica?",
+      tag: "Cero Improvisación",
+      desc: "Todo ensamble se ejecuta bajo especificaciones y aprietes milimétricos del fabricante automotriz con torquímetro calibrado, previniendo daños mecánicos, deformaciones y garantizando la durabilidad del sistema.",
+      highlight: "Normas y tolerancias de fábrica",
+      tagStyle: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+      iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: Truck,
+      title: "¿Trabajan solo con cita o reciben emergencias en grúa?",
+      tag: "Recepción y Grúas",
+      desc: "Agendamos turnos para cero esperas, pero si tu vehículo llega accidentado o en grúa, lo recibimos en patio de inmediato con turno de diagnóstico prioritario y coordinación de auxilio vial.",
+      highlight: "Recepción inmediata de vehículos en grúa",
+      tagStyle: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+      iconStyle: "bg-amber-500/10 border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
       icon: CreditCard,
       title: "¿Cuáles son los métodos de pago aceptados?",
       tag: "Tasa Oficial BCV",
-      desc: "Aceptamos Bolívares a Tasa Oficial BCV del día sin recargos (Pago Móvil y transferencias), Dólares y Euros en efectivo, Zelle y USDT Binance P2P. Presupuestos transparentes sin sorpresas.",
+      desc: "Aceptamos Bolívares a Tasa Oficial BCV del día sin recargos (Pago Móvil y transferencias bancarias), Dólares y Euros en efectivo, Zelle y USDT Binance P2P. Presupuestos claros y transparentes sin sorpresas.",
       highlight: "Sin sobreprecios, tasa oficial BCV",
       tagStyle: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
       iconStyle: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white",
@@ -105,12 +129,34 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
     },
     {
       icon: Lock,
-      title: "¿Puedo dejar mi vehículo varios días?",
+      title: "¿Puedo dejar mi vehículo varios días con seguridad?",
       tag: "Seguridad 24/7",
-      desc: "Sí. Nuestras instalaciones cuentan con estacionamiento techado cerrado, circuito cerrado de cámaras (CCTV), vigilancia privada nocturna y póliza de custodia de taller.",
+      desc: "Sí. Nuestras instalaciones cuentan con estacionamiento techado cerrado, circuito cerrado de cámaras de alta definición (CCTV), vigilancia privada nocturna y póliza de custodia de taller.",
       highlight: "Instalaciones techadas y vigiladas 24/7",
       tagStyle: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
       iconStyle: "bg-purple-500/10 border-purple-500/20 text-purple-500 group-hover:bg-purple-500 group-hover:text-white",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: PackageCheck,
+      title: "¿Tienen repuestos en stock o los importan?",
+      tag: "Stock e Importación",
+      desc: "Contamos con inventario propio de filtros, lubricantes sintéticos certificados, bujías y piezas de rotación frecuente, además de servicio de importación express directa desde EE.UU. para partes especializadas.",
+      highlight: "Stock en taller e importación express",
+      tagStyle: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+      iconStyle: "bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500 group-hover:text-white",
+      footerStyle: "text-emerald-600 dark:text-emerald-400",
+      isNoWarranty: false
+    },
+    {
+      icon: MessageCircle,
+      title: "¿Cómo agendo una cita o consulto un presupuesto?",
+      tag: "Atención Rápida",
+      desc: "Puedes escribirnos directamente por WhatsApp indicando marca, modelo, año y falla de tu vehículo, o utilizar nuestro botón web de agendamiento para asignarte turno de atención inmediata.",
+      highlight: "Confirmación inmediata vía WhatsApp",
+      tagStyle: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      iconStyle: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white",
       footerStyle: "text-emerald-600 dark:text-emerald-400",
       isNoWarranty: false
     }
@@ -234,7 +280,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   href="#faq-cards"
                   className="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold text-xs transition-all flex items-center gap-2"
                 >
-                  <span>Ver las 8 Preguntas Frecuentes</span>
+                  <span>Ver Preguntas Frecuentes</span>
                 </a>
 
                 <button
@@ -251,7 +297,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
           </div>
         </div>
 
-        {/* 8 Tarjetas FAQ y Respaldo Técnico (Grid de 4 Columnas) */}
+        {/* 12 Tarjetas FAQ y Respaldo Técnico (Grid de 4 Columnas) */}
         <div id="faq-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 scroll-mt-24">
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;

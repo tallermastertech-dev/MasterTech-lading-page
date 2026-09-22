@@ -79,7 +79,7 @@ export default function PreviewTrustPack() {
               className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
             >
               <ShieldCheck size={14} className="text-red-500" />
-              <span>Garantía & 8 FAQs</span>
+              <span>Garantía & 12 FAQs</span>
             </a>
 
             <a 
@@ -116,7 +116,7 @@ export default function PreviewTrustPack() {
                 Entorno de Calibración Aislado
               </h2>
               <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello Oficial con Logo MasterTech</strong>, las <strong>8 Tarjetas FAQ adaptadas</strong> y el <strong>Widget de Google Maps</strong>.
+                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello Oficial con Logo MasterTech</strong>, las <strong>12 Tarjetas FAQ optimizadas sin redundancias</strong> y el <strong>Widget de Google Maps</strong>.
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function PreviewTrustPack() {
         </div>
       </div>
 
-      {/* Component 1: Sello y Política de Garantía MasterTech con las 8 Tarjetas FAQ */}
+      {/* Component 1: Sello y Política de Garantía MasterTech con las 12 Tarjetas FAQ */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <GarantiaMasterTech />
       </div>
