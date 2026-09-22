@@ -17,12 +17,12 @@ interface RateData {
 export default function BrechaCambiariaPanel({ initialOpen = false }: { initialOpen?: boolean }) {
   const [isOpen, setIsOpen] = useState(initialOpen);
   const [rates, setRates] = useState<RateData>({
-    bcv_usd: 794.99,
-    bcv_eur: 922.69,
-    usdt: 937.38,
-    brecha_usdt_usd: 17.91,
-    brecha_usdt_eur: 1.59,
-    brecha_eur_usd: 16.06,
+    bcv_usd: 852.42,
+    bcv_eur: 978.17,
+    usdt: 953.27,
+    brecha_usdt_usd: 11.83,
+    brecha_usdt_eur: -2.55,
+    brecha_eur_usd: 14.75,
     timestamp: new Date().toISOString()
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -65,10 +65,11 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
       console.warn("Backend brecha proxy failed, trying direct public feeds:", e);
     }
 
-    // 2. Direct client-side fallback to DolarApi if proxy failed
+    // 2. Direct client-side fallback to fast public feeds
     if (!success) {
       try {
-        const [usdRes, eurRes, parRes] = await Promise.allSettled([
+        const [vzlaRes, usdRes, eurRes, parRes] = await Promise.allSettled([
+          fetch('https://rates.dolarvzla.com/bcv/current.json'),
           fetch('https://ve.dolarapi.com/v1/dolares/oficial'),
           fetch('https://ve.dolarapi.com/v1/euros/oficial'),
           fetch('https://ve.dolarapi.com/v1/dolares/paralelo')
@@ -78,14 +79,21 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
         let bcvEur = rates.bcv_eur;
         let usdt = rates.usdt;
 
-        if (usdRes.status === 'fulfilled' && usdRes.value.ok) {
-          const d = await usdRes.value.json();
-          if (d?.promedio) bcvUsd = Number(d.promedio);
+        if (vzlaRes.status === 'fulfilled' && vzlaRes.value.ok) {
+          const vzlaData = await vzlaRes.value.json();
+          if (vzlaData?.current?.usd) bcvUsd = Number(vzlaData.current.usd);
+          if (vzlaData?.current?.eur) bcvEur = Number(vzlaData.current.eur);
+        } else {
+          if (usdRes.status === 'fulfilled' && usdRes.value.ok) {
+            const d = await usdRes.value.json();
+            if (d?.promedio) bcvUsd = Number(d.promedio);
+          }
+          if (eurRes.status === 'fulfilled' && eurRes.value.ok) {
+            const d = await eurRes.value.json();
+            if (d?.promedio) bcvEur = Number(d.promedio);
+          }
         }
-        if (eurRes.status === 'fulfilled' && eurRes.value.ok) {
-          const d = await eurRes.value.json();
-          if (d?.promedio) bcvEur = Number(d.promedio);
-        }
+
         if (parRes.status === 'fulfilled' && parRes.value.ok) {
           const d = await parRes.value.json();
           if (d?.promedio) usdt = Number(d.promedio);
@@ -105,7 +113,7 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
           timestamp: new Date().toISOString()
         });
       } catch (err) {
-        console.error("Direct DolarApi fallback also failed:", err);
+        console.error("Direct fallback failed:", err);
       }
     }
 

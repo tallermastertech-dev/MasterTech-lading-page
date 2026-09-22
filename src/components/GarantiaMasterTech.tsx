@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { 
   ShieldCheck, 
+  Wrench, 
+  CheckCircle2, 
+  Gauge, 
   FileText, 
   X, 
   MessageCircle, 
   Sparkles,
+  AlertTriangle,
   PackageCheck,
   PackageX
 } from 'lucide-react';
@@ -17,9 +21,40 @@ interface GarantiaMasterTechProps {
 export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTechProps) {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
+  const pillars = [
+    {
+      icon: Wrench,
+      title: "Garantía según Mano de Obra Realizada",
+      tag: "Sujeto al Servicio",
+      desc: "El tiempo y alcance de la garantía dependen directamente del tipo de trabajo y mano de obra efectuada en el vehículo (motor, tren delantero, frenos, transmisión o mantenimiento). Se estipula formalmente en tu orden de servicio.",
+      highlight: "Período fijado según la labor técnica realizada"
+    },
+    {
+      icon: PackageCheck,
+      title: "Repuesto Suministrado por MasterTech",
+      tag: "Con Garantía",
+      desc: "Si el repuesto es provisto directamente por nuestro taller, cuenta con garantía y respaldo tanto en la pieza OEM de primer equipo como en su correcta instalación.",
+      highlight: "Respaldo total en pieza e instalación"
+    },
+    {
+      icon: PackageX,
+      title: "Repuesto Traído por el Cliente",
+      tag: "Sin Garantía",
+      desc: "Si el cliente decide traer su propio repuesto, el taller no puede certificar su procedencia, calidad ni autenticidad, por lo que el trabajo NO corre con garantía sobre la pieza ni fallas derivadas de la misma.",
+      highlight: "Sin cobertura sobre repuestos externos"
+    },
+    {
+      icon: Gauge,
+      title: "Torque y Procedimiento de Manual",
+      tag: "Cero Improvisación",
+      desc: "Todo ensamble se ejecuta bajo especificaciones y aprietes milimétricos del fabricante automotriz, previniendo daños mecánicos y garantizando el correcto funcionamiento del sistema.",
+      highlight: "Normas y tolerancias de fábrica"
+    }
+  ];
+
   const handleWhatsAppInquiry = () => {
     const text = encodeURIComponent("Hola Taller MasterTech, deseo consultar la garantía aplicable a un trabajo y repuestos para mi vehículo.");
-    window.open(`https://wa.me/584248888000?text=${text}`, '_blank');
+    window.open(`https://wa.me/584123565012?text=${text}`, '_blank');
   };
 
   return (
@@ -110,19 +145,21 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                   />
 
                   {/* Bottom Ribbon Text in Medallion */}
-                  <text x="80" y="106" textAnchor="middle" fill="#0F172A" fontSize="8.5" fontWeight="900" letterSpacing="1.8" fontFamily="sans-serif">
+                  <text x="80" y="106" textAnchor="middle" fill="#0F172A" fontSize="8" fontWeight="900" letterSpacing="1.8" fontFamily="sans-serif">
                     MASTERTECH
                   </text>
-                  <text x="80" y="116" textAnchor="middle" fill="#1E293B" fontSize="6" fontWeight="800" letterSpacing="1.2" fontFamily="sans-serif">
-                    CERTIFIED GARANTÍA
+                  <text x="80" y="116" textAnchor="middle" fill="#78350F" fontSize="6.5" fontWeight="800" letterSpacing="1.5" fontFamily="sans-serif">
+                    CERTIFICADO
                   </text>
                 </svg>
               </div>
 
-              <div className="space-y-1.5 max-w-xs">
-                <span className="inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-mono font-black text-[11px] uppercase tracking-wider">
-                  GARANTÍA POR ESCRITO
-                </span>
+              <div className="space-y-2 max-w-xs flex flex-col items-center">
+                {/* Modernized Luxury Badge replacing GARANTIA POR ESCRITO */}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/50 text-amber-600 dark:text-amber-300 font-extrabold text-[10px] tracking-wider uppercase shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                  <ShieldCheck size={13} className="text-amber-500 shrink-0" />
+                  <span>RESPALDO TÉCNICO OFICIAL</span>
+                </div>
                 
                 <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white leading-tight">
                   Según Mano de Obra
@@ -178,6 +215,58 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
             </div>
 
           </div>
+        </div>
+
+        {/* 4 Pillars Grid (Las 4 Tarjetas Solicitadas) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {pillars.map((pillar, idx) => {
+            const Icon = pillar.icon;
+            const isNoWarranty = pillar.tag === "Sin Garantía";
+            return (
+              <div 
+                key={idx}
+                className={`group relative rounded-2xl p-6 bg-white dark:bg-slate-900/50 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between ${
+                  isNoWarranty 
+                    ? 'border-amber-500/30 dark:border-amber-500/20 hover:border-amber-500/60' 
+                    : 'border-slate-200 dark:border-slate-800/80 hover:border-amber-500/50 dark:hover:border-amber-500/40'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                      isNoWarranty
+                        ? 'bg-red-500/10 border border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white'
+                        : 'bg-amber-500/10 border border-amber-500/20 text-amber-500 group-hover:bg-amber-500 group-hover:text-black'
+                    }`}>
+                      <Icon size={22} />
+                    </div>
+                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border ${
+                      isNoWarranty
+                        ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                    }`}>
+                      {pillar.tag}
+                    </span>
+                  </div>
+
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white mb-2 group-hover:text-amber-500 transition-colors">
+                    {pillar.title}
+                  </h4>
+
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </div>
+
+                <div className={`mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-1.5 text-[11px] font-semibold ${
+                  isNoWarranty ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
+                }`}>
+                  {isNoWarranty ? <AlertTriangle size={13} className="shrink-0" /> : <CheckCircle2 size={13} className="shrink-0" />}
+                  <span>{pillar.highlight}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
       </div>

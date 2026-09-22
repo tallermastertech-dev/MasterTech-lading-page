@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import GarantiaMasterTech from './components/GarantiaMasterTech';
 import GoogleReviewsWidget from './components/GoogleReviewsWidget';
 import FaqGarantiaPreview from './components/FaqGarantiaPreview';
 import { 
@@ -68,13 +69,21 @@ export default function PreviewTrustPack() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
-                Prueba interactiva del Widget de Reseñas y Preguntas Frecuentes con Garantía Integrada
+                Prueba interactiva del Sello y Tarjetas de Garantía, Reseñas de Google Maps y Preguntas Frecuentes
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             {/* Quick jump links */}
+            <a 
+              href="#garantia" 
+              className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
+            >
+              <ShieldCheck size={14} className="text-amber-500" />
+              <span>Garantía</span>
+            </a>
+
             <a 
               href="#opiniones" 
               className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
@@ -87,8 +96,8 @@ export default function PreviewTrustPack() {
               href="#faq-preview" 
               className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden md:flex items-center gap-1.5"
             >
-              <ShieldCheck size={14} className="text-amber-500" />
-              <span>Garantía & Preguntas Frecuentes</span>
+              <HelpCircle size={14} className="text-amber-500" />
+              <span>Preguntas Frecuentes</span>
             </a>
 
             {/* Theme Toggle Button */}
@@ -117,7 +126,7 @@ export default function PreviewTrustPack() {
                 Entorno de Calibración Aislado
               </h2>
               <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
-                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello de Garantía</strong> (sin redundancias), el <strong>Widget de Google Maps</strong> y las <strong>Preguntas Frecuentes</strong> con la política de garantía y repuestos.
+                Estos componentes son privados y no modifican la web principal hasta que des la orden. Incluye el <strong>Sello y las 4 Tarjetas de Garantía</strong>, el <strong>Widget de Google Maps</strong> y las <strong>Preguntas Frecuentes</strong>.
               </p>
             </div>
           </div>
@@ -127,12 +136,17 @@ export default function PreviewTrustPack() {
         </div>
       </div>
 
-      {/* Component 1: Widget Dinámico de Reseñas de Google Maps */}
+      {/* Component 1: Sello y Política de Garantía MasterTech (Banner + 4 Tarjetas) */}
+      <div className="border-b border-slate-200 dark:border-slate-800">
+        <GarantiaMasterTech />
+      </div>
+
+      {/* Component 2: Widget Dinámico de Reseñas de Google Maps */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <GoogleReviewsWidget />
       </div>
 
-      {/* Component 2: Preguntas Frecuentes con el Sello y Política Oficial de Garantía */}
+      {/* Component 3: Preguntas Frecuentes con Política de Garantía y Repuestos */}
       <div className="border-b border-slate-200 dark:border-slate-800">
         <FaqGarantiaPreview />
       </div>

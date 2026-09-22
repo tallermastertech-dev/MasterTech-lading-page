@@ -1260,12 +1260,12 @@ app.get('/inspection-slots', handleGetInspectionSlots);
 // Live Brecha Cambiaria proxy endpoint with multi-source resilient real-time fetching
 let brechaCache: { data: any; lastFetch: number } = {
   data: {
-    bcv_usd: 794.99,
-    bcv_eur: 922.69,
-    usdt: 937.38,
-    brecha_usdt_usd: 17.91,
-    brecha_usdt_eur: 1.59,
-    brecha_eur_usd: 16.06,
+    bcv_usd: 852.42,
+    bcv_eur: 978.17,
+    usdt: 953.27,
+    brecha_usdt_usd: 11.83,
+    brecha_usdt_eur: -2.55,
+    brecha_eur_usd: 14.75,
     timestamp: new Date().toISOString()
   },
   lastFetch: 0
@@ -1277,36 +1277,54 @@ app.get(['/api/brecha-cambiaria', '/brecha-cambiaria'], async (_req, res) => {
     return res.json({ success: true, ...brechaCache.data, cached: true });
   }
 
-  let bcv_usd = brechaCache.data?.bcv_usd || 794.99;
-  let bcv_eur = brechaCache.data?.bcv_eur || 922.69;
-  let usdt = brechaCache.data?.usdt || 937.38;
+  let bcv_usd = brechaCache.data?.bcv_usd || 852.42;
+  let bcv_eur = brechaCache.data?.bcv_eur || 978.17;
+  let usdt = brechaCache.data?.usdt || 953.27;
   let fetchedAny = false;
 
-  // 1. Fetch Official BCV Rates from DolarApi (fastest & most reliable public BCV proxy)
+  // 1. Fetch Official BCV Rates (first priority: rates.dolarvzla.com for immediate same-day BCV closing rates, fallback: dolarapi)
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 4000);
-    const [usdRes, eurRes, paraleloRes] = await Promise.allSettled([
+    const [vzlaRes, usdRes, eurRes, paraleloRes] = await Promise.allSettled([
+      fetch('https://rates.dolarvzla.com/bcv/current.json', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } }),
       fetch('https://ve.dolarapi.com/v1/dolares/oficial', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } }),
       fetch('https://ve.dolarapi.com/v1/euros/oficial', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } }),
       fetch('https://ve.dolarapi.com/v1/dolares/paralelo', { signal: controller.signal, headers: { 'User-Agent': 'MasterTech/2.0' } })
     ]);
     clearTimeout(timeout);
 
-    if (usdRes.status === 'fulfilled' && usdRes.value.ok) {
-      const d = await usdRes.value.json();
-      if (d && (d.promedio || d.precio)) {
-        bcv_usd = Number(d.promedio || d.precio);
+    // Prioritize direct DolarVzla BCV rates
+    if (vzlaRes.status === 'fulfilled' && vzlaRes.value.ok) {
+      const vzlaData = await vzlaRes.value.json();
+      if (vzlaData?.current?.usd) {
+        bcv_usd = Number(vzlaData.current.usd);
+        fetchedAny = true;
+      }
+      if (vzlaData?.current?.eur) {
+        bcv_eur = Number(vzlaData.current.eur);
         fetchedAny = true;
       }
     }
-    if (eurRes.status === 'fulfilled' && eurRes.value.ok) {
-      const d = await eurRes.value.json();
-      if (d && (d.promedio || d.precio)) {
-        bcv_eur = Number(d.promedio || d.precio);
-        fetchedAny = true;
+
+    // Fallback to DolarApi if DolarVzla didn't provide USD/EUR
+    if (!fetchedAny) {
+      if (usdRes.status === 'fulfilled' && usdRes.value.ok) {
+        const d = await usdRes.value.json();
+        if (d && (d.promedio || d.precio)) {
+          bcv_usd = Number(d.promedio || d.precio);
+          fetchedAny = true;
+        }
+      }
+      if (eurRes.status === 'fulfilled' && eurRes.value.ok) {
+        const d = await eurRes.value.json();
+        if (d && (d.promedio || d.precio)) {
+          bcv_eur = Number(d.promedio || d.precio);
+          fetchedAny = true;
+        }
       }
     }
+
     if (paraleloRes.status === 'fulfilled' && paraleloRes.value.ok) {
       const d = await paraleloRes.value.json();
       if (d && (d.promedio || d.precio)) {
@@ -1314,7 +1332,7 @@ app.get(['/api/brecha-cambiaria', '/brecha-cambiaria'], async (_req, res) => {
       }
     }
   } catch (err) {
-    console.error("Error fetching DolarApi rates:", err);
+    console.error("Error fetching BCV rates:", err);
   }
 
   // 2. Fetch Live Binance P2P USDT rates (real P2P market price)
