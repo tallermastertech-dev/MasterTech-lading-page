@@ -319,7 +319,12 @@
       margin-bottom: 4px;
     }
 
-    /* Mileage Badges */
+    /* Mileage Badges & Blocks */
+    .mileage-block {
+      margin-bottom: 14px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
     .mileage-badge {
       font-family: var(--font-heading);
       display: inline-flex;
@@ -332,8 +337,11 @@
       font-weight: 900;
       font-size: 11.5px;
       letter-spacing: 0.06em;
-      margin: 18px 0 10px 0;
+      margin: 0 0 10px 0;
       border-left: 3px solid #ef4444;
+    }
+    .mileage-block .tech-card {
+      margin-bottom: 0;
     }
 
     /* Tables */
@@ -426,85 +434,214 @@
 
     /* Print Styles */
     @page {
-      size: auto;
-      margin: 0mm;
+      size: letter;
+      margin: 8mm 10mm;
     }
     @media print {
       @page {
-        size: auto;
-        margin: 0mm;
+        size: letter;
+        margin: 8mm 10mm;
       }
       body {
-        background: #ffffff;
-        padding: 14mm 16mm;
-        margin: 0;
-        font-size: 11px;
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 9.5px !important;
+        line-height: 1.35 !important;
       }
       .action-bar {
         display: none !important;
       }
       .page-container {
-        border: none;
-        box-shadow: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .manual-banner {
-        background: #0d1117 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      th {
-        background: #0f172a !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .mileage-badge {
-        background: #0f172a !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .highlight-pill {
-        background: #fee2e2 !important;
-        color: #991b1b !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .header-badge {
-        background: #fee2e2 !important;
-        color: #991b1b !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
       }
       .doc-reference-bar {
+        padding: 3px 8px !important;
+        margin-bottom: 8px !important;
         background: #f1f5f9 !important;
         border-color: #cbd5e1 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
       .doc-pill {
+        font-size: 7.5px !important;
+        padding: 2px 6px !important;
         background: #0f172a !important;
         color: #ffffff !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .page-break {
-        page-break-before: always !important;
-        break-before: page !important;
+      .doc-ref-text {
+        font-size: 9.5px !important;
+      }
+      .mastertech-header {
+        padding-bottom: 8px !important;
+        margin-bottom: 10px !important;
+        border-bottom-width: 2px !important;
+      }
+      .brand-logo {
+        height: 42px !important;
+      }
+      .brand-title {
+        font-size: 15px !important;
+      }
+      .brand-sub {
+        font-size: 8px !important;
+      }
+      .header-meta {
+        font-size: 8.5px !important;
+      }
+      .header-badge {
+        font-size: 8px !important;
+        padding: 2px 6px !important;
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .manual-banner {
+        background: #0d1117 !important;
+        padding: 10px 14px !important;
+        margin-bottom: 10px !important;
+        border-left-width: 5px !important;
+        border-radius: 8px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .manual-brand-tag {
+        font-size: 18px !important;
+      }
+      .manual-title {
+        font-size: 11px !important;
+        margin-top: 3px !important;
+      }
+      .manual-subtitle {
+        font-size: 8.5px !important;
+      }
+      .models-box {
+        margin-top: 6px !important;
+        padding-top: 5px !important;
+        font-size: 8.5px !important;
       }
       .chapter-title {
+        font-size: 12px !important;
+        margin: 10px 0 8px 0 !important;
+        padding-left: 8px !important;
+        border-left-width: 4px !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
       }
+      .mileage-block {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 6px !important;
+      }
       .mileage-badge {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        font-size: 8.5px !important;
+        padding: 2.5px 7px !important;
+        margin: 0 0 3px 0 !important;
+        border-radius: 4px !important;
+        display: inline-block !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
         page-break-after: avoid !important;
         break-after: avoid !important;
       }
       .tech-card {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        padding: 5px 9px !important;
+        margin-bottom: 0 !important;
+        border-radius: 6px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .tech-card-header {
+        font-size: 9.5px !important;
+        margin-bottom: 2px !important;
+      }
+      .tech-card p {
+        font-size: 8.5px !important;
+        line-height: 1.32 !important;
+        margin-bottom: 2px !important;
+      }
+      .tech-card p:last-child {
+        margin-bottom: 0 !important;
+      }
+      .tech-sublist {
+        margin: 2px 0 2px 14px !important;
+        font-size: 8.5px !important;
+      }
+      .tech-sublist li {
+        margin-bottom: 1px !important;
+      }
+      .table-container {
+        margin: 6px 0 8px 0 !important;
+        border-radius: 6px !important;
+      }
+      th {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        padding: 5px 8px !important;
+        font-size: 8.5px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      td {
+        padding: 4px 8px !important;
+        font-size: 8.5px !important;
+      }
+      .torque-cell {
+        font-size: 9px !important;
+      }
+      .service-book {
+        margin-top: 10px !important;
+        padding: 10px 12px !important;
+        border-radius: 8px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .service-book h2 {
+        font-size: 11px !important;
+        margin-bottom: 3px !important;
+      }
+      .service-book p {
+        font-size: 8px !important;
+        margin-bottom: 6px !important;
+      }
+      .client-data-grid {
+        margin: 6px 0 8px 0 !important;
+        gap: 4px 14px !important;
+        font-size: 8.5px !important;
+      }
+      .data-line {
+        min-height: 12px !important;
+      }
+      .service-book table th {
+        padding: 4px 6px !important;
+        font-size: 8px !important;
+      }
+      .service-book table td {
+        height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 8px !important;
+      }
+      .mastertech-footer {
+        margin-top: 10px !important;
+        padding-top: 6px !important;
+        font-size: 8px !important;
+      }
+      .page-break {
+        page-break-before: always !important;
+        break-before: page !important;
       }
     }
   </style>
@@ -572,50 +709,62 @@
     <div class="page-break"></div>
     <h2 class="chapter-title">CAPÍTULO 2: PAUTA DE MANTENIMIENTO NISSAN POR KILOMETRAJE</h2>
 
-    <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo)</div>
-    <div class="tech-card">
-      <p><strong>• Motor:</strong> Cambio de aceite full sintético API SP / ILSAC GF-6 (viscosidades 0W-20 o 5W-30 según indicación del fabricante) y filtro de aceite original.</p>
-      <p><strong>• Escudo Antisalitre y Baterías:</strong> Limpieza de bornes de batería. En modelos con sistema Auto Start-Stop, si se desconecta o cambia la batería EFB/AGM, es obligatorio el registro del módulo BMS vía escáner.</p>
-      <p><strong>• Frenos:</strong> Desarmado y lubricación de pasadores de caliper con grasa sintética para frenos (PTFE/Cerámica).</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo)</div>
+      <div class="tech-card">
+        <p><strong>• Motor:</strong> Cambio de aceite full sintético API SP / ILSAC GF-6 (viscosidades 0W-20 o 5W-30 según indicación del fabricante) y filtro de aceite original.</p>
+        <p><strong>• Escudo Antisalitre y Baterías:</strong> Limpieza de bornes de batería. En modelos con sistema Auto Start-Stop, si se desconecta o cambia la batería EFB/AGM, es obligatorio el registro del módulo BMS vía escáner.</p>
+        <p><strong>• Frenos:</strong> Desarmado y lubricación de pasadores de caliper con grasa sintética para frenos (PTFE/Cerámica).</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 10.000 km (Fluidos y Neumáticos)</div>
-    <div class="tech-card">
-      <p><strong>• Líquido de Frenos (DOT 3 / DOT 4):</strong> Reemplazo anual obligatorio. La humedad del aire marino degrada rápidamente el fluido y oxida el módulo de válvulas del sistema ABS/ESP.</p>
-      <p><strong>• Filtro de Aire y Cabina:</strong> Reemplazar obligatoriamente. Prohibido soplado con aire a presión para no expandir los poros del elemento filtrante.</p>
-      <p><strong>• Rotación de Neumáticos:</strong></p>
-      <ul class="tech-sublist">
-        <li>Sedanes y Crossovers (Versa, Sentra, Kicks): <strong>80 lb·ft (108 Nm)</strong>.</li>
-        <li>Suvs Grandes / Pickup (Rogue, Pathfinder, Frontier): <strong>98 a 113 lb·ft (133-153 Nm)</strong>.</li>
-      </ul>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 10.000 km (Fluidos y Neumáticos)</div>
+      <div class="tech-card">
+        <p><strong>• Líquido de Frenos (DOT 3 / DOT 4):</strong> Reemplazo anual obligatorio. La humedad del aire marino degrada rápidamente el fluido y oxida el módulo de válvulas del sistema ABS/ESP.</p>
+        <p><strong>• Filtro de Aire y Cabina:</strong> Reemplazar obligatoriamente. Prohibido soplado con aire a presión para no expandir los poros del elemento filtrante.</p>
+        <p><strong>• Rotación de Neumáticos:</strong></p>
+        <ul class="tech-sublist">
+          <li>Sedanes y Crossovers (Versa, Sentra, Kicks): <strong>80 lb·ft (108 Nm)</strong>.</li>
+          <li>Suvs Grandes / Pickup (Rogue, Pathfinder, Frontier): <strong>98 a 113 lb·ft (133-153 Nm)</strong>.</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 20.000 km (Afinación y Diagnóstico de Encendido)</div>
-    <div class="tech-card">
-      <p><strong>• Inspección de Bujías de Iridio:</strong> Revisión del aislador cerámico. La gasolina local suele dejar depósitos rojizos (contaminación por hierro/plomo). Reemplazar si hay rastro de fugas de corriente a masa.</p>
-      <p><strong>• Limpieza de Inyección:</strong> Tratamiento en tanque con aditivos de alta concentración de PEA para proteger los inyectores de alta presión GDI.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 20.000 km (Afinación y Diagnóstico de Encendido)</div>
+      <div class="tech-card">
+        <p><strong>• Inspección de Bujías de Iridio:</strong> Revisión del aislador cerámico. La gasolina local suele dejar depósitos rojizos (contaminación por hierro/plomo). Reemplazar si hay rastro de fugas de corriente a masa.</p>
+        <p><strong>• Limpieza de Inyección:</strong> Tratamiento en tanque con aditivos de alta concentración de PEA para proteger los inyectores de alta presión GDI.</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 30.000 km (Transmisión CVT Xtronic y AWD)</div>
-    <div class="tech-card">
-      <p><strong>• Cajas CVT Jatco (NS-3):</strong></p>
-      <ul class="tech-sublist">
-        <li>Drenaje por gravedad del fluido viejo y llenado con Nissan Genuine NS-3.</li>
-        <li>Reemplazo del filtro de cartucho (ubicado detrás del enfriador de aceite de la caja) y reemplazo del filtro de malla del cárter.</li>
-        <li>Reseteo del contador de degradación de aceite con escáner.</li>
-      </ul>
-      <p><strong>• Diferencial Trasero y Transfer (AWD / 4x4):</strong> Cambio de aceite lubricante de engranajes hipoidales API GL-5 80W-90 o 75W-85.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 30.000 km (Transmisión CVT Xtronic y AWD)</div>
+      <div class="tech-card">
+        <p><strong>• Cajas CVT Jatco (NS-3):</strong></p>
+        <ul class="tech-sublist">
+          <li>Drenaje por gravedad del fluido viejo y llenado con Nissan Genuine NS-3.</li>
+          <li>Reemplazo del filtro de cartucho (ubicado detrás del enfriador de aceite de la caja) y reemplazo del filtro de malla del cárter.</li>
+          <li>Reseteo del contador de degradación de aceite con escáner.</li>
+        </ul>
+        <p><strong>• Diferencial Trasero y Transfer (AWD / 4x4):</strong> Cambio de aceite lubricante de engranajes hipoidales API GL-5 80W-90 o 75W-85.</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 40.000 km (Mantenimiento Mayor GDI / VC-Turbo)</div>
-    <div class="tech-card">
-      <p><strong>• Descarbonización de Válvulas de Admisión:</strong> Tratamiento por química presurizada o walnut blasting (chorro de esferas de nogal) en los motores VC-Turbo y GDI directos para eliminar la costra de carbón de las válvulas.</p>
-      <p><strong>• Filtro de Gasolina (Tanque):</strong> Reemplazo del cartucho del módulo sumergido de la bomba para evitar fallas por sobrecalentamiento eléctrico.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 40.000 km (Mantenimiento Mayor GDI / VC-Turbo)</div>
+      <div class="tech-card">
+        <p><strong>• Descarbonización de Válvulas de Admisión:</strong> Tratamiento por química presurizada o walnut blasting (chorro de esferas de nogal) en los motores VC-Turbo y GDI directos para eliminar la costra de carbón de las válvulas.</p>
+        <p><strong>• Filtro de Gasolina (Tanque):</strong> Reemplazo del cartucho del módulo sumergido de la bomba para evitar fallas por sobrecalentamiento eléctrico.</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 50.000 a 60.000 km (Transmisiones Automáticas Tradicionales)</div>
-    <div class="tech-card">
-      <p><strong>• Pathfinder / Frontier (Cajas AT de 9 Velocidades):</strong> Reemplazo del fluido por gravedad utilizando Nissan Matic-S / Matic-HD.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 50.000 a 60.000 km (Transmisiones Automáticas Tradicionales)</div>
+      <div class="tech-card">
+        <p><strong>• Pathfinder / Frontier (Cajas AT de 9 Velocidades):</strong> Reemplazo del fluido por gravedad utilizando Nissan Matic-S / Matic-HD.</p>
+      </div>
     </div>
 
     <!-- CAPÍTULO 3 -->

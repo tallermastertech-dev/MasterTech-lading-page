@@ -309,7 +309,12 @@
       margin-bottom: 4px;
     }
 
-    /* Mileage Badges */
+    /* Mileage Badges & Blocks */
+    .mileage-block {
+      margin-bottom: 14px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
     .mileage-badge {
       font-family: var(--font-heading);
       display: inline-flex;
@@ -322,8 +327,11 @@
       font-weight: 900;
       font-size: 11.5px;
       letter-spacing: 0.06em;
-      margin: 18px 0 10px 0;
+      margin: 0 0 10px 0;
       border-left: 3px solid #ef4444;
+    }
+    .mileage-block .tech-card {
+      margin-bottom: 0;
     }
 
     /* Tables */
@@ -416,79 +424,214 @@
 
     /* Print Styles */
     @page {
-      size: auto;
-      margin: 0mm;
+      size: letter;
+      margin: 8mm 10mm;
     }
     @media print {
       @page {
-        size: auto;
-        margin: 0mm;
+        size: letter;
+        margin: 8mm 10mm;
       }
       body {
-        background: #ffffff;
-        padding: 14mm 16mm;
-        margin: 0;
-        font-size: 11px;
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 9.5px !important;
+        line-height: 1.35 !important;
       }
       .action-bar {
         display: none !important;
       }
       .page-container {
-        border: none;
-        box-shadow: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .manual-banner {
-        background: #0d1117 !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      th {
-        background: #0f172a !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .mileage-badge {
-        background: #0f172a !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-      .header-badge {
-        background: #fee2e2 !important;
-        color: #991b1b !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
       }
       .doc-reference-bar {
+        padding: 3px 8px !important;
+        margin-bottom: 8px !important;
         background: #f1f5f9 !important;
         border-color: #cbd5e1 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
       .doc-pill {
+        font-size: 7.5px !important;
+        padding: 2px 6px !important;
         background: #0f172a !important;
         color: #ffffff !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-      .page-break {
-        page-break-before: always !important;
-        break-before: page !important;
+      .doc-ref-text {
+        font-size: 9.5px !important;
+      }
+      .mastertech-header {
+        padding-bottom: 8px !important;
+        margin-bottom: 10px !important;
+        border-bottom-width: 2px !important;
+      }
+      .brand-logo {
+        height: 42px !important;
+      }
+      .brand-title {
+        font-size: 15px !important;
+      }
+      .brand-sub {
+        font-size: 8px !important;
+      }
+      .header-meta {
+        font-size: 8.5px !important;
+      }
+      .header-badge {
+        font-size: 8px !important;
+        padding: 2px 6px !important;
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .manual-banner {
+        background: #0d1117 !important;
+        padding: 10px 14px !important;
+        margin-bottom: 10px !important;
+        border-left-width: 5px !important;
+        border-radius: 8px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .manual-brand-tag {
+        font-size: 18px !important;
+      }
+      .manual-title {
+        font-size: 11px !important;
+        margin-top: 3px !important;
+      }
+      .manual-subtitle {
+        font-size: 8.5px !important;
+      }
+      .models-box {
+        margin-top: 6px !important;
+        padding-top: 5px !important;
+        font-size: 8.5px !important;
       }
       .chapter-title {
+        font-size: 12px !important;
+        margin: 10px 0 8px 0 !important;
+        padding-left: 8px !important;
+        border-left-width: 4px !important;
         page-break-after: avoid !important;
         break-after: avoid !important;
       }
+      .mileage-block {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 6px !important;
+      }
       .mileage-badge {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        font-size: 8.5px !important;
+        padding: 2.5px 7px !important;
+        margin: 0 0 3px 0 !important;
+        border-radius: 4px !important;
+        display: inline-block !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
         page-break-after: avoid !important;
         break-after: avoid !important;
       }
       .tech-card {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        padding: 5px 9px !important;
+        margin-bottom: 0 !important;
+        border-radius: 6px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .tech-card-header {
+        font-size: 9.5px !important;
+        margin-bottom: 2px !important;
+      }
+      .tech-card p {
+        font-size: 8.5px !important;
+        line-height: 1.32 !important;
+        margin-bottom: 2px !important;
+      }
+      .tech-card p:last-child {
+        margin-bottom: 0 !important;
+      }
+      .tech-sublist {
+        margin: 2px 0 2px 14px !important;
+        font-size: 8.5px !important;
+      }
+      .tech-sublist li {
+        margin-bottom: 1px !important;
+      }
+      .table-container {
+        margin: 6px 0 8px 0 !important;
+        border-radius: 6px !important;
+      }
+      th {
+        background: #0f172a !important;
+        color: #ffffff !important;
+        padding: 5px 8px !important;
+        font-size: 8.5px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      td {
+        padding: 4px 8px !important;
+        font-size: 8.5px !important;
+      }
+      .torque-cell {
+        font-size: 9px !important;
+      }
+      .service-book {
+        margin-top: 10px !important;
+        padding: 10px 12px !important;
+        border-radius: 8px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .service-book h2 {
+        font-size: 11px !important;
+        margin-bottom: 3px !important;
+      }
+      .service-book p {
+        font-size: 8px !important;
+        margin-bottom: 6px !important;
+      }
+      .client-data-grid {
+        margin: 6px 0 8px 0 !important;
+        gap: 4px 14px !important;
+        font-size: 8.5px !important;
+      }
+      .data-line {
+        min-height: 12px !important;
+      }
+      .service-book table th {
+        padding: 4px 6px !important;
+        font-size: 8px !important;
+      }
+      .service-book table td {
+        height: 24px !important;
+        padding: 2px 6px !important;
+        font-size: 8px !important;
+      }
+      .mastertech-footer {
+        margin-top: 10px !important;
+        padding-top: 6px !important;
+        font-size: 8px !important;
+      }
+      .page-break {
+        page-break-before: always !important;
+        break-before: page !important;
       }
     }
   </style>
@@ -559,40 +702,50 @@
     <div class="page-break"></div>
     <h2 class="chapter-title">CAPÍTULO 2: PAUTA DE MANTENIMIENTO TOYOTA POR KILOMETRAJE</h2>
 
-    <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo)</div>
-    <div class="tech-card">
-      <p><strong>• Motor:</strong> Cambio de aceite full sintético API SP / ILSAC GF-6 (0W-16 o 0W-20 según la tapa de llenado) y filtro de aceite genuino Toyota.</p>
-      <p><strong>• Modelos Híbridos (RAV4, Sienna, Highlander, Corolla Cross):</strong> Limpieza obligatoria del filtro de la rejilla de enfriamiento de la batería de alto voltaje (ubicado bajo el asiento trasero). Si se tupa de polvo, la batería híbrida se sobrecalienta y se degrada.</p>
-      <p><strong>• Frenos y Tren Delantero:</strong> Engrase de pasadores de mordaza con grasa sintética con base de cerámica o PTFE. Inspección de bujes de suspensión.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 5.000 km (Servicio de Resguardo)</div>
+      <div class="tech-card">
+        <p><strong>• Motor:</strong> Cambio de aceite full sintético API SP / ILSAC GF-6 (0W-16 o 0W-20 según la tapa de llenado) y filtro de aceite genuino Toyota.</p>
+        <p><strong>• Modelos Híbridos (RAV4, Sienna, Highlander, Corolla Cross):</strong> Limpieza obligatoria del filtro de la rejilla de enfriamiento de la batería de alto voltaje (ubicado bajo el asiento trasero). Si se tupa de polvo, la batería híbrida se sobrecalienta y se degrada.</p>
+        <p><strong>• Frenos y Tren Delantero:</strong> Engrase de pasadores de mordaza con grasa sintética con base de cerámica o PTFE. Inspección de bujes de suspensión.</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 10.000 km (Fluidos Higroscópicos y Neumáticos)</div>
-    <div class="tech-card">
-      <p><strong>• Líquido de Frenos (DOT 3 / DOT 4):</strong> Reemplazo del fluido por tiempo (máximo 12 a 18 meses) evaluando con probador de conductividad (debe marcar menos del 3% de humedad) debido a la humedad costera.</p>
-      <p><strong>• Filtros de Aire:</strong> Reemplazo directo del filtro de aire del motor y de cabina. Prohibido soplar con aire a presión.</p>
-      <p><strong>• Rotación y Torque de Ruedas:</strong></p>
-      <ul class="tech-sublist">
-        <li>Sedanes/Crossovers (Corolla, Yaris Cross): <strong>76 lb·ft (103 Nm)</strong>.</li>
-        <li>Camionetas/Rústicos (RAV4, 4Runner, Tacoma, Tundra): <strong>103 lb·ft (140 Nm)</strong>.</li>
-      </ul>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 10.000 km (Fluidos Higroscópicos y Neumáticos)</div>
+      <div class="tech-card">
+        <p><strong>• Líquido de Frenos (DOT 3 / DOT 4):</strong> Reemplazo del fluido por tiempo (máximo 12 a 18 meses) evaluando con probador de conductividad (debe marcar menos del 3% de humedad) debido a la humedad costera.</p>
+        <p><strong>• Filtros de Aire:</strong> Reemplazo directo del filtro de aire del motor y de cabina. Prohibido soplar con aire a presión.</p>
+        <p><strong>• Rotación y Torque de Ruedas:</strong></p>
+        <ul class="tech-sublist">
+          <li>Sedanes/Crossovers (Corolla, Yaris Cross): <strong>76 lb·ft (103 Nm)</strong>.</li>
+          <li>Camionetas/Rústicos (RAV4, 4Runner, Tacoma, Tundra): <strong>103 lb·ft (140 Nm)</strong>.</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 20.000 km (Sistema de Combustible)</div>
-    <div class="tech-card">
-      <p><strong>• Inyección Mixta D-4S:</strong> Desmontaje y limpieza ultrasónica de los 4 o 6 inyectores de puerto. Reemplazo de O-rings.</p>
-      <p><strong>• Inyección Directa y Aditivos:</strong> Aplicación en tanque de aditivo descarbonizante con tecnología PEA (Poliéter amina) para proteger la bomba de alta presión (HPFP) de los sedimentos locales.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 20.000 km (Sistema de Combustible)</div>
+      <div class="tech-card">
+        <p><strong>• Inyección Mixta D-4S:</strong> Desmontaje y limpieza ultrasónica de los 4 o 6 inyectores de puerto. Reemplazo de O-rings.</p>
+        <p><strong>• Inyección Directa y Aditivos:</strong> Aplicación en tanque de aditivo descarbonizante con tecnología PEA (Poliéter amina) para proteger la bomba de alta presión (HPFP) de los sedimentos locales.</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 30.000 km (Cajas CVT / e-CVT / Tracción 4x4)</div>
-    <div class="tech-card">
-      <p><strong>• Cajas CVT / e-CVT:</strong> Cambio de fluido Toyota CVT FE (o fluido Toyota e-CVT para híbridos) por gravedad (drain & fill). Cambio de filtro de cárter de cartucho y ajuste de nivel por reboce a 40°C.</p>
-      <p><strong>• Diferenciales y Transfer (4x4 / AWD):</strong> Reemplazo de aceite en diferencial delantero, trasero y transfer con lubricante API GL-5 75W-85 o 80W-90.</p>
-      <p><em>Aviso Diferenciales LSD:</em> En camionetas con bloqueo o embrague multidisco (como Tacoma / 4Runner TRD), usar únicamente aceite API GL-5 LS o agregar modificador de fricción.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 30.000 km (Cajas CVT / e-CVT / Tracción 4x4)</div>
+      <div class="tech-card">
+        <p><strong>• Cajas CVT / e-CVT:</strong> Cambio de fluido Toyota CVT FE (o fluido Toyota e-CVT para híbridos) por gravedad (drain & fill). Cambio de filtro de cárter de cartucho y ajuste de nivel por reboce a 40°C.</p>
+        <p><strong>• Diferenciales y Transfer (4x4 / AWD):</strong> Reemplazo de aceite en diferencial delantero, trasero y transfer con lubricante API GL-5 75W-85 o 80W-90.</p>
+        <p><em>Aviso Diferenciales LSD:</em> En camionetas con bloqueo o embrague multidisco (como Tacoma / 4Runner TRD), usar únicamente aceite API GL-5 LS o agregar modificador de fricción.</p>
+      </div>
     </div>
 
-    <div class="mileage-badge">⏱ Cada 50.000 a 60.000 km (Transmisiones Automáticas Convencionales)</div>
-    <div class="tech-card">
-      <p><strong>• Cajas de 6, 8 y 10 Velocidades (Direct Shift - AT):</strong> Reemplazo por gravedad de fluido Toyota ATF WS. Se descarta la diálisis presurizada a máquina para evitar desprendimiento de sedimentos hacia el cuerpo de válvulas.</p>
+    <div class="mileage-block">
+      <div class="mileage-badge">⏱ Cada 50.000 a 60.000 km (Transmisiones Automáticas Convencionales)</div>
+      <div class="tech-card">
+        <p><strong>• Cajas de 6, 8 y 10 Velocidades (Direct Shift - AT):</strong> Reemplazo por gravedad de fluido Toyota ATF WS. Se descarta la diálisis presurizada a máquina para evitar desprendimiento de sedimentos hacia el cuerpo de válvulas.</p>
+      </div>
     </div>
 
     <!-- CAPÍTULO 3 -->
