@@ -193,11 +193,11 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
         </div>
 
         {/* Central Trust Banner */}
-        <div className="relative rounded-3xl p-6 sm:p-10 mb-12 bg-white/90 dark:bg-[#0e1219]/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-red-500/5">
+        <div className="relative rounded-3xl p-6 sm:p-10 mb-12 bg-slate-50 dark:bg-[#0e1219]/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-red-500/5">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             {/* Sello Shield Badge Graphic - Premium MasterTech Engineering Seal */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#0d1117] via-[#0e1219] to-[#080a0e] border border-red-500/25 shadow-2xl shadow-red-500/15 relative overflow-hidden group">
+            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-[#0d1117] via-[#0e1219] to-[#080a0e] border-2 border-red-500/40 shadow-[0_0_40px_-8px_rgba(239,68,68,0.35),0_20px_60px_-15px_rgba(0,0,0,0.5)] relative overflow-hidden group">
               
               {/* Animated dot-grid background */}
               <div className="absolute inset-0 bg-[radial-gradient(#ef4444_1px,transparent_1px)] [background-size:18px_18px] opacity-[0.07] pointer-events-none" />
