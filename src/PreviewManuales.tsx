@@ -964,10 +964,10 @@ export default function PreviewManuales() {
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-            Pautas técnicas oficiales de taller calibradas minuciosamente <strong>por motorización</strong>. Diseñadas para contrarrestar el desgaste acelerado por altas temperaturas costeras, tráfico urbano y arranques frecuentes con intervalos preventivos de <strong>5.000 km</strong>.
+            Pautas técnicas oficiales de taller calibradas minuciosamente tanto para motores a <strong>Gasolina</strong> (Turbo, V6, V8, 4 cil) como <strong>Turbo Diésel</strong> (Common Rail). Diseñadas para contrarrestar el desgaste térmico acelerado, tráfico urbano y arranques frecuentes con intervalos preventivos de <strong>5.000 km</strong>.
           </p>
 
-          {/* Quick Metrics Bar */}
+          {/* Quick Metrics Bar: Balance Gasolina vs Diésel */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8 max-w-4xl">
             <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
               <span className="text-xl sm:text-2xl font-black text-red-500 flex items-center gap-1.5">
@@ -978,27 +978,27 @@ export default function PreviewManuales() {
             </div>
 
             <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Droplets size={18} className="text-blue-500" />
-                API SP / CK-4
+              <span className="text-xl sm:text-2xl font-black text-amber-500 flex items-center gap-1.5">
+                <Fuel size={18} className="text-amber-500" />
+                Gasolina
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Anti-LSPI & Protección Diésel</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Norma API SP · Anti-LSPI & GDI</span>
             </div>
 
             <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Fuel size={18} className="text-emerald-500" />
-                Doble Purga
+              <span className="text-xl sm:text-2xl font-black text-blue-500 flex items-center gap-1.5">
+                <Droplets size={18} className="text-blue-500" />
+                Diésel
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Sedimentadores Diésel c/ 2.500 km</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Norma CK-4 · Common Rail & Purga</span>
             </div>
 
             <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
               <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-1.5">
                 <ShieldCheck size={18} className="text-purple-500" />
-                100% Digital
+                Por Motor
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">PDF & Ficha Técnica por Motor</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Fichas & Manuales Específicos</span>
             </div>
           </div>
 
@@ -1018,11 +1018,11 @@ export default function PreviewManuales() {
               Tipo:
             </span>
             {[
-              { id: 'all', label: 'Todos los Motores' },
-              { id: 'diesel', label: 'Diésel D-4D / TDCi' },
+              { id: 'all', label: 'Todos (Gasolina & Diésel)' },
               { id: 'gasolina_turbo', label: 'Gasolina Turbo' },
-              { id: 'gasolina_v6_v8', label: 'V6 & V8' },
-              { id: 'gasolina_aspirado', label: '4 Cilindros' }
+              { id: 'gasolina_v6_v8', label: 'Gasolina V6 & V8' },
+              { id: 'gasolina_aspirado', label: 'Gasolina 4 Cil.' },
+              { id: 'diesel', label: 'Turbo Diésel' }
             ].map((cat) => (
               <button
                 key={cat.id}
@@ -1177,9 +1177,18 @@ export default function PreviewManuales() {
                       {/* Selected Engine Live Spec Preview */}
                       <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex flex-col gap-2">
                         <div>
-                          <span className="font-extrabold text-xs text-slate-900 dark:text-white block">
-                            {activeEngine.name}
-                          </span>
+                          <div className="flex items-center justify-between gap-1.5 mb-0.5">
+                            <span className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
+                              {activeEngine.name}
+                            </span>
+                            <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded border shrink-0 ${
+                              activeEngine.type === 'diesel'
+                                ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30'
+                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                            }`}>
+                              {activeEngine.type === 'diesel' ? 'Diésel' : 'Gasolina'}
+                            </span>
+                          </div>
                           <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-0.5">
                             Modelos: {activeEngine.models}
                           </span>
@@ -1284,7 +1293,16 @@ export default function PreviewManuales() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
-                      <span><strong>Motor activo:</strong> {activeEngine.name}</span>
+                      <span className="flex items-center gap-1.5">
+                        <strong>Motor activo:</strong> {activeEngine.name}
+                        <span className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded border ${
+                          activeEngine.type === 'diesel'
+                            ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30'
+                            : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                        }`}>
+                          {activeEngine.type === 'diesel' ? 'Diésel' : 'Gasolina'}
+                        </span>
+                      </span>
                       <span>·</span>
                       <span><strong>Aceite:</strong> {activeEngine.oilViscosity} ({activeEngine.oilCapacity})</span>
                       <span>·</span>
@@ -1457,9 +1475,18 @@ export default function PreviewManuales() {
                         {/* Motor Hero Card */}
                         <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-5 sm:p-6 shadow-md border border-slate-700">
                           <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
-                            <span className="px-2.5 py-1 rounded-lg bg-red-600 font-black text-xs uppercase tracking-wider text-white">
-                              {modalActiveEngine.code}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="px-2.5 py-1 rounded-lg bg-red-600 font-black text-xs uppercase tracking-wider text-white">
+                                {modalActiveEngine.code}
+                              </span>
+                              <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black uppercase border ${
+                                modalActiveEngine.type === 'diesel'
+                                  ? 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+                                  : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                              }`}>
+                                {modalActiveEngine.type === 'diesel' ? 'Motor Diésel' : 'Motor Gasolina'}
+                              </span>
+                            </div>
                             <span className="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-black">
                               Pauta Preventiva: {modalActiveEngine.severeInterval}
                             </span>
