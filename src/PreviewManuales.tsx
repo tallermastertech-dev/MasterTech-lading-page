@@ -68,7 +68,7 @@ const MANUALES: ManualCard[] = [
     keyHighlight: 'Engrase de crucetas y flechas cardánicas cada 5.000 km obligatorio para clima costero.',
     intervalsCount: '6 Intervalos (5k a 100k km)',
     htmlPath: '/manuales/manual-tecnico-toyota.html',
-    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento para mi Toyota según la pauta de su Manual Técnico.'
+    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento para mi Toyota según sus recomendaciones de mantenimiento.'
   },
   {
     id: 'honda',
@@ -87,7 +87,7 @@ const MANUALES: ManualCard[] = [
     keyHighlight: 'Calibración de holgura de válvulas cada 40.000 km y descarbonización de admisión.',
     intervalsCount: '6 Intervalos (5k a 100k km)',
     htmlPath: '/manuales/manual-tecnico-honda.html',
-    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento para mi Honda según la pauta de su Manual Técnico.'
+    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento para mi Honda según sus recomendaciones de mantenimiento.'
   },
   {
     id: 'nissan',
@@ -106,7 +106,7 @@ const MANUALES: ManualCard[] = [
     keyHighlight: 'Conteo de deterioro de fluido CVT por escáner y resguardo térmico de poleas Jatco.',
     intervalsCount: '6 Intervalos (5k a 100k km)',
     htmlPath: '/manuales/manual-tecnico-nissan.html',
-    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento para mi Nissan según la pauta de su Manual Técnico.'
+    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento para mi Nissan según sus recomendaciones de mantenimiento.'
   },
   {
     id: 'jeep',
@@ -278,7 +278,7 @@ export default function PreviewManuales() {
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Biblioteca Escalable de Manuales Técnicos · Ruta aislada: <code className="text-red-500 font-mono">/preview-manuales</code>
+                Centro de Recomendaciones de Mantenimiento · Ruta aislada: <code className="text-red-500 font-mono">/preview-manuales</code>
               </p>
             </div>
           </div>
@@ -304,25 +304,25 @@ export default function PreviewManuales() {
           
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-500/10 dark:bg-red-500/15 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-black tracking-wider uppercase mb-5 shadow-sm">
             <BookOpen size={15} />
-            <span>Biblioteca y Centro de Pautas Técnicas MasterTech</span>
+            <span>Centro de Recomendaciones de Mantenimiento MasterTech</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white max-w-4xl mx-auto leading-tight">
-            Manuales Oficiales de <br />
+            Recomendaciones Oficiales de <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-red-600">
               Mantenimiento Preventivo
             </span>
           </h1>
 
           <p className="mt-5 text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Nuestra colección de manuales técnicos para clientes en la Isla de Margarita. Consulta las especificaciones de fábrica, tolerancias de apriete, lubricantes certificados y procedimientos para mantener tu motor protegido del clima costero.
+            Nuestra colección de recomendaciones técnicas de mantenimiento para clientes en la Isla de Margarita. Consulta las especificaciones de fábrica, tolerancias de apriete, lubricantes certificados y procedimientos para mantener tu motor protegido del clima costero.
           </p>
 
           {/* Badges bar */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 shadow-sm">
               <Layers size={14} className="text-red-500" />
-              <span>Librería Multimarca en Expansión</span>
+              <span>Guías Técnicas Multimarca</span>
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 shadow-sm">
               <CheckCircle2 size={14} className="text-emerald-500" />
@@ -344,7 +344,7 @@ export default function PreviewManuales() {
           {/* Category Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
             {[
-              { id: 'all', label: 'Todos' },
+              { id: 'all', label: 'Todas las Marcas' },
               { id: 'disponibles', label: 'Disponibles PDF' },
               { id: 'japoneses', label: 'Japoneses' },
               { id: 'americanos', label: 'Americanos' }
@@ -415,7 +415,7 @@ export default function PreviewManuales() {
         {/* Results counter */}
         <div className="mb-5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           <span>
-            Mostrando <strong className="text-slate-900 dark:text-white">{filteredManuales.length}</strong> manuales técnicos
+            Mostrando <strong className="text-slate-900 dark:text-white">{filteredManuales.length}</strong> guías de recomendaciones de mantenimiento
           </span>
           <span className="text-[11px] hidden sm:inline">
             Haga clic en <strong className="text-slate-700 dark:text-slate-200">Ver Online</strong> para desplegar la ficha técnica completa con torques y fluidos.
@@ -459,7 +459,7 @@ export default function PreviewManuales() {
                           {manual.brand}
                         </h3>
                         <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
-                          Manual Técnico de Mantenimiento Preventivo
+                          Recomendaciones de Mantenimiento Preventivo
                         </p>
                       </div>
 
@@ -638,7 +638,7 @@ export default function PreviewManuales() {
                   Pautas Técnicas y Tolerancias a Medida
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
-                  En MasterTech disponemos de software de taller con manuales de fábrica para Dodge, RAM, Hyundai, Kia, Mazda, Mitsubishi y marcas europeas. Solicita la pauta de tu vehículo sin costo.
+                  En MasterTech disponemos de software de taller con especificaciones y pautas de fábrica para Dodge, RAM, Hyundai, Kia, Mazda, Mitsubishi y marcas europeas. Solicita la pauta de tu vehículo sin costo.
                 </p>
               </div>
             </div>
@@ -680,7 +680,7 @@ export default function PreviewManuales() {
                   </div>
                   <div>
                     <h3 className="text-sm font-black text-slate-900 dark:text-white">
-                      Manual Técnico {activeModalManual.brand} ({activeModalManual.years})
+                      Recomendaciones Técnicas {activeModalManual.brand} ({activeModalManual.years})
                     </h3>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Pauta Oficial de Mantenimiento Preventivo MasterTech
@@ -725,14 +725,14 @@ export default function PreviewManuales() {
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 z-10">
                     <div className="w-8 h-8 border-3 border-red-500 border-t-transparent rounded-full animate-spin mb-3" />
                     <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                      Cargando especificaciones técnicas oficiales...
+                      Cargando recomendaciones oficiales...
                     </p>
                   </div>
                 )}
                 <iframe
                   src={modalHtml ? undefined : activeModalManual.htmlPath}
                   srcDoc={modalHtml || undefined}
-                  title={`Manual Técnico ${activeModalManual.brand}`}
+                  title={`Recomendaciones de Mantenimiento ${activeModalManual.brand}`}
                   className="w-full h-full border-0"
                   sandbox="allow-same-origin allow-scripts allow-modals allow-popups allow-forms"
                 />
