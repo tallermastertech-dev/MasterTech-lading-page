@@ -97,16 +97,16 @@ const MANUALES: ManualCard[] = [
     brand: 'TOYOTA',
     category: 'japones',
     status: 'disponible',
-    badge: 'Protocolo Condiciones Severas',
+    badge: 'Protocolo de Alta Exigencia',
     badgeColor: 'bg-red-500/10 text-red-500 border-red-500/30',
     statusBadge: 'Disponible PDF & Ficha',
     statusBadgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     years: '2021 – 2027',
     subtitle: 'Hilux, Fortuner, 4Runner, Prado, Land Cruiser, Corolla, Yaris, RAV4',
     models: ['Hilux (1GD / 2GD / 2TR)', 'Fortuner 4.0L & 2.8L', '4Runner 4.0L V6', 'Prado', 'Land Cruiser 70/200/300', 'Corolla (M20A / 2ZR)', 'Yaris', 'RAV4'],
-    intervalsCount: '6 Intervalos Severos (5k a 100k km)',
+    intervalsCount: '6 Pautas de Protección (5k a 100k km)',
     htmlPath: '/manuales/manual-tecnico-toyota.html',
-    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento en condiciones severas para mi Toyota.',
+    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento bajo protocolo de alta exigencia para mi Toyota.',
     enginesList: [
       {
         id: '1gd',
@@ -122,14 +122,14 @@ const MANUALES: ManualCard[] = [
         coolantSpec: 'Toyota Super Long Life Coolant (SLLC) Rosa 50/50 OAT (11.5 L)',
         sparkPlugsOrGlow: 'Calentadores incandescentes cerámicos Denso (No usa bujías de chispa)',
         severeInterval: 'Cada 5.000 km (Estricto)',
-        severeTip: 'Doble purga del sedimentador de diésel cada 2.500 km por humedad costera y azufre nacional. Filtro combustible OEM cada 10.000 km. Engrase de crucetas cada 5.000 km.',
+        severeTip: 'Doble purga del sedimentador de diésel cada 2.500 km por condensación y humedad costera. Filtro combustible OEM cada 10.000 km. Engrase de crucetas cada 5.000 km.',
         criticalChecks: [
-          { title: 'Trampa de Agua y Sedimentador Diésel', desc: 'Drenaje manual de condensación de agua en el filtro primario cada 2.500 km para salvar los inyectores piezoeléctricos de óxido por combustible local.' },
+          { title: 'Trampa de Agua y Sedimentador Diésel', desc: 'Drenaje preventivo de condensación de humedad en el filtro primario cada 2.500 km para proteger los inyectores piezoeléctricos de óxido y desgaste prematuro.' },
           { title: 'Crucetas y Ejes Cardánicos 4x4', desc: 'Engrase con grasa base de litio NLGI No. 2 en los 6 puntos de engrase del cardán y estrías deslizantes en cada servicio de 5.000 km.' },
           { title: 'Válvula EGR y Colector de Admisión', desc: 'Descarbonización por ultrasonido del múltiple de admisión y enfriador EGR cada 25.000 km por acumulación de hollín diésel.' }
         ],
         schedule: [
-          { km: '5.000 km', service: 'Servicio Severo Diésel', criticalAction: 'Cambio de aceite 5W-30 CK-4 + filtro OEM + purga de sedimentador + engrase de crucetas' },
+          { km: '5.000 km', service: 'Servicio Preventivo Diésel', criticalAction: 'Cambio de aceite 5W-30 CK-4 + filtro OEM + purga de sedimentador + engrase de crucetas' },
           { km: '10.000 km', service: 'Servicio Filtros', criticalAction: 'Sustitución de filtro de combustible diésel OEM + filtro de aire de motor + rotación' },
           { km: '20.000 km', service: 'Servicio Mayor', criticalAction: 'Limpieza de toberas EGR + inspección de holgura en cadena + líquido de frenos DOT 4' },
           { km: '40.000 km', service: 'Servicio Integral 4x4', criticalAction: 'Reemplazo de fluido transfer y diferenciales 75W-90 / 85W-140 + refrigerante rosa' }
@@ -245,16 +245,16 @@ const MANUALES: ManualCard[] = [
     brand: 'HONDA',
     category: 'japones',
     status: 'disponible',
-    badge: 'Protocolo Condiciones Severas',
+    badge: 'Protocolo de Alta Exigencia',
     badgeColor: 'bg-blue-500/10 text-blue-500 border-blue-500/30',
     statusBadge: 'Disponible PDF & Ficha',
     statusBadgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     years: '2021 – 2027',
     subtitle: 'Civic, CR-V, Accord, Pilot, HR-V, Fit / Jazz, Ridgeline',
     models: ['Civic (1.5L Turbo / 2.0L)', 'CR-V (1.5T / 2.4L i-VTEC)', 'Accord 1.5T / 2.0T', 'Pilot 3.5L V6', 'HR-V 1.8L / 2.0L', 'Fit / Jazz 1.5L', 'Ridgeline 3.5L'],
-    intervalsCount: '6 Intervalos Severos (5k a 100k km)',
+    intervalsCount: '6 Pautas de Protección (5k a 100k km)',
     htmlPath: '/manuales/manual-tecnico-honda.html',
-    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento en condiciones severas para mi Honda.',
+    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento bajo protocolo de alta exigencia para mi Honda.',
     enginesList: [
       {
         id: 'l15',
@@ -277,7 +277,7 @@ const MANUALES: ManualCard[] = [
           { title: 'Actuador Eléctrico de Wastegate', desc: 'Inspección de holgura en el varillaje del turbo para prevenir pérdida de soplado o código de baja sobrealimentación.' }
         ],
         schedule: [
-          { km: '5.000 km', service: 'Servicio Turbo Severo', criticalAction: 'Aceite 0W-20 API SP anti-LSPI + filtro OEM + escaneo de presiones de turbo' },
+          { km: '5.000 km', service: 'Servicio de Protección Turbo', criticalAction: 'Aceite 0W-20 API SP anti-LSPI + filtro OEM + escaneo de presiones de turbo' },
           { km: '10.000 km', service: 'Servicio Filtros', criticalAction: 'Filtro de aire motor + filtro de habitáculo antipolen + rotación de neumáticos' },
           { km: '20.000 km', service: 'Servicio de Admisión', criticalAction: 'Limpieza cuerpo de aceleración + aditivo limpia inyectores Honda + líquido frenos' },
           { km: '25.000 km', service: 'Transmisión & Válvulas', criticalAction: 'Reemplazo de fluido CVT Honda HCF-2 + descarbonización de válvulas de admisión' }
@@ -361,16 +361,16 @@ const MANUALES: ManualCard[] = [
     brand: 'NISSAN',
     category: 'japones',
     status: 'disponible',
-    badge: 'Protocolo Condiciones Severas',
+    badge: 'Protocolo de Alta Exigencia',
     badgeColor: 'bg-rose-500/10 text-rose-500 border-rose-500/30',
     statusBadge: 'Disponible PDF & Ficha',
     statusBadgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     years: '2021 – 2027',
     subtitle: 'Sentra, Versa, Kicks, Frontier / Navara, X-Trail, Altima, Pathfinder, Patrol',
     models: ['Sentra (2.0L MR20DD)', 'Frontier / Navara (YD25 / QR25)', 'X-Trail (QR25 / 1.5T VC)', 'Versa (HR16DE)', 'Kicks (1.6L)', 'Altima', 'Pathfinder', 'Patrol Y61/Y62'],
-    intervalsCount: '6 Intervalos Severos (5k a 100k km)',
+    intervalsCount: '6 Pautas de Protección (5k a 100k km)',
     htmlPath: '/manuales/manual-tecnico-nissan.html',
-    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento en condiciones severas para mi Nissan.',
+    whatsappMessage: 'Hola MasterTech, deseo agendar el servicio de mantenimiento bajo protocolo de alta exigencia para mi Nissan.',
     enginesList: [
       {
         id: 'mr20',
@@ -453,7 +453,7 @@ const MANUALES: ManualCard[] = [
         severeInterval: 'Cada 5.000 km',
         severeTip: 'En YD25 Diésel: purga del sensor de agua en filtro cada 2.500 km. Inspección de holgura en cadena primaria y limpieza de válvula EGR.',
         criticalChecks: [
-          { title: 'Purga de Agua en Diésel Nacional (YD25)', desc: 'El filtro principal posee un sensor de boya en la parte inferior. Purgar manualmente cada 2.500 km para no oxidar la bomba de alta presión ni los inyectores.' },
+          { title: 'Purga de Humedad en Sistema Diésel (YD25)', desc: 'El filtro principal posee un sensor de boya en la parte inferior. Purgar preventivamente cada 2.500 km para proteger la bomba de alta presión e inyectores de condensación.' },
           { title: 'Cadena de Distribución Doble/Simple', desc: 'Inspección de desgaste del patín guía y tensor hidráulico de la cadena superior a partir de 80.000 km.' },
           { title: 'Descarbonización EGR y Colector', desc: 'El hollín del diésel combinado con vapores de aceite tapa el conducto de la válvula EGR provocando pérdida de potencia y humo negro.' }
         ],
@@ -477,7 +477,7 @@ const MANUALES: ManualCard[] = [
     brand: 'JEEP / MOPAR',
     category: 'americano',
     status: 'en_edicion',
-    badge: 'Protocolo Condiciones Severas',
+    badge: 'Protocolo de Alta Exigencia',
     badgeColor: 'bg-amber-500/10 text-amber-500 border-amber-500/30',
     statusBadge: 'Ficha Técnica en Taller',
     statusBadgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
@@ -485,7 +485,7 @@ const MANUALES: ManualCard[] = [
     subtitle: 'Grand Cherokee, Wrangler, Cherokee, Compass, Renegade, Gladiator',
     models: ['Grand Cherokee (WK2 / WL 3.6L & 5.7L)', 'Wrangler (JK / JL 3.6L Pentastar)', 'Cherokee (KL 2.4L / 3.2L)', 'Compass', 'Gladiator JT', 'Commander'],
     intervalsCount: 'Pauta Técnica Directa',
-    whatsappMessage: 'Hola MasterTech, deseo consultar la pauta de mantenimiento en condiciones severas para mi Jeep.',
+    whatsappMessage: 'Hola MasterTech, deseo consultar la pauta de mantenimiento bajo protocolo de alta exigencia para mi Jeep.',
     enginesList: [
       {
         id: 'pentastar',
@@ -533,13 +533,13 @@ const MANUALES: ManualCard[] = [
         coolantSpec: 'Mopar 10-Year OAT Violeta (14.0 Litros)',
         sparkPlugsOrGlow: '16x Bujías (2 por cilindro): NGK LZFR5C-11 - Cambio cada 30.000 km',
         severeInterval: 'Cada 5.000 km (Estricto)',
-        severeTip: 'Prohibido usar aceite grueso (20W-50): traba los botadores MDS causando daño al árbol de levas. 16 bujías (2 por cilindro) cambiadas cada 30.000 km con gasolina nacional.',
+        severeTip: 'Prohibido usar aceite grueso (20W-50): traba los botadores MDS causando daño al árbol de levas. 16 bujías (2 por cilindro) calibradas y cambiadas cada 30.000 km para combustión limpia.',
         criticalChecks: [
           { title: 'Prohibido Aceite Grueso (Sistema MDS)', desc: 'Los solenoides MDS usan presión de aceite calibrada para colapsar los botadores de los cilindros 1, 4, 6 y 7. El aceite pesado destruye el árbol de levas.' },
-          { title: '16 Bujías de Encendido', desc: 'Cada cilindro posee 2 bujías para combustión completa. En Venezuela con combustible irregular, deben sustituirse cada 30.000 km.' }
+          { title: '16 Bujías de Encendido', desc: 'Cada cilindro posee 2 bujías para combustión balanceada. Bajo régimen de alta exigencia térmica urbana, deben sustituirse cada 30.000 km.' }
         ],
         schedule: [
-          { km: '5.000 km', service: 'Servicio Severo HEMI', criticalAction: 'Aceite 5W-20 MS-6395 estricto + filtro de aceite roscado OEM + escaneo MDS' },
+          { km: '5.000 km', service: 'Servicio de Protección HEMI', criticalAction: 'Aceite 5W-20 MS-6395 estricto + filtro de aceite roscado OEM + escaneo MDS' },
           { km: '10.000 km', service: 'Servicio Filtros', criticalAction: 'Filtro de aire motor pesado + filtro habitáculo + rotación de cauchos' },
           { km: '20.000 km', service: 'Servicio de Inyección', criticalAction: 'Limpieza de 8 inyectores en laboratorio ultrasonido + líquido frenos DOT 4' },
           { km: '30.000 km', service: 'Afinación 16 Bujías', criticalAction: 'Reemplazo del juego completo de 16 bujías de encendido + refrigerante Mopar' }
@@ -590,7 +590,7 @@ const MANUALES: ManualCard[] = [
     brand: 'FORD / MOTORCRAFT',
     category: 'americano',
     status: 'en_edicion',
-    badge: 'Protocolo Condiciones Severas',
+    badge: 'Protocolo de Alta Exigencia',
     badgeColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/30',
     statusBadge: 'Ficha Técnica en Taller',
     statusBadgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
@@ -598,7 +598,7 @@ const MANUALES: ManualCard[] = [
     subtitle: 'Explorer, F-150, Ranger, EcoSport, Edge, Expedition, Fiesta',
     models: ['Explorer (EcoBoost 2.3L / 3.5L Cyclone)', 'F-150 (5.0L Coyote / 3.5L EcoBoost)', 'Ranger (2.5L / 3.2L Diésel)', 'EcoSport', 'Edge', 'Expedition 3.5L'],
     intervalsCount: 'Pauta Técnica Directa',
-    whatsappMessage: 'Hola MasterTech, deseo consultar la pauta de mantenimiento en condiciones severas para mi Ford.',
+    whatsappMessage: 'Hola MasterTech, deseo consultar la pauta de mantenimiento bajo protocolo de alta exigencia para mi Ford.',
     enginesList: [
       {
         id: 'ecoboost_v6',
@@ -678,13 +678,13 @@ const MANUALES: ManualCard[] = [
         coolantSpec: 'Motorcraft Orange / Yellow OAT (11.8 Litros)',
         sparkPlugsOrGlow: '5x Calentadores incandescentes cerámicos (Glow Plugs) - No usa bujías',
         severeInterval: 'Cada 5.000 km',
-        severeTip: 'Bomba de aceite de paletas variables: nunca dejar escurrir el cárter más de 10 min durante el servicio para no descebar la bomba. Doble trampa de combustible para diésel nacional.',
+        severeTip: 'Bomba de aceite de paletas variables: nunca dejar escurrir el cárter más de 10 min durante el servicio para no descebar la bomba. Doble trampa de sedimentación preventiva para sistema diésel.',
         criticalChecks: [
           { title: 'Regla Crítica de Drenaje de Aceite (10 Minutos)', desc: 'La bomba de aceite de paletas variables se desceba si se deja el cárter drenando más de 10 minutos. Llenar inmediatamente con aceite nuevo para no fundir el motor al arrancar.' },
           { title: 'Purga del Filtro de Diésel', desc: 'Drenar el sedimentador inferior cada 2.500 km y cambiar el cartucho de combustible cada 10.000 km para no triturar la bomba Common Rail.' }
         ],
         schedule: [
-          { km: '5.000 km', service: 'Servicio Severo Duratorq', criticalAction: 'Aceite 5W-30 sintético diésel + filtro de elemento + purga de sedimentador + cardán' },
+          { km: '5.000 km', service: 'Servicio Preventivo Duratorq', criticalAction: 'Aceite 5W-30 sintético diésel + filtro de elemento + purga de sedimentador + cardán' },
           { km: '10.000 km', service: 'Filtro Diésel OEM', criticalAction: 'Sustitución de filtro de combustible + filtro de aire de alta filtración + rotación' },
           { km: '20.000 km', service: 'Descarbonización EGR', criticalAction: 'Limpieza de válvula EGR y colector + líquido de frenos + inspección de turbo' },
           { km: '40.000 km', service: 'Servicio Integral 4x4', criticalAction: 'Fluido caja 6R80 + lubricante de diferenciales 80W-90 + refrigerante' }
@@ -703,7 +703,7 @@ const MANUALES: ManualCard[] = [
     brand: 'CHEVROLET / GM',
     category: 'americano',
     status: 'en_edicion',
-    badge: 'Protocolo Condiciones Severas',
+    badge: 'Protocolo de Alta Exigencia',
     badgeColor: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30',
     statusBadge: 'Ficha Técnica en Taller',
     statusBadgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
@@ -711,7 +711,7 @@ const MANUALES: ManualCard[] = [
     subtitle: 'Tahoe, Silverado, Suburban, Trailblazer, Cruze, Aveo, Captiva',
     models: ['Tahoe / Suburban (5.3L / 6.2L EcoTec3)', 'Silverado 1500 V8', 'Trailblazer', 'Cruze 1.4L Turbo', 'Aveo', 'Captiva 1.5T'],
     intervalsCount: 'Pauta Técnica Directa',
-    whatsappMessage: 'Hola MasterTech, deseo consultar la pauta de mantenimiento en condiciones severas para mi Chevrolet.',
+    whatsappMessage: 'Hola MasterTech, deseo consultar la pauta de mantenimiento bajo protocolo de alta exigencia para mi Chevrolet.',
     enginesList: [
       {
         id: 'ecotec3_v8',
@@ -734,7 +734,7 @@ const MANUALES: ManualCard[] = [
           { title: 'Vibración de Convertidor Caja 8L90', desc: 'Falla común de estremecimiento ("shudder") resuelta con sustitución de fluido por Mobil 1 LV ATF HP azul.' }
         ],
         schedule: [
-          { km: '5.000 km', service: 'Servicio Severo V8 EcoTec3', criticalAction: 'Aceite 0W-20 Dexos 1 Gen 3 + filtro PF64 ACDelco + escaneo de presión VLOM' },
+          { km: '5.000 km', service: 'Servicio de Protección V8 EcoTec3', criticalAction: 'Aceite 0W-20 Dexos 1 Gen 3 + filtro PF64 ACDelco + escaneo de presión VLOM' },
           { km: '10.000 km', service: 'Servicio Filtros', criticalAction: 'Filtro de aire motor de alta capacidad + filtro habitáculo + rotación' },
           { km: '20.000 km', service: 'Afinación & Frenos', criticalAction: 'Aditivo limpiador GDI + líquido de frenos DOT 4 + inspección de tren delantero' },
           { km: '40.000 km', service: 'Servicio Mayor EcoTec3', criticalAction: '8 bujías ACDelco Iridium + fluido de transmisión Mobil 1 LV HP + Dex-Cool nuevo' }
@@ -792,7 +792,7 @@ const MANUALES: ManualCard[] = [
         coolantSpec: 'Dex-Cool Naranja (13.0 Litros)',
         sparkPlugsOrGlow: '6x ACDelco Iridium - Calibración 1.0 mm - Cada 40.000 km',
         severeInterval: 'Cada 5.000 km',
-        severeTip: 'Inyección directa y sistema AFM: bujías de iridio cada 40.000 km con gasolina nacional. Inspección de termostato y mangueras plásticas del radiador por fragilidad térmica.',
+        severeTip: 'Inyección directa y sistema AFM: bujías de iridio cada 40.000 km para mantener encendido eficiente. Inspección de termostato y mangueras plásticas del radiador por fatiga térmica.',
         criticalChecks: [
           { title: 'Sistema AFM en V6', desc: 'Desactiva 2 cilindros en marcha crucero; requiere aceite Dexos 1 Gen 3 para proteger los botadores colapsables.' },
           { title: 'Conectores Rápidos de Mangueras de Calefacción', desc: 'Los acoples en "T" de plástico del radiador se tuestan por temperatura; reemplazo antes de que se partan en marcha.' }
@@ -940,7 +940,7 @@ export default function PreviewManuales() {
 
             <button
               type="button"
-              onClick={() => handleWhatsApp('Hola MasterTech, deseo consultar la pauta de mantenimiento en condiciones severas para mi vehículo.')}
+              onClick={() => handleWhatsApp('Hola MasterTech, deseo consultar la pauta de mantenimiento bajo protocolo de alta exigencia para mi vehículo.')}
               className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm cursor-pointer"
             >
               <MessageCircle size={15} />
@@ -960,11 +960,11 @@ export default function PreviewManuales() {
           </div>
 
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
-            Recomendaciones de Mantenimiento <span className="text-red-500">· Condiciones Severas Venezuela</span>
+            Recomendaciones de Mantenimiento <span className="text-red-500">· Protocolo de Alta Exigencia</span>
           </h1>
 
           <p className="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-            Pautas oficiales de taller calibradas minuciosamente <strong>por motorización</strong>. El calor costero ({'>'}32°C), la humedad salina de Margarita y los combustibles locales exigen intervalos de <strong>5.000 km</strong>, viscosidades certificadas y atención a puntos débiles por motor.
+            Pautas técnicas oficiales de taller calibradas minuciosamente <strong>por motorización</strong>. Diseñadas para contrarrestar el desgaste acelerado por altas temperaturas costeras, tráfico urbano y arranques frecuentes con intervalos preventivos de <strong>5.000 km</strong>.
           </p>
 
           {/* Quick Metrics Bar */}
@@ -974,7 +974,7 @@ export default function PreviewManuales() {
                 <Clock size={18} />
                 5.000 km
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Intervalo Severo Estricto</span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5 font-medium">Intervalo de Alta Exigencia</span>
             </div>
 
             <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-sm">
@@ -1103,7 +1103,7 @@ export default function PreviewManuales() {
             {filteredManuales.map((manual) => {
               const activeEngine = getActiveEngine(manual);
               const isAvailable = manual.status === 'disponible';
-              const whatsappEngineMsg = `Hola MasterTech, deseo agendar el servicio de mantenimiento en condiciones severas para mi ${manual.brand} con motor ${activeEngine.name} (${activeEngine.code}).`;
+              const whatsappEngineMsg = `Hola MasterTech, deseo agendar el servicio de mantenimiento bajo protocolo de alta exigencia para mi ${manual.brand} con motor ${activeEngine.name} (${activeEngine.code}).`;
 
               return (
                 <div 
@@ -1196,12 +1196,12 @@ export default function PreviewManuales() {
                           </div>
                         </div>
 
-                        <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
-                          <div className="flex items-center gap-1 font-bold text-amber-700 dark:text-amber-400 text-[10px] mb-0.5">
-                            <AlertTriangle size={12} className="shrink-0" />
-                            <span>Pauta Crítica en Venezuela:</span>
+                        <div className="p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 text-[11px] leading-snug">
+                          <div className="flex items-center gap-1.5 font-bold text-slate-800 dark:text-slate-200 text-[10px] mb-1">
+                            <ShieldCheck size={13} className="text-emerald-500 shrink-0" />
+                            <span className="uppercase tracking-wider font-extrabold text-[10px] text-slate-700 dark:text-slate-300">Punto Clave de Protección:</span>
                           </div>
-                          <p className="text-[10px] leading-relaxed text-slate-600 dark:text-slate-300">
+                          <p className="text-[10px] leading-relaxed text-slate-600 dark:text-slate-400">
                             {activeEngine.severeTip}
                           </p>
                         </div>
@@ -1244,7 +1244,7 @@ export default function PreviewManuales() {
           <div className="space-y-4">
             {filteredManuales.map((manual) => {
               const activeEngine = getActiveEngine(manual);
-              const whatsappEngineMsg = `Hola MasterTech, deseo agendar el servicio de mantenimiento en condiciones severas para mi ${manual.brand} con motor ${activeEngine.name} (${activeEngine.code}).`;
+              const whatsappEngineMsg = `Hola MasterTech, deseo agendar el servicio de mantenimiento bajo protocolo de alta exigencia para mi ${manual.brand} con motor ${activeEngine.name} (${activeEngine.code}).`;
 
               return (
                 <div 
@@ -1332,7 +1332,7 @@ export default function PreviewManuales() {
             {(() => {
               const modalActiveEngine = activeModalManual.enginesList?.find(e => e.id === activeModalEngineId) || activeModalManual.enginesList?.[0];
               const modalWhatsappMsg = modalActiveEngine
-                ? `Hola MasterTech, deseo agendar el servicio de mantenimiento en condiciones severas para mi ${activeModalManual.brand} con motor ${modalActiveEngine.name} (${modalActiveEngine.code}).`
+                ? `Hola MasterTech, deseo agendar el servicio de mantenimiento bajo protocolo de alta exigencia para mi ${activeModalManual.brand} con motor ${modalActiveEngine.name} (${modalActiveEngine.code}).`
                 : activeModalManual.whatsappMessage;
 
               return (
@@ -1355,7 +1355,7 @@ export default function PreviewManuales() {
                           Recomendaciones Técnicas {activeModalManual.brand} ({activeModalManual.years})
                         </h3>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                          Pauta Oficial de Mantenimiento Preventivo · Condiciones Severas Venezuela
+                          Pauta Oficial de Mantenimiento Preventivo · Protocolo de Uso Intensivo y Protección Térmica
                         </p>
                       </div>
                     </div>
@@ -1461,7 +1461,7 @@ export default function PreviewManuales() {
                               {modalActiveEngine.code}
                             </span>
                             <span className="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-black">
-                              Intervalo Severo: {modalActiveEngine.severeInterval}
+                              Pauta Preventiva: {modalActiveEngine.severeInterval}
                             </span>
                           </div>
 
@@ -1527,22 +1527,22 @@ export default function PreviewManuales() {
 
                         </div>
 
-                        {/* Puntos Críticos de Falla & Alertas Severas Venezuela */}
-                        <div className="bg-amber-500/10 border border-amber-500/25 rounded-2xl p-5 space-y-3">
-                          <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
-                            <ShieldAlert size={18} className="shrink-0" />
+                        {/* Puntos Clave de Protección del Motor */}
+                        <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3 shadow-sm">
+                          <div className="flex items-center gap-2 text-slate-900 dark:text-white">
+                            <ShieldCheck size={18} className="text-emerald-500 shrink-0" />
                             <h3 className="text-sm font-black uppercase tracking-wider">
-                              Pautas Críticas de Falla y Prevención en Venezuela ({modalActiveEngine.code})
+                              Puntos Clave de Protección & Rendimiento ({modalActiveEngine.code})
                             </h3>
                           </div>
 
-                          <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                             {modalActiveEngine.severeTip}
                           </p>
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
                             {modalActiveEngine.criticalChecks.map((chk, i) => (
-                              <div key={i} className="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl border border-amber-500/20">
+                              <div key={i} className="bg-white dark:bg-slate-800/80 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <span className="text-xs font-black text-slate-900 dark:text-white block mb-1">
                                   {chk.title}
                                 </span>
@@ -1561,7 +1561,7 @@ export default function PreviewManuales() {
                               <ClipboardList size={16} className="text-red-500" />
                               Programa de Servicios Recomendado ({modalActiveEngine.code})
                             </h3>
-                            <span className="text-[11px] text-slate-500">Protocolo Severo Taller MasterTech</span>
+                            <span className="text-[11px] text-slate-500">Protocolo de Alta Exigencia · MasterTech</span>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
