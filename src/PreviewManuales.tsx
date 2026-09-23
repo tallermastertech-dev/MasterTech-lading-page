@@ -168,8 +168,32 @@ export default function PreviewManuales() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalManual, setActiveModalManual] = useState<ManualCard | null>(null);
+  const [modalHtml, setModalHtml] = useState<string | null>(null);
+  const [isLoadingHtml, setIsLoadingHtml] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    if (activeModalManual?.htmlPath) {
+      setIsLoadingHtml(true);
+      fetch(activeModalManual.htmlPath)
+        .then((res) => {
+          if (!res.ok) throw new Error('Error al cargar manual');
+          return res.text();
+        })
+        .then((html) => {
+          setModalHtml(html);
+          setIsLoadingHtml(false);
+        })
+        .catch(() => {
+          setModalHtml(null);
+          setIsLoadingHtml(false);
+        });
+    } else {
+      setModalHtml(null);
+      setIsLoadingHtml(false);
+    }
+  }, [activeModalManual]);
 
   useEffect(() => {
     const isLight = document.documentElement.classList.contains('theme-light') || document.documentElement.classList.contains('light');
@@ -681,10 +705,20 @@ export default function PreviewManuales() {
 
               {/* Iframe Viewport */}
               <div className="flex-1 bg-white relative">
+                {isLoadingHtml && !modalHtml && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 z-10">
+                    <div className="w-8 h-8 border-3 border-red-500 border-t-transparent rounded-full animate-spin mb-3" />
+                    <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                      Cargando especificaciones técnicas oficiales...
+                    </p>
+                  </div>
+                )}
                 <iframe
-                  src={activeModalManual.htmlPath}
+                  src={modalHtml ? undefined : activeModalManual.htmlPath}
+                  srcDoc={modalHtml || undefined}
                   title={`Manual Técnico ${activeModalManual.brand}`}
                   className="w-full h-full border-0"
+                  sandbox="allow-same-origin allow-scripts allow-modals allow-popups allow-forms"
                 />
               </div>
 
