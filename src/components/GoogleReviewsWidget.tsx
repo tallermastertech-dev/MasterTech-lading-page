@@ -12,6 +12,7 @@ interface ReviewItem {
   author: string;
   rating: number;
   date: string;
+  datePublished: string;
   vehicle: string;
   text: string;
   serviceDetail?: string;
@@ -23,6 +24,7 @@ const HIGHLIGHTED_REVIEWS: ReviewItem[] = [
     author: "Carlos E. Mendoza",
     rating: 5,
     date: "Hace 1 semana",
+    datePublished: "2026-09-15",
     vehicle: "Jeep Wrangler JL",
     serviceDetail: "Ajuste de tren delantero y terminal Mopar",
     text: "Excelente servicio en Margarita. Diagnosticaron la falla exacta de vibración, ajustaron con torquímetro y el Jeep quedó como de fábrica. 100% recomendados."
@@ -32,6 +34,7 @@ const HIGHLIGHTED_REVIEWS: ReviewItem[] = [
     author: "Alejandro Rodríguez",
     rating: 5,
     date: "Hace 2 semanas",
+    datePublished: "2026-09-08",
     vehicle: "Toyota Fortuner 4.0L",
     serviceDetail: "Mantenimiento preventivo mayor",
     text: "Atención transparente, te muestran los repuestos sustituidos y te entregan el vehículo impecable. Tienen escáner de nivel de agencia y personal capacitado."
@@ -41,6 +44,7 @@ const HIGHLIGHTED_REVIEWS: ReviewItem[] = [
     author: "Mariana Villalba",
     rating: 5,
     date: "Hace 3 semanas",
+    datePublished: "2026-09-01",
     vehicle: "Jeep Grand Cherokee",
     serviceDetail: "Repuesto OEM Mopar certificado",
     text: "Me consiguieron el repuesto original Mopar en tiempo récord y lo instalaron con garantía formal. Cero fugas y temperatura perfecta en autopista."
@@ -75,8 +79,66 @@ interface GoogleReviewsWidgetProps {
 export default function GoogleReviewsWidget({
   googleBusinessUrl = "https://maps.app.goo.gl/taller-mastertech-porlamar"
 }: GoogleReviewsWidgetProps) {
+  // Marcado estructurado Schema.org JSON-LD para Google Rich Snippets (Estrellas doradas en Google Search)
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    "@id": "https://www.tallermastertech.com/#autorepair",
+    "name": "Taller MasterTech",
+    "image": "https://www.tallermastertech.com/logo.png",
+    "url": "https://www.tallermastertech.com",
+    "telephone": "+584123565012",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Sector Sucre, Calle Principal",
+      "addressLocality": "Porlamar",
+      "addressRegion": "Nueva Esparta",
+      "addressCountry": "VE"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 10.9577,
+      "longitude": -63.8697
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "bestRating": "5",
+      "worstRating": "1",
+      "ratingCount": "128",
+      "reviewCount": "128"
+    },
+    "review": HIGHLIGHTED_REVIEWS.map((rev) => ({
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "name": rev.author
+      },
+      "datePublished": rev.datePublished,
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": rev.rating.toString(),
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "reviewBody": rev.text,
+      "itemReviewed": {
+        "@type": "AutoRepair",
+        "@id": "https://www.tallermastertech.com/#autorepair",
+        "name": "Taller MasterTech"
+      }
+    }))
+  };
+
   return (
     <section id="opiniones" className="py-5 md:py-7 relative overflow-hidden bg-slate-50/70 dark:bg-[#090b10] text-slate-900 dark:text-white transition-colors duration-300 border-t border-slate-200/60 dark:border-slate-800/60">
+      {/* Schema.org JSON-LD invisible para Googlebot */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Compact, Discreet Header Bar */}
