@@ -46,6 +46,7 @@ import TrabajaConNosotros from './TrabajaConNosotros';
 import Jeep from './Jeep';
 import Toyota from './Toyota';
 import PreviewTrustPack from './PreviewTrustPack';
+import GarantiaMasterTech from './components/GarantiaMasterTech';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { MT01AdvisorModal } from './components/MT01AdvisorModal';
 import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
@@ -161,7 +162,8 @@ export default function App() {
     window.location.pathname === '/contacto'
   );
   const [isFaq, setIsFaq] = useState(
-    window.location.pathname.toLowerCase() === '/faq'
+    window.location.pathname.toLowerCase() === '/faq' ||
+    window.location.pathname.toLowerCase() === '/garantia'
   );
   const [isNosotros, setIsNosotros] = useState(
     window.location.pathname.toLowerCase() === '/nosotros'
@@ -310,7 +312,10 @@ export default function App() {
     const handleHashChange = () => {
       setIsInspeccion(window.location.pathname === '/inspeccion');
       setIsContacto(window.location.pathname === '/contacto');
-      setIsFaq(window.location.pathname.toLowerCase() === '/faq');
+      setIsFaq(
+        window.location.pathname.toLowerCase() === '/faq' ||
+        window.location.pathname.toLowerCase() === '/garantia'
+      );
       setIsNosotros(window.location.pathname.toLowerCase() === '/nosotros');
       setIsServicios(window.location.pathname.toLowerCase() === '/servicios');
       setIsCatalogo(window.location.pathname.toLowerCase() === '/catalogo');
@@ -679,8 +684,8 @@ export default function App() {
         </div>
       </section>
 
-
-
+      {/* Sello Oficial y Política de Garantía MasterTech (Sustituye FAQs) */}
+      <GarantiaMasterTech />
 
       {/* Booking Form */}
       <section id="contacto" className="py-16 md:py-32 px-3 sm:px-6">

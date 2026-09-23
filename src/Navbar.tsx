@@ -279,14 +279,14 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             </AnimatePresence>
           </div>
 
-          {/* 5. Preguntas Frecuentes Direct Link (No Chevron / No Dropdown) */}
+          {/* 5. Garantía Direct Link (Sustituye Preguntas Frecuentes) */}
           <a 
-            href="/faq" 
+            href="/#garantia" 
             className={`transition-colors py-2 whitespace-nowrap ${
               activePage === 'faq' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
             }`}
           >
-            Preguntas Frecuentes
+            Garantía
           </a>
         </div>
 
@@ -431,14 +431,14 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 )}
               </div>
 
-              {/* 5. Preguntas Frecuentes Direct Link */}
+              {/* 5. Garantía Direct Link */}
               <a
-                href="/faq"
+                href="/#garantia"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
               >
-                <HelpCircle size={18} className="text-primary" />
-                <span>Preguntas Frecuentes</span>
+                <ShieldCheck size={18} className="text-primary" />
+                <span>Garantía</span>
               </a>
 
               {/* Theme Toggle Button (Mobile) */}
