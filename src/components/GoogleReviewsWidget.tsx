@@ -76,11 +76,11 @@ export default function GoogleReviewsWidget({
   googleBusinessUrl = "https://maps.app.goo.gl/taller-mastertech-porlamar"
 }: GoogleReviewsWidgetProps) {
   return (
-    <section id="opiniones" className="py-10 md:py-12 relative overflow-hidden bg-slate-50/70 dark:bg-[#090b10] text-slate-900 dark:text-white transition-colors duration-300 border-t border-slate-200/60 dark:border-slate-800/60">
+    <section id="opiniones" className="py-5 md:py-7 relative overflow-hidden bg-slate-50/70 dark:bg-[#090b10] text-slate-900 dark:text-white transition-colors duration-300 border-t border-slate-200/60 dark:border-slate-800/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Compact, Discreet Header Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80 dark:border-slate-800/80">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pb-4 border-b border-slate-200/80 dark:border-slate-800/80">
           
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-center shrink-0">
@@ -118,7 +118,7 @@ export default function GoogleReviewsWidget({
         </div>
 
         {/* 3 Compact Single-Row Review Cards */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
           {HIGHLIGHTED_REVIEWS.map((review) => (
             <div
               key={review.id}

@@ -625,7 +625,7 @@ export default function App() {
       </section>
 
       {/* Instalaciones Section */}
-      <section id="instalaciones" className="py-20 lg:py-32 px-4 sm:px-6 relative overflow-hidden bg-slate-50 dark:bg-[#0a0b0f] transition-colors duration-300">
+      <section id="instalaciones" className="pt-16 pb-8 lg:pt-24 lg:pb-10 px-4 sm:px-6 relative overflow-hidden bg-slate-50 dark:bg-[#0a0b0f] transition-colors duration-300">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
@@ -689,9 +689,9 @@ export default function App() {
       <GoogleReviewsWidget googleBusinessUrl={config.GOOGLE_MAPS_LINK} />
 
       {/* Booking Form */}
-      <section id="contacto" className="py-16 md:py-32 px-3 sm:px-6">
+      <section id="contacto" className="pt-4 pb-16 md:pt-6 md:pb-24 px-3 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="p-4 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden mt-8 md:mt-16 rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 shadow-xl transition-colors duration-300">
+          <div className="p-4 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden mt-2 md:mt-4 rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 shadow-xl transition-colors duration-300">
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -mr-48 -mt-48 pointer-events-none" />
             
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 relative z-10">
