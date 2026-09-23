@@ -188,7 +188,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-            Transparencia ante todo: la garantía depende de la mano de obra realizada en el vehículo. Los repuestos suministrados por el taller cuentan con respaldo formal, mientras que las piezas externas aportadas por el cliente no tienen garantía.
+            Tu tranquilidad respaldada por escrito: mano de obra especializada con cobertura técnica formal y repuestos certificados con garantía en tu orden de servicio digital.
           </p>
         </div>
 
@@ -290,11 +290,11 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
               </div>
 
               <h4 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                Transparencia total para proteger tu inversión
+                Trabajo bien hecho y garantía por escrito, sin letras pequeñas
               </h4>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Cada intervención en MasterTech queda certificada en tu orden de servicio digital con trazabilidad completa. Avalamos al 100% la mano de obra especializada y los repuestos suministrados por nuestro taller. Cero sorpresas ni letras pequeñas: sabes con exactitud el alcance de tu cobertura antes de retirar tu vehículo.
+                En MasterTech cuidamos tu vehículo con criterio técnico y total claridad. Cada servicio queda registrado en tu orden digital, con repuestos de calidad garantizada y respaldo directo sobre nuestra mano de obra. Todo se aprueba previamente con fotos o videos vía WhatsApp: sabes exactamente qué se le hace a tu carro antes de retirarlo.
               </p>
 
 
