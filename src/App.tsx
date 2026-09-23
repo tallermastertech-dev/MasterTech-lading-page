@@ -47,6 +47,7 @@ import Jeep from './Jeep';
 import Toyota from './Toyota';
 import PreviewTrustPack from './PreviewTrustPack';
 import GarantiaMasterTech from './components/GarantiaMasterTech';
+import GoogleReviewsWidget from './components/GoogleReviewsWidget';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { MT01AdvisorModal } from './components/MT01AdvisorModal';
 import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
@@ -683,6 +684,9 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* Reseñas Verificadas de Google Business */}
+      <GoogleReviewsWidget googleBusinessUrl={config.GOOGLE_MAPS_LINK} />
 
       {/* Booking Form */}
       <section id="contacto" className="py-16 md:py-32 px-3 sm:px-6">
