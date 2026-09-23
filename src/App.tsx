@@ -684,9 +684,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Sello Oficial y Política de Garantía MasterTech (Sustituye FAQs) */}
-      <GarantiaMasterTech />
-
       {/* Booking Form */}
       <section id="contacto" className="py-16 md:py-32 px-3 sm:px-6">
         <div className="max-w-7xl mx-auto">
