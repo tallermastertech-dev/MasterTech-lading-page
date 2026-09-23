@@ -45,7 +45,6 @@ import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
 import Jeep from './Jeep';
 import Toyota from './Toyota';
-import PreviewTrustPack from './PreviewTrustPack';
 import GarantiaMasterTech from './components/GarantiaMasterTech';
 import GoogleReviewsWidget from './components/GoogleReviewsWidget';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -189,13 +188,6 @@ export default function App() {
   );
   const [isToyota, setIsToyota] = useState(
     window.location.pathname.toLowerCase() === '/toyota'
-  );
-  const [isPreviewConfianza, setIsPreviewConfianza] = useState(
-    window.location.pathname.toLowerCase() === '/preview-confianza' ||
-    window.location.pathname.toLowerCase() === '/preview-garantia' ||
-    window.location.pathname.toLowerCase() === '/preview-trust' ||
-    window.location.search.includes('preview=trust') ||
-    window.location.search.includes('preview=confianza')
   );
 
   // Dynamic JSON arrays for team, reviews, and brands
@@ -463,10 +455,6 @@ export default function App() {
 
   if (isToyota) {
     return <Toyota />;
-  }
-
-  if (isPreviewConfianza) {
-    return <PreviewTrustPack />;
   }
 
   return (
