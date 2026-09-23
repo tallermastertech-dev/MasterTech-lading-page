@@ -45,6 +45,7 @@ import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
 import Jeep from './Jeep';
 import Toyota from './Toyota';
+import PreviewManuales from './PreviewManuales';
 import GarantiaMasterTech from './components/GarantiaMasterTech';
 import GoogleReviewsWidget from './components/GoogleReviewsWidget';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
@@ -189,6 +190,11 @@ export default function App() {
   const [isToyota, setIsToyota] = useState(
     window.location.pathname.toLowerCase() === '/toyota'
   );
+  const [isPreviewManuales, setIsPreviewManuales] = useState(
+    window.location.pathname.toLowerCase() === '/preview-manuales' ||
+    window.location.pathname.toLowerCase() === '/manuales-preview' ||
+    window.location.search.includes('preview=manuales')
+  );
 
   // Dynamic JSON arrays for team, reviews, and brands
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
@@ -320,6 +326,11 @@ export default function App() {
       setIsTrabajaConNosotros(
         window.location.pathname.toLowerCase() === '/postulacion' ||
         window.location.hash === '#postulacion'
+      );
+      setIsPreviewManuales(
+        window.location.pathname.toLowerCase() === '/preview-manuales' ||
+        window.location.pathname.toLowerCase() === '/manuales-preview' ||
+        window.location.search.includes('preview=manuales')
       );
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -455,6 +466,10 @@ export default function App() {
 
   if (isToyota) {
     return <Toyota />;
+  }
+
+  if (isPreviewManuales) {
+    return <PreviewManuales />;
   }
 
   return (
