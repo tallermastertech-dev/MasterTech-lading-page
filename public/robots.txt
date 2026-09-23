@@ -1,12 +1,55 @@
-﻿# robots.txt — Taller MasterTech
+# robots.txt — Taller MasterTech
 # https://www.tallermastertech.com/
 
+# 1. Configuración General para Motores de Búsqueda
 User-agent: *
 Allow: /
-
-# Bloquear rutas administrativas y privadas
 Disallow: /admin
 Disallow: /api/
 
-# Sitemap
+# 2. Rastreadores de Inteligencia Artificial (Permitidos explícitamente para citaciones y respuestas en IA)
+# OpenAI / ChatGPT Search
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Google Gemini / Google AI Overviews
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+User-agent: anthropic-ai
+Allow: /
+
+# Apple Intelligence / Siri
+User-agent: Applebot-Extended
+Allow: /
+
+# Microsoft Copilot / Bing AI
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# 3. Sitemaps y Documento para IAs
 Sitemap: https://www.tallermastertech.com/sitemap.xml
