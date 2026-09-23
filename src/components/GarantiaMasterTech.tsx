@@ -290,11 +290,11 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
               </div>
 
               <h4 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                Trabajo bien hecho y garantía por escrito, sin letras pequeñas
+                Garantía Oficial de Servicio
               </h4>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                En MasterTech cuidamos tu vehículo con criterio técnico y total claridad. Cada servicio queda registrado en tu orden digital, con repuestos de calidad garantizada y respaldo directo sobre nuestra mano de obra. Todo se aprueba previamente con fotos o videos vía WhatsApp: sabes exactamente qué se le hace a tu carro antes de retirarlo.
+                Cada reparación cuenta con respaldo técnico sobre la mano de obra y los repuestos suministrados por el taller. Trazabilidad en tu orden digital y validación previa de cada trabajo.
               </p>
 
 
