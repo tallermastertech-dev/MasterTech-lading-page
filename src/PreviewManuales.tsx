@@ -58,7 +58,7 @@ const MANUALES: ManualCard[] = [
     status: 'disponible',
     badge: 'Edición Oficial MasterTech',
     badgeColor: 'bg-red-500/10 text-red-500 border-red-500/30',
-    statusBadge: '✓ Disponible PDF & Online',
+    statusBadge: 'Disponible PDF & Online',
     statusBadgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     years: '2021 – 2027',
     subtitle: 'Hilux, Fortuner, 4Runner, Corolla, Yaris, Land Cruiser, Prado, RAV4',
@@ -77,7 +77,7 @@ const MANUALES: ManualCard[] = [
     status: 'disponible',
     badge: 'Edición Oficial MasterTech',
     badgeColor: 'bg-blue-500/10 text-blue-500 border-blue-500/30',
-    statusBadge: '✓ Disponible PDF & Online',
+    statusBadge: 'Disponible PDF & Online',
     statusBadgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     years: '2021 – 2027',
     subtitle: 'Civic, CR-V, Accord, Pilot, HR-V, Fit / Jazz, Ridgeline',
@@ -96,7 +96,7 @@ const MANUALES: ManualCard[] = [
     status: 'disponible',
     badge: 'Edición Oficial MasterTech',
     badgeColor: 'bg-rose-500/10 text-rose-500 border-rose-500/30',
-    statusBadge: '✓ Disponible PDF & Online',
+    statusBadge: 'Disponible PDF & Online',
     statusBadgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
     years: '2021 – 2027',
     subtitle: 'Versa, Sentra, Kicks, Frontier / Navara, X-Trail, Altima, Pathfinder, Patrol',
@@ -115,7 +115,7 @@ const MANUALES: ManualCard[] = [
     status: 'en_edicion',
     badge: 'En Redacción Técnica',
     badgeColor: 'bg-amber-500/10 text-amber-500 border-amber-500/30',
-    statusBadge: '⏳ Pauta Técnica en Taller · Consulta WhatsApp',
+    statusBadge: 'Pauta Técnica en Taller',
     statusBadgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
     years: '2015 – 2027',
     subtitle: 'Grand Cherokee, Wrangler, Cherokee, Compass, Renegade, Gladiator',
@@ -133,7 +133,7 @@ const MANUALES: ManualCard[] = [
     status: 'en_edicion',
     badge: 'En Redacción Técnica',
     badgeColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/30',
-    statusBadge: '⏳ Pauta Técnica en Taller · Consulta WhatsApp',
+    statusBadge: 'Pauta Técnica en Taller',
     statusBadgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
     years: '2016 – 2027',
     subtitle: 'Explorer, F-150, Ranger, EcoSport, Edge, Expedition, Fiesta',
@@ -151,7 +151,7 @@ const MANUALES: ManualCard[] = [
     status: 'en_edicion',
     badge: 'En Redacción Técnica',
     badgeColor: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/30',
-    statusBadge: '⏳ Pauta Técnica en Taller · Consulta WhatsApp',
+    statusBadge: 'Pauta Técnica en Taller',
     statusBadgeColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
     years: '2015 – 2027',
     subtitle: 'Tahoe, Silverado, Suburban, Trailblazer, Cruze, Aveo, Captiva',
@@ -439,9 +439,17 @@ export default function PreviewManuales() {
                         {manual.category === 'japones' ? 'Línea Japonesa' : 'Línea Americana'} · {manual.years}
                       </span>
                       
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${manual.statusBadgeColor}`}>
-                        {isAvailable ? '✓ PDF & Online' : '⏳ En Taller'}
-                      </span>
+                      {isAvailable ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+                          <CheckCircle2 size={11} className="shrink-0" />
+                          <span>PDF & Online</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30">
+                          <Clock size={11} className="shrink-0" />
+                          <span>En Taller</span>
+                        </span>
+                      )}
                     </div>
 
                     {/* Brand Name & Subtitle */}
@@ -549,9 +557,17 @@ export default function PreviewManuales() {
                         <span className="text-xs font-mono text-slate-400">
                           ({manual.years})
                         </span>
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold border ${manual.statusBadgeColor}`}>
-                          {isAvailable ? 'PDF Disponible' : 'En Taller'}
-                        </span>
+                        {isAvailable ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+                            <CheckCircle2 size={11} className="shrink-0" />
+                            <span>PDF Disponible</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30">
+                            <Clock size={11} className="shrink-0" />
+                            <span>En Taller</span>
+                          </span>
+                        )}
                       </div>
                       
                       <p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
