@@ -30,7 +30,24 @@ import {
   Plus,
   Minus,
   Instagram,
-  Youtube
+  Youtube,
+  Cpu,
+  Fuel,
+  Droplets,
+  Layers,
+  Gauge,
+  FileText,
+  Check,
+  Flame,
+  SlidersHorizontal,
+  ExternalLink,
+  ShieldAlert,
+  AlertCircle,
+  ClipboardCheck,
+  Sparkles,
+  Terminal,
+  Crosshair,
+  Compass
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
@@ -153,6 +170,8 @@ export default function App() {
   const [inspectionSlotStr, setInspectionSlotStr] = useState<string>('');
   const [isInspectionSlotValid, setIsInspectionSlotValid] = useState<boolean>(false);
   const [whatsappUrl, setWhatsappUrl] = useState<string>('');
+  const [selectedSymptom, setSelectedSymptom] = useState<string>('');
+  const [activeBayTab, setActiveBayTab] = useState<number>(0);
 
   // Dynamic config initialized with static CONFIG fallback
   const [config, setConfig] = useState<any>(CONFIG);
@@ -357,14 +376,15 @@ export default function App() {
 
     // Format WhatsApp Direct Link
     const targetPhone = "584123565012";
-    let msg = `🚗 *NUEVA CITA / SOLICITUD - MASTERTECH* 🛠️\n\n`;
-    msg += `👤 *Cliente:* ${data.nombre || ''}\n`;
-    msg += `📱 *WhatsApp:* ${data.telefono || ''}\n`;
+    let msg = `⚙️ *ORDEN DE ADMISIÓN TÉCNICA // MASTERTECH* 🛠️\n\n`;
+    msg += `👤 *Propietario:* ${data.nombre || ''}\n`;
+    msg += `📱 *Teléfono:* ${data.telefono || ''}\n`;
     msg += `🚗 *Vehículo:* ${data.vehiculo || 'No especificado'}\n`;
-    msg += `🛠️ *Servicio:* ${data.servicio || selectedService || 'Línea de inspección'}\n`;
-    if (data.fecha_hora) msg += `📅 *Horario Solicitado:* ${data.fecha_hora}\n`;
-    if (data.falla) msg += `📝 *Falla / Síntoma:* ${data.falla}\n`;
-    msg += `\n_Solicitud enviada desde MasterTech Web._`;
+    msg += `🔧 *Servicio:* ${data.servicio || selectedService || 'Diagnóstico e inspección'}\n`;
+    if (selectedSymptom) msg += `⚠️ *Síntoma Detectado:* ${selectedSymptom}\n`;
+    if (data.fecha_hora) msg += `⏱️ *Turno Solicitado:* ${data.fecha_hora}\n`;
+    if (data.falla) msg += `📝 *Observaciones:* ${data.falla}\n`;
+    msg += `\n_Solicitud enviada desde el Centro Técnico MasterTech Web._`;
 
     const generatedWhatsappUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
     setWhatsappUrl(generatedWhatsappUrl);
@@ -473,97 +493,154 @@ export default function App() {
   }
 
   return (
-    <div className="theme-root min-h-screen selection:bg-primary selection:text-black overflow-x-hidden w-full max-w-full">
-      {/* WhatsApp Button */}
+    <div className="theme-root min-h-screen selection:bg-amber-500 selection:text-black overflow-x-hidden w-full max-w-full font-sans">
+      {/* WhatsApp Direct Action Button */}
       <a 
         href={config.WHATSAPP_LINK}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-[#25D366] p-4 rounded-full shadow-2xl hover:scale-110 transition-transform animate-float flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-3.5 rounded-xl shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center group border border-emerald-400/40"
+        title="Asesoría Técnica Inmediata"
       >
-        <span className="absolute right-full mr-3 bg-white text-black px-4 py-2 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">¡Escríbenos ahora!</span>
-        <WhatsAppIcon size={28} className="text-white fill-current" />
+        <span className="absolute right-full mr-3 bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-mono font-bold tracking-wider opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl border border-slate-700">
+          WHATSAPP TÉCNICO
+        </span>
+        <WhatsAppIcon size={24} className="text-white fill-current" />
       </a>
 
       {/* Navigation with Dropdown Menus */}
       <Navbar activePage="inicio" config={config} />
 
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-8 lg:pt-24 lg:pb-12 px-4 sm:px-6 overflow-hidden min-h-[calc(100vh-70px)] flex flex-col justify-center items-center bg-slate-100 dark:bg-[#0D0D0D] transition-colors duration-300">
-        {/* Workshop Background Image & Overlay */}
+      {/* =========================================================================
+          SECTION 1: INDUSTRIAL COCKPIT HERO
+          ========================================================================= */}
+      <section className="relative pt-24 pb-12 lg:pt-28 lg:pb-16 px-4 sm:px-6 overflow-hidden min-h-[calc(100vh-60px)] flex flex-col justify-center bg-slate-50 dark:bg-[#090b0e] transition-colors duration-300 automotive-grid">
+        {/* Workshop Ambient Background & Precise Vignette */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <img 
             src={config.HERO_IMG || "/assets/hero_bg_custom.webp"} 
-            alt="MasterTech Taller" 
+            alt="MasterTech Centro Automotriz" 
             decoding="async"
             fetchPriority="high"
-            className="w-full h-full object-cover object-center opacity-35 dark:opacity-75 transition-opacity duration-300" 
+            className="w-full h-full object-cover object-center opacity-15 dark:opacity-30 mix-blend-luminosity filter contrast-125" 
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-100/95 via-slate-100/75 to-slate-100/40 dark:from-[#0D0D0D]/90 dark:via-[#0D0D0D]/60 dark:to-[#0D0D0D]/30 transition-colors duration-300" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-100/95 via-transparent to-slate-100/60 dark:from-[#0D0D0D]/85 dark:via-transparent dark:to-[#0D0D0D]/40 transition-colors duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent dark:from-[#090b0e] dark:via-[#090b0e]/95 dark:to-[#090b0e]/70 transition-colors duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-slate-50/70 dark:from-[#090b0e] dark:via-transparent dark:to-[#090b0e]/70 transition-colors duration-300" />
         </div>
-        
-        <div className="max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto relative z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+
+        <div className="max-w-7xl mx-auto relative z-10 w-full">
+          
+          {/* Telemetry Status Strip */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-6 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-mono tracking-wider text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-none rotate-45 bg-amber-500 inline-block" />
+              <span>ISLA DE MARGARITA // LAT: 10.9701° N · LON: 63.8681° W</span>
+            </div>
+            {(() => {
+              const tallerStatus = getTallerStatus(config.IS_OPEN);
+              return (
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${tallerStatus.dotColor} ${tallerStatus.isOpen ? 'animate-ping' : ''}`} />
+                  <span className="font-bold text-slate-800 dark:text-slate-200">
+                    {tallerStatus.badgeText} · RECEPCIÓN ACTIVA
+                  </span>
+                </div>
+              );
+            })()}
+            <div className="hidden md:flex items-center gap-2 text-slate-400">
+              <Terminal size={12} className="text-amber-500" />
+              <span>CENTRO DE INGENIERÍA & DIAGNÓSTICO</span>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Left Column: Authoritative Editorial Presentation */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-7"
             >
-              {(() => {
-                const tallerStatus = getTallerStatus(config.IS_OPEN);
-                const textColor = tallerStatus.isOpen ? '#059669' : '#d97706';
-                return (
-                  <div 
-                    className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border mb-4 text-xs font-black uppercase tracking-wider shadow-sm transition-all taller-status-badge ${tallerStatus.badgeBg} ${tallerStatus.badgeBorder}`}
-                  >
-                    <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.dotColor} animate-pulse shrink-0`} />
-                    <span className="taller-status-text font-black">
-                      {tallerStatus.badgeText}
-                    </span>
-                  </div>
-                );
-              })()}
-              <h1 className="text-slate-900 dark:text-white text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 uppercase leading-[1.05]">
-                TU VEHÍCULO MERECE <br />
-                <span className="text-amber-500 dark:text-amber-400 font-black">ATENCIÓN EXPERTA</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-mono font-bold tracking-wider mb-4 uppercase">
+                <Cpu size={13} className="text-amber-500" />
+                <span>ESPECIALISTAS EN PLATAFORMAS JAPONESAS Y AMERICANAS</span>
+              </div>
+
+              <h1 className="text-slate-900 dark:text-white text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4 uppercase leading-[1.06]">
+                INGENIERÍA & DIAGNÓSTICO <br />
+                <span className="text-amber-500 dark:text-amber-400">AUTOMOTRIZ DE PRECISIÓN</span>
               </h1>
-              <p className="text-slate-600 dark:text-white/85 text-sm sm:text-base lg:text-lg mb-6 max-w-md lg:max-w-lg leading-relaxed font-medium">
-                Elevamos el estándar del servicio automotriz con diagnóstico avanzado, repuestos de primera y un equipo altamente capacitado listo para resolver cualquier falla.
+
+              <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base lg:text-lg mb-8 max-w-xl leading-relaxed font-normal">
+                Centro técnico especializado con osciloscopios de 4 canales, escaneo computarizado de grado concesionario, laboratorio de inyección GDI / Common Rail y calibración de transmisiones automáticas y CVT. <strong>Cero adivinanzas:</strong> analizamos el flujo de datos en tiempo real bajo tolerancias de fábrica.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a href="#contacto" className="btn-primary !px-7 !py-3.5 text-sm sm:text-base border-none shadow-[0_10px_30px_rgba(194,164,114,0.35)]">
-                  Agendar Cita <ArrowRight className="w-4 h-4 ml-2" />
+
+              {/* Action Buttons: Solid Architectural Style */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-10">
+                <a 
+                  href="#admision" 
+                  className="btn-primary !px-7 !py-3.5 text-xs sm:text-sm shadow-md"
+                >
+                  <Calendar size={16} />
+                  <span>AGENDAR ADMISIÓN TÉCNICA</span>
+                  <ArrowRight size={16} />
                 </a>
-                <a href="/servicios" className="btn-secondary !px-7 !py-3.5 text-sm sm:text-base bg-white dark:bg-white/10 border border-slate-200 dark:border-white/20 hover:bg-slate-50 dark:hover:bg-white/20 text-slate-900 dark:text-white font-bold shadow-sm backdrop-blur-md">
-                  Ver Servicios
+
+                <a 
+                  href="/preview-manuales" 
+                  className="btn-secondary !px-6 !py-3.5 text-xs sm:text-sm bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 text-slate-800 dark:text-slate-100 shadow-sm"
+                >
+                  <BookOpen size={16} className="text-amber-500" />
+                  <span>MANUALES POR MOTOR (5.000 KM)</span>
                 </a>
               </div>
-              
-              <div className="mt-6 sm:mt-8 flex items-center gap-6 text-xs sm:text-sm font-bold text-slate-700 dark:text-white/80">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-amber-500 dark:text-amber-400 icon-glow" />
-                  <span>Garantía Total</span>
+
+              {/* 4 Precision Telemetry Badges */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-6 border-t border-slate-200 dark:border-slate-800">
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800/80">
+                  <div className="text-base sm:text-lg font-black text-amber-500 font-mono">100% OEM</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase leading-tight mt-0.5">Fluidos & Repuestos</div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-amber-500 dark:text-amber-400 icon-glow" />
-                  <span>Atención VIP</span>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800/80">
+                  <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">&lt; 48 HORAS</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase leading-tight mt-0.5">Diagnóstico Complejo</div>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800/80">
+                  <div className="text-base sm:text-lg font-black text-emerald-500 font-mono">6 MESES</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase leading-tight mt-0.5">Garantía Escrita</div>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800/80">
+                  <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">+1.850</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase leading-tight mt-0.5">Órdenes Atendidas</div>
                 </div>
               </div>
             </motion.div>
             
+            {/* Right Column: Workshop Telemetry Display (CCTV / Diagnostic Bay Feed) */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative mt-6 lg:mt-0 max-w-[260px] sm:max-w-[280px] lg:max-w-[320px] mx-auto w-full"
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="lg:col-span-5 relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-none mx-auto"
             >
-              {/* Background Glow */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-primary/10 rounded-[2.5rem] blur-3xl -z-10" />
-              
-              {/* Glassmorphic Frame matching user screenshot */}
-              <div className="relative bg-white/80 dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-[0_30px_70px_rgba(0,0,0,0.9)] rounded-[2.2rem] lg:rounded-[2.5rem] p-2 overflow-hidden transition-all duration-300">
-                <div className="w-full aspect-[9/16] rounded-[1.8rem] lg:rounded-[2rem] overflow-hidden bg-black relative flex items-center justify-center">
+              {/* Industrial Frame Chassis */}
+              <div className="relative bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 shadow-2xl overflow-hidden tech-crosshair">
+                
+                {/* Telemetry Header on Monitor */}
+                <div className="flex items-center justify-between px-3 py-1.5 mb-2 bg-black/80 border border-slate-800 rounded text-[10px] font-mono">
+                  <div className="flex items-center gap-1.5 text-red-500 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    <span>REC // FEED BAHÍA 01</span>
+                  </div>
+                  <span className="text-slate-400">CAM-01 [DIAGNÓSTICO EN VIVO]</span>
+                </div>
+
+                {/* Video Window */}
+                <div className="w-full aspect-[9/16] rounded-lg overflow-hidden bg-black relative flex items-center justify-center border border-slate-800">
                   {isDirectVideoUrl(config.HERO_REEL_URL) ? (
                     <video 
                       src={config.HERO_REEL_URL}
@@ -573,14 +650,14 @@ export default function App() {
                       playsInline
                       preload="auto"
                       controls={false}
-                      className="w-full h-full object-cover rounded-[1.8rem] lg:rounded-[2rem]"
+                      className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full overflow-hidden relative rounded-[1.8rem] lg:rounded-[2rem] bg-black flex items-center justify-center">
+                    <div className="w-full h-full overflow-hidden relative bg-black flex items-center justify-center">
                       <iframe 
                         key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
                         src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                        className="w-[130%] h-[145%] border-0 rounded-[1.8rem] lg:rounded-[2rem] pointer-events-auto shrink-0"
+                        className="w-[130%] h-[145%] border-0 pointer-events-auto shrink-0"
                         style={{
                           transform: 'scale(1.42)',
                           transformOrigin: 'center 50%',
@@ -590,354 +667,740 @@ export default function App() {
                         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                         scrolling="no"
                         referrerPolicy="no-referrer-when-downgrade"
-                        title="MasterTech Reel"
+                        title="MasterTech Taller Reel"
                       />
-                      {/* Dark Gradient Overlay covering any bottom white card */}
-                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black to-transparent pointer-events-none z-10" />
-                      {/* Overlay "Ver más en Instagram" button */}
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+                      
                       <a 
                         href={config.HERO_REEL_URL} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="absolute bottom-2.5 left-1/2 -translate-x-1/2 bg-black/95 hover:bg-black backdrop-blur-md text-white border border-white/20 text-[11px] font-bold px-3.5 py-1.5 rounded-full z-20 flex items-center gap-1.5 transition-all shadow-2xl hover:scale-105 whitespace-nowrap"
+                        className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/95 hover:bg-black text-white border border-slate-700 text-xs font-mono font-bold px-3.5 py-1.5 rounded z-20 flex items-center gap-2 transition-all shadow-xl hover:scale-105 whitespace-nowrap"
                       >
-                        <Instagram size={14} className="text-pink-500" />
-                        <span>Ver más en Instagram</span>
+                        <Instagram size={14} className="text-amber-500" />
+                        <span>VER EN INSTAGRAM</span>
+                        <ExternalLink size={12} className="text-slate-400" />
                       </a>
                     </div>
                   )}
                 </div>
+
+                {/* Monitor Footer Telemetry */}
+                <div className="flex items-center justify-between px-2 pt-2 text-[10px] font-mono text-slate-500">
+                  <span>SISTEMA: OSCILOSCOPIO + ESCÁNER</span>
+                  <span>PROCEDIMIENTO ISO-TALLER</span>
+                </div>
               </div>
             </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* Brands Ticker */}
-      <section className="brands-ticker py-6 border-y relative overflow-hidden flex items-center" style={{ backgroundColor: 'rgba(0,0,0,0.35)', borderColor: 'rgba(255,255,255,0.05)' }}>
-        <div className="marquee-fade-left absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #0d0e12, transparent)' }} />
-        <div className="marquee-fade-right absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #0d0e12, transparent)' }} />
-        
-        <div className="animate-marquee gap-16 px-8 items-center">
-          {[...brands, ...brands, ...brands, ...brands].map((brand, i) => (
-            <div key={i} className="brand-ticker-item text-2xl md:text-3xl font-display font-black uppercase tracking-widest hover:text-primary/80 transition-colors duration-500 whitespace-nowrap cursor-default" style={{ color: 'rgba(255,255,255,0.1)' }}>
-              {brand}
+
+      {/* =========================================================================
+          SECTION 2: MATRIZ DE PLATAFORMAS & MOTORIZACIONES (No AI Ticker)
+          ========================================================================= */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white dark:bg-[#0c0f15] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-amber-500 uppercase tracking-widest mb-1.5">
+                <Wrench size={13} />
+                <span>ESPECIALIZACIÓN POR FABRICANTE</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                PLATAFORMAS Y ARQUITECTURAS ATENDIDAS
+              </h2>
             </div>
-          ))}
+            <a 
+              href="/preview-manuales" 
+              className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1.5 uppercase"
+            >
+              <span>Ver todos los manuales y tolerancias</span>
+              <ArrowRight size={13} />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            
+            {/* 1. Toyota */}
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase text-red-500 font-mono tracking-wider">TOYOTA</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 font-bold uppercase">Gasolina & Diésel</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">D-4D, DUAL VVT-i & DYNAMIC FORCE</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Hilux, Fortuner, 4Runner, Prado, Land Cruiser 70/200, Corolla, RAV4</p>
+                <div className="text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                  <div><strong>Motores:</strong> 1GD-FTV (2.8L), 1GR-FE (4.0L V6), M20A (2.0L)</div>
+                  <div><strong>Puntos Clave:</strong> Doble purga de sedimentador cada 2.500 km, cajas Direct-Shift CVT K120 y engrase de 6 crucetas cardán.</div>
+                </div>
+              </div>
+              <a href="/preview-manuales?brand=toyota" className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-amber-500 hover:underline flex items-center justify-between">
+                <span>CONSULTAR FICHA TOYOTA</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+            {/* 2. Jeep & RAM */}
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase text-amber-500 font-mono tracking-wider">JEEP / RAM</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold uppercase">Gasolina V6 & V8</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">PENTASTAR & HEMI MDS</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Grand Cherokee WK2/WL, Wrangler JK/JL, Gladiator JT, RAM 1500</p>
+                <div className="text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                  <div><strong>Motores:</strong> 3.6L Pentastar V6 24V, 5.7L HEMI V8 MDS</div>
+                  <div><strong>Puntos Clave:</strong> Sustitución de base plástica de enfriador de aceite en la V, aceite estricto MS-6395 y cajas ZF 8HP.</div>
+                </div>
+              </div>
+              <a href="/jeep" className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-amber-500 hover:underline flex items-center justify-between">
+                <span>CONSULTAR ESPECIALIDAD JEEP</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+            {/* 3. Nissan */}
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase text-rose-500 font-mono tracking-wider">NISSAN</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/20 font-bold uppercase">Gasolina GDI & Diésel</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">XTRONIC CVT & DIG / YD25</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Sentra B17/B18, Frontier / Navara, X-Trail, Versa, Kicks</p>
+                <div className="text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                  <div><strong>Motores:</strong> 2.0L MR20DD, 1.6L HR16DE, 2.5L YD25 Diésel</div>
+                  <div><strong>Puntos Clave:</strong> Monitoreo de deterioro de fluido CVT NS-3 con escáner, descarbonización GDI y purga de trampa diésel.</div>
+                </div>
+              </div>
+              <a href="/preview-manuales?brand=nissan" className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-amber-500 hover:underline flex items-center justify-between">
+                <span>CONSULTAR FICHA NISSAN</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+            {/* 4. Ford */}
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase text-blue-500 font-mono tracking-wider">FORD</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold uppercase">EcoBoost & Coyote</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">TWIN-TURBO DIT & DURATORQ</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Explorer 3.5L/2.3L, F-150 EcoBoost & Coyote 5.0L, Ranger Diésel</p>
+                <div className="text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                  <div><strong>Motores:</strong> 3.5L EcoBoost, 5.0L Coyote V8, 3.2L Puma Diésel</div>
+                  <div><strong>Puntos Clave:</strong> Cajas 10R80 Mercon ULV, solenoides Ti-VCT y regla de drenaje 10 min en bomba variable de aceite.</div>
+                </div>
+              </div>
+              <a href="/preview-manuales?brand=ford" className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-amber-500 hover:underline flex items-center justify-between">
+                <span>CONSULTAR FICHA FORD</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+            {/* 5. Honda */}
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase text-emerald-500 font-mono tracking-wider">HONDA</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold uppercase">Turbo & i-VTEC</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">EARTH DREAMS & VCM V6</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Civic Turbo, CR-V, Accord 1.5T/2.0T, Pilot V6 3.5L, HR-V</p>
+                <div className="text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                  <div><strong>Motores:</strong> L15B7 Turbo (1.5L), K24/R20, J35 V6 con VCM</div>
+                  <div><strong>Puntos Clave:</strong> Formulación 0W-20 API SP anti-LSPI, reglaje manual de válvulas y fluido Genuine HCF-2 en CVT.</div>
+                </div>
+              </div>
+              <a href="/preview-manuales?brand=honda" className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-amber-500 hover:underline flex items-center justify-between">
+                <span>CONSULTAR FICHA HONDA</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+            {/* 6. Chevrolet */}
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-black uppercase text-purple-500 font-mono tracking-wider">CHEVROLET</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold uppercase">V8 EcoTec3 & Turbo</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1.5">AFM / DFM & SIDI DIRECT</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Tahoe, Suburban, Silverado 1500, Trailblazer, Cruze Turbo</p>
+                <div className="text-[11px] space-y-1.5 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-700/60">
+                  <div><strong>Motores:</strong> 5.3L / 6.2L EcoTec3 V8, Ecotec Turbo</div>
+                  <div><strong>Puntos Clave:</strong> Certificación Dexos 1 Gen 3 para botadores VLOM, fluido Mobil 1 LV ATF HP en cajas 8L90.</div>
+                </div>
+              </div>
+              <a href="/preview-manuales?brand=chevrolet" className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs font-mono font-bold text-amber-500 hover:underline flex items-center justify-between">
+                <span>CONSULTAR FICHA CHEVROLET</span>
+                <ChevronRight size={14} />
+              </a>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
-      {/* Instalaciones Section */}
-      <section id="instalaciones" className="pt-16 pb-8 lg:pt-24 lg:pb-10 px-4 sm:px-6 relative overflow-hidden bg-slate-50 dark:bg-[#0a0b0f] transition-colors duration-300">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-            <div className="flex-1">
-              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-8 text-slate-900 dark:text-white">
-                NUESTRAS <br/><span className="text-primary italic">INSTALACIONES</span>
+
+      {/* =========================================================================
+          SECTION 3: EL PROTOCOLO DE INGENIERÍA EN 4 FASES
+          ========================================================================= */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-100 dark:bg-[#090b0e] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs font-mono font-bold text-amber-500 uppercase tracking-widest block mb-2">METODOLOGÍA DE TALLER CERTIFICADA</span>
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+              PROTOCOLO TÉCNICO EN 4 FASES
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3 leading-relaxed">
+              La diferencia entre cambiar piezas a ciegas y resolver fallas de raíz radica en el método científico de diagnóstico.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm relative">
+              <span className="text-4xl font-black font-mono text-slate-200 dark:text-slate-800 block mb-2">01</span>
+              <h3 className="text-base font-black text-slate-900 dark:text-white mb-2 uppercase">TELEMETRÍA & LIVE DATA</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Conectamos escáneres multimarca profesionales para registrar en tiempo real presiones de combustible, compensaciones de mezcla (STFT/LTFT), ciclos de trabajo de solenoides y anomalías en redes CAN-Bus.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[10px] font-mono text-amber-500 font-bold uppercase">
+                Instrumental: Autel MaxiSys / Launch
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm relative">
+              <span className="text-4xl font-black font-mono text-slate-200 dark:text-slate-800 block mb-2">02</span>
+              <h3 className="text-base font-black text-slate-900 dark:text-white mb-2 uppercase">COMPROBACIÓN FÍSICA</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Medición con osciloscopio automotriz en sensores de cigüeñal/levas, prueba de compresión hidrostática, prueba de estanqueidad de vacío y comprobación de caída de tensión en circuitos de potencia.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[10px] font-mono text-amber-500 font-bold uppercase">
+                Instrumental: PicoScope 4 Ch / Vacuómetro
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm relative">
+              <span className="text-4xl font-black font-mono text-slate-200 dark:text-slate-800 block mb-2">03</span>
+              <h3 className="text-base font-black text-slate-900 dark:text-white mb-2 uppercase">PRESUPUESTO OEM</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Elaboración de orden técnica transparente con desglose de repuestos con código de parte genuino, lubricantes con certificación estricta y horas de trabajo requeridas antes de iniciar cualquier labor.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[10px] font-mono text-amber-500 font-bold uppercase">
+                Trazabilidad: 100% Repuestos Auditados
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm relative">
+              <span className="text-4xl font-black font-mono text-slate-200 dark:text-slate-800 block mb-2">04</span>
+              <h3 className="text-base font-black text-slate-900 dark:text-white mb-2 uppercase">TORQUE & RUTA AUDITADA</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Ajuste de tuercas y pernos con torquímetros digitales calibrados según manual oficial. Prueba de ruta activa con escáner conectado para certificar la corrección de la falla y entrega con garantía escrita.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[10px] font-mono text-emerald-500 font-bold uppercase">
+                Garantía: 6 Meses o 10.000 km
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* =========================================================================
+          SECTION 4: INFRAESTRUCTURA TÉCNICA & BAHÍAS OPERATIVAS (Bespoke Bays)
+          ========================================================================= */}
+      <section id="instalaciones" className="py-16 sm:py-24 px-4 sm:px-6 bg-white dark:bg-[#0c0f15] border-t border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+            
+            {/* Left: Interactive Bay Switcher */}
+            <div className="flex-1 w-full">
+              <span className="text-xs font-mono font-bold text-amber-500 uppercase tracking-widest block mb-2">CAPACIDAD INSTALADA & HERRAMENTAL</span>
+              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-6">
+                BAHÍAS TÉCNICAS ESPECIALIZADAS
               </h2>
-              <div className="space-y-6 sm:space-y-8">
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                Nuestra sede en Porlamar fue diseñada con áreas de trabajo segregadas para garantizar limpieza, precisión en el desarme y mediciones electrónicas libres de interferencias.
+              </p>
+
+              {/* Bay Tabs */}
+              <div className="space-y-3">
                 {[
-                  { title: "Área de Recepción", desc: "Atención al cliente personalizada y elaboración de presupuestos transparentes.", icon: <User className="w-6 h-6 text-primary icon-glow" /> },
-                  { title: "Sala de Espera VIP", desc: "Zona cómoda y climatizada con café de cortesía y conexión Wi-Fi de alta velocidad.", icon: <Clock className="w-6 h-6 text-primary icon-glow" /> },
-                  { title: "Almacén de Repuestos", desc: "Amplio stock de filtros, aceites, bujías y componentes OEM de alta gama para agilizar tu servicio.", icon: <Award className="w-6 h-6 text-primary icon-glow" />, href: "/catalogo" },
-                  { title: "Software de Gestión", desc: "Control de inventario, órdenes de trabajo e historial detallado de tu vehículo.", icon: <Search className="w-6 h-6 text-primary icon-glow" /> }
-                ].map((item, i) => {
-                  const Content = (
-                    <div className={`flex gap-4 sm:gap-6 items-start ${item.href ? 'group/inst hover:bg-slate-100 dark:hover:bg-white/5 p-3 -m-3 rounded-2xl transition-all border border-transparent hover:border-primary/30 cursor-pointer' : ''}`}>
-                      <div className="mt-1 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover/inst:bg-primary/10 group-hover/inst:border-primary/50 bg-white dark:bg-white/6 border border-slate-200 dark:border-white/12 shadow-sm">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-lg sm:text-xl font-black mb-1.5 sm:mb-2 flex items-center gap-2 group-hover/inst:text-primary transition-colors text-slate-900 dark:text-[#f1f5f9]">
-                          <span>{item.title}</span>
-                          {item.href && <ArrowRight size={16} className="text-primary opacity-0 group-hover/inst:opacity-100 group-hover/inst:translate-x-1 transition-all" />}
-                        </h3>
-                        <p className="text-sm leading-relaxed text-slate-600 dark:text-[#94a3b8]">{item.desc}</p>
-                        {item.href && (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-primary mt-2 group-hover/inst:underline">
-                            Explorar Catálogo de Repuestos →
+                  {
+                    id: 0,
+                    tag: "BAHÍA 01",
+                    title: "Diagnóstico Computarizado & Redes Multiplexadas",
+                    specs: "Escáneres Autel MaxiSys Ultra, programación de módulos ECU/TCM, osciloscopios de 4 canales y prueba de caída de tensión.",
+                    equip: "Autel MaxiSys · PicoScope 4425A · Analizador de Red CAN"
+                  },
+                  {
+                    id: 1,
+                    tag: "BAHÍA 02",
+                    title: "Laboratorio de Inyección & Ultrasonido (GDI / Common Rail)",
+                    specs: "Banco de prueba de inyectores multipunto y alta presión directa. Descarbonización química y por cavitación ultrasónica de toberas.",
+                    equip: "Banco Launch CNC-603A · Tina Ultrasónica · Manómetros 200 bar"
+                  },
+                  {
+                    id: 2,
+                    tag: "BAHÍA 03",
+                    title: "Transmisiones Automáticas, Cajas CVT & 4x4",
+                    specs: "Estación de recirculación y diálisis de fluidos CVT/ATF a temperatura controlada. Nivelación por reboce a 35°C–45°C y reset de degradación.",
+                    equip: "Máquina de Diálisis ATF/CVT · Escáner OBD2 · Termómetro Láser"
+                  },
+                  {
+                    id: 3,
+                    tag: "BAHÍA 04",
+                    title: "Mecánica Mayor, Elevadores 4.5 Ton & Almacén OEM",
+                    specs: "Elevadores electromecánicos de 2 y 4 columnas. Ajuste con torquímetro angular según manual oficial y stock directo de repuestos certificados.",
+                    equip: "Elevadores 4.5 Ton · Torquímetros Calibrados · Almacén In-Situ"
+                  }
+                ].map((bay) => {
+                  const isActive = activeBayTab === bay.id;
+                  return (
+                    <div 
+                      key={bay.id}
+                      onClick={() => setActiveBayTab(bay.id)}
+                      className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                        isActive 
+                          ? 'bg-slate-100 dark:bg-slate-800/90 border-amber-500/80 shadow-md' 
+                          : 'bg-slate-50/70 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className={`text-xs font-mono font-black uppercase tracking-wider ${isActive ? 'text-amber-500' : 'text-slate-400'}`}>
+                          {bay.tag}
+                        </span>
+                        {isActive && (
+                          <span className="text-[10px] font-mono font-bold text-amber-500 uppercase flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                            Seleccionada
                           </span>
                         )}
                       </div>
+                      <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase mb-1">
+                        {bay.title}
+                      </h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-2">
+                        {bay.specs}
+                      </p>
+                      <div className="text-[10px] font-mono text-slate-400">
+                        <strong>Herramental:</strong> {bay.equip}
+                      </div>
                     </div>
-                  );
-
-                  return item.href ? (
-                    <a key={i} href={item.href} className="block">
-                      {Content}
-                    </a>
-                  ) : (
-                    <div key={i}>{Content}</div>
                   );
                 })}
               </div>
             </div>
-            <div className="flex-1 relative w-full max-w-lg lg:max-w-none">
-              <div className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl p-2 md:p-4 shadow-xl rotate-2 hover:rotate-0 transition-transform duration-500">
-                 <img 
-                   src={config.IMG_INSTALACIONES || "/assets/instalaciones.webp"} 
-                   alt="Instalaciones MasterTech" 
-                   loading="lazy"
-                   decoding="async"
-                   className="rounded-2xl w-full object-cover aspect-[4/3] grayscale hover:grayscale-0 transition-all duration-700" 
-                 />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Reseñas Verificadas de Google Business */}
-      <GoogleReviewsWidget googleBusinessUrl={config.GOOGLE_MAPS_LINK} />
-
-      {/* Booking Form */}
-      <section id="contacto" className="pt-4 pb-16 md:pt-6 md:pb-24 px-3 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="p-4 sm:p-8 md:p-16 lg:p-20 relative overflow-hidden mt-2 md:mt-4 rounded-3xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 shadow-xl transition-colors duration-300">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[100px] rounded-full -mr-48 -mt-48 pointer-events-none" />
-            
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 relative z-10">
-              <div>
-                <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black tracking-tighter mb-4 md:mb-8 leading-none text-slate-900 dark:text-white">RESERVA TU <br /><span className="text-primary italic">CUPO</span></h2>
-                <p className="text-base sm:text-xl text-slate-600 dark:text-zinc-400 mb-8 md:mb-12 leading-relaxed">Estamos listos para recibirte. Completa los datos y te asignaremos un técnico especialista.</p>
+            {/* Right: Technical Photo Display */}
+            <div className="flex-1 w-full relative">
+              <div className="bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 shadow-2xl overflow-hidden tech-crosshair">
+                <div className="flex items-center justify-between px-3 py-1.5 mb-2 bg-black/80 border border-slate-800 rounded text-[10px] font-mono text-slate-400">
+                  <span className="text-amber-500 font-bold">SEDE OPERATIVA MASTERTECH</span>
+                  <span>PORLAMAR · ISLA DE MARGARITA</span>
+                </div>
                 
-                <div className="space-y-4">
-                  {/* WhatsApp Button */}
-                  <a 
-                    href={config.WHATSAPP_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99]"
-                    style={{ backgroundColor: '#25D366', border: '1px solid #1da851' }}
-                  >
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
-                      <Phone size={20} style={{ color: '#ffffff' }} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest mb-0.5" style={{ color: 'rgba(255,255,255,0.75)' }}>WhatsApp Directo</p>
-                      <p className="text-base sm:text-lg font-black" style={{ color: '#ffffff' }}>{config.PHONE_NUMBER}</p>
-                    </div>
-                  </a>
+                <img 
+                  src={config.IMG_INSTALACIONES || "/assets/instalaciones.webp"} 
+                  alt="Instalaciones Taller MasterTech" 
+                  loading="lazy"
+                  decoding="async"
+                  className="rounded-lg w-full aspect-[4/3] object-cover filter contrast-105"
+                />
 
-                  {/* Location */}
-                  <a 
-                    href={config.GOOGLE_MAPS_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 rounded-2xl p-4 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.99] border bg-slate-50 dark:bg-white/6 border-slate-200 dark:border-white/12 shadow-sm"
-                  >
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 theme-icon-box border">
-                      <MapPin size={20} style={{ color: '#C2A472' }} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest mb-0.5 text-slate-500 dark:text-zinc-400">Ubicación</p>
-                      <p className="text-base sm:text-lg font-black text-slate-900 dark:text-[#f1f5f9]">Porlamar, Nueva Esparta</p>
-                    </div>
-                  </a>
+                <div className="p-3 bg-black/60 border border-slate-800/80 rounded mt-2 text-xs space-y-1 text-slate-300">
+                  <div className="flex justify-between font-mono text-[11px]">
+                    <span className="text-slate-400">Capacidad Simultánea:</span>
+                    <span className="text-white font-bold">Hasta 8 vehículos en bahía</span>
+                  </div>
+                  <div className="flex justify-between font-mono text-[11px]">
+                    <span className="text-slate-400">Sala de Espera VIP:</span>
+                    <span className="text-emerald-400 font-bold">Climatizada · Wi-Fi · Café</span>
+                  </div>
+                  <div className="flex justify-between font-mono text-[11px]">
+                    <span className="text-slate-400">Almacén de Repuestos:</span>
+                    <span className="text-amber-400 font-bold">Filtros OEM · Aceites Sintéticos</span>
+                  </div>
                 </div>
               </div>
-
-              <div className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 shadow-sm">
-                {formStatus === 'success' ? (
-                  <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 sm:py-20">
-                    <CheckCircle2 className="w-16 h-16 sm:w-20 sm:h-20 text-green-500 mx-auto mb-6" />
-                    <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter mb-4">¡CITA SOLICITADA!</h3>
-                    {selectedService === 'Línea de inspección gratuita' ? (
-                      <>
-                        <div className="inline-block bg-primary/20 border border-primary text-primary px-4 py-2 rounded-full font-bold tracking-widest text-xs sm:text-sm mb-6 animate-pulse">
-                          {(config.SUCCESS_BADGE && !config.SUCCESS_BADGE.includes('30%')) ? config.SUCCESS_BADGE : '¡TIENES HASTA UN 15% DE DESCUENTO!'}
-                        </div>
-                        <p className="text-zinc-400 text-sm sm:text-base">{config.SUCCESS_TEXT || 'Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita.'}</p>
-                      </>
-                    ) : (
-                      <p className="text-zinc-400 text-base sm:text-lg">Tu solicitud ha sido registrada con éxito. <br/><br/> Un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu cita.</p>
-                    )}
-
-                    <a
-                      href={whatsappUrl || config.WHATSAPP_LINK || 'https://wa.me/584123565012'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-primary !bg-[#25D366] hover:!bg-[#20bd5a] !text-black font-black py-4 px-6 rounded-2xl w-full max-w-md mx-auto text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer mt-6"
-                    >
-                      <WhatsAppIcon size={20} />
-                      <span>CONFIRMAR POR WHATSAPP AHORA</span>
-                    </a>
-
-                    <button onClick={() => setFormStatus('idle')} className="mt-6 text-primary font-bold uppercase tracking-widest text-xs hover:underline block mx-auto">Solicitar otra cita</button>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="lead-form-nombre" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Nombre</label>
-                        <input id="lead-form-nombre" required name="nombre" type="text" placeholder="Tu Nombre" className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm border" />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="lead-form-telefono" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Teléfono</label>
-                        <input id="lead-form-telefono" required name="telefono" type="tel" placeholder="0412 000 0000" className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm border" />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <label htmlFor="lead-form-vehiculo" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Vehículo</label>
-                      <div className="relative">
-                        <Car className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-zinc-500" />
-                        <input id="lead-form-vehiculo" required name="vehiculo" type="text" placeholder="Ej: Toyota Hilux 2022" className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 pl-11 sm:pl-14 pr-4 sm:pr-6 focus:border-primary outline-none transition-all text-sm border" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="lead-form-servicio" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Servicio Requerido</label>
-                      <select 
-                        id="lead-form-servicio"
-                        name="servicio" 
-                        value={selectedService}
-                        onChange={(e) => setSelectedService(e.target.value)}
-                        className="theme-input w-full rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all appearance-none cursor-pointer text-sm border"
-                      >
-                        <option value="Línea de inspección gratuita">Línea de inspección gratuita</option>
-                        {services.map((s, idx) => (
-                          <option key={s.id || idx} value={s.title}>{s.title}</option>
-                        ))}
-                        <option value="Otro">Otro (Especificar)</option>
-                      </select>
-                    </div>
-
-                    {selectedService === 'Línea de inspección gratuita' && (
-                      <InspectionSlotPicker 
-                        onSelectSlot={(slotStr, isValid) => {
-                          setInspectionSlotStr(slotStr);
-                          setIsInspectionSlotValid(isValid);
-                        }} 
-                      />
-                    )}
-
-                    <div className="space-y-2">
-                      <label htmlFor="lead-form-falla" className="text-[10px] font-black uppercase tracking-widest ml-2 sm:ml-4">Descripción o Falla del Vehículo</label>
-                      <textarea 
-                        id="lead-form-falla"
-                        name="falla" 
-                        placeholder="Describe la falla, ruido o lo que deseas realizarle a tu vehículo..." 
-                        rows={2} 
-                        className="theme-input w-full rounded-xl sm:rounded-2xl py-3 px-4 sm:px-6 focus:border-primary outline-none transition-all text-sm resize-none border" 
-                      />
-                    </div>
-
-                    <button disabled={formStatus === 'loading'} type="submit" className="btn-primary w-full !py-4 sm:!py-5 shadow-[0_20px_50px_rgba(194,164,114,0.3)] text-xs sm:text-sm font-black tracking-wider">
-                      {formStatus === 'loading' ? 'Procesando...' : 'AGENDAR MI CITA VÍA WHATSAPP'}
-                    </button>
-                    {formStatus === 'error' && (
-                      <p className="text-primary text-center text-sm font-bold pt-2">{formErrorMessage}</p>
-                    )}
-                    <p className="text-[11px] sm:text-xs text-center text-zinc-500 leading-relaxed font-medium pt-1 sm:pt-2">Una vez enviado, un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu hora exacta. ¡Te esperamos en nuestro taller!</p>
-                  </form>
-                )}
-              </div>
             </div>
+
           </div>
+
         </div>
       </section>
 
 
+      {/* =========================================================================
+          SECTION 5: REPUTACIÓN AUDITADA GOOGLE BUSINESS
+          ========================================================================= */}
+      <GoogleReviewsWidget googleBusinessUrl={config.GOOGLE_MAPS_LINK} />
 
-      {/* Footer */}
-      <footer className="theme-footer border-t pt-20 sm:pt-32 pb-12 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-4 gap-20 mb-24">
-            <div className="lg:col-span-2">
-              <div className="flex items-center mb-8">
-                <a href="/" className="inline-flex items-center gap-2.5">
-                  <img src={config.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-10 w-auto object-contain shrink-0 logo-gold" />
-                  <span className="font-display font-black text-2xl tracking-tighter uppercase text-slate-900 dark:text-white">
-                    MASTER<span className="text-primary italic">TECH</span>
-                  </span>
-                </a>
+
+      {/* =========================================================================
+          SECTION 6: ORDEN DE ADMISIÓN TÉCNICA (THE REDESIGNED BOOKING FORM)
+          ========================================================================= */}
+      <section id="admision" className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-100 dark:bg-[#090b0e] border-t border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div id="contacto" className="max-w-5xl mx-auto">
+          
+          <div className="p-5 sm:p-10 lg:p-12 rounded-2xl bg-white dark:bg-[#0e1218] border border-slate-300 dark:border-slate-800 shadow-2xl relative overflow-hidden tech-crosshair">
+            
+            {/* Header Document Strip */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-8 border-b border-slate-200 dark:border-slate-800 text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <FileText size={15} className="text-amber-500" />
+                <span className="font-bold text-slate-900 dark:text-white uppercase">ORDEN DE ADMISIÓN TÉCNICA // FOLIO MT-2026</span>
               </div>
-              <p className="text-zinc-500 text-lg max-w-sm mb-10 leading-relaxed">
-                Elevando el estándar del servicio automotriz en el Caribe. Tecnología, pasión y resultados garantizados.
+              <span className="text-slate-500 dark:text-slate-400">CENTRO DE SERVICIO PORLAMAR</span>
+            </div>
+
+            {formStatus === 'success' ? (
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10 sm:py-16">
+                <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
+                <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-2">
+                  ORDEN DE ADMISIÓN GENERADA
+                </h3>
+                <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base max-w-lg mx-auto mb-6">
+                  Tu solicitud ha sido transmitida. Un asesor técnico te atenderá vía WhatsApp para coordinar el ingreso de tu vehículo.
+                </p>
+
+                <a
+                  href={whatsappUrl || config.WHATSAPP_LINK || 'https://wa.me/584123565012'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary !bg-[#25D366] hover:!bg-[#20bd5a] !text-black font-black py-4 px-6 rounded-lg w-full max-w-md mx-auto text-center flex items-center justify-center gap-2 shadow-xl cursor-pointer"
+                >
+                  <WhatsAppIcon size={20} />
+                  <span>CONFIRMAR INGRESO EN WHATSAPP</span>
+                </a>
+
+                <button 
+                  onClick={() => setFormStatus('idle')} 
+                  className="mt-6 text-amber-500 font-mono text-xs font-bold uppercase tracking-wider hover:underline block mx-auto cursor-pointer"
+                >
+                  [ + Generar otra solicitud ]
+                </button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                
+                {/* 1. Motivo / Síntoma Principal (Interactive Chips) */}
+                <div>
+                  <label className="text-xs font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-2.5">
+                    1. SELECCIONA EL SÍNTOMA O SERVICIO REQUERIDO:
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { id: "Luz Check Engine / Falla Eléctrica", icon: AlertCircle },
+                      { id: "Transmisión / Tirones en Caja CVT", icon: Gauge },
+                      { id: "Mantenimiento Preventivo 5.000 km", icon: Clock },
+                      { id: "Frenos / Ruidos en Suspensión", icon: Disc },
+                      { id: "Recalentamiento / Fuga Refrigerante", icon: Flame },
+                      { id: "Climatización A/A", icon: Droplets },
+                      { id: "Inspección Pre-Compra de Vehículo", icon: ShieldCheck },
+                      { id: "Línea de inspección gratuita", icon: Sparkles }
+                    ].map((item) => {
+                      const isSelected = selectedSymptom === item.id || selectedService === item.id;
+                      const IconComp = item.icon;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedSymptom(item.id);
+                            if (item.id === "Línea de inspección gratuita") {
+                              setSelectedService("Línea de inspección gratuita");
+                            }
+                          }}
+                          className={`px-3 py-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                            isSelected
+                              ? 'bg-amber-500 text-black border border-amber-400 shadow-md font-black'
+                              : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-amber-500'
+                          }`}
+                        >
+                          <IconComp size={13} />
+                          <span>{item.id}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Propietario & Contacto */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label htmlFor="lead-form-nombre" className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                      Nombre del Propietario *
+                    </label>
+                    <input 
+                      id="lead-form-nombre" 
+                      required 
+                      name="nombre" 
+                      type="text" 
+                      placeholder="Ej: Carlos Mendoza" 
+                      className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-4 py-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors font-sans" 
+                    />
+                  </div>
+                  
+                  <div className="space-y-1.5">
+                    <label htmlFor="lead-form-telefono" className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                      Teléfono WhatsApp *
+                    </label>
+                    <input 
+                      id="lead-form-telefono" 
+                      required 
+                      name="telefono" 
+                      type="tel" 
+                      placeholder="0412 000 0000" 
+                      className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-4 py-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors font-sans" 
+                    />
+                  </div>
+                </div>
+
+                {/* 3. Vehículo & Servicio */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label htmlFor="lead-form-vehiculo" className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                      Vehículo (Marca / Modelo / Año) *
+                    </label>
+                    <div className="relative">
+                      <Car className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input 
+                        id="lead-form-vehiculo" 
+                        required 
+                        name="vehiculo" 
+                        type="text" 
+                        placeholder="Ej: Toyota Hilux 2022 o Grand Cherokee 3.6L" 
+                        className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 pl-9 pr-4 py-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors font-sans" 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="lead-form-servicio" className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                      Servicio Técnico *
+                    </label>
+                    <select 
+                      id="lead-form-servicio"
+                      name="servicio" 
+                      value={selectedService}
+                      onChange={(e) => setSelectedService(e.target.value)}
+                      className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-4 py-3 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors font-sans cursor-pointer"
+                    >
+                      <option value="Línea de inspección gratuita">Línea de inspección preventiva gratuita</option>
+                      <option value="Diagnóstico computarizado por escáner">Diagnóstico computarizado por escáner</option>
+                      <option value="Mantenimiento preventivo de motor">Mantenimiento preventivo de motor</option>
+                      <option value="Mecánica general y reparación">Mecánica general y reparación</option>
+                      <option value="Frenos y tren delantero">Frenos y tren delantero</option>
+                      <option value="Servicio de inyección y ultrasonido">Servicio de inyección y ultrasonido</option>
+                      <option value="Transmisión y cajas automáticas/CVT">Transmisión y cajas automáticas/CVT</option>
+                      <option value="Climatización automotriz A/A">Climatización automotriz A/A</option>
+                      <option value="Otro">Otro requerimiento específico</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Slot Picker if Free Inspection */}
+                {selectedService === 'Línea de inspección gratuita' && (
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <div className="text-xs font-mono font-bold uppercase tracking-wider text-amber-500 mb-2">
+                      SELECCIONA TU TURNO PARA LA LÍNEA DE INSPECCIÓN:
+                    </div>
+                    <InspectionSlotPicker 
+                      onSelectSlot={(slotStr, isValid) => {
+                        setInspectionSlotStr(slotStr);
+                        setIsInspectionSlotValid(isValid);
+                      }} 
+                    />
+                  </div>
+                )}
+
+                {/* 4. Observaciones */}
+                <div className="space-y-1.5">
+                  <label htmlFor="lead-form-falla" className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                    Descripción de la Falla o Trabajo Deseado
+                  </label>
+                  <textarea 
+                    id="lead-form-falla"
+                    name="falla" 
+                    placeholder="Describe síntomas específicos: ruidos, tironeos, pérdida de potencia, o kilometraje actual..." 
+                    rows={2} 
+                    className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-4 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition-colors font-sans resize-none" 
+                  />
+                </div>
+
+                {/* Submit Action */}
+                <button 
+                  disabled={formStatus === 'loading'} 
+                  type="submit" 
+                  className="btn-primary w-full !py-4 shadow-xl text-xs sm:text-sm font-black tracking-wider cursor-pointer"
+                >
+                  <ClipboardCheck size={16} />
+                  <span>{formStatus === 'loading' ? 'PROCESANDO ORDEN...' : 'TRANSMITIR ORDEN TÉCNICA A WHATSAPP'}</span>
+                </button>
+
+                {formStatus === 'error' && (
+                  <p className="text-red-500 text-center text-xs font-mono font-bold">{formErrorMessage}</p>
+                )}
+
+                <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <span>ATENCIÓN TÉCNICA PERSONALIZADA</span>
+                  <span>RESPUESTA DIRECTA VÍA WHATSAPP</span>
+                </div>
+              </form>
+            )}
+
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* =========================================================================
+          SECTION 7: CERTIFICADO DE GARANTÍA & EDITORIAL FOOTER
+          ========================================================================= */}
+      <footer className="theme-footer border-t border-slate-200 dark:border-slate-800 pt-16 pb-12 px-4 sm:px-6 bg-slate-50 dark:bg-[#07090c] text-slate-400">
+        <div className="max-w-7xl mx-auto">
+          
+          {/* Warranty Certificate Banner */}
+          <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 text-white flex flex-col md:flex-row items-center justify-between gap-6 mb-16 shadow-xl">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-500 flex items-center justify-center shrink-0">
+                <ShieldCheck size={26} />
+              </div>
+              <div>
+                <h4 className="text-base font-black uppercase tracking-wider text-white">
+                  GARANTÍA ESCRITA MASTERTECH · 6 MESES O 10.000 KM
+                </h4>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Toda intervención mayor cuenta con respaldo por escrito en mano de obra y repuestos OEM suministrados por nuestro taller.
+                </p>
+              </div>
+            </div>
+            <a 
+              href="/faq" 
+              className="btn-secondary !px-4 !py-2.5 text-xs font-mono font-bold bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 shrink-0"
+            >
+              <span>TÉRMINOS DE GARANTÍA</span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-2.5 mb-4">
+                <img src={config.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-8 w-auto object-contain logo-gold" />
+                <span className="font-display font-black text-xl tracking-tighter uppercase text-slate-900 dark:text-white">
+                  MASTER<span className="text-amber-500 italic">TECH</span>
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mb-6 leading-relaxed">
+                Centro Especializado de Ingeniería Automotriz en Porlamar, Isla de Margarita. Diagnóstico computarizado avanzado, laboratorio de inyección y mantenimiento bajo especificación técnica oficial.
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <a 
                   href={config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/"} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary transition-all group"
+                  className="w-10 h-10 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 flex items-center justify-center hover:border-amber-500 text-slate-700 dark:text-white transition-colors"
                   title="Instagram"
                 >
-                  <Instagram size={20} className="group-hover:scale-110 transition-transform text-white" />
+                  <Instagram size={17} />
                 </a>
                 <a 
                   href={config.TIKTOK_LINK || "https://www.tiktok.com/@tallermastertech"} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary transition-all group"
+                  className="w-10 h-10 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 flex items-center justify-center hover:border-amber-500 text-slate-700 dark:text-white transition-colors"
                   title="TikTok"
                 >
-                  <TikTokIcon size={20} className="group-hover:scale-110 transition-transform text-white" />
+                  <TikTokIcon size={17} />
                 </a>
                 <a 
                   href={config.YOUTUBE_LINK || "https://www.youtube.com/@tallermastertech"} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary transition-all group"
+                  className="w-10 h-10 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 flex items-center justify-center hover:border-amber-500 text-slate-700 dark:text-white transition-colors"
                   title="YouTube"
                 >
-                  <Youtube size={20} className="group-hover:scale-110 transition-transform text-white" />
+                  <Youtube size={17} />
                 </a>
               </div>
             </div>
 
             <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-8">Servicios</h4>
-              <ul className="space-y-4 text-zinc-400 font-bold text-sm">
-                <li><a href="/servicios" className="hover:text-primary transition-colors">Mecánica General</a></li>
-                <li><a href="/servicios" className="hover:text-primary transition-colors">Mantenimiento Preventivo</a></li>
-                <li><a href="/servicios" className="hover:text-primary transition-colors">Electricidad y Electrónica</a></li>
-                <li><a href="/servicios" className="hover:text-primary transition-colors">Frenos y Suspensión</a></li>
-                <li><a href="/servicios" className="hover:text-primary transition-colors">Inyección Electrónica</a></li>
-                <li><a href="/servicios" className="hover:text-primary transition-colors">Climatización</a></li>
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">
+                PROTOCOLOS TÉCNICOS
+              </h4>
+              <ul className="space-y-2.5 text-xs text-slate-500 dark:text-slate-400">
+                <li><a href="/preview-manuales?brand=toyota" className="hover:text-amber-500 transition-colors">Toyota D-4D & Dual VVT-i</a></li>
+                <li><a href="/jeep" className="hover:text-amber-500 transition-colors">Jeep Pentastar & HEMI MDS</a></li>
+                <li><a href="/preview-manuales?brand=nissan" className="hover:text-amber-500 transition-colors">Nissan CVT NS-3 & DIG</a></li>
+                <li><a href="/preview-manuales?brand=ford" className="hover:text-amber-500 transition-colors">Ford EcoBoost & 10R80</a></li>
+                <li><a href="/preview-manuales?brand=honda" className="hover:text-amber-500 transition-colors">Honda Earth Dreams Anti-LSPI</a></li>
+                <li><a href="/preview-manuales?brand=chevrolet" className="hover:text-amber-500 transition-colors">Chevrolet V8 AFM/DFM Dexos 1</a></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-8">Contacto</h4>
-              <ul className="space-y-6 text-zinc-400 text-sm">
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">
+                UBICACIÓN & HORARIO
+              </h4>
+              <ul className="space-y-3 text-xs text-slate-500 dark:text-slate-400">
                 <li>
                   <a 
-                    href={config.GOOGLE_MAPS_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex gap-4 hover:text-white transition-colors"
+                    href={config.GOOGLE_MAPS_LINK} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex gap-2.5 hover:text-amber-500 transition-colors"
                   >
-                    <MapPin className="text-primary shrink-0" />
-                    <span>Sector Sucre, Calle Principal, Nueva Esparta.</span>
+                    <MapPin size={15} className="text-amber-500 shrink-0 mt-0.5" />
+                    <span>Sector Sucre, Calle Principal, Porlamar, Isla de Margarita.</span>
                   </a>
+                </li>
+                <li className="flex gap-2.5">
+                  <Clock size={15} className="text-amber-500 shrink-0 mt-0.5" />
+                  <span>Lunes a Viernes: 8:00 AM – 5:00 PM<br />Sábados: Previa Cita</span>
                 </li>
                 <li>
                   <a 
-                    href={config.WHATSAPP_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex gap-4 hover:text-white transition-colors"
+                    href={config.WHATSAPP_LINK} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex gap-2.5 hover:text-amber-500 transition-colors font-bold text-slate-900 dark:text-slate-200"
                   >
-                    <Phone className="text-primary shrink-0" />
+                    <Phone size={15} className="text-amber-500 shrink-0 mt-0.5" />
                     <span>{config.PHONE_NUMBER}</span>
                   </a>
                 </li>
               </ul>
             </div>
+
           </div>
 
-
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-            <p>© 2026 SOLUCIONES MASTERTECH C.A. Isla de Margarita, Venezuela. Todos los derechos reservados.</p>
-            <div className="flex gap-8 sm:gap-12">
-              <a href="#" className="hover:text-primary transition-colors">Términos de Servicio</a>
-              <a href="#" className="hover:text-primary transition-colors">Política de Privacidad</a>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-500">
+            <p>© 2026 SOLUCIONES MASTERTECH C.A. Rif: J-50000000-0. Isla de Margarita, Venezuela.</p>
+            <div className="flex gap-6">
+              <a href="/faq" className="hover:text-amber-500 transition-colors">Garantía Escrita</a>
+              <a href="/catalogo" className="hover:text-amber-500 transition-colors">Catálogo OEM</a>
+              <a href="/contacto" className="hover:text-amber-500 transition-colors">Contacto Taller</a>
             </div>
           </div>
+
         </div>
       </footer>
 
@@ -946,25 +1409,6 @@ export default function App() {
 
       {/* MT-01 · Especialista MasterTech — AI Automotive Advisor & VIN Decoder */}
       <MT01AdvisorModal />
-
-      {/* Global CSS for custom styles */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          display: flex;
-          animation: marquee 30s linear infinite;
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
     </div>
   );
 }
