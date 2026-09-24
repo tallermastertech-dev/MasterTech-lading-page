@@ -40,15 +40,8 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
 
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window !== 'undefined') {
-      if (localStorage.getItem('mastertech_editorial_v4') !== 'true') {
-        localStorage.setItem('mastertech_editorial_v4', 'true');
-        localStorage.setItem('mastertech_public_theme', 'light');
-        localStorage.removeItem('mastertech_admin_theme');
-        localStorage.removeItem('mastertech_theme');
-        return 'light';
-      }
       const saved = localStorage.getItem('mastertech_public_theme');
-      if (saved === 'light' || saved === 'dark') return saved;
+      if (saved === 'dark') return 'dark';
     }
     return 'light';
   });

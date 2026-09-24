@@ -233,25 +233,17 @@ export default function App() {
 
   useEffect(() => {
     try {
-      const resetKey = 'mastertech_editorial_v5';
-      if (!localStorage.getItem(resetKey)) {
-        localStorage.setItem(resetKey, 'true');
-        localStorage.removeItem('mastertech_public_theme');
-        localStorage.removeItem('mastertech_theme');
-        localStorage.removeItem('theme');
-        document.documentElement.classList.remove('dark');
-        document.body.classList.remove('dark');
-        document.documentElement.classList.add('theme-light', 'light');
-        document.body.classList.add('theme-light', 'light');
-      }
-
-      const saved = localStorage.getItem('mastertech_public_theme') || localStorage.getItem('mastertech_admin_theme') || localStorage.getItem('mastertech_theme');
+      localStorage.removeItem('mastertech_admin_theme');
+      localStorage.removeItem('mastertech_theme');
+      localStorage.removeItem('theme');
+      const saved = localStorage.getItem('mastertech_public_theme');
       if (saved === 'dark') {
         document.documentElement.classList.remove('theme-light', 'light');
         document.body.classList.remove('theme-light', 'light');
         document.documentElement.classList.add('dark');
         document.body.classList.add('dark');
       } else {
+        localStorage.setItem('mastertech_public_theme', 'light');
         document.documentElement.classList.add('theme-light', 'light');
         document.body.classList.add('theme-light', 'light');
         document.documentElement.classList.remove('dark');

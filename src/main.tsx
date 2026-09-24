@@ -3,6 +3,29 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Force clear stale cache & default to light theme on landing page
+if (typeof window !== 'undefined') {
+  try {
+    const APP_VERSION = 'v5.2';
+    if (localStorage.getItem('mastertech_app_version') !== APP_VERSION) {
+      localStorage.setItem('mastertech_app_version', APP_VERSION);
+      localStorage.removeItem('mastertech_admin_theme');
+      localStorage.removeItem('mastertech_theme');
+      localStorage.removeItem('theme');
+      localStorage.setItem('mastertech_public_theme', 'light');
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+      document.documentElement.classList.add('theme-light', 'light');
+      document.body.classList.add('theme-light', 'light');
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          for (const name of names) caches.delete(name);
+        });
+      }
+    }
+  } catch (e) {}
+}
+
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
