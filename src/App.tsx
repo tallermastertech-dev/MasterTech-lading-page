@@ -670,22 +670,6 @@ export default function App() {
                     </div>
                   )}
                 </div>
-
-                {/* Bottom 3 Accredited Credentials */}
-                <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                    <div className="text-xs font-black text-slate-900 dark:text-white">4 Bahías</div>
-                    <div className="text-[10px] text-slate-500 font-medium">Equipadas</div>
-                  </div>
-                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                    <div className="text-xs font-black text-slate-900 dark:text-white">Escáner OEM</div>
-                    <div className="text-[10px] text-slate-500 font-medium">Oficial</div>
-                  </div>
-                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                    <div className="text-xs font-black text-slate-900 dark:text-white">Garantía</div>
-                    <div className="text-[10px] text-slate-500 font-medium">Por Escrito</div>
-                  </div>
-                </div>
               </div>
             </motion.div>
 
@@ -809,10 +793,10 @@ export default function App() {
                 INSTALACIONES & CAPACIDAD TÉCNICA
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Trabajo Real en Nuestras Bahías
+                Trabajo Real en Nuestros Puestos de Trabajo
               </h2>
               <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2 max-w-2xl">
-                4 bahías de servicio con elevadores hidráulicos de 4 toneladas, escáner de nivel OEM y técnicos uniformados en Porlamar.
+                6 puestos de trabajo con elevadores hidráulicos de 4 toneladas, escáner de nivel OEM y técnicos uniformados en Porlamar.
               </p>
             </div>
             <a 
@@ -831,12 +815,12 @@ export default function App() {
               <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
                 <img 
                   src="/assets/instalaciones.webp" 
-                  alt="Bahía de mecánica mayor en MasterTech Porlamar" 
+                  alt="Puesto de trabajo de mecánica mayor en MasterTech Porlamar" 
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20">
-                  Bahía Hidráulica #1
+                  Puesto de Trabajo #1
                 </span>
               </div>
               <div className="p-5 flex-1 flex flex-col justify-between">
@@ -884,17 +868,17 @@ export default function App() {
               </div>
             </div>
 
-            {/* Foto 3: Jeep & Suspensión en Bahía #2 */}
+            {/* Foto 3: Jeep & Suspensión en Puesto #2 */}
             <div className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
                 <img 
                   src="/assets/servicio-frenos.webp" 
-                  alt="Mantenimiento de Jeep y suspensión en bahía MasterTech" 
+                  alt="Mantenimiento de Jeep y suspensión en puesto de trabajo MasterTech" 
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20">
-                  Bahía #2 · Jeep 4x4
+                  Puesto #2 · Jeep 4x4
                 </span>
               </div>
               <div className="p-5 flex-1 flex flex-col justify-between">

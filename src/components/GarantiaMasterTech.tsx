@@ -451,7 +451,7 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
                       1. Determinación de la Garantía por Mano de Obra
                     </h4>
                     <ul className="list-disc pl-5 space-y-1 text-xs">
-                      <li>La garantía cubre exclusivamente defectos de armado, ajuste o calibración imputables a la mano de obra realizada en nuestras bahías.</li>
+                      <li>La garantía cubre exclusivamente defectos de armado, ajuste o calibración imputables a la mano de obra realizada en nuestros puestos de trabajo.</li>
                       <li>El plazo exacto depende de la complejidad técnica del servicio (reparación mayor de motor, cajas, tren delantero, frenos o servicio preventivo) y queda registrado en tu orden o factura.</li>
                     </ul>
                   </div>

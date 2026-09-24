@@ -93,7 +93,7 @@ const FAQ_CARDS: FaqCard[] = [
     icon: Calendar,
     title: "¿Cómo agendo una cita para mi vehículo?",
     tag: "Atención Rápida",
-    desc: "Puedes agendar directamente por WhatsApp al +58 412 356 5012 o mediante nuestro formulario web. Nuestro equipo te confirma el turno y la bahía asignada de inmediato.",
+    desc: "Puedes agendar directamente por WhatsApp al +58 412 356 5012 o mediante nuestro formulario web. Nuestro equipo te confirma el turno y el puesto asignado de inmediato.",
     highlight: "Confirmación inmediata vía WhatsApp",
     badgeStyle: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     iconStyle: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white"
