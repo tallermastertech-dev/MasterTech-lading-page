@@ -745,53 +745,100 @@ export default function App() {
 
 
       {/* =========================================================================
-          SECTION 2: PILARES DE CONFIANZA (COMPROMISO MASTERTECH)
+          SECTION 2: CENTROS DE ATENCIÓN Y RECURSOS
           ========================================================================= */}
       <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-[#0e1218] border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-2">
-              COMPROMISO MASTERTECH
+              CENTROS DE ATENCIÓN Y RECURSOS
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Por Qué Elegir Nuestro Taller
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              ¿Qué Necesita tu Vehículo Hoy?
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
-              Trabajamos con transparencia y rigor técnico en cada vehículo que ingresa a nuestras bahías.
+              Accede directamente a la información técnica o solicita atención según tu marca o requerimiento.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm">
-              <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center mb-5">
-                <ShieldCheck size={26} />
+            {/* 1. Portal Jeep */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
+                  <Car size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Especialidad</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Jeep & RAM</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Mecánica de motor Pentastar 3.6L y HEMI 5.7L, enfriadores de aceite de aluminio, cajas ZF y tracción 4x4.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Garantía por Escrito</h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Toda intervención mayor cuenta con respaldo por escrito de 6 meses o 10.000 km en mano de obra y repuestos suministrados por el taller.
-              </p>
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 select-none">
+                <CheckCircle2 size={13} className="text-emerald-500" />
+                <span>Escáner OEM & Repuestos Mopar</span>
+              </div>
             </div>
 
-            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-5">
-                <CheckCircle2 size={26} />
+            {/* 2. Portal Toyota */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
+                  <Wrench size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Especialidad</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Toyota Margarita</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Mantenimiento de motores diésel 1GD/2GD D-4D, V6 1GR, Hilux, Fortuner, 4Runner, Prado y Land Cruiser.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Presupuesto Previo Claro</h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Recibes por WhatsApp el detalle exacto de repuestos y mano de obra antes de realizar cualquier intervención. Cero sorpresas en la cuenta final.
-              </p>
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 select-none">
+                <CheckCircle2 size={13} className="text-emerald-500" />
+                <span>Techstream & Repuestos Genuinos</span>
+              </div>
             </div>
 
-            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm">
-              <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5">
-                <Clock size={26} />
+            {/* 3. Portal Línea de Inspección Gratuita */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
+                  <ShieldCheck size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">Sin Costo</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Inspección Preventiva</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Revisión preliminar de fluidos, tren delantero, frenos y escaneo básico con turno agendado sin costo alguno.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Sala VIP Climatizada</h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Instalaciones cómodas con aire acondicionado, Wi-Fi de alta velocidad y café en Porlamar para que esperes cómodamente mientras atendemos tu vehículo.
-              </p>
+              <a href="/inspeccion" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Agendar Inspección</span>
+                <ArrowRight size={14} />
+              </a>
+            </div>
+
+            {/* 4. Portal Manuales por Motor */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 transition-colors shadow-sm">
+                  <BookOpen size={24} />
+                </div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Guías Técnicas</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300/80 dark:border-slate-700">
+                    Próximamente
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Manuales 5.000 KM</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Intervalos recomendados, especificaciones de aceite y tolerancias críticas organizadas por motorización exacta.
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500 cursor-default select-none">
+                <Clock size={13} />
+                <span>En edición · Próximamente disponible</span>
+              </div>
             </div>
 
           </div>
@@ -1004,107 +1051,6 @@ export default function App() {
       </section>
 
 
-      {/* =========================================================================
-          SECTION 5: ACCESOS A PORTALES Y ESPECIALIDADES (PORTAL HUB)
-          ========================================================================= */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-50 dark:bg-[#0e1218] border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto">
-          
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-2">
-              CENTROS DE ATENCIÓN Y RECURSOS
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              ¿Qué Necesita tu Vehículo Hoy?
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
-              Accede directamente a la información técnica o solicita atención según tu marca o requerimiento.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* 1. Portal Jeep */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
-                  <Car size={24} />
-                </div>
-                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Especialidad</span>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Jeep & RAM</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Mecánica de motor Pentastar 3.6L y HEMI 5.7L, enfriadores de aceite de aluminio, cajas ZF y tracción 4x4.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 select-none">
-                <CheckCircle2 size={13} className="text-emerald-500" />
-                <span>Escáner OEM & Repuestos Mopar</span>
-              </div>
-            </div>
-
-            {/* 2. Portal Toyota */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
-                  <Wrench size={24} />
-                </div>
-                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Especialidad</span>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Toyota Margarita</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Mantenimiento de motores diésel 1GD/2GD D-4D, V6 1GR, Hilux, Fortuner, 4Runner, Prado y Land Cruiser.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 select-none">
-                <CheckCircle2 size={13} className="text-emerald-500" />
-                <span>Techstream & Repuestos Genuinos</span>
-              </div>
-            </div>
-
-            {/* 3. Portal Línea de Inspección Gratuita */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
-                  <ShieldCheck size={24} />
-                </div>
-                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">Sin Costo</span>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Inspección Preventiva</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Revisión preliminar de fluidos, tren delantero, frenos y escaneo básico con turno agendado sin costo alguno.
-                </p>
-              </div>
-              <a href="/inspeccion" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Agendar Inspección</span>
-                <ArrowRight size={14} />
-              </a>
-            </div>
-
-            {/* 4. Portal Manuales por Motor */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 transition-colors shadow-sm">
-                  <BookOpen size={24} />
-                </div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Guías Técnicas</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300/80 dark:border-slate-700">
-                    Próximamente
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Manuales 5.000 KM</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Intervalos recomendados, especificaciones de aceite y tolerancias críticas organizadas por motorización exacta.
-                </p>
-              </div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500 cursor-default select-none">
-                <Clock size={13} />
-                <span>En edición · Próximamente disponible</span>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
 
 
 
