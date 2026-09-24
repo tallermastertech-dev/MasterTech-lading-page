@@ -637,7 +637,11 @@ export default function App() {
                     <iframe 
                       key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
                       src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                      className="absolute -top-[56px] left-0 w-full h-[calc(100%+115px)] border-0 pointer-events-auto"
+                      className="w-full h-full border-0 pointer-events-auto shrink-0 select-none"
+                      style={{
+                        transform: 'scale(1.38)',
+                        transformOrigin: 'center 45%'
+                      }}
                       allowTransparency={true}
                       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                       scrolling="no"
