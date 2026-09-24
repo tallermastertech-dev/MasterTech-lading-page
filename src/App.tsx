@@ -619,9 +619,9 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="lg:col-span-5 relative w-full max-w-[500px] lg:max-w-none mx-auto"
+              className="lg:col-span-5 relative w-full flex justify-center items-center"
             >
-              <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
+              <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
                 {isDirectVideoUrl(config.HERO_REEL_URL) ? (
                   <video 
                     src={config.HERO_REEL_URL} 
@@ -637,11 +637,7 @@ export default function App() {
                     <iframe 
                       key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
                       src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                      className="w-full h-full border-0 pointer-events-auto shrink-0 select-none"
-                      style={{
-                        transform: 'scale(1.38)',
-                        transformOrigin: 'center 45%'
-                      }}
+                      className="w-full h-[calc(100%+54px)] -mt-[54px] border-0 pointer-events-auto shrink-0 select-none"
                       allowTransparency={true}
                       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                       scrolling="no"
