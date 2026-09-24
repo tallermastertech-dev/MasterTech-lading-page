@@ -43,7 +43,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
       const saved = localStorage.getItem('mastertech_public_theme') || localStorage.getItem('mastertech_theme');
       if (saved === 'light' || saved === 'dark') return saved;
     }
-    return 'dark';
+    return 'light';
   });
 
   useEffect(() => {

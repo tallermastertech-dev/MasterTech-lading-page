@@ -199,7 +199,7 @@ html.theme-light nav button {
   color: #1e293b;
 }
 html.theme-light nav a:hover {
-  color: #d97706;
+  color: #dc2626;
 }
 
 /* Mobile Menu */
@@ -238,8 +238,8 @@ html.theme-light .theme-mobile-menu button {
 }
 .theme-input::placeholder { color: var(--theme-input-ph) !important; }
 .theme-input:focus {
-  border-color: #d97706 !important;
-  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15) !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
 }
 
 /* Footer */
@@ -263,7 +263,7 @@ html.theme-light .brands-ticker {
   border-color: #cbd5e1 !important;
 }
 html.theme-light .brands-ticker .brand-ticker-item { color: rgba(15, 23, 42, 0.25) !important; }
-html.theme-light .brands-ticker .brand-ticker-item:hover { color: #d97706 !important; }
+html.theme-light .brands-ticker .brand-ticker-item:hover { color: #dc2626 !important; }
 html.theme-light .brands-ticker .marquee-fade-left  { background: linear-gradient(to right, #e9edf2, transparent) !important; }
 html.theme-light .brands-ticker .marquee-fade-right { background: linear-gradient(to left,  #e9edf2, transparent) !important; }
 
