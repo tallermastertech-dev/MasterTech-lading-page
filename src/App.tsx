@@ -47,7 +47,9 @@ import {
   Sparkles,
   Terminal,
   Crosshair,
-  Compass
+  Compass,
+  BookOpen,
+  Disc
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
