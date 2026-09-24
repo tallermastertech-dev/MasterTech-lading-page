@@ -1025,7 +1025,7 @@ export default function App() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             
             {/* 1. Portal Jeep */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
                   <Car size={24} />
@@ -1036,14 +1036,14 @@ export default function App() {
                   Mecánica de motor Pentastar 3.6L y HEMI 5.7L, enfriadores de aceite de aluminio, cajas ZF y tracción 4x4.
                 </p>
               </div>
-              <a href="/jeep" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Ver página de Jeep</span>
-                <ArrowRight size={14} />
-              </a>
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 select-none">
+                <CheckCircle2 size={13} className="text-emerald-500" />
+                <span>Escáner OEM & Repuestos Mopar</span>
+              </div>
             </div>
 
             {/* 2. Portal Toyota */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
                   <Wrench size={24} />
@@ -1054,10 +1054,10 @@ export default function App() {
                   Mantenimiento de motores diésel 1GD/2GD D-4D, V6 1GR, Hilux, Fortuner, 4Runner, Prado y Land Cruiser.
                 </p>
               </div>
-              <a href="/toyota" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Ver página de Toyota</span>
-                <ArrowRight size={14} />
-              </a>
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 select-none">
+                <CheckCircle2 size={13} className="text-emerald-500" />
+                <span>Techstream & Repuestos Genuinos</span>
+              </div>
             </div>
 
             {/* 3. Portal Línea de Inspección Gratuita */}
