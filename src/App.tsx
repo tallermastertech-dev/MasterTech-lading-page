@@ -233,6 +233,18 @@ export default function App() {
 
   useEffect(() => {
     try {
+      const resetKey = 'mastertech_editorial_v5';
+      if (!localStorage.getItem(resetKey)) {
+        localStorage.setItem(resetKey, 'true');
+        localStorage.removeItem('mastertech_public_theme');
+        localStorage.removeItem('mastertech_theme');
+        localStorage.removeItem('theme');
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+        document.documentElement.classList.add('theme-light', 'light');
+        document.body.classList.add('theme-light', 'light');
+      }
+
       const saved = localStorage.getItem('mastertech_public_theme') || localStorage.getItem('mastertech_admin_theme') || localStorage.getItem('mastertech_theme');
       if (saved === 'dark') {
         document.documentElement.classList.remove('theme-light', 'light');
@@ -535,7 +547,7 @@ export default function App() {
                 <div className="flex items-center gap-2">
                   <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
                   <span className="font-semibold text-slate-800 dark:text-slate-200">
-                    {tallerStatus.badgeText} · Lun a Vie 8:00 AM - 5:00 PM
+                    {tallerStatus.badgeText}
                   </span>
                 </div>
               );
@@ -610,73 +622,78 @@ export default function App() {
               </div>
             </motion.div>
             
-            {/* Right Column: Workshop Video / Action Card */}
+            {/* Right Column: High-End Workshop Showcase Card */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="lg:col-span-5 relative w-full max-w-[420px] lg:max-w-none mx-auto"
+              className="lg:col-span-5 relative w-full max-w-[500px] lg:max-w-none mx-auto"
             >
               <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-3.5 shadow-xl overflow-hidden">
-                <div className="flex items-center justify-between px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300">
+                <div className="flex items-center justify-between px-3 py-2 mb-2.5 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300">
                   <div className="flex items-center gap-2 text-red-600 font-bold">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
-                    <span>Conoce Nuestro Taller</span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Diagnóstico en Vivo</span>
                   </div>
-                  <span className="text-slate-500 text-[11px] font-semibold">Sede Porlamar</span>
+                  <span className="text-slate-500 text-[11px] font-semibold">Bahía #1 · Porlamar</span>
                 </div>
 
-                {/* Video Window */}
-                <div className="w-full aspect-[9/16] rounded-2xl overflow-hidden bg-black relative flex items-center justify-center border border-slate-200 dark:border-slate-800">
-                  {isDirectVideoUrl(config.HERO_REEL_URL) ? (
-                    <video 
-                      src={config.HERO_REEL_URL} 
-                      autoPlay 
-                      loop 
-                      muted 
-                      playsInline
-                      preload="auto"
-                      controls={false}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full overflow-hidden relative bg-black flex items-center justify-center">
-                      <iframe 
-                        key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                        src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                        className="w-[130%] h-[145%] border-0 pointer-events-auto shrink-0"
-                        style={{
-                          transform: 'scale(1.42)',
-                          transformOrigin: 'center 50%',
-                          marginTop: '65%'
-                        }}
-                        allowTransparency={true}
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                        scrolling="no"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title="MasterTech Taller Reel"
-                      />
-                      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
-                      
-                      <a 
-                        href={config.HERO_REEL_URL} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/95 hover:bg-black text-white border border-slate-700 text-xs font-semibold px-4 py-2 rounded-lg z-20 flex items-center gap-2 transition-all shadow-xl hover:scale-105 whitespace-nowrap"
-                      >
-                        <Instagram size={14} className="text-red-400" />
-                        <span>Ver en Instagram</span>
-                        <ExternalLink size={12} className="text-slate-400" />
-                      </a>
+                {/* Main Workshop Visual (16:11 aspect ratio) */}
+                <div className="relative aspect-[16/11] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-inner group">
+                  <img 
+                    src="/assets/servicio-electricidad.webp" 
+                    alt="Técnico especialista de MasterTech realizando diagnóstico computarizado por escáner OEM a Toyota en Porlamar" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent pointer-events-none" />
+
+                  {/* Top-right Tag */}
+                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg">
+                    <Sparkles size={12} className="text-red-400" />
+                    <span>Especialistas Jeep & Toyota</span>
+                  </div>
+
+                  {/* Bottom Information Overlay */}
+                  <div className="absolute inset-x-0 bottom-0 p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                    <div>
+                      <p className="text-white text-xs font-semibold uppercase tracking-wider text-red-400">
+                        Tecnología & Scanner
+                      </p>
+                      <h4 className="text-white font-bold text-base leading-tight drop-shadow-sm">
+                        Instalaciones MasterTech
+                      </h4>
+                      <p className="text-slate-300 text-xs mt-0.5 line-clamp-1">
+                        Equipos computarizados de nivel concesionario
+                      </p>
                     </div>
-                  )}
+
+                    <a 
+                      href={config.HERO_REEL_URL} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/95 hover:bg-white text-slate-900 text-xs font-bold shadow-lg transition-transform hover:scale-105 shrink-0"
+                    >
+                      <Instagram size={14} className="text-pink-600" />
+                      <span>Ver Reel</span>
+                      <ExternalLink size={11} className="text-slate-500" />
+                    </a>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between px-3 pt-3 text-xs text-slate-500 dark:text-slate-400">
-                  <span>Mecánica & Diagnóstico en Acción</span>
-                  <a href="/contacto" className="text-red-600 dark:text-red-400 hover:underline font-bold">
-                    Agendar Cita →
-                  </a>
+                {/* Bottom 3 Accredited Credentials */}
+                <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                    <div className="text-xs font-black text-slate-900 dark:text-white">4 Bahías</div>
+                    <div className="text-[10px] text-slate-500 font-medium">Equipadas</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                    <div className="text-xs font-black text-slate-900 dark:text-white">Escáner OEM</div>
+                    <div className="text-[10px] text-slate-500 font-medium">Oficial</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                    <div className="text-xs font-black text-slate-900 dark:text-white">Garantía</div>
+                    <div className="text-[10px] text-slate-500 font-medium">Por Escrito</div>
+                  </div>
                 </div>
               </div>
             </motion.div>
