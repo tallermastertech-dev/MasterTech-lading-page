@@ -514,7 +514,7 @@ export default function App() {
       <Navbar activePage="inicio" config={config} />
 
       {/* =========================================================================
-          SECTION 1: HERO - PRESTIGIOUS & HUMAN AUTOMOTIVE WORKSHOP
+          SECTION 1: HERO - PORTAL PRINCIPAL
           ========================================================================= */}
       <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-24 px-4 sm:px-6 overflow-hidden min-h-[calc(100vh-60px)] flex flex-col justify-center bg-slate-900 text-white">
         {/* Authentic Workshop Photo Background with Dark Gradient */}
@@ -553,7 +553,7 @@ export default function App() {
 
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             
-            {/* Left Column: Clear, Trustworthy Value Proposition */}
+            {/* Left Column: Clear Value Proposition */}
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -562,7 +562,7 @@ export default function App() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-600/15 border border-red-500/30 text-red-400 text-xs font-bold tracking-wider mb-5 uppercase">
                 <ShieldCheck size={14} className="text-red-500" />
-                <span>TALLER MECÁNICO Y DIAGNÓSTICO EN MARGARITA</span>
+                <span>CENTRO AUTOMOTRIZ DE SERVICIO & DIAGNÓSTICO</span>
               </div>
 
               <h1 className="text-white text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-5 leading-tight">
@@ -570,26 +570,28 @@ export default function App() {
               </h1>
 
               <p className="text-slate-300 text-base sm:text-lg mb-8 max-w-xl leading-relaxed font-normal">
-                Mantenimiento integral, diagnóstico computarizado por escáner y reparación para <strong>Jeep, Toyota y todas las marcas</strong>. Presupuestos claros antes de iniciar, repuestos de calidad y garantía por escrito en cada servicio.
+                Atención especializada en <strong>Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner, mecánica integral, aire acondicionado y repuestos con garantía escrita.
               </p>
 
-              {/* Action Buttons: Solid Red & Clean Secondary */}
+              {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-10">
                 <a 
-                  href="#contacto" 
+                  href={config.WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn-primary !px-7 !py-3.5 text-sm shadow-lg font-bold"
                 >
-                  <Calendar size={18} />
-                  <span>AGENDAR CITA O DIAGNÓSTICO</span>
+                  <WhatsAppIcon size={18} />
+                  <span>CONSULTAR POR WHATSAPP</span>
                   <ArrowRight size={16} />
                 </a>
 
                 <a 
-                  href="#servicios" 
+                  href="/servicios" 
                   className="btn-secondary !px-6 !py-3.5 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/40 shadow-sm"
                 >
                   <Wrench size={16} className="text-red-400" />
-                  <span>NUESTROS SERVICIOS</span>
+                  <span>EXPLORAR SERVICIOS</span>
                 </a>
               </div>
 
@@ -597,7 +599,7 @@ export default function App() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/10">
                 <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                   <div className="text-xl font-bold text-white">6 Meses</div>
-                  <div className="text-xs text-slate-400 mt-0.5">Garantía por Escrito</div>
+                  <div className="text-xs text-slate-400 mt-0.5">Garantía Escrita</div>
                 </div>
 
                 <div className="p-3 rounded-lg bg-white/5 border border-white/10">
@@ -681,8 +683,8 @@ export default function App() {
 
                 <div className="flex items-center justify-between px-2 pt-2.5 text-xs text-slate-400">
                   <span>Mecánica & Diagnóstico Especializado</span>
-                  <a href={config.WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="text-red-400 hover:underline font-medium">
-                    Consultar Cita →
+                  <a href="/contacto" className="text-red-400 hover:underline font-medium">
+                    Agendar Cita →
                   </a>
                 </div>
               </div>
@@ -694,136 +696,186 @@ export default function App() {
 
 
       {/* =========================================================================
-          SECTION 2: MARCAS & MODELOS ATENDIDOS
+          SECTION 2: ACCESOS A PORTALES Y ESPECIALIDADES (HUB CENTRAL)
           ========================================================================= */}
       <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-[#0e1218] border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-1">
+              CENTROS DE ATENCIÓN Y RECURSOS
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              ¿Qué Necesita tu Vehículo Hoy?
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
+              Accede directamente a la información técnica o solicita atención según tu marca o requerimiento.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            
+            {/* 1. Portal Jeep */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                  <Car size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Especialidad</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Jeep & RAM</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Mecánica de motor Pentastar 3.6L y HEMI 5.7L, enfriadores de aceite, cajas ZF y tracción 4x4.
+                </p>
+              </div>
+              <a href="/jeep" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Ver página de Jeep</span>
+                <ArrowRight size={14} />
+              </a>
+            </div>
+
+            {/* 2. Portal Toyota */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                  <Wrench size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Especialidad</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Toyota Margarita</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Mantenimiento de motores diésel 1GD D-4D, V6 1GR, Hilux, Fortuner, 4Runner y Prado.
+                </p>
+              </div>
+              <a href="/toyota" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Ver página de Toyota</span>
+                <ArrowRight size={14} />
+              </a>
+            </div>
+
+            {/* 3. Portal Línea de Inspección Gratuita */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                  <ShieldCheck size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">Sin Costo</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Inspección Preventiva</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Revisión preliminar de fluidos, tren delantero, frenos y escaneo básico con cita agendada.
+                </p>
+              </div>
+              <a href="/inspeccion" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Agendar Inspección</span>
+                <ArrowRight size={14} />
+              </a>
+            </div>
+
+            {/* 4. Portal Manuales por Motor */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                  <BookOpen size={24} />
+                </div>
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Guías Técnicas</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Manuales 5.000 KM</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  Intervalos recomendados, especificaciones de aceite y tolerancias críticas por motorización.
+                </p>
+              </div>
+              <a href="/preview-manuales" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Consultar Manuales</span>
+                <ArrowRight size={14} />
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* =========================================================================
+          SECTION 3: RESUMEN DE CAPACIDADES DE TALLER (CON BOTÓN A /servicios)
+          ========================================================================= */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white dark:bg-[#0b0d11] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-4 border-b border-slate-200 dark:border-slate-800">
             <div>
               <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-1">
-                COBERTURA Y CAPACIDAD TÉCNICA
+                TALLER INTEGRAL EN PORLAMAR
               </span>
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Marcas y Modelos que Atendemos
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Nuestras Áreas de Servicio
               </h2>
             </div>
             <a 
-              href="/preview-manuales" 
-              className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-1.5 transition-colors"
+              href="/servicios" 
+              className="btn-secondary !px-5 !py-2.5 text-xs font-bold flex items-center gap-2 self-start md:self-auto"
             >
-              <span>Ver manuales de mantenimiento por motor</span>
+              <span>Ver Catálogo Completo de Servicios</span>
               <ArrowRight size={14} />
             </a>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {/* 1. Toyota */}
-            <div className="p-6 rounded-xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/40 dark:hover:border-red-500/40 shadow-sm transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-black text-red-600 dark:text-red-500 tracking-wider">TOYOTA</span>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">Gasolina & Diésel</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Hilux, Fortuner, 4Runner & Prado</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                  Mantenimiento de motores 1GD, 1GR-FE V6 y Dynamic Force. Diagnóstico de inyección common rail, cajas automáticas y mantenimiento de 4x4.
-                </p>
-              </div>
-              <a href="/preview-manuales?brand=toyota" className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-red-600 dark:text-red-400 hover:underline flex items-center justify-between">
-                <span>Ver especificaciones Toyota</span>
-                <ChevronRight size={15} />
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Diagnóstico Electrónico & Escáner</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Escaneo computarizado de nivel OEM, detección de fallas DTC, prueba de sensores y test de actuadores sin adivinanzas.
+              </p>
+              <a href="/servicios#diagnostico" className="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline">
+                Conocer más →
               </a>
             </div>
 
-            {/* 2. Jeep & RAM */}
-            <div className="p-6 rounded-xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/40 dark:hover:border-red-500/40 shadow-sm transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-black text-slate-900 dark:text-white tracking-wider">JEEP / RAM</span>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">V6 Pentastar & V8 HEMI</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Grand Cherokee, Wrangler & RAM</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                  Especialistas en enfriador de aceite, tren delantero, cajas ZF 8HP, sistema de tracción Quadra-Trac y electrónica de carrocería.
-                </p>
-              </div>
-              <a href="/jeep" className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-red-600 dark:text-red-400 hover:underline flex items-center justify-between">
-                <span>Ver especialidad Jeep Margarita</span>
-                <ChevronRight size={15} />
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Mecánica General & Motores</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Mantenimientos preventivos de 5.000 y 10.000 km, correas, cadenas de tiempo, bombas de agua y afinación de motor.
+              </p>
+              <a href="/servicios#mecanica" className="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline">
+                Conocer más →
               </a>
             </div>
 
-            {/* 3. Ford */}
-            <div className="p-6 rounded-xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/40 dark:hover:border-red-500/40 shadow-sm transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-black text-blue-600 dark:text-blue-400 tracking-wider">FORD</span>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">EcoBoost & Coyote</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Explorer, F-150 & Ranger</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                  Diagnóstico de turbocompresores EcoBoost, distribución variable Ti-VCT, cajas 6R80 / 10R80 y calibración electrónica con escáner.
-                </p>
-              </div>
-              <a href="/preview-manuales?brand=ford" className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-red-600 dark:text-red-400 hover:underline flex items-center justify-between">
-                <span>Ver especificaciones Ford</span>
-                <ChevronRight size={15} />
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Climatización & Aire Acondicionado</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Carga de gas R134a con balanza de precisión, detección de microfugas UV, mantenimiento de compresor y evaporadores.
+              </p>
+              <a href="/servicios#frenos" className="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline">
+                Conocer más →
               </a>
             </div>
 
-            {/* 4. Chevrolet */}
-            <div className="p-6 rounded-xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/40 dark:hover:border-red-500/40 shadow-sm transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-black text-amber-600 dark:text-amber-500 tracking-wider">CHEVROLET</span>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">V8 EcoTec & Turbo</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Silverado, Tahoe & Suburban</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                  Mantenimiento de sistemas AFM / DFM, inyección directa SIDI, lubricación estricta Dexos y diagnóstico de transmisión automática.
-                </p>
-              </div>
-              <a href="/preview-manuales?brand=chevrolet" className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-red-600 dark:text-red-400 hover:underline flex items-center justify-between">
-                <span>Ver especificaciones Chevrolet</span>
-                <ChevronRight size={15} />
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Frenos, Dirección & Suspensión</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Pastillas cerámicas, rectificación de discos, amortiguadores, terminales de dirección y bujes para máxima seguridad.
+              </p>
+              <a href="/servicios#frenos" className="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline">
+                Conocer más →
               </a>
             </div>
 
-            {/* 5. Nissan */}
-            <div className="p-6 rounded-xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/40 dark:hover:border-red-500/40 shadow-sm transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-black text-red-700 dark:text-red-400 tracking-wider">NISSAN</span>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">XTRONIC CVT & Diésel</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Patrol, X-Trail, Sentra & Frontier</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                  Monitoreo de degradación de fluido CVT con escáner, mantenimiento de cajas XTRONIC, inyección DIG y motores diésel YD25.
-                </p>
-              </div>
-              <a href="/preview-manuales?brand=nissan" className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-red-600 dark:text-red-400 hover:underline flex items-center justify-between">
-                <span>Ver especificaciones Nissan</span>
-                <ChevronRight size={15} />
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Inyección & Tina Ultrasónica</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Prueba en banco computarizado de inyectores, lavado ultrasónico, medición de caudal y sustitución de microfiltros.
+              </p>
+              <a href="/servicios#diagnostico" className="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline">
+                Conocer más →
               </a>
             </div>
 
-            {/* 6. Honda & Multimarca */}
-            <div className="p-6 rounded-xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/40 dark:hover:border-red-500/40 shadow-sm transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-wider">MULTIMARCA</span>
-                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">Asiáticos y Americanos</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Honda, Dodge, Hyundai & Kia</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
-                  Escaneo computarizado para todas las marcas, lectura de códigos OBD2, reseteo de intervalos de servicio y mantenimiento general.
-                </p>
-              </div>
-              <a href="#contacto" className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-red-600 dark:text-red-400 hover:underline flex items-center justify-between">
-                <span>Consultar por mi modelo</span>
-                <ChevronRight size={15} />
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">Transmisiones Automáticas & CVT</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                Mantenimiento de cajas automáticas y CVT, reemplazo de fluidos bajo especificación estricta de fabricante.
+              </p>
+              <a href="/servicios#mecanica" className="text-xs font-semibold text-red-600 dark:text-red-400 hover:underline">
+                Conocer más →
               </a>
             </div>
 
@@ -834,246 +886,52 @@ export default function App() {
 
 
       {/* =========================================================================
-          SECTION 3: SERVICIOS TALLER CON FOTOS REALES
-          ========================================================================= */}
-      <section id="servicios" className="py-16 sm:py-24 px-4 sm:px-6 bg-white dark:bg-[#0b0d11] transition-colors duration-300">
-        <div className="max-w-7xl mx-auto">
-          
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-2">
-              SOLUCIONES AUTOMOTRICES INTEGRALES
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Nuestros Servicios de Taller
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-base mt-3 leading-relaxed">
-              Equipamiento técnico moderno, repuestos garantizados y mano de obra calificada en Porlamar.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            {/* Servicio 1: Mecánica General */}
-            <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img 
-                  src="/assets/servicio-mecanica.webp" 
-                  alt="Mecánica General Automotriz" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
-                  Mantenimiento Integral
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Mecánica General & Motores</h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Mantenimiento preventivo de 5.000 y 10.000 km, cambio de correas y cadenas de distribución, bombas de agua, empacaduras y afinación completa.
-                </p>
-                <a 
-                  href={config.WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <span>Consultar por WhatsApp</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* Servicio 2: Diagnóstico Electrónico */}
-            <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img 
-                  src="/assets/servicio-electricidad.webp" 
-                  alt="Diagnóstico Electrónico por Scanner" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
-                  Escáner Multimarca
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Diagnóstico Electrónico & Escáner</h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Lectura de códigos de falla DTC, monitoreo de sensores en vivo, prueba de actuadores, reseteo de testigos de advertencia y diagnóstico certero.
-                </p>
-                <a 
-                  href={config.WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <span>Consultar por WhatsApp</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* Servicio 3: Frenos y Suspensión */}
-            <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img 
-                  src="/assets/servicio-frenos.webp" 
-                  alt="Frenos y Tren Delantero" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
-                  Seguridad Activa
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Frenos, Dirección & Suspensión</h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Sustitución de pastillas y discos cerámicos, rectificación, amortiguadores, terminales de dirección, bujes, muñones y eliminación de ruidos.
-                </p>
-                <a 
-                  href={config.WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <span>Consultar por WhatsApp</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* Servicio 4: Climatización A/A */}
-            <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img 
-                  src="/assets/servicio-climatizacion.webp" 
-                  alt="Aire Acondicionado Automotriz" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
-                  Climatización
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Aire Acondicionado Automotriz</h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Carga de gas refrigerante R134a con balanza digital, prueba de estanqueidad al vacío, detección de microfugas UV y servicio de compresores.
-                </p>
-                <a 
-                  href={config.WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <span>Consultar por WhatsApp</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* Servicio 5: Laboratorio de Inyectores */}
-            <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img 
-                  src="/assets/servicio-inyeccion.webp" 
-                  alt="Limpieza de Inyectores por Ultrasonido" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
-                  Laboratorio
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Inyección & Tina Ultrasónica</h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Prueba en banco computarizado de inyección, lavado por ultrasonido, medición de caudal, estanqueidad y sustitución de microfiltros y sellos.
-                </p>
-                <a 
-                  href={config.WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <span>Consultar por WhatsApp</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-            {/* Servicio 6: Cajas Automáticas & Transmisiones */}
-            <div className="rounded-xl overflow-hidden bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all group">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <img 
-                  src="/assets/cat_aceites_lubricantes.webp" 
-                  alt="Transmisiones Automáticas y Fluidos" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-semibold px-2.5 py-1 rounded">
-                  Transmisión & Fluidos
-                </span>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Cajas Automáticas, CVT & Fluidos</h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Mantenimiento y cambio de fluido para transmisiones automáticas y CVT con aceites homologados según especificación estricta de fabricante.
-                </p>
-                <a 
-                  href={config.WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <span>Consultar por WhatsApp</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* =========================================================================
-          SECTION 4: PROCESO TRANSPARENTE DE ATENCIÓN
+          SECTION 4: PILARES DE CONFIANZA
           ========================================================================= */}
       <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-50 dark:bg-[#0e1218] border-y border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-2">
-              CLARIDAD Y CONFIANZA
+              COMPROMISO MASTERTECH
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Nuestro Proceso de Trabajo
+              Por Qué Elegir Nuestro Taller
             </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-base mt-2">
-              Sin sorpresas en la cuenta final. Tienes el control de tu presupuesto en todo momento.
+            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
+              Trabajamos con transparencia y rigor técnico en cada vehículo que ingresa a nuestras bahías.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm relative">
-              <span className="w-10 h-10 rounded-full bg-red-600 text-white font-black flex items-center justify-center text-sm mb-5">1</span>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Recepción & Diagnóstico</h3>
+            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center mb-5">
+                <ShieldCheck size={26} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Garantía por Escrito</h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Ingresas tu vehículo al taller, escuchamos los síntomas que has notado y conectamos el escáner computarizado para obtener un diagnóstico técnico certero.
+                Toda intervención mayor cuenta con respaldo por escrito de 6 meses o 10.000 km en mano de obra y repuestos suministrados por el taller.
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm relative">
-              <span className="w-10 h-10 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black flex items-center justify-center text-sm mb-5">2</span>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Presupuesto por WhatsApp</h3>
+            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-5">
+                <CheckCircle2 size={26} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Presupuesto Previo Claro</h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Te enviamos a tu WhatsApp el detalle exacto de repuestos necesarios, opciones disponibles y costo de mano de obra antes de realizar cualquier intervención.
+                Recibes por WhatsApp el detalle exacto de repuestos y mano de obra antes de realizar cualquier intervención. Cero sorpresas en la cuenta final.
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm relative">
-              <span className="w-10 h-10 rounded-full bg-emerald-600 text-white font-black flex items-center justify-center text-sm mb-5">3</span>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Reparación & Garantía Escrita</h3>
+            <div className="p-8 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5">
+                <Clock size={26} />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Sala VIP & Atención Ágil</h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Ejecutamos el trabajo bajo especificaciones de fábrica, realizamos prueba funcional y te entregamos tu orden con garantía respaldada por escrito.
+                Instalaciones cómodas con aire acondicionado, Wi-Fi y café en Porlamar para que esperes cómodamente mientras atendemos tu mantenimiento.
               </p>
             </div>
 
@@ -1084,332 +942,58 @@ export default function App() {
 
 
       {/* =========================================================================
-          SECTION 5: NUESTRAS INSTALACIONES EN PORLAMAR
-          ========================================================================= */}
-      <section id="instalaciones" className="py-16 sm:py-24 px-4 sm:px-6 bg-white dark:bg-[#0b0d11] transition-colors duration-300">
-        <div className="max-w-7xl mx-auto">
-          
-          <div className="grid lg:grid-cols-12 gap-10 items-center">
-            
-            <div className="lg:col-span-6 space-y-6">
-              <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block">
-                SEDE OPERATIVA EN PORLAMAR
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Instalaciones Modernas, Cómodas y Seguras
-              </h2>
-              <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
-                Diseñamos nuestro taller para ofrecer un servicio transparente y eficiente en la Isla de Margarita. Contamos con bahías especializadas, elevadores de carga y un entorno ordenado.
-              </p>
-
-              <div className="space-y-4 pt-2">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check size={14} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">4 Bahías de Trabajo con Elevadores Hidráulicos</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Capacidad para atender vehículos medianos, camionetas 4x4 y de carga ligera.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check size={14} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">Laboratorio de Inyección & Escaneo</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Equipos de diagnóstico computarizado y banco de pruebas ultrasónico para inyectores.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check size={14} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">Sala de Clientes Climatizada</h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Espacio cómodo con aire acondicionado, Wi-Fi y café mientras esperas tu vehículo.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <a 
-                  href={config.GOOGLE_MAPS_LINK} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="inline-flex items-center gap-2 text-xs font-bold text-red-600 dark:text-red-400 hover:underline"
-                >
-                  <MapPin size={16} />
-                  <span>Ver ubicación en Google Maps (Sector Sucre, Porlamar)</span>
-                  <ExternalLink size={13} />
-                </a>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6">
-              <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
-                <img 
-                  src={config.IMG_INSTALACIONES || "/assets/instalaciones.webp"} 
-                  alt="Taller MasterTech Margarita" 
-                  loading="lazy"
-                  className="w-full h-full object-cover filter contrast-105"
-                />
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* =========================================================================
-          SECTION 6: OPINIONES DE CLIENTES (GOOGLE REVIEWS WIDGET)
+          SECTION 5: REPUTACIÓN AUDITADA GOOGLE BUSINESS
           ========================================================================= */}
       <GoogleReviewsWidget googleBusinessUrl={config.GOOGLE_MAPS_LINK} />
 
 
       {/* =========================================================================
-          SECTION 7: FORMULARIO DE ADMISIÓN & CONTACTO DIRECTO
+          SECTION 6: LLAMADO A LA ACCIÓN & UBICACIÓN RÁPIDA (SIN FORMULARIO DUPLICADO)
           ========================================================================= */}
-      <section id="contacto" className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-50 dark:bg-[#0e1218] border-t border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <div id="admision" className="max-w-5xl mx-auto">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-slate-900 text-white transition-colors duration-300">
+        <div className="max-w-5xl mx-auto">
           
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-widest block mb-1">
-              ATENCIÓN PERSONALIZADA
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Agenda tu Cita o Solicita Presupuesto
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">
-              Completa el formulario y te confirmaremos disponibilidad de inmediato a tu WhatsApp.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Form Column */}
-            <div className="lg:col-span-7 bg-white dark:bg-[#13171f] p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl">
-              
-              {formStatus === 'success' ? (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
-                  <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                    ¡Solicitud Enviada con Éxito!
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm max-w-md mx-auto mb-6">
-                    Hemos preparado los datos de tu vehículo. Pulsa el botón inferior para confirmar tu cita directamente en WhatsApp con un asesor técnico.
-                  </p>
-
-                  <a
-                    href={whatsappUrl || config.WHATSAPP_LINK || 'https://wa.me/584123565012'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-primary !bg-[#25D366] hover:!bg-[#20bd5a] !border-[#20bd5a] py-3.5 px-6 rounded-lg w-full max-w-sm mx-auto text-center flex items-center justify-center gap-2 shadow-lg"
-                  >
-                    <WhatsAppIcon size={20} />
-                    <span>Confirmar en WhatsApp</span>
-                  </a>
-
-                  <button 
-                    onClick={() => setFormStatus('idle')} 
-                    className="mt-5 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-xs font-semibold underline block mx-auto cursor-pointer"
-                  >
-                    Enviar otra solicitud
-                  </button>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  
-                  {/* Nombre & Teléfono */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label htmlFor="lead-form-nombre" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                        Tu Nombre y Apellido *
-                      </label>
-                      <input 
-                        id="lead-form-nombre" 
-                        required 
-                        name="nombre" 
-                        type="text" 
-                        placeholder="Ej: Carlos Mendoza" 
-                        className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 transition-colors" 
-                      />
-                    </div>
-                    
-                    <div className="space-y-1.5">
-                      <label htmlFor="lead-form-telefono" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                        Número de WhatsApp *
-                      </label>
-                      <input 
-                        id="lead-form-telefono" 
-                        required 
-                        name="telefono" 
-                        type="tel" 
-                        placeholder="0412 000 0000" 
-                        className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 transition-colors" 
-                      />
-                    </div>
-                  </div>
-
-                  {/* Vehículo & Servicio */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label htmlFor="lead-form-vehiculo" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                        Vehículo (Marca / Modelo / Año) *
-                      </label>
-                      <input 
-                        id="lead-form-vehiculo" 
-                        required 
-                        name="vehiculo" 
-                        type="text" 
-                        placeholder="Ej: Toyota Hilux 2021 o Grand Cherokee" 
-                        className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 transition-colors" 
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="lead-form-servicio" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                        Servicio Requerido *
-                      </label>
-                      <select 
-                        id="lead-form-servicio"
-                        name="servicio" 
-                        value={selectedService}
-                        onChange={(e) => setSelectedService(e.target.value)}
-                        className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 transition-colors cursor-pointer"
-                      >
-                        <option value="Línea de inspección gratuita">Línea de inspección preventiva gratuita</option>
-                        <option value="Diagnóstico computarizado por escáner">Diagnóstico computarizado por escáner</option>
-                        <option value="Mantenimiento preventivo de motor">Mantenimiento preventivo de motor</option>
-                        <option value="Mecánica general y reparación">Mecánica general y reparación</option>
-                        <option value="Frenos y tren delantero">Frenos y tren delantero</option>
-                        <option value="Servicio de inyección y ultrasonido">Servicio de inyección y ultrasonido</option>
-                        <option value="Transmisión y cajas automáticas/CVT">Transmisión y cajas automáticas/CVT</option>
-                        <option value="Climatización automotriz A/A">Climatización automotriz A/A</option>
-                        <option value="Otro">Otro requerimiento específico</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Slot Picker if Free Inspection */}
-                  {selectedService === 'Línea de inspección gratuita' && (
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-                      <div className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                        Selecciona el turno para tu inspección preventiva:
-                      </div>
-                      <InspectionSlotPicker 
-                        onSelectSlot={(slotStr, isValid) => {
-                          setInspectionSlotStr(slotStr);
-                          setIsInspectionSlotValid(isValid);
-                        }} 
-                      />
-                    </div>
-                  )}
-
-                  {/* Observaciones */}
-                  <div className="space-y-1.5">
-                    <label htmlFor="lead-form-falla" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      Detalles o Falla que Presenta (Opcional)
-                    </label>
-                    <textarea 
-                      id="lead-form-falla"
-                      name="falla" 
-                      placeholder="Indícanos si hay algún ruido, luz encendida en tablero o kilometraje actual..." 
-                      rows={2} 
-                      className="w-full rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-red-500 transition-colors resize-none" 
-                    />
-                  </div>
-
-                  {/* Submit Action */}
-                  <button 
-                    disabled={formStatus === 'loading'} 
-                    type="submit" 
-                    className="btn-primary w-full !py-3.5 text-sm font-bold tracking-wide cursor-pointer shadow-md"
-                  >
-                    <ClipboardCheck size={18} />
-                    <span>{formStatus === 'loading' ? 'Procesando...' : 'Agendar Cita por WhatsApp'}</span>
-                  </button>
-
-                  {formStatus === 'error' && (
-                    <p className="text-red-500 text-center text-xs font-semibold">{formErrorMessage}</p>
-                  )}
-
-                  <p className="text-[11px] text-center text-slate-500">
-                    Al hacer clic, se abrirá un chat directo de WhatsApp con tu solicitud lista para enviar.
-                  </p>
-                </form>
-              )}
-
-            </div>
-
-            {/* Direct Contact Info Column */}
-            <div className="lg:col-span-5 space-y-6">
-              
-              <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                  Información del Taller
-                </h3>
-
-                <div className="space-y-3.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                  <div className="flex items-start gap-3">
-                    <MapPin size={18} className="text-red-500 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="text-slate-900 dark:text-white block">Ubicación:</strong>
-                      <span>Sector Sucre, Calle Principal, Porlamar, Isla de Margarita, Edo. Nueva Esparta.</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <Clock size={18} className="text-red-500 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="text-slate-900 dark:text-white block">Horario de Atención:</strong>
-                      <span>Lunes a Viernes: 8:00 AM – 5:00 PM<br />Sábados: Con cita previa</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <Phone size={18} className="text-red-500 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="text-slate-900 dark:text-white block">Teléfono / WhatsApp:</strong>
-                      <a href={config.WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="text-red-600 dark:text-red-400 font-semibold hover:underline">
-                        {config.PHONE_NUMBER}
-                      </a>
-                    </div>
-                  </div>
+          <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="max-w-xl space-y-3">
+              <span className="text-xs font-bold text-red-500 uppercase tracking-widest block">
+                ATENCIÓN INMEDIATA EN MARGARITA
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
+                ¿Listo para Atender tu Vehículo?
+              </h2>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Escríbenos por WhatsApp para coordinar tu ingreso, cotizar un servicio o agendar tu cita en nuestro taller de Porlamar.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-400">
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={14} className="text-red-500" />
+                  <span>Sector Sucre, Porlamar</span>
                 </div>
-
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                  <a 
-                    href={config.GOOGLE_MAPS_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary w-full text-xs font-semibold py-2.5 justify-center"
-                  >
-                    <span>Abrir Ruta en Google Maps</span>
-                    <ExternalLink size={13} />
-                  </a>
+                <div className="flex items-center gap-1.5">
+                  <Clock size={14} className="text-red-500" />
+                  <span>Lun a Vie 8:00 AM – 5:00 PM</span>
                 </div>
               </div>
-
-              {/* Warranty Guarantee Callout */}
-              <div className="p-6 rounded-2xl bg-red-600 text-white shadow-lg flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-                  <ShieldCheck size={28} />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold uppercase tracking-wider">Garantía por Escrito</h4>
-                  <p className="text-xs text-white/90 mt-0.5">
-                    Respaldamos formalmente cada servicio mecánico y repuesto con garantía certificada de 6 meses o 10.000 km.
-                  </p>
-                </div>
-              </div>
-
             </div>
 
+            <div className="flex flex-col sm:flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
+              <a 
+                href={config.WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary !px-7 !py-4 text-sm font-bold justify-center shadow-lg"
+              >
+                <WhatsAppIcon size={18} />
+                <span>Chatear por WhatsApp</span>
+              </a>
+
+              <a 
+                href="/contacto"
+                className="btn-secondary !px-7 !py-3.5 text-xs font-semibold justify-center bg-white/10 hover:bg-white/20 text-white border-white/20"
+              >
+                <span>Agendar Cita en Línea (/contacto)</span>
+              </a>
+            </div>
           </div>
 
         </div>
@@ -1417,9 +1001,9 @@ export default function App() {
 
 
       {/* =========================================================================
-          SECTION 8: EDITORIAL FOOTER
+          SECTION 7: EDITORIAL FOOTER
           ========================================================================= */}
-      <footer className="theme-footer border-t border-slate-200 dark:border-slate-800 pt-16 pb-12 px-4 sm:px-6 bg-slate-900 text-slate-300">
+      <footer className="theme-footer border-t border-slate-200 dark:border-slate-800 pt-16 pb-12 px-4 sm:px-6 bg-slate-950 text-slate-400">
         <div className="max-w-7xl mx-auto">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
@@ -1470,7 +1054,7 @@ export default function App() {
                 ENLACES RÁPIDOS
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
-                <li><a href="#servicios" className="hover:text-red-400 transition-colors">Servicios Mecánicos</a></li>
+                <li><a href="/servicios" className="hover:text-red-400 transition-colors">Servicios Mecánicos</a></li>
                 <li><a href="/preview-manuales" className="hover:text-red-400 transition-colors">Manuales por Motor</a></li>
                 <li><a href="/jeep" className="hover:text-red-400 transition-colors">Especialista Jeep Margarita</a></li>
                 <li><a href="/toyota" className="hover:text-red-400 transition-colors">Especialista Toyota Margarita</a></li>
