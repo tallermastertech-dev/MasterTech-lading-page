@@ -531,7 +531,7 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-8 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
             <div className="flex items-center gap-2">
               <MapPin size={15} className="text-red-600 shrink-0" />
-              <span className="font-medium">Sector Sucre, Calle Principal, Porlamar · Isla de Margarita</span>
+              <span className="font-medium">Calle Progreso, Av. Circunvalación Nte., Porlamar 6301, Nueva Esparta</span>
             </div>
             {(() => {
               const tallerStatus = getTallerStatus(config.IS_OPEN);
@@ -944,7 +944,7 @@ export default function App() {
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-400">
                 <div className="flex items-center gap-1.5">
                   <MapPin size={14} className="text-red-500" />
-                  <span>Sector Sucre, Porlamar</span>
+                  <span>Calle Progreso, Av. Circunvalación Nte., Porlamar</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock size={14} className="text-red-500" />
@@ -1064,7 +1064,7 @@ export default function App() {
               <ul className="space-y-3 text-xs text-slate-400">
                 <li className="flex gap-2.5">
                   <MapPin size={15} className="text-red-500 shrink-0 mt-0.5" />
-                  <span>Sector Sucre, Calle Principal, Porlamar, Isla de Margarita.</span>
+                  <span>Calle Progreso, Av. Circunvalación Nte., Porlamar 6301, Nueva Esparta.</span>
                 </li>
                 <li className="flex gap-2.5">
                   <Clock size={15} className="text-red-500 shrink-0 mt-0.5" />

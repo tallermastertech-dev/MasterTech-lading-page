@@ -91,9 +91,10 @@ export default function GoogleReviewsWidget({
     "priceRange": "$$",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Sector Sucre, Calle Principal",
+      "streetAddress": "Calle Progreso, Av. Circunvalación Nte.",
       "addressLocality": "Porlamar",
       "addressRegion": "Nueva Esparta",
+      "postalCode": "6301",
       "addressCountry": "VE"
     },
     "geo": {
