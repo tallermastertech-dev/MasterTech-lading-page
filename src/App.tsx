@@ -912,21 +912,26 @@ export default function App() {
             </div>
 
             {/* 4. Portal Manuales por Motor */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
+                <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 transition-colors shadow-sm">
                   <BookOpen size={24} />
                 </div>
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Guías Técnicas</span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Guías Técnicas</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300/80 dark:border-slate-700">
+                    Próximamente
+                  </span>
+                </div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Manuales 5.000 KM</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                   Intervalos recomendados, especificaciones de aceite y tolerancias críticas organizadas por motorización exacta.
                 </p>
               </div>
-              <a href="/preview-manuales" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Consultar Manuales</span>
-                <ArrowRight size={14} />
-              </a>
+              <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500 cursor-default select-none">
+                <Clock size={13} />
+                <span>En edición · Próximamente disponible</span>
+              </div>
             </div>
 
           </div>
@@ -1181,7 +1186,7 @@ export default function App() {
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li><a href="/servicios" className="hover:text-red-400 transition-colors">Servicios Mecánicos</a></li>
-                <li><a href="/preview-manuales" className="hover:text-red-400 transition-colors">Manuales por Motor</a></li>
+                <li><span className="text-slate-500 cursor-default">Manuales por Motor (Próximamente)</span></li>
                 <li><a href="/jeep" className="hover:text-red-400 transition-colors">Especialista Jeep Margarita</a></li>
                 <li><a href="/toyota" className="hover:text-red-400 transition-colors">Especialista Toyota Margarita</a></li>
                 <li><a href="/catalogo" className="hover:text-red-400 transition-colors">Repuestos y Fluidos</a></li>
