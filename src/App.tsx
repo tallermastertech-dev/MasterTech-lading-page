@@ -894,7 +894,60 @@ export default function App() {
 
 
       {/* =========================================================================
-          SECTION 4: ACCESOS A PORTALES Y ESPECIALIDADES (PORTAL HUB)
+          SECTION 4: LLAMADO A LA ACCIÓN & CONTACTO RÁPIDO
+          ========================================================================= */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 bg-slate-900 text-white transition-colors duration-300">
+        <div className="max-w-5xl mx-auto">
+          
+          <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="max-w-xl space-y-3">
+              <span className="text-xs font-bold text-red-500 uppercase tracking-widest block">
+                ATENCIÓN INMEDIATA EN MARGARITA
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
+                ¿Listo para Atender tu Vehículo?
+              </h2>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Escríbenos por WhatsApp para coordinar tu ingreso, cotizar un servicio o agendar tu cita en nuestro taller de Porlamar.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-400">
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={14} className="text-red-500" />
+                  <span>Sector Sucre, Porlamar</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock size={14} className="text-red-500" />
+                  <span>Lun a Vie 8:00 AM – 5:00 PM</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
+              <a 
+                href={config.WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary !px-7 !py-4 text-sm font-bold justify-center shadow-lg"
+              >
+                <WhatsAppIcon size={18} />
+                <span>Chatear por WhatsApp</span>
+              </a>
+
+              <a 
+                href="/contacto" 
+                className="btn-secondary !px-7 !py-3.5 text-xs font-semibold justify-center bg-white/10 hover:bg-white/20 text-white border-white/20"
+              >
+                <span>Agendar Cita en Línea</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* =========================================================================
+          SECTION 5: ACCESOS A PORTALES Y ESPECIALIDADES (PORTAL HUB)
           ========================================================================= */}
       <section className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-50 dark:bg-[#0e1218] border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
@@ -1081,57 +1134,7 @@ export default function App() {
       <GoogleReviewsWidget googleBusinessUrl={config.GOOGLE_MAPS_LINK} />
 
 
-      {/* =========================================================================
-          SECTION 7: LLAMADO A LA ACCIÓN & UBICACIÓN RÁPIDA (PORTAL CONVERSIÓN)
-          ========================================================================= */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-900 text-white transition-colors duration-300">
-        <div className="max-w-5xl mx-auto">
-          
-          <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="max-w-xl space-y-3">
-              <span className="text-xs font-bold text-red-500 uppercase tracking-widest block">
-                ATENCIÓN INMEDIATA EN MARGARITA
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-                ¿Listo para Atender tu Vehículo?
-              </h2>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Escríbenos por WhatsApp para coordinar tu ingreso, cotizar un servicio o agendar tu cita en nuestro taller de Porlamar.
-              </p>
-              <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-400">
-                <div className="flex items-center gap-1.5">
-                  <MapPin size={14} className="text-red-500" />
-                  <span>Sector Sucre, Porlamar</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock size={14} className="text-red-500" />
-                  <span>Lun a Vie 8:00 AM – 5:00 PM</span>
-                </div>
-              </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row md:flex-col gap-3 w-full md:w-auto shrink-0">
-              <a 
-                href={config.WHATSAPP_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary !px-7 !py-4 text-sm font-bold justify-center shadow-lg"
-              >
-                <WhatsAppIcon size={18} />
-                <span>Chatear por WhatsApp</span>
-              </a>
-
-              <a 
-                href="/contacto" 
-                className="btn-secondary !px-7 !py-3.5 text-xs font-semibold justify-center bg-white/10 hover:bg-white/20 text-white border-white/20"
-              >
-                <span>Agendar Cita en Línea (/contacto)</span>
-              </a>
-            </div>
-          </div>
-
-        </div>
-      </section>
 
 
       {/* =========================================================================
