@@ -614,50 +614,52 @@ export default function App() {
               </div>
             </motion.div>
             
-            {/* Right Column: High-End Workshop Showcase Card */}
+            {/* Right Column: High-End Workshop Showcase (Pure CSS & Native Photo) */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="lg:col-span-5 relative w-full flex justify-center items-center"
+              className="lg:col-span-5 relative w-full max-w-[500px] lg:max-w-none mx-auto"
             >
-              <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
-                {isDirectVideoUrl(config.HERO_REEL_URL) ? (
-                  <video 
-                    src={config.HERO_REEL_URL} 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline
-                    controls
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full relative overflow-hidden bg-black flex items-center justify-center">
-                    <iframe 
-                      key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                      src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
-                      className="w-full h-[calc(100%+54px)] -mt-[54px] border-0 pointer-events-auto shrink-0 select-none"
-                      allowTransparency={true}
-                      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                      scrolling="no"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="MasterTech Taller Video"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none z-10" />
-                    
-                    <a 
-                      href={config.HERO_REEL_URL} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="absolute bottom-3 right-3 bg-black/85 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20"
-                    >
-                      <Instagram size={13} className="text-pink-400" />
-                      <span>Ver en Instagram</span>
-                      <ExternalLink size={11} className="text-slate-400" />
-                    </a>
+              <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-3 sm:p-3.5 shadow-2xl overflow-hidden group">
+                {/* Top Subtle Status Tag in CSS */}
+                <div className="flex items-center justify-between px-3 py-2 mb-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-700/50">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="font-bold text-slate-900 dark:text-white">Taller Operativo</span>
                   </div>
-                )}
+                  <span className="text-slate-500 text-[11px] font-semibold">Sede Porlamar</span>
+                </div>
+
+                {/* Main Workshop Visual with pure CSS effects */}
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-inner">
+                  <img 
+                    src={config.HERO_IMG || "/assets/instalaciones.webp"} 
+                    alt="Instalaciones del taller mecánico MasterTech en Porlamar" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  {/* CSS Gradients */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent pointer-events-none" />
+
+                  {/* Top-Right Badge */}
+                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg select-none">
+                    <ShieldCheck size={13} className="text-red-500" />
+                    <span>6 Puestos de Trabajo</span>
+                  </div>
+
+                  {/* Bottom Text Information */}
+                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+                    <p className="text-red-400 text-[11px] font-bold uppercase tracking-wider mb-1">
+                      Tecnología, Precisión y Confianza
+                    </p>
+                    <h3 className="text-white font-extrabold text-base sm:text-lg leading-tight drop-shadow-sm">
+                      Instalaciones MasterTech
+                    </h3>
+                    <p className="text-slate-300 text-xs mt-1 leading-relaxed">
+                      Elevadores hidráulicos de 4 toneladas, escáner de nivel OEM y atención profesional en Margarita.
+                    </p>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
