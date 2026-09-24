@@ -174,6 +174,7 @@ export default function App() {
   const [whatsappUrl, setWhatsappUrl] = useState<string>('');
   const [selectedSymptom, setSelectedSymptom] = useState<string>('');
   const [activeBayTab, setActiveBayTab] = useState<number>(0);
+  const [heroShowcaseMode, setHeroShowcaseMode] = useState<'video' | 'photo'>('video');
 
   // Dynamic config initialized with static CONFIG fallback
   const [config, setConfig] = useState<any>(CONFIG);
@@ -622,54 +623,102 @@ export default function App() {
               className="lg:col-span-5 relative w-full max-w-[500px] lg:max-w-none mx-auto"
             >
               <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-3.5 shadow-xl overflow-hidden">
-                <div className="flex items-center justify-between px-3 py-2 mb-2.5 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300">
-                  <div className="flex items-center gap-2 text-red-600 font-bold">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>Diagnóstico en Vivo</span>
+                {/* Header with Switcher Tabs */}
+                <div className="flex items-center justify-between px-2 py-1.5 mb-2.5 bg-slate-100 dark:bg-slate-800/90 rounded-2xl text-xs font-medium">
+                  <div className="flex items-center gap-1 bg-white dark:bg-slate-900 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700/60">
+                    <button
+                      type="button"
+                      onClick={() => setHeroShowcaseMode('video')}
+                      className={`px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
+                        heroShowcaseMode === 'video' 
+                          ? 'bg-red-600 text-white shadow-sm' 
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${heroShowcaseMode === 'video' ? 'bg-white animate-pulse' : 'bg-red-600'}`} />
+                      <span>Video Taller</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setHeroShowcaseMode('photo')}
+                      className={`px-3 py-1 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
+                        heroShowcaseMode === 'photo' 
+                          ? 'bg-red-600 text-white shadow-sm' 
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <span>Diagnóstico Toyota</span>
+                    </button>
                   </div>
-                  <span className="text-slate-500 text-[11px] font-semibold">Bahía #1 · Porlamar</span>
+                  <span className="text-slate-500 dark:text-slate-400 text-[11px] font-semibold pr-2">Sede Porlamar</span>
                 </div>
 
-                {/* Main Workshop Visual (16:11 aspect ratio) */}
-                <div className="relative aspect-[16/11] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-inner group">
-                  <img 
-                    src="/assets/servicio-electricidad.webp" 
-                    alt="Técnico especialista de MasterTech realizando diagnóstico computarizado por escáner OEM a Toyota en Porlamar" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent pointer-events-none" />
+                {/* Main Showcase Visual (Video or Photo) */}
+                <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-inner group flex items-center justify-center">
+                  {heroShowcaseMode === 'video' ? (
+                    isDirectVideoUrl(config.HERO_REEL_URL) ? (
+                      <video 
+                        src={config.HERO_REEL_URL} 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        controls
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full relative overflow-hidden bg-black flex items-center justify-center">
+                        <iframe 
+                          key={getInstagramEmbedUrl(config.HERO_REEL_URL)}
+                          src={getInstagramEmbedUrl(config.HERO_REEL_URL)}
+                          className="w-full h-full border-0 pointer-events-auto"
+                          allowTransparency={true}
+                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                          scrolling="no"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title="MasterTech Taller Video"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none z-10" />
+                        
+                        <a 
+                          href={config.HERO_REEL_URL} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="absolute bottom-3 right-3 bg-black/85 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20"
+                        >
+                          <Instagram size={13} className="text-pink-400" />
+                          <span>Ver en Instagram</span>
+                          <ExternalLink size={11} className="text-slate-400" />
+                        </a>
+                      </div>
+                    )
+                  ) : (
+                    <>
+                      <img 
+                        src="/assets/servicio-electricidad.webp" 
+                        alt="Técnico especialista de MasterTech realizando diagnóstico computarizado por escáner OEM a Toyota en Porlamar" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent pointer-events-none" />
 
-                  {/* Top-right Tag */}
-                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg">
-                    <Sparkles size={12} className="text-red-400" />
-                    <span>Especialistas Jeep & Toyota</span>
-                  </div>
+                      <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg">
+                        <Sparkles size={12} className="text-red-400" />
+                        <span>Especialistas Jeep & Toyota</span>
+                      </div>
 
-                  {/* Bottom Information Overlay */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                    <div>
-                      <p className="text-white text-xs font-semibold uppercase tracking-wider text-red-400">
-                        Tecnología & Scanner
-                      </p>
-                      <h4 className="text-white font-bold text-base leading-tight drop-shadow-sm">
-                        Instalaciones MasterTech
-                      </h4>
-                      <p className="text-slate-300 text-xs mt-0.5 line-clamp-1">
-                        Equipos computarizados de nivel concesionario
-                      </p>
-                    </div>
-
-                    <a 
-                      href={config.HERO_REEL_URL} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/95 hover:bg-white text-slate-900 text-xs font-bold shadow-lg transition-transform hover:scale-105 shrink-0"
-                    >
-                      <Instagram size={14} className="text-pink-600" />
-                      <span>Ver Reel</span>
-                      <ExternalLink size={11} className="text-slate-500" />
-                    </a>
-                  </div>
+                      <div className="absolute inset-x-0 bottom-0 p-4">
+                        <p className="text-white text-xs font-semibold uppercase tracking-wider text-red-400">
+                          Tecnología & Scanner
+                        </p>
+                        <h4 className="text-white font-bold text-base leading-tight drop-shadow-sm">
+                          Instalaciones MasterTech
+                        </h4>
+                        <p className="text-slate-300 text-xs mt-0.5 line-clamp-1">
+                          Diagnóstico computarizado de nivel concesionario
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Bottom 3 Accredited Credentials */}
