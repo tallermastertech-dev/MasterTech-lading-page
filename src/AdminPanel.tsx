@@ -7219,7 +7219,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   {services.map((srv, idx) => (
                     <div key={srv.id || idx} className="bg-[#12141a] p-5 rounded-2xl border border-white/10 space-y-4">
                       <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-amber-400">Servicio #{idx + 1}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-red-500">Servicio #{idx + 1}</span>
                         <button
                           type="button"
                           onClick={() => {
