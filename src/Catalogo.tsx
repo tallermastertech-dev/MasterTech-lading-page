@@ -2102,10 +2102,6 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   </motion.button>
                 </div>
               </div>
-                    <span>Añadir al Carrito</span>
-                  </motion.button>
-                </div>
-              </div>
             </motion.div>
           </div>
         )}
