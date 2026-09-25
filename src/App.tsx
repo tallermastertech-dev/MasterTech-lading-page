@@ -557,18 +557,18 @@ export default function App() {
               {/* 4 Clean Key Trust Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-slate-200 dark:border-slate-800">
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+                  <div className="text-xl font-black text-slate-900 dark:text-white">+6 Puestos</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Atención Simultánea</div>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                   <div className="text-xl font-black text-slate-900 dark:text-white">Escáner OEM</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Diagnóstico Preciso</div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">OEM & Marca</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Repuestos Confiables</div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">100% Claro</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Presupuesto Previo</div>
+                  <div className="text-xl font-black text-slate-900 dark:text-white">Presupuesto Previo</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">100% Claro y Aprobado</div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
