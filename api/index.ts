@@ -444,8 +444,19 @@ async function persistCloudBackupLeads(newOrUpdatedLead: any, isDelete = false):
 // =============================================================
 // CRYPTOGRAPHIC TOKEN SYSTEM (HMAC-SHA256 with Expiration & Signature)
 // =============================================================
-const JWT_SECRET = process.env.ADMIN_JWT_SECRET || process.env.ADMIN_PASSWORD || 'mastertech-secret-signature-2026-production';
-const TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas de validez máxima
+const DEFAULT_JWT_SECRET = 'mastertech-secret-signature-2026-production';
+const JWT_SECRET = process.env.ADMIN_JWT_SECRET || process.env.ADMIN_PASSWORD || DEFAULT_JWT_SECRET;
+const TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 días de persistencia de sesión continua
+const GRACE_PERIOD_MS = 7 * 24 * 60 * 60 * 1000; // 7 días de ventana de gracia para evitar pérdida de trabajo
+
+// Pool of valid signing secrets to eliminate environment desync lockouts
+const VALID_SECRETS: string[] = Array.from(new Set([
+  JWT_SECRET,
+  process.env.ADMIN_JWT_SECRET,
+  process.env.ADMIN_PASSWORD,
+  DEFAULT_JWT_SECRET,
+  'mastertech-secret-signature-2025'
+].filter(Boolean) as string[]));
 
 interface TokenPayload {
   sub: string;
@@ -475,16 +486,29 @@ const verifyAdminToken = (token: string): TokenPayload | null => {
   const [payloadB64, signature] = parts;
 
   try {
-    const expectedSig = crypto.createHmac('sha256', JWT_SECRET).update(payloadB64).digest('base64url');
     const sigBuffer = Buffer.from(signature);
-    const expectedBuffer = Buffer.from(expectedSig);
-    if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+
+    // Validate signature across all valid secrets (prevents invalidation if env vars switch)
+    let isSigValid = false;
+    for (const secret of VALID_SECRETS) {
+      const expectedSig = crypto.createHmac('sha256', secret).update(payloadB64).digest('base64url');
+      const expectedBuffer = Buffer.from(expectedSig);
+      if (sigBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+        isSigValid = true;
+        break;
+      }
+    }
+
+    if (!isSigValid) {
       return null;
     }
 
     const payload: TokenPayload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf-8'));
-    if (!payload.exp || Date.now() > payload.exp) {
-      return null; // Sesión expirada
+    
+    // Check expiration with a 7-day grace window to prevent abrupt session lockouts
+    const now = Date.now();
+    if (!payload.exp || now > (payload.exp + GRACE_PERIOD_MS)) {
+      return null; // Sesión definitivamente expirada
     }
     return payload;
   } catch {
@@ -514,6 +538,21 @@ const authenticateAdmin = async (req: express.Request, res: express.Response, ne
   }
   
   (req as any).adminUser = verified;
+
+  // Auto-renew token if within grace period or nearing expiration (within 5 days of expiry)
+  const now = Date.now();
+  if (verified.exp && (now > verified.exp || (verified.exp - now < 5 * 24 * 60 * 60 * 1000))) {
+    try {
+      const renewedToken = generateAdminToken({
+        id: verified.sub,
+        email: verified.email,
+        role: verified.role
+      });
+      res.setHeader('X-Renewed-Token', renewedToken);
+      res.setHeader('Access-Control-Expose-Headers', 'X-Renewed-Token');
+    } catch (e) {}
+  }
+
   next();
 };
 
