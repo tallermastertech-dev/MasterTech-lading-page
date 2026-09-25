@@ -51,7 +51,8 @@ import {
   BookOpen,
   Disc,
   Volume2,
-  VolumeX
+  VolumeX,
+  Package
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
