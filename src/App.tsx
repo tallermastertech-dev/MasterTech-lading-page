@@ -49,7 +49,9 @@ import {
   Crosshair,
   Compass,
   BookOpen,
-  Disc
+  Disc,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
@@ -100,46 +102,6 @@ function isDirectVideoUrl(url?: string): boolean {
   const clean = (url || '').trim().toLowerCase();
   return clean.endsWith('.mp4') || clean.endsWith('.webm') || clean.endsWith('.mov') || clean.includes('/assets/') || clean.startsWith('data:video');
 }
-
-function getInstagramEmbedUrl(url?: string): string {
-  if (!url || !url.trim()) {
-    return "https://www.instagram.com/reel/DYQxwH6jywd/embed";
-  }
-
-  let cleanUrl = url.trim();
-
-  // 1. If user pasted an <iframe> HTML snippet, extract the src attribute
-  if (cleanUrl.includes('<iframe') && cleanUrl.includes('src=')) {
-    const srcMatch = cleanUrl.match(/src=["']([^"']+)["']/i);
-    if (srcMatch && srcMatch[1]) {
-      cleanUrl = srcMatch[1];
-    }
-  }
-
-  // 2. If it's already a complete embed URL
-  if (cleanUrl.includes('/embed')) {
-    return cleanUrl;
-  }
-
-  // 3. Strip trailing query parameters like ?igsh=...
-  const urlWithoutQuery = cleanUrl.split('?')[0];
-
-  // 4. Match /reel/, /reels/, /p/, /tv/ followed by media ID
-  const match = urlWithoutQuery.match(/(?:reels?|p|tv)\/([A-Za-z0-9_-]+)/i);
-  if (match && match[1]) {
-    return `https://www.instagram.com/reel/${match[1]}/embed`;
-  }
-
-  // 5. Fallback for segment extraction
-  const segments = urlWithoutQuery.replace(/\/$/, '').split('/').filter(Boolean);
-  const lastSegment = segments[segments.length - 1];
-  if (lastSegment && lastSegment.length >= 5 && !lastSegment.includes('instagram') && !lastSegment.includes('www.')) {
-    return `https://www.instagram.com/reel/${lastSegment}/embed`;
-  }
-
-  return cleanUrl.endsWith('/') ? `${cleanUrl}embed` : `${cleanUrl}/embed`;
-}
-
 // --- CONFIGURACIÓN ---
 const CONFIG = {
   PHONE_NUMBER: "+584123565012", 
@@ -149,7 +111,7 @@ const CONFIG = {
   INSTAGRAM_LINK: "https://www.instagram.com/tallermastertech/",
   TIKTOK_LINK: "https://www.tiktok.com/@tallermastertech",
   YOUTUBE_LINK: "https://www.youtube.com/@tallermastertech",
-  HERO_REEL_URL: "https://www.instagram.com/reel/DYQxwH6jywd/",
+  HERO_REEL_URL: "/assets/taller_video.mp4",
   GOOGLE_MAPS_EMBED: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15665.5!2d-63.8681155!3d10.9701683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c318fe358d81b01%3A0xf0c67c88a5063093!2sTaller%20MasterTech!5e0!3m2!1ses!2sve!4v1700000000000!5m2!1ses!2sve",
   GOOGLE_BUSINESS_URL: "https://maps.app.goo.gl/fybS1jW9buxQD5gv7",
   HERO_IMG: "/assets/instalaciones.webp",
@@ -173,6 +135,8 @@ export default function App() {
   const [isInspectionSlotValid, setIsInspectionSlotValid] = useState<boolean>(false);
   const [whatsappUrl, setWhatsappUrl] = useState<string>('');
   const [selectedSymptom, setSelectedSymptom] = useState<string>('');
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const heroVideoRef = React.useRef<HTMLVideoElement>(null);
 
 
   // Dynamic config initialized with static CONFIG fallback
@@ -614,52 +578,65 @@ export default function App() {
               </div>
             </motion.div>
             
-            {/* Right Column: High-End Workshop Showcase (Pure CSS & Native Photo) */}
+            {/* Right Column: Workshop Video Showcase (Native HTML5 Video + Pure CSS) */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="lg:col-span-5 relative w-full max-w-[500px] lg:max-w-none mx-auto"
+              className="lg:col-span-5 relative w-full flex justify-center items-center"
             >
-              <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-3 sm:p-3.5 shadow-2xl overflow-hidden group">
-                {/* Top Subtle Status Tag in CSS */}
-                <div className="flex items-center justify-between px-3 py-2 mb-3 bg-slate-50 dark:bg-slate-800/80 rounded-2xl text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-700/50">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="font-bold text-slate-900 dark:text-white">Taller Operativo</span>
-                  </div>
-                  <span className="text-slate-500 text-[11px] font-semibold">Sede Porlamar</span>
+              <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
+                <video 
+                  ref={heroVideoRef}
+                  src={(config.HERO_REEL_URL && isDirectVideoUrl(config.HERO_REEL_URL)) ? config.HERO_REEL_URL : "/assets/taller_video.mp4"} 
+                  autoPlay 
+                  loop 
+                  muted={isVideoMuted}
+                  playsInline
+                  preload="auto"
+                  className="w-full h-full object-cover select-none"
+                />
+
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg select-none z-20">
+                  <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                  <span>Video del Taller</span>
                 </div>
 
-                {/* Main Workshop Visual with pure CSS effects */}
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-inner">
-                  <img 
-                    src={config.HERO_IMG || "/assets/instalaciones.webp"} 
-                    alt="Instalaciones del taller mecánico MasterTech en Porlamar" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  {/* CSS Gradients */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent pointer-events-none" />
+                {/* Audio Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (heroVideoRef.current) {
+                      heroVideoRef.current.muted = !isVideoMuted;
+                      setIsVideoMuted(!isVideoMuted);
+                    }
+                  }}
+                  className="absolute top-3 right-3 bg-black/60 hover:bg-black/90 backdrop-blur-md border border-white/20 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-110 cursor-pointer z-20"
+                  title={isVideoMuted ? "Activar audio" : "Silenciar audio"}
+                >
+                  {isVideoMuted ? <VolumeX size={15} className="text-slate-300" /> : <Volume2 size={15} className="text-emerald-400" />}
+                </button>
 
-                  {/* Top-Right Badge */}
-                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg select-none">
-                    <ShieldCheck size={13} className="text-red-500" />
-                    <span>6 Puestos de Trabajo</span>
-                  </div>
+                {/* Bottom Gradient Overlay */}
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
 
-                  {/* Bottom Text Information */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                    <p className="text-red-400 text-[11px] font-bold uppercase tracking-wider mb-1">
-                      Tecnología, Precisión y Confianza
-                    </p>
-                    <h3 className="text-white font-extrabold text-base sm:text-lg leading-tight drop-shadow-sm">
-                      Instalaciones MasterTech
-                    </h3>
-                    <p className="text-slate-300 text-xs mt-1 leading-relaxed">
-                      Elevadores hidráulicos de 4 toneladas, escáner de nivel OEM y atención profesional en Margarita.
-                    </p>
-                  </div>
+                {/* Bottom Info & Instagram Direct Link */}
+                <div className="absolute bottom-3 left-3 z-20 pointer-events-none">
+                  <p className="text-white text-xs font-bold leading-tight drop-shadow">Taller MasterTech</p>
+                  <p className="text-slate-300 text-[10px]">Porlamar, Margarita</p>
                 </div>
+
+                <a 
+                  href={config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/"} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="absolute bottom-3 right-3 bg-black/85 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20"
+                >
+                  <Instagram size={13} className="text-pink-400" />
+                  <span>Instagram</span>
+                  <ExternalLink size={11} className="text-slate-400" />
+                </a>
               </div>
             </motion.div>
 
