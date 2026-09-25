@@ -136,15 +136,15 @@ export default function Inspeccion() {
               Diagnóstico de Alta Precisión
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-display font-black tracking-tighter mb-6 leading-[1.1]">
-              REGÍSTRATE PARA SABER EXACTAMENTE <br className="hidden md:block"/> 
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-black tracking-tight mb-6 leading-tight uppercase">
+              SOLICITA TU CITA DE REVISIÓN <br className="hidden md:block"/> 
               <span className="text-primary font-black">
-                QUÉ NECESITA TU CARRO
+                EN TALLER MASTERTECH
               </span>
             </h1>
             
-            <p className="text-lg md:text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              No dejes tu seguridad al azar. Nuestra línea de inspección evalúa más de 100pts críticos de tu vehículo con tecnología de vanguardia para que tomes decisiones informadas.
+            <p className="text-base sm:text-lg md:text-xl text-zinc-300 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+              Revisión preventiva y asesoría especializada con presupuesto previo antes de cualquier intervención.
             </p>
 
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 mb-10 text-left max-w-3xl mx-auto backdrop-blur-md">
