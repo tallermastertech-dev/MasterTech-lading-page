@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge } from 'lucide-react';
+import { ChevronLeft, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
@@ -306,6 +306,37 @@ const CATEGORIES = [
   "Cuidado & Detailing"
 ];
 
+export const OEM_BRANDS = [
+  { name: "Todas", label: "Todas las Marcas", badge: "Catálogo Completo" },
+  { name: "Brembo", label: "Brembo", origin: "Italia · Frenos", color: "from-red-600 to-rose-700" },
+  { name: "Mopar", label: "Mopar", origin: "USA · Original OEM", color: "from-blue-600 to-indigo-700" },
+  { name: "Wagner", label: "Wagner", origin: "USA · Cerámica", color: "from-amber-600 to-yellow-700" },
+  { name: "Monroe", label: "Monroe", origin: "USA · Amortiguadores", color: "from-yellow-600 to-amber-700" },
+  { name: "KYB", label: "KYB", origin: "Japón · Suspensión", color: "from-red-500 to-orange-600" },
+  { name: "Motul", label: "Motul", origin: "Francia · Lubricantes", color: "from-red-600 to-red-800" },
+  { name: "Mobil 1", label: "Mobil 1", origin: "USA · Sintético", color: "from-blue-700 to-sky-700" },
+  { name: "Duncan", label: "Duncan", origin: "Líder VE · Baterías", color: "from-emerald-600 to-teal-700" },
+  { name: "ACDelco", label: "ACDelco", origin: "GM Original · Baterías", color: "from-blue-600 to-cyan-700" },
+  { name: "Denso", label: "Denso", origin: "Japón · Alternadores", color: "from-red-700 to-rose-800" },
+  { name: "Bosch", label: "Bosch", origin: "Alemania · Inyección", color: "from-blue-800 to-slate-800" },
+  { name: "K&N", label: "K&N", origin: "USA · Filtros Flujo", color: "from-orange-600 to-red-700" },
+  { name: "Chemours", label: "Chemours", origin: "USA · Gas R134a", color: "from-cyan-600 to-blue-700" },
+  { name: "Prestone", label: "Prestone", origin: "USA · Coolant OAT", color: "from-yellow-500 to-amber-600" },
+  { name: "Garrett", label: "Garrett", origin: "USA · Turbo OEM", color: "from-slate-700 to-slate-900" },
+  { name: "Meguiar's", label: "Meguiar's", origin: "USA · Detailing", color: "from-purple-600 to-indigo-800" }
+];
+
+export const VEHICLE_MODELS = [
+  { name: "Todos", label: "Todos los Vehículos" },
+  { name: "Jeep", label: "Jeep (Wrangler / Cherokee)", icon: "🚙" },
+  { name: "Toyota", label: "Toyota (Hilux / Fortuner)", icon: "🚗" },
+  { name: "Ford", label: "Ford (Explorer / F-150)", icon: "🛻" },
+  { name: "Chevrolet", label: "Chevrolet (Tahoe / Silverado)", icon: "🏎️" },
+  { name: "Dodge", label: "Dodge / RAM", icon: "🚘" },
+  { name: "Honda", label: "Honda", icon: "🚙" },
+  { name: "Nissan", label: "Nissan", icon: "🚗" }
+];
+
 export interface CartItem {
   product: CatalogItem;
   quantity: number;
@@ -315,10 +346,34 @@ export default function Catalogo() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(DEFAULT_CATALOG);
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+  const [selectedBrand, setSelectedBrand] = useState<string>("Todas");
+  const [selectedVehicle, setSelectedVehicle] = useState<string>("Todos");
+  const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'stock' | 'usa'>('all');
+  const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
+  const [copiedPartId, setCopiedPartId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+  const handleCopyPart = (id: number, partNumber: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!partNumber) return;
+    try {
+      navigator.clipboard.writeText(partNumber);
+      setCopiedPartId(id);
+      setTimeout(() => setCopiedPartId(null), 2000);
+    } catch (err) {}
+  };
+
+  const resetAllFilters = () => {
+    setSelectedCategory("Todos");
+    setSelectedBrand("Todas");
+    setSelectedVehicle("Todos");
+    setAvailabilityFilter("all");
+    setSortBy("featured");
+    setSearchQuery("");
+  };
 
   // USA Import Order Form Modal State
   const [isUsaModalOpen, setIsUsaModalOpen] = useState(false);
@@ -665,16 +720,57 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
   };
 
   const filteredItems = useMemo(() => {
-    return catalogItems.filter(item => {
+    let result = catalogItems.filter(item => {
+      // 1. Category filter
       const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
-      const matchesSearch = searchQuery.trim() === "" || 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.partNumber || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+
+      // 2. Brand filter
+      const matchesBrand = selectedBrand === "Todas" || 
+        (item.badge && item.badge.toLowerCase().includes(selectedBrand.toLowerCase())) ||
+        item.title.toLowerCase().includes(selectedBrand.toLowerCase()) ||
+        (item.desc && item.desc.toLowerCase().includes(selectedBrand.toLowerCase()));
+
+      // 3. Vehicle compatibility filter
+      const matchesVehicle = selectedVehicle === "Todos" ||
+        (item.compatibility && item.compatibility.toLowerCase().includes(selectedVehicle.toLowerCase()));
+
+      // 4. Availability filter
+      const matchesAvailability = availabilityFilter === 'all' ||
+        (availabilityFilter === 'stock' && !item.isImportedUSA) ||
+        (availabilityFilter === 'usa' && item.isImportedUSA);
+
+      // 5. Search query
+      const q = searchQuery.trim().toLowerCase();
+      const matchesSearch = q === "" || 
+        item.title.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q) ||
+        (item.partNumber || '').toLowerCase().includes(q) ||
+        (item.badge || '').toLowerCase().includes(q) ||
+        (item.compatibility || '').toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q);
+
+      return matchesCategory && matchesBrand && matchesVehicle && matchesAvailability && matchesSearch;
     });
-  }, [catalogItems, selectedCategory, searchQuery]);
+
+    // Sorting
+    if (sortBy === 'price-asc') {
+      result = [...result].sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+    } else if (sortBy === 'price-desc') {
+      result = [...result].sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+    }
+
+    return result;
+  }, [catalogItems, selectedCategory, selectedBrand, selectedVehicle, availabilityFilter, sortBy, searchQuery]);
+
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedCategory !== "Todos") count++;
+    if (selectedBrand !== "Todas") count++;
+    if (selectedVehicle !== "Todos") count++;
+    if (availabilityFilter !== "all") count++;
+    if (searchQuery.trim() !== "") count++;
+    return count;
+  }, [selectedCategory, selectedBrand, selectedVehicle, availabilityFilter, searchQuery]);
 
   const getWhatsAppMessage = (productName: string, price: string, partNumber?: string, isImportedUSA?: boolean, stock?: number) => {
     const partInfo = partNumber ? ` (N° Parte OEM: ${partNumber})` : '';
@@ -782,6 +878,32 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <CheckCircle2 size={14} className="text-emerald-500" />
                   Marcas OEM & Genuinas
                 </span>
+              </div>
+
+              {/* Quick Search Chips */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 pt-3 text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-semibold text-slate-700 dark:text-slate-300 mr-1">Búsquedas rápidas:</span>
+                {[
+                  "Brembo",
+                  "Wagner",
+                  "Motul 5W-30",
+                  "KYB",
+                  "Batería Duncan",
+                  "Mopar"
+                ].map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(tag);
+                      const el = document.getElementById('catalogo-grid');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-white/10 transition-colors cursor-pointer text-[11px] font-medium"
+                  >
+                    {tag}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -975,20 +1097,173 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 4: PRODUCT CATALOG GRID (INVENTARIO DISPONIBLE) */}
         {/* ========================================================================= */}
         <section id="catalogo-grid" className="space-y-6 pt-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
+          
+          {/* Header Title & Result Count */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
             <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
+                <span className="text-[11px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider">Catálogo MasterTech 2026</span>
+              </div>
               <h2 className="text-2xl sm:text-3xl font-display font-black tracking-tight text-zinc-900 dark:text-white section-heading-dark flex items-center gap-2">
                 <span>Inventario de Repuestos</span> <span className="text-red-600 font-serif italic text-xl sm:text-2xl">/ En Taller & Encargo</span>
               </h2>
-              <div className="w-16 h-0.5 bg-red-600 mt-2 rounded-full" />
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Mostrando <strong className="text-slate-900 dark:text-white font-mono">{filteredItems.length}</strong> de <strong className="text-slate-900 dark:text-white font-mono">{catalogItems.length}</strong> repuestos certificados con garantía y respaldo de instalación.
+              </p>
             </div>
 
-            {/* Search Box Only */}
-            <div className="relative w-full sm:w-72">
+            {/* Availability Filter Segmented Control */}
+            <div className="flex items-center bg-slate-100 dark:bg-white/5 p-1 rounded-2xl border border-slate-200 dark:border-white/10 self-start sm:self-end">
+              <button
+                type="button"
+                onClick={() => setAvailabilityFilter('all')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  availabilityFilter === 'all'
+                    ? 'bg-white dark:bg-[#1a1d28] text-slate-900 dark:text-white shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                Todos ({catalogItems.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setAvailabilityFilter('stock')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  availabilityFilter === 'stock'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>En Taller ({catalogItems.filter(i => !i.isImportedUSA).length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAvailabilityFilter('usa')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  availabilityFilter === 'usa'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <Plane size={12} />
+                <span>Express USA ({catalogItems.filter(i => i.isImportedUSA).length})</span>
+              </button>
+            </div>
+          </div>
+
+          {/* OEM BRANDS SELECTOR STRIP */}
+          <div className="space-y-2.5 bg-slate-50/70 dark:bg-white/[0.02] p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/5">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={14} className="text-red-600" />
+                <span className="font-black uppercase tracking-wider text-slate-900 dark:text-white text-[11px]">
+                  Marcas OEM Certificadas
+                </span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:inline">
+                  (Selecciona para filtrar por fabricante)
+                </span>
+              </div>
+              {selectedBrand !== 'Todas' && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedBrand('Todas')}
+                  className="text-[11px] font-bold text-red-600 hover:underline cursor-pointer flex items-center gap-1"
+                >
+                  <RotateCcw size={11} />
+                  <span>Ver todas las marcas</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-red-500/20 scrollbar-track-transparent">
+              {OEM_BRANDS.map((brand) => {
+                const isSelected = selectedBrand === brand.name;
+                const count = brand.name === "Todas"
+                  ? catalogItems.length
+                  : catalogItems.filter(item => 
+                      (item.badge && item.badge.toLowerCase().includes(brand.name.toLowerCase())) ||
+                      item.title.toLowerCase().includes(brand.name.toLowerCase()) ||
+                      (item.desc && item.desc.toLowerCase().includes(brand.name.toLowerCase()))
+                    ).length;
+
+                return (
+                  <button
+                    key={brand.name}
+                    type="button"
+                    onClick={() => setSelectedBrand(brand.name)}
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border ${
+                      isSelected
+                        ? 'bg-red-600 text-white border-red-500 shadow-md shadow-red-600/30'
+                        : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-red-500/50 hover:bg-slate-50 dark:hover:bg-[#181a24]'
+                    }`}
+                  >
+                    <span>{brand.label}</span>
+                    {brand.origin && (
+                      <span className={`text-[9px] uppercase tracking-wider font-semibold opacity-75 hidden md:inline ${isSelected ? 'text-white' : 'text-slate-400'}`}>
+                        · {brand.origin.split('·')[0]}
+                      </span>
+                    )}
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
+                      isSelected 
+                        ? 'bg-black/30 text-white' 
+                        : 'bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400'
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* VEHICLE COMPATIBILITY BAR */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/70 dark:bg-white/[0.02] p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-white/5">
+            <div className="flex items-center gap-2 shrink-0">
+              <Car size={15} className="text-red-600" />
+              <span className="font-black uppercase tracking-wider text-slate-900 dark:text-white text-[11px]">
+                Compatibilidad:
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-thin">
+              {VEHICLE_MODELS.map((veh) => {
+                const isSelected = selectedVehicle === veh.name;
+                const count = veh.name === 'Todos'
+                  ? catalogItems.length
+                  : catalogItems.filter(item => item.compatibility && item.compatibility.toLowerCase().includes(veh.name.toLowerCase())).length;
+
+                return (
+                  <button
+                    key={veh.name}
+                    type="button"
+                    onClick={() => setSelectedVehicle(veh.name)}
+                    className={`shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                      isSelected
+                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-sm'
+                        : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/20'
+                    }`}
+                  >
+                    {veh.icon && <span className="text-xs">{veh.icon}</span>}
+                    <span>{veh.name}</span>
+                    <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-red-400 dark:text-red-600' : 'text-slate-400'}`}>
+                      ({count})
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* SECONDARY TOOLBAR: SEARCH & SORT CONTROLS */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+            {/* Search Box */}
+            <div className="relative w-full sm:w-80">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={15} />
               <input 
                 type="text"
-                placeholder="Buscar por nombre, marca o N° de parte..."
+                placeholder="Buscar por nombre, código OEM o modelo..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/15 focus:border-red-500 rounded-xl py-2.5 pl-9 pr-7 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none transition-all shadow-sm"
@@ -1002,7 +1277,88 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 </button>
               )}
             </div>
+
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 shrink-0">
+                <ArrowUpDown size={13} />
+                <span className="hidden sm:inline">Ordenar:</span>
+              </div>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/15 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer hover:border-red-500 transition-colors shadow-sm"
+              >
+                <option value="featured">Destacados MasterTech</option>
+                <option value="price-asc">Precio: Menor a Mayor</option>
+                <option value="price-desc">Precio: Mayor a Menor</option>
+              </select>
+            </div>
           </div>
+
+          {/* ACTIVE FILTERS SUMMARY CHIPS */}
+          {activeFiltersCount > 0 && (
+            <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-red-50/50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-xs">
+              <span className="font-bold text-red-600 dark:text-red-400 flex items-center gap-1">
+                <SlidersHorizontal size={13} />
+                <span>Filtros activos ({activeFiltersCount}):</span>
+              </span>
+
+              {selectedCategory !== "Todos" && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
+                  Categoría: {selectedCategory}
+                  <button onClick={() => setSelectedCategory("Todos")} className="hover:text-red-500 cursor-pointer ml-1">
+                    <X size={11} />
+                  </button>
+                </span>
+              )}
+
+              {selectedBrand !== "Todas" && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
+                  Marca: {selectedBrand}
+                  <button onClick={() => setSelectedBrand("Todas")} className="hover:text-red-500 cursor-pointer ml-1">
+                    <X size={11} />
+                  </button>
+                </span>
+              )}
+
+              {selectedVehicle !== "Todos" && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
+                  Vehículo: {selectedVehicle}
+                  <button onClick={() => setSelectedVehicle("Todos")} className="hover:text-red-500 cursor-pointer ml-1">
+                    <X size={11} />
+                  </button>
+                </span>
+              )}
+
+              {availabilityFilter !== "all" && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
+                  Disponibilidad: {availabilityFilter === 'stock' ? 'En Taller' : 'Express USA'}
+                  <button onClick={() => setAvailabilityFilter("all")} className="hover:text-red-500 cursor-pointer ml-1">
+                    <X size={11} />
+                  </button>
+                </span>
+              )}
+
+              {searchQuery.trim() !== "" && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
+                  Búsqueda: "{searchQuery}"
+                  <button onClick={() => setSearchQuery("")} className="hover:text-red-500 cursor-pointer ml-1">
+                    <X size={11} />
+                  </button>
+                </span>
+              )}
+
+              <button
+                type="button"
+                onClick={resetAllFilters}
+                className="ml-auto text-red-600 dark:text-red-400 hover:underline font-bold text-[11px] flex items-center gap-1 cursor-pointer"
+              >
+                <RotateCcw size={12} />
+                <span>Restablecer filtros</span>
+              </button>
+            </div>
+          )}
 
           {/* Products Grid */}
           {filteredItems.length === 0 ? (
@@ -1010,27 +1366,29 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <Package size={44} className="text-zinc-400 mb-4 stroke-[1.5]" />
               <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">No encontramos coincidencias</h3>
               <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
-                Prueba seleccionando otra categoría o consúltanos directamente por WhatsApp para ubicar tu número de parte OEM.
+                Prueba ajustando los filtros de marca o categoría, o consúltanos directamente por WhatsApp con tu serial VIN o código de parte.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button 
                   type="button"
-                  onClick={() => { setSelectedCategory("Todos"); setSearchQuery(""); }}
+                  onClick={resetAllFilters}
                   className="btn-secondary inline-flex items-center justify-center !py-2.5 !px-5 text-xs font-bold rounded-xl"
                 >
-                  Ver Todo el Catálogo
+                  <RotateCcw size={13} className="mr-1.5" />
+                  Restablecer Filtros
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsUsaModalOpen(true)}
                   className="btn-primary inline-flex items-center justify-center !py-2.5 !px-5 text-xs font-bold rounded-xl"
                 >
+                  <Plane size={13} className="mr-1.5" />
                   Pedir por Encargo USA
                 </button>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6">
               {filteredItems.map((item, idx) => {
                 const numericPrice = parsePrice(item.price);
 
@@ -1039,13 +1397,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     key={item.id}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.03 }}
-                    className="catalogo-product-card bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-2xl overflow-hidden hover:border-red-500/70 hover:shadow-xl transition-all duration-300 flex flex-col group relative"
+                    transition={{ delay: idx * 0.02 }}
+                    className="catalogo-product-card bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden hover:border-red-500/70 hover:shadow-2xl transition-all duration-300 flex flex-col group relative"
                   >
                     {/* Product Top Image Box */}
                     <div 
-                      className="relative aspect-square bg-slate-50 dark:bg-[#0c0e14] p-4 sm:p-6 flex items-center justify-center cursor-pointer overflow-hidden group/img"
-                      onClick={() => setSelectedProduct(item)}
+                      className="relative aspect-square bg-gradient-to-b from-slate-50 to-slate-100/60 dark:from-[#151722] dark:to-[#0c0e14] p-5 flex items-center justify-center cursor-pointer overflow-hidden group/img select-none"
+                      onClick={() => {
+                        setSelectedProduct(item);
+                        setActiveImageIndex(0);
+                      }}
                     >
                       <img 
                         src={item.img || "/assets/cat_suspension_amortiguadores.webp"} 
@@ -1053,62 +1414,108 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         loading="lazy"
                         decoding="async"
                         onError={(e) => { (e.target as HTMLImageElement).src = '/assets/promo_brakes_caliper.webp'; }}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-md rounded-xl"
+                        className="w-full h-full object-contain group-hover/img:scale-108 transition-transform duration-500 drop-shadow-md rounded-xl"
                       />
 
-                      {/* Badge top-left */}
+                      {/* Brand Badge Top-Left */}
                       {item.badge && (
                         <div className="absolute top-2.5 left-2.5 pointer-events-none">
-                          <span className="font-bold text-[9px] px-2 py-0.5 rounded-md shadow-md uppercase tracking-wide leading-tight block max-w-[120px] truncate bg-slate-900/90 text-white border border-white/20 backdrop-blur-sm">
+                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider leading-tight block max-w-[130px] truncate bg-black/85 text-white border border-white/20 backdrop-blur-md shadow-md">
                             {item.badge}
                           </span>
                         </div>
                       )}
 
-                      {/* USA chip top-right */}
-                      {item.isImportedUSA && (
-                        <div className="absolute top-2.5 right-2.5 pointer-events-none">
-                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md shadow-md uppercase tracking-wider bg-blue-600 text-white border border-blue-400/50">
-                            ✈ USA
+                      {/* Availability Badge Top-Right */}
+                      <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                        {item.isImportedUSA ? (
+                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-blue-600/90 text-white border border-blue-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
+                            <Plane size={10} />
+                            <span>USA Express</span>
                           </span>
-                        </div>
-                      )}
+                        ) : (
+                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-emerald-600/90 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                            <span>Stock Taller</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Quick View Floating Hint */}
+                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                        <span className="px-3.5 py-1.5 rounded-xl bg-white/95 text-slate-900 text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-xl transform translate-y-2 group-hover/img:translate-y-0 transition-transform">
+                          <Eye size={13} />
+                          <span>Ficha Técnica</span>
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Subtle Thin Divider */}
-                    <div className="w-full border-t border-zinc-100 dark:border-white/5" />
+                    {/* Divider */}
+                    <div className="w-full border-t border-slate-100 dark:border-white/5" />
 
                     {/* Product Details */}
                     <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-transparent">
                       <div className="space-y-2">
-                        {/* Part Number & Compatibility */}
-                        <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-                          {item.partNumber && (
-                            <span className="font-mono font-semibold truncate max-w-[130px]">
-                              {item.partNumber}
+                        {/* Part Number & Vehicle Compatibility */}
+                        <div className="flex items-center justify-between gap-1 text-[10px]">
+                          {item.partNumber ? (
+                            <button
+                              type="button"
+                              onClick={(e) => handleCopyPart(item.id, item.partNumber || '', e)}
+                              className="inline-flex items-center gap-1 font-mono font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-red-500/50 hover:bg-red-50 dark:hover:bg-red-950/20 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 transition-all cursor-pointer group/part"
+                              title="Copiar número de parte OEM al portapapeles"
+                            >
+                              {copiedPartId === item.id ? (
+                                <>
+                                  <CheckCheck size={11} className="text-emerald-500" />
+                                  <span className="text-emerald-500 font-bold">¡Copiado!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy size={11} className="text-slate-400 group-hover/part:text-red-500" />
+                                  <span className="truncate max-w-[110px]">{item.partNumber}</span>
+                                </>
+                              )}
+                            </button>
+                          ) : (
+                            <span className="text-slate-400 font-mono text-[10px]">OEM Genuino</span>
+                          )}
+
+                          {item.compatibility && (
+                            <span className="font-semibold text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[120px] text-right" title={item.compatibility}>
+                              {item.compatibility.split(',')[0]}
                             </span>
                           )}
-                          <span className={`px-1.5 py-0.2 rounded font-bold ${
-                            item.isImportedUSA
-                              ? 'text-blue-600 dark:text-blue-400'
-                              : 'text-emerald-600 dark:text-emerald-400'
-                          }`}>
-                            {item.isImportedUSA ? 'Por Encargo' : 'En Taller'}
-                          </span>
                         </div>
 
+                        {/* Title */}
                         <h3 
-                          onClick={() => setSelectedProduct(item)}
+                          onClick={() => {
+                            setSelectedProduct(item);
+                            setActiveImageIndex(0);
+                          }}
                           className="product-title text-xs sm:text-sm font-bold text-slate-900 dark:text-white hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.6em]"
                           title={item.title}
                         >
                           {item.title}
                         </h3>
 
+                        {/* Micro-specs pills */}
+                        {item.specs && item.specs.length > 0 && (
+                          <div className="space-y-1 pt-0.5">
+                            {item.specs.slice(0, 2).map((spec, sIdx) => (
+                              <div key={sIdx} className="flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-slate-400">
+                                <span className="w-1 h-1 rounded-full bg-red-600 shrink-0" />
+                                <span className="truncate">{spec}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
                         {/* Price Section */}
-                        <div className="pt-1 flex items-baseline justify-between">
+                        <div className="pt-1.5 flex items-baseline justify-between border-t border-slate-100 dark:border-white/5">
                           <div className="flex items-baseline gap-1">
-                            <span className="product-price text-base sm:text-lg font-black text-slate-900 dark:text-white font-display tracking-tight">
+                            <span className="product-price text-lg sm:text-xl font-black text-slate-900 dark:text-white font-display tracking-tight">
                               {numericPrice > 0 ? `$${numericPrice.toFixed(2)}` : item.price}
                             </span>
                             <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
@@ -1116,15 +1523,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             </span>
                           </div>
 
-                          <span className="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:inline-block">
-                            {item.compatibility ? item.compatibility.split(',')[0] : 'OEM'}
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300">
+                            {item.category.split('&')[0].trim()}
                           </span>
                         </div>
 
                         {/* Workshop Installation Hint */}
                         <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 select-none pt-0.5">
                           <Wrench size={11} className="text-red-600 shrink-0" />
-                          <span className="truncate">Instalación disponible en taller</span>
+                          <span className="truncate">Instalación y garantía en Taller MasterTech</span>
                         </div>
                       </div>
 
@@ -1135,7 +1542,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             whileTap={{ scale: 0.95 }}
                             whileHover={{ scale: 1.02 }}
                             onClick={(e) => addToCart(item, 1, e)}
-                            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black text-xs py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.95]"
+                            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black text-xs py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-red-600/20 active:scale-[0.95]"
                           >
                             <ShoppingCart size={13} />
                             <span>Añadir</span>
@@ -1145,7 +1552,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             initial={{ scale: 0.88, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ type: "spring", stiffness: 450, damping: 25 }}
-                            className="flex-1 flex items-center justify-between rounded-xl overflow-hidden border border-red-600 bg-red-600" 
+                            className="flex-1 flex items-center justify-between rounded-xl overflow-hidden border border-red-600 bg-red-600 shadow-md shadow-red-600/20" 
                             style={{ minHeight: '34px' }}
                           >
                             <button
@@ -1170,6 +1577,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             </button>
                           </motion.div>
                         )}
+
                         <button
                           onClick={() => {
                             setSelectedProduct(item);
@@ -1178,7 +1586,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-red-500 text-slate-600 dark:text-zinc-300 hover:text-red-600 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                           title="Ver Ficha Técnica"
                         >
-                          <ZoomIn size={14} />
+                          <Eye size={14} />
                         </button>
 
                         <a
@@ -1186,7 +1594,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           target="_blank"
                           rel="noopener noreferrer"
                           className="p-2.5 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-colors cursor-pointer border border-[#25D366]/30 flex items-center justify-center"
-                          title="Consultar por WhatsApp"
+                          title="Consultar por WhatsApp con N° OEM"
                         >
                           <WhatsAppIcon size={14} />
                         </a>
@@ -1203,7 +1611,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 5: CUSTOM USA PART IMPORT BANNER */}
         {/* ========================================================================= */}
         <section 
-          className="rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-xl border bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-100 dark:from-[#0d1527] dark:via-[#161f30] dark:to-[#10141d] border-blue-200 dark:border-amber-400/40 text-slate-900 dark:text-white transition-colors duration-300"
+          className="rounded-3xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-xl border bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-100 dark:from-[#0d1527] dark:via-[#161f30] dark:to-[#10141d] border-blue-200 dark:border-blue-500/40 text-slate-900 dark:text-white transition-colors duration-300"
         >
           <div className="space-y-3 max-w-2xl relative z-10">
             <div 
