@@ -85,7 +85,8 @@ import {
   ArrowLeftRight,
   ChevronsUp,
   GripVertical,
-  Upload
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
