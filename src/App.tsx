@@ -557,8 +557,8 @@ export default function App() {
               {/* 4 Clean Key Trust Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-slate-200 dark:border-slate-800">
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">6 Meses</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Garantía Escrita</div>
+                  <div className="text-xl font-black text-slate-900 dark:text-white">Escáner OEM</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Diagnóstico Preciso</div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
@@ -701,20 +701,20 @@ export default function App() {
               </div>
             </div>
 
-            {/* 3. Portal Línea de Inspección Gratuita */}
+            {/* 3. Portal Cita de Revisión */}
             <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
                   <ShieldCheck size={24} />
                 </div>
-                <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">Sin Costo</span>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Inspección Preventiva</h3>
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Diagnóstico Especializado</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Cita de Revisión</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Revisión preliminar de fluidos, tren delantero, frenos y escaneo básico con turno agendado sin costo alguno.
+                  Revisión preventiva y asesoría especializada con presupuesto previo antes de cualquier intervención.
                 </p>
               </div>
-              <a href="/inspeccion" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Agendar Inspección</span>
+              <a href="/contacto" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Solicitar Cita de Revisión</span>
                 <ArrowRight size={14} />
               </a>
             </div>
@@ -899,17 +899,17 @@ export default function App() {
           ========================================================================= */}
       <section className="py-14 sm:py-20 px-4 sm:px-6 bg-slate-900 text-white transition-colors duration-300">
         <div className="max-w-5xl mx-auto">
-          
           <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-xl space-y-3">
               <span className="text-xs font-bold text-red-500 uppercase tracking-widest block">
-                ATENCIÓN INMEDIATA EN MARGARITA
+                ATENCIÓN PROFESIONAL EN MARGARITA
               </span>
-              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-                ¿Listo para Atender tu Vehículo?
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white uppercase leading-tight">
+                SOLICITA TU CITA DE REVISIÓN <br />
+                <span className="text-red-500">EN TALLER MASTERTECH</span>
               </h2>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Escríbenos por WhatsApp para coordinar tu ingreso, cotizar un servicio o agendar tu cita en nuestro taller de Porlamar.
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-medium">
+                Revisión preventiva y asesoría especializada con presupuesto previo antes de cualquier intervención.
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-400">
                 <div className="flex items-center gap-1.5">

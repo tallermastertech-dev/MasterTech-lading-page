@@ -216,12 +216,12 @@ export default function Contacto() {
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 Agenda tu cita
               </div>
-              <h1 className="text-5xl lg:text-7xl font-display font-black tracking-tighter leading-none mb-4">
-                RESERVA TU <br />
-                <span className="text-primary italic">CUPO</span>
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-tight mb-4 uppercase">
+                SOLICITA TU CITA DE REVISIÓN <br />
+                <span className="text-primary">EN TALLER MASTERTECH</span>
               </h1>
-              <p className="text-lg text-zinc-400 max-w-xl mx-auto">
-                Estamos listos para recibirte. Completa los datos y te asignaremos un técnico especialista.
+              <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto font-medium leading-relaxed">
+                Revisión preventiva y asesoría especializada con presupuesto previo antes de cualquier intervención.
               </p>
             </div>
 

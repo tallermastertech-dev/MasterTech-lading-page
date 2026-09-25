@@ -206,16 +206,21 @@ export default function Servicios() {
             </div>
 
             {/* CTA Box */}
-            <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-10 text-center max-w-xl mx-auto shadow-sm">
-              <h3 className="text-2xl sm:text-3xl font-black mb-3 text-slate-900 dark:text-white">¿Necesitas una revisión personalizada?</h3>
-              <p className="text-slate-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Contáctanos por WhatsApp para consultar sobre fallas específicas o agendar tu cita de inmediato.</p>
+            <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-8 sm:p-10 text-center max-w-2xl mx-auto shadow-sm">
+              <h3 className="text-2xl sm:text-3xl font-black mb-3 text-slate-900 dark:text-white uppercase leading-tight">
+                SOLICITA TU CITA DE REVISIÓN <br />
+                <span className="text-primary">EN TALLER MASTERTECH</span>
+              </h3>
+              <p className="text-slate-600 dark:text-zinc-400 text-sm sm:text-base mb-6 leading-relaxed font-medium">
+                Revisión preventiva y asesoría especializada con presupuesto previo antes de cualquier intervención.
+              </p>
               <a
                 href={config.WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary inline-flex items-center gap-3 !py-4 !px-8 text-sm sm:text-base border-none mx-auto"
               >
-                CONSULTAR VÍA WHATSAPP <ArrowRight className="w-5 h-5" />
+                AGENDAR CITA POR WHATSAPP <ArrowRight className="w-5 h-5" />
               </a>
             </div>
           </motion.div>
