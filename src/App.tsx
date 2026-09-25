@@ -529,7 +529,7 @@ export default function App() {
               </h1>
 
               <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg mb-8 max-w-xl leading-relaxed font-normal">
-                Atención especializada en <strong>Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos con garantía escrita.
+                Atención especializada en <strong>Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos de alta calidad.
               </p>
 
               {/* Action Buttons */}
@@ -719,27 +719,22 @@ export default function App() {
               </a>
             </div>
 
-            {/* 4. Portal Manuales por Motor */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 shadow-sm transition-all flex flex-col justify-between group">
+            {/* 4. Portal Catálogo de Repuestos & Autopartes */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 transition-colors shadow-sm">
-                  <BookOpen size={24} />
+                <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
+                  <Package size={24} />
                 </div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Guías Técnicas</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300/80 dark:border-slate-700">
-                    Próximamente
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Manuales 5.000 KM</h3>
+                <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Stock & Encargo</span>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Catálogo de Repuestos</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Intervalos recomendados, especificaciones de aceite y tolerancias críticas organizadas por motorización exacta.
+                  Frenos cerámicos, amortiguadores, lubricantes sintéticos y piezas OEM en Margarita o importación express desde EE.UU.
                 </p>
               </div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500 cursor-default select-none">
-                <Clock size={13} />
-                <span>En edición · Próximamente disponible</span>
-              </div>
+              <a href="/catalogo" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
+                <span>Explorar Catálogo</span>
+                <ArrowRight size={14} />
+              </a>
             </div>
 
           </div>

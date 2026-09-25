@@ -40,31 +40,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 1. Frenos & Discos
   {
     id: 1,
-    title: "Conjunto de Disco Perforado & Cáliper Brembo MasterTech",
+    title: "Kit de Discos Ranurados Ventilados & Cálispers Brembo 4-Pistones",
     category: "Frenos & Discos",
     price: "$185.00",
-    desc: "Módulo integral MasterTech con disco ranurado ventilado y cáliper Brembo de 4 pistones.",
-    longDesc: "Ensamble MasterTech Performance: disco ranurado perforado con disipación térmica y pinza de 4 pistones para frenadas precisas.",
+    desc: "Discos ventilados de alto rendimiento térmico con pinzas Brembo de 4 pistones para frenadas precisas.",
+    longDesc: "Ensamble Brembo Performance: disco ranurado ventilado con disipación térmica y pinza de 4 pistones para frenadas estables y sin fatiga.",
     img: "/assets/cat_frenos_discos.webp",
-    badge: "MasterTech Brembo",
-    specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico MasterTech", "Ensamble directo Plug & Play"],
+    badge: "Brembo Racing",
+    specs: ["Cáliper 4 pistones alto torque", "Disco ranurado térmico Brembo", "Ensamble directo Plug & Play"],
     compatibility: "Vehículos deportivos y SUVs seleccionadas",
-    partNumber: "MT-STR-BRK-4P",
+    partNumber: "BRM-STR-4P-GT",
     stock: 4,
     isImportedUSA: true
   },
   {
     id: 2,
-    title: "Pastillas de Freno Cerámicas Premium MasterTech (Juego Delantero)",
+    title: "Pastillas de Freno Cerámicas Wagner / Raybestos (Juego Delantero)",
     category: "Frenos & Discos",
     price: "$55.00",
-    desc: "Pastillas cerámicas MasterTech de baja emisión de polvo, frenado silencioso y máxima adherencia térmica.",
-    longDesc: "Fórmula de fricción MasterTech: previene chirridos metálicos y disminuye el desgaste de los discos de freno.",
+    desc: "Pastillas cerámicas de formulación silenciosa, mínima emisión de polvo y óptima fricción térmica.",
+    longDesc: "Fórmula de fricción cerámica de grado OEM: previene chirridos metálicos y prolonga la vida útil de los discos de freno.",
     img: "/assets/promo_brakes_caliper.webp",
-    badge: "MasterTech Brakes",
-    specs: ["Compuesto 100% cerámico MasterTech", "Libre de polvo metálico", "Resistencia superior a 600°C"],
+    badge: "Wagner / OEM",
+    specs: ["Compuesto 100% cerámico", "Libre de polvo metálico", "Resistencia superior a 650°C"],
     compatibility: "Vehículos Japoneses, Americanos y Coreanos",
-    partNumber: "MT-BP-CER-8842",
+    partNumber: "WAG-QC-CER-88",
     stock: 12,
     isImportedUSA: true
   },
@@ -72,31 +72,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 2. Suspensión & Amortiguadores
   {
     id: 3,
-    title: "Juego de Coilovers & Amortiguadores MasterTech Pro (Par)",
+    title: "Juego de Amortiguadores Heavy Duty Monroe / KYB Gas-Magnum (Par)",
     category: "Suspensión & Amortiguadores",
     price: "$120.00",
-    desc: "Amortiguadores dobles MasterTech presurizados con nitrógeno y resortes reforzados para máxima estabilidad.",
-    longDesc: "Línea oficial MasterTech Racing: resortes progresivos de aleación con recubrimiento electrostático y vástagos cromados de alta fricción.",
+    desc: "Amortiguadores presurizados con nitrógeno y tecnología multirrango para máxima estabilidad en vía.",
+    longDesc: "Línea Heavy Duty a gas: control superior de oscilación y rebote en baches y asfalto exigente.",
     img: "/assets/cat_suspension_amortiguadores.webp",
-    badge: "MasterTech Pro",
-    specs: ["Doble tubo a gas nitrógeno", "Certificación MasterTech OEM", "Ajuste de precarga y altura"],
+    badge: "Monroe / KYB",
+    specs: ["Doble tubo presurizado a nitrógeno", "Certificación internacional OEM", "Vástago de acero microcromado"],
     compatibility: "Jeep, Toyota, Ford, Chevrolet, Dodge",
-    partNumber: "MT-COIL-PRO-2024",
+    partNumber: "MNR-GAS-HD-202",
     stock: 8,
     isImportedUSA: true
   },
   {
     id: 4,
-    title: "Coilover Deportivo MasterTech Pro con Muelle Helicoidal",
+    title: "Coilover Deportivo Pro con Muelle Helicoidal Regulable",
     category: "Suspensión & Amortiguadores",
     price: "$95.00",
-    desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para pista o calle.",
-    longDesc: "Ingeniería MasterTech Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas.",
+    desc: "Amortiguador deportivo con muelle helicoidal y válvula de control de rebote para camionetas y sedanes.",
+    longDesc: "Ingeniería Pro Suspension: respuesta inmediata de estabilidad con mínima oscilación en curvas y frenadas bruscas.",
     img: "/assets/promo_suspension_spring.webp",
-    badge: "MasterTech Pro",
-    specs: ["Muelle helicoidal reforzado", "Vástago cromado de baja fricción", "Ajuste milimétrico"],
+    badge: "Bilstein / Pro",
+    specs: ["Muelle helicoidal reforzado", "Vástago cromado de baja fricción", "Ajuste de altura milimétrico"],
     compatibility: "Vehículos livianos y sedanes",
-    partNumber: "MT-SUSP-SP-90",
+    partNumber: "BLS-SP-COIL-90",
     stock: 6,
     isImportedUSA: true
   },
@@ -104,31 +104,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 3. Aceites & Lubricantes
   {
     id: 5,
-    title: "Kit Aceite MasterTech 100% Sintético 5W-30 + Filtro OEM",
+    title: "Kit Aceite 100% Sintético 5W-30 (Mopar / Motul / Mobil 1) + Filtro OEM",
     category: "Aceites & Lubricantes",
     price: "$45.00",
-    desc: "Aceite 100% sintético MasterTech con aditivos antifricción de última generación y filtro OEM.",
-    longDesc: "Fórmula exclusiva MasterTech Lubricants: reduce el rozamiento térmico en motores modernos y protege en frío.",
+    desc: "Aceite sintético con aditivos antidesgaste de última generación API SP y filtro de aceite genuino.",
+    longDesc: "Protección térmica total: reduce el rozamiento térmico en motores modernos con tecnología VVT / Turbo y protege en frío.",
     img: "/assets/cat_aceites_lubricantes.webp",
-    badge: "MasterTech Oil",
-    specs: ["Sintético API SP / ILSAC GF-6A", "Incluye filtro de aceite MasterTech", "Soporta altas temperaturas"],
+    badge: "Mopar / Motul",
+    specs: ["Certificación API SP / ILSAC GF-6A", "Incluye filtro de aceite de alta eficiencia", "Soporta altas temperaturas y tráfico pesado"],
     compatibility: "Jeep, Toyota, Honda, Nissan, Dodge, Lexus, Hyundai",
-    partNumber: "MT-SYN-5W30-OEM",
+    partNumber: "MPR-5W30-SYN-KT",
     stock: 20,
     isImportedUSA: true
   },
   {
     id: 6,
-    title: "Fluido Sintético de Transmisión Automática ATF MasterTech (Galón)",
+    title: "Fluido Sintético de Transmisión Automática ATF+4 / Dexron VI (Galón)",
     category: "Aceites & Lubricantes",
     price: "$38.00",
-    desc: "Fluido de transmisión de alto desempeño para cajas automáticas secuenciales y CVT.",
-    longDesc: "Protección térmica contra fricción y deslizamiento en cambios de marcha continuos bajo climas cálidos.",
+    desc: "Fluido de transmisión de alta estabilidad térmica para cajas automáticas secuenciales y transmisiones modernas.",
+    longDesc: "Protección contra fricción y deslizamiento en cambios de marcha continuos bajo climas cálidos.",
     img: "/assets/cat_aceites_lubricantes.webp",
-    badge: "MasterTech Fluid",
-    specs: ["Compatible Dexron VI / Mercon LV", "Protección antidesgaste", "Alta estabilidad térmica"],
+    badge: "Mopar / Valvoline",
+    specs: ["Compatible ATF+4 / Dexron VI / Mercon LV", "Protección antidesgaste para embragues", "Alta resistencia a la oxidación"],
     compatibility: "Transmisiones automáticas multimarca",
-    partNumber: "MT-ATF-SYN-4L",
+    partNumber: "MPR-ATF4-SYN-GL",
     stock: 14,
     isImportedUSA: true
   },
@@ -136,31 +136,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 4. Baterías & Electricidad
   {
     id: 7,
-    title: "Batería MasterTech AGM Alta Potencia 600A / 700A",
+    title: "Batería Sellada Libre de Mantenimiento Duncan / ACDelco 700A",
     category: "Baterías & Electricidad",
     price: "$85.00",
-    desc: "Batería sellada MasterTech de aleación plata-calcio de alta resistencia para arranques inmediatos.",
-    longDesc: "Energía de precisión MasterTech: bornes de bronce y carcasa de carbono para climas exigentes.",
+    desc: "Batería de aleación plata-calcio de alta resistencia diseñada para arranque instantáneo y clima tropical.",
+    longDesc: "Potencia de arranque garantizada: placas reforzadas resistentes a vibraciones y alta temperatura.",
     img: "/assets/cat_baterias_electricidad.webp",
-    badge: "MasterTech Power",
-    specs: ["Sellada libre de mantenimiento", "Garantía MasterTech 12 Meses", "Placas reforzadas"],
+    badge: "Duncan / ACDelco",
+    specs: ["Sellada 100% libre de mantenimiento", "Alta capacidad de arranque en frío (CCA)", "Garantía de respaldo técnico en taller"],
     compatibility: "Universal 12V vehículos livianos y camionetas",
-    partNumber: "MT-BAT-AGM-700",
+    partNumber: "DNC-700A-MF-12V",
     stock: 15,
     isImportedUSA: false
   },
   {
     id: 8,
-    title: "Alternador de Alto Rendimiento 140A MasterTech Heavy Duty",
+    title: "Alternador Reforzado de Alto Rendimiento 140A Denso / Bosch",
     category: "Baterías & Electricidad",
     price: "$165.00",
-    desc: "Alternador reforzado de 140 amperios con regulador interno de voltaje para alta demanda eléctrica.",
-    longDesc: "Componente MasterTech Electrical: garantiza alimentación estable para sistemas de audio, iluminación LED y aire acondicionado.",
+    desc: "Alternador con bobinado de cobre de alta pureza y regulador interno para alta demanda eléctrica.",
+    longDesc: "Alimentación eléctrica continua y estable para sistemas de climatización, audio e iluminación auxiliar.",
     img: "/assets/cat_baterias_electricidad.webp",
-    badge: "MasterTech Heavy Duty",
-    specs: ["Salida 140 Amperios 12V", "Bobinado de cobre de alta pureza", "Regulador electrónico integrado"],
+    badge: "Denso / Bosch",
+    specs: ["Salida nominal 140 Amperios 12V", "Bobinado de cobre de máxima pureza", "Regulador electrónico de voltaje integrado"],
     compatibility: "Camionetas, SUVs y sistemas con accesorios",
-    partNumber: "MT-ALT-140A-HD",
+    partNumber: "DNS-ALT-140A-HD",
     stock: 5,
     isImportedUSA: true
   },
@@ -168,31 +168,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 5. Filtros & Consumibles
   {
     id: 9,
-    title: "Filtro de Aire Cónico de Alto Flujo MasterTech Performance",
+    title: "Filtro de Aire Cónico de Alto Flujo K&N / Intake Performance",
     category: "Filtros & Consumibles",
     price: "$42.00",
-    desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor entrada de flujo de aire.",
-    longDesc: "Línea MasterTech AirFlow: maximiza la respuesta de aceleración y protege el motor contra partículas finas.",
+    desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor flujo de admisión.",
+    longDesc: "Maximiza la respuesta de aceleración protegiendo las cámaras de combustión contra micropartículas.",
     img: "/assets/cat_filtros_oem.webp",
-    badge: "MasterTech High Flow",
-    specs: ["Malla de algodón lavable", "Cuello de 3 pulgadas adaptable", "Incremento de flujo de aire hasta +25%"],
+    badge: "K&N Performance",
+    specs: ["Malla de algodón multicapa lavable", "Cuello universal adaptable de 3 pulgadas", "Incremento de flujo de aire"],
     compatibility: "Sistemas de inducción directa y tomas universales",
-    partNumber: "MT-AF-CONE-RED",
+    partNumber: "KN-CONE-AIR-3IN",
     stock: 18,
     isImportedUSA: true
   },
   {
     id: 10,
-    title: "Kit de Diagnóstico & Microfiltros de Inyección MasterTech",
+    title: "Kit de Microfiltros y Sellos Vitón para Inyectores OEM",
     category: "Filtros & Consumibles",
     price: "$35.00",
-    desc: "Kit de microfiltros, sellos vitón y componentes OEM para mantenimiento de inyección electrónica.",
-    longDesc: "Componentes MasterTech OEM: previene fugas de combustible y asegura pulverización uniforme en inyectores.",
+    desc: "Kit de microfiltros de alta retención y sellos vitón resistentes a gasolina para inyección electrónica.",
+    longDesc: "Mantenimiento preventivo para inyectores: asegura pulverización uniforme y previene fugas de combustible.",
     img: "/assets/cat_filtros_oem.webp",
-    badge: "MasterTech OEM",
-    specs: ["Sellos Vitón de alta presión", "Microfiltros de precisión", "Garantía de estanqueidad"],
+    badge: "Bosch / Denso OEM",
+    specs: ["Sellos Vitón de alta presión y temperatura", "Microfiltros de micromalla metálica", "Estanqueidad 100% garantizada"],
     compatibility: "Inyectores Bosch, Denso, Delphi, Magneti Marelli",
-    partNumber: "MT-INJ-KIT-OEM",
+    partNumber: "INJ-KIT-OEM-VITON",
     stock: 25,
     isImportedUSA: true
   },
@@ -200,31 +200,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 6. Fluidos & Climatización
   {
     id: 11,
-    title: "Kit de Servicio A/A Gas Refrigerante R134a + Aceite PAG MasterTech",
+    title: "Garrafa Gas Refrigerante R134a Chemours + Aceite Sintético PAG",
     category: "Fluidos & Climatización",
     price: "$48.00",
-    desc: "Garrafa de gas ecológico R134a MasterTech con lubricante sintético PAG para compresores de A/A.",
-    longDesc: "Enfriamiento instantáneo MasterTech: restaura la presión óptima y la temperatura del sistema de climatización.",
+    desc: "Refrigerante puro R134a de grado automotriz con lubricante sintético PAG para compresores de aire acondicionado.",
+    longDesc: "Restaura la presión y la capacidad de enfriamiento óptima del sistema de aire acondicionado del vehículo.",
     img: "/assets/cat_climatizacion.webp",
-    badge: "MasterTech A/C",
-    specs: ["Gas refrigerante puro R134a", "Aceite sintético PAG ISO 46/100", "Detector UV antifugas incluido"],
+    badge: "Chemours R134a",
+    specs: ["Gas refrigerante puro R134a", "Aceite sintético PAG ISO 46/100", "Compatible con detector UV antifugas"],
     compatibility: "Sistemas de aire acondicionado automotriz R134a",
-    partNumber: "MT-AC-R134A-KIT",
+    partNumber: "CHM-R134A-PAG-KT",
     stock: 16,
     isImportedUSA: true
   },
   {
     id: 12,
-    title: "Refrigerante / Anticongelante 50/50 MasterTech Long Life (Galón)",
+    title: "Refrigerante / Anticongelante Orgánico 50/50 Long Life (Galón)",
     category: "Fluidos & Climatización",
     price: "$22.00",
-    desc: "Coolant prediluido con tecnología OAT para protección del radiador, bomba de agua y bloque de motor.",
-    longDesc: "Protección térmica contra sobrecalentamiento y corrosión galvánica en motores de aluminio.",
+    desc: "Coolant prediluido con tecnología de ácidos orgánicos (OAT) para protección contra sobrecalentamiento.",
+    longDesc: "Protección térmica contra cavitación y corrosión galvánica en radiadores y bloques de aluminio.",
     img: "/assets/cat_climatizacion.webp",
-    badge: "MasterTech Coolant",
-    specs: ["Fórmula 50/50 lista para usar", "Protección anticorrosiva OAT", "Punto de ebullición hasta 129°C"],
+    badge: "Prestone / Mopar",
+    specs: ["Fórmula 50/50 lista para usar", "Tecnología OAT de larga duración", "Punto de ebullición elevado"],
     compatibility: "Todos los radiadores y motores gasolina/diésel",
-    partNumber: "MT-COOL-5050-GL",
+    partNumber: "PRS-COOL-5050-OAT",
     stock: 30,
     isImportedUSA: true
   },
@@ -232,31 +232,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 7. Inyección & Motor
   {
     id: 13,
-    title: "Turbocargador MasterTech Garrett Twin Scroll con Líneas de Acero",
+    title: "Turbocargador Garrett / BorgWarner Twin Scroll OEM",
     category: "Inyección & Motor",
     price: "$340.00",
-    desc: "Turbo MasterTech de geometría avanzada con carcasa pulida, rodamientos cerámicos y líneas malladas.",
-    longDesc: "Línea MasterTech Motorsport: balanceado dinámico de fábrica para soportar altas revoluciones y presiones de turbo.",
+    desc: "Turbocargador de geometría de precisión con rodamientos reforzados para motores sobrealimentados.",
+    longDesc: "Presión de sobrealimentación estable y balanceado dinámico para máxima durabilidad en exigencia.",
     img: "/assets/promo_turbo_charger.webp",
-    badge: "MasterTech Turbo",
-    specs: ["Carcasa Twin Scroll MasterTech", "Rodamientos cerámicos de alta velocidad", "Líneas de acero inoxidable AN-4"],
+    badge: "Garrett OEM",
+    specs: ["Carcasa Twin Scroll de alta resistencia", "Rodamientos de precisión", "Líneas de refrigeración y lubricación"],
     compatibility: "Motores gasolina y diésel turboalimentados",
-    partNumber: "MT-TURB-TWIN-SC",
+    partNumber: "GRT-TWIN-SC-OEM",
     stock: 3,
     isImportedUSA: true
   },
   {
     id: 14,
-    title: "Juego de Inyectores de Alta Precisión Multi-Punto MasterTech (Set x4)",
+    title: "Juego de Inyectores de Combustible Multi-Punto Bosch / Denso (Set x4)",
     category: "Inyección & Motor",
     price: "$90.00",
-    desc: "Inyectores de combustible de respuesta ultrarrápida calibrados para pulverización perfecta.",
-    longDesc: "Máxima eficiencia de combustión MasterTech: reduce el consumo y optimiza la potencia en aceleración.",
+    desc: "Inyectores originales de respuesta rápida con pulverización balanceada para óptima combustión.",
+    longDesc: "Caudal equilibrado y pulverización atomizada que reducen emisiones y optimizan el consumo de combustible.",
     img: "/assets/promo_turbo_charger.webp",
-    badge: "MasterTech Inyección",
-    specs: ["Pulverización multi-orificio de 12 puntos", "Caudal balanceado ±1%", "Conectores estándar OEM"],
+    badge: "Bosch / Denso",
+    specs: ["Pulverización multi-orificio", "Caudal balanceado de fábrica", "Conectores estándar OEM"],
     compatibility: "Motores 4 y 6 cilindros",
-    partNumber: "MT-INJ-FLOW-4X",
+    partNumber: "BSH-INJ-FLOW-4X",
     stock: 9,
     isImportedUSA: true
   },
@@ -264,31 +264,31 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   // 8. Cuidado & Detailing
   {
     id: 15,
-    title: "Kit de Detailing & Cera Cerámica Hidrofóbica MasterTech Gold",
+    title: "Cera Cerámica Hidrofóbica SiO2 Meguiar's / 3M Professional",
     category: "Cuidado & Detailing",
     price: "$38.00",
-    desc: "Sellador cerámico SiO2 con efecto hidrofóbico repelente al agua, polvo y rayos UV.",
-    longDesc: "Estética automotriz MasterTech: brillo efecto espejo con protección duradera por hasta 6 meses.",
+    desc: "Sellador cerámico con nanopartículas de SiO2 que ofrece protección repelente y brillo profundo.",
+    longDesc: "Capa protectora contra rayos UV, salitre de la isla, lluvia ácida y polvo con efecto hidrofóbico.",
     img: "/assets/cat_cuidado_estetica.webp",
-    badge: "MasterTech Detailing",
-    specs: ["Fórmula SiO2 hidrofóbica", "Brillo profundo efecto cristal", "Incluye aplicador de microfibra"],
+    badge: "Meguiar's Pro",
+    specs: ["Fórmula avanzada SiO2", "Brillo profundo efecto cristalino", "Protección contra salitre costero"],
     compatibility: "Pinturas automotrices, vidrios y faros",
-    partNumber: "MT-CERAMIC-WAX-500",
+    partNumber: "MEG-CERAMIC-500",
     stock: 22,
     isImportedUSA: true
   },
   {
     id: 16,
-    title: "Champú de Espuma Activa PH Neutro & Toallas Microfibra MasterTech",
+    title: "Champú de Espuma Activa PH Neutro Snow Foam + Toallas Microfibra",
     category: "Cuidado & Detailing",
     price: "$25.00",
-    desc: "Champú concentrado para cañón de espuma Snow Foam que encapsula la suciedad sin rayar la pintura.",
-    longDesc: "Limpieza profesional de carrocería MasterTech: respeta tratamientos cerámicos y ceras preexistentes.",
+    desc: "Champú concentrado para espumadora que remueve contaminantes sin dañar el barniz ni ceras previas.",
+    longDesc: "Lavado seguro y anti-rayas: encapsula partículas de suciedad facilitando el enjuague.",
     img: "/assets/cat_cuidado_estetica.webp",
-    badge: "MasterTech Care",
-    specs: ["PH Neutro 100% seguro", "Alta densidad de espuma", "Incluye 2 toallas de 600 GSM"],
+    badge: "Pro Care",
+    specs: ["PH neutro seguro para pinturas", "Espuma densa de alta adherencia", "Incluye 2 toallas de microfibra de alto gramaje"],
     compatibility: "Todo tipo de carrocerías y acabados mate o brillante",
-    partNumber: "MT-SNOW-FOAM-1L",
+    partNumber: "PRO-SNOW-FOAM-1L",
     stock: 28,
     isImportedUSA: true
   }
@@ -696,12 +696,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
       <main className="pt-24 pb-20 max-w-[1760px] mx-auto px-3 sm:px-6 space-y-16">
         
         {/* ========================================================================= */}
-        {/* SECTION 1: HERO SHOWCASE (INSPIRADO EN EL DISEÑO DE REFERENCIA) */}
+        {/* SECTION 1: HERO SHOWCASE (DISEÑO PROFESIONAL MASTERTECH) */}
         {/* ========================================================================= */}
-        <section className="relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-14 shadow-xl border bg-white dark:bg-gradient-to-b dark:from-[#161822] dark:via-[#11131a] dark:to-[#0D0D0D] border-slate-200 dark:border-amber-400/30 transition-colors duration-300">
+        <section className="relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-14 shadow-xl border bg-white dark:bg-gradient-to-b dark:from-[#161822] dark:via-[#11131a] dark:to-[#0D0D0D] border-slate-200 dark:border-slate-800 transition-colors duration-300">
           {/* Ambient Glows */}
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
             {/* Left Content */}
@@ -709,10 +709,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <motion.div 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="hero-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-xs uppercase tracking-widest bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400"
+                className="hero-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-xs uppercase tracking-widest bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400"
               >
-                <ShieldCheck size={14} className="text-amber-500 dark:text-amber-400" />
-                <span>Calidad & Certificación OEM Internacional</span>
+                <ShieldCheck size={14} className="text-red-600 dark:text-red-400" />
+                <span>Stock en Margarita · Importación Directa EE.UU.</span>
               </motion.div>
 
               <motion.h1 
@@ -722,7 +722,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] text-slate-900 dark:text-white"
               >
                 <span>Repuestos &</span> <br className="hidden sm:block" />
-                <span className="text-amber-500 dark:text-amber-400 italic">Autopartes</span> <span>de Alta Calidad</span>
+                <span className="text-red-600 dark:text-red-500 italic">Autopartes OEM</span> <span>Certificadas</span>
               </motion.h1>
 
               <motion.p 
@@ -731,7 +731,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 transition={{ delay: 0.2 }}
                 className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 text-slate-600 dark:text-slate-300"
               >
-                Frenos cerámicos, suspensión presurizada, lubricantes 100% sintéticos y componentes OEM con stock inmediato en Margarita y despacho express directo desde EE.UU.
+                Pastillas cerámicas, amortiguadores heavy duty, lubricantes 100% sintéticos y componentes genuinos. Disponibilidad inmediata en taller o importación express desde EE.UU. con código OEM o serial VIN.
               </motion.p>
 
               {/* Action CTAs */}
@@ -743,7 +743,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               >
                 <a 
                   href="#catalogo-grid"
-                  className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
+                  className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-red-600/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
                 >
                   <ShoppingCart size={16} />
                   <span>Explorar Catálogo</span>
@@ -761,18 +761,27 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(true)}
-                  className="px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer bg-amber-50 dark:bg-amber-400/15 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-400/35 hover:bg-amber-100 dark:hover:bg-amber-400/25"
+                  className="px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
                   <ShoppingBag size={16} />
                   <span>Carrito ({cartTotalItems})</span>
                 </button>
               </motion.div>
 
-              {/* Pagination Dots Simulator */}
-              <div className="flex items-center justify-center lg:justify-start gap-2 pt-4">
-                <span className="w-6 h-2 rounded-full bg-amber-400 shadow-md shadow-amber-400/40"></span>
-                <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-white/20"></span>
-                <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-white/20"></span>
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4 text-xs font-medium text-slate-600 dark:text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-emerald-500" />
+                  Garantía en Taller
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-emerald-500" />
+                  Instalación Disponible
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-emerald-500" />
+                  Marcas OEM & Genuinas
+                </span>
               </div>
             </div>
 
@@ -796,15 +805,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 {/* Floating Micro-Badge */}
                 <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-md">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-500 dark:text-amber-400 font-bold">
+                    <div className="w-8 h-8 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-600 dark:text-red-400 font-bold">
                       <Flame size={16} />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-slate-900 dark:text-white">Discos & Suspensión Heavy Duty</div>
-                      <div className="text-[10px] text-slate-600 dark:text-slate-300">Rendimiento garantizado en pista y carretera</div>
+                      <div className="text-xs font-black text-slate-900 dark:text-white">Frenos, Suspensión & Motor</div>
+                      <div className="text-[10px] text-slate-600 dark:text-slate-300">Rendimiento garantizado y compatibilidad exacta</div>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/30">
+                  <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-lg border border-red-500/30">
                     OEM 100%
                   </span>
                 </div>
@@ -814,34 +823,34 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         </section>
 
         {/* ========================================================================= */}
-        {/* SECTION 2: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID COMO REFERENCIA) */}
+        {/* SECTION 2: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID) */}
         {/* ========================================================================= */}
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-                <span className="text-[11px] font-black uppercase text-amber-500 dark:text-amber-400 tracking-wider">Exploración Rápida</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
+                <span className="text-[11px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider">Exploración por Sistema</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                <span>Categorías</span> <span className="text-amber-500 dark:text-amber-400 italic">Populares</span>
+                <span>Categorías</span> <span className="text-red-600 dark:text-red-400 italic">Principales</span>
               </h2>
             </div>
             <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-sm">
-              Haz clic en cualquier categoría para filtrar automáticamente el inventario en tiempo real.
+              Selecciona una categoría para filtrar el inventario o cotizar piezas específicas para tu vehículo.
             </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-amber-400" />, img: "/assets/cat_frenos_discos.webp", desc: "Pastillas cerámicas y discos ranurados" },
-              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-amber-400" />, img: "/assets/cat_suspension_amortiguadores.webp", desc: "Coilovers y amortiguadores de gas" },
-              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-amber-400" />, img: "/assets/cat_aceites_lubricantes.webp", desc: "Sintéticos 5W-30 y fluidos ATF" },
-              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-amber-400" />, img: "/assets/cat_baterias_electricidad.webp", desc: "Baterías AGM y alternadores 140A" },
-              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-amber-400" />, img: "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
-              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-amber-400" />, img: "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
-              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-amber-400" />, img: "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
-              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-amber-400" />, img: "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
+              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-red-500" />, img: "/assets/cat_frenos_discos.webp", desc: "Pastillas cerámicas y discos ranurados" },
+              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-red-500" />, img: "/assets/cat_suspension_amortiguadores.webp", desc: "Coilovers y amortiguadores de gas" },
+              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-red-500" />, img: "/assets/cat_aceites_lubricantes.webp", desc: "Sintéticos 5W-30 y fluidos ATF" },
+              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-red-500" />, img: "/assets/cat_baterias_electricidad.webp", desc: "Baterías AGM y alternadores 140A" },
+              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-red-500" />, img: "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
+              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-red-500" />, img: "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
+              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-red-500" />, img: "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
+              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-red-500" />, img: "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
             ].map((catItem, idx) => {
               const count = catalogItems.filter(item => item.category === catItem.name).length;
               const isSelected = selectedCategory === catItem.name;
@@ -856,8 +865,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   }}
                   className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-sm hover:shadow-md ${
                     isSelected
-                      ? 'is-selected ring-2 ring-amber-400 bg-amber-500/15 border-amber-400'
-                      : 'bg-white dark:bg-[#12141a]/90 border-slate-200 dark:border-white/10 hover:border-amber-400/50 hover:bg-slate-50 dark:hover:bg-[#161822]'
+                      ? 'is-selected ring-2 ring-red-600 bg-red-50 dark:bg-red-950/20 border-red-500'
+                      : 'bg-white dark:bg-[#12141a]/90 border-slate-200 dark:border-white/10 hover:border-red-500/40 hover:bg-slate-50 dark:hover:bg-[#161822]'
                   }`}
                 >
                   <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-slate-100 dark:bg-[#0c0e14] border border-slate-200 dark:border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
@@ -870,11 +879,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-colors leading-tight truncate">
+                    <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors leading-tight truncate">
                       {catItem.label}
                     </h4>
-                    <span className="category-count text-[10px] font-mono text-amber-600 dark:text-amber-400/90 font-bold block mt-0.5">
-                      ({count} {count === 1 ? 'producto' : 'productos'})
+                    <span className="category-count text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold block mt-0.5">
+                      ({count} {count === 1 ? 'pieza' : 'piezas'})
                     </span>
                   </div>
                 </div>
@@ -884,17 +893,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         </section>
 
         {/* ========================================================================= */}
-        {/* SECTION 3: PROMO OFFER BANNERS (3 TARJETAS COMO EN LA REFERENCIA) */}
+        {/* SECTION 3: PROMO OFFER BANNERS (SERVICIOS Y REPUESTOS CLAVE) */}
         {/* ========================================================================= */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Promo Card 1: Frenos */}
           <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-red-50/80 dark:bg-gradient-to-br dark:from-[#221010] dark:via-[#151114] dark:to-black border border-red-200 dark:border-red-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-red-600 dark:text-[#f87171]">Frenos Cerámicos</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-red-600 dark:text-[#f87171]">Frenos & Seguridad</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
-                Hasta <span className="text-red-600 dark:text-[#f87171]">30% Off</span>
+                Frenado <span className="text-red-600 dark:text-[#f87171]">Cerámico</span>
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300">Pastillas y discos de alta disipación térmica.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">Pastillas cerámicas libres de chirridos y discos ventilados.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -914,13 +923,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           </div>
 
           {/* Promo Card 2: Suspensión */}
-          <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-amber-50/80 dark:bg-gradient-to-br dark:from-[#221a0f] dark:via-[#151310] dark:to-black border border-amber-200 dark:border-amber-500/40">
+          <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-slate-50 dark:bg-gradient-to-br dark:from-[#1b1f28] dark:via-[#13171f] dark:to-black border border-slate-200 dark:border-slate-700/60">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-amber-600 dark:text-[#fbbf24]">Suspensión Pro</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-slate-700 dark:text-slate-300">Suspensión & Confort</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
-                Importación <span className="text-amber-500 dark:text-[#fbbf24]">USA</span>
+                Heavy <span className="text-red-600 dark:text-red-400">Duty</span>
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300">Amortiguadores presurizados y coilovers.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">Amortiguadores presurizados a gas y muelles reforzados.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -928,65 +937,61 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   const el = document.getElementById('catalogo-grid');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-amber-600 dark:text-[#fbbf24]"
+                className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-slate-900 dark:text-white"
               >
                 <span>Ver Suspensión</span>
                 <ArrowRight size={13} />
               </button>
             </div>
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-amber-100 dark:border-white/5">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-slate-200 dark:border-white/5">
               <img src="/assets/promo_suspension_spring.webp" alt="Suspensión" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
-          {/* Promo Card 3: Inyección y Motores */}
+          {/* Promo Card 3: Importación Especial */}
           <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-blue-50/80 dark:bg-gradient-to-br dark:from-[#0e1726] dark:via-[#10141c] dark:to-black border border-blue-200 dark:border-blue-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-blue-600 dark:text-[#60a5fa]">Inyección & Motor</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-blue-600 dark:text-[#60a5fa]">Pedidos Especiales</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
-                Alto <span className="text-blue-600 dark:text-[#60a5fa]">Rendimiento</span>
+                Importación <span className="text-blue-600 dark:text-[#60a5fa]">Directa USA</span>
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300">Turbos, microfiltros y bombas OEM.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">Traemos tu repuesto OEM desde Miami en 7 a 15 días con código de parte o VIN.</p>
               <button
                 type="button"
-                onClick={() => {
-                  setSelectedCategory("Inyección & Motor");
-                  const el = document.getElementById('catalogo-grid');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={() => setIsUsaModalOpen(true)}
                 className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-blue-600 dark:text-[#60a5fa]"
               >
-                <span>Ver Inyección</span>
+                <span>Solicitar por Encargo</span>
                 <ArrowRight size={13} />
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-blue-100 dark:border-white/5">
-              <img src="/assets/promo_turbo_charger.webp" alt="Turbo e Inyección" loading="lazy" decoding="async" className="w-full h-full object-contain" />
+              <img src="/assets/promo_turbo_charger.webp" alt="Importación USA" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* SECTION 4: PRODUCT CATALOG & NEW ARRIVALS (NUEVOS INGRESOS / CATÁLOGO) */}
+        {/* SECTION 4: PRODUCT CATALOG GRID (INVENTARIO DISPONIBLE) */}
         {/* ========================================================================= */}
         <section id="catalogo-grid" className="space-y-6 pt-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-display font-black tracking-tight text-zinc-900 dark:text-white section-heading-dark flex items-center gap-2">
-                <span>New Arrivals</span> <span className="text-amber-500 font-serif italic text-xl sm:text-2xl">/ Catálogo</span>
+                <span>Inventario de Repuestos</span> <span className="text-red-600 font-serif italic text-xl sm:text-2xl">/ En Taller & Encargo</span>
               </h2>
-              <div className="w-16 h-0.5 bg-amber-500 mt-2 rounded-full" />
+              <div className="w-16 h-0.5 bg-red-600 mt-2 rounded-full" />
             </div>
 
             {/* Search Box Only */}
-            <div className="relative w-full sm:w-64">
+            <div className="relative w-full sm:w-72">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={15} />
               <input 
                 type="text"
-                placeholder="Buscar repuesto..."
+                placeholder="Buscar por nombre, marca o N° de parte..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/15 focus:border-amber-400 rounded-xl py-2.5 pl-9 pr-7 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none transition-all shadow-sm"
+                className="w-full bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/15 focus:border-red-500 rounded-xl py-2.5 pl-9 pr-7 text-xs text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none transition-all shadow-sm"
               />
               {searchQuery && (
                 <button 
@@ -1005,21 +1010,29 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <Package size={44} className="text-zinc-400 mb-4 stroke-[1.5]" />
               <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">No encontramos coincidencias</h3>
               <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
-                Prueba seleccionando otra categoría de repuesto o busca un término más general.
+                Prueba seleccionando otra categoría o consúltanos directamente por WhatsApp para ubicar tu número de parte OEM.
               </p>
-              <button 
-                type="button"
-                onClick={() => { setSelectedCategory("Todos"); setSearchQuery(""); }}
-                className="btn-primary inline-flex items-center justify-center !py-2.5 !px-6 text-xs sm:text-sm font-bold border-none rounded-full shadow-lg hover:scale-105 transition-all cursor-pointer mx-auto"
-              >
-                Ver Todo el Catálogo
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button 
+                  type="button"
+                  onClick={() => { setSelectedCategory("Todos"); setSearchQuery(""); }}
+                  className="btn-secondary inline-flex items-center justify-center !py-2.5 !px-5 text-xs font-bold rounded-xl"
+                >
+                  Ver Todo el Catálogo
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsUsaModalOpen(true)}
+                  className="btn-primary inline-flex items-center justify-center !py-2.5 !px-5 text-xs font-bold rounded-xl"
+                >
+                  Pedir por Encargo USA
+                </button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6">
               {filteredItems.map((item, idx) => {
                 const numericPrice = parsePrice(item.price);
-                const oldPrice = (numericPrice * 1.35).toFixed(2);
 
                 return (
                   <motion.div
@@ -1027,9 +1040,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className="catalogo-product-card bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-2xl overflow-hidden hover:border-amber-400/80 hover:shadow-xl transition-all duration-300 flex flex-col group relative"
+                    className="catalogo-product-card bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-2xl overflow-hidden hover:border-red-500/70 hover:shadow-xl transition-all duration-300 flex flex-col group relative"
                   >
-                    {/* Product Top Image Box: Isolated Display without stark white clashes */}
+                    {/* Product Top Image Box */}
                     <div 
                       className="relative aspect-square bg-slate-50 dark:bg-[#0c0e14] p-4 sm:p-6 flex items-center justify-center cursor-pointer overflow-hidden group/img"
                       onClick={() => setSelectedProduct(item)}
@@ -1046,7 +1059,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Badge top-left */}
                       {item.badge && (
                         <div className="absolute top-2.5 left-2.5 pointer-events-none">
-                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md shadow-lg uppercase tracking-wide leading-tight block max-w-[110px] truncate" style={{ backgroundColor: '#f59e0b', color: '#000000' }}>
+                          <span className="font-bold text-[9px] px-2 py-0.5 rounded-md shadow-md uppercase tracking-wide leading-tight block max-w-[120px] truncate bg-slate-900/90 text-white border border-white/20 backdrop-blur-sm">
                             {item.badge}
                           </span>
                         </div>
@@ -1055,7 +1068,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* USA chip top-right */}
                       {item.isImportedUSA && (
                         <div className="absolute top-2.5 right-2.5 pointer-events-none">
-                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md shadow-lg uppercase tracking-wider" style={{ backgroundColor: '#2563eb', color: '#ffffff', border: '1px solid rgba(147,197,253,0.5)' }}>
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md shadow-md uppercase tracking-wider bg-blue-600 text-white border border-blue-400/50">
                             ✈ USA
                           </span>
                         </div>
@@ -1067,62 +1080,62 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                     {/* Product Details */}
                     <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-transparent">
-                      <div className="space-y-1.5">
+                      <div className="space-y-2">
+                        {/* Part Number & Compatibility */}
+                        <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                          {item.partNumber && (
+                            <span className="font-mono font-semibold truncate max-w-[130px]">
+                              {item.partNumber}
+                            </span>
+                          )}
+                          <span className={`px-1.5 py-0.2 rounded font-bold ${
+                            item.isImportedUSA
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : 'text-emerald-600 dark:text-emerald-400'
+                          }`}>
+                            {item.isImportedUSA ? 'Por Encargo' : 'En Taller'}
+                          </span>
+                        </div>
+
                         <h3 
                           onClick={() => setSelectedProduct(item)}
-                          className="product-title text-xs sm:text-sm font-bold text-slate-900 dark:text-white hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer leading-relaxed line-clamp-2 min-h-[2.7em]"
+                          className="product-title text-xs sm:text-sm font-bold text-slate-900 dark:text-white hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.6em]"
                           title={item.title}
                         >
                           {item.title}
                         </h3>
 
-                        {/* Price Section (Clear Discount & Reference) */}
-                        <div className="pt-1.5">
-                          {numericPrice > 0 ? (
-                            <div className="space-y-1">
-                              {/* Strikethrough Reference + Discount Badge */}
-                              <div className="flex items-center justify-between gap-1">
-                                <div className="flex items-center gap-1 text-slate-600 dark:text-zinc-400">
-                                  <span className="text-[11px] font-bold uppercase tracking-wider">
-                                    Antes:
-                                  </span>
-                                  <span className="text-xs sm:text-sm font-bold line-through font-mono text-slate-500 dark:text-zinc-400">
-                                    ${oldPrice}
-                                  </span>
-                                </div>
-                                <span className="text-[10px] font-black uppercase tracking-wide bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-600/50 shadow-xs shrink-0">
-                                  -26% OFF
-                                </span>
-                              </div>
+                        {/* Price Section */}
+                        <div className="pt-1 flex items-baseline justify-between">
+                          <div className="flex items-baseline gap-1">
+                            <span className="product-price text-base sm:text-lg font-black text-slate-900 dark:text-white font-display tracking-tight">
+                              {numericPrice > 0 ? `$${numericPrice.toFixed(2)}` : item.price}
+                            </span>
+                            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
+                              USD
+                            </span>
+                          </div>
 
-                              {/* Main Final Price */}
-                              <div className="flex items-baseline gap-1.5">
-                                <span className="product-price text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 font-display tracking-tight">
-                                  ${numericPrice.toFixed(2)}
-                                </span>
-                                <span className="text-xs font-black text-slate-600 dark:text-zinc-400 uppercase">
-                                  USD
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="flex items-baseline gap-1.5">
-                              <span className="product-price text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 font-display tracking-tight">
-                                {item.price}
-                              </span>
-                            </div>
-                          )}
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:inline-block">
+                            {item.compatibility ? item.compatibility.split(',')[0] : 'OEM'}
+                          </span>
+                        </div>
+
+                        {/* Workshop Installation Hint */}
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1 select-none pt-0.5">
+                          <Wrench size={11} className="text-red-600 shrink-0" />
+                          <span className="truncate">Instalación disponible en taller</span>
                         </div>
                       </div>
 
                       {/* Actions */}
-                      <div className="pt-2 flex items-center gap-2 border-t border-white/10">
+                      <div className="pt-2 flex items-center gap-2 border-t border-slate-100 dark:border-white/10">
                         {getItemQuantity(item.id) === 0 ? (
                           <motion.button
-                            whileTap={{ scale: 0.93 }}
+                            whileTap={{ scale: 0.95 }}
                             whileHover={{ scale: 1.02 }}
                             onClick={(e) => addToCart(item, 1, e)}
-                            className="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs py-2.5 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.95]"
+                            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-black text-xs py-2.5 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-[0.95]"
                           >
                             <ShoppingCart size={13} />
                             <span>Añadir</span>
@@ -1132,17 +1145,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             initial={{ scale: 0.88, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ type: "spring", stiffness: 450, damping: 25 }}
-                            className="flex-1 flex items-center justify-between rounded-lg overflow-hidden border border-amber-400 bg-amber-500" 
+                            className="flex-1 flex items-center justify-between rounded-xl overflow-hidden border border-red-600 bg-red-600" 
                             style={{ minHeight: '34px' }}
                           >
                             <button
                               onClick={() => updateCartQty(item.id, -1)}
-                              className="w-8 h-[34px] bg-amber-600 hover:bg-amber-700 text-black flex items-center justify-center font-black cursor-pointer transition-colors shrink-0 active:bg-amber-800"
+                              className="w-8 h-[34px] bg-red-700 hover:bg-red-800 text-white flex items-center justify-center font-black cursor-pointer transition-colors shrink-0 active:bg-red-900"
                               title="Restar"
                             >
                               <Minus size={12} />
                             </button>
-                            <span className="flex-1 text-center font-black text-black text-xs tracking-wide select-none" style={{ color: '#000000' }}>
+                            <span className="flex-1 text-center font-bold text-white text-xs tracking-wide select-none">
                               {getItemQuantity(item.id)} en carrito
                             </span>
                             <button
@@ -1150,34 +1163,33 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                 updateCartQty(item.id, 1);
                                 setCartBump(prev => prev + 1);
                               }}
-                              className="w-8 h-[34px] bg-amber-600 hover:bg-amber-700 text-black flex items-center justify-center font-black cursor-pointer transition-colors shrink-0 active:bg-amber-800"
+                              className="w-8 h-[34px] bg-red-700 hover:bg-red-800 text-white flex items-center justify-center font-black cursor-pointer transition-colors shrink-0 active:bg-red-900"
                               title="Sumar"
                             >
                               <Plus size={12} />
                             </button>
                           </motion.div>
                         )}
-
-                        <a
-                          href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2.5 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-black transition-colors cursor-pointer border border-[#25D366]/40"
-                          title="Consultar por WhatsApp"
-                        >
-                          <WhatsAppIcon size={14} />
-                        </a>
-
                         <button
                           onClick={() => {
                             setSelectedProduct(item);
                             setActiveImageIndex(0);
                           }}
-                          className="p-2.5 rounded-lg border border-white/10 hover:border-amber-400 text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                          className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-red-500 text-slate-600 dark:text-zinc-300 hover:text-red-600 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                           title="Ver Ficha Técnica"
                         >
                           <ZoomIn size={14} />
                         </button>
+
+                        <a
+                          href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-white transition-colors cursor-pointer border border-[#25D366]/30 flex items-center justify-center"
+                          title="Consultar por WhatsApp"
+                        >
+                          <WhatsAppIcon size={14} />
+                        </a>
                       </div>
                     </div>
                   </motion.div>
@@ -1496,7 +1508,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               {/* Modal Header */}
               <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-black/60">
                 <div className="flex items-center gap-2">
-                  <Tag size={16} className="text-[#C2A472]" />
+                  <Tag size={16} className="text-red-500" />
                   <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">{selectedProduct.category}</span>
                 </div>
                 <button 
@@ -1531,12 +1543,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             decoding="async"
                           />
                           {selectedProduct.badge && (
-                            <span className="absolute top-3 left-3 bg-[#C2A472] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
+                            <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-lg z-10">
                               {selectedProduct.badge}
                             </span>
                           )}
                           <div className="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity border border-white/20 shadow-lg">
-                            <ZoomIn size={14} className="text-[#C2A472]" />
+                            <ZoomIn size={14} className="text-red-500" />
                             <span>Tocar para Ampliar</span>
                           </div>
                         </div>
@@ -1552,7 +1564,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                   type="button"
                                   onClick={() => setActiveImageIndex(pIdx)}
                                   className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                                    isActive ? 'border-[#C2A472] scale-105 shadow-md shadow-[#C2A472]/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                                    isActive ? 'border-red-500 scale-105 shadow-md shadow-red-500/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
                                   }`}
                                 >
                                   <img src={photo} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
@@ -1566,72 +1578,66 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <div className="space-y-3">
                         <div className="flex flex-wrap items-center gap-2">
                           {selectedProduct.partNumber && (
-                            <span className="text-xs font-mono font-bold text-[#C2A472] bg-[#C2A472]/15 border border-[#C2A472]/30 px-3 py-1 rounded-full inline-block">
+                            <span className="text-xs font-mono font-bold text-red-400 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full inline-block">
                               N° OEM: {selectedProduct.partNumber}
                             </span>
                           )}
 
                           <span className={`text-xs font-bold px-3 py-1 rounded-full inline-block ${
                             (selectedProduct.stock ?? 10) > 0 
-                              ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                              : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                           }`}>
-                            {(selectedProduct.stock ?? 10) > 0 ? `🟢 ${selectedProduct.stock ?? 10} en Stock` : '🔴 Agotado / Importación USA'}
+                            {selectedProduct.isImportedUSA ? '✈ Pedido USA (7 a 15 días)' : `● ${selectedProduct.stock ?? 10} en Stock Taller`}
                           </span>
                         </div>
 
-                        <h3 className="text-xl font-bold leading-snug" style={{ color: '#ffffff' }}>{selectedProduct.title}</h3>
-                        {parsePrice(selectedProduct.price) > 0 ? (
-                          <div className="pt-1.5 space-y-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs text-zinc-400">Antes:</span>
-                              <span className="text-sm text-zinc-500 line-through font-mono">
-                                ${(parsePrice(selectedProduct.price) * 1.35).toFixed(2)} USD
-                              </span>
-                              <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                                -26% OFERTA
-                              </span>
-                            </div>
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-3xl font-black font-mono text-amber-400">
-                                ${parsePrice(selectedProduct.price).toFixed(2)}
-                              </span>
-                              <span className="text-xs font-bold text-zinc-400">USD</span>
-                              <span className="text-[11px] text-emerald-400 font-semibold ml-1">
-                                (Ahorras ${(parsePrice(selectedProduct.price) * 0.35).toFixed(2)} USD)
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="text-2xl font-black font-mono text-amber-400">{selectedProduct.price}</div>
-                        )}
-                        <p className="text-xs leading-relaxed mt-1" style={{ color: '#cbd5e1' }}>{selectedProduct.desc}</p>
+                        <h3 className="text-xl font-bold leading-snug text-white">{selectedProduct.title}</h3>
+                        
+                        <div className="pt-1 flex items-baseline gap-2">
+                          <span className="text-3xl font-black font-display text-white">
+                            {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)}` : selectedProduct.price}
+                          </span>
+                          <span className="text-xs font-bold text-zinc-400">USD</span>
+                          {selectedProduct.isImportedUSA && (
+                            <span className="text-[11px] text-blue-400 font-semibold ml-2 bg-blue-950/60 border border-blue-500/30 px-2 py-0.5 rounded-full">
+                              Importación Express
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-xs leading-relaxed mt-1 text-slate-300">{selectedProduct.desc}</p>
+
+                        <div className="p-3 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300 flex items-center gap-2.5">
+                          <Wrench size={16} className="text-red-500 shrink-0" />
+                          <span><strong>Servicio de Taller:</strong> Podemos realizar la instalación, diagnóstico y calibración de esta pieza en nuestras instalaciones en Porlamar.</span>
+                        </div>
                       </div>
                     </div>
 
                     {selectedProduct.isImportedUSA && (
                       <div className="p-4 bg-blue-950/60 border border-blue-500/40 rounded-2xl text-xs text-blue-200 flex items-center gap-3 shadow-md">
                         <div>
-                          <strong className="block font-bold" style={{ color: '#ffffff' }}>Repuesto Importado Directamente desde EE.UU.</strong>
-                          <p className="text-[11px] mt-0.5" style={{ color: '#93c5fd' }}>Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
+                          <strong className="block font-bold text-white">Repuesto Importado Directamente desde EE.UU.</strong>
+                          <p className="text-[11px] mt-0.5 text-blue-200">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
                         </div>
                       </div>
                     )}
 
                     {selectedProduct.longDesc && (
-                      <div className="space-y-2 rounded-2xl border p-4" style={{ backgroundColor: 'rgba(0,0,0,0.4)', borderColor: 'rgba(255,255,255,0.1)' }}>
-                        <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: '#e2e8f0' }}>Ficha Técnica &amp; Detalles de Calidad</h4>
-                        <p className="text-xs leading-relaxed" style={{ color: '#cbd5e1' }}>{selectedProduct.longDesc}</p>
+                      <div className="space-y-2 rounded-2xl border p-4 bg-black/40 border-white/10">
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Ficha Técnica &amp; Detalles de Calidad</h4>
+                        <p className="text-xs leading-relaxed text-slate-300">{selectedProduct.longDesc}</p>
                       </div>
                     )}
 
                     {selectedProduct.specs && selectedProduct.specs.length > 0 && (
                       <div className="space-y-2">
-                        <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: '#e2e8f0' }}>Especificaciones Técnicas:</h4>
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Especificaciones Técnicas:</h4>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {selectedProduct.specs.map((spec, i) => (
-                            <li key={i} className="text-xs flex items-center gap-2" style={{ color: '#cbd5e1' }}>
-                              <CheckCircle2 size={14} className="text-[#C2A472] shrink-0" />
+                            <li key={i} className="text-xs flex items-center gap-2 text-slate-300">
+                              <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
                               <span>{spec}</span>
                             </li>
                           ))}
@@ -1640,8 +1646,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     )}
 
                     {selectedProduct.compatibility && (
-                      <div className="p-3.5 bg-[#C2A472]/10 border border-[#C2A472]/25 rounded-2xl text-xs text-zinc-200 flex items-center gap-3 shadow-md mb-2">
-                        <ShieldCheck size={18} className="text-[#C2A472] shrink-0" />
+                      <div className="p-3.5 bg-red-950/20 border border-red-500/25 rounded-2xl text-xs text-zinc-200 flex items-center gap-3 shadow-md mb-2">
+                        <ShieldCheck size={18} className="text-red-500 shrink-0" />
                         <span><strong className="text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
                       </div>
                     )}
@@ -1651,37 +1657,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
               {/* Modal Footer CTA */}
               <div className="p-4 sm:p-6 border-t border-white/10 bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
-                {parsePrice(selectedProduct.price) > 0 ? (
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] text-zinc-400">Antes:</span>
-                      <span className="text-xs text-zinc-500 line-through font-mono">
-                        ${(parsePrice(selectedProduct.price) * 1.35).toFixed(2)}
-                      </span>
-                      <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/20 px-1.5 py-0.2 rounded border border-emerald-500/30">
-                        -26% OFF
-                      </span>
-                    </div>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-xs text-zinc-400">Oferta:</span>
-                      <span className="text-2xl font-black text-amber-400 font-mono">
-                        ${parsePrice(selectedProduct.price).toFixed(2)}
-                      </span>
-                      <span className="text-xs font-bold text-zinc-400">USD</span>
-                      {selectedProduct.isImportedUSA && (
-                        <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30 ml-1">Envío Directo</span>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs text-zinc-400">Total:</span>
-                    <span className="text-2xl font-black text-amber-400 font-mono">{selectedProduct.price}</span>
-                    {selectedProduct.isImportedUSA && (
-                      <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
-                    )}
-                  </div>
-                )}
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs text-zinc-400">Total:</span>
+                  <span className="text-2xl font-black text-white font-mono">
+                    {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)} USD` : selectedProduct.price}
+                  </span>
+                  {selectedProduct.isImportedUSA && (
+                    <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-2.5 w-full sm:w-auto">
                   <a
@@ -1703,9 +1687,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       setIsCartOpen(true);
                       setSelectedProduct(null);
                     }}
-                    className="flex-1 sm:flex-none bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 hover:from-amber-300 hover:to-amber-400 text-black text-xs font-black uppercase tracking-wider py-3.5 px-7 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/25 cursor-pointer"
+                    className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider py-3.5 px-7 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-red-600/25 cursor-pointer"
                   >
-                    <ShoppingCart size={17} className="text-black" />
+                    <ShoppingCart size={17} className="text-white" />
+                    <span>Añadir al Carrito</span>
+                  </motion.button>
+                </div>
+              </div>
                     <span>Añadir al Carrito</span>
                   </motion.button>
                 </div>
@@ -1766,16 +1754,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.92 }}
               transition={{ type: "spring", stiffness: 450, damping: 25 }}
-              className="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-50 bg-[#12141c]/95 backdrop-blur-xl border border-amber-400/50 text-white py-2 px-4 rounded-2xl shadow-2xl flex items-center gap-3 max-w-[92vw] pointer-events-auto"
-              style={{ boxShadow: '0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 158, 11, 0.25)' }}
+              className="fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-50 bg-[#12141c]/95 backdrop-blur-xl border border-red-500/50 text-white py-2 px-4 rounded-2xl shadow-2xl flex items-center gap-3 max-w-[92vw] pointer-events-auto"
+              style={{ boxShadow: '0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(220, 38, 38, 0.25)' }}
             >
-              <div className="w-9 h-9 rounded-xl overflow-hidden bg-black border border-amber-400/40 shrink-0 shadow-sm">
+              <div className="w-9 h-9 rounded-xl overflow-hidden bg-black border border-red-500/40 shrink-0 shadow-sm">
                 <img src={toastItem.img} alt={toastItem.title} className="w-full h-full object-cover" />
               </div>
               <div className="min-w-0 pr-1">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 size={13} className="text-amber-400 shrink-0" />
-                  <span className="text-[11px] font-black text-amber-300 uppercase tracking-wide">¡Añadido al Carrito!</span>
+                  <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                  <span className="text-[11px] font-black text-white uppercase tracking-wide">¡Añadido al Carrito!</span>
                 </div>
                 <p className="text-[11px] text-zinc-300 font-medium truncate max-w-[170px] sm:max-w-[260px]">
                   {toastItem.title}
@@ -1787,7 +1775,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   setIsCartOpen(true);
                   setToastItem(null);
                 }}
-                className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl transition-all shadow-md shrink-0 cursor-pointer hover:scale-105 active:scale-95"
+                className="bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl transition-all shadow-md shrink-0 cursor-pointer hover:scale-105 active:scale-95"
               >
                 Ver Carrito
               </button>
@@ -1795,7 +1783,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           )}
         </AnimatePresence>
 
-        {/* Flying Orb to Cart Animation - Fluida y sin giros bruscos */}
+        {/* Flying Orb to Cart Animation */}
         <AnimatePresence>
           {flyingItems.map(item => (
             <motion.div
@@ -1820,9 +1808,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 duration: 0.55,
                 ease: [0.25, 1, 0.5, 1]
               }}
-              className="w-11 h-11 rounded-full overflow-hidden border-2 border-amber-400 bg-black flex items-center justify-center pointer-events-none ring-4 ring-amber-400/20"
+              className="w-11 h-11 rounded-full overflow-hidden border-2 border-red-500 bg-black flex items-center justify-center pointer-events-none ring-4 ring-red-500/20"
               style={{ 
-                boxShadow: '0 0 20px rgba(245, 158, 11, 0.85), 0 8px 16px rgba(0,0,0,0.5)' 
+                boxShadow: '0 0 20px rgba(220, 38, 38, 0.85), 0 8px 16px rgba(0,0,0,0.5)' 
               }}
             >
               <img src={item.img} alt="" className="w-full h-full object-cover" />
@@ -1850,33 +1838,32 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               }}
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
               onClick={() => setIsCartOpen(true)}
-              className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-amber-500 via-amber-400 to-primary text-black font-black text-xs uppercase tracking-wider py-3.5 px-6 rounded-full shadow-2xl shadow-amber-500/40 border border-amber-300 flex items-center gap-3.5 hover:scale-[1.03] transition-transform cursor-pointer ring-4 ring-black/50"
+              className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-red-600 via-red-600 to-red-700 text-white font-black text-xs uppercase tracking-wider py-3.5 px-6 rounded-full shadow-2xl shadow-red-600/40 border border-red-400 flex items-center gap-3.5 hover:scale-[1.03] transition-transform cursor-pointer ring-4 ring-black/50"
             >
-              {/* Ripple aura que estalla suavemente al recibir el repuesto */}
               {cartBump > 0 && (
                 <motion.span
                   key={`glow-${cartBump}`}
                   initial={{ scale: 0.9, opacity: 0.8 }}
                   animate={{ scale: 1.65, opacity: 0 }}
                   transition={{ duration: 0.55, ease: "easeOut" }}
-                  className="absolute inset-0 rounded-full border-2 border-amber-300 pointer-events-none"
+                  className="absolute inset-0 rounded-full border-2 border-red-400 pointer-events-none"
                 />
               )}
               <div className="relative">
-                <ShoppingCart size={20} className="text-black" />
+                <ShoppingCart size={20} className="text-white" />
                 <motion.span 
                   key={`badge-${cartTotalItems}`}
                   initial={{ scale: 1.5 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 600, damping: 15 }}
-                  className="absolute -top-2.5 -right-2.5 bg-black text-amber-300 font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-amber-400"
+                  className="absolute -top-2.5 -right-2.5 bg-black text-white font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-red-500"
                 >
                   {cartTotalItems}
                 </motion.span>
               </div>
-              <div className="flex flex-col items-start leading-none text-black">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-black/85">Mi Carrito</span>
-                <span className="text-sm font-black text-black">${cartTotalAmount.toFixed(2)} USD</span>
+              <div className="flex flex-col items-start leading-none text-white">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-200">Mi Carrito</span>
+                <span className="text-sm font-black text-white">${cartTotalAmount.toFixed(2)} USD</span>
               </div>
             </motion.button>
           )}
@@ -1892,23 +1879,22 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="carrito-modal rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col"
-                style={{ backgroundColor: '#12141a', border: '1px solid rgba(245,158,11,0.4)' }}
+                className="carrito-modal rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col bg-[#12141a] border border-red-500/40"
               >
                 {/* Header */}
-                <div className="p-4 sm:p-5 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'linear-gradient(to right, #1c1810, #12141a, #1c1810)' }}>
+                <div className="p-4 sm:p-5 flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-red-950/60 via-slate-900 to-red-950/60">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md shrink-0" style={{ backgroundColor: 'rgba(245,158,11,0.2)', border: '1px solid rgba(245,158,11,0.4)', color: '#fbbf24' }}>
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md shrink-0 bg-red-500/20 border border-red-500/40 text-red-500">
                       <ShoppingCart size={20} />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight flex items-center gap-2" style={{ color: '#ffffff' }}>
+                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight flex items-center gap-2 text-white">
                         <span>Mi Carrito de Repuestos</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(245,158,11,0.2)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.4)' }}>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/40">
                           {cartTotalItems} {cartTotalItems === 1 ? 'pieza' : 'piezas'}
                         </span>
                       </h2>
-                      <p className="text-xs mt-0.5" style={{ color: '#cbd5e1' }}>
+                      <p className="text-xs mt-0.5 text-slate-300">
                         Selecciona cantidades y envía el pedido completo a nuestros asesores por WhatsApp.
                       </p>
                     </div>
@@ -1916,8 +1902,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="p-2 rounded-full transition-colors cursor-pointer"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
+                    className="p-2 rounded-full transition-colors cursor-pointer bg-white/10 text-white hover:bg-white/20"
                     title="Cerrar carrito"
                   >
                     <X size={18} />
@@ -1939,8 +1924,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         <button
                           type="button"
                           onClick={() => { clearCart(); setCartSuccess(false); setIsCartOpen(false); }}
-                          className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none shadow-xl cursor-pointer hover:scale-105 transition-transform"
-                          style={{ color: '#000000', backgroundColor: '#f59e0b' }}
+                          className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider border-none shadow-xl cursor-pointer hover:scale-105 transition-transform bg-red-600 text-white"
                         >
                           Vaciar Carrito y Continuar
                         </button>
@@ -1948,27 +1932,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     </div>
                   ) : cart.length === 0 ? (
                     <div
-                      className="text-center py-12 space-y-4 flex flex-col items-center justify-center"
-                      style={{ color: '#ffffff' }}
+                      className="text-center py-12 space-y-4 flex flex-col items-center justify-center text-white"
                     >
-                      <ShoppingBag size={48} className="mx-auto mb-1" style={{ color: '#94a3b8' }} />
-                      <h3
-                        className="text-lg font-black"
-                        style={{ color: '#ffffff', WebkitTextFillColor: '#ffffff' } as React.CSSProperties}
-                      >
+                      <ShoppingBag size={48} className="mx-auto mb-1 text-slate-400" />
+                      <h3 className="text-lg font-black text-white">
                         Tu carrito está vacío
                       </h3>
-                      <p
-                        className="text-xs max-w-xs mx-auto leading-relaxed"
-                        style={{ color: '#cbd5e1', WebkitTextFillColor: '#cbd5e1' } as React.CSSProperties}
-                      >
-                        Navega por nuestro catálogo y presiona "+ Agregar al Carrito" en las piezas que necesites.
+                      <p className="text-xs max-w-xs mx-auto leading-relaxed text-slate-300">
+                        Navega por nuestro catálogo y presiona "+ Añadir" en las piezas que necesites para tu vehículo.
                       </p>
                       <button
                         type="button"
                         onClick={() => setIsCartOpen(false)}
-                        className="!py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform rounded-full"
-                        style={{ color: '#000000', backgroundColor: '#f59e0b', WebkitTextFillColor: '#000000' } as React.CSSProperties}
+                        className="!py-3 !px-8 text-xs font-black uppercase tracking-wider border-none mt-3 mx-auto inline-flex items-center justify-center cursor-pointer shadow-xl hover:scale-105 transition-transform rounded-full bg-red-600 text-white"
                       >
                         Explorar Catálogo
                       </button>
@@ -1981,33 +1957,31 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           const itemPriceNum = parsePrice(item.product.price);
                           const itemSubtotal = (itemPriceNum * item.quantity).toFixed(2);
                           return (
-                            <div key={item.product.id} className="flex items-center justify-between gap-3 p-3 rounded-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                              <img src={item.product.img} alt={item.product.title} className="w-14 h-14 object-cover rounded-xl shrink-0" style={{ border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#000' }} />
+                            <div key={item.product.id} className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+                              <img src={item.product.img} alt={item.product.title} className="w-14 h-14 object-cover rounded-xl shrink-0 border border-white/10 bg-black" />
                               
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-xs font-bold truncate" style={{ color: '#f1f5f9' }}>{item.product.title}</h4>
+                                <h4 className="text-xs font-bold truncate text-slate-100">{item.product.title}</h4>
                                 {item.product.partNumber && (
-                                  <span className="text-[10px] font-mono block mt-0.5" style={{ color: '#71717a' }}>#{item.product.partNumber}</span>
+                                  <span className="text-[10px] font-mono block mt-0.5 text-slate-400">#{item.product.partNumber}</span>
                                 )}
-                                <span className="text-xs font-black block mt-0.5" style={{ color: '#fbbf24' }}>{item.product.price} <span className="text-[10px] font-normal" style={{ color: '#71717a' }}>/ c/u</span></span>
+                                <span className="text-xs font-black block mt-0.5 text-white">{item.product.price} <span className="text-[10px] font-normal text-slate-400">/ c/u</span></span>
                               </div>
 
                               {/* Quantity Controls */}
-                              <div className="flex items-center gap-1.5 rounded-xl p-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                              <div className="flex items-center gap-1.5 rounded-xl p-1 bg-black/60 border border-white/15">
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, -1)}
-                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors hover:bg-amber-500"
-                                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
+                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors bg-white/10 hover:bg-red-600 text-white"
                                 >
                                   <Minus size={12} />
                                 </button>
-                                <span className="font-bold text-xs px-2 min-w-[1.5rem] text-center" style={{ color: '#ffffff' }}>{item.quantity}</span>
+                                <span className="font-bold text-xs px-2 min-w-[1.5rem] text-center text-white">{item.quantity}</span>
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, 1)}
-                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors hover:bg-amber-500"
-                                  style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }}
+                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors bg-white/10 hover:bg-red-600 text-white"
                                 >
                                   <Plus size={12} />
                                 </button>
@@ -2015,12 +1989,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                               {/* Subtotal & Trash */}
                               <div className="text-right shrink-0 min-w-[70px]">
-                                <span className="text-xs font-black block" style={{ color: '#ffffff' }}>${itemSubtotal}</span>
+                                <span className="text-xs font-black block text-white">${itemSubtotal}</span>
                                 <button
                                   type="button"
                                   onClick={() => removeFromCart(item.product.id)}
-                                  className="text-[10px] mt-1 flex items-center gap-0.5 justify-end ml-auto cursor-pointer hover:text-red-400 transition-colors"
-                                  style={{ color: '#71717a' }}
+                                  className="text-[10px] mt-1 flex items-center gap-0.5 justify-end ml-auto cursor-pointer text-slate-400 hover:text-red-400 transition-colors"
                                 >
                                   <Trash2 size={12} />
                                 </button>
@@ -2031,21 +2004,21 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </div>
 
                       {/* Order Calculation Summary Box */}
-                      <div className="p-4 rounded-2xl space-y-2" style={{ background: 'linear-gradient(to right, rgba(245,158,11,0.1), rgba(22,24,34,1), rgba(245,158,11,0.1))', border: '1px solid rgba(245,158,11,0.3)' }}>
-                        <div className="flex justify-between items-center text-xs" style={{ color: '#71717a' }}>
+                      <div className="p-4 rounded-2xl space-y-2 bg-gradient-to-r from-red-950/30 via-slate-900 to-red-950/30 border border-red-500/30">
+                        <div className="flex justify-between items-center text-xs text-slate-400">
                           <span>Cantidad Total de Repuestos:</span>
-                          <span className="font-bold" style={{ color: '#ffffff' }}>{cartTotalItems} unidades</span>
+                          <span className="font-bold text-white">{cartTotalItems} unidades</span>
                         </div>
-                        <div className="flex justify-between items-center pt-2 text-sm font-black" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                          <span className="uppercase tracking-wider" style={{ color: '#ffffff' }}>Monto Total Estimado:</span>
-                          <span className="text-xl font-display" style={{ color: '#fbbf24' }}>${cartTotalAmount.toFixed(2)} USD</span>
+                        <div className="flex justify-between items-center pt-2 text-sm font-black border-t border-white/10">
+                          <span className="uppercase tracking-wider text-white">Monto Total Estimado:</span>
+                          <span className="text-xl font-display text-white font-mono">${cartTotalAmount.toFixed(2)} USD</span>
                         </div>
                       </div>
 
                       {/* Customer Inputs */}
-                      <div className="space-y-3 p-3.5 rounded-2xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                        <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: '#ffffff' }}>
-                          <User size={13} style={{ color: '#fbbf24' }} />
+                      <div className="space-y-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                        <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-white">
+                          <User size={13} className="text-red-500" />
                           <span>Datos del Solicitante (Para Enviar Presupuesto)</span>
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
