@@ -1995,6 +1995,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   ];
 
   const [services, setServices] = useState<any[]>([]);
+
+  const availableServices = useMemo(() => {
+    if (Array.isArray(services) && services.length > 0) {
+      return services.map((s, idx) => ({
+        id: s.id || `servicio-${idx}`,
+        title: s.title || `Servicio #${idx + 1}`,
+        desc: s.desc || '',
+        img: s.img || ''
+      }));
+    }
+    return SERVICIOS_TALLER_OPCIONES.map(s => ({
+      ...s,
+      desc: '',
+      img: ''
+    }));
+  }, [services]);
   const [faqs, setFaqs] = useState<any[]>([]);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
@@ -7540,21 +7556,48 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         Edita las fotos, títulos, textos explicativos y garantías de la sección "Trabajo Real en Nuestros Puestos de Trabajo" en la página principal.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                      {availableServices.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!window.confirm(`¿Deseas auto-generar las tarjetas de la portada importando los ${availableServices.length} servicios del taller? Esto rellenará fotos, títulos, descripciones y enlaces automáticamente con los datos oficiales de cada servicio.`)) return;
+                            const generated = availableServices.map((srv, i) => ({
+                              id: Date.now() + i,
+                              badge: `Puesto #${i + 1}`,
+                              title: srv.title,
+                              desc: srv.desc || 'Servicio técnico especializado en Taller MasterTech.',
+                              img: srv.img || '/assets/instalaciones.webp',
+                              feature: 'Garantía técnica de calidad MasterTech',
+                              servicioId: srv.id,
+                              servicioNombre: srv.title
+                            }));
+                            setInstalaciones(generated);
+                          }}
+                          className="px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center gap-1.5 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                          title="Importar todos los servicios configurados en el taller como tarjetas de portada"
+                        >
+                          <Sparkles size={14} />
+                          <span>Rellenar Todos desde Servicios ({availableServices.length})</span>
+                        </button>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => {
+                          const usedIds = new Set(instalaciones.map(i => String(i.servicioId)));
+                          const nextService = availableServices.find(s => !usedIds.has(String(s.id))) || availableServices[0];
                           const updated = [
                             ...instalaciones,
                             {
                               id: Date.now(),
                               badge: `Puesto #${instalaciones.length + 1}`,
-                              title: "Nuevo Trabajo Técnico",
-                              desc: "Descripción del trabajo especializado...",
-                              img: "/assets/instalaciones.webp",
+                              title: nextService ? nextService.title : "Nuevo Trabajo Técnico",
+                              desc: nextService?.desc || "Descripción del trabajo especializado...",
+                              img: nextService?.img || "/assets/instalaciones.webp",
                               feature: "Garantía de calidad MasterTech",
-                              servicioId: "mecanica",
-                              servicioNombre: "Mecánica General & Mantenimiento"
+                              servicioId: nextService ? nextService.id : "mecanica",
+                              servicioNombre: nextService ? nextService.title : "Mecánica General & Mantenimiento"
                             }
                           ];
                           setInstalaciones(updated);
@@ -7676,34 +7719,71 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-amber-400 uppercase block mb-1 flex items-center gap-1">
-                            <Wrench size={12} />
-                            <span>Servicio del Taller Enlazado</span>
+                          <label className="text-[10px] font-bold text-amber-400 uppercase block mb-1 flex items-center justify-between">
+                            <span className="flex items-center gap-1">
+                              <Wrench size={12} />
+                              <span>Servicio del Taller Enlazado</span>
+                            </span>
+                            {item.servicioId && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const matched = availableServices.find(s => String(s.id) === String(item.servicioId) || s.title === item.servicioId);
+                                  if (matched) {
+                                    const updated = [...instalaciones];
+                                    if (matched.title) updated[idx].title = matched.title;
+                                    if (matched.desc) updated[idx].desc = matched.desc;
+                                    if (matched.img) updated[idx].img = matched.img;
+                                    setInstalaciones(updated);
+                                  }
+                                }}
+                                className="text-[10px] text-amber-300 hover:text-white font-bold flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/40 px-2 py-0.5 rounded-md border border-amber-400/40 transition-colors cursor-pointer"
+                                title="Rellenar foto, título y descripción automáticamente con los datos de este servicio"
+                              >
+                                <Sparkles size={11} />
+                                <span>Rellenar Todo con este Servicio</span>
+                              </button>
+                            )}
                           </label>
                           <select
                             value={item.servicioId || ''}
                             onChange={(e) => {
                               const selectedId = e.target.value;
-                              const matched = SERVICIOS_TALLER_OPCIONES.find(s => s.id === selectedId);
+                              const matched = availableServices.find(s => String(s.id) === String(selectedId) || s.title === selectedId);
                               const updated = [...instalaciones];
                               updated[idx].servicioId = selectedId;
                               updated[idx].servicioNombre = matched ? matched.title : '';
+                              if (matched) {
+                                if (matched.title) updated[idx].title = matched.title;
+                                if (matched.desc) updated[idx].desc = matched.desc;
+                                if (matched.img) updated[idx].img = matched.img;
+                                if (!updated[idx].badge || updated[idx].badge.startsWith('Puesto')) {
+                                  updated[idx].badge = `Puesto · ${matched.title}`;
+                                }
+                              }
                               setInstalaciones(updated);
                             }}
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400 font-semibold cursor-pointer"
                           >
                             <option value="">-- Sin enlace específico (Lleva a Servicios general) --</option>
-                            {SERVICIOS_TALLER_OPCIONES.map((serv) => (
+                            {availableServices.map((serv) => (
                               <option key={serv.id} value={serv.id}>
                                 {serv.title}
                               </option>
                             ))}
                           </select>
-                          <p className="text-[10px] text-zinc-500 mt-1 font-mono">
-                            {item.servicioId 
-                              ? `Enlace activo: /servicios#${item.servicioId}`
-                              : 'Enlace por defecto: /servicios'}
-                          </p>
+                          <div className="flex items-center justify-between gap-2 mt-1 font-mono text-[10px]">
+                            <span className="text-zinc-500">
+                              {item.servicioId 
+                                ? `Enlace activo: /servicios#${item.servicioId}`
+                                : 'Enlace por defecto: /servicios'}
+                            </span>
+                            {item.servicioId && (
+                              <span className="text-amber-400/80">
+                                Datos sincronizados con el servicio
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         <div>
