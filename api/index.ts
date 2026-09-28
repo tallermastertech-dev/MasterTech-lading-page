@@ -2159,18 +2159,21 @@ app.get([
 // AI PART AUTOFILL ROUTE v2 - Comprehensive OEM Database
 // =============================================================
 app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-part'], async (req, res) => {
-  const { partNumber } = req.body || {};
-  if (!partNumber || typeof partNumber !== 'string' || !partNumber.trim()) {
-    return res.status(400).json({ error: 'Se requiere el campo partNumber' });
-  }
-  const cleanedInput = rawNum
-    .replace(/^(OEM|N\/P|CODIGO|COD|PART\s*NUMBER|PARTE|N°|NUMERO|REF|REFERENCIA)\s*[:#\s]*/i, '')
-    .replace(/^[:#\s]+/, '')
-    .trim() || rawNum;
-  // Normalize Mopar package prefix P when followed by 7-8 digits (e.g. P68252103AF -> 68252103AF, P05184651AH -> 05184651AH)
-  const moparStripped = cleanedInput.replace(/^P(?=[0-9]{7,8})/i, '');
-  const pNum = moparStripped || cleanedInput;
-  const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY || ['AQ', 'Ab8RN6Lx6TDruzrPfy2PpWA9yLO9PpBklx4LJp1ml1vyWk8ghg'].join('.');
+  try {
+    const { partNumber } = req.body || {};
+    if (!partNumber || typeof partNumber !== 'string' || !partNumber.trim()) {
+      return res.status(400).json({ error: 'Se requiere el campo partNumber' });
+    }
+    const rawNum = partNumber.trim();
+    const cleanedInput = rawNum
+      .replace(/^(OEM|N\/P|CODIGO|COD|PART\s*NUMBER|PARTE|N°|NUMERO|REF|REFERENCIA)\s*[:#\s]*/i, '')
+      .replace(/^[:#\s]+/, '')
+      .trim() || rawNum;
+    // Normalize Mopar package prefix P when followed by 7-8 digits (e.g. P68252103AF -> 68252103AF, P05184651AH -> 05184651AH)
+    const moparStripped = cleanedInput.replace(/^P(?=[0-9]{7,8})/i, '');
+    const pNum = moparStripped || cleanedInput;
+    const rawApiKey = (process.env.AI_API_KEY || process.env.GEMINI_API_KEY || '').trim();
+    const apiKey = (rawApiKey.startsWith('AIza') || rawApiKey.startsWith('sk-')) ? rawApiKey : '';
 
   // Comprehensive OEM part number database
   const detectFromDatabase = (raw: string): any | null => {
@@ -2636,7 +2639,55 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
       return { titulo: 'Repuesto Original Nissan Genuine Parts ' + sys + ' (' + raw.toUpperCase() + ')', categoria: (sys.includes('Freno')||sys.includes('Amort')||sys.includes('Susp')) ? 'Frenos y Suspension' : sys.includes('Refrig') ? 'Fluidos y Refrigeracion' : (sys.includes('Inyec')||sys.includes('Sensor')) ? 'Inyeccion y Sensores' : 'Motor y Encendido', compatibilidad: 'Nissan Altima, Sentra, Versa, Frontier, Pathfinder, Murano & Infiniti (consultar numero exacto)', descripcionCorta: 'Componente Nissan Genuine Parts sistema ' + sys + ', tolerancias OEM Nissan Motor Co.', descripcionDetallada: 'Repuesto OEM Nissan #' + raw.toUpperCase() + '. Sistema: ' + sys + '. Bajo estandares Nissan GQP. Garantia Genuine Parts.' };
     }
 
-    if (/^04466[0-9A-Z]{5}/i.test(c)) return { titulo: 'Pastillas de Freno Traseras Toyota Camry/RAV4 OEM (' + raw + ')', categoria: 'Frenos y Suspensión', compatibilidad: 'Toyota Camry 2.5L/3.5L, RAV4, Highlander & Sienna 3.5L V6 (2006-2024)', descripcionCorta: 'Pastillas traseras cerámicas Toyota Genuine Parts con indicador de desgaste acústico.', descripcionDetallada: 'Pastillas traseras OEM Toyota #' + raw + '. Compuesto cerámico para uso city/highway.' };
+    // TOYOTA Front Brake Pads — 04465-XXXXX
+    if (/^04465/i.test(c)) {
+      return {
+        titulo: 'Pastillas de Freno Delanteras Cerámicas Toyota OEM (' + raw.toUpperCase() + ')',
+        categoria: 'Frenos & Discos',
+        compatibilidad: 'Toyota Corolla 1.6L/1.8L (2003-2022), Yaris, Matrix, RAV4, Hilux & Fortuner (según código exacto)',
+        descripcionCorta: 'Juego de pastillas de freno delanteras cerámicas originales Toyota Genuine Parts con laminillas antirruido shims y ranura de disipación térmica.',
+        descripcionDetallada: 'Juego de pastillas de freno delanteras OEM Toyota #' + raw.toUpperCase() + '. Formulación 100% cerámica de alta fricción libre de asbesto. Diseñadas para frenado silencioso, baja emisión de polvillo negro en rines y máxima duración de discos rotores. Incluye sensores acústicos de desgaste.',
+        specs: [
+          'Compuesto cerámico de fricción formulación OEM Toyota',
+          'Laminillas antirruido acústicas (anti-squeal shims) de acero inoxidable',
+          'Coeficiente de fricción estable hasta 450°C',
+          'Ranura central y chaflanes biselados para ventilación y frenado silencioso',
+          `Referencia OEM Toyota: ${raw.toUpperCase()}`
+        ],
+        precio: '$48.00',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_frenos_discos.webp',
+        partNumber: raw.toUpperCase(),
+        referencias: [`Toyota ${raw.toUpperCase()}`, 'Akebono ACT1353', 'Denso Brake Pads']
+      };
+    }
+
+    // TOYOTA Wiring Harness / Battery Cable — 82101 / 8210
+    if (/^(?:82101|8210)[0-9A-Z]{4,6}/i.test(c) || /^(?:82101|8210)/i.test(c)) {
+      return {
+        titulo: 'Arnés / Cableado Eléctrico Principal Motor OEM Toyota (' + raw.toUpperCase() + ')',
+        categoria: 'Baterías & Electricidad',
+        compatibilidad: 'Toyota Corolla 1.8L, Yaris, Camry, RAV4, Hilux & Fortuner — según especificación de motor',
+        descripcionCorta: 'Ramal y cableado eléctrico genuino Toyota con conectores estancos sellados automotrices grado IP67 y protección térmica.',
+        descripcionDetallada: 'Arnés y cableado de motor OEM Toyota #' + raw.toUpperCase() + '. Conductor de cobre electrolítico de alta pureza con recubrimiento aislante automotriz resistente a aceites, vibraciones y temperaturas de hasta 125°C. Conectores terminales sellados para evitar corrosión por sulfatación o humedad.',
+        specs: [
+          'Conductor de cobre multifilar grado automotriz de alta conductividad',
+          'Conectores terminales estancos con sellos de silicona grado IP67',
+          'Aislamiento térmico retardante de llama y resistente a hidrocarburos',
+          'Compatibilidad exacta con ECU y sensores del compartimiento motor',
+          `Referencia OEM Toyota: ${raw.toUpperCase()}`
+        ],
+        precio: '$145.00',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_baterias_electricidad.webp',
+        partNumber: raw.toUpperCase(),
+        referencias: [`Toyota ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/^04466[0-9A-Z]{5}/i.test(c) || /^04466/i.test(c)) return { titulo: 'Pastillas de Freno Traseras Toyota Camry/RAV4 OEM (' + raw + ')', categoria: 'Frenos & Discos', compatibilidad: 'Toyota Camry 2.5L/3.5L, RAV4, Highlander & Sienna 3.5L V6 (2006-2024)', descripcionCorta: 'Pastillas traseras cerámicas Toyota Genuine Parts con indicador de desgaste acústico.', descripcionDetallada: 'Pastillas traseras OEM Toyota #' + raw + '. Compuesto cerámico para uso city/highway.' };
     // TOYOTA valve cover Corolla 1.8L
     if (/11201[0-9A-Z]{5}/i.test(c)) return { titulo: 'Tapa de Válvulas Motor Toyota Corolla 1.8L OEM (' + raw + ')', categoria: 'Motor y Encendido', compatibilidad: 'Toyota Corolla 1.8L (2ZR-FE/2ZR-FAE) 2009-2019, Matrix 2009-2014, Scion xB/xD 2008-2015', descripcionCorta: 'Tapa de válvulas de polímero térmico con empaque integrado, sello hermético antifiltraciones de aceite.', descripcionDetallada: 'Tapa de válvulas OEM Toyota #' + raw + '. Puertos PCV reforzados. Empaque FKMI resistente a aceites sintéticos.' };
     // TOYOTA cabin air filter (filtro de habitaculo/cabina)
@@ -3109,12 +3160,11 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     return null;
   };
 
-  try {
     // STEP 1: Local database (instant, no API cost)
     let parsedJson: any = detectFromDatabase(pNum);
 
-    // STEP 2: Gemini AI (if not found in DB)
-    if (!parsedJson && apiKey) {
+    // STEP 2: Gemini AI (if not found in DB and a real API key is configured)
+    if (!parsedJson && apiKey && apiKey.startsWith('AIza')) {
       const promptText = `Eres el MAYOR EXPERTO MUNDIAL en decodificacion de numeros de parte OEM automotriz. Numero de parte: "${pNum}". Devuelve UNICAMENTE JSON valido sin markdown.
 
 PREFIJOS OEM TOYOTA/LEXUS: 87139=Filtro Cabina/Habitaculo, 17801=Filtro Aire Motor, 90915=Filtro Aceite, 23221/23220=Bomba Gasolina en Tanque, 23300=Filtro Gasolina, 22030/23801=Cuerpo Aceleracion ETCS-i drive-by-wire, 42607=Sensor TPMS 315MHz, 04465=Pastillas Freno Delanteras Ceramicas, 04466=Pastillas Freno Traseras, 22204=Sensor MAF Hilo Caliente 0-5V, 89465/89467=Sensor O2 Lambda 4 cables calentado ZrO2, 23250=Inyector Combustible Multipunto solenoid, 90919=Sensor CKP/CMP Hall Effect, 89615=Sensor Detonacion Knock piezoel, 11201=Tapa Valvulas con PCV, 28100=Motor Arranque Starter 1.0-1.4kW, 27060=Alternador 80-100A OAD polea, 48520=Amortiguador Delantero gas N2, 48530=Amortiguador Trasero, 43550/43560=Cubo Manzana Rueda Delantera con sensor ABS, 42410=Cubo Rueda Trasera, 43330/48654=Rotula Suspension Ball Joint PTFE, 48820/48825=Eslabon Barra Estabilizadora Sway Bar Link, 45516=Terminal Direccion Exterior Outer Tie Rod, 45503=Terminal Direccion Interior Inner Tie Rod, 44200/44201=Rack Pinion Direccion EPS, 44310=Bomba Direccion Hidraulica paletas, 47510=Cilindro Maestro Freno, 47730/47750=Caliper Freno piston Stainless, 43206/43512=Disco Rotor Freno ventilado hierro gris, 44610=Servo Freno Booster vacio 9 pulgadas, 04311=Disco Embrague 215mm organico-ceramico, 31250=Plato Presion Embrague diafragma Belleville, 31230=Collarin Rodamiento Embrague, 43470/43430=Semieje Junta Homocinetica CV Axle, 16400/16410=Radiador aluminio, 16271/16281=Manguera Radiador EPDM, 16031=Tapa Radiador 1.1bar, 16801/16802=Ventilador Electrico Radiador, 16100/16110=Bomba Agua accionada correa sello SiC, 88320/88310=Compresor A/C piston axial variable, 88501/88450=Condensador A/C aluminio microceldas, 88899/88716=Valvula Expansion A/C termostatica, 13070/13073=Kit Cadena Distribucion completo con tensor y guias, 13568/13507=Correa Distribucion Timing Belt HNBR aramida, 90916=Correa Serpentin polyV EPDM, 15100/15010=Bomba Aceite, 12361/12372=Soporte Motor Mount, 17505/17560=Catalizador, 17740=Silenciador Mofle, 53101/53111=Cofre Capo acero, 52119=Paragolpes PP+EPDM, 12204=Valvula PCV Ventilacion Carter NBR, 25620/25800=Valvula EGR electronica, 77740/77741=Canister EVAP Carbon Activo, 89422/83420=Sensor ECT Temperatura Refrigerante NTC, 89452/89453=Sensor TPS Posicion Acelerador doble pista, 22365=Sensor MAP IAT Presion Admision, 83800=Tablero Cluster, 89170=Modulo SRS Airbag, 85720/85710=Motor Elevalunas Electrico, 69120/69130=Actuador Cerradura Puerta, 90080=Bujias Encendido Denso iridio/platino.
@@ -3128,30 +3178,38 @@ PRECIOS MERCADO REAL: filtro cabina $12-28, filtro aceite $8-25, sensor MAF $45-
 DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
 {"titulo":"[Tipo ESPECIFICO de repuesto NO generico con Marca+Modelo+Motorizacion+Anios]","categoria":"[Inyección & Motor | Frenos & Discos | Suspensión & Amortiguadores | Aceites & Lubricantes | Baterías & Electricidad | Filtros & Consumibles | Fluidos & Climatización | Cuidado & Detailing]","compatibilidad":"[Marca Modelo Cilindrada Codigo-Motor Anios — varios vehiculos con punto y coma]","descripcionCorta":"[1-2 oraciones tecnicas con material y beneficio clave]","descripcionDetallada":"[Descripcion tecnica completa con material, dimensiones, especificaciones, temperatura de operacion e intervalo de reemplazo]","specs":["[Material o composicion exacta del repuesto]","[Dimensiones o capacidad principal]","[Parametros electricos o mecanicos clave]","[Intervalo de reemplazo o vida util]","[Norma o numero OEM original equivalente]"],"precio":"[$XX.XX (solo monto numerico con signo $, ej: $45.00)]","referencias":["[Numero OEM original exacto del fabricante]","[Equivalente aftermarket Marca + Numero]","[Otra referencia cruzada importante]"]}`;
 
-      const geminiModels = ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'];
-      for (const model of geminiModels) {
-        if (parsedJson) break;
-        try {
-          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { temperature: 0.1, maxOutputTokens: 2048 } })
-          });
-          if (response.ok) {
-            const data = await response.json();
-            const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            if (rawText) { try { parsedJson = JSON.parse(rawText.replace(/```json/g, '').replace(/```/g, '').trim()); } catch (e) {} }
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { temperature: 0.1, maxOutputTokens: 2048 } }),
+          signal: AbortSignal.timeout(3500)
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          if (rawText) {
+            try { parsedJson = JSON.parse(rawText.replace(/```json/g, '').replace(/```/g, '').trim()); } catch (e) {}
           }
-        } catch (e) {}
-      }
-      if (!parsedJson && apiKey.startsWith('sk-')) {
-        try {
-          const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-            body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: promptText }], temperature: 0.1 })
-          });
-          if (response.ok) { const data = await response.json(); const rawText = data?.choices?.[0]?.message?.content || ''; if (rawText) { try { parsedJson = JSON.parse(rawText.replace(/```json/g, '').replace(/```/g, '').trim()); } catch (e) {} } }
-        } catch (e) {}
-      }
+        }
+      } catch (e) {}
+    } else if (!parsedJson && apiKey && apiKey.startsWith('sk-')) {
+      const promptText = `Eres el MAYOR EXPERTO MUNDIAL en decodificacion de numeros de parte OEM automotriz. Numero de parte: "${pNum}". Devuelve UNICAMENTE JSON valido sin markdown con titulo, categoria, compatibilidad, descripcionCorta, descripcionDetallada, specs, precio, referencias.`;
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: promptText }], temperature: 0.1 }),
+          signal: AbortSignal.timeout(3500)
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const rawText = data?.choices?.[0]?.message?.content || '';
+          if (rawText) {
+            try { parsedJson = JSON.parse(rawText.replace(/```json/g, '').replace(/```/g, '').trim()); } catch (e) {}
+          }
+        }
+      } catch (e) {}
     }
 
     // STEP 3: Smart structural fallback
@@ -3376,10 +3434,11 @@ RESTRICCIONES MÍNIMAS:
     // Enhanced greeting in model turn
     const modelGreeting = `Claro, aquí MT-01 listo. Cuéntame qué está pasando con tu vehículo — ruido, falla, luz en el tablero, lo que sea. Si tienes el VIN también lo decodifico al instante.`;
 
-    const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY || ['AQ', 'Ab8RN6Lx6TDruzrPfy2PpWA9yLO9PpBklx4LJp1ml1vyWk8ghg'].join('.');
+    const rawApiKey = (process.env.AI_API_KEY || process.env.GEMINI_API_KEY || '').trim();
+    const apiKey = (rawApiKey.startsWith('AIza') || rawApiKey.startsWith('sk-')) ? rawApiKey : '';
     let aiResponseText = '';
 
-    if (apiKey) {
+    if (apiKey && apiKey.startsWith('AIza')) {
       try {
         let contents: any[] = [
           { role: 'user', parts: [{ text: systemPrompt }] },
@@ -3400,20 +3459,16 @@ RESTRICCIONES MÍNIMAS:
 
         contents.push({ role: 'user', parts: [{ text: fullUserText }] });
 
-        const geminiModels = ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro'];
-        for (const model of geminiModels) {
-          try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ contents })
-            });
-            if (r.ok) {
-              const data = await r.json();
-              const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (txt) { aiResponseText = txt.trim(); break; }
-            }
-          } catch (e) {}
+        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents }),
+          signal: AbortSignal.timeout(4000)
+        });
+        if (r.ok) {
+          const data = await r.json();
+          const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (txt) { aiResponseText = txt.trim(); }
         }
       } catch (e) {}
     }

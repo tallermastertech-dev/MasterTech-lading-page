@@ -2596,8 +2596,130 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     // 1. Client-side instant catalog match
     let localMatch: any = null;
 
-    // Mopar 68252103 (AA-AF) / P68252103AF: Barra de Dirección / Terminal Izquierdo Jeep Wrangler JL & JT
-    if (cleanP.startsWith('68252103') || rawUpper.startsWith('68252103') || rawUpper.startsWith('P68252103')) {
+    // Toyota 04465: Pastillas de Freno Delanteras Cerámicas OEM
+    if (cleanP.startsWith('04465') || rawUpper.startsWith('04465')) {
+      localMatch = {
+        title: `Pastillas de Freno Delanteras Cerámicas Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Frenos & Discos',
+        price: '$48.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Juego de pastillas de freno delanteras cerámicas originales Toyota Genuine Parts con laminillas antirruido shims y ranura de disipación térmica.',
+        longDesc: `Juego de pastillas de freno delanteras OEM Toyota #${cleanRaw.toUpperCase()}. Formulación 100% cerámica de alta fricción libre de asbesto. Diseñadas para frenado silencioso, baja emisión de polvillo negro en rines y máxima duración de discos rotores. Incluye sensores acústicos de desgaste.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla 1.6L/1.8L (2003-2022), Yaris, Matrix, RAV4, Hilux & Fortuner — según código exacto',
+        specs: [
+          'Compuesto cerámico de fricción formulación OEM Toyota',
+          'Laminillas antirruido acústicas (anti-squeal shims) de acero inoxidable',
+          'Coeficiente de fricción estable hasta 450°C',
+          'Ranura central y chaflanes biselados para ventilación y frenado silencioso',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_frenos_discos.webp',
+        msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('04466') || rawUpper.startsWith('04466')) {
+      localMatch = {
+        title: `Pastillas de Freno Traseras Cerámicas Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Frenos & Discos',
+        price: '$42.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Juego de pastillas de freno traseras cerámicas originales Toyota Genuine Parts con indicador de desgaste acústico.',
+        longDesc: `Pastillas traseras OEM Toyota #${cleanRaw.toUpperCase()}. Compuesto cerámico para frenado estable y prolongada vida útil de discos.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Camry 2.5L/3.5L, RAV4, Corolla, Highlander & Sienna (2006-2024)',
+        specs: [
+          'Formulación cerámica de fricción progresiva OEM Toyota',
+          'Laminillas acústicas antirruido de acero templado',
+          'Indicador acústico de desgaste integrado',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_frenos_discos.webp',
+        msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('82101') || cleanP.startsWith('8210') || rawUpper.startsWith('82101') || rawUpper.startsWith('8210')) {
+      localMatch = {
+        title: `Arnés / Cableado Eléctrico Principal Motor OEM Toyota (${cleanRaw.toUpperCase()})`,
+        category: 'Baterías & Electricidad',
+        price: '$145.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Ramal y cableado eléctrico genuino Toyota con conectores estancos sellados automotrices grado IP67 y protección térmica.',
+        longDesc: `Arnés y cableado de motor OEM Toyota #${cleanRaw.toUpperCase()}. Conductor de cobre electrolítico de alta pureza con recubrimiento aislante automotriz resistente a aceites, vibraciones y temperaturas de hasta 125°C. Conectores terminales sellados para evitar corrosión por sulfatación o humedad.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla 1.8L, Yaris, Camry, RAV4, Hilux & Fortuner — según especificación de motor',
+        specs: [
+          'Conductor de cobre multifilar grado automotriz de alta conductividad',
+          'Conectores terminales estancos con sellos de silicona grado IP67',
+          'Aislamiento térmico retardante de llama y resistente a hidrocarburos',
+          'Compatibilidad exacta con ECU y sensores del compartimiento motor',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_baterias_electricidad.webp',
+        msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('17801') || rawUpper.startsWith('17801')) {
+      localMatch = {
+        title: `Filtro de Aire Motor Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Filtros & Consumibles',
+        price: '$22.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Filtro de aire para motor Toyota Genuine Parts, celulosa micro-plegada con retención del 99.2% de micropartículas.',
+        longDesc: `Filtro de aire de motor original Toyota #${cleanRaw.toUpperCase()}. Medios filtrantes de celulosa de poro calibrado con junta elastomérica de sellado hermético contra polvo y arena.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla, Yaris, RAV4, Hilux, Fortuner, Camry & 4Runner',
+        specs: [
+          'Celulosa micro-plegada de alta permeabilidad al aire',
+          'Junta perimetral de poliuretano estanca antiaspiración',
+          'Retención certificada de partículas de hasta 5 micras',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_filtros_consumibles.webp',
+        msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('90915') || rawUpper.startsWith('90915')) {
+      localMatch = {
+        title: `Filtro de Aceite de Motor Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Aceites & Lubricantes',
+        price: '$14.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Filtro de aceite original Toyota Genuine Parts con válvula de alivio bypass y diafragma de silicona anti-drenaje.',
+        longDesc: `Filtro de aceite de motor OEM Toyota #${cleanRaw.toUpperCase()}. Diseñado para flujo continuo de lubricante sintético y mineral en arranques en frío, protegiendo cojinetes y árbol de levas.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla, Yaris, RAV4, Camry, Tacoma, Hilux & Fortuner',
+        specs: [
+          'Elemento filtrante multi-densidad con núcleo de acero perforado',
+          'Válvula anti-retorno de silicona resistente a alta temperatura',
+          'Válvula de seguridad bypass calibrada a presión OEM',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_aceites_lubricantes.webp',
+        msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('87139') || rawUpper.startsWith('87139')) {
+      localMatch = {
+        title: `Filtro de Cabina / A/C Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Fluidos & Climatización',
+        price: '$18.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Filtro de polen y habitáculo Toyota Genuine Parts, fibra electrostática con carbón activo contra polen, smog y bacterias.',
+        longDesc: `Filtro de cabina OEM Toyota #${cleanRaw.toUpperCase()}. Purifica el flujo de aire al interior del vehículo protegiendo el evaporador de obstrucciones y reteniendo partículas PM2.5.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla, Yaris, RAV4, Camry, Hilux, Fortuner, Highlander & 4Runner',
+        specs: [
+          'Fibra no tejida electrostática con capa de carbón activado',
+          'Elimina esporas, polen, alérgenos y olores de hidrocarburos',
+          'Ajuste directo en la caja de climatización tras guantera',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_climatizacion.webp',
+        msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('68252103') || rawUpper.startsWith('68252103') || rawUpper.startsWith('P68252103')) {
       localMatch = {
         title: 'Barra de Dirección / Terminal Izquierdo Mopar Jeep Wrangler JL & Gladiator JT (68252103AF)',
         category: 'Suspensión & Amortiguadores',
@@ -2751,7 +2873,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       const res = await fetch('/api/autofill-part', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ partNumber: cleanNoP || rawSearch })
+        body: JSON.stringify({ partNumber: cleanNoP || rawSearch }),
+        signal: AbortSignal.timeout(6000)
       });
 
       if (res.ok) {
