@@ -124,6 +124,17 @@ export default function Servicios() {
     };
     fetchSettings();
 
+    // Auto-scroll to specific service if hash present (e.g. #frenos)
+    if (window.location.hash) {
+      setTimeout(() => {
+        const targetId = window.location.hash.replace('#', '');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 350);
+    }
+
     const handleSettingsUpdated = (e: any) => {
       const updated = e.detail || e;
       if (updated && typeof updated === 'object') {
@@ -175,7 +186,11 @@ export default function Servicios() {
             {/* Services Grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 sm:mb-20">
               {services.map((s, i) => (
-                <div key={s.id || i} className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden hover:border-primary/50 transition-all shadow-sm hover:shadow-xl group flex flex-col">
+                <div 
+                  key={s.id || i} 
+                  id={s.id || `servicio-${i}`}
+                  className="scroll-mt-28 bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden hover:border-primary/50 transition-all shadow-sm hover:shadow-xl group flex flex-col"
+                >
                   <div className="h-48 overflow-hidden relative">
                     <div className="absolute inset-0 bg-slate-900/20 dark:bg-black/40 group-hover:bg-transparent transition-colors z-10" />
                     <img 

@@ -1984,6 +1984,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   // Content States
+  const SERVICIOS_TALLER_OPCIONES = [
+    { id: 'mecanica', title: 'Mecánica General & Mantenimiento' },
+    { id: 'diagnostico', title: 'Diagnóstico Electrónico & Escáner' },
+    { id: 'electricidad', title: 'Electricidad & Electrónica Automotriz' },
+    { id: 'frenos', title: 'Frenos, Dirección & Suspensión' },
+    { id: 'inyectores', title: 'Limpieza de Inyectores por Ultrasonido' },
+    { id: 'climatizacion', title: 'Climatización & Aire Acondicionado' },
+    { id: 'ecu', title: 'Reprogramación ECU Stage 1 & 2' }
+  ];
+
   const [services, setServices] = useState<any[]>([]);
   const [faqs, setFaqs] = useState<any[]>([]);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
@@ -1995,7 +2005,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       title: 'Mecánica Mayor & Motores',
       desc: 'Desarme técnico, calibración de tolerancias, rectificación y armado con grúa hidráulica según especificaciones de torque OEM.',
       img: '/assets/instalaciones.webp',
-      feature: 'Torque de precisión garantizado'
+      feature: 'Torque de precisión garantizado',
+      servicioId: 'mecanica',
+      servicioNombre: 'Mecánica General & Mantenimiento'
     },
     {
       id: 2,
@@ -2003,7 +2015,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       title: 'Diagnóstico por Escáner',
       desc: 'Lectura en vivo de parámetros de sensores, pruebas de actuadores y reseteo de computadoras ECU sin inventar diagnósticos.',
       img: '/assets/servicio-electricidad.webp',
-      feature: 'Detección de códigos DTC exactos'
+      feature: 'Detección de códigos DTC exactos',
+      servicioId: 'diagnostico',
+      servicioNombre: 'Diagnóstico Electrónico & Escáner'
     },
     {
       id: 3,
@@ -2011,7 +2025,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       title: 'Tren Motriz, Frenos & 4x4',
       desc: 'Inspección profunda de terminales, bujes, amortiguadores, pastillas cerámicas y tracción en camionetas Jeep y Toyota.',
       img: '/assets/servicio-frenos.webp',
-      feature: 'Seguridad en carretera garantizada'
+      feature: 'Seguridad en carretera garantizada',
+      servicioId: 'frenos',
+      servicioNombre: 'Frenos, Dirección & Suspensión'
     },
     {
       id: 4,
@@ -2019,7 +2035,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       title: 'Inyección & Ultrasonido',
       desc: 'Limpieza en tina ultrasónica, medición de caudal y verificación del patrón de pulverización para óptimo consumo de combustible.',
       img: '/assets/servicio-inyeccion.webp',
-      feature: 'Prueba dinámica en banco digital'
+      feature: 'Prueba dinámica en banco digital',
+      servicioId: 'inyectores',
+      servicioNombre: 'Limpieza de Inyectores por Ultrasonido'
     }
   ]);
 
@@ -7534,7 +7552,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               title: "Nuevo Trabajo Técnico",
                               desc: "Descripción del trabajo especializado...",
                               img: "/assets/instalaciones.webp",
-                              feature: "Garantía de calidad MasterTech"
+                              feature: "Garantía de calidad MasterTech",
+                              servicioId: "mecanica",
+                              servicioNombre: "Mecánica General & Mantenimiento"
                             }
                           ];
                           setInstalaciones(updated);
@@ -7653,6 +7673,37 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             placeholder="Detalles del procedimiento o herramientas utilizadas..."
                             className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
                           />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-amber-400 uppercase block mb-1 flex items-center gap-1">
+                            <Wrench size={12} />
+                            <span>Servicio del Taller Enlazado</span>
+                          </label>
+                          <select
+                            value={item.servicioId || ''}
+                            onChange={(e) => {
+                              const selectedId = e.target.value;
+                              const matched = SERVICIOS_TALLER_OPCIONES.find(s => s.id === selectedId);
+                              const updated = [...instalaciones];
+                              updated[idx].servicioId = selectedId;
+                              updated[idx].servicioNombre = matched ? matched.title : '';
+                              setInstalaciones(updated);
+                            }}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400 font-semibold cursor-pointer"
+                          >
+                            <option value="">-- Sin enlace específico (Lleva a Servicios general) --</option>
+                            {SERVICIOS_TALLER_OPCIONES.map((serv) => (
+                              <option key={serv.id} value={serv.id}>
+                                {serv.title}
+                              </option>
+                            ))}
+                          </select>
+                          <p className="text-[10px] text-zinc-500 mt-1 font-mono">
+                            {item.servicioId 
+                              ? `Enlace activo: /servicios#${item.servicioId}`
+                              : 'Enlace por defecto: /servicios'}
+                          </p>
                         </div>
 
                         <div>

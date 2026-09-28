@@ -196,7 +196,9 @@ export default function App() {
       title: 'Mecánica Mayor & Motores',
       desc: 'Desarme técnico, calibración de tolerancias, rectificación y armado con grúa hidráulica según especificaciones de torque OEM.',
       img: '/assets/instalaciones.webp',
-      feature: 'Torque de precisión garantizado'
+      feature: 'Torque de precisión garantizado',
+      servicioId: 'mecanica',
+      servicioNombre: 'Mecánica General & Mantenimiento'
     },
     {
       id: 2,
@@ -204,7 +206,9 @@ export default function App() {
       title: 'Diagnóstico por Escáner',
       desc: 'Lectura en vivo de parámetros de sensores, pruebas de actuadores y reseteo de computadoras ECU sin inventar diagnósticos.',
       img: '/assets/servicio-electricidad.webp',
-      feature: 'Detección de códigos DTC exactos'
+      feature: 'Detección de códigos DTC exactos',
+      servicioId: 'diagnostico',
+      servicioNombre: 'Diagnóstico Electrónico & Escáner'
     },
     {
       id: 3,
@@ -212,7 +216,9 @@ export default function App() {
       title: 'Tren Motriz, Frenos & 4x4',
       desc: 'Inspección profunda de terminales, bujes, amortiguadores, pastillas cerámicas y tracción en camionetas Jeep y Toyota.',
       img: '/assets/servicio-frenos.webp',
-      feature: 'Seguridad en carretera garantizada'
+      feature: 'Seguridad en carretera garantizada',
+      servicioId: 'frenos',
+      servicioNombre: 'Frenos, Dirección & Suspensión'
     },
     {
       id: 4,
@@ -220,7 +226,9 @@ export default function App() {
       title: 'Inyección & Ultrasonido',
       desc: 'Limpieza en tina ultrasónica, medición de caudal y verificación del patrón de pulverización para óptimo consumo de combustible.',
       img: '/assets/servicio-inyeccion.webp',
-      feature: 'Prueba dinámica en banco digital'
+      feature: 'Prueba dinámica en banco digital',
+      servicioId: 'inyectores',
+      servicioNombre: 'Limpieza de Inyectores por Ultrasonido'
     }
   ]);
 
@@ -828,43 +836,85 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {instalacionesList.map((item, idx) => (
-              <div key={item.id || idx} className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
-                  <img 
-                    src={item.img || "/assets/instalaciones.webp"} 
-                    alt={item.title || "Puesto de trabajo MasterTech"} 
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {item.badge && (
-                    <span className={`absolute top-3 left-3 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20 ${
-                      item.badge.toLowerCase().includes('oem') || item.badge.toLowerCase().includes('diagn')
-                        ? 'bg-red-600 shadow-md border-transparent'
-                        : 'bg-slate-900/90'
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
-                </div>
-                <div className="p-5 flex-1 flex flex-col justify-between">
+            {instalacionesList.map((item, idx) => {
+              const serviceHref = item.servicioId 
+                ? `/servicios#${item.servicioId}` 
+                : '/servicios';
+              const targetTitle = item.servicioNombre || item.title || 'Servicio Automotriz';
+              const baseWa = config?.WHATSAPP_LINK 
+                ? config.WHATSAPP_LINK.split('?')[0] 
+                : 'https://wa.me/584123565012';
+              const waHref = `${baseWa}?text=${encodeURIComponent(`Hola Taller MasterTech, deseo consultar y agendar el servicio de ${targetTitle}`)}`;
+
+              return (
+                <div key={item.id || idx} className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                   <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                      {item.desc}
-                    </p>
-                  </div>
-                  {item.feature && (
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                      <CheckCircle2 size={13} className="text-emerald-500" />
-                      <span>{item.feature}</span>
+                    <a href={serviceHref} className="block relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900 group/img">
+                      <img 
+                        src={item.img || "/assets/instalaciones.webp"} 
+                        alt={item.title || "Puesto de trabajo MasterTech"} 
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      {item.badge && (
+                        <span className={`absolute top-3 left-3 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20 ${
+                          item.badge.toLowerCase().includes('oem') || item.badge.toLowerCase().includes('diagn')
+                            ? 'bg-red-600 shadow-md border-transparent'
+                            : 'bg-slate-900/90'
+                        }`}>
+                          {item.badge}
+                        </span>
+                      )}
+                      <div className="absolute inset-0 bg-slate-950/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover/img:translate-y-0 transition-transform">
+                          <span>Ver Servicio</span>
+                          <ArrowRight size={12} />
+                        </span>
+                      </div>
+                    </a>
+
+                    <div className="p-5 pb-2">
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                        <a href={serviceHref} className="hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                          {item.title}
+                        </a>
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {item.desc}
+                      </p>
                     </div>
-                  )}
+                  </div>
+
+                  <div className="p-5 pt-0 space-y-3 mt-2">
+                    {item.feature && (
+                      <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                        <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+                        <span className="truncate">{item.feature}</span>
+                      </div>
+                    )}
+
+                    <div className="pt-1 flex items-center gap-2">
+                      <a 
+                        href={serviceHref}
+                        className="flex-1 py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-red-600 hover:text-white dark:hover:bg-red-600 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all flex items-center justify-center gap-1.5 group/btn"
+                      >
+                        <span>Ver Servicio</span>
+                        <ArrowRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                      </a>
+                      <a 
+                        href={waHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 hover:text-white dark:text-emerald-400 transition-colors flex items-center justify-center"
+                        title={`Agendar ${targetTitle}`}
+                      >
+                        <WhatsAppIcon size={16} className="fill-current" />
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
