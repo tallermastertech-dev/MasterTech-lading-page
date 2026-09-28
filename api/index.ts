@@ -31,7 +31,7 @@ const memoryLeadsCache: any[] = [];
 // Only queries Supabase once every 5 minutes regardless of traffic
 let supabaseSettingsCache: Record<string, string> | null = null;
 let supabaseSettingsCacheTime = 0;
-const SUPABASE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const SUPABASE_CACHE_TTL_MS = 10 * 1000; // 10 seconds
 
 // Initialize memory cache from persistent disk file on startup
 try {
@@ -313,7 +313,7 @@ function extractSlot(text: string): { dateStr: string; timeStr: string } | null 
 }
 
 // Helper: Get settings as object (Pure Supabase data priority, zero hardcoded content)
-async function getSettings() {
+async function getSettings(force = false) {
   const defaultSettings: Record<string, string> = {
     PHONE_NUMBER: '+584123565012',
     WHATSAPP_LINK: 'https://wa.link/xnj37f',
@@ -341,9 +341,9 @@ async function getSettings() {
     CATALOG_PRODUCTS_JSON: '[]'
   };
 
-  // ── TTL CACHE: skip Supabase query if data is fresh (< 5 min) ──
+  // ── TTL CACHE: skip Supabase query if data is fresh (< 10 sec) and not forced ──
   const now = Date.now();
-  if (supabaseSettingsCache && (now - supabaseSettingsCacheTime) < SUPABASE_CACHE_TTL_MS) {
+  if (!force && supabaseSettingsCache && (now - supabaseSettingsCacheTime) < SUPABASE_CACHE_TTL_MS) {
     return { ...defaultSettings, ...supabaseSettingsCache };
   }
 
@@ -564,9 +564,9 @@ app.use(['/api/admin', '/admin'], authenticateAdmin);
 // Handler reutilizable para GET /settings
 const handleGetSettings = async (req: express.Request, res: express.Response) => {
   try {
-    // TTL Cache-Control: Browser caches for 60s, Vercel Edge CDN caches for 300s (5 min), stale-while-revalidate for 600s
-    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
-    const settings = await getSettings();
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    const isBypass = Boolean(req.query._t || req.headers['cache-control']?.includes('no-cache'));
+    const settings = await getSettings(isBypass);
     res.json(settings);
   } catch (error) {
     res.status(500).json({ error: 'Error del servidor' });

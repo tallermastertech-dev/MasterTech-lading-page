@@ -274,8 +274,11 @@ export default function App() {
       }
     };
 
-    // Call loadSettings (will skip network request if cache is within TTL)
-    loadSettings();
+    // Revalidate settings in background on mount and focus
+    loadSettings(true);
+
+    const handleFocus = () => loadSettings(true);
+    window.addEventListener('focus', handleFocus);
 
     // Live update listener for instant admin updates across tabs
     const handleSettingsUpdated = (e: any) => {
@@ -293,6 +296,7 @@ export default function App() {
     window.addEventListener('storage', () => loadSettings(true));
 
     return () => {
+      window.removeEventListener('focus', handleFocus);
       window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
       window.removeEventListener('storage', () => loadSettings(true));
     };

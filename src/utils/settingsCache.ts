@@ -6,7 +6,7 @@
  * eliminating unnecessary server load and bandwidth/egress consumption.
  */
 
-export const SETTINGS_TTL_MS = 5 * 60 * 1000; // 5 minutes TTL
+export const SETTINGS_TTL_MS = 10 * 1000; // 10 seconds TTL
 const STORAGE_KEY = 'mastertech_settings_store';
 const TIMESTAMP_KEY = 'mastertech_settings_timestamp';
 
@@ -57,13 +57,14 @@ export function invalidateSettingsCache(): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.removeItem(TIMESTAMP_KEY);
+    localStorage.removeItem(STORAGE_KEY);
     window.dispatchEvent(new Event('mastertech_settings_updated'));
   } catch (e) {}
 }
 
 /**
  * Fetches settings respecting the TTL cache.
- * If data is fresh (< 5 min old), returns it immediately with zero network overhead.
+ * If data is fresh (< 10 sec old), returns it immediately with zero network overhead.
  * Deduplicates in-flight requests if multiple components mount simultaneously.
  */
 export async function fetchSettingsWithTTL(options?: { force?: boolean }): Promise<any> {
@@ -82,9 +83,12 @@ export async function fetchSettingsWithTTL(options?: { force?: boolean }): Promi
 
   inFlightPromise = (async () => {
     try {
-      // Use cache-busting only if force-requested (e.g. from Admin save)
-      const url = force ? `/api/settings?_t=${Date.now()}` : '/api/settings';
-      const res = await fetch(url);
+      // Always use timestamp & no-store so CDN and browser HTTP caches never trap old data
+      const url = `/api/settings?_t=${Date.now()}`;
+      const res = await fetch(url, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store' }
+      });
       
       if (!res.ok) {
         // If fetch fails, fall back to cached data even if stale
@@ -97,6 +101,7 @@ export async function fetchSettingsWithTTL(options?: { force?: boolean }): Promi
           freshData.SUCCESS_BADGE = '¡TIENES HASTA UN 15% DE DESCUENTO!';
         }
         setCachedSettings(freshData);
+        window.dispatchEvent(new CustomEvent('mastertech_settings_updated', { detail: freshData }));
         return freshData;
       }
 

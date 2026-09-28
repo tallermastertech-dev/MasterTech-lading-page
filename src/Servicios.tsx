@@ -109,10 +109,10 @@ export default function Servicios() {
       if (parsed) setServices(parsed);
     }
 
-    // 2. Fetch authoritative fresh data respecting 5-min TTL
+    // 2. Fetch authoritative fresh data in the background
     const fetchSettings = async () => {
       try {
-        const data = await fetchSettingsWithTTL();
+        const data = await fetchSettingsWithTTL({ force: true });
         if (data && typeof data === 'object') {
           setConfig((prev: any) => ({ ...prev, ...data }));
           const parsed = parseServices(data);
