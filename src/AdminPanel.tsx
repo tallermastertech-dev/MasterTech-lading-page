@@ -7331,79 +7331,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
 
                         <div>
-                          <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">
-                            Imagen Representativa
-                          </label>
-                          <div className="bg-black/50 p-3 rounded-2xl border border-white/10 space-y-2.5">
-                            {/* Preview and Upload Buttons */}
-                            <div className="flex items-center gap-3">
-                              <div className="w-16 h-16 rounded-xl bg-black/60 border border-white/15 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
-                                {srv.img ? (
-                                  <img 
-                                    src={srv.img} 
-                                    alt={srv.title || 'Servicio'} 
-                                    className="w-full h-full object-cover" 
-                                    onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
-                                  />
-                                ) : (
-                                  <ImageIcon className="w-6 h-6 text-zinc-600" />
-                                )}
-                              </div>
-
-                              <div className="flex-1 space-y-1.5">
-                                <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider cursor-pointer shadow-md shadow-red-600/30 transition-all active:scale-95">
-                                  <Upload size={14} />
-                                  <span>{srv.img ? 'Cambiar Foto' : 'Subir Foto'}</span>
-                                  <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                      if (e.target.files && e.target.files[0]) {
-                                        handleDirectImageUpload(e.target.files[0], (dataUrl) => {
-                                          const updated = [...services];
-                                          updated[idx].img = dataUrl;
-                                          setServices(updated);
-                                        }, 'servicios');
-                                      }
-                                      e.target.value = '';
-                                    }}
-                                  />
-                                </label>
-
-                                {srv.img && (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      const updated = [...services];
-                                      updated[idx].img = '';
-                                      setServices(updated);
-                                    }}
-                                    className="text-[10px] font-bold text-red-400 hover:text-red-300 block cursor-pointer transition-colors"
-                                  >
-                                    ✕ Quitar foto
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Direct Path / URL Field */}
-                            <div>
-                              <input
-                                type="text"
-                                value={srv.img?.startsWith('data:image') ? '[Foto cargada desde este dispositivo]' : (srv.img || '')}
-                                onChange={(e) => {
-                                  if (!srv.img?.startsWith('data:image')) {
-                                    const updated = [...services];
-                                    updated[idx].img = e.target.value;
-                                    setServices(updated);
-                                  }
-                                }}
-                                placeholder="/assets/servicio-mecanica.webp o URL"
-                                className={`w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-xs text-white outline-none focus:border-red-500 transition-all font-mono text-[11px] truncate ${srv.img?.startsWith('data:image') ? 'text-emerald-400 font-sans cursor-default' : ''}`}
-                              />
-                            </div>
-                          </div>
+                          <ImageUploader
+                            label="Imagen Representativa"
+                            value={srv.img || ''}
+                            onChange={(val) => {
+                              const updated = [...services];
+                              updated[idx].img = val;
+                              setServices(updated);
+                            }}
+                            aspectRatio={16 / 9}
+                            placeholder="/assets/servicio-mecanica.webp"
+                            folder="servicios"
+                          />
                         </div>
                       </div>
                     </div>
@@ -7512,72 +7451,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           </div>
 
                           <div>
-                            <label className="text-[10px] font-bold uppercase text-zinc-400 block mb-1">
-                              Foto Oficial de {member.name || `Miembro #${idx + 1}`}
-                            </label>
-                            <div className="bg-black/50 p-3 rounded-2xl border border-white/10 space-y-2.5">
-                              <div className="flex items-center gap-3">
-                                <div className="w-16 h-16 rounded-xl bg-black/60 border border-white/15 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
-                                  {member.img ? (
-                                    <img 
-                                      src={member.img} 
-                                      alt={member.name} 
-                                      className="w-full h-full object-cover" 
-                                      onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
-                                    />
-                                  ) : (
-                                    <User size={20} className="text-zinc-600" />
-                                  )}
-                                </div>
-                                <div className="flex-1 space-y-1.5">
-                                  <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider cursor-pointer shadow-md shadow-red-600/30 transition-all active:scale-95">
-                                    <Upload size={14} />
-                                    <span>{member.img ? 'Cambiar Foto' : 'Subir Foto'}</span>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      className="hidden"
-                                      onChange={(e) => {
-                                        if (e.target.files && e.target.files[0]) {
-                                          handleDirectImageUpload(e.target.files[0], (dataUrl) => {
-                                            const updated = [...teamMembers];
-                                            updated[idx].img = dataUrl;
-                                            setTeamMembers(updated);
-                                          }, 'equipo');
-                                        }
-                                        e.target.value = '';
-                                      }}
-                                    />
-                                  </label>
-                                  {member.img && (
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const updated = [...teamMembers];
-                                        updated[idx].img = '';
-                                        setTeamMembers(updated);
-                                      }}
-                                      className="text-[10px] font-bold text-red-400 hover:text-red-300 block cursor-pointer transition-colors"
-                                    >
-                                      ✕ Quitar foto
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                              <input
-                                type="text"
-                                value={member.img?.startsWith('data:image') ? '[Foto cargada desde este dispositivo]' : (member.img || '')}
-                                onChange={(e) => {
-                                  if (!member.img?.startsWith('data:image')) {
-                                    const updated = [...teamMembers];
-                                    updated[idx].img = e.target.value;
-                                    setTeamMembers(updated);
-                                  }
-                                }}
-                                placeholder="/assets/foto.webp o URL"
-                                className={`w-full bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-xs text-white outline-none focus:border-red-500 transition-all font-mono text-[11px] truncate ${member.img?.startsWith('data:image') ? 'text-emerald-400 font-sans cursor-default' : ''}`}
-                              />
-                            </div>
+                            <ImageUploader
+                              label={`Foto Oficial de ${member.name || `Miembro #${idx + 1}`}`}
+                              value={member.img || ''}
+                              onChange={(val) => {
+                                const updated = [...teamMembers];
+                                updated[idx].img = val;
+                                setTeamMembers(updated);
+                              }}
+                              aspectRatio={1}
+                              placeholder="/assets/foto.webp"
+                              folder="equipo"
+                            />
                           </div>
                         </div>
                       </div>

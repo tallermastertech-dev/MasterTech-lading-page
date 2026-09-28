@@ -1,18 +1,25 @@
 export const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous')
-    image.src = url
-  })
+    const image = new Image();
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', () => {
+      const fallback = new Image();
+      fallback.addEventListener('load', () => resolve(fallback));
+      fallback.addEventListener('error', (error) => reject(error));
+      fallback.src = url;
+    });
+    if (!url.startsWith('data:')) {
+      image.setAttribute('crossOrigin', 'anonymous');
+    }
+    image.src = url;
+  });
 
 export default async function getCroppedImg(
   imageSrc: string,
   pixelCrop: { x: number; y: number; width: number; height: number },
   aspectRatio: number = 4/3,
-  maxDimension: number = 600,
-  quality: number = 0.75
+  maxDimension: number = 1200,
+  quality: number = 0.88
 ): Promise<string> {
   const image = await createImage(imageSrc)
   const canvas = document.createElement('canvas')
