@@ -686,14 +686,24 @@ export default function App() {
                 return (
                   <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
                     {isInstagram ? (
-                      <iframe 
-                        src={`https://www.instagram.com/reel/${instagramId}/embed/`}
-                        title="Instagram Reel Taller MasterTech"
-                        className="w-full h-full border-0 select-none bg-black"
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                        allowFullScreen
-                        scrolling="no"
-                      />
+                      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black flex items-center justify-center">
+                        <iframe 
+                          src={`https://www.instagram.com/reel/${instagramId}/embed/`}
+                          title="Instagram Reel Taller MasterTech"
+                          className="border-0 select-none bg-black pointer-events-auto"
+                          style={{
+                            position: 'absolute',
+                            width: 'calc(100% + 8px)',
+                            left: '-4px',
+                            top: '-58px',
+                            height: 'calc(100% + 195px)',
+                            maxWidth: 'none'
+                          }}
+                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                          allowFullScreen
+                          scrolling="no"
+                        />
+                      </div>
                     ) : isYouTube ? (
                       <iframe 
                         src={`https://www.youtube.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=1`}

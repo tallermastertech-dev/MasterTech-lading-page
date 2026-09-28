@@ -8396,6 +8396,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           }}
                         />
                       </label>
+                      <button
+                        type="button"
+                        onClick={() => setSettingsForm((prev: any) => ({ ...prev, HERO_REEL_URL: '/assets/taller_video.mp4' }))}
+                        className="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shrink-0"
+                        title="Restaurar el video original del taller (/assets/taller_video.mp4)"
+                      >
+                        <RotateCcw size={13} />
+                        <span>Restaurar Predeterminado</span>
+                      </button>
                     </div>
 
                     {/* Status helper text */}
