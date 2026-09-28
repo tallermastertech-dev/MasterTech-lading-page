@@ -9,6 +9,7 @@ interface ImageUploaderProps {
   onChange: (base64OrUrl: string) => void;
   aspectRatio?: number;
   placeholder?: string;
+  folder?: string;
 }
 
 export default function ImageUploader({
@@ -16,7 +17,8 @@ export default function ImageUploader({
   value,
   onChange,
   aspectRatio = 4 / 3,
-  placeholder
+  placeholder,
+  folder = 'contenido'
 }: ImageUploaderProps) {
   const instanceId = useId();
   const cleanId = instanceId.replace(/[^a-zA-Z0-9]/g, '');
@@ -79,8 +81,29 @@ export default function ImageUploader({
     try {
       setIsProcessing(true);
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels, aspectRatio);
+      // Immediate local preview so UI updates without lag
       onChange(croppedImage);
       setIsModalOpen(false);
+
+      // Sincronizar automáticamente en Supabase Storage mastertech-media/{folder}
+      try {
+        const cleanName = label.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 30) || 'media';
+        const res = await fetch('/api/upload-media', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            image: croppedImage,
+            folder: folder || 'contenido',
+            filename: `${cleanName}.jpg`
+          })
+        });
+        const data = await res.json();
+        if (data && data.success && data.url) {
+          onChange(data.url);
+        }
+      } catch (uploadErr) {
+        console.warn('Almacenamiento en nube en segundo plano:', uploadErr);
+      }
     } catch (e) {
       console.error(e);
       alert('Error al procesar la imagen');

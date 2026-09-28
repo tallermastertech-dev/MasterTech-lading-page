@@ -2394,8 +2394,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
   };
 
-  // Helper for direct high-res compressed image uploads (services, team, content)
-  const handleDirectImageUpload = (file: File, callback: (dataUrl: string) => void) => {
+  // Helper for direct high-res compressed image uploads (services, team, content, workshop)
+  const handleDirectImageUpload = (
+    file: File,
+    callback: (finalUrl: string) => void,
+    folder: string = 'servicios'
+  ) => {
     if (!file || !file.type.startsWith('image/')) {
       alert('Por favor selecciona un archivo de imagen válido (JPG, PNG o WEBP).');
       return;
@@ -2403,8 +2407,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
-      img.onload = () => {
-        const maxDim = 900;
+      img.onload = async () => {
+        const maxDim = 1200;
         let w = img.width;
         let h = img.height;
         if (w > maxDim || h > maxDim) {
@@ -2420,13 +2424,36 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         canvas.width = w;
         canvas.height = h;
         const ctx = canvas.getContext('2d');
+        let processedDataUrl = '';
         if (ctx) {
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(img, 0, 0, w, h);
-          callback(canvas.toDataURL('image/jpeg', 0.85));
+          processedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
         } else {
-          callback(reader.result?.toString() || '');
+          processedDataUrl = (reader.result?.toString() || '');
+        }
+
+        // Vista previa inmediata para que el usuario no espere
+        callback(processedDataUrl);
+
+        // Subir a la carpeta correspondiente en Supabase Storage (mastertech-media/{folder})
+        try {
+          const res = await fetch('/api/upload-media', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              image: processedDataUrl,
+              folder,
+              filename: file.name
+            })
+          });
+          const data = await res.json();
+          if (data && data.success && data.url) {
+            callback(data.url);
+          }
+        } catch (uploadErr) {
+          console.warn('Almacenamiento en nube en segundo plano:', uploadErr);
         }
       };
       img.src = e.target?.result as string;
@@ -7337,7 +7364,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                           const updated = [...services];
                                           updated[idx].img = dataUrl;
                                           setServices(updated);
-                                        });
+                                        }, 'servicios');
                                       }
                                       e.target.value = '';
                                     }}
@@ -7516,7 +7543,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                             const updated = [...teamMembers];
                                             updated[idx].img = dataUrl;
                                             setTeamMembers(updated);
-                                          });
+                                          }, 'equipo');
                                         }
                                         e.target.value = '';
                                       }}
@@ -8633,6 +8660,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   onChange={(val) => setEditingProduct({ ...editingProduct, img: val })}
                   aspectRatio={4 / 3}
                   placeholder="/assets/servicio-mecanica.webp"
+                  folder="catalogo"
                 />
 
                 {/* Galería Adicional Indefinida */}
@@ -8666,6 +8694,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       }}
                       aspectRatio={4 / 3}
                       placeholder="/assets/servicio-frenos.jpg"
+                      folder="catalogo"
                     />
                   </div>
                 ))}

@@ -9,8 +9,8 @@ import path from 'path';
 dotenv.config();
 
 const app = express();
-app.use(express.json({ limit: '2mb' }));
-app.use(express.urlencoded({ limit: '2mb', extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'placeholder-key';
@@ -1922,6 +1922,62 @@ app.delete(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, r
     res.json({ success: true, message: 'Historial de auditoría vaciado correctamente.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al limpiar logs', details: err.message });
+  }
+});
+
+// =============================================================
+// ADMIN MEDIA UPLOAD TO SUPABASE STORAGE BUCKET
+// =============================================================
+app.post(['/api/upload-media', '/api/admin/upload-media'], async (req, res) => {
+  try {
+    const { image, folder = 'servicios', filename } = req.body || {};
+    if (!image) {
+      return res.status(400).json({ error: 'No se recibió ninguna imagen.' });
+    }
+
+    const matches = String(image).match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    let buffer: Buffer;
+    let contentType = 'image/jpeg';
+    let ext = 'jpg';
+
+    if (matches && matches.length === 3) {
+      contentType = matches[1];
+      buffer = Buffer.from(matches[2], 'base64');
+      if (contentType.includes('png')) ext = 'png';
+      else if (contentType.includes('webp')) ext = 'webp';
+      else if (contentType.includes('svg')) ext = 'svg';
+    } else {
+      buffer = Buffer.from(String(image).replace(/^data:[^;]+;base64,/, ''), 'base64');
+    }
+
+    const cleanFolder = String(folder).replace(/[^a-zA-Z0-9_-]/g, '') || 'general';
+    const cleanName = filename ? String(filename).replace(/[^a-zA-Z0-9_-]/g, '_') : 'img';
+    const storagePath = `${cleanFolder}/${Date.now()}_${cleanName}.${ext}`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('mastertech-media')
+      .upload(storagePath, buffer, {
+        contentType,
+        upsert: true
+      });
+
+    if (uploadError) {
+      console.error('Supabase storage upload error:', uploadError);
+      return res.status(500).json({ error: 'Error al guardar imagen en Supabase Storage', details: uploadError.message });
+    }
+
+    const { data: pubData } = supabase.storage.from('mastertech-media').getPublicUrl(storagePath);
+    const publicUrl = pubData?.publicUrl || '';
+
+    res.json({
+      success: true,
+      url: publicUrl,
+      path: storagePath,
+      folder: cleanFolder
+    });
+  } catch (err: any) {
+    console.error('Error in /api/upload-media:', err);
+    res.status(500).json({ error: 'Error interno al procesar imagen', details: err.message });
   }
 });
 
