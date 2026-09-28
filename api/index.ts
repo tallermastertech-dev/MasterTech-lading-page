@@ -338,7 +338,8 @@ async function getSettings(force = false) {
     FAQS_JSON: '[]',
     JORNADAS_JSON: '[]',
     PROVEEDORES_JSON: '[]',
-    CATALOG_PRODUCTS_JSON: '[]'
+    CATALOG_PRODUCTS_JSON: '[]',
+    INSTALACIONES_JSON: '[]'
   };
 
   // ── TTL CACHE: skip Supabase query if data is fresh (< 10 sec) and not forced ──

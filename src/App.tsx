@@ -182,13 +182,47 @@ export default function App() {
     window.location.search.includes('preview=manuales')
   );
 
-  // Dynamic JSON arrays for team, reviews, and brands
+  // Dynamic JSON arrays for team, reviews, brands and workshop showcases
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [brands, setBrands] = useState<string[]>([
     "Jeep", "Toyota", "Honda", "Dodge", "Nissan", "Chrysler", "Lexus"
   ]);
   const [services, setServices] = useState<any[]>([]);
+  const [instalacionesList, setInstalacionesList] = useState<any[]>([
+    {
+      id: 1,
+      badge: 'Puesto de Trabajo #1',
+      title: 'Mecánica Mayor & Motores',
+      desc: 'Desarme técnico, calibración de tolerancias, rectificación y armado con grúa hidráulica según especificaciones de torque OEM.',
+      img: '/assets/instalaciones.webp',
+      feature: 'Torque de precisión garantizado'
+    },
+    {
+      id: 2,
+      badge: 'Diagnóstico OEM',
+      title: 'Diagnóstico por Escáner',
+      desc: 'Lectura en vivo de parámetros de sensores, pruebas de actuadores y reseteo de computadoras ECU sin inventar diagnósticos.',
+      img: '/assets/servicio-electricidad.webp',
+      feature: 'Detección de códigos DTC exactos'
+    },
+    {
+      id: 3,
+      badge: 'Puesto #2 · Jeep 4x4',
+      title: 'Tren Motriz, Frenos & 4x4',
+      desc: 'Inspección profunda de terminales, bujes, amortiguadores, pastillas cerámicas y tracción en camionetas Jeep y Toyota.',
+      img: '/assets/servicio-frenos.webp',
+      feature: 'Seguridad en carretera garantizada'
+    },
+    {
+      id: 4,
+      badge: 'Laboratorio',
+      title: 'Inyección & Ultrasonido',
+      desc: 'Limpieza en tina ultrasónica, medición de caudal y verificación del patrón de pulverización para óptimo consumo de combustible.',
+      img: '/assets/servicio-inyeccion.webp',
+      feature: 'Prueba dinámica en banco digital'
+    }
+  ]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -249,6 +283,12 @@ export default function App() {
       try { if (localData.REVIEWS_JSON) setReviews(JSON.parse(localData.REVIEWS_JSON)); } catch (e) {}
       try { if (localData.BRANDS_JSON) setBrands(JSON.parse(localData.BRANDS_JSON)); } catch (e) {}
       try { if (localData.SERVICES_JSON) setServices(JSON.parse(localData.SERVICES_JSON)); } catch (e) {}
+      try {
+        if (localData.INSTALACIONES_JSON) {
+          const p = JSON.parse(localData.INSTALACIONES_JSON);
+          if (Array.isArray(p) && p.length > 0) setInstalacionesList(p);
+        }
+      } catch (e) {}
     }
 
     // 2. Fetch fresh settings respecting TTL (5 min cache)
@@ -269,6 +309,12 @@ export default function App() {
           if (data.SERVICES_JSON) setServices(JSON.parse(data.SERVICES_JSON));
           else setServices([]);
         } catch (e) {}
+        try {
+          if (data.INSTALACIONES_JSON) {
+            const p = JSON.parse(data.INSTALACIONES_JSON);
+            if (Array.isArray(p) && p.length > 0) setInstalacionesList(p);
+          }
+        } catch (e) {}
       } catch (err) {
         console.error("Error cargando configuración dinámica:", err);
       }
@@ -288,6 +334,12 @@ export default function App() {
         try { if (updated.TEAM_MEMBERS_JSON) setTeamMembers(JSON.parse(updated.TEAM_MEMBERS_JSON)); } catch (err) {}
         try { if (updated.REVIEWS_JSON) setReviews(JSON.parse(updated.REVIEWS_JSON)); } catch (err) {}
         try { if (updated.SERVICES_JSON) setServices(JSON.parse(updated.SERVICES_JSON)); } catch (err) {}
+        try {
+          if (updated.INSTALACIONES_JSON) {
+            const p = JSON.parse(updated.INSTALACIONES_JSON);
+            if (Array.isArray(p) && p.length > 0) setInstalacionesList(p);
+          }
+        } catch (err) {}
       } else {
         loadSettings(true);
       }
@@ -776,123 +828,43 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Foto 1: Desarme y Mecánica Mayor */}
-            <div className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
-                <img 
-                  src="/assets/instalaciones.webp" 
-                  alt="Puesto de trabajo de mecánica mayor en MasterTech Porlamar" 
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20">
-                  Puesto de Trabajo #1
-                </span>
-              </div>
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                    Mecánica Mayor & Motores
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                    Desarme técnico, calibración de tolerancias, rectificación y armado con grúa hidráulica según especificaciones de torque OEM.
-                  </p>
+            {instalacionesList.map((item, idx) => (
+              <div key={item.id || idx} className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
+                  <img 
+                    src={item.img || "/assets/instalaciones.webp"} 
+                    alt={item.title || "Puesto de trabajo MasterTech"} 
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {item.badge && (
+                    <span className={`absolute top-3 left-3 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20 ${
+                      item.badge.toLowerCase().includes('oem') || item.badge.toLowerCase().includes('diagn')
+                        ? 'bg-red-600 shadow-md border-transparent'
+                        : 'bg-slate-900/90'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
                 </div>
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-500" />
-                  <span>Torque de precisión garantizado</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Foto 2: Diagnóstico Electrónico de Toyota */}
-            <div className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
-                <img 
-                  src="/assets/servicio-electricidad.webp" 
-                  alt="Diagnóstico electrónico computarizado en Toyota MasterTech" 
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <span className="absolute top-3 left-3 bg-red-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase shadow-md">
-                  Diagnóstico OEM
-                </span>
-              </div>
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                    Diagnóstico por Escáner
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                    Lectura en vivo de parámetros de sensores, pruebas de actuadores y reseteo de computadoras ECU sin inventar diagnósticos.
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-500" />
-                  <span>Detección de códigos DTC exactos</span>
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                      {item.desc}
+                    </p>
+                  </div>
+                  {item.feature && (
+                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                      <CheckCircle2 size={13} className="text-emerald-500" />
+                      <span>{item.feature}</span>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-
-            {/* Foto 3: Jeep & Suspensión en Puesto #2 */}
-            <div className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
-                <img 
-                  src="/assets/servicio-frenos.webp" 
-                  alt="Mantenimiento de Jeep y suspensión en puesto de trabajo MasterTech" 
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20">
-                  Puesto #2 · Jeep 4x4
-                </span>
-              </div>
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                    Tren Motriz, Frenos & 4x4
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                    Inspección profunda de terminales, bujes, amortiguadores, pastillas cerámicas y tracción en camionetas Jeep y Toyota.
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-500" />
-                  <span>Seguridad en carretera garantizada</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Foto 4: Tina Ultrasónica e Inyectores */}
-            <div className="group rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col">
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-900">
-                <img 
-                  src="/assets/servicio-inyeccion.webp" 
-                  alt="Banco de pruebas e inyección ultrasónica MasterTech" 
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <span className="absolute top-3 left-3 bg-slate-900/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase border border-white/20">
-                  Laboratorio
-                </span>
-              </div>
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                    Inyección & Ultrasonido
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                    Limpieza en tina ultrasónica, medición de caudal y verificación del patrón de pulverización para óptimo consumo de combustible.
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                  <CheckCircle2 size={13} className="text-emerald-500" />
-                  <span>Prueba dinámica en banco digital</span>
-                </div>
-              </div>
-            </div>
-
+            ))}
           </div>
 
         </div>

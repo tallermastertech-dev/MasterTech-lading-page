@@ -762,7 +762,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Active Navigation Tab
   const [activeTab, setActiveTab] = useState<'dashboard' | 'brecha' | 'control-taller' | 'leads' | 'catalogo' | 'manuales' | 'jornadas' | 'proveedores' | 'settings' | 'contenido' | 'auditoria' | 'usuarios'>('dashboard');
-  const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios'>('servicios');
+  const [contentSubTab, setContentSubTab] = useState<'servicios' | 'faqs' | 'equipo' | 'testimonios' | 'puestos'>('servicios');
 
   // Audit Logs State (Registro de Actividad y Cambios de Usuarios)
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
@@ -1988,6 +1988,40 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [faqs, setFaqs] = useState<any[]>([]);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [instalaciones, setInstalaciones] = useState<any[]>([
+    {
+      id: 1,
+      badge: 'Puesto de Trabajo #1',
+      title: 'Mecánica Mayor & Motores',
+      desc: 'Desarme técnico, calibración de tolerancias, rectificación y armado con grúa hidráulica según especificaciones de torque OEM.',
+      img: '/assets/instalaciones.webp',
+      feature: 'Torque de precisión garantizado'
+    },
+    {
+      id: 2,
+      badge: 'Diagnóstico OEM',
+      title: 'Diagnóstico por Escáner',
+      desc: 'Lectura en vivo de parámetros de sensores, pruebas de actuadores y reseteo de computadoras ECU sin inventar diagnósticos.',
+      img: '/assets/servicio-electricidad.webp',
+      feature: 'Detección de códigos DTC exactos'
+    },
+    {
+      id: 3,
+      badge: 'Puesto #2 · Jeep 4x4',
+      title: 'Tren Motriz, Frenos & 4x4',
+      desc: 'Inspección profunda de terminales, bujes, amortiguadores, pastillas cerámicas y tracción en camionetas Jeep y Toyota.',
+      img: '/assets/servicio-frenos.webp',
+      feature: 'Seguridad en carretera garantizada'
+    },
+    {
+      id: 4,
+      badge: 'Laboratorio',
+      title: 'Inyección & Ultrasonido',
+      desc: 'Limpieza en tina ultrasónica, medición de caudal y verificación del patrón de pulverización para óptimo consumo de combustible.',
+      img: '/assets/servicio-inyeccion.webp',
+      feature: 'Prueba dinámica en banco digital'
+    }
+  ]);
 
   // Real-time clock for header
   const [timeStr, setTimeStr] = useState('');
@@ -2052,6 +2086,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
     if (merged.FAQS_JSON) {
       try { const p = JSON.parse(merged.FAQS_JSON); if (Array.isArray(p)) setFaqs(p); } catch (e) {}
+    }
+    if (merged.INSTALACIONES_JSON) {
+      try { const p = JSON.parse(merged.INSTALACIONES_JSON); if (Array.isArray(p) && p.length > 0) setInstalaciones(p); } catch (e) {}
     }
     if (merged.SAVED_REMINDERS) {
       try {
@@ -7226,6 +7263,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   {[
                     { id: 'servicios', label: 'Servicios Taller' },
                     { id: 'equipo', label: 'Equipo Taller' },
+                    { id: 'puestos', label: 'Puestos de Trabajo (Portada)' },
                     { id: 'testimonios', label: 'Testimonios' },
                     { id: 'faqs', label: 'FAQs' }
                   ].map(sub => (
@@ -7467,6 +7505,187 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-tab: Puestos de Trabajo (Portada) */}
+              {contentSubTab === 'puestos' && (
+                <div className="space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#12141a] p-4 rounded-2xl border border-white/10">
+                    <div>
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <span>Puestos de Trabajo en Portada</span>
+                        <span className="text-xs text-amber-400 font-mono font-normal">({instalaciones.length} puestos)</span>
+                      </h3>
+                      <p className="text-[11px] text-zinc-400">
+                        Edita las fotos, títulos, textos explicativos y garantías de la sección "Trabajo Real en Nuestros Puestos de Trabajo" en la página principal.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = [
+                            ...instalaciones,
+                            {
+                              id: Date.now(),
+                              badge: `Puesto #${instalaciones.length + 1}`,
+                              title: "Nuevo Trabajo Técnico",
+                              desc: "Descripción del trabajo especializado...",
+                              img: "/assets/instalaciones.webp",
+                              feature: "Garantía de calidad MasterTech"
+                            }
+                          ];
+                          setInstalaciones(updated);
+                        }}
+                        className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-white/10 transition-colors cursor-pointer"
+                      >
+                        <Plus size={14} />
+                        <span>Añadir Puesto</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSaveSection('puestos', { INSTALACIONES_JSON: JSON.stringify(instalaciones) })}
+                        disabled={savingSection === 'puestos'}
+                        className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg cursor-pointer"
+                      >
+                        {savingSection === 'puestos' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                        <span>{savedSectionSuccess === 'puestos' ? '¡Puestos Guardados!' : 'Guardar Puestos'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {savedSectionSuccess === 'puestos' && (
+                    <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                      <CheckCircle2 size={16} />
+                      <span>¡Los Puestos de Trabajo han sido actualizados en la portada principal y guardados en Supabase!</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {instalaciones.map((item, idx) => (
+                      <div key={item.id || idx} className="bg-[#12141a] p-4 rounded-2xl border border-white/10 space-y-4 relative group">
+                        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                          <span className="text-xs font-black text-amber-400 uppercase tracking-wider">
+                            Puesto / Tarjeta #{idx + 1}
+                          </span>
+                          {instalaciones.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (confirm(`¿Eliminar la tarjeta "${item.title}" de la portada?`)) {
+                                  const updated = instalaciones.filter((_, i) => i !== idx);
+                                  setInstalaciones(updated);
+                                }
+                              }}
+                              className="text-zinc-500 hover:text-red-400 p-1 transition-colors cursor-pointer text-xs flex items-center gap-1"
+                              title="Eliminar este puesto"
+                            >
+                              <Trash2 size={13} />
+                              <span>Eliminar</span>
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Image Uploader with interactive crop */}
+                        <ImageUploader
+                          label="Foto del Puesto / Trabajo"
+                          value={item.img || ''}
+                          onChange={(val) => {
+                            const updated = [...instalaciones];
+                            updated[idx].img = val;
+                            setInstalaciones(updated);
+                          }}
+                          aspectRatio={4 / 3}
+                          placeholder="/assets/instalaciones.webp"
+                          folder="instalaciones"
+                        />
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">
+                              Distintivo Superior (Badge)
+                            </label>
+                            <input
+                              type="text"
+                              value={item.badge || ''}
+                              onChange={(e) => {
+                                const updated = [...instalaciones];
+                                updated[idx].badge = e.target.value;
+                                setInstalaciones(updated);
+                              }}
+                              placeholder="Ej: Puesto de Trabajo #1, Diagnóstico OEM"
+                              className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary font-mono text-[11px]"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">
+                              Título Principal
+                            </label>
+                            <input
+                              type="text"
+                              value={item.title || ''}
+                              onChange={(e) => {
+                                const updated = [...instalaciones];
+                                updated[idx].title = e.target.value;
+                                setInstalaciones(updated);
+                              }}
+                              placeholder="Ej: Mecánica Mayor & Motores"
+                              className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs font-bold text-white outline-none focus:border-primary"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-zinc-400 uppercase block mb-1">
+                            Descripción del Trabajo
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={item.desc || ''}
+                            onChange={(e) => {
+                              const updated = [...instalaciones];
+                              updated[idx].desc = e.target.value;
+                              setInstalaciones(updated);
+                            }}
+                            placeholder="Detalles del procedimiento o herramientas utilizadas..."
+                            className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-emerald-400 uppercase block mb-1 flex items-center gap-1">
+                            <CheckCircle2 size={12} />
+                            <span>Punto Clave / Garantía (Con Check Verde)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={item.feature || ''}
+                            onChange={(e) => {
+                              const updated = [...instalaciones];
+                              updated[idx].feature = e.target.value;
+                              setInstalaciones(updated);
+                            }}
+                            placeholder="Ej: Torque de precisión garantizado"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-xs text-emerald-300 outline-none focus:border-emerald-500 font-semibold text-[11px]"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-end pt-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSaveSection('puestos', { INSTALACIONES_JSON: JSON.stringify(instalaciones) })}
+                      disabled={savingSection === 'puestos'}
+                      className="btn-primary !py-3 !px-8 text-xs font-black uppercase border-none flex items-center gap-2 shadow-xl cursor-pointer"
+                    >
+                      {savingSection === 'puestos' ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                      <span>{savedSectionSuccess === 'puestos' ? '¡Puestos Guardados Exitosamente!' : 'Guardar Puestos de Trabajo'}</span>
+                    </button>
                   </div>
                 </div>
               )}
