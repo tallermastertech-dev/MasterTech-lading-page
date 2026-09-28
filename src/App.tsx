@@ -561,17 +561,30 @@ export default function App() {
       {/* =========================================================================
           SECTION 1: HERO - EDITORIAL LIGHT DEALER SHOWCASE
           ========================================================================= */}
-      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-20 px-4 sm:px-6 overflow-hidden bg-white dark:bg-[#0b0d11] transition-colors duration-300 border-b border-slate-200 dark:border-slate-800">
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-20 px-4 sm:px-6 overflow-hidden bg-slate-950 text-white transition-colors duration-300 border-b border-slate-800">
+        {/* Background Hero Image with 55% dark overlay */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img 
+            src={config.HERO_IMG || "/assets/instalaciones.webp"} 
+            alt="Taller MasterTech Instalaciones" 
+            className="w-full h-full object-cover object-center select-none"
+            loading="eager"
+          />
+          {/* Capa de oscuridad al 55% para que la imagen de fondo se aprecie con total claridad */}
+          <div className="absolute inset-0 bg-slate-950/55 dark:bg-black/55 backdrop-blur-[0.5px]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/50" />
+        </div>
+
         {/* Subtle high-end architectural automotive dot pattern background */}
-        <div className="absolute inset-0 pointer-events-none opacity-40 automotive-subtle-pattern" />
-        <div className="absolute -top-32 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none opacity-20 automotive-subtle-pattern z-[1]" />
+        <div className="absolute -top-32 right-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl pointer-events-none z-[1]" />
 
         <div className="max-w-7xl mx-auto relative z-10 w-full">
           
           {/* Status & Location Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-8 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3 mb-8 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-xs text-slate-200 shadow-md">
             <div className="flex items-center gap-2">
-              <MapPin size={15} className="text-red-600 shrink-0" />
+              <MapPin size={15} className="text-red-500 shrink-0" />
               <span className="font-medium">Calle Progreso, Av. Circunvalación Nte., Porlamar 6301, Nueva Esparta</span>
             </div>
             {(() => {
@@ -579,7 +592,7 @@ export default function App() {
               return (
                 <div className="flex items-center gap-2">
                   <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-                  <span className="font-semibold text-slate-800 dark:text-slate-200">
+                  <span className="font-semibold text-white">
                     {tallerStatus.badgeText}
                   </span>
                 </div>
@@ -596,17 +609,17 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="lg:col-span-7"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-xs font-bold tracking-wider mb-5 uppercase">
-                <ShieldCheck size={14} className="text-red-600" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-950/60 border border-red-500/30 text-red-400 text-xs font-bold tracking-wider mb-5 uppercase backdrop-blur-md shadow-sm">
+                <ShieldCheck size={14} className="text-red-500" />
                 <span>TALLER MECÁNICO & CENTRO DE DIAGNÓSTICO</span>
               </div>
 
-              <h1 className="text-slate-900 dark:text-white text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-5 leading-[1.12]">
+              <h1 className="text-white text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-5 leading-[1.12] drop-shadow-md">
                 Tecnología, Precisión y Confianza Automotriz
               </h1>
 
-              <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg mb-8 max-w-xl leading-relaxed font-normal">
-                Atención especializada en <strong>Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos de alta calidad.
+              <p className="text-slate-200 text-base sm:text-lg mb-8 max-w-xl leading-relaxed font-normal drop-shadow-sm">
+                Atención especializada en <strong className="text-white font-bold">Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos de alta calidad.
               </p>
 
               {/* Action Buttons */}
@@ -615,7 +628,7 @@ export default function App() {
                   href={config.WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary !px-7 !py-3.5 text-sm shadow-lg font-bold"
+                  className="btn-primary !px-7 !py-3.5 text-sm shadow-xl font-bold"
                 >
                   <WhatsAppIcon size={18} />
                   <span>CONSULTAR POR WHATSAPP</span>
@@ -624,33 +637,33 @@ export default function App() {
 
                 <a 
                   href="/servicios" 
-                  className="btn-secondary !px-6 !py-3.5 text-sm border-slate-300 dark:border-slate-700 hover:border-red-600 shadow-sm"
+                  className="btn-secondary !px-6 !py-3.5 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all"
                 >
-                  <Wrench size={16} className="text-red-600" />
+                  <Wrench size={16} className="text-red-400" />
                   <span>EXPLORAR SERVICIOS</span>
                 </a>
               </div>
 
               {/* 4 Clean Key Trust Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-slate-200 dark:border-slate-800">
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">+6 Puestos</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Atención Simultánea</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/10">
+                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
+                  <div className="text-xl font-black text-white">+6 Puestos</div>
+                  <div className="text-xs text-slate-300 mt-0.5">Atención Simultánea</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">Escáner OEM</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Diagnóstico Preciso</div>
+                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
+                  <div className="text-xl font-black text-white">Escáner OEM</div>
+                  <div className="text-xs text-slate-300 mt-0.5">Diagnóstico Preciso</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">Presupuesto Previo</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">100% Claro y Aprobado</div>
+                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
+                  <div className="text-xl font-black text-white">Presupuesto Previo</div>
+                  <div className="text-xs text-slate-300 mt-0.5">100% Claro y Aprobado</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-                  <div className="text-xl font-black text-slate-900 dark:text-white">+1.850</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Vehículos Atendidos</div>
+                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
+                  <div className="text-xl font-black text-white">+1.850</div>
+                  <div className="text-xs text-slate-300 mt-0.5">Vehículos Atendidos</div>
                 </div>
               </div>
             </motion.div>
