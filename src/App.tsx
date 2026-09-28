@@ -98,10 +98,22 @@ const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?
   </svg>
 );
 
+function getInstagramReelId(url?: string): string | null {
+  if (!url) return null;
+  const match = url.match(/instagram\.com\/(?:reel|p|tv)\/([A-Za-z0-9_-]+)/i);
+  return match ? match[1] : null;
+}
+
+function getYouTubeId(url?: string): string | null {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([A-Za-z0-9_-]{11})/i);
+  return match ? match[1] : null;
+}
+
 function isDirectVideoUrl(url?: string): boolean {
   if (!url) return false;
   const clean = (url || '').trim().toLowerCase();
-  return clean.endsWith('.mp4') || clean.endsWith('.webm') || clean.endsWith('.mov') || clean.includes('/assets/') || clean.startsWith('data:video');
+  return clean.endsWith('.mp4') || clean.endsWith('.webm') || clean.endsWith('.mov') || clean.endsWith('.m4v') || clean.includes('/assets/') || clean.startsWith('data:video') || clean.includes('mastertech-media/videos');
 }
 // --- CONFIGURACIÓN ---
 const CONFIG = {
@@ -650,59 +662,93 @@ export default function App() {
               transition={{ duration: 0.5, delay: 0.15 }}
               className="lg:col-span-5 relative w-full flex justify-center items-center"
             >
-              <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
-                <video 
-                  ref={heroVideoRef}
-                  src={(config.HERO_REEL_URL && isDirectVideoUrl(config.HERO_REEL_URL)) ? config.HERO_REEL_URL : "/assets/taller_video.mp4"} 
-                  autoPlay 
-                  loop 
-                  muted={isVideoMuted}
-                  playsInline
-                  preload="auto"
-                  className="w-full h-full object-cover select-none"
-                />
+              {(() => {
+                const reelUrl = (config.HERO_REEL_URL || '').trim();
+                const instagramId = getInstagramReelId(reelUrl);
+                const youTubeId = getYouTubeId(reelUrl);
+                const isInstagram = Boolean(instagramId);
+                const isYouTube = Boolean(youTubeId);
+                const directVideoSrc = isDirectVideoUrl(reelUrl) ? reelUrl : "/assets/taller_video.mp4";
 
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg select-none z-20">
-                  <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                  <span>Video del Taller</span>
-                </div>
+                return (
+                  <div className="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
+                    {isInstagram ? (
+                      <iframe 
+                        src={`https://www.instagram.com/reel/${instagramId}/embed/`}
+                        title="Instagram Reel Taller MasterTech"
+                        className="w-full h-full border-0 select-none bg-black"
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                        allowFullScreen
+                        scrolling="no"
+                      />
+                    ) : isYouTube ? (
+                      <iframe 
+                        src={`https://www.youtube.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=1`}
+                        title="Video YouTube Taller MasterTech"
+                        className="w-full h-full border-0 select-none bg-black"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <>
+                        <video 
+                          ref={heroVideoRef}
+                          src={directVideoSrc} 
+                          autoPlay 
+                          loop 
+                          muted={isVideoMuted}
+                          playsInline
+                          preload="auto"
+                          className="w-full h-full object-cover select-none"
+                        />
 
-                {/* Audio Toggle Button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (heroVideoRef.current) {
-                      heroVideoRef.current.muted = !isVideoMuted;
-                      setIsVideoMuted(!isVideoMuted);
-                    }
-                  }}
-                  className="absolute top-3 right-3 bg-black/60 hover:bg-black/90 backdrop-blur-md border border-white/20 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-110 cursor-pointer z-20"
-                  title={isVideoMuted ? "Activar audio" : "Silenciar audio"}
-                >
-                  {isVideoMuted ? <VolumeX size={15} className="text-slate-300" /> : <Volume2 size={15} className="text-emerald-400" />}
-                </button>
+                        {/* Audio Toggle Button for Native Video */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (heroVideoRef.current) {
+                              heroVideoRef.current.muted = !isVideoMuted;
+                              setIsVideoMuted(!isVideoMuted);
+                            }
+                          }}
+                          className="absolute top-3 right-3 bg-black/60 hover:bg-black/90 backdrop-blur-md border border-white/20 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-110 cursor-pointer z-20"
+                          title={isVideoMuted ? "Activar audio" : "Silenciar audio"}
+                        >
+                          {isVideoMuted ? <VolumeX size={15} className="text-slate-300" /> : <Volume2 size={15} className="text-emerald-400" />}
+                        </button>
+                      </>
+                    )}
 
-                {/* Bottom Gradient Overlay */}
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
+                    {/* Top Badge */}
+                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-lg select-none z-20 pointer-events-none">
+                      <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                      <span>{isInstagram ? "Reel de Instagram" : isYouTube ? "Video de YouTube" : "Video del Taller"}</span>
+                    </div>
 
-                {/* Bottom Info & Instagram Direct Link */}
-                <div className="absolute bottom-3 left-3 z-20 pointer-events-none">
-                  <p className="text-white text-xs font-bold leading-tight drop-shadow">Taller MasterTech</p>
-                  <p className="text-slate-300 text-[10px]">Porlamar, Margarita</p>
-                </div>
+                    {/* Bottom Gradient Overlay (for native video) */}
+                    {!isInstagram && (
+                      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
+                    )}
 
-                <a 
-                  href={config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/"} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="absolute bottom-3 right-3 bg-black/85 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20"
-                >
-                  <Instagram size={13} className="text-pink-400" />
-                  <span>Instagram</span>
-                  <ExternalLink size={11} className="text-slate-400" />
-                </a>
-              </div>
+                    {/* Bottom Info & Instagram Direct Link */}
+                    <div className="absolute bottom-3 left-3 z-20 pointer-events-none">
+                      <p className="text-white text-xs font-bold leading-tight drop-shadow">Taller MasterTech</p>
+                      <p className="text-slate-300 text-[10px]">Porlamar, Margarita</p>
+                    </div>
+
+                    <a 
+                      href={isInstagram ? reelUrl : (config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/")} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="absolute bottom-3 right-3 bg-black/85 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20"
+                    >
+                      <Instagram size={13} className="text-pink-400" />
+                      <span>{isInstagram ? "Ver en Instagram" : "Instagram"}</span>
+                      <ExternalLink size={11} className="text-slate-400" />
+                    </a>
+                  </div>
+                );
+              })()}
             </motion.div>
 
           </div>

@@ -8333,28 +8333,89 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
                         URL del Reel de Instagram / Video Promocional de Portada
                       </label>
-                      {settingsForm.HERO_REEL_URL && (
-                        <a
-                          href={settingsForm.HERO_REEL_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
-                        >
-                          <ExternalLink size={12} />
-                          <span>Abrir Enlace</span>
-                        </a>
+                      <div className="flex items-center gap-2">
+                        {settingsForm.HERO_REEL_URL && (
+                          <a
+                            href={settingsForm.HERO_REEL_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[10px] text-amber-400 hover:underline font-bold flex items-center gap-1"
+                          >
+                            <ExternalLink size={12} />
+                            <span>Abrir Enlace</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <input
+                        type="text"
+                        value={settingsForm.HERO_REEL_URL || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, HERO_REEL_URL: e.target.value })}
+                        className="flex-1 bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-amber-400 font-mono text-[11px]"
+                        placeholder="Ej: https://www.instagram.com/reel/DbyzI22kjcj/ o https://.../video.mp4"
+                      />
+                      <label className="px-3.5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors shrink-0">
+                        <Upload size={13} />
+                        <span>Subir Video MP4</span>
+                        <input
+                          type="file"
+                          accept="video/mp4,video/webm,video/quicktime,video/m4v"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            if (file.size > 25 * 1024 * 1024) {
+                              alert("El video supera el límite recomendado de 25MB.");
+                              return;
+                            }
+                            const reader = new FileReader();
+                            reader.onload = async () => {
+                              try {
+                                const base64 = reader.result?.toString() || '';
+                                const res = await fetch('/api/upload-media', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    image: base64,
+                                    folder: 'videos',
+                                    filename: file.name.replace(/\.[^/.]+$/, "")
+                                  })
+                                });
+                                const data = await res.json();
+                                if (data.url) {
+                                  setSettingsForm((prev: any) => ({ ...prev, HERO_REEL_URL: data.url }));
+                                } else {
+                                  alert(data.error || 'Error subiendo video.');
+                                }
+                              } catch (err) {
+                                alert('Error al procesar el archivo de video.');
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </label>
+                    </div>
+
+                    {/* Status helper text */}
+                    <div className="text-[11px] space-y-1">
+                      {settingsForm.HERO_REEL_URL?.includes('instagram.com/reel') || settingsForm.HERO_REEL_URL?.includes('instagram.com/p') ? (
+                        <p className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                          <CheckCircle2 size={13} />
+                          <span>Reel de Instagram detectado: se mostrará embebido en la portada y el botón 'Ver en Instagram' dirigirá a este reel exacto.</span>
+                        </p>
+                      ) : settingsForm.HERO_REEL_URL?.match(/\.(mp4|webm|mov|m4v)/i) || settingsForm.HERO_REEL_URL?.includes('/assets/') || settingsForm.HERO_REEL_URL?.includes('/videos/') ? (
+                        <p className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                          <CheckCircle2 size={13} />
+                          <span>Video MP4 directo detectado: se reproducirá de forma nativa y continua con control de audio en la portada.</span>
+                        </p>
+                      ) : (
+                        <p className="text-zinc-500">
+                          Pega cualquier enlace de Instagram Reel o sube un video MP4. Se actualizará en la portada del sitio web tras guardar.
+                        </p>
                       )}
                     </div>
-                    <input
-                      type="text"
-                      value={settingsForm.HERO_REEL_URL || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, HERO_REEL_URL: e.target.value })}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-4 text-xs font-bold text-white outline-none focus:border-primary"
-                      placeholder="Ej. https://www.instagram.com/reel/DYQxwH6jywd/ o tu video mp4"
-                    />
-                    <p className="text-[10.5px] text-zinc-500">
-                      Pega cualquier link de Instagram Reel. Se reproducirá automáticamente en la portada del sitio web.
-                    </p>
                   </div>
 
                   {/* Phone & WhatsApp Links */}

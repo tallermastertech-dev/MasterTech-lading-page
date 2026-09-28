@@ -1947,6 +1947,10 @@ app.post(['/api/upload-media', '/api/admin/upload-media'], async (req, res) => {
       if (contentType.includes('png')) ext = 'png';
       else if (contentType.includes('webp')) ext = 'webp';
       else if (contentType.includes('svg')) ext = 'svg';
+      else if (contentType.includes('mp4')) ext = 'mp4';
+      else if (contentType.includes('webm')) ext = 'webm';
+      else if (contentType.includes('quicktime') || contentType.includes('mov')) ext = 'mov';
+      else if (contentType.includes('m4v')) ext = 'm4v';
     } else {
       buffer = Buffer.from(String(image).replace(/^data:[^;]+;base64,/, ''), 'base64');
     }
