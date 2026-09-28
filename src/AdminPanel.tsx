@@ -4075,7 +4075,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                 }`}
                               >
                                 <span className="text-zinc-500 text-xs italic block mb-2">
-                                  {draggedVehInfo ? '👉 Suelta aquí para asignar este vehículo' : 'Sin vehículos en bahía'}
+                                  {draggedVehInfo ? 'Suelta aquí para asignar este vehículo' : 'Sin vehículos en bahía'}
                                 </span>
                                 {!isTallerReadOnly && !draggedVehInfo && (
                                   <button
@@ -5424,7 +5424,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                                 <div className="flex items-center gap-2">
                                   <span className="text-xs font-mono font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-xl">
-                                    📅 {formattedDate}
+                                    {formattedDate}
                                   </span>
 
                                   {isFullAdminUser(currentUser) && (

@@ -262,7 +262,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       <Plane className="w-4 h-4" style={{ color: '#60a5fa' }} />
                     </div>
                     <div className="flex-1">
-                      <div className="font-black text-xs" style={{ color: '#ffffff' }}>Importar desde EE.UU. 🇺🇸</div>
+                      <div className="font-black text-xs" style={{ color: '#ffffff' }}>Importar desde EE.UU.</div>
                       <div className="text-[11px] mt-0.5" style={{ color: '#93c5fd' }}>Repuestos OEM con número de parte · Express USA</div>
                     </div>
                     <span className="text-[9px] font-black px-1.5 py-0.5 rounded shrink-0" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.25)', border: '1px solid rgba(96,165,250,0.4)' }}>EXPRESS</span>

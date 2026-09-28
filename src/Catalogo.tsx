@@ -328,13 +328,13 @@ export const OEM_BRANDS = [
 
 export const VEHICLE_MODELS = [
   { name: "Todos", label: "Todos los Vehículos" },
-  { name: "Jeep", label: "Jeep (Wrangler / Cherokee)", icon: "🚙" },
-  { name: "Toyota", label: "Toyota (Hilux / Fortuner)", icon: "🚗" },
-  { name: "Ford", label: "Ford (Explorer / F-150)", icon: "🛻" },
-  { name: "Chevrolet", label: "Chevrolet (Tahoe / Silverado)", icon: "🏎️" },
-  { name: "Dodge", label: "Dodge / RAM", icon: "🚘" },
-  { name: "Honda", label: "Honda", icon: "🚙" },
-  { name: "Nissan", label: "Nissan", icon: "🚗" }
+  { name: "Jeep", label: "Jeep (Wrangler / Cherokee)" },
+  { name: "Toyota", label: "Toyota (Hilux / Fortuner)" },
+  { name: "Ford", label: "Ford (Explorer / F-150)" },
+  { name: "Chevrolet", label: "Chevrolet (Tahoe / Silverado)" },
+  { name: "Dodge", label: "Dodge / RAM" },
+  { name: "Honda", label: "Honda" },
+  { name: "Nissan", label: "Nissan" }
 ];
 
 export interface CartItem {
@@ -1245,7 +1245,6 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/20'
                     }`}
                   >
-                    {veh.icon && <span className="text-xs">{veh.icon}</span>}
                     <span>{veh.name}</span>
                     <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-red-400 dark:text-red-600' : 'text-slate-400'}`}>
                       ({count})
@@ -1830,8 +1829,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-blue-400 transition-colors font-medium"
                             style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
                           >
-                            <option value="Express Aéreo (7 a 15 días hábiles)">✈️ Express Aéreo (7 a 15 días hábiles - Urgente)</option>
-                            <option value="Marítimo Estándar (21 a 40 días hábiles)">🚢 Marítimo Estándar (21 a 40 días hábiles - Económico)</option>
+                            <option value="Express Aéreo (7 a 15 días hábiles)">Express Aéreo (7 a 15 días hábiles - Urgente)</option>
+                            <option value="Marítimo Estándar (21 a 40 días hábiles)">Marítimo Estándar (21 a 40 días hábiles - Económico)</option>
                           </select>
                         </div>
                       </div>

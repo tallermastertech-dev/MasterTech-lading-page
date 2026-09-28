@@ -632,7 +632,7 @@ export default function Jornadas() {
 
                     {currentJornada.popularAddon && (
                       <p className="text-[11px] text-zinc-400 italic text-center">
-                        💡 {currentJornada.popularAddon}
+                        {currentJornada.popularAddon}
                       </p>
                     )}
                   </div>
@@ -704,7 +704,7 @@ export default function Jornadas() {
                     </button>
 
                     <p className="text-[10px] text-zinc-500 text-center">
-                      🔒 Reserva directa protegida. Al tocar el botón serás redirigido a nuestro WhatsApp oficial para confirmar tu cupo.
+                      Reserva directa protegida. Al tocar el botón serás redirigido a nuestro WhatsApp oficial para confirmar tu cupo.
                     </p>
                   </form>
                 </div>
