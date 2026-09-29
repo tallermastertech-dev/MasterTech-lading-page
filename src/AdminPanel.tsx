@@ -2481,7 +2481,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
   };
 
+  // Wrapper for saving general settings Form
+  const handleSaveSettings = async (customPayload?: any) => {
+    return handleSaveSection('settings', customPayload);
+  };
+
   // Helper for direct high-res compressed image uploads (services, team, content, workshop)
+
   const handleDirectImageUpload = (
     file: File,
     callback: (finalUrl: string) => void,

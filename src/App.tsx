@@ -636,13 +636,14 @@ export default function App() {
                 </a>
 
                 <a 
-                  href="/servicios" 
-                  className="btn-secondary !px-6 !py-3.5 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all"
+                  href="/catalogo" 
+                  className="btn-secondary !px-6 !py-3.5 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all flex items-center gap-2"
                 >
-                  <Wrench size={16} className="text-red-400" />
-                  <span>EXPLORAR SERVICIOS</span>
+                  <Package size={16} className="text-red-400" />
+                  <span>EXPLORAR CATÁLOGO</span>
                 </a>
               </div>
+
 
               {/* 4 Clean Key Trust Stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/10">
@@ -693,10 +694,10 @@ export default function App() {
                           className="border-0 select-none bg-black pointer-events-auto"
                           style={{
                             position: 'absolute',
-                            width: 'calc(100% + 8px)',
-                            left: '-4px',
-                            top: '-58px',
-                            height: 'calc(100% + 195px)',
+                            width: 'calc(100% + 14px)',
+                            left: '-7px',
+                            top: '-56px',
+                            height: 'calc(100% + 360px)',
                             maxWidth: 'none'
                           }}
                           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
@@ -704,6 +705,7 @@ export default function App() {
                           scrolling="no"
                         />
                       </div>
+
                     ) : isYouTube ? (
                       <iframe 
                         src={`https://www.youtube.com/embed/${youTubeId}?autoplay=1&mute=1&loop=1&playlist=${youTubeId}&controls=1`}
@@ -748,10 +750,9 @@ export default function App() {
                       <span>{isInstagram ? "Reel de Instagram" : isYouTube ? "Video de YouTube" : "Video del Taller"}</span>
                     </div>
 
-                    {/* Bottom Gradient Overlay (for native video) */}
-                    {!isInstagram && (
-                      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
-                    )}
+                    {/* Bottom Gradient Overlay (always active to guarantee zero white bleed) */}
+                    <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+
 
                     {/* Bottom Info & Instagram Direct Link */}
                     <div className="absolute bottom-3 left-3 z-20 pointer-events-none">
