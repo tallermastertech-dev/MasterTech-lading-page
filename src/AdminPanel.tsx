@@ -2638,7 +2638,96 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         img: '/assets/cat_frenos_discos.webp',
         msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
       };
-    } else if (cleanP.startsWith('82101') || cleanP.startsWith('8210') || rawUpper.startsWith('82101') || rawUpper.startsWith('8210')) {
+    } else if (cleanP.startsWith('88210') || rawUpper.startsWith('88210')) {
+      // 88210: Toyota Distance Sensor / Radar ADAS (88210-02040, 88210-0E080, etc.)
+      localMatch = {
+        title: `Sensor de Distancia / Radar ADAS Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Baterías & Electricidad',
+        price: '$325.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Sensor radar de distancia frontal Toyota OEM para control crucero adaptativo (ACC) y asistencia de frenado de emergencia (PCS).',
+        longDesc: `Sensor radar milimétrico de distancia frontal OEM Toyota #${cleanRaw.toUpperCase()}. Opera en banda de 76-77 GHz con alcance de hasta 180 m. Integrado al sistema Toyota Safety Sense (TSS): Control Crucero Adaptativo (ACC), Alerta de Pre-colisión (PCS) y Aviso de Cambio de Carril. Calibración obligatoria con escáner Toyota TechStream tras sustitución.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla 2019-2025, RAV4 2019-2025, Camry 2018-2025, Highlander 2020-2025, Prius 2019-2025 — según código exacto de modelo',
+        specs: [
+          'Tecnología radar milimétrico 76-77 GHz, alcance hasta 180 m',
+          'Sistema Toyota Safety Sense: ACC + PCS + LDA integrados',
+          'Rango de detección angular ±15° horizontal / ±5° vertical',
+          'Temperatura de operación -40°C a +85°C — IP67 resistente a agua y polvo',
+          `Calibración obligatoria con Toyota TechStream — Ref. OEM: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_baterias_electricidad.webp',
+        msg: '✅ Sensor ADAS decodificado al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('88650') || rawUpper.startsWith('88650')) {
+      // 88650: Toyota Forward Recognition Camera (TSS camera)
+      localMatch = {
+        title: `Cámara de Reconocimiento Frontal Toyota Safety Sense OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Baterías & Electricidad',
+        price: '$280.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Cámara frontal monocular Toyota Safety Sense OEM para detección de carriles, peatones y señales de tránsito.',
+        longDesc: `Cámara de reconocimiento frontal OEM Toyota #${cleanRaw.toUpperCase()}. Sensor CMOS de alta resolución integrado al sistema Toyota Safety Sense (TSS). Detecta marcas viales (LDA), peatones y vehículos (PCS), señales de velocidad (RSA) y condición de luz alta/baja (AHB). Requiere calibración con Toyota TechStream.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla 2019-2025, RAV4 2019-2025, Camry 2018-2025, Highlander 2020-2025 — verificar VIN',
+        specs: [
+          'Sensor CMOS de alta resolución con campo visual 48° (wide) / 22° (tele)',
+          'Detección: marcas viales, peatones, señales de velocidad y vehículos',
+          'Integración Toyota Safety Sense: LDA + PCS + RSA + AHB',
+          'Temperatura operación -20°C a +70°C — conector sellado OEM',
+          `Calibración obligatoria con Toyota TechStream — Ref. OEM: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_baterias_electricidad.webp',
+        msg: '✅ Cámara ADAS decodificada al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('89341') || rawUpper.startsWith('89341')) {
+      // 89341: Toyota Parking Sensor / PDC Ultrasonic Sensor
+      localMatch = {
+        title: `Sensor de Estacionamiento PDC Ultrasónico Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Baterías & Electricidad',
+        price: '$65.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Sensor ultrasónico de estacionamiento Toyota OEM (PDC) para detección de obstáculos traseros y delanteros hasta 2.5 m.',
+        longDesc: `Sensor de estacionamiento ultrasónico OEM Toyota #${cleanRaw.toUpperCase()}. Opera a 40 kHz con rango de detección 20-250 cm. Integrado al sistema de aviso sonoro y visual de proximidad. Compatible con guía de estacionamiento inteligente en modelos con pantalla multimeda.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla 2014-2025, Camry 2015-2025, RAV4 2013-2025, Land Cruiser, Prado & Hilux — según color y posición',
+        specs: [
+          'Frecuencia ultrasónica 40 kHz — rango detección 20-250 cm',
+          'Ángulo de detección horizontal 60° / vertical 28°',
+          'IP67 sellado — resistente a agua, lodo y lavado a presión',
+          'Disponible en múltiples colores OEM para coincidir con carrocería',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_baterias_electricidad.webp',
+        msg: '✅ Sensor PDC decodificado al instante desde catálogo OEM Toyota.'
+      };
+    } else if (cleanP.startsWith('89345') || rawUpper.startsWith('89345')) {
+      // 89345: Toyota BSM Radar / Blind Spot Monitor
+      localMatch = {
+        title: `Sensor Radar de Punto Ciego (BSM) Toyota OEM (${cleanRaw.toUpperCase()})`,
+        category: 'Baterías & Electricidad',
+        price: '$195.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Sensor radar de monitoreo de punto ciego Toyota BSM OEM — detección lateral y alerta al cambiar de carril.',
+        longDesc: `Sensor radar Blind Spot Monitor OEM Toyota #${cleanRaw.toUpperCase()}. Opera en banda 24 GHz. Detecta vehículos en zona ciega lateral y trasera. Activa alerta visual en espejo y alerta sonora al accionar intermitente. Compatible con Rear Cross-Traffic Alert (RCTA).`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Camry 2018-2025, RAV4 2019-2025, Highlander 2020-2025, Corolla Cross 2022-2025 — verificar VIN',
+        specs: [
+          'Radar 24 GHz — rango detección lateral hasta 4 m y trasero hasta 25 m',
+          'Integrado con Toyota BSM + RCTA (alerta de tráfico cruzado trasero)',
+          'Alerta visual en espejo + alerta sonora al accionar intermitente',
+          'IP67 — instalación en parachoques trasero lateral',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_baterias_electricidad.webp',
+        msg: '✅ Radar BSM decodificado al instante desde catálogo OEM Toyota.'
+      };
+    } else if ((cleanP.startsWith('82101') && !cleanP.startsWith('821010')) || (rawUpper.startsWith('82101') && !rawUpper.startsWith('821010'))) {
+      // 82101: Toyota Main Engine Wiring Harness
       localMatch = {
         title: `Arnés / Cableado Eléctrico Principal Motor OEM Toyota (${cleanRaw.toUpperCase()})`,
         category: 'Baterías & Electricidad',
