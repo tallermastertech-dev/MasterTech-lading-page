@@ -52,7 +52,9 @@ import {
   Disc,
   Volume2,
   VolumeX,
-  Package
+  Package,
+  Tag,
+  BadgePercent
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
@@ -135,7 +137,83 @@ const CONFIG = {
   SUCCESS_TEXT: "Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita."
 };
 
+const DEFAULT_JORNADAS = [
+  {
+    id: "reprogramacion",
+    badge: "Jornada de Potenciación",
+    title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
+    subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
+    img: "/assets/servicio-mecanica.webp",
+    regularPrice: "$250 USD",
+    promoPrice: "$160 USD",
+    discountBadge: "AHORRAS $90 USD (36% OFF)",
+    duration: "2 a 3 horas",
+    benefits: [
+      "Incremento de +15% a +35% de HP y Torque comprobables",
+      "Eliminación total del retardo (lag) del pedal del acelerador",
+      "Ahorro de hasta un 10% de combustible en viajes largos y autopista"
+    ],
+    specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }],
+    compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo."
+  },
+  {
+    id: "egr-dpf",
+    badge: "Solución Electrónica Definitiva",
+    title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off",
+    subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.",
+    img: "/assets/servicio-electricidad.webp",
+    regularPrice: "$180 USD",
+    promoPrice: "$120 USD",
+    discountBadge: "AHORRAS $60 USD (33% OFF)",
+    duration: "1.5 a 2.5 horas",
+    benefits: [
+      "Anulación electrónica limpia de Válvula EGR",
+      "Solución definitiva a regeneración atascada de Filtro DPF",
+      "Eliminación de limitación de velocidad por sistema AdBlue/DEF"
+    ],
+    specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }],
+    compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok."
+  },
+  {
+    id: "cielo-estrellado",
+    badge: "Estética VIP Rolls-Royce",
+    title: "Cielo Estrellado de Fibra Óptica LED RGBW",
+    subtitle: "Transforma el techo interior de tu vehículo en un cielo estrellado de lujo artesanal con destellos dinámicos.",
+    img: "/assets/instalaciones.webp",
+    regularPrice: "$380 USD",
+    promoPrice: "$260 USD",
+    discountBadge: "AHORRAS $120 USD (32% OFF)",
+    duration: "1 día (Instalación Artesanal)",
+    benefits: [
+      "De 200 a 600 micro-hilos de fibra óptica ultra-fina integrados al techo",
+      "Control de efectos por App Bluetooth en Smartphone + Control Remoto",
+      "Acabado profesional sin cables ni conexiones visibles"
+    ],
+    specs: [{ label: "Micro-hilos", val: "200 a 600 Puntos" }, { label: "Garantía", val: "1 Año" }],
+    compatibleModels: "Apto para Sedanes, Coupés, SUVs, Camionetas 4x4 y Pick-ups."
+  },
+  {
+    id: "climatizacion",
+    badge: "Confort & Máximo Frío",
+    title: "Jornada de Climatización & Recuperación de Aire Acondicionado",
+    subtitle: "Restaura el frío polar de tu sistema A/A con recarga R134a de máxima pureza, aceite PAG sintético y trazador UV anti-fugas.",
+    img: "/assets/servicio-climatizacion.webp",
+    regularPrice: "$65 USD",
+    promoPrice: "$40 USD",
+    discountBadge: "AHORRAS $25 USD (38% OFF)",
+    duration: "45 min a 1 hora",
+    benefits: [
+      "Recarga con gas refrigerante ecológico R134a certificado",
+      "Inyección de aceite sintético PAG para lubricación del compresor",
+      "Aplicación de contraste UV para detección temprana de micro-fugas"
+    ],
+    specs: [{ label: "Enfriamiento", val: "Frío Polar Rápido" }, { label: "Garantía", val: "6 Meses" }],
+    compatibleModels: "Apto para todas las marcas y modelos con sistema R134a."
+  }
+];
+
 export default function App() {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -244,7 +322,65 @@ export default function App() {
     }
   ]);
 
+  const [jornadasList, setJornadasList] = useState<any[]>(() => {
+    try {
+      const s = localStorage.getItem('mastertech_settings_store');
+      if (s) {
+        const p = JSON.parse(s);
+        if (p.JORNADAS_JSON) {
+          const parsed = typeof p.JORNADAS_JSON === 'string' ? JSON.parse(p.JORNADAS_JSON) : p.JORNADAS_JSON;
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      }
+    } catch (e) {}
+    return DEFAULT_JORNADAS;
+  });
+
+  // Calculate discount percentage dynamically for each promotion
+  const getPromoDiscountPct = (item: any): number => {
+    if (!item) return 0;
+    const matchPct = (item.discountBadge || '').match(/(\d+)%/);
+    if (matchPct && matchPct[1]) return parseInt(matchPct[1], 10);
+    if (item.regularPrice && item.promoPrice) {
+      const reg = parseFloat(String(item.regularPrice).replace(/[^0-9.]/g, ''));
+      const pro = parseFloat(String(item.promoPrice).replace(/[^0-9.]/g, ''));
+      if (!isNaN(reg) && !isNaN(pro) && reg > 0 && pro < reg) {
+        return Math.round(((reg - pro) / reg) * 100);
+      }
+    }
+    return 0;
+  };
+
+  const processedPromos = React.useMemo(() => {
+    const list = (jornadasList && jornadasList.length > 0) ? jornadasList : DEFAULT_JORNADAS;
+    return list.map((item: any) => ({
+      ...item,
+      discountPct: getPromoDiscountPct(item)
+    })).sort((a: any, b: any) => b.discountPct - a.discountPct);
+  }, [jornadasList]);
+
+  // The promotion with the highest % discount
+  const topPromo = processedPromos[0] || null;
+
+  const scrollToPromo = (promoId?: string) => {
+    const targetId = promoId ? `promo-${promoId}` : (topPromo ? `promo-${topPromo.id}` : 'seccion-promociones');
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('ring-4', 'ring-red-500', 'ring-offset-4', 'dark:ring-offset-slate-900', 'transition-all');
+      setTimeout(() => {
+        el.classList.remove('ring-4', 'ring-red-500', 'ring-offset-4', 'dark:ring-offset-slate-900');
+      }, 3500);
+    } else {
+      const sec = document.getElementById('seccion-promociones');
+      if (sec) {
+        sec.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   useEffect(() => {
+
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -309,6 +445,12 @@ export default function App() {
           if (Array.isArray(p) && p.length > 0) setInstalacionesList(p);
         }
       } catch (e) {}
+      try {
+        if (localData.JORNADAS_JSON) {
+          const p = typeof localData.JORNADAS_JSON === 'string' ? JSON.parse(localData.JORNADAS_JSON) : localData.JORNADAS_JSON;
+          if (Array.isArray(p) && p.length > 0) setJornadasList(p);
+        }
+      } catch (e) {}
     }
 
     // 2. Fetch fresh settings respecting TTL (5 min cache)
@@ -333,6 +475,12 @@ export default function App() {
           if (data.INSTALACIONES_JSON) {
             const p = JSON.parse(data.INSTALACIONES_JSON);
             if (Array.isArray(p) && p.length > 0) setInstalacionesList(p);
+          }
+        } catch (e) {}
+        try {
+          if (data.JORNADAS_JSON) {
+            const p = typeof data.JORNADAS_JSON === 'string' ? JSON.parse(data.JORNADAS_JSON) : data.JORNADAS_JSON;
+            if (Array.isArray(p) && p.length > 0) setJornadasList(p);
           }
         } catch (e) {}
       } catch (err) {
@@ -360,10 +508,17 @@ export default function App() {
             if (Array.isArray(p) && p.length > 0) setInstalacionesList(p);
           }
         } catch (err) {}
+        try {
+          if (updated.JORNADAS_JSON) {
+            const p = typeof updated.JORNADAS_JSON === 'string' ? JSON.parse(updated.JORNADAS_JSON) : updated.JORNADAS_JSON;
+            if (Array.isArray(p) && p.length > 0) setJornadasList(p);
+          }
+        } catch (err) {}
       } else {
         loadSettings(true);
       }
     };
+
     window.addEventListener('mastertech_settings_updated', handleSettingsUpdated);
     window.addEventListener('storage', () => loadSettings(true));
 
@@ -779,6 +934,56 @@ export default function App() {
         </div>
       </section>
 
+      {/* =========================================================================
+          BARRA DE NOTIFICACIÓN DE PROMOCIÓN FLASH (MÁXIMO DESCUENTO)
+          ========================================================================= */}
+      {topPromo && (
+        <aside aria-label="Promoción destacada" className="relative z-20 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 dark:from-red-950 dark:via-red-900/95 dark:to-amber-950 border-y border-red-500/40 shadow-md text-white transition-colors">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 text-center md:text-left flex-wrap md:flex-nowrap justify-center">
+              <span className="inline-flex items-center gap-1.5 bg-black/35 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-[11px] font-black tracking-wider uppercase text-amber-300 shadow-sm shrink-0">
+                <Flame size={14} className="text-amber-400 animate-pulse" />
+                <span>OFERTA DESTACADA</span>
+              </span>
+              
+              <div className="flex items-center gap-2 flex-wrap justify-center text-xs sm:text-sm">
+                <span className="bg-white text-red-700 font-black px-2.5 py-0.5 rounded shadow-sm tracking-wide shrink-0">
+                  {topPromo.discountPct > 0 ? `-${topPromo.discountPct}% OFF` : (topPromo.discountBadge || "OFERTA")}
+                </span>
+                <span className="font-bold text-white/95 drop-shadow-sm">
+                  {topPromo.title}
+                </span>
+                {(topPromo.promoPrice || topPromo.regularPrice) && (
+                  <span className="font-semibold text-amber-200 flex items-center gap-1.5 ml-1">
+                    {topPromo.regularPrice && (
+                      <span className="line-through text-white/60 text-xs">{topPromo.regularPrice}</span>
+                    )}
+                    <span className="text-white font-extrabold text-sm">{topPromo.promoPrice}</span>
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => scrollToPromo(topPromo.id)}
+                className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
+              >
+                <span>Aprovechar Descuento</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToPromo()}
+                className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1 cursor-pointer"
+              >
+                <span>Ver todas</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+      )}
 
       {/* =========================================================================
           SECTION 2: CENTROS DE ATENCIÓN Y RECURSOS
@@ -877,6 +1082,156 @@ export default function App() {
         </div>
       </section>
 
+      {/* =========================================================================
+          SECCIÓN DE PROMOCIONES Y JORNADAS ESPECIALES
+          ========================================================================= */}
+      <section id="seccion-promociones" className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-100/80 dark:bg-[#090b0e] border-b border-slate-200 dark:border-slate-800 transition-colors duration-300 scroll-mt-20">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-4 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider mb-3">
+                <Flame size={14} className="text-red-500 animate-pulse" />
+                <span>JORNADAS & PROMOCIONES VIGENTES</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Promociones y Descuentos Especiales
+              </h2>
+              <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+                Cupos limitados con precios promocionales en reprogramación de software, soluciones de emisiones y confort automotriz garantizado en Margarita.
+              </p>
+            </div>
+            <a 
+              href="/jornadas" 
+              className="btn-secondary !px-5 !py-2.5 text-xs font-bold flex items-center gap-2 self-start md:self-auto shrink-0"
+            >
+              <span>Ver Catálogo Completo de Jornadas</span>
+              <ArrowRight size={14} />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+            {processedPromos.map((item, idx) => {
+              const baseWa = config?.WHATSAPP_LINK 
+                ? config.WHATSAPP_LINK.split('?')[0] 
+                : 'https://wa.me/584123565012';
+              const waMessage = `Hola Taller MasterTech, deseo agendar la promoción de ${item.title} con el precio especial de ${item.promoPrice || 'descuento'}.`;
+              const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
+              const isTop = idx === 0 && item.discountPct > 0;
+
+              return (
+                <div 
+                  key={item.id || idx}
+                  id={`promo-${item.id}`}
+                  className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl group ${
+                    isTop 
+                      ? 'border-red-500/80 ring-2 ring-red-500/30' 
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                  }`}
+                >
+                  {/* Top highlight badge for maximum discount */}
+                  {isTop && (
+                    <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
+                      <Flame size={13} className="text-amber-300 animate-pulse" />
+                      <span>MAYOR DESCUENTO ACTIVO</span>
+                    </div>
+                  )}
+
+                  <div>
+                    {/* Image Container with Badges */}
+                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 group/img">
+                      <img 
+                        src={item.img || "/assets/servicio-mecanica.webp"} 
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                      
+                      {/* Category Badge */}
+                      <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                        {item.badge}
+                      </div>
+
+                      {/* Prominent Discount Badge */}
+                      <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
+                        <Tag size={12} />
+                        <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
+                      </div>
+
+                      {/* Pricing Tag Overlay */}
+                      <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                        <div>
+                          {item.regularPrice && (
+                            <span className="text-slate-300 line-through text-xs block font-medium">
+                              Precio Normal: {item.regularPrice}
+                            </span>
+                          )}
+                          <span className="text-2xl font-black text-white tracking-tight drop-shadow">
+                            {item.promoPrice}
+                          </span>
+                        </div>
+                        {item.duration && (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
+                            <Clock size={12} className="text-red-400" />
+                            <span>{item.duration}</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="p-6">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+                        {item.subtitle}
+                      </p>
+
+                      {/* Benefits List */}
+                      {item.benefits && item.benefits.length > 0 && (
+                        <div className="space-y-2 mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                          {item.benefits.slice(0, 3).map((benefit: string, bIdx: number) => (
+                            <div key={bIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                              <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                              <span className="leading-tight">{benefit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Compatible Models */}
+                      {item.compatibleModels && (
+                        <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 text-[11px] text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-2">
+                          <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
+                          <span className="leading-tight line-clamp-2">
+                            <strong className="text-slate-800 dark:text-slate-200 font-semibold">Modelos:</strong> {item.compatibleModels}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions Block */}
+                  <div className="p-6 pt-0">
+                    <a
+                      href={waHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all"
+                    >
+                      <MessageCircle size={16} />
+                      <span>Reservar Cupo con Descuento</span>
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
 
       {/* =========================================================================
           SECTION 3: NUESTRAS INSTALACIONES Y TRABAJO EN ACCIÓN (SHOWCASE REAL)
