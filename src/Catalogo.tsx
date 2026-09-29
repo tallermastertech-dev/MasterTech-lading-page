@@ -1130,18 +1130,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             </div>
           )}
 
-          {!isCatalogLoading && (
-          <>
-
           {/* Header Title & Result Count */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
+          {!isCatalogLoading && <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
                 <span className="text-[11px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider">Catálogo MasterTech 2026</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-display font-black tracking-tight text-zinc-900 dark:text-white section-heading-dark flex items-center gap-2">
-                <span>Inventario de Repuestos</span> <span className="text-red-600 font-serif italic text-xl sm:text-2xl">/ En Taller & Encargo</span>
+                <span>Inventario de Repuestos</span> <span className="text-red-600 font-serif italic text-xl sm:text-2xl">/ En Taller &amp; Encargo</span>
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Mostrando <strong className="text-slate-900 dark:text-white font-mono">{filteredItems.length}</strong> de <strong className="text-slate-900 dark:text-white font-mono">{catalogItems.length}</strong> repuestos certificados con garantía y respaldo de instalación.
@@ -1186,7 +1183,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <span>Express USA ({catalogItems.filter(i => i.isImportedUSA).length})</span>
               </button>
             </div>
-          </div>
+          </div>}
+
+          <div style={{ display: isCatalogLoading ? 'none' : undefined }}>
 
           {/* OEM BRANDS SELECTOR STRIP */}
           <div className="space-y-2.5 bg-slate-50/70 dark:bg-white/[0.02] p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/5">
@@ -1639,9 +1638,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               })}
             </div>
           )}
-          </>
-          )}
+          </div>{/* end loading wrapper */}
         </section>
+
+
 
 
         {/* ========================================================================= */}
