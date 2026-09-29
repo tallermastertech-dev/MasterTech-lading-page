@@ -932,12 +932,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             >
               <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group">
                 <img 
-                  src="/assets/autoparts_hero_showcase.webp" 
+                  src={config.CATALOG_HERO_IMG || "/assets/autoparts_hero_showcase.webp"} 
                   alt="Auto Parts Showcase MasterTech"
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
                 />
+
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 dark:from-black/60 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Micro-Badge */}
@@ -981,15 +982,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-red-500" />, img: "/assets/cat_frenos_discos.webp", desc: "Pastillas cerámicas y discos ranurados" },
-              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-red-500" />, img: "/assets/cat_suspension_amortiguadores.webp", desc: "Coilovers y amortiguadores de gas" },
-              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-red-500" />, img: "/assets/cat_aceites_lubricantes.webp", desc: "Sintéticos 5W-30 y fluidos ATF" },
-              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-red-500" />, img: "/assets/cat_baterias_electricidad.webp", desc: "Baterías AGM y alternadores 140A" },
-              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-red-500" />, img: "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
-              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-red-500" />, img: "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
-              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-red-500" />, img: "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
-              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-red-500" />, img: "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
+              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-red-500" />, img: config.CAT_IMG_FRENOS || "/assets/cat_frenos_discos.webp", desc: "Pastillas cerámicas y discos ranurados" },
+              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-red-500" />, img: config.CAT_IMG_SUSPENSION || "/assets/cat_suspension_amortiguadores.webp", desc: "Coilovers y amortiguadores de gas" },
+              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-red-500" />, img: config.CAT_IMG_ACEITES || "/assets/cat_aceites_lubricantes.webp", desc: "Sintéticos 5W-30 y fluidos ATF" },
+              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-red-500" />, img: config.CAT_IMG_BATERIAS || "/assets/cat_baterias_electricidad.webp", desc: "Baterías AGM y alternadores 140A" },
+              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-red-500" />, img: config.CAT_IMG_FILTROS || "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
+              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-red-500" />, img: config.CAT_IMG_CLIMATIZACION || "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
+              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-red-500" />, img: config.CAT_IMG_MOTOR || "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
+              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-red-500" />, img: config.CAT_IMG_DETAILING || "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
             ].map((catItem, idx) => {
+
               const count = catalogItems.filter(item => item.category === catItem.name).length;
               const isSelected = selectedCategory === catItem.name;
 
@@ -1056,7 +1058,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-red-100 dark:border-white/5">
-              <img src="/assets/promo_brakes_caliper.webp" alt="Frenos Cerámicos" loading="lazy" decoding="async" className="w-full h-full object-contain" />
+              <img src={config.PROMO_IMG_FRENOS || "/assets/promo_brakes_caliper.webp"} alt="Frenos Cerámicos" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
@@ -1082,7 +1084,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-slate-200 dark:border-white/5">
-              <img src="/assets/promo_suspension_spring.webp" alt="Suspensión" loading="lazy" decoding="async" className="w-full h-full object-contain" />
+              <img src={config.PROMO_IMG_SUSPENSION || "/assets/promo_suspension_spring.webp"} alt="Suspensión" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
 
@@ -1104,9 +1106,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </button>
             </div>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 group-hover:scale-110 transition-transform duration-500 bg-white/60 dark:bg-[#0c0e14]/60 p-1 flex items-center justify-center border border-blue-100 dark:border-white/5">
-              <img src="/assets/promo_turbo_charger.webp" alt="Importación USA" loading="lazy" decoding="async" className="w-full h-full object-contain" />
+              <img src={config.PROMO_IMG_USA || "/assets/promo_turbo_charger.webp"} alt="Importación USA" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
+
         </section>
 
         {/* ========================================================================= */}

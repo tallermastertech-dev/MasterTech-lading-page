@@ -1810,8 +1810,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   });
   const [editingProduct, setEditingProduct] = useState<CatalogItem | null>(null);
   const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
+  const [isCatalogImagesOpen, setIsCatalogImagesOpen] = useState(false);
   const [isAiAutofilling, setIsAiAutofilling] = useState(false);
   const [aiStatusMsg, setAiStatusMsg] = useState('');
+
 
   // Jornadas State
   const [jornadasList, setJornadasList] = useState<any[]>(() => {
@@ -6617,6 +6619,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </button>
 
                   <button
+                    onClick={() => setIsCatalogImagesOpen(!isCatalogImagesOpen)}
+                    className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                      isCatalogImagesOpen 
+                        ? 'bg-amber-500/20 border-amber-500/50 text-amber-300' 
+                        : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                    }`}
+                    title="Configurar imágenes de fondo, vitrina 3D, categorías y promociones del catálogo"
+                  >
+                    <ImageIcon size={16} />
+                    <span>{isCatalogImagesOpen ? 'Ocultar Banners' : 'Banners & Imágenes del Catálogo'}</span>
+                  </button>
+
+                  <button
                     onClick={() => {
                       setEditingProduct({
                         id: 0,
@@ -6644,7 +6659,153 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               {savedSectionSuccess === 'catalogo' && (
                 <div className="p-3.5 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-xs font-bold flex items-center gap-2 shadow-lg">
                   <CheckCircle2 size={18} />
-                  <span>¡El catálogo de repuestos ha sido guardado e integrado públicamente en `/catalogo`!</span>
+                  <span>¡El catálogo de repuestos e imágenes ha sido guardado e integrado públicamente en `/catalogo`!</span>
+                </div>
+              )}
+
+              {/* PANEL DE IMÁGENES Y BANNERS DEL CATÁLOGO */}
+              {isCatalogImagesOpen && (
+                <div className="bg-[#12141a] border border-amber-500/30 rounded-2xl p-6 space-y-6 shadow-xl animate-fade-in">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                    <div>
+                      <h2 className="text-base font-black uppercase text-amber-400 flex items-center gap-2">
+                        <ImageIcon size={18} />
+                        <span>Imágenes & Banners Visuales de /catalogo</span>
+                      </h2>
+                      <p className="text-xs text-zinc-400 mt-1">
+                        Sube o actualiza la vitrina 3D principal, las 8 imágenes de categorías y los 3 banners de ofertas promocionales.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: JSON.stringify(catalogItems) })}
+                      disabled={savingSection === 'catalogo'}
+                      className="btn-primary !py-2 !px-4 text-xs font-bold uppercase border-none flex items-center gap-2 shadow-md"
+                    >
+                      {savingSection === 'catalogo' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                      <span>Guardar Imágenes</span>
+                    </button>
+                  </div>
+
+                  {/* 1. Vitrina 3D Principal Hero */}
+                  <div className="space-y-3 bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span>1. Vitrina 3D Principal (Frenos, Suspensión & Motor Showcase)</span>
+                      </h3>
+                      <span className="text-[10px] text-zinc-400 font-mono">Cabecera de /catalogo</span>
+                    </div>
+                    <ImageUploader
+                      label="Imagen Showcase Principal 3D"
+                      value={settingsForm.CATALOG_HERO_IMG || ''}
+                      onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG: val })}
+                      aspectRatio={1 / 1}
+                      placeholder="/assets/autoparts_hero_showcase.webp"
+                    />
+                  </div>
+
+                  {/* 2. Ocho Imágenes de Categorías Populares */}
+                  <div className="space-y-3 bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                        <span>2. Tarjetas de Categorías Populares (Grid de 8 Sistemas)</span>
+                      </h3>
+                      <span className="text-[10px] text-zinc-400 font-mono">Aspecto 1:1 Cuadrado</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <ImageUploader
+                        label="Frenos & Discos"
+                        value={settingsForm.CAT_IMG_FRENOS || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_FRENOS: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_frenos_discos.webp"
+                      />
+                      <ImageUploader
+                        label="Suspensión & Amortiguadores"
+                        value={settingsForm.CAT_IMG_SUSPENSION || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_SUSPENSION: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_suspension_amortiguadores.webp"
+                      />
+                      <ImageUploader
+                        label="Aceites & Lubricantes"
+                        value={settingsForm.CAT_IMG_ACEITES || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_ACEITES: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_aceites_lubricantes.webp"
+                      />
+                      <ImageUploader
+                        label="Baterías & Electricidad"
+                        value={settingsForm.CAT_IMG_BATERIAS || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_BATERIAS: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_baterias_electricidad.webp"
+                      />
+                      <ImageUploader
+                        label="Filtros & Consumibles"
+                        value={settingsForm.CAT_IMG_FILTROS || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_FILTROS: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_filtros_oem.webp"
+                      />
+                      <ImageUploader
+                        label="Fluidos & Climatización"
+                        value={settingsForm.CAT_IMG_CLIMATIZACION || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_CLIMATIZACION: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_climatizacion.webp"
+                      />
+                      <ImageUploader
+                        label="Inyección & Motor"
+                        value={settingsForm.CAT_IMG_MOTOR || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_MOTOR: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/promo_turbo_charger.webp"
+                      />
+                      <ImageUploader
+                        label="Cuidado & Detailing"
+                        value={settingsForm.CAT_IMG_DETAILING || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_DETAILING: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_cuidado_estetica.webp"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 3. Banners de Ofertas Promocionales */}
+                  <div className="space-y-3 bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span>3. Banners de Ofertas y Servicios Especiales (3 Banners)</span>
+                      </h3>
+                      <span className="text-[10px] text-zinc-400 font-mono">Frenos, Suspensión y USA</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <ImageUploader
+                        label="Promo Frenos Cerámicos"
+                        value={settingsForm.PROMO_IMG_FRENOS || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_FRENOS: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/promo_brakes_caliper.webp"
+                      />
+                      <ImageUploader
+                        label="Promo Suspensión Heavy Duty"
+                        value={settingsForm.PROMO_IMG_SUSPENSION || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_SUSPENSION: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/promo_suspension_spring.webp"
+                      />
+                      <ImageUploader
+                        label="Promo Importación Directa USA"
+                        value={settingsForm.PROMO_IMG_USA || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_USA: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/promo_turbo_charger.webp"
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
 
