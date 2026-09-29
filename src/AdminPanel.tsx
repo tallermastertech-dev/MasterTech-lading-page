@@ -2096,8 +2096,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }
       } catch (e) {}
     } else {
+      // No catalog in Supabase yet — auto-publish DEFAULT_CATALOG so the public page reads it
       setCatalogItems(DEFAULT_CATALOG);
+      const autoPublishToken = token || localStorage.getItem('mastertech_admin_token') || '';
+      if (autoPublishToken) {
+        const autoPayload = { ...merged, CATALOG_PRODUCTS_JSON: JSON.stringify(DEFAULT_CATALOG) };
+        fetch('/api/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${autoPublishToken}` },
+          body: JSON.stringify(autoPayload)
+        }).then(r => {
+          if (r.ok) {
+            try { localStorage.setItem('mastertech_settings_store', JSON.stringify(autoPayload)); } catch (e) {}
+            window.dispatchEvent(new Event('mastertech_settings_updated'));
+          }
+        }).catch(() => {});
+      }
     }
+
     if (merged.JORNADAS_JSON) {
       try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
     }

@@ -344,7 +344,9 @@ export interface CartItem {
 
 export default function Catalogo() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(DEFAULT_CATALOG);
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
+  const [isCatalogLoading, setIsCatalogLoading] = useState(true);
+
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedBrand, setSelectedBrand] = useState<string>("Todas");
   const [selectedVehicle, setSelectedVehicle] = useState<string>("Todos");
@@ -607,6 +609,7 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
                 : localData.CATALOG_PRODUCTS_JSON;
               if (Array.isArray(parsed) && parsed.length > 0) {
                 setCatalogItems(parsed);
+                setIsCatalogLoading(false);
               }
             }
           }
@@ -634,9 +637,20 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
             if (Array.isArray(parsed) && parsed.length > 0) {
               setCatalogItems(parsed);
             }
+          } else {
+            // Supabase returned no catalog — use DEFAULT_CATALOG as fallback
+            setCatalogItems(DEFAULT_CATALOG);
           }
+        } else {
+          // No Supabase data at all — use DEFAULT_CATALOG
+          setCatalogItems(DEFAULT_CATALOG);
         }
-      } catch (err) {}
+      } catch (err) {
+        // Network error — use DEFAULT_CATALOG
+        setCatalogItems(DEFAULT_CATALOG);
+      } finally {
+        setIsCatalogLoading(false);
+      }
     };
 
     fetchSettings();
@@ -655,6 +669,8 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
       window.removeEventListener('storage', handleAdminSync);
     };
   }, []);
+
+
 
   const getCleanPhoneDigits = (phoneStr?: string): string => {
     if (!phoneStr) return "584123565012";
@@ -1097,7 +1113,26 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* SECTION 4: PRODUCT CATALOG GRID (INVENTARIO DISPONIBLE) */}
         {/* ========================================================================= */}
         <section id="catalogo-grid" className="space-y-6 pt-4">
-          
+
+          {/* Skeleton loader while fetching from Supabase */}
+          {isCatalogLoading && (
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 animate-pulse">
+                  <div className="aspect-square bg-slate-200 dark:bg-white/10" />
+                  <div className="p-3 space-y-2">
+                    <div className="h-3 bg-slate-200 dark:bg-white/10 rounded-full w-3/4" />
+                    <div className="h-3 bg-slate-200 dark:bg-white/10 rounded-full w-1/2" />
+                    <div className="h-5 bg-slate-200 dark:bg-white/10 rounded-full w-1/3 mt-2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!isCatalogLoading && (
+          <>
+
           {/* Header Title & Result Count */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-white/10 pb-4">
             <div>
@@ -1604,7 +1639,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               })}
             </div>
           )}
+          </>
+          )}
         </section>
+
 
         {/* ========================================================================= */}
         {/* SECTION 5: CUSTOM USA PART IMPORT BANNER */}
