@@ -948,13 +948,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <Flame size={16} />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-slate-900 dark:text-white">Frenos, Suspensión & Motor</div>
-                      <div className="text-[10px] text-slate-600 dark:text-slate-300">Rendimiento garantizado y compatibilidad exacta</div>
+                      <div className="text-xs font-black text-slate-900 dark:text-white">{config.CATALOG_HERO_TITLE || "Frenos, Suspensión & Motor"}</div>
+                      <div className="text-[10px] text-slate-600 dark:text-slate-300">{config.CATALOG_HERO_SUBTITLE || "Rendimiento garantizado y compatibilidad exacta"}</div>
                     </div>
                   </div>
                   <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-lg border border-red-500/30">
-                    OEM 100%
+                    {config.CATALOG_HERO_BADGE || "OEM 100%"}
                   </span>
+
                 </div>
               </div>
             </motion.div>
@@ -1039,11 +1040,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           {/* Promo Card 1: Frenos */}
           <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-red-50/80 dark:bg-gradient-to-br dark:from-[#221010] dark:via-[#151114] dark:to-black border border-red-200 dark:border-red-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-red-600 dark:text-[#f87171]">Frenos & Seguridad</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-red-600 dark:text-[#f87171]">{config.PROMO_1_TAG || "Frenos & Seguridad"}</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
-                Frenado <span className="text-red-600 dark:text-[#f87171]">Cerámico</span>
+                {config.PROMO_1_TITLE_1 || "Frenado"} <span className="text-red-600 dark:text-[#f87171]">{config.PROMO_1_TITLE_2 || "Cerámico"}</span>
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300">Pastillas cerámicas libres de chirridos y discos ventilados.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">{config.PROMO_1_DESC || "Pastillas cerámicas libres de chirridos y discos ventilados."}</p>
               <button
                 type="button"
                 onClick={() => {
@@ -1053,7 +1054,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 }}
                 className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-red-600 dark:text-[#f87171]"
               >
-                <span>Ver Frenos</span>
+                <span>{config.PROMO_1_BTN || "Ver Frenos"}</span>
                 <ArrowRight size={13} />
               </button>
             </div>
@@ -1065,11 +1066,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           {/* Promo Card 2: Suspensión */}
           <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-slate-50 dark:bg-gradient-to-br dark:from-[#1b1f28] dark:via-[#13171f] dark:to-black border border-slate-200 dark:border-slate-700/60">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-slate-700 dark:text-slate-300">Suspensión & Confort</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-slate-700 dark:text-slate-300">{config.PROMO_2_TAG || "Suspensión & Confort"}</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
-                Heavy <span className="text-red-600 dark:text-red-400">Duty</span>
+                {config.PROMO_2_TITLE_1 || "Heavy"} <span className="text-red-600 dark:text-red-400">{config.PROMO_2_TITLE_2 || "Duty"}</span>
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300">Amortiguadores presurizados a gas y muelles reforzados.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">{config.PROMO_2_DESC || "Amortiguadores presurizados a gas y muelles reforzados."}</p>
               <button
                 type="button"
                 onClick={() => {
@@ -1079,7 +1080,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 }}
                 className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-slate-900 dark:text-white"
               >
-                <span>Ver Suspensión</span>
+                <span>{config.PROMO_2_BTN || "Ver Suspensión"}</span>
                 <ArrowRight size={13} />
               </button>
             </div>
@@ -1091,17 +1092,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           {/* Promo Card 3: Importación Especial */}
           <div className="p-6 rounded-3xl relative overflow-hidden shadow-sm hover:shadow-md flex items-center justify-between group transition-all bg-blue-50/80 dark:bg-gradient-to-br dark:from-[#0e1726] dark:via-[#10141c] dark:to-black border border-blue-200 dark:border-blue-500/40">
             <div className="space-y-2 relative z-10 max-w-[60%]">
-              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-blue-600 dark:text-[#60a5fa]">Pedidos Especiales</span>
+              <span className="promo-tag text-[10px] font-black uppercase tracking-wider block text-blue-600 dark:text-[#60a5fa]">{config.PROMO_3_TAG || "Pedidos Especiales"}</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase leading-tight text-slate-900 dark:text-white">
-                Importación <span className="text-blue-600 dark:text-[#60a5fa]">Directa USA</span>
+                {config.PROMO_3_TITLE_1 || "Importación"} <span className="text-blue-600 dark:text-[#60a5fa]">{config.PROMO_3_TITLE_2 || "Directa USA"}</span>
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300">Traemos tu repuesto OEM desde Miami en 7 a 15 días con código de parte o VIN.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">{config.PROMO_3_DESC || "Traemos tu repuesto OEM desde Miami en 7 a 15 días con código de parte o VIN."}</p>
               <button
                 type="button"
                 onClick={() => setIsUsaModalOpen(true)}
                 className="text-xs font-black flex items-center gap-1 pt-1 group-hover:underline cursor-pointer bg-transparent border-0 p-0 text-blue-600 dark:text-[#60a5fa]"
               >
-                <span>Solicitar por Encargo</span>
+                <span>{config.PROMO_3_BTN || "Solicitar por Encargo"}</span>
                 <ArrowRight size={13} />
               </button>
             </div>
@@ -1109,6 +1110,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <img src={config.PROMO_IMG_USA || "/assets/promo_turbo_charger.webp"} alt="Importación USA" loading="lazy" decoding="async" className="w-full h-full object-contain" />
             </div>
           </div>
+
 
         </section>
 

@@ -6687,7 +6687,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
 
                   {/* 1. Vitrina 3D Principal Hero */}
-                  <div className="space-y-3 bg-black/40 p-4 rounded-xl border border-white/5">
+                  <div className="space-y-4 bg-black/40 p-4 rounded-xl border border-white/5">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-red-500"></span>
@@ -6695,14 +6695,59 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       </h3>
                       <span className="text-[10px] text-zinc-400 font-mono">Cabecera de /catalogo</span>
                     </div>
-                    <ImageUploader
-                      label="Imagen Showcase Principal 3D"
-                      value={settingsForm.CATALOG_HERO_IMG || ''}
-                      onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG: val })}
-                      aspectRatio={1 / 1}
-                      placeholder="/assets/autoparts_hero_showcase.webp"
-                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <ImageUploader
+                        label="Imagen Showcase Principal 3D"
+                        value={settingsForm.CATALOG_HERO_IMG || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/autoparts_hero_showcase.webp"
+                      />
+
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Título de la Tarjeta Flotante
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.CATALOG_HERO_TITLE || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_TITLE: e.target.value })}
+                            placeholder="Frenos, Suspensión & Motor"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-red-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Subtítulo / Descripción Corta
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.CATALOG_HERO_SUBTITLE || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_SUBTITLE: e.target.value })}
+                            placeholder="Rendimiento garantizado y compatibilidad exacta"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-red-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Distintivo / Badge (Esquina Derecha)
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.CATALOG_HERO_BADGE || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_BADGE: e.target.value })}
+                            placeholder="OEM 100%"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-xs text-white font-mono outline-none focus:border-red-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
 
                   {/* 2. Ocho Imágenes de Categorías Populares */}
                   <div className="space-y-3 bg-black/40 p-4 rounded-xl border border-white/5">
@@ -6774,38 +6819,264 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
 
                   {/* 3. Banners de Ofertas Promocionales */}
-                  <div className="space-y-3 bg-black/40 p-4 rounded-xl border border-white/5">
+                  <div className="space-y-4 bg-black/40 p-4 rounded-xl border border-white/5">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                        <span>3. Banners de Ofertas y Servicios Especiales (3 Banners)</span>
+                        <span>3. Banners de Ofertas y Servicios Especiales (Textos & Banners)</span>
                       </h3>
-                      <span className="text-[10px] text-zinc-400 font-mono">Frenos, Suspensión y USA</span>
+                      <span className="text-[10px] text-zinc-400 font-mono">3 Tarjetas Destacadas</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <ImageUploader
-                        label="Promo Frenos Cerámicos"
-                        value={settingsForm.PROMO_IMG_FRENOS || ''}
-                        onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_FRENOS: val })}
-                        aspectRatio={1 / 1}
-                        placeholder="/assets/promo_brakes_caliper.webp"
-                      />
-                      <ImageUploader
-                        label="Promo Suspensión Heavy Duty"
-                        value={settingsForm.PROMO_IMG_SUSPENSION || ''}
-                        onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_SUSPENSION: val })}
-                        aspectRatio={1 / 1}
-                        placeholder="/assets/promo_suspension_spring.webp"
-                      />
-                      <ImageUploader
-                        label="Promo Importación Directa USA"
-                        value={settingsForm.PROMO_IMG_USA || ''}
-                        onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_USA: val })}
-                        aspectRatio={1 / 1}
-                        placeholder="/assets/promo_turbo_charger.webp"
-                      />
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                      {/* Banner 1: Frenos */}
+                      <div className="bg-[#12141a] border border-red-500/20 p-4 rounded-2xl space-y-3">
+                        <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                          <span className="text-[11px] font-black uppercase text-red-400">Banner #1 · Frenos</span>
+                          <span className="text-[9px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded-full font-bold">Tarjeta Roja</span>
+                        </div>
+
+                        <ImageUploader
+                          label="Imagen del Banner"
+                          value={settingsForm.PROMO_IMG_FRENOS || ''}
+                          onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_FRENOS: val })}
+                          aspectRatio={1 / 1}
+                          placeholder="/assets/promo_brakes_caliper.webp"
+                        />
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Etiqueta Superior
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.PROMO_1_TAG || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_1_TAG: e.target.value })}
+                            placeholder="Frenos & Seguridad"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-red-500"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Título Base
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.PROMO_1_TITLE_1 || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_1_TITLE_1: e.target.value })}
+                              placeholder="Frenado"
+                              className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-red-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Resaltado (Color)
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.PROMO_1_TITLE_2 || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_1_TITLE_2: e.target.value })}
+                              placeholder="Cerámico"
+                              className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-red-400 font-bold outline-none focus:border-red-500"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Descripción
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={settingsForm.PROMO_1_DESC || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_1_DESC: e.target.value })}
+                            placeholder="Pastillas cerámicas libres de chirridos y discos ventilados."
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-red-500 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Texto del Botón
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.PROMO_1_BTN || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_1_BTN: e.target.value })}
+                            placeholder="Ver Frenos"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-red-500"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Banner 2: Suspensión */}
+                      <div className="bg-[#12141a] border border-white/10 p-4 rounded-2xl space-y-3">
+                        <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                          <span className="text-[11px] font-black uppercase text-zinc-300">Banner #2 · Suspensión</span>
+                          <span className="text-[9px] bg-white/10 text-zinc-300 px-2 py-0.5 rounded-full font-bold">Tarjeta Gris</span>
+                        </div>
+
+                        <ImageUploader
+                          label="Imagen del Banner"
+                          value={settingsForm.PROMO_IMG_SUSPENSION || ''}
+                          onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_SUSPENSION: val })}
+                          aspectRatio={1 / 1}
+                          placeholder="/assets/promo_suspension_spring.webp"
+                        />
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Etiqueta Superior
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.PROMO_2_TAG || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_2_TAG: e.target.value })}
+                            placeholder="Suspensión & Confort"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-zinc-400"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Título Base
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.PROMO_2_TITLE_1 || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_2_TITLE_1: e.target.value })}
+                              placeholder="Heavy"
+                              className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-zinc-400"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Resaltado (Color)
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.PROMO_2_TITLE_2 || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_2_TITLE_2: e.target.value })}
+                              placeholder="Duty"
+                              className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-red-400 font-bold outline-none focus:border-red-500"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Descripción
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={settingsForm.PROMO_2_DESC || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_2_DESC: e.target.value })}
+                            placeholder="Amortiguadores presurizados a gas y muelles reforzados."
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-zinc-400 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Texto del Botón
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.PROMO_2_BTN || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_2_BTN: e.target.value })}
+                            placeholder="Ver Suspensión"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-zinc-400"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Banner 3: Pedidos USA */}
+                      <div className="bg-[#12141a] border border-blue-500/20 p-4 rounded-2xl space-y-3">
+                        <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                          <span className="text-[11px] font-black uppercase text-blue-400">Banner #3 · Pedidos USA</span>
+                          <span className="text-[9px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full font-bold">Tarjeta Azul</span>
+                        </div>
+
+                        <ImageUploader
+                          label="Imagen del Banner"
+                          value={settingsForm.PROMO_IMG_USA || ''}
+                          onChange={(val) => setSettingsForm({ ...settingsForm, PROMO_IMG_USA: val })}
+                          aspectRatio={1 / 1}
+                          placeholder="/assets/promo_turbo_charger.webp"
+                        />
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Etiqueta Superior
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.PROMO_3_TAG || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_3_TAG: e.target.value })}
+                            placeholder="Pedidos Especiales"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-blue-500"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Título Base
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.PROMO_3_TITLE_1 || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_3_TITLE_1: e.target.value })}
+                              placeholder="Importación"
+                              className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-blue-500"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Resaltado (Color)
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.PROMO_3_TITLE_2 || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_3_TITLE_2: e.target.value })}
+                              placeholder="Directa USA"
+                              className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-blue-400 font-bold outline-none focus:border-blue-500"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Descripción
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={settingsForm.PROMO_3_DESC || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_3_DESC: e.target.value })}
+                            placeholder="Traemos tu repuesto OEM desde Miami en 7 a 15 días con código de parte o VIN."
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-blue-500 resize-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                            Texto del Botón
+                          </label>
+                          <input
+                            type="text"
+                            value={settingsForm.PROMO_3_BTN || ''}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_3_BTN: e.target.value })}
+                            placeholder="Solicitar por Encargo"
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-xs text-white outline-none focus:border-blue-500"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
+
                 </div>
               )}
 
