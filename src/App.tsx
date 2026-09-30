@@ -936,10 +936,10 @@ export default function App() {
                           className="border-0 select-none bg-black pointer-events-auto"
                           style={{
                             position: 'absolute',
-                            width: 'calc(100% + 14px)',
-                            left: '-7px',
-                            top: '-56px',
-                            height: 'calc(100% + 360px)',
+                            width: '138%',
+                            height: '150%',
+                            top: '-92px',
+                            left: '-19%',
                             maxWidth: 'none'
                           }}
                           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
@@ -992,9 +992,9 @@ export default function App() {
                       <span>{isInstagram ? "Reel de Instagram" : isYouTube ? "Video de YouTube" : "Video del Taller"}</span>
                     </div>
 
-                    {/* Bottom Gradient Overlay (always active to guarantee zero white bleed) */}
-                    <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
-
+                    {/* Bottom Dark Protection Mask (Completely eliminates any white Instagram card bleed) */}
+                    <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black via-black/95 to-transparent pointer-events-none z-10" />
+                    <div className="absolute inset-x-0 bottom-0 h-14 bg-black/90 backdrop-blur-sm z-15 pointer-events-none border-t border-white/10" />
 
                     {/* Bottom Info & Instagram Direct Link */}
                     <div className="absolute bottom-3 left-3 z-20 pointer-events-none">
@@ -1006,7 +1006,7 @@ export default function App() {
                       href={isInstagram ? reelUrl : (config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/")} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="absolute bottom-3 right-3 bg-black/85 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20"
+                      className="absolute bottom-3 right-3 bg-black/90 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20 cursor-pointer"
                     >
                       <Instagram size={13} className="text-pink-400" />
                       <span>{isInstagram ? "Ver en Instagram" : "Instagram"}</span>
