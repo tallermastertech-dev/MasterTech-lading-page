@@ -1871,6 +1871,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [editingProduct, setEditingProduct] = useState<CatalogItem | null>(null);
   const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
   const [isCatalogImagesOpen, setIsCatalogImagesOpen] = useState(false);
+  const [isCatalogPromoOpen, setIsCatalogPromoOpen] = useState(false);
+  const [isJornadasPromoOpen, setIsJornadasPromoOpen] = useState(false);
   const [isAiAutofilling, setIsAiAutofilling] = useState(false);
   const [aiStatusMsg, setAiStatusMsg] = useState('');
 
@@ -6731,6 +6733,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </button>
 
                   <button
+                    onClick={() => setIsCatalogPromoOpen(!isCatalogPromoOpen)}
+                    className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                      isCatalogPromoOpen 
+                        ? 'bg-red-500/20 border-red-500/50 text-red-300' 
+                        : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                    }`}
+                    title="Configurar barra flash superior y las 3 ofertas mostradas en la página de inicio"
+                  >
+                    <Flame size={16} className={isCatalogPromoOpen ? 'text-red-400' : 'text-zinc-400'} />
+                    <span>{isCatalogPromoOpen ? 'Ocultar Ofertas Portada' : 'Ofertas en Portada (3 Tarjetas)'}</span>
+                  </button>
+
+                  <button
                     onClick={() => {
                       setEditingProduct({
                         id: 0,
@@ -6765,10 +6780,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </div>
               )}
 
-              {/* Configuración de la Barra Flash Superior (Página Principal) */}
               {/* Configuración de la Barra Flash Superior & Sección de Promociones (Página Principal) */}
-              <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+              {isCatalogPromoOpen && (
+                <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4 animate-fade-in">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
                   <div>
                     <h3 className="text-xs font-black uppercase text-red-400 tracking-wider flex items-center gap-2">
                       <Flame size={16} className="text-amber-400 animate-pulse" />
@@ -7059,6 +7074,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
                 </div>
               </div>
+              )}
 
               {/* PANEL DE IMÁGENES Y BANNERS DEL CATÁLOGO */}
               {isCatalogImagesOpen && (
@@ -7555,33 +7571,49 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <h1 className="text-2xl font-display font-black uppercase text-white tracking-tight">Jornadas VIP Automotrices</h1>
                   <p className="text-xs text-zinc-400 mt-1">Crea o elimina las promociones especiales con precios de jornada en `/jornada`.</p>
                 </div>
-                <button
-                  onClick={() => {
-                    setEditingJornada({
-                      id: `jornada_${Date.now()}`,
-                      badge: "Jornada Especial",
-                      title: "Título de la Jornada",
-                      subtitle: "Descripción corta de la jornada...",
-                      img: "/assets/servicio-mecanica.webp",
-                      regularPrice: "$100 USD",
-                      promoPrice: "$60 USD",
-                      discountBadge: "AHORRAS $40 USD",
-                      duration: "1 a 2 horas",
-                      benefits: ["Beneficio 1", "Beneficio 2"],
-                      specs: [{ label: "Garantía", val: "1 Año" }],
-                      compatibleModels: "Apto para todas las marcas."
-                    });
-                    setIsJornadaModalOpen(true);
-                  }}
-                  className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
-                >
-                  <Plus size={16} />
-                  <span>Nueva Jornada VIP</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsJornadasPromoOpen(!isJornadasPromoOpen)}
+                    className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                      isJornadasPromoOpen 
+                        ? 'bg-red-500/20 border-red-500/50 text-red-300' 
+                        : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                    }`}
+                    title="Configurar barra flash superior y las 3 ofertas mostradas en la página de inicio"
+                  >
+                    <Flame size={16} className={isJornadasPromoOpen ? 'text-red-400' : 'text-zinc-400'} />
+                    <span>{isJornadasPromoOpen ? 'Ocultar Ofertas Portada' : 'Ofertas en Portada (3 Tarjetas)'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingJornada({
+                        id: `jornada_${Date.now()}`,
+                        badge: "Jornada Especial",
+                        title: "Título de la Jornada",
+                        subtitle: "Descripción corta de la jornada...",
+                        img: "/assets/servicio-mecanica.webp",
+                        regularPrice: "$100 USD",
+                        promoPrice: "$60 USD",
+                        discountBadge: "AHORRAS $40 USD",
+                        duration: "1 a 2 horas",
+                        benefits: ["Beneficio 1", "Beneficio 2"],
+                        specs: [{ label: "Garantía", val: "1 Año" }],
+                        compatibleModels: "Apto para todas las marcas."
+                      });
+                      setIsJornadaModalOpen(true);
+                    }}
+                    className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 shadow-lg"
+                  >
+                    <Plus size={16} />
+                    <span>Nueva Jornada VIP</span>
+                  </button>
+                </div>
               </div>
 
               {/* Configuración de la Barra Flash Superior & Sección de Promociones (Página Principal) */}
-              <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4">
+              {isJornadasPromoOpen && (
+                <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4 animate-fade-in">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
                   <div>
                     <h3 className="text-xs font-black uppercase text-red-400 tracking-wider flex items-center gap-2">
@@ -7873,6 +7905,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </div>
                 </div>
               </div>
+              )}
 
               {/* Clock Timer & Empty State Config */}
               <div className="bg-[#12141a] p-6 rounded-2xl border border-white/10 space-y-5">
