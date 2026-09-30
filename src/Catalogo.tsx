@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
@@ -350,6 +350,467 @@ export const OEM_BRANDS = [
   { name: "Meguiar's", label: "Meguiar's", origin: "USA · Detailing", color: "from-purple-600 to-indigo-800" }
 ];
 
+export interface VehicleModelOption {
+  name: string;
+  engines: string[];
+}
+
+export interface VehicleBrandOption {
+  name: string;
+  models: VehicleModelOption[];
+}
+
+export const VEHICLE_CATALOG_DATA: VehicleBrandOption[] = [
+  {
+    name: "Jeep",
+    models: [
+      {
+        name: "Grand Cherokee",
+        engines: [
+          "Todos los motores",
+          "3.6L V6 Pentastar Gasolina",
+          "5.7L V8 HEMI MDS Gasolina",
+          "4.7L V8 PowerTech Gasolina",
+          "4.0L I6 Gasolina (WJ / ZJ)",
+          "6.4L V8 HEMI SRT-8"
+        ]
+      },
+      {
+        name: "Wrangler (JK / JL / TJ)",
+        engines: [
+          "Todos los motores",
+          "3.6L V6 Pentastar Gasolina",
+          "3.8L V6 EGH Gasolina",
+          "4.0L I6 PowerTech Gasolina",
+          "2.0L Turbo I4 Gasolina / 4xe"
+        ]
+      },
+      {
+        name: "Cherokee (KK / KJ / KL / XJ)",
+        engines: [
+          "Todos los motores",
+          "3.7L V6 PowerTech Gasolina",
+          "4.0L I6 PowerTech Gasolina",
+          "3.2L V6 Pentastar Gasolina",
+          "2.4L I4 Tigershark Gasolina"
+        ]
+      },
+      {
+        name: "Compass / Patriot",
+        engines: [
+          "Todos los motores",
+          "2.4L I4 Tigershark / World Engine",
+          "2.0L I4 Gasolina",
+          "1.3L Turbo I4 FireFly"
+        ]
+      },
+      {
+        name: "Commander",
+        engines: [
+          "Todos los motores",
+          "4.7L V8 PowerTech Gasolina",
+          "5.7L V8 HEMI MDS Gasolina"
+        ]
+      },
+      {
+        name: "Gladiator (JT)",
+        engines: [
+          "Todos los motores",
+          "3.6L V6 Pentastar Gasolina",
+          "3.0L V6 EcoDiesel"
+        ]
+      },
+      {
+        name: "Otro modelo Jeep",
+        engines: ["Todos los motores", "Gasolina V6 / V8", "Gasolina 4 Cilindros", "Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Toyota",
+    models: [
+      {
+        name: "Hilux / Fortuner",
+        engines: [
+          "Todos los motores",
+          "4.0L V6 1GR-FE Gasolina",
+          "2.7L I4 2TR-FE Gasolina",
+          "2.8L I4 1GD-FTV Turbo Diésel",
+          "3.0L I4 1KD-FTV D-4D Turbo Diésel"
+        ]
+      },
+      {
+        name: "Land Cruiser (Serie 70 / Machito)",
+        engines: [
+          "Todos los motores",
+          "4.0L V6 1GR-FE Gasolina",
+          "4.5L V8 1VD-FTV Turbo Diésel",
+          "4.5L I6 1FZ-FE Gasolina",
+          "4.2L I6 1HZ Diésel"
+        ]
+      },
+      {
+        name: "Land Cruiser (Prado / Serie 90-150)",
+        engines: [
+          "Todos los motores",
+          "4.0L V6 1GR-FE Dual VVT-i",
+          "2.7L I4 2TR-FE Gasolina",
+          "3.0L I4 1KD-FTV Turbo Diésel",
+          "3.4L V6 5VZ-FE Gasolina"
+        ]
+      },
+      {
+        name: "4Runner",
+        engines: [
+          "Todos los motores",
+          "4.0L V6 1GR-FE Dual VVT-i",
+          "4.7L V8 2UZ-FE VVT-i"
+        ]
+      },
+      {
+        name: "Corolla / Corolla Cross",
+        engines: [
+          "Todos los motores",
+          "2.0L I4 Dynamic Force (2020-2025)",
+          "1.8L I4 2ZR-FE Dual VVT-i",
+          "1.8L I4 Híbrido Hybrid Synergy",
+          "1.6L I4 3ZZ-FE"
+        ]
+      },
+      {
+        name: "Yaris",
+        engines: [
+          "Todos los motores",
+          "1.5L I4 1NZ-FE / 2NR-FE",
+          "1.3L I4 2NZ-FE"
+        ]
+      },
+      {
+        name: "Tacoma / Tundra / Sequoia",
+        engines: [
+          "Todos los motores",
+          "3.5L V6 Twin Turbo i-FORCE",
+          "5.7L V8 3UR-FE i-FORCE",
+          "4.0L V6 1GR-FE"
+        ]
+      },
+      {
+        name: "RAV4 / Camry",
+        engines: [
+          "Todos los motores",
+          "2.5L I4 Dynamic Force / Híbrido",
+          "3.5L V6 2GR-FE Dual VVT-i",
+          "2.4L I4 2AZ-FE"
+        ]
+      },
+      {
+        name: "Otro modelo Toyota",
+        engines: ["Todos los motores", "Gasolina V6", "Gasolina 4 Cilindros", "Turbo Diésel", "Híbrido"]
+      }
+    ]
+  },
+  {
+    name: "Ford",
+    models: [
+      {
+        name: "F-150 / F-250 / FX4 / Raptor",
+        engines: [
+          "Todos los motores",
+          "5.0L V8 Coyote Gasolina",
+          "3.5L V6 EcoBoost Twin-Turbo",
+          "5.4L V8 Triton 3V",
+          "4.6L V8 Triton 2V",
+          "6.2L V8 Boss Gasolina"
+        ]
+      },
+      {
+        name: "Explorer",
+        engines: [
+          "Todos los motores",
+          "3.5L V6 Ti-VCT Gasolina",
+          "3.5L V6 EcoBoost Twin-Turbo",
+          "4.6L V8 3V Modular",
+          "4.0L V6 Cologne",
+          "2.3L EcoBoost I4 Turbo"
+        ]
+      },
+      {
+        name: "Ranger",
+        engines: [
+          "Todos los motores",
+          "3.2L I5 Duratorq TDCi Turbo Diésel",
+          "2.2L I4 Duratorq TDCi Turbo Diésel",
+          "2.5L I4 Duratec Gasolina",
+          "2.3L EcoBoost I4"
+        ]
+      },
+      {
+        name: "Fiesta / Focus / Ecosport",
+        engines: [
+          "Todos los motores",
+          "1.6L I4 Sigma / Zetec Rocam",
+          "2.0L I4 Duratec Gasolina"
+        ]
+      },
+      {
+        name: "Super Duty (F-250 / F-350)",
+        engines: [
+          "Todos los motores",
+          "6.7L V8 Power Stroke Turbo Diésel",
+          "6.2L V8 Boss Gasolina",
+          "5.4L V8 Triton Gasolina"
+        ]
+      },
+      {
+        name: "Otro modelo Ford",
+        engines: ["Todos los motores", "Gasolina V8", "Gasolina V6", "EcoBoost Turbo", "Power Stroke Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Chevrolet",
+    models: [
+      {
+        name: "Silverado / Tahoe / Suburban / Cheyenne",
+        engines: [
+          "Todos los motores",
+          "5.3L V8 EcoTec3 / Vortec 5300",
+          "6.2L V8 EcoTec3 / Vortec",
+          "4.8L V8 Vortec 4800"
+        ]
+      },
+      {
+        name: "Trailblazer / Traverse / Equinox",
+        engines: [
+          "Todos los motores",
+          "4.2L I6 Vortec 4200",
+          "3.6L V6 SIDI / High Feature",
+          "1.5L / 2.0L Turbo I4"
+        ]
+      },
+      {
+        name: "Aveo / Optra / Spark / Cruze",
+        engines: [
+          "Todos los motores",
+          "1.6L I4 E-TEC II / DOHC (Aveo)",
+          "1.8L I4 DOHC (Optra)",
+          "1.4L Turbo / 1.8L Ecotec (Cruze)",
+          "1.0L / 1.2L I4 (Spark)"
+        ]
+      },
+      {
+        name: "D-Max / LUV / Colorado",
+        engines: [
+          "Todos los motores",
+          "3.0L I4 Turbo Diésel 4JJ1",
+          "3.5L V6 Vortec Gasolina",
+          "2.8L Duramax Turbo Diésel"
+        ]
+      },
+      {
+        name: "Otro modelo Chevrolet",
+        engines: ["Todos los motores", "Gasolina V8", "Gasolina V6", "Gasolina 4 Cilindros", "Turbo Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Dodge / RAM",
+    models: [
+      {
+        name: "RAM 1500 / 2500",
+        engines: [
+          "Todos los motores",
+          "5.7L V8 HEMI MDS Gasolina",
+          "3.6L V6 Pentastar Gasolina",
+          "6.7L I6 Cummins Turbo Diésel",
+          "4.7L V8 Magnum"
+        ]
+      },
+      {
+        name: "Durango",
+        engines: [
+          "Todos los motores",
+          "5.7L V8 HEMI MDS Gasolina",
+          "3.6L V6 Pentastar Gasolina",
+          "4.7L V8 Magnum"
+        ]
+      },
+      {
+        name: "Caliber / Journey",
+        engines: [
+          "Todos los motores",
+          "2.4L I4 DOHC World Engine",
+          "2.0L I4 DOHC World Engine",
+          "3.6L V6 Pentastar Gasolina"
+        ]
+      },
+      {
+        name: "Otro modelo Dodge / RAM",
+        engines: ["Todos los motores", "5.7L HEMI V8", "V6 Gasolina", "Cummins Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Honda",
+    models: [
+      {
+        name: "Civic",
+        engines: [
+          "Todos los motores",
+          "1.5L Turbo I4 VTEC",
+          "1.8L / 2.0L I4 i-VTEC",
+          "1.6L I4 DOHC / SOHC"
+        ]
+      },
+      {
+        name: "CR-V",
+        engines: [
+          "Todos los motores",
+          "1.5L Turbo I4 VTEC",
+          "2.4L I4 i-VTEC K24",
+          "2.0L I4 i-VTEC"
+        ]
+      },
+      {
+        name: "Pilot / Accord",
+        engines: [
+          "Todos los motores",
+          "3.5L V6 i-VTEC J35",
+          "2.0L Turbo I4 VTEC",
+          "2.4L I4 i-VTEC"
+        ]
+      },
+      {
+        name: "Otro modelo Honda",
+        engines: ["Todos los motores", "i-VTEC Gasolina", "Turbo VTEC"]
+      }
+    ]
+  },
+  {
+    name: "Nissan",
+    models: [
+      {
+        name: "Patrol / Armada",
+        engines: [
+          "Todos los motores",
+          "5.6L V8 VK56DE / VK56VD",
+          "4.8L I6 TB48DE Gasolina"
+        ]
+      },
+      {
+        name: "Pathfinder / X-Trail",
+        engines: [
+          "Todos los motores",
+          "3.5L V6 VQ35DE / VQ35DD",
+          "2.5L I4 QR25DE Gasolina"
+        ]
+      },
+      {
+        name: "Frontier / Navara / NP300",
+        engines: [
+          "Todos los motores",
+          "2.5L I4 YD25DDTi Turbo Diésel",
+          "2.5L I4 QR25DE Gasolina",
+          "4.0L V6 VQ40DE Gasolina"
+        ]
+      },
+      {
+        name: "Sentra / Tiida / Versa",
+        engines: [
+          "Todos los motores",
+          "1.8L / 2.0L I4 MR20DE / MRA8DE",
+          "1.6L I4 HR16DE"
+        ]
+      },
+      {
+        name: "Otro modelo Nissan",
+        engines: ["Todos los motores", "Gasolina V6", "Gasolina 4 Cilindros", "Turbo Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Hyundai",
+    models: [
+      {
+        name: "Tucson / Santa Fe",
+        engines: ["Todos los motores", "2.0L I4 Gasolina", "2.4L I4 MPI", "3.3L V6 Lambda", "2.0L CRDi Diésel"]
+      },
+      {
+        name: "Elantra / Accent / Getz",
+        engines: ["Todos los motores", "1.6L / 2.0L I4 Gasolina", "1.4L / 1.6L Alpha/Gamma"]
+      },
+      {
+        name: "Otro modelo Hyundai",
+        engines: ["Todos los motores", "Gasolina 4 Cilindros", "V6 Gasolina", "CRDi Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Kia",
+    models: [
+      {
+        name: "Sportage / Sorento",
+        engines: ["Todos los motores", "2.0L / 2.4L I4 Gasolina", "3.3L / 3.5L V6", "2.2L CRDi Diésel"]
+      },
+      {
+        name: "Rio / Cerato / Picanto",
+        engines: ["Todos los motores", "1.6L / 2.0L I4 Gasolina", "1.2L / 1.4L I4"]
+      },
+      {
+        name: "Otro modelo Kia",
+        engines: ["Todos los motores", "Gasolina", "Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Mitsubishi",
+    models: [
+      {
+        name: "Montero / Dakar / Sport",
+        engines: ["Todos los motores", "3.0L / 3.5L / 3.8L V6 Gasolina", "3.2L / 2.5L DI-D Turbo Diésel"]
+      },
+      {
+        name: "L200 / Sportero",
+        engines: ["Todos los motores", "2.5L / 2.4L DI-D Turbo Diésel", "2.4L Gasolina"]
+      },
+      {
+        name: "Lancer / Signo",
+        engines: ["Todos los motores", "1.6L / 2.0L I4 Gasolina", "1.3L / 1.5L Gasolina"]
+      },
+      {
+        name: "Otro modelo Mitsubishi",
+        engines: ["Todos los motores", "Gasolina V6", "Gasolina 4 Cilindros", "Turbo Diésel"]
+      }
+    ]
+  },
+  {
+    name: "BMW",
+    models: [
+      {
+        name: "Serie 3 / Serie 5 / X3 / X5",
+        engines: ["Todos los motores", "2.0L Turbo 4 Cilindros", "3.0L Turbo 6 Cilindros", "4.4L V8 Twin-Turbo"]
+      },
+      {
+        name: "Otro modelo BMW",
+        engines: ["Todos los motores", "Gasolina Turbo", "Diésel"]
+      }
+    ]
+  },
+  {
+    name: "Mercedes-Benz",
+    models: [
+      {
+        name: "Clase C / Clase E / GLC / GLE",
+        engines: ["Todos los motores", "2.0L Turbo 4 Cilindros", "3.0L V6 / I6 Biturbo", "4.0L V8 Biturbo AMG"]
+      },
+      {
+        name: "Otro modelo Mercedes-Benz",
+        engines: ["Todos los motores", "Gasolina", "Diésel"]
+      }
+    ]
+  }
+];
+
 export const VEHICLE_MODELS = [
   { name: "Todos", label: "Todos los Vehículos" },
   { name: "Jeep", label: "Jeep (Wrangler / Cherokee)" },
@@ -374,6 +835,59 @@ export default function Catalogo() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedBrand, setSelectedBrand] = useState<string>("Todas");
   const [selectedVehicle, setSelectedVehicle] = useState<string>("Todos");
+
+  // Step-by-Step Vehicle Selector State (Marca -> Modelo -> Motor)
+  const [selectedVehicleBrand, setSelectedVehicleBrand] = useState<string>("");
+  const [selectedVehicleModel, setSelectedVehicleModel] = useState<string>("");
+  const [selectedVehicleEngine, setSelectedVehicleEngine] = useState<string>("");
+  const [appliedVehicleFilter, setAppliedVehicleFilter] = useState<{
+    brand: string;
+    model: string;
+    engine: string;
+  } | null>(null);
+
+  const currentBrandObj = useMemo(() => {
+    return VEHICLE_CATALOG_DATA.find(b => b.name === selectedVehicleBrand);
+  }, [selectedVehicleBrand]);
+
+  const availableModels = useMemo(() => {
+    return currentBrandObj ? currentBrandObj.models : [];
+  }, [currentBrandObj]);
+
+  const currentModelObj = useMemo(() => {
+    return availableModels.find(m => m.name === selectedVehicleModel);
+  }, [availableModels, selectedVehicleModel]);
+
+  const availableEngines = useMemo(() => {
+    return currentModelObj ? currentModelObj.engines : [];
+  }, [currentModelObj]);
+
+  const handleVehicleSearch = () => {
+    if (!selectedVehicleBrand) {
+      setAppliedVehicleFilter(null);
+      setSelectedVehicle("Todos");
+      return;
+    }
+    setAppliedVehicleFilter({
+      brand: selectedVehicleBrand,
+      model: selectedVehicleModel,
+      engine: selectedVehicleEngine
+    });
+    setSelectedVehicle(selectedVehicleBrand);
+    const resultsEl = document.getElementById('catalogo-results-anchor') || document.getElementById('catalogo-grid');
+    if (resultsEl) {
+      resultsEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const clearVehicleFilter = () => {
+    setSelectedVehicleBrand("");
+    setSelectedVehicleModel("");
+    setSelectedVehicleEngine("");
+    setAppliedVehicleFilter(null);
+    setSelectedVehicle("Todos");
+  };
+
   const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'stock' | 'usa'>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
   const [copiedPartId, setCopiedPartId] = useState<number | null>(null);
@@ -396,6 +910,10 @@ export default function Catalogo() {
     setSelectedCategory("Todos");
     setSelectedBrand("Todas");
     setSelectedVehicle("Todos");
+    setSelectedVehicleBrand("");
+    setSelectedVehicleModel("");
+    setSelectedVehicleEngine("");
+    setAppliedVehicleFilter(null);
     setAvailabilityFilter("all");
     setSortBy("featured");
     setSearchQuery("");
@@ -770,9 +1288,43 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         item.title.toLowerCase().includes(selectedBrand.toLowerCase()) ||
         (item.desc && item.desc.toLowerCase().includes(selectedBrand.toLowerCase()));
 
-      // 3. Vehicle compatibility filter
-      const matchesVehicle = selectedVehicle === "Todos" ||
-        (item.compatibility && item.compatibility.toLowerCase().includes(selectedVehicle.toLowerCase()));
+      // 3. Vehicle compatibility filter (from step selector or legacy)
+      let matchesVehicle = true;
+      if (appliedVehicleFilter && appliedVehicleFilter.brand) {
+        const brandNorm = appliedVehicleFilter.brand.toLowerCase();
+        const modelNorm = appliedVehicleFilter.model ? appliedVehicleFilter.model.toLowerCase() : "";
+
+        const compNorm = (item.compatibility || "").toLowerCase();
+        const titleNorm = item.title.toLowerCase();
+        const descNorm = (item.desc || "").toLowerCase();
+        const longDescNorm = (item.longDesc || "").toLowerCase();
+        const specsNorm = (item.specs || []).join(" ").toLowerCase();
+
+        const isUniversal = compNorm.includes("universal") || 
+                            compNorm.includes("multimarca") || 
+                            compNorm.includes("todos") ||
+                            compNorm.includes("japoneses, americanos") ||
+                            compNorm.includes("vehículos livianos") ||
+                            compNorm.includes("camionetas, suvs");
+
+        const brandInItem = compNorm.includes(brandNorm) || 
+                            titleNorm.includes(brandNorm) || 
+                            descNorm.includes(brandNorm) ||
+                            longDescNorm.includes(brandNorm);
+
+        if (modelNorm && !modelNorm.includes("todos")) {
+          const cleanModel = modelNorm.split('(')[0].trim().toLowerCase();
+          const modelInItem = compNorm.includes(cleanModel) || 
+                              titleNorm.includes(cleanModel) || 
+                              descNorm.includes(cleanModel) || 
+                              specsNorm.includes(cleanModel);
+          matchesVehicle = isUniversal || (brandInItem && (modelInItem || !compNorm.includes('(')));
+        } else {
+          matchesVehicle = isUniversal || brandInItem;
+        }
+      } else if (selectedVehicle !== "Todos") {
+        matchesVehicle = (item.compatibility && item.compatibility.toLowerCase().includes(selectedVehicle.toLowerCase()));
+      }
 
       // 4. Availability filter
       const matchesAvailability = availabilityFilter === 'all' ||
@@ -800,17 +1352,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
     }
 
     return result;
-  }, [catalogItems, selectedCategory, selectedBrand, selectedVehicle, availabilityFilter, sortBy, searchQuery]);
+  }, [catalogItems, selectedCategory, selectedBrand, selectedVehicle, appliedVehicleFilter, availabilityFilter, sortBy, searchQuery]);
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (selectedCategory !== "Todos") count++;
     if (selectedBrand !== "Todas") count++;
-    if (selectedVehicle !== "Todos") count++;
+    if (appliedVehicleFilter !== null || selectedVehicle !== "Todos") count++;
     if (availabilityFilter !== "all") count++;
     if (searchQuery.trim() !== "") count++;
     return count;
-  }, [selectedCategory, selectedBrand, selectedVehicle, availabilityFilter, searchQuery]);
+  }, [selectedCategory, selectedBrand, selectedVehicle, appliedVehicleFilter, availabilityFilter, searchQuery]);
 
   const getWhatsAppMessage = (productName: string, price: string, partNumber?: string, isImportedUSA?: boolean, stock?: number) => {
     const partInfo = partNumber ? ` (N° Parte OEM: ${partNumber})` : '';
@@ -1216,105 +1768,175 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           <div style={{ display: isCatalogLoading ? 'none' : undefined }}>
 
-          {/* OEM BRANDS SELECTOR STRIP */}
-          <div className="space-y-2.5 bg-slate-50/70 dark:bg-white/[0.02] p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/5">
-            <div className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <ShieldCheck size={14} className="text-red-600" />
-                <span className="font-black uppercase tracking-wider text-slate-900 dark:text-white text-[11px]">
-                  Marcas OEM Certificadas
-                </span>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:inline">
-                  (Selecciona para filtrar por fabricante)
-                </span>
+          {/* ========================================================================= */}
+          {/* 3-STEP VEHICLE SELECTOR WIDGET (MARCA -> MODELO -> MOTOR -> BUSCAR)       */}
+          {/* ========================================================================= */}
+          <div className="bg-white dark:bg-[#12141a] rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-7 shadow-sm">
+            <div className="max-w-2xl mx-auto space-y-3.5">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-2">
+                Seleccione su modelo de vehículo para buscar repuestos
+              </h3>
+
+              {/* Step 1: Elija una marca */}
+              <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
+                selectedVehicleBrand ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+              }`}>
+                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                  <span className="w-7 h-7 rounded-full bg-[#ff5500] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-sm">
+                    1
+                  </span>
+                  <span className={`text-sm truncate ${selectedVehicleBrand ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
+                    {selectedVehicleBrand ? selectedVehicleBrand : "Elija una marca"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 shrink-0 pl-3">
+                  <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                  <ChevronDown size={18} className="text-slate-400" />
+                </div>
+                <select
+                  value={selectedVehicleBrand}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSelectedVehicleBrand(val);
+                    setSelectedVehicleModel("");
+                    setSelectedVehicleEngine("");
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base"
+                  aria-label="Elija una marca"
+                >
+                  <option value="">Elija una marca</option>
+                  {VEHICLE_CATALOG_DATA.map(b => (
+                    <option key={b.name} value={b.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
+                      {b.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-              {selectedBrand !== 'Todas' && (
+
+              {/* Step 2: Elija un modelo */}
+              <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
+                !selectedVehicleBrand 
+                  ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
+                  : selectedVehicleModel 
+                    ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
+                    : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+              }`}>
+                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                  <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
+                    selectedVehicleBrand 
+                      ? 'bg-[#ff5500] text-white' 
+                      : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
+                  }`}>
+                    2
+                  </span>
+                  <span className={`text-sm truncate ${
+                    !selectedVehicleBrand 
+                      ? 'text-slate-400 dark:text-slate-500' 
+                      : selectedVehicleModel 
+                        ? 'font-bold text-slate-900 dark:text-white' 
+                        : 'text-slate-700 dark:text-slate-300'
+                  }`}>
+                    {selectedVehicleModel ? selectedVehicleModel : "Elija un modelo"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 shrink-0 pl-3">
+                  <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                  <ChevronDown size={18} className="text-slate-400" />
+                </div>
+                <select
+                  disabled={!selectedVehicleBrand}
+                  value={selectedVehicleModel}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSelectedVehicleModel(val);
+                    setSelectedVehicleEngine("");
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
+                  aria-label="Elija un modelo"
+                >
+                  <option value="">Elija un modelo</option>
+                  {availableModels.map(m => (
+                    <option key={m.name} value={m.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Step 3: Elija un tipo de motor */}
+              <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
+                !selectedVehicleModel 
+                  ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
+                  : selectedVehicleEngine 
+                    ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
+                    : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+              }`}>
+                <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                  <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
+                    selectedVehicleModel 
+                      ? 'bg-[#ff5500] text-white' 
+                      : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
+                  }`}>
+                    3
+                  </span>
+                  <span className={`text-sm truncate ${
+                    !selectedVehicleModel 
+                      ? 'text-slate-400 dark:text-slate-500' 
+                      : selectedVehicleEngine 
+                        ? 'font-bold text-slate-900 dark:text-white' 
+                        : 'text-slate-700 dark:text-slate-300'
+                  }`}>
+                    {selectedVehicleEngine ? selectedVehicleEngine : "Elija un tipo de motor"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 shrink-0 pl-3">
+                  <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                  <ChevronDown size={18} className="text-slate-400" />
+                </div>
+                <select
+                  disabled={!selectedVehicleModel}
+                  value={selectedVehicleEngine}
+                  onChange={(e) => setSelectedVehicleEngine(e.target.value)}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
+                  aria-label="Elija un tipo de motor"
+                >
+                  <option value="">Elija un tipo de motor</option>
+                  {availableEngines.map(eng => (
+                    <option key={eng} value={eng} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
+                      {eng}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Search Action Button */}
+              <button
+                type="button"
+                onClick={handleVehicleSearch}
+                className="w-full py-3.5 px-6 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] active:bg-[#004080] text-white font-bold text-base transition-all shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-2"
+              >
+                <Search size={18} />
+                <span>Buscar</span>
+              </button>
+
+              {/* Bottom Link: ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO? */}
+              <div className="text-center pt-2">
                 <button
                   type="button"
-                  onClick={() => setSelectedBrand('Todas')}
-                  className="text-[11px] font-bold text-red-600 hover:underline cursor-pointer flex items-center gap-1"
+                  onClick={() => {
+                    setUsaForm(prev => ({
+                      ...prev,
+                      brand: selectedVehicleBrand || prev.brand,
+                      model: selectedVehicleModel || prev.model,
+                      engine: selectedVehicleEngine || prev.engine
+                    }));
+                    setIsUsaModalOpen(true);
+                  }}
+                  className="text-[#0066cc] dark:text-sky-400 hover:underline font-bold text-xs sm:text-sm tracking-wide uppercase cursor-pointer"
                 >
-                  <RotateCcw size={11} />
-                  <span>Ver todas las marcas</span>
+                  ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO?
                 </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-red-500/20 scrollbar-track-transparent">
-              {OEM_BRANDS.map((brand) => {
-                const isSelected = selectedBrand === brand.name;
-                const count = brand.name === "Todas"
-                  ? catalogItems.length
-                  : catalogItems.filter(item => 
-                      (item.badge && item.badge.toLowerCase().includes(brand.name.toLowerCase())) ||
-                      item.title.toLowerCase().includes(brand.name.toLowerCase()) ||
-                      (item.desc && item.desc.toLowerCase().includes(brand.name.toLowerCase()))
-                    ).length;
-
-                return (
-                  <button
-                    key={brand.name}
-                    type="button"
-                    onClick={() => setSelectedBrand(brand.name)}
-                    className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border ${
-                      isSelected
-                        ? 'bg-red-600 text-white border-red-500 shadow-md shadow-red-600/30'
-                        : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-red-500/50 hover:bg-slate-50 dark:hover:bg-[#181a24]'
-                    }`}
-                  >
-                    <span>{brand.label}</span>
-                    {brand.origin && (
-                      <span className={`text-[9px] uppercase tracking-wider font-semibold opacity-75 hidden md:inline ${isSelected ? 'text-white' : 'text-slate-400'}`}>
-                        · {brand.origin.split('·')[0]}
-                      </span>
-                    )}
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                      isSelected 
-                        ? 'bg-black/30 text-white' 
-                        : 'bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400'
-                    }`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* VEHICLE COMPATIBILITY BAR */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/70 dark:bg-white/[0.02] p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-white/5">
-            <div className="flex items-center gap-2 shrink-0">
-              <Car size={15} className="text-red-600" />
-              <span className="font-black uppercase tracking-wider text-slate-900 dark:text-white text-[11px]">
-                Compatibilidad:
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-thin">
-              {VEHICLE_MODELS.map((veh) => {
-                const isSelected = selectedVehicle === veh.name;
-                const count = veh.name === 'Todos'
-                  ? catalogItems.length
-                  : catalogItems.filter(item => item.compatibility && item.compatibility.toLowerCase().includes(veh.name.toLowerCase())).length;
-
-                return (
-                  <button
-                    key={veh.name}
-                    type="button"
-                    onClick={() => setSelectedVehicle(veh.name)}
-                    className={`shrink-0 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
-                      isSelected
-                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-sm'
-                        : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/20'
-                    }`}
-                  >
-                    <span>{veh.name}</span>
-                    <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-red-400 dark:text-red-600' : 'text-slate-400'}`}>
-                      ({count})
-                    </span>
-                  </button>
-                );
-              })}
+              </div>
             </div>
           </div>
 
@@ -1384,14 +2006,26 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 </span>
               )}
 
-              {selectedVehicle !== "Todos" && (
+              {appliedVehicleFilter ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
+                  <Car size={12} className="text-red-600" />
+                  <span>
+                    Vehículo: <strong>{appliedVehicleFilter.brand}</strong>
+                    {appliedVehicleFilter.model && ` · ${appliedVehicleFilter.model}`}
+                    {appliedVehicleFilter.engine && appliedVehicleFilter.engine !== "Todos los motores" && ` (${appliedVehicleFilter.engine})`}
+                  </span>
+                  <button onClick={clearVehicleFilter} className="hover:text-red-500 cursor-pointer ml-1" title="Quitar filtro de vehículo">
+                    <X size={11} />
+                  </button>
+                </span>
+              ) : selectedVehicle !== "Todos" ? (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
                   Vehículo: {selectedVehicle}
                   <button onClick={() => setSelectedVehicle("Todos")} className="hover:text-red-500 cursor-pointer ml-1">
                     <X size={11} />
                   </button>
                 </span>
-              )}
+              ) : null}
 
               {availabilityFilter !== "all" && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[11px] font-semibold">
@@ -1424,11 +2058,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           {/* Products Grid */}
           {filteredItems.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-3xl max-w-md mx-auto shadow-sm">
+            <div className="flex flex-col items-center justify-center text-center py-16 px-6 bg-white dark:bg-[#12141a] border border-zinc-200 dark:border-white/10 rounded-3xl max-w-lg mx-auto shadow-sm">
               <Package size={44} className="text-zinc-400 mb-4 stroke-[1.5]" />
-              <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">No encontramos coincidencias</h3>
-              <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm max-w-xs mb-6 leading-relaxed">
-                Prueba ajustando los filtros de marca o categoría, o consúltanos directamente por WhatsApp con tu serial VIN o código de parte.
+              <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
+                {appliedVehicleFilter 
+                  ? `Sin stock inmediato para ${appliedVehicleFilter.brand} ${appliedVehicleFilter.model || ''}`
+                  : "No encontramos coincidencias"}
+              </h3>
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm max-w-sm mb-6 leading-relaxed">
+                {appliedVehicleFilter 
+                  ? `No tenemos esta pieza en stock físico en Margarita ahora mismo, pero la importamos express desde Miami con código OEM o VIN en 7 a 15 días.`
+                  : "Prueba ajustando los filtros de búsqueda o consúltanos directamente por WhatsApp con tu serial VIN o código de parte."}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button 
@@ -1441,11 +2081,21 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 </button>
                 <button
                   type="button"
-                  onClick={() => setIsUsaModalOpen(true)}
+                  onClick={() => {
+                    if (appliedVehicleFilter) {
+                      setUsaForm(prev => ({
+                        ...prev,
+                        brand: appliedVehicleFilter.brand,
+                        model: appliedVehicleFilter.model,
+                        engine: appliedVehicleFilter.engine
+                      }));
+                    }
+                    setIsUsaModalOpen(true);
+                  }}
                   className="btn-primary inline-flex items-center justify-center !py-2.5 !px-5 text-xs font-bold rounded-xl"
                 >
                   <Plane size={13} className="mr-1.5" />
-                  Pedir por Encargo USA
+                  {appliedVehicleFilter ? `Pedir para ${appliedVehicleFilter.brand} (USA)` : "Pedir por Encargo USA"}
                 </button>
               </div>
             </div>
