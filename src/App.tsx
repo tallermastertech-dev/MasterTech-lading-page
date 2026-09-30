@@ -371,31 +371,41 @@ export default function App() {
 
   const processedJornadas = React.useMemo(() => {
     const list = (jornadasList && jornadasList.length > 0) ? jornadasList : DEFAULT_JORNADAS;
+    const targetId = (config.PROMO_BAR_TARGET_ID || '').trim();
     return list.map((item: any) => ({
       ...item,
       promoType: 'jornada' as const,
-      discountPct: getPromoDiscountPct(item)
-    })).sort((a: any, b: any) => b.discountPct - a.discountPct);
-  }, [jornadasList]);
+      discountPct: getPromoDiscountPct(item),
+      isSelectedPromo: targetId ? (String(item.id) === targetId) : false
+    })).sort((a: any, b: any) => {
+      if (a.isSelectedPromo && !b.isSelectedPromo) return -1;
+      if (!a.isSelectedPromo && b.isSelectedPromo) return 1;
+      return b.discountPct - a.discountPct;
+    });
+  }, [jornadasList, config.PROMO_BAR_TARGET_ID]);
 
   const processedRepuestos = React.useMemo(() => {
     const list = (catalogList && catalogList.length > 0) ? catalogList : DEFAULT_CATALOG;
+    const targetId = (config.PROMO_BAR_TARGET_ID || '').trim();
     return list.map((item: any) => ({
       ...item,
       promoType: 'repuesto' as const,
       promoPrice: item.promoPrice || item.price,
-      discountPct: getPromoDiscountPct(item)
+      discountPct: getPromoDiscountPct(item),
+      isSelectedPromo: targetId ? (String(item.id) === targetId || item.partNumber === targetId) : false
     })).sort((a: any, b: any) => {
+      if (a.isSelectedPromo && !b.isSelectedPromo) return -1;
+      if (!a.isSelectedPromo && b.isSelectedPromo) return 1;
       if (b.discountPct !== a.discountPct) return b.discountPct - a.discountPct;
-      if (b.isPromo && !a.isPromo) return 1;
-      if (!b.isPromo && a.isPromo) return -1;
+      if (b.isPromo && !a.isPromo) return -1;
+      if (!b.isPromo && a.isPromo) return 1;
       return 0;
     });
-  }, [catalogList]);
+  }, [catalogList, config.PROMO_BAR_TARGET_ID]);
 
   // Selected Active Promotion for the Flash Notification Bar based on Admin Mode
   const activePromo = React.useMemo(() => {
-    const mode = (config.PROMO_BAR_MODE || 'jornadas').toLowerCase();
+    const mode = (config.PROMO_BAR_MODE || 'auto').toLowerCase();
     const targetId = (config.PROMO_BAR_TARGET_ID || '').trim();
 
     if (targetId) {
@@ -428,6 +438,18 @@ export default function App() {
     }
     return bestJ || bestR || null;
   }, [config.PROMO_BAR_MODE, config.PROMO_BAR_TARGET_ID, processedJornadas, processedRepuestos]);
+
+  // Synchronize the default active tab of the Home Page Promotion Section with the Admin Selection
+  useEffect(() => {
+    const mode = (config.PROMO_BAR_MODE || '').toLowerCase();
+    if (mode === 'repuestos') {
+      setPromoSectionTab('repuestos');
+    } else if (mode === 'jornadas') {
+      setPromoSectionTab('jornadas');
+    } else if (activePromo?.promoType) {
+      setPromoSectionTab(activePromo.promoType === 'repuesto' ? 'repuestos' : 'jornadas');
+    }
+  }, [config.PROMO_BAR_MODE, activePromo?.promoType]);
 
   const scrollToPromo = (promoId?: string) => {
     if (activePromo?.promoType === 'repuesto') {
@@ -1032,12 +1054,12 @@ export default function App() {
                 {activePromo.promoType === 'repuesto' ? (
                   <>
                     <Package size={14} className="text-amber-400" />
-                    <span>OFERTA EN REPUESTO OEM</span>
+                    <span>{config.PROMO_BAR_BADGE_TEXT || "OFERTA EN REPUESTO OEM"}</span>
                   </>
                 ) : (
                   <>
                     <Flame size={14} className="text-amber-400 animate-pulse" />
-                    <span>OFERTA DESTACADA</span>
+                    <span>{config.PROMO_BAR_BADGE_TEXT || "OFERTA DESTACADA"}</span>
                   </>
                 )}
               </span>
@@ -1067,14 +1089,14 @@ export default function App() {
                     href={`/catalogo?search=${encodeURIComponent(activePromo.partNumber || activePromo.title)}`}
                     className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
                   >
-                    <span>Ver Repuesto</span>
+                    <span>{config.PROMO_BAR_BTN_TEXT || "Ver Repuesto"}</span>
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </a>
                   <a
                     href="/catalogo"
                     className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1"
                   >
-                    <span>Catálogo de repuestos</span>
+                    <span>{config.PROMO_BAR_LINK_TEXT || "Catálogo de repuestos"}</span>
                   </a>
                 </>
               ) : (
@@ -1084,7 +1106,7 @@ export default function App() {
                     onClick={() => scrollToPromo(activePromo.id)}
                     className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
                   >
-                    <span>Aprovechar Descuento</span>
+                    <span>{config.PROMO_BAR_BTN_TEXT || "Aprovechar Descuento"}</span>
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </button>
                   <button
@@ -1092,7 +1114,7 @@ export default function App() {
                     onClick={() => scrollToPromo()}
                     className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1 cursor-pointer"
                   >
-                    <span>Ver todas</span>
+                    <span>{config.PROMO_BAR_LINK_TEXT || "Ver todas"}</span>
                   </button>
                 </>
               )}
@@ -1208,15 +1230,17 @@ export default function App() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider mb-3">
                 <Flame size={14} className="text-red-500 animate-pulse" />
-                <span>OFERTAS Y PROMOCIONES VIGENTES</span>
+                <span>{config.PROMO_SECTION_BADGE || "OFERTAS Y PROMOCIONES VIGENTES"}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                {promoSectionTab === 'jornadas' ? 'Jornadas VIP y Descuentos Especiales' : 'Ofertas en Repuestos OEM y Accesorios'}
+                {promoSectionTab === 'jornadas'
+                  ? (config.PROMO_SECTION_TITLE_JORNADAS || 'Jornadas VIP y Descuentos Especiales')
+                  : (config.PROMO_SECTION_TITLE_REPUESTOS || 'Ofertas en Repuestos OEM y Accesorios')}
               </h2>
               <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
                 {promoSectionTab === 'jornadas'
-                  ? 'Cupos limitados con precios promocionales en reprogramación de software, soluciones de emisiones y confort automotriz garantizado en Margarita.'
-                  : 'Descuentos exclusivos en repuestos originales OEM certificados, sensores de asistencia avanzada e insumos automotrices garantizados.'}
+                  ? (config.PROMO_SECTION_DESC_JORNADAS || 'Cupos limitados con precios promocionales en reprogramación de software, soluciones de emisiones y confort automotriz garantizado en Margarita.')
+                  : (config.PROMO_SECTION_DESC_REPUESTOS || 'Descuentos exclusivos en repuestos originales OEM certificados, sensores de asistencia avanzada e insumos automotrices garantizados.')}
               </p>
             </div>
 
@@ -1278,7 +1302,7 @@ export default function App() {
                   : 'https://wa.me/584123565012';
                 const waMessage = `Hola Taller MasterTech, deseo agendar la promoción de ${item.title} con el precio especial de ${item.promoPrice || 'descuento'}.`;
                 const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
-                const isTop = idx === 0 && item.discountPct > 0;
+                const isTop = idx === 0 && (item.discountPct > 0 || item.isSelectedPromo);
 
                 return (
                   <div 
@@ -1290,11 +1314,11 @@ export default function App() {
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                     }`}
                   >
-                    {/* Top highlight badge for maximum discount */}
+                    {/* Top highlight badge for maximum discount or selected promo */}
                     {isTop && (
                       <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
                         <Flame size={13} className="text-amber-300 animate-pulse" />
-                        <span>MAYOR DESCUENTO ACTIVO</span>
+                        <span>{item.isSelectedPromo ? "OFERTA DESTACADA EN PORTADA" : "MAYOR DESCUENTO ACTIVO"}</span>
                       </div>
                     )}
 
@@ -1398,7 +1422,7 @@ export default function App() {
                   : 'https://wa.me/584123565012';
                 const waMessage = `Hola Taller MasterTech, deseo consultar la oferta del repuesto: ${item.title} (OEM ${item.partNumber || 'N/A'}) con el precio especial de ${item.promoPrice || item.price}.`;
                 const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
-                const isTop = idx === 0 && item.discountPct > 0;
+                const isTop = idx === 0 && (item.discountPct > 0 || item.isSelectedPromo);
 
                 return (
                   <div 
@@ -1414,7 +1438,7 @@ export default function App() {
                     {isTop && (
                       <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
                         <Flame size={13} className="text-amber-300 animate-pulse" />
-                        <span>MEJOR DESCUENTO EN REPUESTOS</span>
+                        <span>{item.isSelectedPromo ? "OFERTA DESTACADA EN PORTADA" : "MEJOR DESCUENTO EN REPUESTOS"}</span>
                       </div>
                     )}
 

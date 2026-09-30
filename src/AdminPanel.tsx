@@ -6717,22 +6717,31 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               )}
 
               {/* Configuración de la Barra Flash Superior (Página Principal) */}
+              {/* Configuración de la Barra Flash Superior & Sección de Promociones (Página Principal) */}
               <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
                   <div>
                     <h3 className="text-xs font-black uppercase text-red-400 tracking-wider flex items-center gap-2">
                       <Flame size={16} className="text-amber-400 animate-pulse" />
-                      <span>Barra Superior de Oferta Flash (Página Principal)</span>
+                      <span>Barra Superior de Oferta Flash & Sección de Promociones (Página Principal)</span>
                     </h3>
                     <p className="text-[11px] text-zinc-400 mt-0.5">
-                      Define qué promoción destacada aparecerá fija en la barra superior de la portada web.
+                      Define qué promoción destacada aparecerá en la portada y edita los títulos y textos de la sección.
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleSaveSection('promobar', {
                       PROMO_BAR_MODE: settingsForm.PROMO_BAR_MODE || 'auto',
-                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || ''
+                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_SECTION_BADGE: settingsForm.PROMO_SECTION_BADGE || '',
+                      PROMO_SECTION_TITLE_JORNADAS: settingsForm.PROMO_SECTION_TITLE_JORNADAS || '',
+                      PROMO_SECTION_DESC_JORNADAS: settingsForm.PROMO_SECTION_DESC_JORNADAS || '',
+                      PROMO_SECTION_TITLE_REPUESTOS: settingsForm.PROMO_SECTION_TITLE_REPUESTOS || '',
+                      PROMO_SECTION_DESC_REPUESTOS: settingsForm.PROMO_SECTION_DESC_REPUESTOS || '',
+                      PROMO_BAR_BADGE_TEXT: settingsForm.PROMO_BAR_BADGE_TEXT || '',
+                      PROMO_BAR_BTN_TEXT: settingsForm.PROMO_BAR_BTN_TEXT || '',
+                      PROMO_BAR_LINK_TEXT: settingsForm.PROMO_BAR_LINK_TEXT || ''
                     })}
                     disabled={savingSection === 'promobar'}
                     className="btn-primary !py-2 !px-4 text-xs font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer shrink-0"
@@ -6745,7 +6754,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 {savedSectionSuccess === 'promobar' && (
                   <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
                     <CheckCircle2 size={16} />
-                    <span>¡Configuración de la Barra Flash guardada con éxito e integrada en la portada!</span>
+                    <span>¡Configuración y textos guardados con éxito e integrados en la portada!</span>
                   </div>
                 )}
 
@@ -6764,7 +6773,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <option value="jornadas">Jornadas de Servicio (Solo promociones de servicios VIP)</option>
                     </select>
                     <span className="text-[10px] text-zinc-500 mt-1 block">
-                      En modo &quot;Automático&quot;, el sistema calcula la oferta con más porcentaje de descuento y la muestra en la portada.
+                      En modo &quot;Automático&quot;, el sistema calcula la oferta con más descuento y sincroniza la portada.
                     </span>
                   </div>
 
@@ -6798,8 +6807,120 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       )}
                     </select>
                     <span className="text-[10px] text-zinc-500 mt-1 block">
-                      Puedes fijar un repuesto específico (ej: Sensor Radar OEM) o dejarlo automático.
+                      Puedes fijar un repuesto específico o dejarlo automático.
                     </span>
+                  </div>
+                </div>
+
+                {/* Subsección: Textos Modificables de la Sección en Portada */}
+                <div className="border-t border-white/10 pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-300">
+                    <Tag size={13} className="text-red-400" />
+                    <span>Textos de la Sección de Promociones (Portada)</span>
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1 text-[11px]">
+                      Distintivo Superior de la Sección
+                    </label>
+                    <input
+                      type="text"
+                      value={settingsForm.PROMO_SECTION_BADGE || ''}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_BADGE: e.target.value })}
+                      placeholder="OFERTAS Y PROMOCIONES VIGENTES"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-white text-xs outline-none focus:border-red-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div className="space-y-2 bg-black/30 p-3 rounded-xl border border-white/5">
+                      <span className="text-[10px] uppercase font-black text-amber-400 tracking-wider block">Vista: Jornadas VIP</span>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Título de la Sección</label>
+                        <input
+                          type="text"
+                          value={settingsForm.PROMO_SECTION_TITLE_JORNADAS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_TITLE_JORNADAS: e.target.value })}
+                          placeholder="Jornadas VIP y Descuentos Especiales"
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Descripción de la Sección</label>
+                        <textarea
+                          rows={2}
+                          value={settingsForm.PROMO_SECTION_DESC_JORNADAS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_DESC_JORNADAS: e.target.value })}
+                          placeholder="Cupos limitados con precios promocionales en reprogramación de software..."
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500 resize-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 bg-black/30 p-3 rounded-xl border border-white/5">
+                      <span className="text-[10px] uppercase font-black text-rose-400 tracking-wider block">Vista: Repuestos OEM</span>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Título de la Sección</label>
+                        <input
+                          type="text"
+                          value={settingsForm.PROMO_SECTION_TITLE_REPUESTOS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_TITLE_REPUESTOS: e.target.value })}
+                          placeholder="Ofertas en Repuestos OEM y Accesorios"
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Descripción de la Sección</label>
+                        <textarea
+                          rows={2}
+                          value={settingsForm.PROMO_SECTION_DESC_REPUESTOS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_DESC_REPUESTOS: e.target.value })}
+                          placeholder="Descuentos exclusivos en repuestos originales OEM certificados..."
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500 resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subsección: Textos de la Barra Flash (Opcional) */}
+                <div className="border-t border-white/10 pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-300">
+                    <Flame size={13} className="text-amber-400" />
+                    <span>Personalización de Textos de la Barra Flash (Opcional)</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Texto Insignia Flash</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PROMO_BAR_BADGE_TEXT || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_BADGE_TEXT: e.target.value })}
+                        placeholder="OFERTA EN REPUESTO OEM / OFERTA DESTACADA"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Texto Botón Principal</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PROMO_BAR_BTN_TEXT || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_BTN_TEXT: e.target.value })}
+                        placeholder="Ver Repuesto / Aprovechar Descuento"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Texto Enlace Secundario</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PROMO_BAR_LINK_TEXT || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_LINK_TEXT: e.target.value })}
+                        placeholder="Catálogo de repuestos / Ver todas"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -7324,23 +7445,31 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </button>
               </div>
 
-              {/* Configuración de la Barra Flash Superior (Página Principal) */}
+              {/* Configuración de la Barra Flash Superior & Sección de Promociones (Página Principal) */}
               <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
                   <div>
                     <h3 className="text-xs font-black uppercase text-red-400 tracking-wider flex items-center gap-2">
                       <Flame size={16} className="text-amber-400 animate-pulse" />
-                      <span>Barra Superior de Oferta Flash (Página Principal)</span>
+                      <span>Barra Superior de Oferta Flash & Sección de Promociones (Página Principal)</span>
                     </h3>
                     <p className="text-[11px] text-zinc-400 mt-0.5">
-                      Define qué promoción destacada aparecerá fija en la barra superior de la portada web.
+                      Define qué promoción destacada aparecerá en la portada y edita los títulos y textos de la sección.
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleSaveSection('promobar', {
                       PROMO_BAR_MODE: settingsForm.PROMO_BAR_MODE || 'auto',
-                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || ''
+                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_SECTION_BADGE: settingsForm.PROMO_SECTION_BADGE || '',
+                      PROMO_SECTION_TITLE_JORNADAS: settingsForm.PROMO_SECTION_TITLE_JORNADAS || '',
+                      PROMO_SECTION_DESC_JORNADAS: settingsForm.PROMO_SECTION_DESC_JORNADAS || '',
+                      PROMO_SECTION_TITLE_REPUESTOS: settingsForm.PROMO_SECTION_TITLE_REPUESTOS || '',
+                      PROMO_SECTION_DESC_REPUESTOS: settingsForm.PROMO_SECTION_DESC_REPUESTOS || '',
+                      PROMO_BAR_BADGE_TEXT: settingsForm.PROMO_BAR_BADGE_TEXT || '',
+                      PROMO_BAR_BTN_TEXT: settingsForm.PROMO_BAR_BTN_TEXT || '',
+                      PROMO_BAR_LINK_TEXT: settingsForm.PROMO_BAR_LINK_TEXT || ''
                     })}
                     disabled={savingSection === 'promobar'}
                     className="btn-primary !py-2 !px-4 text-xs font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer shrink-0"
@@ -7353,7 +7482,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 {savedSectionSuccess === 'promobar' && (
                   <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
                     <CheckCircle2 size={16} />
-                    <span>¡Configuración de la Barra Flash guardada con éxito e integrada en la portada!</span>
+                    <span>¡Configuración y textos guardados con éxito e integrados en la portada!</span>
                   </div>
                 )}
 
@@ -7372,7 +7501,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <option value="repuestos">Catálogo de Repuestos OEM (Solo ofertas de repuestos)</option>
                     </select>
                     <span className="text-[10px] text-zinc-500 mt-1 block">
-                      En modo &quot;Automático&quot;, el sistema calcula la oferta con más porcentaje de descuento y la muestra en la portada.
+                      En modo &quot;Automático&quot;, el sistema calcula la oferta con más descuento y sincroniza la portada.
                     </span>
                   </div>
 
@@ -7408,6 +7537,118 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <span className="text-[10px] text-zinc-500 mt-1 block">
                       Puedes fijar una jornada específica o dejarlo en automático.
                     </span>
+                  </div>
+                </div>
+
+                {/* Subsección: Textos Modificables de la Sección en Portada */}
+                <div className="border-t border-white/10 pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-300">
+                    <Tag size={13} className="text-red-400" />
+                    <span>Textos de la Sección de Promociones (Portada)</span>
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1 text-[11px]">
+                      Distintivo Superior de la Sección
+                    </label>
+                    <input
+                      type="text"
+                      value={settingsForm.PROMO_SECTION_BADGE || ''}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_BADGE: e.target.value })}
+                      placeholder="OFERTAS Y PROMOCIONES VIGENTES"
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2 text-white text-xs outline-none focus:border-red-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div className="space-y-2 bg-black/30 p-3 rounded-xl border border-white/5">
+                      <span className="text-[10px] uppercase font-black text-amber-400 tracking-wider block">Vista: Jornadas VIP</span>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Título de la Sección</label>
+                        <input
+                          type="text"
+                          value={settingsForm.PROMO_SECTION_TITLE_JORNADAS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_TITLE_JORNADAS: e.target.value })}
+                          placeholder="Jornadas VIP y Descuentos Especiales"
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Descripción de la Sección</label>
+                        <textarea
+                          rows={2}
+                          value={settingsForm.PROMO_SECTION_DESC_JORNADAS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_DESC_JORNADAS: e.target.value })}
+                          placeholder="Cupos limitados con precios promocionales en reprogramación de software..."
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500 resize-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 bg-black/30 p-3 rounded-xl border border-white/5">
+                      <span className="text-[10px] uppercase font-black text-rose-400 tracking-wider block">Vista: Repuestos OEM</span>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Título de la Sección</label>
+                        <input
+                          type="text"
+                          value={settingsForm.PROMO_SECTION_TITLE_REPUESTOS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_TITLE_REPUESTOS: e.target.value })}
+                          placeholder="Ofertas en Repuestos OEM y Accesorios"
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Descripción de la Sección</label>
+                        <textarea
+                          rows={2}
+                          value={settingsForm.PROMO_SECTION_DESC_REPUESTOS || ''}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_SECTION_DESC_REPUESTOS: e.target.value })}
+                          placeholder="Descuentos exclusivos en repuestos originales OEM certificados..."
+                          className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500 resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subsección: Textos de la Barra Flash (Opcional) */}
+                <div className="border-t border-white/10 pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-300">
+                    <Flame size={13} className="text-amber-400" />
+                    <span>Personalización de Textos de la Barra Flash (Opcional)</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Texto Insignia Flash</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PROMO_BAR_BADGE_TEXT || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_BADGE_TEXT: e.target.value })}
+                        placeholder="OFERTA EN REPUESTO OEM / OFERTA DESTACADA"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Texto Botón Principal</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PROMO_BAR_BTN_TEXT || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_BTN_TEXT: e.target.value })}
+                        placeholder="Ver Repuesto / Aprovechar Descuento"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-[11px]">Texto Enlace Secundario</label>
+                      <input
+                        type="text"
+                        value={settingsForm.PROMO_BAR_LINK_TEXT || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_LINK_TEXT: e.target.value })}
+                        placeholder="Catálogo de repuestos / Ver todas"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
