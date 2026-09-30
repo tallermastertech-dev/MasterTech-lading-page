@@ -1307,8 +1307,18 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
     }
 
     const sanitizeCatalogItems = (items: any[]): any[] => {
-      if (!Array.isArray(items)) return items;
-      return items.map(item => {
+      if (!Array.isArray(items)) return DEFAULT_CATALOG;
+      const valid = items.filter(item => {
+        if (!item) return false;
+        const title = String(item.title || '').trim();
+        const priceStr = String(item.price || item.promoPrice || '').replace(/[^0-9.]/g, '');
+        const priceNum = parseFloat(priceStr);
+        return title.length > 0 && !isNaN(priceNum) && priceNum > 0;
+      });
+
+      const baseList = valid.length > 0 ? valid : DEFAULT_CATALOG;
+
+      return baseList.map(item => {
         let copy = { ...item };
         if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
           if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {

@@ -1819,6 +1819,39 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     return match ? match[0] : (l.cv_url || null);
   };
 
+  const sanitizeCatalogItems = (items: any[]): CatalogItem[] => {
+    if (!Array.isArray(items)) return DEFAULT_CATALOG;
+    const valid = items.filter(item => {
+      if (!item) return false;
+      const title = String(item.title || '').trim();
+      const priceStr = String(item.price || item.promoPrice || '').replace(/[^0-9.]/g, '');
+      const priceNum = parseFloat(priceStr);
+      return title.length > 0 && !isNaN(priceNum) && priceNum > 0;
+    });
+
+    const baseList = valid.length > 0 ? valid : DEFAULT_CATALOG;
+
+    return baseList.map(item => {
+      let copy = { ...item };
+      if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
+        if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {
+          copy.img = '/assets/cat_radar_tss.jpg';
+        }
+      }
+      if (copy.id === 2 || copy.partNumber === 'WAG-QC-CER-88' || (copy.title && copy.title.toLowerCase().includes('pastillas de freno cerámicas wagner'))) {
+        if (!copy.img || copy.img.includes('promo_brakes_caliper') || copy.img.includes('cat_frenos_discos')) {
+          copy.img = '/assets/cat_pastillas_freno.jpg';
+        }
+        if (!copy.regularPrice) {
+          copy.regularPrice = '$70.00';
+          copy.discountBadge = 'AHORRAS $15 USD (21% OFF)';
+          copy.isPromo = true;
+        }
+      }
+      return copy;
+    });
+  };
+
   // Catalog State
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(() => {
     try {
@@ -1826,14 +1859,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       if (s) { 
         const p = JSON.parse(s); 
         if (p.CATALOG_PRODUCTS_JSON) {
-          const items = JSON.parse(p.CATALOG_PRODUCTS_JSON);
+          const items = typeof p.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(p.CATALOG_PRODUCTS_JSON) : p.CATALOG_PRODUCTS_JSON;
           if (Array.isArray(items)) {
-            return items;
+            return sanitizeCatalogItems(items);
           }
         }
       }
     } catch (e) {}
-    return DEFAULT_CATALOG;
+    return sanitizeCatalogItems(DEFAULT_CATALOG);
   });
   const [editingProduct, setEditingProduct] = useState<CatalogItem | null>(null);
   const [isCatalogModalOpen, setIsCatalogModalOpen] = useState(false);
@@ -2119,14 +2152,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
     if (merged.CATALOG_PRODUCTS_JSON) {
       try { 
-        const p = JSON.parse(merged.CATALOG_PRODUCTS_JSON); 
+        const p = typeof merged.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(merged.CATALOG_PRODUCTS_JSON) : merged.CATALOG_PRODUCTS_JSON; 
         if (Array.isArray(p)) {
-          setCatalogItems(p);
+          const sanitized = sanitizeCatalogItems(p);
+          setCatalogItems(sanitized);
+          merged.CATALOG_PRODUCTS_JSON = JSON.stringify(sanitized);
         }
       } catch (e) {}
     } else {
       // No catalog in Supabase yet — auto-publish DEFAULT_CATALOG so the public page reads it
-      setCatalogItems(DEFAULT_CATALOG);
+      setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
       const autoPublishToken = token || localStorage.getItem('mastertech_admin_token') || '';
       if (autoPublishToken) {
         const autoPayload = { ...merged, CATALOG_PRODUCTS_JSON: JSON.stringify(DEFAULT_CATALOG) };
@@ -3082,9 +3117,19 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Catalog Item Save
   const handleSaveCatalogItem = (product: CatalogItem) => {
+    const titleTrim = String(product.title || '').trim();
+    if (!titleTrim) {
+      alert('Por favor escribe un título o nombre para el repuesto antes de guardar.');
+      return;
+    }
     const matchP = String(product.price || '').match(/(\d+(?:\.\d+)?)/);
-    const formattedPrice = matchP ? `$${parseFloat(matchP[1]).toFixed(2)}` : (product.price?.startsWith('$') ? product.price : (product.price ? `$${product.price}` : '$0.00'));
-    const cleanProduct = { ...product, price: formattedPrice };
+    const parsedVal = matchP ? parseFloat(matchP[1]) : 0;
+    if (isNaN(parsedVal) || parsedVal <= 0) {
+      alert('Por favor ingresa un precio válido mayor a $0.');
+      return;
+    }
+    const formattedPrice = `$${parsedVal.toFixed(2)}`;
+    const cleanProduct = { ...product, title: titleTrim, price: formattedPrice };
 
     const isEdit = cleanProduct.id && catalogItems.some(p => p.id === cleanProduct.id);
     let updated: CatalogItem[] = [];
@@ -3094,8 +3139,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       updated = [{ ...cleanProduct, id: Date.now() }, ...catalogItems];
     }
 
-    setCatalogItems(updated);
-    const jsonStr = JSON.stringify(updated);
+    const sanitizedUpdated = sanitizeCatalogItems(updated);
+    setCatalogItems(sanitizedUpdated);
+    const jsonStr = JSON.stringify(sanitizedUpdated);
     const updatedForm = { ...settingsForm, CATALOG_PRODUCTS_JSON: jsonStr };
     setSettingsForm(updatedForm);
     setSettings(updatedForm);
@@ -6747,7 +6793,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       PROMO_SECTION_DESC_REPUESTOS: settingsForm.PROMO_SECTION_DESC_REPUESTOS || '',
                       PROMO_BAR_BADGE_TEXT: settingsForm.PROMO_BAR_BADGE_TEXT || '',
                       PROMO_BAR_BTN_TEXT: settingsForm.PROMO_BAR_BTN_TEXT || '',
-                      PROMO_BAR_LINK_TEXT: settingsForm.PROMO_BAR_LINK_TEXT || ''
+                      PROMO_BAR_LINK_TEXT: settingsForm.PROMO_BAR_LINK_TEXT || '',
+                      CATALOG_PRODUCTS_JSON: JSON.stringify(sanitizeCatalogItems(catalogItems))
                     })}
                     disabled={savingSection === 'promobar'}
                     className="btn-primary !py-2 !px-4 text-xs font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer shrink-0"
@@ -7560,7 +7607,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       PROMO_SECTION_DESC_REPUESTOS: settingsForm.PROMO_SECTION_DESC_REPUESTOS || '',
                       PROMO_BAR_BADGE_TEXT: settingsForm.PROMO_BAR_BADGE_TEXT || '',
                       PROMO_BAR_BTN_TEXT: settingsForm.PROMO_BAR_BTN_TEXT || '',
-                      PROMO_BAR_LINK_TEXT: settingsForm.PROMO_BAR_LINK_TEXT || ''
+                      PROMO_BAR_LINK_TEXT: settingsForm.PROMO_BAR_LINK_TEXT || '',
+                      CATALOG_PRODUCTS_JSON: JSON.stringify(sanitizeCatalogItems(catalogItems))
                     })}
                     disabled={savingSection === 'promobar'}
                     className="btn-primary !py-2 !px-4 text-xs font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer shrink-0"

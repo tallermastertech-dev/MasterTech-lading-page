@@ -339,8 +339,20 @@ export default function App() {
   });
 
   const sanitizeCatalogItems = (items: any[]): any[] => {
-    if (!Array.isArray(items)) return items;
-    return items.map(item => {
+    if (!Array.isArray(items)) return DEFAULT_CATALOG;
+
+    // Filter out invalid items (blank title or price $0.00)
+    const valid = items.filter(item => {
+      if (!item) return false;
+      const title = String(item.title || '').trim();
+      const priceStr = String(item.price || item.promoPrice || '').replace(/[^0-9.]/g, '');
+      const priceNum = parseFloat(priceStr);
+      return title.length > 0 && !isNaN(priceNum) && priceNum > 0;
+    });
+
+    const baseList = valid.length > 0 ? valid : DEFAULT_CATALOG;
+
+    return baseList.map(item => {
       let copy = { ...item };
       if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
         if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {
@@ -408,7 +420,7 @@ export default function App() {
   }, [jornadasList, config.PROMO_BAR_TARGET_ID]);
 
   const processedRepuestos = React.useMemo(() => {
-    const list = (catalogList && catalogList.length > 0) ? catalogList : DEFAULT_CATALOG;
+    const list = sanitizeCatalogItems((catalogList && catalogList.length > 0) ? catalogList : DEFAULT_CATALOG);
     const mapped = list.map((item: any) => ({
       ...item,
       promoType: 'repuesto' as const,
@@ -447,7 +459,7 @@ export default function App() {
       final3 ? { ...final3, isSelectedPromo: !!slot3Id } : null,
     ].filter(Boolean);
 
-    return result.length > 0 ? result : sortedDefault;
+    return (result.length > 0 ? result : sortedDefault).slice(0, 3);
   }, [catalogList, config.PROMO_BAR_TARGET_ID, config.PROMO_REPUESTO_1, config.PROMO_REPUESTO_2, config.PROMO_REPUESTO_3]);
 
   // Selected Active Promotion for the Flash Notification Bar based on Admin Mode
