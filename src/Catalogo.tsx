@@ -1430,7 +1430,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2"
               >
                 <a 
-                  href="#catalogo-grid"
+                  href="#selector-vehiculo"
                   className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-red-600/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
                 >
                   <ShoppingCart size={16} />
@@ -1539,7 +1539,207 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         </section>
 
         {/* ========================================================================= */}
-        {/* SECTION 2: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID) */}
+        {/* SECTION 2: BUSCADOR POR VEHÍCULO (3 PASOS: MARCA -> MODELO -> MOTOR)      */}
+        {/* ========================================================================= */}
+        <section id="selector-vehiculo" className="scroll-mt-28">
+          <div className="bg-white dark:bg-[#12141a] rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-7 shadow-xl transition-colors">
+            <div className="max-w-7xl mx-auto space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#ff5500]/10 border border-[#ff5500]/30 flex items-center justify-center text-[#ff5500] shrink-0">
+                    <Car size={18} />
+                  </div>
+                  <div>
+                    <h2 className="text-base sm:text-lg font-black uppercase text-slate-900 dark:text-white tracking-tight">
+                      Seleccione su modelo de vehículo para buscar repuestos
+                    </h2>
+                    <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                      Filtra repuestos 100% compatibles con la marca, modelo y motorización de tu vehículo.
+                    </p>
+                  </div>
+                </div>
+
+                {appliedVehicleFilter && (
+                  <button
+                    type="button"
+                    onClick={clearVehicleFilter}
+                    className="text-xs text-red-600 dark:text-red-400 font-bold flex items-center gap-1.5 cursor-pointer bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-xl border border-red-500/20 transition-all self-start sm:self-auto shrink-0"
+                  >
+                    <X size={13} />
+                    <span>Quitar filtro ({appliedVehicleFilter.brand}{appliedVehicleFilter.model ? ` ${appliedVehicleFilter.model}` : ''})</span>
+                  </button>
+                )}
+              </div>
+
+              {/* 3-Step Vehicle Selector Form */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 items-center">
+                {/* Step 1: Elija una marca */}
+                <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
+                  selectedVehicleBrand ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+                }`}>
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className="w-7 h-7 rounded-full bg-[#ff5500] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-sm">
+                      1
+                    </span>
+                    <span className={`text-sm truncate ${selectedVehicleBrand ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
+                      {selectedVehicleBrand ? selectedVehicleBrand : "Elija una marca"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0 pl-2">
+                    <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                    <ChevronDown size={18} className="text-slate-400" />
+                  </div>
+                  <select
+                    value={selectedVehicleBrand}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSelectedVehicleBrand(val);
+                      setSelectedVehicleModel("");
+                      setSelectedVehicleEngine("");
+                    }}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base"
+                    aria-label="Elija una marca"
+                  >
+                    <option value="">Elija una marca</option>
+                    {VEHICLE_CATALOG_DATA.map(b => (
+                      <option key={b.name} value={b.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
+                        {b.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Step 2: Elija un modelo */}
+                <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
+                  !selectedVehicleBrand 
+                    ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
+                    : selectedVehicleModel 
+                      ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
+                      : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+                }`}>
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
+                      selectedVehicleBrand 
+                        ? 'bg-[#ff5500] text-white' 
+                        : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
+                    }`}>
+                      2
+                    </span>
+                    <span className={`text-sm truncate ${
+                      !selectedVehicleBrand 
+                        ? 'text-slate-400 dark:text-slate-500' 
+                        : selectedVehicleModel 
+                          ? 'font-bold text-slate-900 dark:text-white' 
+                          : 'text-slate-700 dark:text-slate-300'
+                    }`}>
+                      {selectedVehicleModel ? selectedVehicleModel : "Elija un modelo"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0 pl-2">
+                    <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                    <ChevronDown size={18} className="text-slate-400" />
+                  </div>
+                  <select
+                    disabled={!selectedVehicleBrand}
+                    value={selectedVehicleModel}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSelectedVehicleModel(val);
+                      setSelectedVehicleEngine("");
+                    }}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
+                    aria-label="Elija un modelo"
+                  >
+                    <option value="">Elija un modelo</option>
+                    {availableModels.map(m => (
+                      <option key={m.name} value={m.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
+                        {m.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Step 3: Elija un tipo de motor */}
+                <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
+                  !selectedVehicleModel 
+                    ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
+                    : selectedVehicleEngine 
+                      ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
+                      : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+                }`}>
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
+                      selectedVehicleModel 
+                        ? 'bg-[#ff5500] text-white' 
+                        : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
+                    }`}>
+                      3
+                    </span>
+                    <span className={`text-sm truncate ${
+                      !selectedVehicleModel 
+                        ? 'text-slate-400 dark:text-slate-500' 
+                        : selectedVehicleEngine 
+                          ? 'font-bold text-slate-900 dark:text-white' 
+                          : 'text-slate-700 dark:text-slate-300'
+                    }`}>
+                      {selectedVehicleEngine ? selectedVehicleEngine : "Elija un tipo de motor"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0 pl-2">
+                    <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                    <ChevronDown size={18} className="text-slate-400" />
+                  </div>
+                  <select
+                    disabled={!selectedVehicleModel}
+                    value={selectedVehicleEngine}
+                    onChange={(e) => setSelectedVehicleEngine(e.target.value)}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
+                    aria-label="Elija un tipo de motor"
+                  >
+                    <option value="">Elija un tipo de motor</option>
+                    {availableEngines.map(eng => (
+                      <option key={eng} value={eng} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
+                        {eng}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Step 4: Search Action Button */}
+                <button
+                  type="button"
+                  onClick={handleVehicleSearch}
+                  className="w-full py-3.5 px-6 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] active:bg-[#004080] text-white font-bold text-sm sm:text-base transition-all shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <Search size={18} />
+                  <span>Buscar Repuestos</span>
+                </button>
+              </div>
+
+              {/* Bottom Link: ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO? */}
+              <div className="text-center pt-1 border-t border-slate-100 dark:border-white/5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUsaForm(prev => ({
+                      ...prev,
+                      brand: selectedVehicleBrand || prev.brand,
+                      model: selectedVehicleModel || prev.model,
+                      engine: selectedVehicleEngine || prev.engine
+                    }));
+                    setIsUsaModalOpen(true);
+                  }}
+                  className="text-[#0066cc] dark:text-sky-400 hover:underline font-bold text-xs sm:text-sm tracking-wide uppercase cursor-pointer"
+                >
+                  ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO?
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION 3: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID) */}
         {/* ========================================================================= */}
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
@@ -1768,175 +1968,46 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
           <div style={{ display: isCatalogLoading ? 'none' : undefined }}>
 
-          {/* ========================================================================= */}
-          {/* 3-STEP VEHICLE SELECTOR WIDGET (MARCA -> MODELO -> MOTOR -> BUSCAR)       */}
-          {/* ========================================================================= */}
-          <div className="bg-white dark:bg-[#12141a] rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-7 shadow-sm">
-            <div className="max-w-2xl mx-auto space-y-3.5">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-2">
-                Seleccione su modelo de vehículo para buscar repuestos
-              </h3>
-
-              {/* Step 1: Elija una marca */}
-              <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
-                selectedVehicleBrand ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
-              }`}>
-                <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                  <span className="w-7 h-7 rounded-full bg-[#ff5500] text-white text-xs font-black flex items-center justify-center shrink-0 shadow-sm">
-                    1
-                  </span>
-                  <span className={`text-sm truncate ${selectedVehicleBrand ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
-                    {selectedVehicleBrand ? selectedVehicleBrand : "Elija una marca"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 shrink-0 pl-3">
-                  <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
-                  <ChevronDown size={18} className="text-slate-400" />
-                </div>
-                <select
-                  value={selectedVehicleBrand}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setSelectedVehicleBrand(val);
-                    setSelectedVehicleModel("");
-                    setSelectedVehicleEngine("");
-                  }}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base"
-                  aria-label="Elija una marca"
-                >
-                  <option value="">Elija una marca</option>
-                  {VEHICLE_CATALOG_DATA.map(b => (
-                    <option key={b.name} value={b.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
-                      {b.name}
-                    </option>
-                  ))}
-                </select>
+          {/* BARRA DE ESTADO / ACCESO RÁPIDO DE VEHÍCULO */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${appliedVehicleFilter ? 'bg-[#ff5500]/15 text-[#ff5500] border border-[#ff5500]/30' : 'bg-slate-100 dark:bg-white/5 text-slate-400 border border-slate-200 dark:border-white/10'}`}>
+                <Car size={18} />
               </div>
-
-              {/* Step 2: Elija un modelo */}
-              <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
-                !selectedVehicleBrand 
-                  ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
-                  : selectedVehicleModel 
-                    ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
-                    : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
-              }`}>
-                <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                  <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
-                    selectedVehicleBrand 
-                      ? 'bg-[#ff5500] text-white' 
-                      : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
-                  }`}>
-                    2
-                  </span>
-                  <span className={`text-sm truncate ${
-                    !selectedVehicleBrand 
-                      ? 'text-slate-400 dark:text-slate-500' 
-                      : selectedVehicleModel 
-                        ? 'font-bold text-slate-900 dark:text-white' 
-                        : 'text-slate-700 dark:text-slate-300'
-                  }`}>
-                    {selectedVehicleModel ? selectedVehicleModel : "Elija un modelo"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 shrink-0 pl-3">
-                  <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
-                  <ChevronDown size={18} className="text-slate-400" />
-                </div>
-                <select
-                  disabled={!selectedVehicleBrand}
-                  value={selectedVehicleModel}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setSelectedVehicleModel(val);
-                    setSelectedVehicleEngine("");
-                  }}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
-                  aria-label="Elija un modelo"
-                >
-                  <option value="">Elija un modelo</option>
-                  {availableModels.map(m => (
-                    <option key={m.name} value={m.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
-                      {m.name}
-                    </option>
-                  ))}
-                </select>
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider block text-slate-500 dark:text-zinc-400">
+                  Compatibilidad de Vehículo
+                </span>
+                <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                  {appliedVehicleFilter ? (
+                    <>
+                      Mostrando repuestos compatibles con <strong className="text-[#ff5500]">{appliedVehicleFilter.brand} {appliedVehicleFilter.model || ''}</strong> {appliedVehicleFilter.engine && appliedVehicleFilter.engine !== "Todos los motores" ? `(${appliedVehicleFilter.engine})` : ''}
+                    </>
+                  ) : (
+                    "Mostrando catálogo general (sin filtro de vehículo aplicado)"
+                  )}
+                </span>
               </div>
+            </div>
 
-              {/* Step 3: Elija un tipo de motor */}
-              <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
-                !selectedVehicleModel 
-                  ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
-                  : selectedVehicleEngine 
-                    ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
-                    : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
-              }`}>
-                <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                  <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
-                    selectedVehicleModel 
-                      ? 'bg-[#ff5500] text-white' 
-                      : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
-                  }`}>
-                    3
-                  </span>
-                  <span className={`text-sm truncate ${
-                    !selectedVehicleModel 
-                      ? 'text-slate-400 dark:text-slate-500' 
-                      : selectedVehicleEngine 
-                        ? 'font-bold text-slate-900 dark:text-white' 
-                        : 'text-slate-700 dark:text-slate-300'
-                  }`}>
-                    {selectedVehicleEngine ? selectedVehicleEngine : "Elija un tipo de motor"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 shrink-0 pl-3">
-                  <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
-                  <ChevronDown size={18} className="text-slate-400" />
-                </div>
-                <select
-                  disabled={!selectedVehicleModel}
-                  value={selectedVehicleEngine}
-                  onChange={(e) => setSelectedVehicleEngine(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
-                  aria-label="Elija un tipo de motor"
-                >
-                  <option value="">Elija un tipo de motor</option>
-                  {availableEngines.map(eng => (
-                    <option key={eng} value={eng} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
-                      {eng}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Search Action Button */}
-              <button
-                type="button"
-                onClick={handleVehicleSearch}
-                className="w-full py-3.5 px-6 rounded-xl bg-[#0066cc] hover:bg-[#0052a3] active:bg-[#004080] text-white font-bold text-base transition-all shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-2"
-              >
-                <Search size={18} />
-                <span>Buscar</span>
-              </button>
-
-              {/* Bottom Link: ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO? */}
-              <div className="text-center pt-2">
+            <div className="flex items-center gap-2">
+              {appliedVehicleFilter && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setUsaForm(prev => ({
-                      ...prev,
-                      brand: selectedVehicleBrand || prev.brand,
-                      model: selectedVehicleModel || prev.model,
-                      engine: selectedVehicleEngine || prev.engine
-                    }));
-                    setIsUsaModalOpen(true);
-                  }}
-                  className="text-[#0066cc] dark:text-sky-400 hover:underline font-bold text-xs sm:text-sm tracking-wide uppercase cursor-pointer"
+                  onClick={clearVehicleFilter}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all cursor-pointer flex items-center gap-1"
                 >
-                  ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO?
+                  <X size={13} />
+                  <span>Quitar filtro</span>
                 </button>
-              </div>
+              )}
+              <a
+                href="#selector-vehiculo"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider text-white bg-[#0066cc] hover:bg-[#0052a3] transition-all shadow-sm cursor-pointer flex items-center gap-1.5"
+              >
+                <SlidersHorizontal size={13} />
+                <span>{appliedVehicleFilter ? "Cambiar Vehículo" : "Seleccionar Vehículo"}</span>
+              </a>
             </div>
           </div>
 
