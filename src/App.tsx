@@ -338,7 +338,7 @@ export default function App() {
     return DEFAULT_JORNADAS;
   });
 
-  const [promoSectionTab, setPromoSectionTab] = useState<'jornadas' | 'repuestos'>('jornadas');
+  const [promoSectionTab, setPromoSectionTab] = useState<'jornadas' | 'repuestos'>('repuestos');
 
   const [catalogList, setCatalogList] = useState<any[]>(() => {
     try {
@@ -442,12 +442,10 @@ export default function App() {
   // Synchronize the default active tab of the Home Page Promotion Section with the Admin Selection
   useEffect(() => {
     const mode = (config.PROMO_BAR_MODE || '').toLowerCase();
-    if (mode === 'repuestos') {
-      setPromoSectionTab('repuestos');
-    } else if (mode === 'jornadas') {
+    if (mode === 'jornadas') {
       setPromoSectionTab('jornadas');
-    } else if (activePromo?.promoType) {
-      setPromoSectionTab(activePromo.promoType === 'repuesto' ? 'repuestos' : 'jornadas');
+    } else {
+      setPromoSectionTab('repuestos');
     }
   }, [config.PROMO_BAR_MODE, activePromo?.promoType]);
 
@@ -1245,38 +1243,10 @@ export default function App() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 self-start md:self-auto shrink-0">
-              {/* Tab Switcher Pills */}
-              <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
-                <button
-                  type="button"
-                  onClick={() => setPromoSectionTab('jornadas')}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    promoSectionTab === 'jornadas'
-                      ? 'bg-red-600 text-white shadow-md'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  <Flame size={14} />
-                  <span>Jornadas VIP ({processedJornadas.length})</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPromoSectionTab('repuestos')}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    promoSectionTab === 'repuestos'
-                      ? 'bg-red-600 text-white shadow-md'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  <Package size={14} />
-                  <span>Repuestos OEM ({processedRepuestos.length})</span>
-                </button>
-              </div>
-
               {promoSectionTab === 'jornadas' ? (
                 <a 
                   href="/jornadas" 
-                  className="btn-secondary !px-4 !py-2 text-xs font-bold flex items-center justify-center gap-2"
+                  className="btn-secondary !px-5 !py-2.5 text-xs font-bold flex items-center justify-center gap-2"
                 >
                   <span>Ver Catálogo de Jornadas</span>
                   <ArrowRight size={14} />
@@ -1284,7 +1254,7 @@ export default function App() {
               ) : (
                 <a 
                   href="/catalogo" 
-                  className="btn-secondary !px-4 !py-2 text-xs font-bold flex items-center justify-center gap-2"
+                  className="btn-secondary !px-5 !py-2.5 text-xs font-bold flex items-center justify-center gap-2"
                 >
                   <span>Ver Catálogo de Repuestos</span>
                   <ArrowRight size={14} />
@@ -1296,7 +1266,7 @@ export default function App() {
           {/* Cards Grid */}
           {promoSectionTab === 'jornadas' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-              {processedJornadas.map((item: any, idx: number) => {
+              {processedJornadas.slice(0, 3).map((item: any, idx: number) => {
                 const baseWa = config?.WHATSAPP_LINK 
                   ? config.WHATSAPP_LINK.split('?')[0] 
                   : 'https://wa.me/584123565012';
@@ -1416,7 +1386,7 @@ export default function App() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-              {processedRepuestos.slice(0, 6).map((item: any, idx: number) => {
+              {processedRepuestos.slice(0, 3).map((item: any, idx: number) => {
                 const baseWa = config?.WHATSAPP_LINK 
                   ? config.WHATSAPP_LINK.split('?')[0] 
                   : 'https://wa.me/584123565012';
