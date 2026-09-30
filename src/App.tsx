@@ -338,6 +338,29 @@ export default function App() {
     return DEFAULT_JORNADAS;
   });
 
+  const sanitizeCatalogItems = (items: any[]): any[] => {
+    if (!Array.isArray(items)) return items;
+    return items.map(item => {
+      let copy = { ...item };
+      if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
+        if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {
+          copy.img = '/assets/cat_radar_tss.jpg';
+        }
+      }
+      if (copy.id === 2 || copy.partNumber === 'WAG-QC-CER-88' || (copy.title && copy.title.toLowerCase().includes('pastillas de freno cerámicas wagner'))) {
+        if (!copy.img || copy.img.includes('promo_brakes_caliper') || copy.img.includes('cat_frenos_discos')) {
+          copy.img = '/assets/cat_pastillas_freno.jpg';
+        }
+        if (!copy.regularPrice) {
+          copy.regularPrice = '$70.00';
+          copy.discountBadge = 'AHORRAS $15 USD (21% OFF)';
+          copy.isPromo = true;
+        }
+      }
+      return copy;
+    });
+  };
+
   const [promoSectionTab, setPromoSectionTab] = useState<'jornadas' | 'repuestos'>('repuestos');
 
   const [catalogList, setCatalogList] = useState<any[]>(() => {
@@ -347,11 +370,11 @@ export default function App() {
         const p = JSON.parse(s);
         if (p.CATALOG_PRODUCTS_JSON) {
           const parsed = typeof p.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(p.CATALOG_PRODUCTS_JSON) : p.CATALOG_PRODUCTS_JSON;
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) return sanitizeCatalogItems(parsed);
         }
       }
     } catch (e) {}
-    return DEFAULT_CATALOG;
+    return sanitizeCatalogItems(DEFAULT_CATALOG);
   });
 
   // Calculate discount percentage dynamically for each promotion (both Jornadas and Repuestos)
@@ -572,7 +595,7 @@ export default function App() {
       try {
         if (localData.CATALOG_PRODUCTS_JSON) {
           const p = typeof localData.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(localData.CATALOG_PRODUCTS_JSON) : localData.CATALOG_PRODUCTS_JSON;
-          if (Array.isArray(p) && p.length > 0) setCatalogList(p);
+          if (Array.isArray(p) && p.length > 0) setCatalogList(sanitizeCatalogItems(p));
         }
       } catch (e) {}
     }
@@ -610,7 +633,7 @@ export default function App() {
         try {
           if (data.CATALOG_PRODUCTS_JSON) {
             const p = typeof data.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(data.CATALOG_PRODUCTS_JSON) : data.CATALOG_PRODUCTS_JSON;
-            if (Array.isArray(p) && p.length > 0) setCatalogList(p);
+            if (Array.isArray(p) && p.length > 0) setCatalogList(sanitizeCatalogItems(p));
           }
         } catch (e) {}
       } catch (err) {
@@ -647,7 +670,7 @@ export default function App() {
         try {
           if (updated.CATALOG_PRODUCTS_JSON) {
             const p = typeof updated.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(updated.CATALOG_PRODUCTS_JSON) : updated.CATALOG_PRODUCTS_JSON;
-            if (Array.isArray(p) && p.length > 0) setCatalogList(p);
+            if (Array.isArray(p) && p.length > 0) setCatalogList(sanitizeCatalogItems(p));
           }
         } catch (err) {}
       } else {

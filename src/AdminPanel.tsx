@@ -151,7 +151,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     isPromo: true,
     desc: "Sensor radar de distancia frontal OEM Toyota Corolla (Toyota Safety Sense TSS) para Control Crucero Dinámico (DRCC) y Sistema Pre-Colisión (PCS).",
     longDesc: "Sensor radar milimétrico de distancia frontal original Toyota Genuine Parts OEM #88210-02040. Opera en banda de 76-77 GHz para el sistema Toyota Safety Sense 3.0 (TSS 3.0): Control de Crucero por Radar Dinámico (DRCC), Sistema Pre-Colisión (PCS) y Asistencia de Mantenimiento de Carril.",
-    img: "/assets/cat_baterias_electricidad.webp",
+    img: "/assets/cat_radar_tss.jpg",
     badge: "Toyota Genuine Parts",
     specs: ["Radar milimétrico 76-77 GHz", "Toyota Safety Sense TSS 3.0", "Rango de detección hasta 180m", "Calibración con Toyota TechStream"],
     compatibility: "Toyota Corolla 1.8L / 2.0L / Hybrid (2023-2025), Corolla Cross (2023-2025)",
@@ -164,9 +164,12 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     title: "Pastillas de Freno Cerámicas Wagner / Raybestos (Juego Delantero)",
     category: "Frenos & Discos",
     price: "$55.00",
+    regularPrice: "$70.00",
+    discountBadge: "AHORRAS $15 USD (21% OFF)",
+    isPromo: true,
     desc: "Pastillas cerámicas de formulación silenciosa, mínima emisión de polvo y óptima fricción térmica.",
     longDesc: "Fórmula de fricción cerámica de grado OEM: previene chirridos metálicos y prolonga la vida útil de los discos de freno.",
-    img: "/assets/promo_brakes_caliper.webp",
+    img: "/assets/cat_pastillas_freno.jpg",
     badge: "Wagner / OEM",
     specs: ["Compuesto 100% cerámico", "Libre de polvo metálico", "Resistencia superior a 650°C"],
     compatibility: "Vehículos Japoneses, Americanos y Coreanos",
@@ -2728,7 +2731,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           'Temperatura de operación -40°C a +85°C — IP67 sellado estanco',
           `Calibración obligatoria con Toyota TechStream — Ref. OEM: ${finalPn}`
         ],
-        img: '/assets/cat_baterias_electricidad.webp',
+        img: '/assets/cat_radar_tss.jpg',
         msg: wasTypoCorrected
           ? `✅ Detectado y corregido a OEM Toyota #${finalPn} (Sensor de Distancia / Radar TSS Corolla 2023-2025).`
           : '✅ Sensor ADAS decodificado al instante desde catálogo OEM Toyota.'

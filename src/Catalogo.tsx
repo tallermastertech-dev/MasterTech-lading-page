@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Navbar from './Navbar';
 import { ChevronLeft, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -69,7 +69,7 @@ export const DEFAULT_CATALOG: CatalogItem[] = [
     isPromo: true,
     desc: "Sensor radar de distancia frontal OEM Toyota Corolla (Toyota Safety Sense TSS) para Control Crucero Dinámico (DRCC) y Sistema Pre-Colisión (PCS).",
     longDesc: "Sensor radar milimétrico de distancia frontal original Toyota Genuine Parts OEM #88210-02040. Opera en banda de 76-77 GHz para el sistema Toyota Safety Sense 3.0 (TSS 3.0): Control de Crucero por Radar Dinámico (DRCC), Sistema Pre-Colisión (PCS) y Asistencia de Mantenimiento de Carril.",
-    img: "/assets/cat_baterias_electricidad.webp",
+    img: "/assets/cat_radar_tss.jpg",
     badge: "Toyota Genuine Parts",
     specs: ["Radar milimétrico 76-77 GHz", "Toyota Safety Sense TSS 3.0", "Rango de detección hasta 180m", "Calibración con Toyota TechStream"],
     compatibility: "Toyota Corolla 1.8L / 2.0L / Hybrid (2023-2025), Corolla Cross (2023-2025)",
@@ -82,9 +82,12 @@ export const DEFAULT_CATALOG: CatalogItem[] = [
     title: "Pastillas de Freno Cerámicas Wagner / Raybestos (Juego Delantero)",
     category: "Frenos & Discos",
     price: "$55.00",
+    regularPrice: "$70.00",
+    discountBadge: "AHORRAS $15 USD (21% OFF)",
+    isPromo: true,
     desc: "Pastillas cerámicas de formulación silenciosa, mínima emisión de polvo y óptima fricción térmica.",
     longDesc: "Fórmula de fricción cerámica de grado OEM: previene chirridos metálicos y prolonga la vida útil de los discos de freno.",
-    img: "/assets/promo_brakes_caliper.webp",
+    img: "/assets/cat_pastillas_freno.jpg",
     badge: "Wagner / OEM",
     specs: ["Compuesto 100% cerámico", "Libre de polvo metálico", "Resistencia superior a 650°C"],
     compatibility: "Vehículos Japoneses, Americanos y Coreanos",
@@ -350,8 +353,16 @@ export const OEM_BRANDS = [
   { name: "Meguiar's", label: "Meguiar's", origin: "USA · Detailing", color: "from-purple-600 to-indigo-800" }
 ];
 
+export interface VehicleSubModelOption {
+  name: string;
+  years?: string;
+  code?: string;
+  engines?: string[];
+}
+
 export interface VehicleModelOption {
   name: string;
+  submodels?: VehicleSubModelOption[];
   engines: string[];
 }
 
@@ -362,150 +373,247 @@ export interface VehicleBrandOption {
 
 export const VEHICLE_CATALOG_DATA: VehicleBrandOption[] = [
   {
-    name: "Jeep",
-    models: [
-      {
-        name: "Grand Cherokee",
-        engines: [
-          "Todos los motores",
-          "3.6L V6 Pentastar Gasolina",
-          "5.7L V8 HEMI MDS Gasolina",
-          "4.7L V8 PowerTech Gasolina",
-          "4.0L I6 Gasolina (WJ / ZJ)",
-          "6.4L V8 HEMI SRT-8"
-        ]
-      },
-      {
-        name: "Wrangler (JK / JL / TJ)",
-        engines: [
-          "Todos los motores",
-          "3.6L V6 Pentastar Gasolina",
-          "3.8L V6 EGH Gasolina",
-          "4.0L I6 PowerTech Gasolina",
-          "2.0L Turbo I4 Gasolina / 4xe"
-        ]
-      },
-      {
-        name: "Cherokee (KK / KJ / KL / XJ)",
-        engines: [
-          "Todos los motores",
-          "3.7L V6 PowerTech Gasolina",
-          "4.0L I6 PowerTech Gasolina",
-          "3.2L V6 Pentastar Gasolina",
-          "2.4L I4 Tigershark Gasolina"
-        ]
-      },
-      {
-        name: "Compass / Patriot",
-        engines: [
-          "Todos los motores",
-          "2.4L I4 Tigershark / World Engine",
-          "2.0L I4 Gasolina",
-          "1.3L Turbo I4 FireFly"
-        ]
-      },
-      {
-        name: "Commander",
-        engines: [
-          "Todos los motores",
-          "4.7L V8 PowerTech Gasolina",
-          "5.7L V8 HEMI MDS Gasolina"
-        ]
-      },
-      {
-        name: "Gladiator (JT)",
-        engines: [
-          "Todos los motores",
-          "3.6L V6 Pentastar Gasolina",
-          "3.0L V6 EcoDiesel"
-        ]
-      },
-      {
-        name: "Otro modelo Jeep",
-        engines: ["Todos los motores", "Gasolina V6 / V8", "Gasolina 4 Cilindros", "Diésel"]
-      }
-    ]
-  },
-  {
     name: "Toyota",
     models: [
       {
-        name: "Hilux / Fortuner",
-        engines: [
-          "Todos los motores",
-          "4.0L V6 1GR-FE Gasolina",
-          "2.7L I4 2TR-FE Gasolina",
-          "2.8L I4 1GD-FTV Turbo Diésel",
-          "3.0L I4 1KD-FTV D-4D Turbo Diésel"
-        ]
-      },
-      {
-        name: "Land Cruiser (Serie 70 / Machito)",
-        engines: [
-          "Todos los motores",
-          "4.0L V6 1GR-FE Gasolina",
-          "4.5L V8 1VD-FTV Turbo Diésel",
-          "4.5L I6 1FZ-FE Gasolina",
-          "4.2L I6 1HZ Diésel"
-        ]
-      },
-      {
-        name: "Land Cruiser (Prado / Serie 90-150)",
-        engines: [
-          "Todos los motores",
-          "4.0L V6 1GR-FE Dual VVT-i",
-          "2.7L I4 2TR-FE Gasolina",
-          "3.0L I4 1KD-FTV Turbo Diésel",
-          "3.4L V6 5VZ-FE Gasolina"
-        ]
-      },
-      {
         name: "4Runner",
-        engines: [
-          "Todos los motores",
-          "4.0L V6 1GR-FE Dual VVT-i",
-          "4.7L V8 2UZ-FE VVT-i"
-        ]
+        submodels: [
+          { name: "4Runner SUV (N280)", years: "(03.2009 - ...)", engines: ["4.0L V6 1GR-FE Dual VVT-i", "2.7L I4 2TR-FE"] },
+          { name: "4Runner SUV (N210)", years: "(08.2002 - 12.2009)", engines: ["4.0L V6 1GR-FE VVT-i", "4.7L V8 2UZ-FE VVT-i"] },
+          { name: "4Runner (N180)", years: "(11.1995 - 11.2002)", engines: ["3.4L V6 5VZ-FE", "2.7L I4 3RZ-FE"] },
+          { name: "4Runner (_N1_ / N130)", years: "(08.1987 - 03.1996)", engines: ["3.0L V6 3VZ-E", "2.4L I4 22R-E"] },
+          { name: "4Runner (N50, N60, N70)", years: "(07.1984 - 10.1989)", engines: ["2.4L I4 22R / 22R-E", "2.0L I4"] }
+        ],
+        engines: ["Todos los motores", "4.0L V6 1GR-FE Dual VVT-i", "4.7L V8 2UZ-FE VVT-i", "3.4L V6 5VZ-FE"]
       },
       {
-        name: "Corolla / Corolla Cross",
-        engines: [
-          "Todos los motores",
-          "2.0L I4 Dynamic Force (2020-2025)",
-          "1.8L I4 2ZR-FE Dual VVT-i",
-          "1.8L I4 Híbrido Hybrid Synergy",
-          "1.6L I4 3ZZ-FE"
-        ]
+        name: "Alphard",
+        submodels: [
+          { name: "Alphard / Vellfire (AH30)", years: "(2015 - 2023)", engines: ["3.5L V6 2GR-FKS", "2.5L I4 2AR-FE / Hybrid"] },
+          { name: "Alphard / Vellfire (AH20)", years: "(2008 - 2015)", engines: ["3.5L V6 2GR-FE", "2.4L I4 2AZ-FE"] }
+        ],
+        engines: ["Todos los motores", "3.5L V6 2GR", "2.5L I4 Híbrido", "2.4L I4"]
+      },
+      {
+        name: "Auris",
+        submodels: [
+          { name: "Auris (E180)", years: "(2012 - 2018)", engines: ["1.8L Hybrid 2ZR-FXE", "1.6L Valvematic", "1.4L D-4D"] },
+          { name: "Auris (E150)", years: "(2006 - 2012)", engines: ["1.6L Dual VVT-i", "1.8L Dual VVT-i", "2.0L D-4D"] }
+        ],
+        engines: ["Todos los motores", "1.8L Híbrido", "1.6L Dual VVT-i", "1.4L / 2.0L D-4D"]
+      },
+      {
+        name: "Avensis",
+        submodels: [
+          { name: "Avensis (T270)", years: "(2008 - 2018)", engines: ["2.0L Valvematic", "1.8L Valvematic", "2.2L D-4D / D-CAT"] },
+          { name: "Avensis (T250)", years: "(2003 - 2008)", engines: ["2.0L VVT-i", "1.8L VVT-i", "2.2L D-4D"] }
+        ],
+        engines: ["Todos los motores", "2.0L Valvematic", "1.8L Valvematic", "2.2L D-4D"]
+      },
+      {
+        name: "Aygo",
+        submodels: [
+          { name: "Aygo X (AB70)", years: "(2022 - ...)", engines: ["1.0L 3-Cilindros 1KR-B52"] },
+          { name: "Aygo (AB40)", years: "(2014 - 2021)", engines: ["1.0L 3-Cilindros 1KR-FE"] },
+          { name: "Aygo (AB10)", years: "(2005 - 2014)", engines: ["1.0L 3-Cilindros 1KR-FE", "1.4L D-4D"] }
+        ],
+        engines: ["Todos los motores", "1.0L 3-Cilindros Gasolina", "1.2L Gasolina"]
+      },
+      {
+        name: "bZ4X",
+        submodels: [
+          { name: "bZ4X Eléctrico (EA10)", years: "(2022 - ...)", engines: ["Motor Eléctrico FWD 150 kW", "Motor Eléctrico AWD Dual 160 kW"] }
+        ],
+        engines: ["Todos los motores", "Eléctrico FWD 150 kW", "Eléctrico AWD Dual 160 kW"]
+      },
+      {
+        name: "C-HR",
+        submodels: [
+          { name: "C-HR II (AX20)", years: "(2023 - ...)", engines: ["2.0L Híbrido Plug-in", "1.8L Híbrido 2ZR-FXE"] },
+          { name: "C-HR I (AX10)", years: "(2016 - 2023)", engines: ["1.8L Híbrido 2ZR-FXE", "2.0L Dynamic Force M20A", "1.2L Turbo 8NR-FTS"] }
+        ],
+        engines: ["Todos los motores", "1.8L Híbrido", "2.0L Dynamic Force", "1.2L Turbo"]
+      },
+      {
+        name: "Camry",
+        submodels: [
+          { name: "Camry (XV70)", years: "(2017 - ...)", engines: ["2.5L Dynamic Force A25A", "3.5L V6 2GR-FKS", "2.5L Hybrid"] },
+          { name: "Camry (XV50)", years: "(2011 - 2017)", engines: ["2.5L Dual VVT-i 2AR-FE", "3.5L V6 2GR-FE"] },
+          { name: "Camry (XV40)", years: "(2006 - 2011)", engines: ["2.4L 2AZ-FE", "3.5L V6 2GR-FE"] },
+          { name: "Camry (XV30 / Lumina)", years: "(2001 - 2006)", engines: ["2.4L 2AZ-FE", "3.0L V6 1MZ-FE"] }
+        ],
+        engines: ["Todos los motores", "2.5L Dynamic Force / Hybrid", "3.5L V6 2GR-FE / FKS", "2.4L I4 2AZ-FE"]
+      },
+      {
+        name: "Corolla",
+        submodels: [
+          { name: "Corolla XII Sedán (E210)", years: "(2019 - ...)", engines: ["2.0L Dynamic Force M20A-FKS", "1.8L Hybrid 2ZR-FXE", "1.8L 2ZR-FE"] },
+          { name: "Corolla Cross (XG10)", years: "(2020 - ...)", engines: ["2.0L Dynamic Force M20A", "1.8L Hybrid 2ZR-FXE"] },
+          { name: "Corolla XI (E170 / E180)", years: "(2013 - 2019)", engines: ["1.8L Dual VVT-i 2ZR-FE", "1.8L Valvematic 2ZR-FAE"] },
+          { name: "Corolla X (E140 / E150)", years: "(2006 - 2013)", engines: ["1.8L Dual VVT-i 2ZR-FE", "1.6L 1ZR-FE", "2.0L 3ZR-FE"] },
+          { name: "Corolla IX (E120 / Baby Camry)", years: "(2000 - 2007)", engines: ["1.8L 1ZZ-FE", "1.6L 3ZZ-FE", "1.4L 4ZZ-FE"] }
+        ],
+        engines: ["Todos los motores", "2.0L Dynamic Force (2020-2025)", "1.8L Dual VVT-i 2ZR-FE", "1.8L Híbrido Hybrid Synergy", "1.6L 3ZZ-FE"]
+      },
+      {
+        name: "FJ Cruiser",
+        submodels: [
+          { name: "FJ Cruiser (GSJ15)", years: "(2006 - 2022)", engines: ["4.0L V6 1GR-FE Dual VVT-i", "4.0L V6 1GR-FE Single VVT-i"] }
+        ],
+        engines: ["Todos los motores", "4.0L V6 1GR-FE Dual VVT-i", "4.0L V6 1GR-FE Single VVT-i"]
+      },
+      {
+        name: "Fortuner",
+        submodels: [
+          { name: "Fortuner II (AN150 / AN160)", years: "(2015 - ...)", engines: ["4.0L V6 1GR-FE Dual VVT-i", "2.8L I4 1GD-FTV Turbo Diésel", "2.7L I4 2TR-FE"] },
+          { name: "Fortuner I (AN50 / AN60)", years: "(2005 - 2015)", engines: ["4.0L V6 1GR-FE VVT-i", "3.0L I4 1KD-FTV D-4D", "2.7L I4 2TR-FE"] }
+        ],
+        engines: ["Todos los motores", "4.0L V6 1GR-FE Gasolina", "2.8L I4 1GD-FTV Turbo Diésel", "3.0L I4 1KD-FTV D-4D", "2.7L I4 2TR-FE"]
+      },
+      {
+        name: "Hilux",
+        submodels: [
+          { name: "Hilux VIII Pick-up (AN120 / AN130)", years: "(2015 - ...)", engines: ["2.8L I4 1GD-FTV Turbo Diésel", "2.4L I4 2GD-FTV Turbo Diésel", "2.7L I4 2TR-FE Dual VVT-i", "4.0L V6 1GR-FE"] },
+          { name: "Hilux VII Pick-up (AN10 / Kavak)", years: "(2004 - 2015)", engines: ["4.0L V6 1GR-FE", "3.0L I4 1KD-FTV D-4D", "2.7L I4 2TR-FE", "2.5L I4 2KD-FTV"] },
+          { name: "Hilux VI Pick-up (N140 / N150 / N160)", years: "(1997 - 2005)", engines: ["2.7L I4 3RZ-FE", "2.4L I4 2RZ-FE", "3.0L Diésel 5L"] }
+        ],
+        engines: ["Todos los motores", "2.8L I4 1GD-FTV Turbo Diésel", "4.0L V6 1GR-FE Gasolina", "3.0L I4 1KD-FTV D-4D", "2.7L I4 2TR-FE"]
+      },
+      {
+        name: "Land Cruiser",
+        submodels: [
+          { name: "Land Cruiser 300 (J300)", years: "(2021 - ...)", engines: ["3.5L V6 Twin Turbo V35A-FTS", "3.3L V6 Twin Turbo Diésel F33A-FTV"] },
+          { name: "Land Cruiser 200 (J200 / Roraima)", years: "(2007 - 2021)", engines: ["5.7L V8 3UR-FE", "4.6L V8 1UR-FE", "4.5L V8 1VD-FTV Twin Turbo Diésel", "4.0L V6 1GR-FE"] },
+          { name: "Land Cruiser 100 (J100)", years: "(1998 - 2007)", engines: ["4.7L V8 2UZ-FE", "4.5L I6 1FZ-FE", "4.2L I6 1HD-FTE Turbo Diésel"] },
+          { name: "Land Cruiser 80 (J80 / Autana / Burbuja)", years: "(1990 - 1998)", engines: ["4.5L I6 1FZ-FE DOHC 24V", "4.0L I6 3F-E", "4.2L I6 1HD-T / 1HZ Diésel"] },
+          { name: "Land Cruiser 70 (J70 / Machito / Hembrita)", years: "(1984 - ...)", engines: ["4.0L V6 1GR-FE Dual VVT-i", "4.5L V8 1VD-FTV Turbo Diésel", "4.5L I6 1FZ-FE", "4.2L I6 1HZ"] }
+        ],
+        engines: ["Todos los motores", "4.0L V6 1GR-FE Gasolina", "4.5L V8 1VD-FTV Turbo Diésel", "5.7L V8 3UR-FE", "4.5L I6 1FZ-FE", "4.7L V8 2UZ-FE"]
+      },
+      {
+        name: "Prado",
+        submodels: [
+          { name: "Land Cruiser Prado 250 (J250)", years: "(2024 - ...)", engines: ["2.4L Turbo T24A-FTS Hybrid", "2.8L I4 1GD-FTV Turbo Diésel"] },
+          { name: "Land Cruiser Prado 150 (J150)", years: "(2009 - 2023)", engines: ["4.0L V6 1GR-FE Dual VVT-i", "2.8L I4 1GD-FTV Turbo Diésel", "3.0L I4 1KD-FTV D-4D", "2.7L I4 2TR-FE"] },
+          { name: "Land Cruiser Prado 120 (J120 / Merú)", years: "(2002 - 2009)", engines: ["4.0L V6 1GR-FE", "2.7L I4 3RZ-FE / 2TR-FE", "3.4L V6 5VZ-FE", "3.0L Diésel 1KZ-TE"] },
+          { name: "Land Cruiser Prado 90 (J90)", years: "(1996 - 2002)", engines: ["3.4L V6 5VZ-FE", "2.7L I4 3RZ-FE", "3.0L Diésel 1KZ-TE"] }
+        ],
+        engines: ["Todos los motores", "4.0L V6 1GR-FE Dual VVT-i", "2.8L I4 1GD-FTV Turbo Diésel", "3.0L I4 1KD-FTV", "2.7L I4 2TR-FE"]
+      },
+      {
+        name: "RAV4",
+        submodels: [
+          { name: "RAV4 V (XA50)", years: "(2018 - ...)", engines: ["2.5L Dynamic Force A25A", "2.5L Hybrid / Plug-in", "2.0L M20A-FKS"] },
+          { name: "RAV4 IV (XA40)", years: "(2012 - 2018)", engines: ["2.5L Dual VVT-i 2AR-FE", "2.0L 3ZR-FE", "2.2L D-4D Diésel"] },
+          { name: "RAV4 III (XA30)", years: "(2005 - 2012)", engines: ["3.5L V6 2GR-FE", "2.4L 2AZ-FE", "2.0L 1AZ-FE"] }
+        ],
+        engines: ["Todos los motores", "2.5L Dynamic Force / Hybrid", "3.5L V6 2GR-FE", "2.4L 2AZ-FE", "2.0L 3ZR-FE"]
+      },
+      {
+        name: "Tacoma",
+        submodels: [
+          { name: "Tacoma IV (N400)", years: "(2023 - ...)", engines: ["2.4L Turbo i-FORCE T24A", "2.4L Turbo i-FORCE MAX Hybrid"] },
+          { name: "Tacoma III (N300)", years: "(2015 - 2023)", engines: ["3.5L V6 2GR-FKS", "2.7L I4 2TR-FE"] },
+          { name: "Tacoma II (N200)", years: "(2004 - 2015)", engines: ["4.0L V6 1GR-FE", "2.7L I4 2TR-FE"] }
+        ],
+        engines: ["Todos los motores", "3.5L V6 2GR-FKS", "4.0L V6 1GR-FE", "2.4L Turbo i-FORCE", "2.7L I4 2TR-FE"]
+      },
+      {
+        name: "Tundra",
+        submodels: [
+          { name: "Tundra III (XK70)", years: "(2021 - ...)", engines: ["3.5L V6 Twin Turbo V35A-FTS", "3.5L Twin Turbo i-FORCE MAX Hybrid"] },
+          { name: "Tundra II (XK50)", years: "(2007 - 2021)", engines: ["5.7L V8 3UR-FE i-FORCE", "4.6L V8 1UR-FE", "4.0L V6 1GR-FE"] }
+        ],
+        engines: ["Todos los motores", "3.5L V6 Twin Turbo i-FORCE", "5.7L V8 3UR-FE i-FORCE", "4.6L V8 1UR-FE"]
       },
       {
         name: "Yaris",
-        engines: [
-          "Todos los motores",
-          "1.5L I4 1NZ-FE / 2NR-FE",
-          "1.3L I4 2NZ-FE"
-        ]
-      },
-      {
-        name: "Tacoma / Tundra / Sequoia",
-        engines: [
-          "Todos los motores",
-          "3.5L V6 Twin Turbo i-FORCE",
-          "5.7L V8 3UR-FE i-FORCE",
-          "4.0L V6 1GR-FE"
-        ]
-      },
-      {
-        name: "RAV4 / Camry",
-        engines: [
-          "Todos los motores",
-          "2.5L I4 Dynamic Force / Híbrido",
-          "3.5L V6 2GR-FE Dual VVT-i",
-          "2.4L I4 2AZ-FE"
-        ]
+        submodels: [
+          { name: "Yaris IV (XP210)", years: "(2020 - ...)", engines: ["1.5L Dynamic Force 3-Cil M15A", "1.5L Hybrid", "1.6L Turbo G16E-GTS GR"] },
+          { name: "Yaris III (XP130 / XP150)", years: "(2011 - 2020)", engines: ["1.5L 1NZ-FE / 2NR-FE", "1.3L 1NR-FE"] },
+          { name: "Yaris II (XP90 / Belta / Sedán)", years: "(2005 - 2011)", engines: ["1.5L 1NZ-FE", "1.3L 2NZ-FE"] }
+        ],
+        engines: ["Todos los motores", "1.5L I4 1NZ-FE / 2NR-FE", "1.3L I4 2NZ-FE", "1.5L 3-Cil Dynamic Force"]
       },
       {
         name: "Otro modelo Toyota",
         engines: ["Todos los motores", "Gasolina V6", "Gasolina 4 Cilindros", "Turbo Diésel", "Híbrido"]
+      }
+    ]
+  },
+  {
+    name: "Jeep",
+    models: [
+      {
+        name: "Cherokee",
+        submodels: [
+          { name: "Cherokee (KL)", years: "(2014 - 2023)", engines: ["3.2L V6 Pentastar", "2.4L I4 Tigershark", "2.0L Turbo I4"] },
+          { name: "Cherokee (KK)", years: "(2008 - 2013)", engines: ["3.7L V6 PowerTech"] },
+          { name: "Cherokee / Liberty (KJ)", years: "(2002 - 2007)", engines: ["3.7L V6 PowerTech", "2.8L CRD Turbo Diésel", "2.4L I4"] },
+          { name: "Cherokee (XJ)", years: "(1984 - 2001)", engines: ["4.0L I6 PowerTech", "2.5L I4 Gasolina"] }
+        ],
+        engines: ["Todos los motores", "3.7L V6 PowerTech Gasolina", "4.0L I6 PowerTech Gasolina", "3.2L V6 Pentastar Gasolina", "2.4L I4 Tigershark Gasolina"]
+      },
+      {
+        name: "Commander",
+        submodels: [
+          { name: "Commander (XK / XH)", years: "(2006 - 2010)", engines: ["5.7L V8 HEMI MDS", "4.7L V8 PowerTech", "3.7L V6 PowerTech"] }
+        ],
+        engines: ["Todos los motores", "5.7L V8 HEMI MDS Gasolina", "4.7L V8 PowerTech Gasolina", "3.7L V6 PowerTech"]
+      },
+      {
+        name: "Compass",
+        submodels: [
+          { name: "Compass (MP / 552)", years: "(2017 - ...)", engines: ["2.4L I4 Tigershark", "1.3L Turbo FireFly", "2.0L Turbo Diésel"] },
+          { name: "Compass (MK49)", years: "(2007 - 2016)", engines: ["2.4L I4 World Engine", "2.0L I4 World Engine"] }
+        ],
+        engines: ["Todos los motores", "2.4L I4 Tigershark / World Engine", "2.0L I4 Gasolina", "1.3L Turbo I4 FireFly"]
+      },
+      {
+        name: "Gladiator",
+        submodels: [
+          { name: "Gladiator Pick-up (JT)", years: "(2019 - ...)", engines: ["3.6L V6 Pentastar", "3.0L V6 EcoDiesel"] }
+        ],
+        engines: ["Todos los motores", "3.6L V6 Pentastar Gasolina", "3.0L V6 EcoDiesel"]
+      },
+      {
+        name: "Grand Cherokee",
+        submodels: [
+          { name: "Grand Cherokee (WL)", years: "(2021 - ...)", engines: ["3.6L V6 Pentastar", "5.7L V8 HEMI", "2.0L Turbo 4xe Hybrid"] },
+          { name: "Grand Cherokee (WK2)", years: "(2011 - 2021)", engines: ["3.6L V6 Pentastar", "5.7L V8 HEMI MDS", "6.4L V8 HEMI SRT-8", "3.0L V6 EcoDiesel"] },
+          { name: "Grand Cherokee (WK / WH)", years: "(2005 - 2010)", engines: ["4.7L V8 PowerTech", "5.7L V8 HEMI", "3.7L V6 PowerTech", "6.1L V8 HEMI SRT-8"] },
+          { name: "Grand Cherokee (WJ / WG)", years: "(1999 - 2004)", engines: ["4.7L V8 PowerTech", "4.0L I6 PowerTech"] },
+          { name: "Grand Cherokee (ZJ)", years: "(1993 - 1998)", engines: ["4.0L I6 PowerTech", "5.2L V8 Magnum", "5.9L V8 Magnum"] }
+        ],
+        engines: ["Todos los motores", "3.6L V6 Pentastar Gasolina", "5.7L V8 HEMI MDS Gasolina", "4.7L V8 PowerTech Gasolina", "4.0L I6 Gasolina", "6.4L V8 HEMI SRT-8"]
+      },
+      {
+        name: "Patriot",
+        submodels: [
+          { name: "Patriot (MK74)", years: "(2007 - 2017)", engines: ["2.4L I4 World Engine", "2.0L I4 World Engine"] }
+        ],
+        engines: ["Todos los motores", "2.4L I4 World Engine", "2.0L I4 World Engine"]
+      },
+      {
+        name: "Renegade",
+        submodels: [
+          { name: "Renegade (BU)", years: "(2015 - ...)", engines: ["2.4L I4 Tigershark", "1.3L Turbo FireFly", "1.8L E.torQ"] }
+        ],
+        engines: ["Todos los motores", "2.4L I4 Tigershark", "1.3L Turbo FireFly", "1.8L E.torQ"]
+      },
+      {
+        name: "Wrangler",
+        submodels: [
+          { name: "Wrangler (JL / JLU)", years: "(2018 - ...)", engines: ["3.6L V6 Pentastar eTorque", "2.0L Turbo I4 / 4xe", "6.4L V8 HEMI 392"] },
+          { name: "Wrangler (JK / JKU)", years: "(2007 - 2018)", engines: ["3.6L V6 Pentastar (2012-2018)", "3.8L V6 EGH (2007-2011)", "2.8L CRD Turbo Diésel"] },
+          { name: "Wrangler (TJ)", years: "(1997 - 2006)", engines: ["4.0L I6 PowerTech", "2.5L / 2.4L I4 PowerTech"] },
+          { name: "Wrangler (YJ)", years: "(1987 - 1995)", engines: ["4.0L I6 PowerTech", "4.2L I6 AMC 258", "2.5L I4 AMC"] }
+        ],
+        engines: ["Todos los motores", "3.6L V6 Pentastar Gasolina", "3.8L V6 EGH Gasolina", "4.0L I6 PowerTech Gasolina", "2.0L Turbo I4 Gasolina / 4xe"]
+      },
+      {
+        name: "Otro modelo Jeep",
+        engines: ["Todos los motores", "Gasolina V6 / V8", "Gasolina 4 Cilindros", "Diésel"]
       }
     ]
   },
@@ -855,12 +963,72 @@ export default function Catalogo() {
   }, [currentBrandObj]);
 
   const currentModelObj = useMemo(() => {
-    return availableModels.find(m => m.name === selectedVehicleModel);
+    if (!availableModels || !selectedVehicleModel) return null;
+    const direct = availableModels.find(m => m.name === selectedVehicleModel);
+    if (direct) return direct;
+    for (const parent of availableModels) {
+      if (parent.submodels) {
+        const sub = parent.submodels.find(s => s.name === selectedVehicleModel);
+        if (sub) {
+          return {
+            name: sub.name,
+            engines: (sub.engines && sub.engines.length > 0) ? sub.engines : parent.engines
+          };
+        }
+      }
+    }
+    return null;
   }, [availableModels, selectedVehicleModel]);
 
   const availableEngines = useMemo(() => {
     return currentModelObj ? currentModelObj.engines : [];
   }, [currentModelObj]);
+
+  // Step 2 Autodoc-Style Custom Dropdown State
+  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
+  const [modelSearchQuery, setModelSearchQuery] = useState("");
+  const [expandedModelName, setExpandedModelName] = useState<string | null>(null);
+  const modelDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close Step 2 dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (modelDropdownRef.current && !modelDropdownRef.current.contains(e.target as Node)) {
+        setIsModelDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsModelDropdownOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  // Filtered models for Step 2 based on modelSearchQuery
+  const filteredGroupedModels = useMemo(() => {
+    if (!availableModels) return [];
+    const q = modelSearchQuery.trim().toLowerCase();
+    if (!q) return availableModels;
+
+    return availableModels.map(m => {
+      const parentMatches = m.name.toLowerCase().includes(q);
+      const matchingSubs = m.submodels ? m.submodels.filter(s => 
+        s.name.toLowerCase().includes(q) || (s.years && s.years.toLowerCase().includes(q))
+      ) : [];
+
+      if (parentMatches || matchingSubs.length > 0) {
+        return {
+          ...m,
+          submodels: matchingSubs.length > 0 ? matchingSubs : m.submodels
+        };
+      }
+      return null;
+    }).filter(Boolean) as VehicleModelOption[];
+  }, [availableModels, modelSearchQuery]);
 
   const handleVehicleSearch = () => {
     if (!selectedVehicleBrand) {
@@ -1138,6 +1306,29 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
       setIsUsaModalOpen(true);
     }
 
+    const sanitizeCatalogItems = (items: any[]): any[] => {
+      if (!Array.isArray(items)) return items;
+      return items.map(item => {
+        let copy = { ...item };
+        if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
+          if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {
+            copy.img = '/assets/cat_radar_tss.jpg';
+          }
+        }
+        if (copy.id === 2 || copy.partNumber === 'WAG-QC-CER-88' || (copy.title && copy.title.toLowerCase().includes('pastillas de freno cerámicas wagner'))) {
+          if (!copy.img || copy.img.includes('promo_brakes_caliper') || copy.img.includes('cat_frenos_discos')) {
+            copy.img = '/assets/cat_pastillas_freno.jpg';
+          }
+          if (!copy.regularPrice) {
+            copy.regularPrice = '$70.00';
+            copy.discountBadge = 'AHORRAS $15 USD (21% OFF)';
+            copy.isPromo = true;
+          }
+        }
+        return copy;
+      });
+    };
+
     const loadLocalCatalog = () => {
       try {
         const stored = localStorage.getItem('mastertech_settings_store');
@@ -1150,7 +1341,7 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
                 ? JSON.parse(localData.CATALOG_PRODUCTS_JSON) 
                 : localData.CATALOG_PRODUCTS_JSON;
               if (Array.isArray(parsed) && parsed.length > 0) {
-                setCatalogItems(parsed);
+                setCatalogItems(sanitizeCatalogItems(parsed));
                 setIsCatalogLoading(false);
               }
             }
@@ -1177,19 +1368,19 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
           if (catalogSource) {
             const parsed = typeof catalogSource === 'string' ? JSON.parse(catalogSource) : catalogSource;
             if (Array.isArray(parsed) && parsed.length > 0) {
-              setCatalogItems(parsed);
+              setCatalogItems(sanitizeCatalogItems(parsed));
             }
           } else {
             // Supabase returned no catalog — use DEFAULT_CATALOG as fallback
-            setCatalogItems(DEFAULT_CATALOG);
+            setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
           }
         } else {
           // No Supabase data at all — use DEFAULT_CATALOG
-          setCatalogItems(DEFAULT_CATALOG);
+          setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
         }
       } catch (err) {
         // Network error — use DEFAULT_CATALOG
-        setCatalogItems(DEFAULT_CATALOG);
+        setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
       } finally {
         setIsCatalogLoading(false);
       }
@@ -1314,9 +1505,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
         if (modelNorm && !modelNorm.includes("todos")) {
           const cleanModel = modelNorm.split('(')[0].trim().toLowerCase();
+          const baseModel = cleanModel.replace(/suv|sedán|pick-up|hatchback/gi, '').trim().split(/\s+/)[0] || '';
           const modelInItem = compNorm.includes(cleanModel) || 
+                              (baseModel && compNorm.includes(baseModel)) ||
                               titleNorm.includes(cleanModel) || 
+                              (baseModel && titleNorm.includes(baseModel)) ||
                               descNorm.includes(cleanModel) || 
+                              (baseModel && descNorm.includes(baseModel)) ||
                               specsNorm.includes(cleanModel);
           matchesVehicle = isUniversal || (brandInItem && (modelInItem || !compNorm.includes('(')));
         } else {
@@ -1609,54 +1804,185 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   </select>
                 </div>
 
-                {/* Step 2: Elija un modelo */}
-                <div className={`relative flex items-center justify-between rounded-xl border p-3.5 transition-all bg-white dark:bg-[#181a24] ${
-                  !selectedVehicleBrand 
-                    ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
-                    : selectedVehicleModel 
-                      ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30' 
-                      : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
-                }`}>
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
-                      selectedVehicleBrand 
-                        ? 'bg-[#ff5500] text-white' 
-                        : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
-                    }`}>
-                      2
-                    </span>
-                    <span className={`text-sm truncate ${
-                      !selectedVehicleBrand 
-                        ? 'text-slate-400 dark:text-slate-500' 
+                {/* Step 2: Elija un modelo (Autodoc / Oscaro style) */}
+                <div 
+                  ref={modelDropdownRef} 
+                  className={`relative rounded-xl border transition-all bg-white dark:bg-[#181a24] ${
+                    !selectedVehicleBrand 
+                      ? 'opacity-60 bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10 cursor-not-allowed'
+                      : isModelDropdownOpen
+                        ? 'border-[#ff5500] ring-2 ring-[#ff5500]/40 z-40'
                         : selectedVehicleModel 
-                          ? 'font-bold text-slate-900 dark:text-white' 
-                          : 'text-slate-700 dark:text-slate-300'
-                    }`}>
-                      {selectedVehicleModel ? selectedVehicleModel : "Elija un modelo"}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0 pl-2">
-                    <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
-                    <ChevronDown size={18} className="text-slate-400" />
-                  </div>
-                  <select
-                    disabled={!selectedVehicleBrand}
-                    value={selectedVehicleModel}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setSelectedVehicleModel(val);
-                      setSelectedVehicleEngine("");
+                          ? 'border-[#ff5500] ring-1 ring-[#ff5500]/30 hover:border-[#ff5500]' 
+                          : 'border-slate-300 dark:border-white/15 hover:border-slate-400'
+                  }`}
+                >
+                  {/* Trigger Button */}
+                  <div
+                    onClick={() => {
+                      if (!selectedVehicleBrand) return;
+                      setIsModelDropdownOpen(prev => !prev);
                     }}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed text-base"
-                    aria-label="Elija un modelo"
+                    role="button"
+                    tabIndex={0}
+                    className="flex items-center justify-between p-3.5 cursor-pointer select-none"
                   >
-                    <option value="">Elija un modelo</option>
-                    {availableModels.map(m => (
-                      <option key={m.name} value={m.name} className="bg-white dark:bg-[#181a24] text-slate-900 dark:text-white">
-                        {m.name}
-                      </option>
-                    ))}
-                  </select>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <span className={`w-7 h-7 rounded-full text-xs font-black flex items-center justify-center shrink-0 shadow-sm ${
+                        selectedVehicleBrand 
+                          ? 'bg-[#ff5500] text-white' 
+                          : 'bg-slate-200 dark:bg-white/10 text-slate-400 dark:text-slate-500'
+                      }`}>
+                        2
+                      </span>
+                      <span className={`text-sm truncate ${
+                        !selectedVehicleBrand 
+                          ? 'text-slate-400 dark:text-slate-500' 
+                          : selectedVehicleModel 
+                            ? 'font-bold text-slate-900 dark:text-white' 
+                            : 'text-slate-500 dark:text-slate-400'
+                      }`}>
+                        {selectedVehicleModel ? selectedVehicleModel : "Buscar modelo..."}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 pl-2">
+                      {selectedVehicleModel && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedVehicleModel("");
+                            setSelectedVehicleEngine("");
+                          }}
+                          className="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+                          title="Limpiar modelo"
+                        >
+                          <X size={14} />
+                        </button>
+                      )}
+                      <div className="w-px h-6 bg-slate-200 dark:bg-white/15" />
+                      <ChevronDown 
+                        size={18} 
+                        className={`text-slate-400 transition-transform duration-200 ${isModelDropdownOpen ? 'rotate-180 text-[#ff5500]' : ''}`} 
+                      />
+                    </div>
+                  </div>
+
+                  {/* Dropdown Menu (Autodoc style with live search and + / - accordion) */}
+                  {isModelDropdownOpen && selectedVehicleBrand && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#181a24] border border-slate-200 dark:border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                      {/* Search Input Box */}
+                      <div className="p-3 border-b border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-[#14161f]">
+                        <div className="relative">
+                          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                          <input
+                            type="text"
+                            value={modelSearchQuery}
+                            onChange={(e) => setModelSearchQuery(e.target.value)}
+                            placeholder="Buscar modelo o año (ej: 4Runner, 2015)..."
+                            autoFocus
+                            className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-white dark:bg-[#1f2230] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-[#ff5500] focus:ring-1 focus:ring-[#ff5500]"
+                          />
+                          {modelSearchQuery && (
+                            <button
+                              type="button"
+                              onClick={() => setModelSearchQuery('')}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                            >
+                              <X size={14} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Header Title */}
+                      <div className="px-4 py-2 bg-slate-100/70 dark:bg-white/[0.04] border-b border-slate-200/60 dark:border-white/10 text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                        <span>TODOS LOS MODELOS {selectedVehicleBrand.toUpperCase()}</span>
+                        <span className="text-[10px] font-normal lowercase opacity-75">{filteredGroupedModels.length} modelos</span>
+                      </div>
+
+                      {/* Model Accordion List */}
+                      <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-white/[0.06] text-xs">
+                        {filteredGroupedModels.length === 0 ? (
+                          <div className="p-6 text-center text-slate-400 text-xs">
+                            No se encontraron modelos con "{modelSearchQuery}"
+                          </div>
+                        ) : (
+                          filteredGroupedModels.map((m) => {
+                            const hasSubmodels = m.submodels && m.submodels.length > 0;
+                            const isExpanded = expandedModelName === m.name || modelSearchQuery.trim().length > 0;
+                            const isParentActive = selectedVehicleModel === m.name;
+
+                            return (
+                              <div key={m.name} className="group/item">
+                                {/* Parent Model Row */}
+                                <div 
+                                  className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-colors ${
+                                    isParentActive 
+                                      ? 'bg-[#ff5500]/10 text-[#ff5500] font-bold' 
+                                      : 'hover:bg-slate-50 dark:hover:bg-white/[0.04] text-slate-800 dark:text-slate-200 font-semibold'
+                                  }`}
+                                  onClick={() => {
+                                    if (hasSubmodels) {
+                                      setExpandedModelName(expandedModelName === m.name ? null : m.name);
+                                    } else {
+                                      setSelectedVehicleModel(m.name);
+                                      setSelectedVehicleEngine("");
+                                      setIsModelDropdownOpen(false);
+                                    }
+                                  }}
+                                >
+                                  <span className="tracking-wide uppercase font-bold text-[13px]">{m.name}</span>
+                                  {hasSubmodels ? (
+                                    <span className="w-5 h-5 rounded-md flex items-center justify-center bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 group-hover/item:text-slate-900 dark:group-hover/item:text-white font-mono text-sm font-bold">
+                                      {isExpanded ? '−' : '+'}
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-400 uppercase font-medium">Seleccionar</span>
+                                  )}
+                                </div>
+
+                                {/* Expanded Submodels / Generations */}
+                                {hasSubmodels && isExpanded && (
+                                  <div className="bg-slate-50/70 dark:bg-black/20 pl-4 pr-3 py-1 space-y-0.5 border-t border-slate-100 dark:border-white/[0.04]">
+                                    {m.submodels!.map((sub) => {
+                                      const isSubActive = selectedVehicleModel === sub.name;
+                                      return (
+                                        <div
+                                          key={sub.name}
+                                          onClick={() => {
+                                            setSelectedVehicleModel(sub.name);
+                                            setSelectedVehicleEngine("");
+                                            setIsModelDropdownOpen(false);
+                                          }}
+                                          className={`py-2 px-3 rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
+                                            isSubActive
+                                              ? 'bg-[#ff5500] text-white font-bold'
+                                              : 'hover:bg-slate-200/60 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300'
+                                          }`}
+                                        >
+                                          <div className="flex items-center gap-2 min-w-0">
+                                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isSubActive ? 'bg-white' : 'bg-[#ff5500]'}`} />
+                                            <span className="truncate text-xs">{sub.name}</span>
+                                          </div>
+                                          {sub.years && (
+                                            <span className={`text-[10px] font-mono shrink-0 pl-2 ${isSubActive ? 'text-white/90' : 'text-slate-400'}`}>
+                                              {sub.years}
+                                            </span>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Step 3: Elija un tipo de motor */}
