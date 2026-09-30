@@ -3019,15 +3019,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           longDesc: localMatch.longDesc || localMatch.desc,
           badge: localMatch.badge || 'Mopar Genuine Parts',
           compatibility: localMatch.compatibility,
-          partNumber: localMatch.partNumber || cleanNoP.toUpperCase(),
+          partNumber: localMatch.partNumber || resolvedPartNumber || cleanNoP.toUpperCase(),
           specs: localMatch.specs || [],
           img: prev.img || localMatch.img || '',
           isImportedUSA: localMatch.isImportedUSA ?? true
         };
       });
       setIsAiAutofilling(false);
-      setAiStatusMsg(localMatch.msg || '✅ Datos completados con éxito desde catálogo OEM.');
-      setTimeout(() => setAiStatusMsg(''), 4000);
+      setAiStatusMsg(localMatch.msg || (wasTypoCorrected ? `✅ Corregido automáticamente a OEM #${resolvedPartNumber} y decodificado con éxito.` : '✅ Datos completados con éxito desde catálogo OEM.'));
+      setTimeout(() => setAiStatusMsg(''), 4500);
       return;
     }
 
@@ -3035,8 +3035,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       const res = await fetch('/api/autofill-part', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ partNumber: cleanNoP || rawSearch }),
-        signal: AbortSignal.timeout(6000)
+        body: JSON.stringify({ partNumber: resolvedPartNumber || cleanNoP || rawSearch }),
+        signal: AbortSignal.timeout(9000)
       });
 
       if (res.ok) {
@@ -3048,6 +3048,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             const rawPrice = item.price || item.precio || prev.price || '';
             const matchPrice = String(rawPrice).match(/(\d+(?:\.\d+)?)/);
             const cleanPrice = matchPrice ? `$${parseFloat(matchPrice[1]).toFixed(2)}` : '$45.00';
+            const finalPartNo = item.partNumber || item.codigo || resolvedPartNumber || prev.partNumber;
             return {
               ...prev,
               title: item.title || item.titulo || prev.title,
@@ -3057,22 +3058,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               longDesc: item.longDesc || item.descripcionDetallada || item.desc || prev.longDesc,
               badge: item.badge || prev.badge || 'Repuesto Certificado OEM',
               compatibility: item.compatibility || item.compatibilidad || prev.compatibility,
-              partNumber: item.partNumber || item.codigo || prev.partNumber,
+              partNumber: finalPartNo,
               specs: (item.specs && item.specs.length > 0) ? item.specs : (prev.specs || []),
               img: item.img || prev.img || '',
               isImportedUSA: item.isImportedUSA !== undefined ? item.isImportedUSA : (prev.isImportedUSA ?? true)
             };
           });
-          setAiStatusMsg('✅ Datos completados con éxito desde catálogo OEM.');
+          setAiStatusMsg(wasTypoCorrected ? `✅ Corregido a OEM #${resolvedPartNumber} y completado con éxito.` : '✅ Datos completados con éxito desde catálogo OEM.');
         } else {
           setAiStatusMsg('ℹ️ No se encontró código OEM exacto, llena los campos manualmente.');
         }
       }
     } catch (e) {
-      setAiStatusMsg('⚠️ Error al consultar IA.');
+      setAiStatusMsg('⚠️ Error al consultar catálogo.');
     } finally {
       setIsAiAutofilling(false);
-      setTimeout(() => setAiStatusMsg(''), 4000);
+      setTimeout(() => setAiStatusMsg(''), 4500);
     }
   };
 

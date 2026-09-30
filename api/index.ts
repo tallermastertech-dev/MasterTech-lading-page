@@ -3286,10 +3286,188 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     return null;
   };
 
+    // Live Web Auto-Discovery for unknown or typo-corrected OEM Part Numbers
+    const searchLiveOemData = async (rawInput: string): Promise<any | null> => {
+      let clean = rawInput.replace(/^(OEM|N\/P|CODIGO|COD|PART\s*NUMBER|PARTE|N°|NUMERO|REF|REFERENCIA)\s*[:#\s]*/i, '').replace(/^[:#\s]+/, '').trim();
+      const cleanNoP = clean.replace(/^P(?=[0-9]{7,8})/i, '');
+      let cleanP = cleanNoP.toUpperCase().replace(/[\s\-_.]/g, '');
+      let resolvedPn = cleanNoP.toUpperCase();
+
+      // Auto-correct 9-digit Toyota radar part numbers missing leading 8 (e.g. 8210-02040 -> 88210-02040)
+      if ((cleanP.startsWith('82100') || cleanP.startsWith('8210') || cleanNoP.startsWith('8210-')) && cleanP.length === 9) {
+        cleanP = '8' + cleanP;
+        resolvedPn = '88210-' + cleanP.slice(5);
+      }
+
+      const query = `${resolvedPn} oem part`;
+      try {
+        const res = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept-Language': 'es,en;q=0.9'
+          },
+          signal: AbortSignal.timeout(4500)
+        });
+        if (!res.ok) return null;
+        const html = await res.text();
+        const resultBlocks = html.split('<div class="result results_links');
+        const snippets: string[] = [];
+
+        for (let i = 1; i < resultBlocks.length && snippets.length < 8; i++) {
+          const block = resultBlocks[i];
+          const snipM = block.match(/<a class="result__snippet[^"]*"[^>]*>([\s\S]*?)<\/a>/);
+          const titleM = block.match(/<h2 class="result__title">[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>/);
+          const snip = snipM ? snipM[1].replace(/<[^>]+>/g, '').trim() : '';
+          const title = titleM ? titleM[1].replace(/<[^>]+>/g, '').trim() : '';
+          if (snip || title) snippets.push(`${title} — ${snip}`);
+        }
+
+        const combined = snippets.join(' ');
+        if (!combined || combined.length < 30) return null;
+
+        // Detect Brand
+        const brandList = [
+          { name: 'Toyota', regex: /\btoyota\b|\bscion\b|\blexus\b/i, badge: 'Toyota Genuine Parts' },
+          { name: 'Mopar / Jeep', regex: /\bmopar\b|\bjeep\b|\bchrysler\b|\bdodge\b|\bram\b/i, badge: 'Mopar Genuine Parts' },
+          { name: 'Ford', regex: /\bford\b|\bmotorcraft\b|\blincoln\b/i, badge: 'Motorcraft OEM Parts' },
+          { name: 'Chevrolet / GM', regex: /\bgm\b|\bchevrolet\b|\bchevy\b|\bacdelco\b|\bgmc\b/i, badge: 'GM Genuine Parts' },
+          { name: 'Honda', regex: /\bhonda\b|\bacura\b/i, badge: 'Honda Genuine Parts' },
+          { name: 'Nissan', regex: /\bnissan\b|\binfiniti\b/i, badge: 'Nissan Genuine Parts' },
+          { name: 'Hyundai', regex: /\bhyundai\b|\bkia\b|\bmobis\b/i, badge: 'Hyundai / Mobis OEM' }
+        ];
+        const detectedBrand = brandList.find(b => b.regex.test(combined)) || { name: 'OEM', badge: 'Repuesto Certificado OEM' };
+
+        // Verify/Correct Part Number from text
+        const pnRegex = new RegExp(`\\b(${resolvedPn.replace(/[-]/g, '[- ]?')})\\b`, 'i');
+        const exactM = combined.match(pnRegex);
+        if (exactM) {
+          resolvedPn = exactM[1].replace(/\s+/g, '-').toUpperCase();
+        }
+
+        // Category & Component Name
+        let cat = 'Inyección & Motor';
+        let esPartName = 'Repuesto Automotriz Especializado';
+        let defaultPrice = '$85.00';
+
+        if (/distance sensor|radar sensor|adaptive cruise|sensor assembly millime|tss\b|adas\b/i.test(combined)) {
+          cat = 'Baterías & Electricidad';
+          esPartName = 'Sensor de Distancia / Radar Frontal ADAS (TSS)';
+          defaultPrice = '$340.00';
+        } else if (/brake pad|pastilla de freno|friction/i.test(combined)) {
+          cat = 'Frenos & Discos';
+          esPartName = 'Pastillas de Freno Cerámicas Delanteras';
+          defaultPrice = '$48.00';
+        } else if (/brake rotor|brake disc|disco de freno/i.test(combined)) {
+          cat = 'Frenos & Discos';
+          esPartName = 'Disco de Freno Rotor Ventilado';
+          defaultPrice = '$65.00';
+        } else if (/shock absorber|strut assembly|amortiguador/i.test(combined)) {
+          cat = 'Suspensión & Amortiguadores';
+          esPartName = 'Amortiguador Presurizado a Gas Nitrógeno';
+          defaultPrice = '$95.00';
+        } else if (/tie rod|drag link|terminal de direccion|ball joint/i.test(combined)) {
+          cat = 'Suspensión & Amortiguadores';
+          esPartName = 'Terminal / Barra de Dirección Forjada';
+          defaultPrice = '$85.00';
+        } else if (/oil filter|filtro de aceite/i.test(combined)) {
+          cat = 'Filtros & Consumibles';
+          esPartName = 'Filtro de Aceite de Alta Eficiencia';
+          defaultPrice = '$18.00';
+        } else if (/air filter|filtro de aire/i.test(combined)) {
+          cat = 'Filtros & Consumibles';
+          esPartName = 'Filtro de Aire de Motor OEM';
+          defaultPrice = '$22.00';
+        } else if (/cabin filter|filtro de cabina|pollen filter/i.test(combined)) {
+          cat = 'Filtros & Consumibles';
+          esPartName = 'Filtro de Cabina / A/C Antialérgico';
+          defaultPrice = '$20.00';
+        } else if (/spark plug|bujia/i.test(combined)) {
+          cat = 'Filtros & Consumibles';
+          esPartName = 'Bujía de Encendido Iridio / Platino';
+          defaultPrice = '$15.00';
+        } else if (/water pump|bomba de agua/i.test(combined)) {
+          cat = 'Fluidos & Climatización';
+          esPartName = 'Bomba de Agua y Refrigeración de Motor';
+          defaultPrice = '$115.00';
+        } else if (/compressor|compresor a\/c/i.test(combined)) {
+          cat = 'Fluidos & Climatización';
+          esPartName = 'Compresor de Aire Acondicionado OEM';
+          defaultPrice = '$320.00';
+        } else if (/ignition coil|bobina de encendido/i.test(combined)) {
+          cat = 'Inyección & Motor';
+          esPartName = 'Bobina de Encendido Electrónico COP';
+          defaultPrice = '$45.00';
+        } else if (/fuel pump|bomba de gasolina/i.test(combined)) {
+          cat = 'Inyección & Motor';
+          esPartName = 'Módulo Bomba de Combustible en Tanque';
+          defaultPrice = '$140.00';
+        } else if (/transfer case|ptu\b|diferencial/i.test(combined)) {
+          cat = 'Inyección & Motor';
+          esPartName = 'Caja de Transferencia PTU Tracción AWD';
+          defaultPrice = '$485.00';
+        }
+
+        const vehicleModels = [
+          'Corolla', 'Corolla Cross', 'RAV4', 'Camry', 'Hilux', 'Fortuner', 'Yaris', 'Tacoma', 'Tundra', 'Highlander', 'Prius', '4Runner',
+          'Wrangler', 'Grand Cherokee', 'Gladiator', 'Cherokee', 'Compass', 'Durango', 'RAM 1500', 'RAM 2500', 'Chrysler 300',
+          'Explorer', 'Edge', 'F-150', 'Escape', 'Focus', 'Fusion', 'Mustang', 'Expedition',
+          'Silverado', 'Tahoe', 'Suburban', 'Equinox', 'Cruze', 'Trailblazer', 'Malibu', 'Colorado',
+          'Civic', 'CR-V', 'Accord', 'Pilot', 'HR-V',
+          'Altima', 'Sentra', 'Versa', 'X-Trail', 'Frontier', 'Pathfinder'
+        ];
+        const matchedModels = vehicleModels.filter(m => new RegExp(`\\b${m}\\b`, 'i').test(combined));
+        const modelsStr = matchedModels.slice(0, 3).join(' / ');
+
+        const yearRangeMatch = combined.match(/\b(20[0-2][0-9])\s*[-–a/]\s*(20[0-2][0-9])\b/);
+        const singleYearMatch = combined.match(/\b(20[0-2][0-9])\b/);
+        const yearsText = yearRangeMatch ? `${yearRangeMatch[1]}-${yearRangeMatch[2]}` : (singleYearMatch ? singleYearMatch[1] : '');
+
+        const priceMatches = [...combined.matchAll(/\$\s*(\d{2,4}(?:\.\d{2})?)/g)]
+          .map(m => parseFloat(m[1]))
+          .filter(p => p >= 12 && p <= 2500);
+
+        let finalPrice = defaultPrice;
+        if (priceMatches.length > 0) {
+          const avg = Math.round(priceMatches.reduce((a, b) => a + b, 0) / priceMatches.length);
+          finalPrice = `$${avg}.00`;
+        }
+
+        const finalTitle = `${esPartName} ${detectedBrand.name} ${modelsStr} ${yearsText} OEM (${resolvedPn})`.replace(/\s+/g, ' ').replace(/\(\s+/g, '(').trim();
+        const compat = `${detectedBrand.name} ${modelsStr || 'Línea automotriz'} ${yearsText ? `(${yearsText})` : ''} — Verificación por VIN en Taller MasterTech`.trim();
+
+        return {
+          titulo: finalTitle,
+          categoria: cat,
+          precio: finalPrice,
+          partNumber: resolvedPn,
+          badge: detectedBrand.badge,
+          compatibilidad: compat,
+          descripcionCorta: `${esPartName} original ${detectedBrand.name} número de parte OEM #${resolvedPn}. Ajuste directo de fábrica y máxima fiabilidad.`,
+          descripcionDetallada: `Componente original ${detectedBrand.badge} ref. #${resolvedPn}. Diseñado según los parámetros técnicos de equipo original para ${detectedBrand.name} ${modelsStr || ''}. Cumple con especificaciones de tolerancia milimétrica, resistencia térmica y durabilidad certificada. Instalación y escaneo computarizado disponible en Taller MasterTech en Porlamar, Isla de Margarita.`,
+          specs: [
+            `Fabricación original bajo especificaciones OEM ${detectedBrand.name}`,
+            `Referencia oficial del fabricante: ${resolvedPn}`,
+            `Ajuste Plug & Play sin adaptaciones ni modificaciones`,
+            `Garantía de instalación y calibración en Taller MasterTech`
+          ],
+          isImportedUSA: true
+        };
+      } catch (e) {
+        return null;
+      }
+    };
+
     // STEP 1: Local database (instant, no API cost)
     let parsedJson: any = detectFromDatabase(pNum);
 
-    // STEP 2: Gemini AI (if not found in DB and a real API key is configured)
+    // STEP 2: Live Web Auto-Discovery (DuckDuckGo search engine with real-time OEM decoding)
+    if (!parsedJson) {
+      try {
+        parsedJson = await searchLiveOemData(pNum);
+      } catch (e) {}
+    }
+
+    // STEP 3: Gemini AI (if not found in DB and a real API key is configured)
     if (!parsedJson && apiKey && apiKey.startsWith('AIza')) {
       const promptText = `Eres el MAYOR EXPERTO MUNDIAL en decodificacion de numeros de parte OEM automotriz. Numero de parte: "${pNum}". Devuelve UNICAMENTE JSON valido sin markdown.
 
