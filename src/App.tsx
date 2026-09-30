@@ -386,22 +386,46 @@ export default function App() {
 
   const processedRepuestos = React.useMemo(() => {
     const list = (catalogList && catalogList.length > 0) ? catalogList : DEFAULT_CATALOG;
-    const targetId = (config.PROMO_BAR_TARGET_ID || '').trim();
-    return list.map((item: any) => ({
+    const mapped = list.map((item: any) => ({
       ...item,
       promoType: 'repuesto' as const,
       promoPrice: item.promoPrice || item.price,
       discountPct: getPromoDiscountPct(item),
-      isSelectedPromo: targetId ? (String(item.id) === targetId || item.partNumber === targetId) : false
-    })).sort((a: any, b: any) => {
-      if (a.isSelectedPromo && !b.isSelectedPromo) return -1;
-      if (!a.isSelectedPromo && b.isSelectedPromo) return 1;
+    }));
+
+    const slot1Id = (config.PROMO_REPUESTO_1 || config.PROMO_BAR_TARGET_ID || '').trim();
+    const slot2Id = (config.PROMO_REPUESTO_2 || '').trim();
+    const slot3Id = (config.PROMO_REPUESTO_3 || '').trim();
+
+    const isMatch = (item: any, id: string) => id ? (String(item.id) === id || item.partNumber === id) : false;
+
+    // Highest discount pool for empty slots
+    const sortedDefault = [...mapped].sort((a: any, b: any) => {
       if (b.discountPct !== a.discountPct) return b.discountPct - a.discountPct;
       if (b.isPromo && !a.isPromo) return -1;
       if (!b.isPromo && a.isPromo) return 1;
       return 0;
     });
-  }, [catalogList, config.PROMO_BAR_TARGET_ID]);
+
+    const chosen1 = slot1Id ? mapped.find((item: any) => isMatch(item, slot1Id)) : null;
+    const chosen2 = slot2Id ? mapped.find((item: any) => isMatch(item, slot2Id)) : null;
+    const chosen3 = slot3Id ? mapped.find((item: any) => isMatch(item, slot3Id)) : null;
+
+    const used = new Set([chosen1, chosen2, chosen3].filter(Boolean));
+    const available = sortedDefault.filter((item: any) => !used.has(item));
+
+    const final1 = chosen1 || available.shift() || mapped[0];
+    const final2 = chosen2 || available.shift() || mapped[1] || mapped[0];
+    const final3 = chosen3 || available.shift() || mapped[2] || mapped[1] || mapped[0];
+
+    const result = [
+      final1 ? { ...final1, isSelectedPromo: !!slot1Id } : null,
+      final2 ? { ...final2, isSelectedPromo: !!slot2Id } : null,
+      final3 ? { ...final3, isSelectedPromo: !!slot3Id } : null,
+    ].filter(Boolean);
+
+    return result.length > 0 ? result : sortedDefault;
+  }, [catalogList, config.PROMO_BAR_TARGET_ID, config.PROMO_REPUESTO_1, config.PROMO_REPUESTO_2, config.PROMO_REPUESTO_3]);
 
   // Selected Active Promotion for the Flash Notification Bar based on Admin Mode
   const activePromo = React.useMemo(() => {

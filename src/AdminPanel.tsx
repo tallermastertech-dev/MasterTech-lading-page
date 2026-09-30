@@ -6733,7 +6733,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     type="button"
                     onClick={() => handleSaveSection('promobar', {
                       PROMO_BAR_MODE: settingsForm.PROMO_BAR_MODE || 'auto',
-                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_REPUESTO_1: settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_REPUESTO_2: settingsForm.PROMO_REPUESTO_2 || '',
+                      PROMO_REPUESTO_3: settingsForm.PROMO_REPUESTO_3 || '',
                       PROMO_SECTION_BADGE: settingsForm.PROMO_SECTION_BADGE || '',
                       PROMO_SECTION_TITLE_JORNADAS: settingsForm.PROMO_SECTION_TITLE_JORNADAS || '',
                       PROMO_SECTION_DESC_JORNADAS: settingsForm.PROMO_SECTION_DESC_JORNADAS || '',
@@ -6779,11 +6782,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                   <div>
                     <label className="text-zinc-400 font-bold block mb-1">
-                      Seleccionar Oferta Específica (Opcional)
+                      Seleccionar Oferta Barra Flash (Principal)
                     </label>
                     <select
-                      value={settingsForm.PROMO_BAR_TARGET_ID || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_TARGET_ID: e.target.value })}
+                      value={settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSettingsForm({ ...settingsForm, PROMO_BAR_TARGET_ID: val, PROMO_REPUESTO_1: val });
+                      }}
                       className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-red-500 cursor-pointer"
                     >
                       <option value="">Automático: la de mayor % de descuento</option>
@@ -6807,8 +6813,87 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       )}
                     </select>
                     <span className="text-[10px] text-zinc-500 mt-1 block">
-                      Puedes fijar un repuesto específico o dejarlo automático.
+                      Oferta fijada en la barra flash superior y en la primera tarjeta de la portada.
                     </span>
+                  </div>
+                </div>
+
+                {/* Subsección: Selección de las 3 Tarjetas en Portada desde el Catálogo */}
+                <div className="border-t border-white/10 pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-300">
+                    <Package size={14} className="text-red-400" />
+                    <span>Selección de los 3 Repuestos Mostrados en Portada (Catálogo)</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-400">
+                    Elige directamente qué repuestos de tu catálogo deben mostrarse en cada una de las 3 tarjetas de la portada para no tener que subirlos 2 veces.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    {/* Tarjeta 1 */}
+                    <div className="space-y-1.5 bg-black/40 p-3 rounded-xl border border-white/10">
+                      <label className="text-zinc-300 font-bold block text-[11px] flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-red-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">1</span>
+                        <span>Tarjeta 1 (Principal)</span>
+                      </label>
+                      <select
+                        value={settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSettingsForm({ ...settingsForm, PROMO_REPUESTO_1: val, PROMO_BAR_TARGET_ID: val });
+                        }}
+                        className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-red-500 cursor-pointer text-xs"
+                      >
+                        <option value="">Automático: mayor descuento</option>
+                        {catalogItems.map((prod) => (
+                          <option key={`card1-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                            {prod.title} ({prod.price}) {prod.partNumber ? `[OEM: ${prod.partNumber}]` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-zinc-500 block">Primera tarjeta de izquierda a derecha.</span>
+                    </div>
+
+                    {/* Tarjeta 2 */}
+                    <div className="space-y-1.5 bg-black/40 p-3 rounded-xl border border-white/10">
+                      <label className="text-zinc-300 font-bold block text-[11px] flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-zinc-700 text-white text-[10px] font-black flex items-center justify-center shrink-0">2</span>
+                        <span>Tarjeta 2 (Central)</span>
+                      </label>
+                      <select
+                        value={settingsForm.PROMO_REPUESTO_2 || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_REPUESTO_2: e.target.value })}
+                        className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-red-500 cursor-pointer text-xs"
+                      >
+                        <option value="">Automático: mayor descuento</option>
+                        {catalogItems.map((prod) => (
+                          <option key={`card2-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                            {prod.title} ({prod.price}) {prod.partNumber ? `[OEM: ${prod.partNumber}]` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-zinc-500 block">Segunda tarjeta (centro).</span>
+                    </div>
+
+                    {/* Tarjeta 3 */}
+                    <div className="space-y-1.5 bg-black/40 p-3 rounded-xl border border-white/10">
+                      <label className="text-zinc-300 font-bold block text-[11px] flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-zinc-700 text-white text-[10px] font-black flex items-center justify-center shrink-0">3</span>
+                        <span>Tarjeta 3 (Derecha)</span>
+                      </label>
+                      <select
+                        value={settingsForm.PROMO_REPUESTO_3 || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_REPUESTO_3: e.target.value })}
+                        className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-red-500 cursor-pointer text-xs"
+                      >
+                        <option value="">Automático: mayor descuento</option>
+                        {catalogItems.map((prod) => (
+                          <option key={`card3-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                            {prod.title} ({prod.price}) {prod.partNumber ? `[OEM: ${prod.partNumber}]` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-zinc-500 block">Tercera tarjeta (derecha).</span>
+                    </div>
                   </div>
                 </div>
 
@@ -7461,7 +7546,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     type="button"
                     onClick={() => handleSaveSection('promobar', {
                       PROMO_BAR_MODE: settingsForm.PROMO_BAR_MODE || 'auto',
-                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_REPUESTO_1: settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || '',
+                      PROMO_REPUESTO_2: settingsForm.PROMO_REPUESTO_2 || '',
+                      PROMO_REPUESTO_3: settingsForm.PROMO_REPUESTO_3 || '',
                       PROMO_SECTION_BADGE: settingsForm.PROMO_SECTION_BADGE || '',
                       PROMO_SECTION_TITLE_JORNADAS: settingsForm.PROMO_SECTION_TITLE_JORNADAS || '',
                       PROMO_SECTION_DESC_JORNADAS: settingsForm.PROMO_SECTION_DESC_JORNADAS || '',
@@ -7507,11 +7595,14 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                   <div>
                     <label className="text-zinc-400 font-bold block mb-1">
-                      Seleccionar Oferta Específica (Opcional)
+                      Seleccionar Oferta Barra Flash (Principal)
                     </label>
                     <select
-                      value={settingsForm.PROMO_BAR_TARGET_ID || ''}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_TARGET_ID: e.target.value })}
+                      value={settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || ''}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSettingsForm({ ...settingsForm, PROMO_BAR_TARGET_ID: val, PROMO_REPUESTO_1: val });
+                      }}
                       className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-red-500 cursor-pointer"
                     >
                       <option value="">Automático: la de mayor % de descuento</option>
@@ -7535,8 +7626,87 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       )}
                     </select>
                     <span className="text-[10px] text-zinc-500 mt-1 block">
-                      Puedes fijar una jornada específica o dejarlo en automático.
+                      Oferta fijada en la barra flash superior y en la primera tarjeta de la portada.
                     </span>
+                  </div>
+                </div>
+
+                {/* Subsección: Selección de las 3 Tarjetas en Portada desde el Catálogo */}
+                <div className="border-t border-white/10 pt-4 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-zinc-300">
+                    <Package size={14} className="text-red-400" />
+                    <span>Selección de los 3 Repuestos Mostrados en Portada (Catálogo)</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-400">
+                    Elige directamente qué repuestos de tu catálogo deben mostrarse en cada una de las 3 tarjetas de la portada para no tener que subirlos 2 veces.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    {/* Tarjeta 1 */}
+                    <div className="space-y-1.5 bg-black/40 p-3 rounded-xl border border-white/10">
+                      <label className="text-zinc-300 font-bold block text-[11px] flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-red-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">1</span>
+                        <span>Tarjeta 1 (Principal)</span>
+                      </label>
+                      <select
+                        value={settingsForm.PROMO_REPUESTO_1 || settingsForm.PROMO_BAR_TARGET_ID || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSettingsForm({ ...settingsForm, PROMO_REPUESTO_1: val, PROMO_BAR_TARGET_ID: val });
+                        }}
+                        className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-red-500 cursor-pointer text-xs"
+                      >
+                        <option value="">Automático: mayor descuento</option>
+                        {catalogItems.map((prod) => (
+                          <option key={`c1-tab-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                            {prod.title} ({prod.price}) {prod.partNumber ? `[OEM: ${prod.partNumber}]` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-zinc-500 block">Primera tarjeta de izquierda a derecha.</span>
+                    </div>
+
+                    {/* Tarjeta 2 */}
+                    <div className="space-y-1.5 bg-black/40 p-3 rounded-xl border border-white/10">
+                      <label className="text-zinc-300 font-bold block text-[11px] flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-zinc-700 text-white text-[10px] font-black flex items-center justify-center shrink-0">2</span>
+                        <span>Tarjeta 2 (Central)</span>
+                      </label>
+                      <select
+                        value={settingsForm.PROMO_REPUESTO_2 || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_REPUESTO_2: e.target.value })}
+                        className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-red-500 cursor-pointer text-xs"
+                      >
+                        <option value="">Automático: mayor descuento</option>
+                        {catalogItems.map((prod) => (
+                          <option key={`c2-tab-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                            {prod.title} ({prod.price}) {prod.partNumber ? `[OEM: ${prod.partNumber}]` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-zinc-500 block">Segunda tarjeta (centro).</span>
+                    </div>
+
+                    {/* Tarjeta 3 */}
+                    <div className="space-y-1.5 bg-black/40 p-3 rounded-xl border border-white/10">
+                      <label className="text-zinc-300 font-bold block text-[11px] flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-zinc-700 text-white text-[10px] font-black flex items-center justify-center shrink-0">3</span>
+                        <span>Tarjeta 3 (Derecha)</span>
+                      </label>
+                      <select
+                        value={settingsForm.PROMO_REPUESTO_3 || ''}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_REPUESTO_3: e.target.value })}
+                        className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white outline-none focus:border-red-500 cursor-pointer text-xs"
+                      >
+                        <option value="">Automático: mayor descuento</option>
+                        {catalogItems.map((prod) => (
+                          <option key={`c3-tab-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                            {prod.title} ({prod.price}) {prod.partNumber ? `[OEM: ${prod.partNumber}]` : ''}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="text-[10px] text-zinc-500 block">Tercera tarjeta (derecha).</span>
+                    </div>
                   </div>
                 </div>
 
