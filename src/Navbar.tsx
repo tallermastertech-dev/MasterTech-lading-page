@@ -425,7 +425,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       </a>
                     ))}
                     <a href="/catalogo" onClick={() => setIsMobileMenuOpen(false)} className="block text-primary font-bold pt-1.5 pl-11">
-                      → Explorar Catálogo Completo
+                      → Ver Catálogo de Repuestos Completo
                     </a>
                   </div>
                 )}

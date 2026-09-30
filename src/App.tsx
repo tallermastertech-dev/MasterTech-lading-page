@@ -887,7 +887,7 @@ export default function App() {
                   className="btn-secondary !px-6 !py-3.5 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all flex items-center gap-2"
                 >
                   <Package size={16} className="text-red-400" />
-                  <span>EXPLORAR CATÁLOGO</span>
+                  <span>CATÁLOGO DE REPUESTOS</span>
                 </a>
               </div>
 
@@ -1079,7 +1079,7 @@ export default function App() {
                     href="/catalogo"
                     className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1"
                   >
-                    <span>Explorar catálogo</span>
+                    <span>Catálogo de repuestos</span>
                   </a>
                 </>
               ) : (
@@ -1193,7 +1193,7 @@ export default function App() {
                 </p>
               </div>
               <a href="/catalogo" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Explorar Catálogo</span>
+                <span>Ver Catálogo de Repuestos</span>
                 <ArrowRight size={14} />
               </a>
             </div>
@@ -1267,7 +1267,7 @@ export default function App() {
                   href="/catalogo" 
                   className="btn-secondary !px-4 !py-2 text-xs font-bold flex items-center justify-center gap-2"
                 >
-                  <span>Ver Catálogo Completo</span>
+                  <span>Ver Catálogo de Repuestos</span>
                   <ArrowRight size={14} />
                 </a>
               )}
