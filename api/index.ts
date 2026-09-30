@@ -2857,6 +2857,35 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     if (/^13503909$|^CF3313$|^25896246$|^23435001$|^84184764$/i.test(c)) return { titulo: 'Filtro de Habitáculo / Cabina (Cabin Air Filter) AC Delco/GM OEM (' + raw + ')', categoria: 'Filtros y Consumibles', compatibilidad: 'Chevrolet Silverado 2014-2022, Suburban, Tahoe, Equinox 2018-2022, Malibu 2013-2020 & GMC Sierra (2014-2022)', descripcionCorta: 'Filtro de cabina AC Delco OEM, fibra sintética de alta capacidad, retiene polvo, humo y bacterias del sistema HVAC.', descripcionDetallada: 'Filtro de habitáculo OEM GM/AC Delco #' + raw + '. Multi-capa con fibra electroestática. Eficiencia PM10: 99%. Intervalo: 20,000 km.' };
     // FORD/MOTORCRAFT cabin air filter
     if (/^FP79$|^FP76$|^CF11242$|^FLF501$|^FP82$/i.test(c)) return { titulo: 'Filtro de Habitáculo / Cabina (Cabin Air Filter) Motorcraft/Ford OEM (' + raw + ')', categoria: 'Filtros y Consumibles', compatibilidad: 'Ford F-150 2015-2024, Explorer 2011-2022, Edge 2015-2021, Fusion 2013-2020 & Lincoln MKZ/MKX (2013-2022)', descripcionCorta: 'Filtro de cabina Motorcraft OEM, fibra sintética densificada, protege el sistema HVAC y mejora calidad del aire interior.', descripcionDetallada: 'Filtro de habitáculo OEM Motorcraft #' + raw + '. Material: fibra sintética de 3 densidades. Retiene partículas ≥1 micra. Intervalo: 20,000 km o 1 año.' };
+    // TOYOTA Radar Sensor Distance ADAS (88210 / 8210 typo)
+    if (/^88210[0-9A-Z]{5}|^821002040|^82100[0-9A-Z]{4}/i.test(c) || /^8210-?02040/i.test(raw)) {
+      const isCorolla = /02040/i.test(c) || /02040/i.test(raw);
+      const truePn = isCorolla ? '88210-02040' : (raw.startsWith('8210') ? '88' + raw.slice(1) : raw);
+      return {
+        titulo: isCorolla
+          ? 'Sensor de Distancia / Radar Frontal Toyota Corolla 2023-2025 OEM (' + truePn + ')'
+          : 'Sensor de Distancia / Radar ADAS TSS Toyota OEM (' + truePn + ')',
+        categoria: 'Baterías y Electricidad',
+        compatibilidad: isCorolla
+          ? 'Toyota Corolla 1.8L / 2.0L / Hybrid 2023-2025 y Corolla Cross 2023-2025'
+          : 'Toyota Corolla 2019-2025, RAV4 2019-2025, Camry 2018-2025, Highlander & Sienna (2020-2025)',
+        descripcionCorta: 'Sensor radar milimétrico frontal Toyota Safety Sense TSS para Control Crucero Adaptativo y Pre-Colisión.',
+        descripcionDetallada: 'Sensor radar de distancia frontal OEM Toyota #' + truePn + '. Banda 76-77 GHz. Integrado a Toyota Safety Sense TSS 3.0. Requiere calibración con escáner Toyota TechStream tras instalación.',
+        precio: isCorolla ? '$340.00' : '$325.00',
+        badge: 'Toyota Genuine Parts',
+        specs: [
+          'Tecnología radar milimétrico 76-77 GHz, alcance hasta 180 m',
+          'Sistema Toyota Safety Sense (TSS): DRCC + PCS + LDA integrados',
+          'Temperatura de operación -40°C a +85°C — IP67 resistente a agua y polvo',
+          'Calibración obligatoria con Toyota TechStream — Ref. OEM: ' + truePn
+        ],
+        referencias: [
+          truePn + ' (Toyota OEM)',
+          '88210-02030 (Toyota anterior)',
+          '88210-02031 (Toyota anterior)'
+        ]
+      };
+    }
     // TOYOTA TPMS sensor
     if (/^42607[0-9A-Z]{5}/i.test(c)) return { titulo: 'Sensor TPMS Presión Neumáticos Toyota OEM (' + raw + ')', categoria: 'Inyección y Sensores', compatibilidad: 'Toyota Tacoma 2007-2023, Tundra 2007-2021, 4Runner 2003-2024, Fortuner, Hilux, RAV4 & Camry (2007-2024)', descripcionCorta: 'Sensor TPMS 315/433 MHz calibrado para Toyota, sin reprogramación adicional requerida.', descripcionDetallada: 'Sensor TPMS OEM Toyota #' + raw + '. Batería litio 7-10 años. Rango 1.3-4.5 bar. Transmite datos al tablero en tiempo real.' };
     // TOYOTA O2 sensor
@@ -3320,6 +3349,7 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
       else if (/PUMP|BOMBA|WATER|COOLANT/i.test(u3)) parsedJson = { titulo: `Bomba de Agua/Refrigeración OEM (${pNum})`, categoria: 'Fluidos & Climatización', compatibilidad: 'Motores multimarca', descripcionCorta: 'Bomba impulsor metálico con sello carburo de silicio, caudal 80-120 L/min.', descripcionDetallada: `Bomba OEM #${pNum}. Resistente a anticongelante OAT/HOAT. Garantía 2 años.` };
       else if (/TRANSFER|PTU|DIFERENCIAL|CASE|MS10/i.test(u3)) parsedJson = { titulo: `Caja de Transferencia / PTU AWD OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Vehículos SUV y 4WD/AWD Ford, Jeep, Dodge, Toyota', descripcionCorta: 'Caja de transferencia / PTU para distribución de torque a las 4 ruedas.', descripcionDetallada: `Unidad OEM #${pNum}. Verifique lubricación con fluido sintético 75W-140.` };
       else if (/^(?:P|0)?(68[0-9]{6}|05[0-9]{6}|52[0-9]{6}|53[0-9]{6}|56[0-9]{6})/i.test(u3)) parsedJson = { titulo: `Repuesto Original Mopar OEM (#${pNum.toUpperCase()})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Jeep Wrangler JL/JK, Grand Cherokee WK2, RAM 1500 & Dodge Durango', descripcionCorta: `Componente original de fábrica Mopar Stellantis OEM #${pNum}.`, descripcionDetallada: `Repuesto original Mopar #${pNum}. Fabricado bajo especificaciones de equipo original para Jeep, Dodge y RAM.`, precio: '$125.00', badge: 'Mopar Genuine Parts' };
+      else if (/88210|8210|RADAR|DISTANCE|ADAS|CRUISE|SAFETY/i.test(u3)) parsedJson = { titulo: `Sensor de Distancia / Radar Frontal ADAS OEM (#${pNum.toUpperCase()})`, categoria: 'Baterías & Electricidad', compatibilidad: 'Toyota Corolla / RAV4 / Camry / Highlander con sistema Safety Sense TSS', descripcionCorta: `Sensor radar de ondas milimétricas para Control Crucero Adaptativo y Alerta de Colisión OEM #${pNum}.`, descripcionDetallada: `Sensor radar OEM #${pNum}. Requiere calibración con escáner TechStream tras instalación.`, precio: '$340.00', badge: 'Toyota Genuine Parts' };
       else parsedJson = { titulo: `Repuesto Automotriz OEM #${pNum.toUpperCase()}`, categoria: 'Filtros & Consumibles', compatibilidad: 'Consultar compatibilidad en catálogo OEM del fabricante', descripcionCorta: `Componente original o equivalente certificado OEM #${pNum}.`, descripcionDetallada: `Repuesto OEM #${pNum}. Consulte catálogo del fabricante para confirmar aplicación exacta.` };
     }
 

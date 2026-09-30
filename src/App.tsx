@@ -64,7 +64,7 @@ import Contacto from './Contacto';
 import Faq from './Faq';
 import Nosotros from './Nosotros';
 import Servicios from './Servicios';
-import Catalogo from './Catalogo';
+import Catalogo, { DEFAULT_CATALOG } from './Catalogo';
 import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
 import Jeep from './Jeep';
@@ -134,7 +134,9 @@ const CONFIG = {
   BEFORE_AFTER_1: "/assets/before_after_1.webp",
   BEFORE_AFTER_2: "/assets/before_after_2.webp",
   SUCCESS_BADGE: "¡TIENES HASTA UN 15% DE DESCUENTO!",
-  SUCCESS_TEXT: "Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita."
+  SUCCESS_TEXT: "Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita.",
+  PROMO_BAR_MODE: "jornadas",
+  PROMO_BAR_TARGET_ID: ""
 };
 
 const DEFAULT_JORNADAS = [
@@ -336,47 +338,119 @@ export default function App() {
     return DEFAULT_JORNADAS;
   });
 
-  // Calculate discount percentage dynamically for each promotion
+  const [promoSectionTab, setPromoSectionTab] = useState<'jornadas' | 'repuestos'>('jornadas');
+
+  const [catalogList, setCatalogList] = useState<any[]>(() => {
+    try {
+      const s = localStorage.getItem('mastertech_settings_store');
+      if (s) {
+        const p = JSON.parse(s);
+        if (p.CATALOG_PRODUCTS_JSON) {
+          const parsed = typeof p.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(p.CATALOG_PRODUCTS_JSON) : p.CATALOG_PRODUCTS_JSON;
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      }
+    } catch (e) {}
+    return DEFAULT_CATALOG;
+  });
+
+  // Calculate discount percentage dynamically for each promotion (both Jornadas and Repuestos)
   const getPromoDiscountPct = (item: any): number => {
     if (!item) return 0;
-    const matchPct = (item.discountBadge || '').match(/(\d+)%/);
-    if (matchPct && matchPct[1]) return parseInt(matchPct[1], 10);
-    if (item.regularPrice && item.promoPrice) {
+    if (item.regularPrice && (item.promoPrice || item.price)) {
       const reg = parseFloat(String(item.regularPrice).replace(/[^0-9.]/g, ''));
-      const pro = parseFloat(String(item.promoPrice).replace(/[^0-9.]/g, ''));
+      const pro = parseFloat(String(item.promoPrice || item.price).replace(/[^0-9.]/g, ''));
       if (!isNaN(reg) && !isNaN(pro) && reg > 0 && pro < reg) {
         return Math.round(((reg - pro) / reg) * 100);
       }
     }
+    const matchPct = (item.discountBadge || item.badge || '').match(/(\d+)%/);
+    if (matchPct && matchPct[1]) return parseInt(matchPct[1], 10);
     return 0;
   };
 
-  const processedPromos = React.useMemo(() => {
+  const processedJornadas = React.useMemo(() => {
     const list = (jornadasList && jornadasList.length > 0) ? jornadasList : DEFAULT_JORNADAS;
     return list.map((item: any) => ({
       ...item,
+      promoType: 'jornada' as const,
       discountPct: getPromoDiscountPct(item)
     })).sort((a: any, b: any) => b.discountPct - a.discountPct);
   }, [jornadasList]);
 
-  // The promotion with the highest % discount
-  const topPromo = processedPromos[0] || null;
+  const processedRepuestos = React.useMemo(() => {
+    const list = (catalogList && catalogList.length > 0) ? catalogList : DEFAULT_CATALOG;
+    return list.map((item: any) => ({
+      ...item,
+      promoType: 'repuesto' as const,
+      promoPrice: item.promoPrice || item.price,
+      discountPct: getPromoDiscountPct(item)
+    })).sort((a: any, b: any) => {
+      if (b.discountPct !== a.discountPct) return b.discountPct - a.discountPct;
+      if (b.isPromo && !a.isPromo) return 1;
+      if (!b.isPromo && a.isPromo) return -1;
+      return 0;
+    });
+  }, [catalogList]);
 
-  const scrollToPromo = (promoId?: string) => {
-    const targetId = promoId ? `promo-${promoId}` : (topPromo ? `promo-${topPromo.id}` : 'seccion-promociones');
-    const el = document.getElementById(targetId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.classList.add('ring-4', 'ring-red-500', 'ring-offset-4', 'dark:ring-offset-slate-900', 'transition-all');
-      setTimeout(() => {
-        el.classList.remove('ring-4', 'ring-red-500', 'ring-offset-4', 'dark:ring-offset-slate-900');
-      }, 3500);
-    } else {
-      const sec = document.getElementById('seccion-promociones');
-      if (sec) {
-        sec.scrollIntoView({ behavior: 'smooth' });
+  // Selected Active Promotion for the Flash Notification Bar based on Admin Mode
+  const activePromo = React.useMemo(() => {
+    const mode = (config.PROMO_BAR_MODE || 'jornadas').toLowerCase();
+    const targetId = (config.PROMO_BAR_TARGET_ID || '').trim();
+
+    if (targetId) {
+      if (mode === 'repuestos') {
+        const found = processedRepuestos.find((r: any) => String(r.id) === targetId || r.partNumber === targetId);
+        if (found) return found;
+      } else if (mode === 'jornadas') {
+        const found = processedJornadas.find((j: any) => String(j.id) === targetId);
+        if (found) return found;
+      } else {
+        const foundJ = processedJornadas.find((j: any) => String(j.id) === targetId);
+        if (foundJ) return foundJ;
+        const foundR = processedRepuestos.find((r: any) => String(r.id) === targetId || r.partNumber === targetId);
+        if (foundR) return foundR;
       }
     }
+
+    if (mode === 'repuestos') {
+      return processedRepuestos[0] || null;
+    }
+    if (mode === 'jornadas') {
+      return processedJornadas[0] || null;
+    }
+
+    // mode === 'auto'
+    const bestJ = processedJornadas[0];
+    const bestR = processedRepuestos[0];
+    if (bestR && bestR.discountPct > (bestJ?.discountPct || 0)) {
+      return bestR;
+    }
+    return bestJ || bestR || null;
+  }, [config.PROMO_BAR_MODE, config.PROMO_BAR_TARGET_ID, processedJornadas, processedRepuestos]);
+
+  const scrollToPromo = (promoId?: string) => {
+    if (activePromo?.promoType === 'repuesto') {
+      setPromoSectionTab('repuestos');
+    } else {
+      setPromoSectionTab('jornadas');
+    }
+    const targetId = promoId ? `promo-${promoId}` : (activePromo ? `promo-${activePromo.id}` : 'seccion-promociones');
+    setTimeout(() => {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('ring-4', 'ring-red-500', 'ring-offset-4', 'dark:ring-offset-slate-900', 'transition-all');
+        setTimeout(() => {
+          el.classList.remove('ring-4', 'ring-red-500', 'ring-offset-4', 'dark:ring-offset-slate-900');
+        }, 3500);
+      } else {
+        const sec = document.getElementById('seccion-promociones');
+        if (sec) {
+          sec.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }, 50);
   };
 
   useEffect(() => {
@@ -451,6 +525,12 @@ export default function App() {
           if (Array.isArray(p) && p.length > 0) setJornadasList(p);
         }
       } catch (e) {}
+      try {
+        if (localData.CATALOG_PRODUCTS_JSON) {
+          const p = typeof localData.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(localData.CATALOG_PRODUCTS_JSON) : localData.CATALOG_PRODUCTS_JSON;
+          if (Array.isArray(p) && p.length > 0) setCatalogList(p);
+        }
+      } catch (e) {}
     }
 
     // 2. Fetch fresh settings respecting TTL (5 min cache)
@@ -483,6 +563,12 @@ export default function App() {
             if (Array.isArray(p) && p.length > 0) setJornadasList(p);
           }
         } catch (e) {}
+        try {
+          if (data.CATALOG_PRODUCTS_JSON) {
+            const p = typeof data.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(data.CATALOG_PRODUCTS_JSON) : data.CATALOG_PRODUCTS_JSON;
+            if (Array.isArray(p) && p.length > 0) setCatalogList(p);
+          }
+        } catch (e) {}
       } catch (err) {
         console.error("Error cargando configuración dinámica:", err);
       }
@@ -512,6 +598,12 @@ export default function App() {
           if (updated.JORNADAS_JSON) {
             const p = typeof updated.JORNADAS_JSON === 'string' ? JSON.parse(updated.JORNADAS_JSON) : updated.JORNADAS_JSON;
             if (Array.isArray(p) && p.length > 0) setJornadasList(p);
+          }
+        } catch (err) {}
+        try {
+          if (updated.CATALOG_PRODUCTS_JSON) {
+            const p = typeof updated.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(updated.CATALOG_PRODUCTS_JSON) : updated.CATALOG_PRODUCTS_JSON;
+            if (Array.isArray(p) && p.length > 0) setCatalogList(p);
           }
         } catch (err) {}
       } else {
@@ -935,51 +1027,80 @@ export default function App() {
       </section>
 
       {/* =========================================================================
-          BARRA DE NOTIFICACIÓN DE PROMOCIÓN FLASH (MÁXIMO DESCUENTO)
+          BARRA DE NOTIFICACIÓN DE PROMOCIÓN FLASH (CONFIGURABLE: JORNADAS O REPUESTOS)
           ========================================================================= */}
-      {topPromo && (
+      {activePromo && (
         <aside aria-label="Promoción destacada" className="relative z-20 bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 dark:from-red-950 dark:via-red-900/95 dark:to-amber-950 border-y border-red-500/40 shadow-md text-white transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 flex flex-col md:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 sm:gap-3.5 text-center md:text-left flex-wrap md:flex-nowrap justify-center">
               <span className="inline-flex items-center gap-1.5 bg-black/35 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-[11px] font-black tracking-wider uppercase text-amber-300 shadow-sm shrink-0">
-                <Flame size={14} className="text-amber-400 animate-pulse" />
-                <span>OFERTA DESTACADA</span>
+                {activePromo.promoType === 'repuesto' ? (
+                  <>
+                    <Package size={14} className="text-amber-400" />
+                    <span>OFERTA EN REPUESTO OEM</span>
+                  </>
+                ) : (
+                  <>
+                    <Flame size={14} className="text-amber-400 animate-pulse" />
+                    <span>OFERTA DESTACADA</span>
+                  </>
+                )}
               </span>
               
               <div className="flex items-center gap-2 flex-wrap justify-center text-xs sm:text-sm">
                 <span className="bg-white text-red-700 font-black px-2.5 py-0.5 rounded shadow-sm tracking-wide shrink-0">
-                  {topPromo.discountPct > 0 ? `-${topPromo.discountPct}% OFF` : (topPromo.discountBadge || "OFERTA")}
+                  {activePromo.discountPct > 0 ? `-${activePromo.discountPct}% OFF` : (activePromo.discountBadge || (activePromo.promoType === 'repuesto' ? "PRECIO ESPECIAL" : "OFERTA"))}
                 </span>
                 <span className="font-bold text-white/95 drop-shadow-sm">
-                  {topPromo.title}
+                  {activePromo.title}
                 </span>
-                {(topPromo.promoPrice || topPromo.regularPrice) && (
+                {(activePromo.promoPrice || activePromo.regularPrice || activePromo.price) && (
                   <span className="font-semibold text-amber-200 flex items-center gap-1.5 ml-1">
-                    {topPromo.regularPrice && (
-                      <span className="line-through text-white/60 text-xs">{topPromo.regularPrice}</span>
+                    {activePromo.regularPrice && (
+                      <span className="line-through text-white/60 text-xs">{activePromo.regularPrice}</span>
                     )}
-                    <span className="text-white font-extrabold text-sm">{topPromo.promoPrice}</span>
+                    <span className="text-white font-extrabold text-sm">{activePromo.promoPrice || activePromo.price}</span>
                   </span>
                 )}
               </div>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => scrollToPromo(topPromo.id)}
-                className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
-              >
-                <span>Aprovechar Descuento</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollToPromo()}
-                className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1 cursor-pointer"
-              >
-                <span>Ver todas</span>
-              </button>
+              {activePromo.promoType === 'repuesto' ? (
+                <>
+                  <a
+                    href={`/catalogo?search=${encodeURIComponent(activePromo.partNumber || activePromo.title)}`}
+                    className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
+                  >
+                    <span>Ver Repuesto</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </a>
+                  <a
+                    href="/catalogo"
+                    className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1"
+                  >
+                    <span>Explorar catálogo</span>
+                  </a>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => scrollToPromo(activePromo.id)}
+                    className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
+                  >
+                    <span>Aprovechar Descuento</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollToPromo()}
+                    className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1 cursor-pointer"
+                  >
+                    <span>Ver todas</span>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </aside>
@@ -1088,147 +1209,330 @@ export default function App() {
       <section id="seccion-promociones" className="py-16 sm:py-24 px-4 sm:px-6 bg-slate-100/80 dark:bg-[#090b0e] border-b border-slate-200 dark:border-slate-800 transition-colors duration-300 scroll-mt-20">
         <div className="max-w-7xl mx-auto">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-4 border-b border-slate-200 dark:border-slate-800">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider mb-3">
                 <Flame size={14} className="text-red-500 animate-pulse" />
-                <span>JORNADAS & PROMOCIONES VIGENTES</span>
+                <span>OFERTAS Y PROMOCIONES VIGENTES</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Promociones y Descuentos Especiales
+                {promoSectionTab === 'jornadas' ? 'Jornadas VIP y Descuentos Especiales' : 'Ofertas en Repuestos OEM y Accesorios'}
               </h2>
               <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-                Cupos limitados con precios promocionales en reprogramación de software, soluciones de emisiones y confort automotriz garantizado en Margarita.
+                {promoSectionTab === 'jornadas'
+                  ? 'Cupos limitados con precios promocionales en reprogramación de software, soluciones de emisiones y confort automotriz garantizado en Margarita.'
+                  : 'Descuentos exclusivos en repuestos originales OEM certificados, sensores de asistencia avanzada e insumos automotrices garantizados.'}
               </p>
             </div>
-            <a 
-              href="/jornadas" 
-              className="btn-secondary !px-5 !py-2.5 text-xs font-bold flex items-center gap-2 self-start md:self-auto shrink-0"
-            >
-              <span>Ver Catálogo Completo de Jornadas</span>
-              <ArrowRight size={14} />
-            </a>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-            {processedPromos.map((item, idx) => {
-              const baseWa = config?.WHATSAPP_LINK 
-                ? config.WHATSAPP_LINK.split('?')[0] 
-                : 'https://wa.me/584123565012';
-              const waMessage = `Hola Taller MasterTech, deseo agendar la promoción de ${item.title} con el precio especial de ${item.promoPrice || 'descuento'}.`;
-              const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
-              const isTop = idx === 0 && item.discountPct > 0;
-
-              return (
-                <div 
-                  key={item.id || idx}
-                  id={`promo-${item.id}`}
-                  className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl group ${
-                    isTop 
-                      ? 'border-red-500/80 ring-2 ring-red-500/30' 
-                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 self-start md:self-auto shrink-0">
+              {/* Tab Switcher Pills */}
+              <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+                <button
+                  type="button"
+                  onClick={() => setPromoSectionTab('jornadas')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    promoSectionTab === 'jornadas'
+                      ? 'bg-red-600 text-white shadow-md'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  {/* Top highlight badge for maximum discount */}
-                  {isTop && (
-                    <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
-                      <Flame size={13} className="text-amber-300 animate-pulse" />
-                      <span>MAYOR DESCUENTO ACTIVO</span>
-                    </div>
-                  )}
+                  <Flame size={14} />
+                  <span>Jornadas VIP ({processedJornadas.length})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPromoSectionTab('repuestos')}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    promoSectionTab === 'repuestos'
+                      ? 'bg-red-600 text-white shadow-md'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  <Package size={14} />
+                  <span>Repuestos OEM ({processedRepuestos.length})</span>
+                </button>
+              </div>
 
-                  <div>
-                    {/* Image Container with Badges */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 group/img">
-                      <img 
-                        src={item.img || "/assets/servicio-mecanica.webp"} 
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                      
-                      {/* Category Badge */}
-                      <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
-                        {item.badge}
+              {promoSectionTab === 'jornadas' ? (
+                <a 
+                  href="/jornadas" 
+                  className="btn-secondary !px-4 !py-2 text-xs font-bold flex items-center justify-center gap-2"
+                >
+                  <span>Ver Catálogo de Jornadas</span>
+                  <ArrowRight size={14} />
+                </a>
+              ) : (
+                <a 
+                  href="/catalogo" 
+                  className="btn-secondary !px-4 !py-2 text-xs font-bold flex items-center justify-center gap-2"
+                >
+                  <span>Ver Catálogo Completo</span>
+                  <ArrowRight size={14} />
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Cards Grid */}
+          {promoSectionTab === 'jornadas' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+              {processedJornadas.map((item: any, idx: number) => {
+                const baseWa = config?.WHATSAPP_LINK 
+                  ? config.WHATSAPP_LINK.split('?')[0] 
+                  : 'https://wa.me/584123565012';
+                const waMessage = `Hola Taller MasterTech, deseo agendar la promoción de ${item.title} con el precio especial de ${item.promoPrice || 'descuento'}.`;
+                const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
+                const isTop = idx === 0 && item.discountPct > 0;
+
+                return (
+                  <div 
+                    key={item.id || idx}
+                    id={`promo-${item.id}`}
+                    className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl group ${
+                      isTop 
+                        ? 'border-red-500/80 ring-2 ring-red-500/30' 
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                    }`}
+                  >
+                    {/* Top highlight badge for maximum discount */}
+                    {isTop && (
+                      <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
+                        <Flame size={13} className="text-amber-300 animate-pulse" />
+                        <span>MAYOR DESCUENTO ACTIVO</span>
                       </div>
+                    )}
 
-                      {/* Prominent Discount Badge */}
-                      <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
-                        <Tag size={12} />
-                        <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
-                      </div>
+                    <div>
+                      {/* Image Container with Badges */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 group/img">
+                        <img 
+                          src={item.img || "/assets/servicio-mecanica.webp"} 
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                        
+                        {/* Category Badge */}
+                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                          {item.badge}
+                        </div>
 
-                      {/* Pricing Tag Overlay */}
-                      <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-                        <div>
-                          {item.regularPrice && (
-                            <span className="text-slate-300 line-through text-xs block font-medium">
-                              Precio Normal: {item.regularPrice}
+                        {/* Prominent Discount Badge */}
+                        <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
+                          <Tag size={12} />
+                          <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
+                        </div>
+
+                        {/* Pricing Tag Overlay */}
+                        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                          <div>
+                            {item.regularPrice && (
+                              <span className="text-slate-300 line-through text-xs block font-medium">
+                                Precio Normal: {item.regularPrice}
+                              </span>
+                            )}
+                            <span className="text-2xl font-black text-white tracking-tight drop-shadow">
+                              {item.promoPrice}
+                            </span>
+                          </div>
+                          {item.duration && (
+                            <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
+                              <Clock size={12} className="text-red-400" />
+                              <span>{item.duration}</span>
                             </span>
                           )}
-                          <span className="text-2xl font-black text-white tracking-tight drop-shadow">
-                            {item.promoPrice}
-                          </span>
                         </div>
-                        {item.duration && (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
-                            <Clock size={12} className="text-red-400" />
-                            <span>{item.duration}</span>
-                          </span>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-6">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+                          {item.subtitle}
+                        </p>
+
+                        {/* Benefits List */}
+                        {item.benefits && item.benefits.length > 0 && (
+                          <div className="space-y-2 mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                            {item.benefits.slice(0, 3).map((benefit: string, bIdx: number) => (
+                              <div key={bIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                                <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                                <span className="leading-tight">{benefit}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Compatible Models */}
+                        {item.compatibleModels && (
+                          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 text-[11px] text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-2">
+                            <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
+                            <span className="leading-tight line-clamp-2">
+                              <strong className="text-slate-800 dark:text-slate-200 font-semibold">Modelos:</strong> {item.compatibleModels}
+                            </span>
+                          </div>
                         )}
                       </div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="p-6">
-                      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        {item.subtitle}
-                      </p>
-
-                      {/* Benefits List */}
-                      {item.benefits && item.benefits.length > 0 && (
-                        <div className="space-y-2 mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-                          {item.benefits.slice(0, 3).map((benefit: string, bIdx: number) => (
-                            <div key={bIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                              <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
-                              <span className="leading-tight">{benefit}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Compatible Models */}
-                      {item.compatibleModels && (
-                        <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 text-[11px] text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-2">
-                          <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
-                          <span className="leading-tight line-clamp-2">
-                            <strong className="text-slate-800 dark:text-slate-200 font-semibold">Modelos:</strong> {item.compatibleModels}
-                          </span>
-                        </div>
-                      )}
+                    {/* Actions Block */}
+                    <div className="p-6 pt-0">
+                      <a
+                        href={waHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all cursor-pointer"
+                      >
+                        <MessageCircle size={16} />
+                        <span>Reservar Cupo con Descuento</span>
+                      </a>
                     </div>
                   </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+              {processedRepuestos.slice(0, 6).map((item: any, idx: number) => {
+                const baseWa = config?.WHATSAPP_LINK 
+                  ? config.WHATSAPP_LINK.split('?')[0] 
+                  : 'https://wa.me/584123565012';
+                const waMessage = `Hola Taller MasterTech, deseo consultar la oferta del repuesto: ${item.title} (OEM ${item.partNumber || 'N/A'}) con el precio especial de ${item.promoPrice || item.price}.`;
+                const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
+                const isTop = idx === 0 && item.discountPct > 0;
 
-                  {/* Actions Block */}
-                  <div className="p-6 pt-0">
-                    <a
-                      href={waHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all"
-                    >
-                      <MessageCircle size={16} />
-                      <span>Reservar Cupo con Descuento</span>
-                    </a>
+                return (
+                  <div 
+                    key={item.id || idx}
+                    id={`promo-${item.id}`}
+                    className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl group ${
+                      isTop 
+                        ? 'border-red-500/80 ring-2 ring-red-500/30' 
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                    }`}
+                  >
+                    {/* Top highlight badge */}
+                    {isTop && (
+                      <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
+                        <Flame size={13} className="text-amber-300 animate-pulse" />
+                        <span>MEJOR DESCUENTO EN REPUESTOS</span>
+                      </div>
+                    )}
+
+                    <div>
+                      {/* Image Container with Badges */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 group/img">
+                        <img 
+                          src={item.img || "/assets/cat_frenos_discos.webp"} 
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                        
+                        {/* Category Badge */}
+                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                          {item.category || item.badge || 'Repuesto OEM'}
+                        </div>
+
+                        {/* Prominent Discount Badge */}
+                        <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
+                          <Tag size={12} />
+                          <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : (item.discountBadge || 'OFERTA')}</span>
+                        </div>
+
+                        {/* Pricing Tag Overlay */}
+                        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                          <div>
+                            {item.regularPrice && (
+                              <span className="text-slate-300 line-through text-xs block font-medium">
+                                Regular: {item.regularPrice}
+                              </span>
+                            )}
+                            <span className="text-2xl font-black text-white tracking-tight drop-shadow">
+                              {item.promoPrice || item.price}
+                            </span>
+                          </div>
+                          {item.partNumber && (
+                            <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-mono font-bold">
+                              <span>OEM #{item.partNumber}</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] uppercase tracking-wider font-extrabold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded border border-red-200 dark:border-red-900/40">
+                            {item.badge || 'OEM Importado'}
+                          </span>
+                          {item.stock !== undefined && (
+                            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                              Stock: {item.stock} disponibles
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 leading-relaxed line-clamp-2">
+                          {item.desc}
+                        </p>
+
+                        {/* Specs List */}
+                        {item.specs && item.specs.length > 0 && (
+                          <div className="space-y-1.5 mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                            {item.specs.slice(0, 3).map((spec: string, sIdx: number) => (
+                              <div key={sIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                                <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-0.5" />
+                                <span className="leading-tight line-clamp-1">{spec}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Compatible Models */}
+                        {item.compatibility && (
+                          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 text-[11px] text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-2">
+                            <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
+                            <span className="leading-tight line-clamp-2">
+                              <strong className="text-slate-800 dark:text-slate-200 font-semibold">Compatibilidad:</strong> {item.compatibility}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Actions Block */}
+                    <div className="p-6 pt-0 space-y-2">
+                      <a
+                        href={waHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all cursor-pointer"
+                      >
+                        <MessageCircle size={16} />
+                        <span>Consultar / Comprar Oferta</span>
+                      </a>
+                      <a
+                        href={`/catalogo?search=${encodeURIComponent(item.partNumber || item.title)}`}
+                        className="w-full inline-flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 font-semibold text-xs py-2 px-3 rounded-xl transition-all cursor-pointer"
+                      >
+                        <span>Ver Ficha Técnica en Catálogo</span>
+                        <ArrowRight size={13} />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
 
         </div>
       </section>

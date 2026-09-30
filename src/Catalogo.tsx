@@ -34,15 +34,21 @@ export interface CatalogItem {
   partNumber?: string;
   stock?: number;
   isImportedUSA?: boolean;
+  regularPrice?: string;
+  isPromo?: boolean;
+  discountBadge?: string;
 }
 
-const DEFAULT_CATALOG: CatalogItem[] = [
+export const DEFAULT_CATALOG: CatalogItem[] = [
   // 1. Frenos & Discos
   {
     id: 1,
     title: "Kit de Discos Ranurados Ventilados & Cálispers Brembo 4-Pistones",
     category: "Frenos & Discos",
     price: "$185.00",
+    regularPrice: "$230.00",
+    discountBadge: "AHORRAS $45 USD (20% OFF)",
+    isPromo: true,
     desc: "Discos ventilados de alto rendimiento térmico con pinzas Brembo de 4 pistones para frenadas precisas.",
     longDesc: "Ensamble Brembo Performance: disco ranurado ventilado con disipación térmica y pinza de 4 pistones para frenadas estables y sin fatiga.",
     img: "/assets/cat_frenos_discos.webp",
@@ -51,6 +57,24 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     compatibility: "Vehículos deportivos y SUVs seleccionadas",
     partNumber: "BRM-STR-4P-GT",
     stock: 4,
+    isImportedUSA: true
+  },
+  {
+    id: 101,
+    title: "Sensor de Distancia / Radar Frontal TSS Toyota Corolla 2023-2025 OEM (88210-02040)",
+    category: "Baterías & Electricidad",
+    price: "$340.00",
+    regularPrice: "$380.00",
+    discountBadge: "AHORRAS $40 USD (11% OFF)",
+    isPromo: true,
+    desc: "Sensor radar de distancia frontal OEM Toyota Corolla (Toyota Safety Sense TSS) para Control Crucero Dinámico (DRCC) y Sistema Pre-Colisión (PCS).",
+    longDesc: "Sensor radar milimétrico de distancia frontal original Toyota Genuine Parts OEM #88210-02040. Opera en banda de 76-77 GHz para el sistema Toyota Safety Sense 3.0 (TSS 3.0): Control de Crucero por Radar Dinámico (DRCC), Sistema Pre-Colisión (PCS) y Asistencia de Mantenimiento de Carril.",
+    img: "/assets/cat_baterias_electricidad.webp",
+    badge: "Toyota Genuine Parts",
+    specs: ["Radar milimétrico 76-77 GHz", "Toyota Safety Sense TSS 3.0", "Rango de detección hasta 180m", "Calibración con Toyota TechStream"],
+    compatibility: "Toyota Corolla 1.8L / 2.0L / Hybrid (2023-2025), Corolla Cross (2023-2025)",
+    partNumber: "88210-02040",
+    stock: 6,
     isImportedUSA: true
   },
   {

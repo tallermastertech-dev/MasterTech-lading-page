@@ -116,6 +116,9 @@ export interface CatalogItem {
   stock?: number;
   isPopular?: boolean;
   isImportedUSA?: boolean;
+  regularPrice?: string;
+  isPromo?: boolean;
+  discountBadge?: string;
 }
 
 const DEFAULT_CATALOG: CatalogItem[] = [
@@ -125,6 +128,9 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     title: "Kit de Discos Ranurados Ventilados & Cálispers Brembo 4-Pistones",
     category: "Frenos & Discos",
     price: "$185.00",
+    regularPrice: "$230.00",
+    discountBadge: "AHORRAS $45 USD (20% OFF)",
+    isPromo: true,
     desc: "Discos ventilados de alto rendimiento térmico con pinzas Brembo de 4 pistones para frenadas precisas.",
     longDesc: "Ensamble Brembo Performance: disco ranurado ventilado con disipación térmica y pinza de 4 pistones para frenadas estables y sin fatiga.",
     img: "/assets/cat_frenos_discos.webp",
@@ -133,6 +139,24 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     compatibility: "Vehículos deportivos y SUVs seleccionadas",
     partNumber: "BRM-STR-4P-GT",
     stock: 4,
+    isImportedUSA: true
+  },
+  {
+    id: 101,
+    title: "Sensor de Distancia / Radar Frontal TSS Toyota Corolla 2023-2025 OEM (88210-02040)",
+    category: "Baterías & Electricidad",
+    price: "$340.00",
+    regularPrice: "$380.00",
+    discountBadge: "AHORRAS $40 USD (11% OFF)",
+    isPromo: true,
+    desc: "Sensor radar de distancia frontal OEM Toyota Corolla (Toyota Safety Sense TSS) para Control Crucero Dinámico (DRCC) y Sistema Pre-Colisión (PCS).",
+    longDesc: "Sensor radar milimétrico de distancia frontal original Toyota Genuine Parts OEM #88210-02040. Opera en banda de 76-77 GHz para el sistema Toyota Safety Sense 3.0 (TSS 3.0): Control de Crucero por Radar Dinámico (DRCC), Sistema Pre-Colisión (PCS) y Asistencia de Mantenimiento de Carril.",
+    img: "/assets/cat_baterias_electricidad.webp",
+    badge: "Toyota Genuine Parts",
+    specs: ["Radar milimétrico 76-77 GHz", "Toyota Safety Sense TSS 3.0", "Rango de detección hasta 180m", "Calibración con Toyota TechStream"],
+    compatibility: "Toyota Corolla 1.8L / 2.0L / Hybrid (2023-2025), Corolla Cross (2023-2025)",
+    partNumber: "88210-02040",
+    stock: 6,
     isImportedUSA: true
   },
   {
@@ -2614,8 +2638,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     // Clean prefixes like OEM, REF, N/P and Mopar packaging barcode prefix 'P' (e.g. P68252103AF -> 68252103AF)
     const cleanRaw = rawSearch.replace(/^(OEM|N\/P|CODIGO|COD|PART\s*NUMBER|PARTE|N°|NUMERO|REF|REFERENCIA)\s*[:#\s]*/i, '').replace(/^[:#\s]+/, '').trim();
     const cleanNoP = cleanRaw.replace(/^P(?=[0-9]{7,8})/i, '');
-    const cleanP = cleanNoP.toUpperCase().replace(/[\s\-_.]/g, '');
-    const rawUpper = cleanRaw.toUpperCase().replace(/[\s\-_.]/g, '');
+    let cleanP = cleanNoP.toUpperCase().replace(/[\s\-_.]/g, '');
+    let rawUpper = cleanRaw.toUpperCase().replace(/[\s\-_.]/g, '');
+    let resolvedPartNumber = cleanRaw.toUpperCase();
+    let wasTypoCorrected = false;
+
+    // Smart auto-correction for Toyota OEM part numbers:
+    // Toyota format is 5 digits - 5 digits (10 digits).
+    // If user typed 8210-02040 or 821002040 (9 digits starting with 8210-),
+    // they missed the leading 8 for the Toyota Distance Sensor (88210-02040).
+    if ((cleanP.startsWith('82100') || cleanP.startsWith('8210') || cleanRaw.startsWith('8210-')) && cleanP.length === 9) {
+      cleanP = '8' + cleanP;
+      rawUpper = '8' + rawUpper;
+      resolvedPartNumber = '88210-' + cleanP.slice(5);
+      wasTypoCorrected = true;
+    }
 
     // 1. Client-side instant catalog match
     let localMatch: any = null;
@@ -2662,27 +2699,39 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         img: '/assets/cat_frenos_discos.webp',
         msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
       };
-    } else if (cleanP.startsWith('88210') || rawUpper.startsWith('88210')) {
+    } else if (cleanP.startsWith('88210') || rawUpper.startsWith('88210') || cleanP.startsWith('821002')) {
       // 88210: Toyota Distance Sensor / Radar ADAS (88210-02040, 88210-0E080, etc.)
+      const isCorolla02040 = cleanP === '8821002040' || cleanP.startsWith('882100204') || cleanP === '821002040';
+      const finalPn = isCorolla02040 ? '88210-02040' : (resolvedPartNumber || cleanRaw.toUpperCase());
       localMatch = {
-        title: `Sensor de Distancia / Radar ADAS Toyota OEM (${cleanRaw.toUpperCase()})`,
+        title: isCorolla02040
+          ? `Sensor de Distancia / Radar Frontal Toyota Corolla 2023-2025 OEM (${finalPn})`
+          : `Sensor de Distancia / Radar ADAS Toyota OEM (${finalPn})`,
         category: 'Baterías & Electricidad',
-        price: '$325.00',
-        partNumber: cleanRaw.toUpperCase(),
-        desc: 'Sensor radar de distancia frontal Toyota OEM para control crucero adaptativo (ACC) y asistencia de frenado de emergencia (PCS).',
-        longDesc: `Sensor radar milimétrico de distancia frontal OEM Toyota #${cleanRaw.toUpperCase()}. Opera en banda de 76-77 GHz con alcance de hasta 180 m. Integrado al sistema Toyota Safety Sense (TSS): Control Crucero Adaptativo (ACC), Alerta de Pre-colisión (PCS) y Aviso de Cambio de Carril. Calibración obligatoria con escáner Toyota TechStream tras sustitución.`,
+        price: isCorolla02040 ? '$340.00' : '$325.00',
+        partNumber: finalPn,
+        desc: isCorolla02040
+          ? 'Sensor radar de distancia frontal OEM Toyota Corolla (Toyota Safety Sense TSS) para Control Crucero Dinámico (DRCC) y Sistema Pre-Colisión (PCS).'
+          : 'Sensor radar de distancia frontal Toyota OEM para control crucero adaptativo (ACC) y asistencia de frenado de emergencia (PCS).',
+        longDesc: isCorolla02040
+          ? `Sensor radar milimétrico de distancia frontal original Toyota Genuine Parts OEM #${finalPn}. Opera en banda de 76-77 GHz para el sistema Toyota Safety Sense 3.0 (TSS 3.0): Control de Crucero por Radar Dinámico (DRCC), Sistema Pre-Colisión (PCS) y Asistencia de Mantenimiento de Carril. Requiere calibración obligatoria con escáner Toyota TechStream tras sustitución.`
+          : `Sensor radar milimétrico de distancia frontal OEM Toyota #${finalPn}. Opera en banda de 76-77 GHz con alcance de hasta 180 m. Integrado al sistema Toyota Safety Sense (TSS): Control Crucero Adaptativo (ACC), Alerta de Pre-colisión (PCS) y Aviso de Cambio de Carril. Calibración obligatoria con escáner Toyota TechStream tras sustitución.`,
         badge: 'Toyota Genuine Parts',
         isImportedUSA: true,
-        compatibility: 'Toyota Corolla 2019-2025, RAV4 2019-2025, Camry 2018-2025, Highlander 2020-2025, Prius 2019-2025 — según código exacto de modelo',
+        compatibility: isCorolla02040
+          ? 'Toyota Corolla 1.8L / 2.0L / Hybrid (2023-2025), Corolla Cross (2023-2025) — TSS 3.0'
+          : 'Toyota Corolla 2019-2025, RAV4 2019-2025, Camry 2018-2025, Highlander 2020-2025, Prius 2019-2025 — según código exacto de modelo',
         specs: [
-          'Tecnología radar milimétrico 76-77 GHz, alcance hasta 180 m',
-          'Sistema Toyota Safety Sense: ACC + PCS + LDA integrados',
+          'Tecnología radar milimétrico 76-77 GHz, alcance frontal hasta 180 m',
+          'Sistema Toyota Safety Sense (TSS): DRCC + PCS + LDA integrados',
           'Rango de detección angular ±15° horizontal / ±5° vertical',
-          'Temperatura de operación -40°C a +85°C — IP67 resistente a agua y polvo',
-          `Calibración obligatoria con Toyota TechStream — Ref. OEM: ${cleanRaw.toUpperCase()}`
+          'Temperatura de operación -40°C a +85°C — IP67 sellado estanco',
+          `Calibración obligatoria con Toyota TechStream — Ref. OEM: ${finalPn}`
         ],
         img: '/assets/cat_baterias_electricidad.webp',
-        msg: '✅ Sensor ADAS decodificado al instante desde catálogo OEM Toyota.'
+        msg: wasTypoCorrected
+          ? `✅ Detectado y corregido a OEM Toyota #${finalPn} (Sensor de Distancia / Radar TSS Corolla 2023-2025).`
+          : '✅ Sensor ADAS decodificado al instante desde catálogo OEM Toyota.'
       };
     } else if (cleanP.startsWith('88650') || rawUpper.startsWith('88650')) {
       // 88650: Toyota Forward Recognition Camera (TSS camera)
@@ -6638,6 +6687,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         title: '',
                         category: 'Frenos & Discos',
                         price: '$0.00',
+                        regularPrice: '',
+                        isPromo: false,
+                        discountBadge: '',
                         desc: '',
                         img: '/assets/cat_frenos_discos.webp',
                         images: [],
@@ -6662,6 +6714,94 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <span>¡El catálogo de repuestos e imágenes ha sido guardado e integrado públicamente en `/catalogo`!</span>
                 </div>
               )}
+
+              {/* Configuración de la Barra Flash Superior (Página Principal) */}
+              <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+                  <div>
+                    <h3 className="text-xs font-black uppercase text-red-400 tracking-wider flex items-center gap-2">
+                      <Flame size={16} className="text-amber-400 animate-pulse" />
+                      <span>Barra Superior de Oferta Flash (Página Principal)</span>
+                    </h3>
+                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                      Define qué promoción destacada aparecerá fija en la barra superior de la portada web.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveSection('promobar', {
+                      PROMO_BAR_MODE: settingsForm.PROMO_BAR_MODE || 'auto',
+                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || ''
+                    })}
+                    disabled={savingSection === 'promobar'}
+                    className="btn-primary !py-2 !px-4 text-xs font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer shrink-0"
+                  >
+                    {savingSection === 'promobar' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                    <span>{savedSectionSuccess === 'promobar' ? '¡Barra Guardada!' : 'Guardar Barra Flash'}</span>
+                  </button>
+                </div>
+
+                {savedSectionSuccess === 'promobar' && (
+                  <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                    <CheckCircle2 size={16} />
+                    <span>¡Configuración de la Barra Flash guardada con éxito e integrada en la portada!</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">
+                      Origen / Tipo de Promoción a Mostrar
+                    </label>
+                    <select
+                      value={settingsForm.PROMO_BAR_MODE || 'auto'}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_MODE: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-red-500 cursor-pointer"
+                    >
+                      <option value="auto">Automático (Mayor % de descuento entre Repuestos y Jornadas)</option>
+                      <option value="repuestos">Catálogo de Repuestos OEM (Solo ofertas de repuestos)</option>
+                      <option value="jornadas">Jornadas de Servicio (Solo promociones de servicios VIP)</option>
+                    </select>
+                    <span className="text-[10px] text-zinc-500 mt-1 block">
+                      En modo &quot;Automático&quot;, el sistema calcula la oferta con más porcentaje de descuento y la muestra en la portada.
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">
+                      Seleccionar Oferta Específica (Opcional)
+                    </label>
+                    <select
+                      value={settingsForm.PROMO_BAR_TARGET_ID || ''}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_TARGET_ID: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-red-500 cursor-pointer"
+                    >
+                      <option value="">Automático: la de mayor % de descuento</option>
+                      {(!settingsForm.PROMO_BAR_MODE || settingsForm.PROMO_BAR_MODE === 'auto' || settingsForm.PROMO_BAR_MODE === 'repuestos') && (
+                        <optgroup label="Ofertas del Catálogo de Repuestos">
+                          {catalogItems.map((prod) => (
+                            <option key={`rep-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                              [Repuesto] {prod.title} - {prod.price} {prod.partNumber ? `(OEM: ${prod.partNumber})` : ''} {prod.isPromo ? '⭐ OFERTA' : ''}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {(!settingsForm.PROMO_BAR_MODE || settingsForm.PROMO_BAR_MODE === 'auto' || settingsForm.PROMO_BAR_MODE === 'jornadas') && (
+                        <optgroup label="Jornadas de Servicio VIP">
+                          {jornadasList.map((j) => (
+                            <option key={`jor-${j.id}`} value={String(j.id)}>
+                              [Jornada] {j.title} - {j.promoPrice || 'Precio Especial'}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </select>
+                    <span className="text-[10px] text-zinc-500 mt-1 block">
+                      Puedes fijar un repuesto específico (ej: Sensor Radar OEM) o dejarlo automático.
+                    </span>
+                  </div>
+                </div>
+              </div>
 
               {/* PANEL DE IMÁGENES Y BANNERS DEL CATÁLOGO */}
               {isCatalogImagesOpen && (
@@ -7092,9 +7232,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             OEM: {prod.partNumber}
                           </span>
                         )}
-                        <span className="absolute bottom-2 right-2 text-xs font-black text-primary bg-black/90 px-2.5 py-1 rounded-lg border border-primary/30">
-                          {prod.price}
-                        </span>
+                        {prod.isPromo && (
+                          <span className="absolute top-2 right-2 text-[9px] font-black bg-red-600 text-white px-2 py-0.5 rounded-md border border-red-400 flex items-center gap-1 shadow">
+                            <Tag size={10} />
+                            <span>{prod.discountBadge || 'OFERTA'}</span>
+                          </span>
+                        )}
+                        <div className="absolute bottom-2 right-2 flex items-center gap-1.5">
+                          {prod.regularPrice && (
+                            <span className="text-[10px] line-through text-zinc-400 bg-black/80 px-1.5 py-0.5 rounded border border-white/10 font-bold">
+                              {prod.regularPrice}
+                            </span>
+                          )}
+                          <span className="text-xs font-black text-amber-400 bg-black/90 px-2.5 py-1 rounded-lg border border-amber-500/30">
+                            {prod.price}
+                          </span>
+                        </div>
                       </div>
 
                       <div>
@@ -7168,6 +7321,94 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <Plus size={16} />
                   <span>Nueva Jornada VIP</span>
                 </button>
+              </div>
+
+              {/* Configuración de la Barra Flash Superior (Página Principal) */}
+              <div className="bg-[#12141a] p-5 sm:p-6 rounded-2xl border border-red-500/30 shadow-xl space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+                  <div>
+                    <h3 className="text-xs font-black uppercase text-red-400 tracking-wider flex items-center gap-2">
+                      <Flame size={16} className="text-amber-400 animate-pulse" />
+                      <span>Barra Superior de Oferta Flash (Página Principal)</span>
+                    </h3>
+                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                      Define qué promoción destacada aparecerá fija en la barra superior de la portada web.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveSection('promobar', {
+                      PROMO_BAR_MODE: settingsForm.PROMO_BAR_MODE || 'auto',
+                      PROMO_BAR_TARGET_ID: settingsForm.PROMO_BAR_TARGET_ID || ''
+                    })}
+                    disabled={savingSection === 'promobar'}
+                    className="btn-primary !py-2 !px-4 text-xs font-black uppercase flex items-center gap-1.5 border-none shadow-md cursor-pointer shrink-0"
+                  >
+                    {savingSection === 'promobar' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                    <span>{savedSectionSuccess === 'promobar' ? '¡Barra Guardada!' : 'Guardar Barra Flash'}</span>
+                  </button>
+                </div>
+
+                {savedSectionSuccess === 'promobar' && (
+                  <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-xs font-bold flex items-center gap-2">
+                    <CheckCircle2 size={16} />
+                    <span>¡Configuración de la Barra Flash guardada con éxito e integrada en la portada!</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">
+                      Origen / Tipo de Promoción a Mostrar
+                    </label>
+                    <select
+                      value={settingsForm.PROMO_BAR_MODE || 'auto'}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_MODE: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white font-bold outline-none focus:border-red-500 cursor-pointer"
+                    >
+                      <option value="auto">Automático (Mayor % de descuento entre Repuestos y Jornadas)</option>
+                      <option value="jornadas">Jornadas de Servicio (Solo promociones de servicios VIP)</option>
+                      <option value="repuestos">Catálogo de Repuestos OEM (Solo ofertas de repuestos)</option>
+                    </select>
+                    <span className="text-[10px] text-zinc-500 mt-1 block">
+                      En modo &quot;Automático&quot;, el sistema calcula la oferta con más porcentaje de descuento y la muestra en la portada.
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">
+                      Seleccionar Oferta Específica (Opcional)
+                    </label>
+                    <select
+                      value={settingsForm.PROMO_BAR_TARGET_ID || ''}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, PROMO_BAR_TARGET_ID: e.target.value })}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-red-500 cursor-pointer"
+                    >
+                      <option value="">Automático: la de mayor % de descuento</option>
+                      {(!settingsForm.PROMO_BAR_MODE || settingsForm.PROMO_BAR_MODE === 'auto' || settingsForm.PROMO_BAR_MODE === 'jornadas') && (
+                        <optgroup label="Jornadas de Servicio VIP">
+                          {jornadasList.map((j) => (
+                            <option key={`jor-tab-${j.id}`} value={String(j.id)}>
+                              [Jornada] {j.title} - {j.promoPrice || 'Precio Especial'}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {(!settingsForm.PROMO_BAR_MODE || settingsForm.PROMO_BAR_MODE === 'auto' || settingsForm.PROMO_BAR_MODE === 'repuestos') && (
+                        <optgroup label="Ofertas del Catálogo de Repuestos">
+                          {catalogItems.map((prod) => (
+                            <option key={`rep-tab-${prod.id}`} value={prod.partNumber || String(prod.id)}>
+                              [Repuesto] {prod.title} - {prod.price} {prod.partNumber ? `(OEM: ${prod.partNumber})` : ''} {prod.isPromo ? '⭐ OFERTA' : ''}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </select>
+                    <span className="text-[10px] text-zinc-500 mt-1 block">
+                      Puedes fijar una jornada específica o dejarlo en automático.
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Clock Timer & Empty State Config */}
@@ -9581,6 +9822,60 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </span>
                   </label>
                 </div>
+              </div>
+
+              {/* Configuración de Promoción / Oferta */}
+              <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-xs font-black uppercase text-red-400">
+                    <Tag size={15} />
+                    <span>Configuración de Promoción / Oferta</span>
+                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={!!editingProduct.isPromo}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, isPromo: e.target.checked })}
+                      className="w-4 h-4 accent-red-500 rounded cursor-pointer"
+                    />
+                    <span className="text-xs font-bold text-white">¿Activar en Oferta Especial?</span>
+                  </label>
+                </div>
+
+                {editingProduct.isPromo && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-red-500/20">
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-xs">Precio Regular / Anterior (USD)</label>
+                      <div className="relative flex items-center">
+                        <span className="absolute left-3 font-black text-zinc-400 select-none text-xs pointer-events-none">$</span>
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          value={String(editingProduct.regularPrice || '').replace(/^\$/, '').replace(/\s*USD$/i, '').trim()}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9.]/g, '');
+                            setEditingProduct({ ...editingProduct, regularPrice: val ? `$${val}` : '' });
+                          }}
+                          placeholder="Ej. 380.00"
+                          className="w-full bg-black/40 border border-white/10 rounded-xl py-2 pl-7 pr-3 text-white text-xs font-bold outline-none focus:border-red-500 font-mono"
+                        />
+                      </div>
+                      <span className="text-[10px] text-zinc-500 mt-1 block">Aparecerá tachado al lado del precio de oferta.</span>
+                    </div>
+
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1 text-xs">Badge / Etiqueta de Descuento</label>
+                      <input
+                        type="text"
+                        value={editingProduct.discountBadge || ''}
+                        onChange={(e) => setEditingProduct({ ...editingProduct, discountBadge: e.target.value })}
+                        placeholder="Ej. -15% OFF, AHORRAS $40 USD"
+                        className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-white text-xs outline-none focus:border-red-500"
+                      />
+                      <span className="text-[10px] text-zinc-500 mt-1 block">Si se deja vacío, se calculará automáticamente el porcentaje.</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
