@@ -892,26 +892,21 @@ export default function App() {
               </div>
 
 
-              {/* 4 Clean Key Trust Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/10">
-                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
-                  <div className="text-xl font-black text-white">+6 Puestos</div>
-                  <div className="text-xs text-slate-300 mt-0.5">Atención Simultánea</div>
+              {/* 3 Clean Key Trust Stats */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-6 border-t border-white/10">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
+                  <div className="text-lg sm:text-xl font-black text-white">+6 Puestos</div>
+                  <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5">Atención Simultánea</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
-                  <div className="text-xl font-black text-white">Escáner OEM</div>
-                  <div className="text-xs text-slate-300 mt-0.5">Diagnóstico Preciso</div>
+                <div className="p-3 sm:p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
+                  <div className="text-lg sm:text-xl font-black text-white">Escáner OEM</div>
+                  <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5">Diagnóstico Preciso</div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
-                  <div className="text-xl font-black text-white">Presupuesto Previo</div>
-                  <div className="text-xs text-slate-300 mt-0.5">100% Claro y Aprobado</div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm">
-                  <div className="text-xl font-black text-white">+1.850</div>
-                  <div className="text-xs text-slate-300 mt-0.5">Vehículos Atendidos</div>
+                <div className="p-3 sm:p-3.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
+                  <div className="text-lg sm:text-xl font-black text-white">+1.850</div>
+                  <div className="text-[11px] sm:text-xs text-slate-300 mt-0.5">Vehículos Atendidos</div>
                 </div>
               </div>
             </motion.div>
