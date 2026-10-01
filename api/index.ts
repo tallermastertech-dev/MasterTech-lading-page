@@ -1996,8 +1996,24 @@ app.post(['/api/upload-media', '/api/admin/upload-media'], async (req, res) => {
       buffer = Buffer.from(String(image).replace(/^data:[^;]+;base64,/, ''), 'base64');
     }
 
+    // Optimización automática a WebP con Sharp (Reduce peso hasta un 80% y soporta HEIC/JPG/PNG)
+    if (buffer && contentType.startsWith('image/') && !contentType.includes('svg')) {
+      try {
+        const sharpModule = await import('sharp');
+        const sharp = sharpModule.default;
+        buffer = await sharp(buffer)
+          .resize({ width: 1200, height: 1200, fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 80 })
+          .toBuffer();
+        contentType = 'image/webp';
+        ext = 'webp';
+      } catch (optErr) {
+        console.warn('Compresión Sharp omitida:', optErr);
+      }
+    }
+
     const cleanFolder = String(folder).replace(/[^a-zA-Z0-9_-]/g, '') || 'general';
-    const cleanName = filename ? String(filename).replace(/[^a-zA-Z0-9_-]/g, '_') : 'img';
+    const cleanName = filename ? String(filename).replace(/[^a-zA-Z0-9_-]/g, '_').replace(/\.[^.]+$/, '') : 'img';
     const storagePath = `${cleanFolder}/${Date.now()}_${cleanName}.${ext}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
