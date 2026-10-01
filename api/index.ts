@@ -1967,6 +1967,39 @@ app.delete(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, r
   }
 });
 
+// Endpoint de conversión automática HEIC/HEIF a WebP ultraligero
+app.post(['/api/convert-heic', '/convert-heic'], async (req, res) => {
+  try {
+    const { image } = req.body || {};
+    if (!image) {
+      return res.status(400).json({ error: 'No se recibió imagen' });
+    }
+    const base64Data = String(image).replace(/^data:[^;]+;base64,/, '');
+    const inputBuffer = Buffer.from(base64Data, 'base64');
+    
+    let intermediateBuffer: Buffer = inputBuffer;
+    try {
+      const heicConvert = (await import('heic-convert')).default;
+      intermediateBuffer = await heicConvert({ buffer: inputBuffer, format: 'JPEG', quality: 0.90 });
+    } catch (hErr) {
+      intermediateBuffer = inputBuffer;
+    }
+
+    const sharpModule = await import('sharp');
+    const sharp = sharpModule.default;
+    const webpBuffer = await sharp(intermediateBuffer)
+      .resize({ width: 1200, height: 1200, fit: 'inside', withoutEnlargement: true })
+      .webp({ quality: 80 })
+      .toBuffer();
+
+    const dataUrl = `data:image/webp;base64,${webpBuffer.toString('base64')}`;
+    res.json({ success: true, dataUrl });
+  } catch (err: any) {
+    console.error('Error al convertir HEIC:', err);
+    res.status(500).json({ error: 'Error al convertir imagen', details: err?.message });
+  }
+});
+
 // =============================================================
 // ADMIN MEDIA UPLOAD TO SUPABASE STORAGE BUCKET
 // =============================================================

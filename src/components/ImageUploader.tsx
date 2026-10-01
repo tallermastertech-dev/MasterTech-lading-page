@@ -38,13 +38,48 @@ export default function ImageUploader({
   }, []);
 
   const processFile = (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      alert('Por favor selecciona un archivo de imagen válido (JPG, PNG, WEBP, etc.)');
+    const isHeic = file.name.toLowerCase().endsWith('.heic') || 
+                   file.name.toLowerCase().endsWith('.heif') || 
+                   file.type.includes('heic') || 
+                   file.type.includes('heif');
+
+    if (!file.type.startsWith('image/') && !isHeic) {
+      alert('Por favor selecciona un archivo de imagen válido (JPG, PNG, WEBP, HEIC, etc.)');
       return;
     }
+
     const reader = new FileReader();
-    reader.onload = () => {
-      setImageSrc(reader.result?.toString() || null);
+    reader.onload = async () => {
+      const rawData = reader.result?.toString() || null;
+      if (!rawData) return;
+
+      if (isHeic) {
+        setIsProcessing(true);
+        try {
+          const res = await fetch('/api/convert-heic', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: rawData })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.dataUrl) {
+              setImageSrc(data.dataUrl);
+              setCrop({ x: 0, y: 0 });
+              setZoom(1);
+              setIsModalOpen(true);
+              setIsProcessing(false);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Fallo conversión HEIC en servidor, usando original:', e);
+        } finally {
+          setIsProcessing(false);
+        }
+      }
+
+      setImageSrc(rawData);
       setCrop({ x: 0, y: 0 });
       setZoom(1);
       setIsModalOpen(true);
@@ -244,7 +279,7 @@ export default function ImageUploader({
           id={`${fieldId}-file`}
           name={`${fieldId}-file`}
           type="file" 
-          accept="image/*" 
+          accept="image/*,.heic,.heif,.HEIC,.HEIF" 
           className="hidden" 
           onChange={handleFileChange}
         />
