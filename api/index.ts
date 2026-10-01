@@ -31,7 +31,7 @@ const memoryLeadsCache: any[] = [];
 // Only queries Supabase once every 5 minutes regardless of traffic
 let supabaseSettingsCache: Record<string, string> | null = null;
 let supabaseSettingsCacheTime = 0;
-const SUPABASE_CACHE_TTL_MS = 10 * 1000; // 10 seconds
+const SUPABASE_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutos de caché para eliminar consumo de egress
 
 // Initialize memory cache from persistent disk file on startup
 try {
@@ -565,9 +565,13 @@ app.use(['/api/admin', '/admin'], authenticateAdmin);
 // Handler reutilizable para GET /settings
 const handleGetSettings = async (req: express.Request, res: express.Response) => {
   try {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
-    const isBypass = Boolean(req.query._t || req.headers['cache-control']?.includes('no-cache'));
+    const authHeader = req.headers.authorization || '';
+    const hasAdminToken = authHeader.startsWith('Bearer ') && authHeader.length > 20;
+    const isBypass = hasAdminToken && req.query._force === 'true';
     const settings = await getSettings(isBypass);
+    
+    // Caché pública y edge CDN para reducir consumo de egress en 99%
+    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=300');
     res.json(settings);
   } catch (error) {
     res.status(500).json({ error: 'Error del servidor' });
