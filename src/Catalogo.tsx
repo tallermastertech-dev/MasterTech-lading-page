@@ -405,10 +405,17 @@ export const VEHICLE_CATALOG_DATA: VehicleBrandOption[] = [
       {
         name: "Avensis",
         submodels: [
-          { name: "Avensis (T270)", years: "(2008 - 2018)", engines: ["2.0L Valvematic", "1.8L Valvematic", "2.2L D-4D / D-CAT"] },
-          { name: "Avensis (T250)", years: "(2003 - 2008)", engines: ["2.0L VVT-i", "1.8L VVT-i", "2.2L D-4D"] }
+          { name: "Avensis III Berlina (T27)", years: "(11.2008 - 10.2018)", engines: ["2.0L Valvematic", "1.8L Valvematic", "2.0L / 2.2L D-4D"] },
+          { name: "Avensis III Familiar (T27)", years: "(03.2009 - 10.2018)", engines: ["2.0L Valvematic", "1.8L Valvematic", "2.2L D-CAT"] },
+          { name: "Avensis II Berlina (T25)", years: "(04.2003 - 11.2008)", engines: ["2.0L VVT-i", "1.8L VVT-i", "2.4L VVT-i", "2.2L D-4D"] },
+          { name: "Avensis II Hatchback (T25)", years: "(04.2003 - 11.2008)", engines: ["2.0L VVT-i", "1.8L VVT-i", "2.0L D-4D"] },
+          { name: "Avensis II Station Wagon (T25)", years: "(04.2003 - 11.2008)", engines: ["2.0L VVT-i", "1.8L VVT-i", "2.2L D-4D"] },
+          { name: "Avensis I Berlina (T22)", years: "(09.1997 - 03.2003)", engines: ["2.0L 3S-FE", "1.8L 7A-FE", "1.6L 4A-FE", "2.0L D-4D"] },
+          { name: "Avensis I Familiar (T22)", years: "(09.1997 - 03.2003)", engines: ["2.0L 3S-FE", "1.8L 7A-FE", "2.0L D-4D"] },
+          { name: "Avensis I Liftback (T22)", years: "(09.1997 - 03.2003)", engines: ["2.0L 3S-FE", "1.8L 7A-FE", "1.6L 4A-FE"] },
+          { name: "Avensis Verso (M2)", years: "(08.2001 - 11.2009)", engines: ["2.0L VVT-i 1AZ-FE", "2.0L D-4D 1CD-FTV"] }
         ],
-        engines: ["Todos los motores", "2.0L Valvematic", "1.8L Valvematic", "2.2L D-4D"]
+        engines: ["Todos los motores", "2.0L Valvematic", "1.8L Valvematic", "2.0L VVT-i", "2.2L D-4D", "2.0L 3S-FE"]
       },
       {
         name: "Aygo",
@@ -1372,7 +1379,14 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
             if (stored) currentLocal = JSON.parse(stored);
           } catch (e) {}
 
-          const merged = { ...(currentLocal || {}), ...(data || {}) };
+          const merged: any = { ...(currentLocal || {}) };
+          if (data && typeof data === 'object') {
+            for (const [k, v] of Object.entries(data)) {
+              if (v !== '' && v !== null && v !== undefined) {
+                merged[k] = v;
+              }
+            }
+          }
           setConfig((prev: any) => ({ ...prev, ...merged }));
           const catalogSource = data?.CATALOG_PRODUCTS_JSON || currentLocal?.CATALOG_PRODUCTS_JSON;
           if (catalogSource) {

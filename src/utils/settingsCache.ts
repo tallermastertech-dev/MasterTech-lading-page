@@ -57,7 +57,7 @@ export function invalidateSettingsCache(): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.removeItem(TIMESTAMP_KEY);
-    localStorage.removeItem(STORAGE_KEY);
+    // Keep STORAGE_KEY as an offline/error fallback so failed server fetches don't wipe local state
     window.dispatchEvent(new Event('mastertech_settings_updated'));
   } catch (e) {}
 }

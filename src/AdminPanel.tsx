@@ -7090,12 +7090,44 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       </p>
                     </div>
                     <button
-                      onClick={() => handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: JSON.stringify(catalogItems) })}
-                      disabled={savingSection === 'catalogo'}
-                      className="btn-primary !py-2 !px-4 text-xs font-bold uppercase border-none flex items-center gap-2 shadow-md"
+                      onClick={() => handleSaveSection('catalogo_images', {
+                        CATALOG_HERO_IMG: settingsForm.CATALOG_HERO_IMG || '',
+                        CATALOG_HERO_TITLE: settingsForm.CATALOG_HERO_TITLE || '',
+                        CATALOG_HERO_SUBTITLE: settingsForm.CATALOG_HERO_SUBTITLE || '',
+                        CATALOG_HERO_BADGE: settingsForm.CATALOG_HERO_BADGE || '',
+                        CAT_IMG_FRENOS: settingsForm.CAT_IMG_FRENOS || '',
+                        CAT_IMG_SUSPENSION: settingsForm.CAT_IMG_SUSPENSION || '',
+                        CAT_IMG_ACEITES: settingsForm.CAT_IMG_ACEITES || '',
+                        CAT_IMG_BATERIAS: settingsForm.CAT_IMG_BATERIAS || '',
+                        CAT_IMG_FILTROS: settingsForm.CAT_IMG_FILTROS || '',
+                        CAT_IMG_CLIMATIZACION: settingsForm.CAT_IMG_CLIMATIZACION || '',
+                        CAT_IMG_MOTOR: settingsForm.CAT_IMG_MOTOR || '',
+                        CAT_IMG_DETAILING: settingsForm.CAT_IMG_DETAILING || '',
+                        PROMO_IMG_FRENOS: settingsForm.PROMO_IMG_FRENOS || '',
+                        PROMO_1_TAG: settingsForm.PROMO_1_TAG || '',
+                        PROMO_1_TITLE_1: settingsForm.PROMO_1_TITLE_1 || '',
+                        PROMO_1_TITLE_2: settingsForm.PROMO_1_TITLE_2 || '',
+                        PROMO_1_DESC: settingsForm.PROMO_1_DESC || '',
+                        PROMO_1_BTN: settingsForm.PROMO_1_BTN || '',
+                        PROMO_IMG_SUSPENSION: settingsForm.PROMO_IMG_SUSPENSION || '',
+                        PROMO_2_TAG: settingsForm.PROMO_2_TAG || '',
+                        PROMO_2_TITLE_1: settingsForm.PROMO_2_TITLE_1 || '',
+                        PROMO_2_TITLE_2: settingsForm.PROMO_2_TITLE_2 || '',
+                        PROMO_2_DESC: settingsForm.PROMO_2_DESC || '',
+                        PROMO_2_BTN: settingsForm.PROMO_2_BTN || '',
+                        PROMO_IMG_MOTOR: settingsForm.PROMO_IMG_MOTOR || '',
+                        PROMO_3_TAG: settingsForm.PROMO_3_TAG || '',
+                        PROMO_3_TITLE_1: settingsForm.PROMO_3_TITLE_1 || '',
+                        PROMO_3_TITLE_2: settingsForm.PROMO_3_TITLE_2 || '',
+                        PROMO_3_DESC: settingsForm.PROMO_3_DESC || '',
+                        PROMO_3_BTN: settingsForm.PROMO_3_BTN || '',
+                        CATALOG_PRODUCTS_JSON: JSON.stringify(sanitizeCatalogItems(catalogItems))
+                      })}
+                      disabled={savingSection === 'catalogo_images'}
+                      className="btn-primary !py-2 !px-4 text-xs font-bold uppercase border-none flex items-center gap-2 shadow-md cursor-pointer"
                     >
-                      {savingSection === 'catalogo' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
-                      <span>Guardar Imágenes</span>
+                      {savingSection === 'catalogo_images' ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                      <span>{savedSectionSuccess === 'catalogo_images' ? '¡Imágenes Guardadas!' : 'Guardar Imágenes'}</span>
                     </button>
                   </div>
 
