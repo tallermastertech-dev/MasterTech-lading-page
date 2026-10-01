@@ -1070,6 +1070,10 @@ async function getAllLeads(): Promise<any[]> {
   });
 }
 
+let cachedOccupiedSlots: Record<string, string[]> | null = null;
+let cachedOccupiedSlotsTime = 0;
+const OCCUPIED_SLOTS_TTL_MS = 5 * 60 * 1000; // 5 minutos de caché en memoria
+
 // Helper: Recalculate occupied slots strictly from active non-cancelled leads
 async function rebuildAndPersistOccupiedSlots(): Promise<Record<string, string[]>> {
   const occupied: Record<string, string[]> = {};
@@ -1108,11 +1112,17 @@ async function rebuildAndPersistOccupiedSlots(): Promise<Record<string, string[]
     console.error("Error updating OCCUPIED_SLOTS_JSON in Supabase:", e);
   }
 
+  cachedOccupiedSlots = occupied;
+  cachedOccupiedSlotsTime = Date.now();
   return occupied;
 }
 
 // Helper: Get all occupied slots across leads and settings
 async function getOccupiedSlotsMap(): Promise<Record<string, string[]>> {
+  const now = Date.now();
+  if (cachedOccupiedSlots && (now - cachedOccupiedSlotsTime) < OCCUPIED_SLOTS_TTL_MS) {
+    return cachedOccupiedSlots;
+  }
   return await rebuildAndPersistOccupiedSlots();
 }
 

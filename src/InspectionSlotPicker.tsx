@@ -20,9 +20,6 @@ export default function InspectionSlotPicker({ onSelectSlot }: InspectionSlotPic
 
   useEffect(() => {
     fetchOccupiedSlots();
-    // Refresh slots periodically respecting the 15-30s TTL cache
-    const interval = setInterval(fetchOccupiedSlots, 20000);
-    return () => clearInterval(interval);
   }, []);
 
   const fetchOccupiedSlots = async () => {
