@@ -1273,7 +1273,34 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
     const upsertRows: { key: string; value: string }[] = [];
 
     for (const [key, value] of entries) {
-      const valStr = value === null || value === undefined ? '' : String(value);
+      let valStr = value === null || value === undefined ? '' : String(value);
+
+      // FIREWALL ANTI-BASE64: Si un valor es una imagen Base64 pesada (>25KB), subirla a Supabase Storage y guardar solo la URL
+      if (valStr.startsWith('data:image/') && valStr.length > 25000) {
+        try {
+          const matches = valStr.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+          if (matches && matches.length === 3) {
+            const contentType = matches[1];
+            const buffer = Buffer.from(matches[2], 'base64');
+            const ext = contentType.includes('png') ? 'png' : (contentType.includes('webp') ? 'webp' : 'jpg');
+            const cleanKey = key.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            const storagePath = `settings_media/${cleanKey}_${Date.now()}.${ext}`;
+            const { error: upErr } = await supabase.storage.from('mastertech-media').upload(storagePath, buffer, {
+              contentType,
+              upsert: true
+            });
+            if (!upErr) {
+              const { data: pubData } = supabase.storage.from('mastertech-media').getPublicUrl(storagePath);
+              if (pubData?.publicUrl) {
+                valStr = pubData.publicUrl;
+              }
+            }
+          }
+        } catch (storageErr) {
+          console.warn('[Anti-Base64 Firewall] No se pudo subir a Supabase Storage:', storageErr);
+        }
+      }
+
       memorySettingsCache[key] = valStr;
       upsertRows.push({ key, value: valStr });
     }

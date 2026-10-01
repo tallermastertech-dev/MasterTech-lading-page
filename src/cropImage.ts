@@ -18,18 +18,17 @@ export default async function getCroppedImg(
   imageSrc: string,
   pixelCrop: { x: number; y: number; width: number; height: number },
   aspectRatio: number = 4/3,
-  maxDimension: number = 1200,
-  quality: number = 0.88
+  maxDimension: number = 800,
+  quality: number = 0.80
 ): Promise<string> {
-  const image = await createImage(imageSrc)
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
   if (!ctx) {
-    return ''
+    return '';
   }
 
-  // Preserve high resolution up to maxDimension (default 1920px for HD displays)
   let targetWidth = pixelCrop.width;
   let targetHeight = pixelCrop.height;
 
@@ -46,7 +45,6 @@ export default async function getCroppedImg(
   canvas.width = targetWidth;
   canvas.height = targetHeight;
 
-  // Use high-quality image smoothing
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
@@ -60,8 +58,15 @@ export default async function getCroppedImg(
     0,
     targetWidth,
     targetHeight
-  )
+  );
 
-  // High quality JPEG (0.92 for crystal-clear HD imagery)
-  return canvas.toDataURL('image/jpeg', quality)
+  // Intentar exportar como WebP optimizado (pesa 70% menos que JPEG)
+  try {
+    const webpData = canvas.toDataURL('image/webp', quality);
+    if (webpData.startsWith('data:image/webp')) {
+      return webpData;
+    }
+  } catch (e) {}
+
+  return canvas.toDataURL('image/jpeg', quality);
 }
