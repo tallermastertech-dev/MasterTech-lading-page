@@ -31,9 +31,33 @@ const NIVELES_EXPERIENCIA = [
   'Estudiante / Recién Graduado con Pasión por los Autos'
 ];
 
+const DEFAULT_TEAM_MEMBERS = [
+  {
+    id: 1,
+    name: "Técnico Especialista en Diagnóstico",
+    role: "DIAGNÓSTICO OEM & ELECTRÓNICA",
+    desc: "Diagnóstico computarizado con escáner de nivel de agencia para Jeep, Toyota y vehículos multimarca.",
+    img: "/assets/servicio-electricidad.webp"
+  },
+  {
+    id: 2,
+    name: "Mecánico Senior de Motores",
+    role: "MECÁNICA GENERAL & MOTORES",
+    desc: "Especialista en motores Pentastar, HEMI, VVT-i y tren motriz con calibración y torque de precisión OEM.",
+    img: "/assets/servicio-mecanica.webp"
+  },
+  {
+    id: 3,
+    name: "Especialista en Frenos & Suspensión",
+    role: "TREN DELANTERO, FRENOS & 4X4",
+    desc: "Ajuste de sistemas de suspensión, amortiguadores y pastillas de freno cerámicas con banco de pruebas.",
+    img: "/assets/servicio-frenos.webp"
+  }
+];
+
 export default function Nosotros() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>(DEFAULT_TEAM_MEMBERS);
 
   // Recruitment Modal & Form States
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,10 +102,10 @@ export default function Nosotros() {
       if (dataObj?.TEAM_MEMBERS_JSON) {
         try {
           const parsed = JSON.parse(dataObj.TEAM_MEMBERS_JSON);
-          if (Array.isArray(parsed)) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
         } catch (e) {}
       }
-      return [];
+      return DEFAULT_TEAM_MEMBERS;
     };
 
     // 1. Initial load from TTL cache / local store for instant rendering

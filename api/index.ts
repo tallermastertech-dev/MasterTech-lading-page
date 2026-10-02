@@ -31,7 +31,7 @@ const memoryLeadsCache: any[] = [];
 // Only queries Supabase once every 5 minutes regardless of traffic
 let supabaseSettingsCache: Record<string, string> | null = null;
 let supabaseSettingsCacheTime = 0;
-const SUPABASE_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutos de caché para eliminar consumo de egress
+const SUPABASE_CACHE_TTL_MS = 60 * 1000; // 60 segundos de caché para actualizar rápido y eliminar consumo de egress
 
 // Initialize memory cache from persistent disk file on startup
 try {
