@@ -34,24 +34,66 @@ const NIVELES_EXPERIENCIA = [
 const DEFAULT_TEAM_MEMBERS = [
   {
     id: 1,
-    name: "Técnico Especialista en Diagnóstico",
-    role: "DIAGNÓSTICO OEM & ELECTRÓNICA",
-    desc: "Diagnóstico computarizado con escáner de nivel de agencia para Jeep, Toyota y vehículos multimarca.",
-    img: "/assets/servicio-electricidad.webp"
+    name: "Jesús Mata",
+    role: "JEFE DE MECANICA",
+    desc: "Experto en diagnóstico avanzado y reparación de motores con más de 15 años de experiencia multimarca.",
+    img: "/jesus.jpg"
   },
   {
     id: 2,
-    name: "Mecánico Senior de Motores",
-    role: "MECÁNICA GENERAL & MOTORES",
-    desc: "Especialista en motores Pentastar, HEMI, VVT-i y tren motriz con calibración y torque de precisión OEM.",
-    img: "/assets/servicio-mecanica.webp"
+    name: "J. Vicente Betancourt",
+    role: "CEO - DIRECTOR",
+    desc: "Dirección general y gestión estratégica de MasterTech Taller.",
+    img: "/assets/instalaciones.jpg"
   },
   {
     id: 3,
-    name: "Especialista en Frenos & Suspensión",
-    role: "TREN DELANTERO, FRENOS & 4X4",
-    desc: "Ajuste de sistemas de suspensión, amortiguadores y pastillas de freno cerámicas con banco de pruebas.",
-    img: "/assets/servicio-frenos.webp"
+    name: "Brenda Santaella",
+    role: "COORDINADORA LOGISTICA",
+    desc: "Coordinación y gestión de repuestos e insumos automotrices.",
+    img: "/assets/instalaciones.jpg"
+  },
+  {
+    id: 4,
+    name: "Ambar Salazar",
+    role: "ASESORA DE LOGISTICA",
+    desc: "Atención directa y seguimiento continuo a clientes.",
+    img: "/assets/instalaciones.jpg"
+  },
+  {
+    id: 5,
+    name: "Aaron Rivas",
+    role: "TECNICO ELECTRONICA",
+    desc: "Especialista en diagnóstico computarizado y reprogramación de módulos.",
+    img: "/assets/instalaciones.jpg"
+  },
+  {
+    id: 6,
+    name: "Domingo Blandin",
+    role: "ASESOR DE SERVICIO",
+    desc: "Asesoría técnica personalizada y recepción de vehículos.",
+    img: "/assets/instalaciones.jpg"
+  },
+  {
+    id: 7,
+    name: "Beltran Lopez",
+    role: "TECNICO MECANICO",
+    desc: "Mantenimiento preventivo, correctivo y sistemas de suspensión.",
+    img: "/assets/instalaciones.jpg"
+  },
+  {
+    id: 8,
+    name: "Jose Vasquez",
+    role: "MARKETING - DESARROLLADOR WEB",
+    desc: "Desarrollo tecnológico, presencia digital y comunicación.",
+    img: "/assets/instalaciones.jpg"
+  },
+  {
+    id: 9,
+    name: "Olga Vera",
+    role: "ADMINISTRACIÓN",
+    desc: "Gestión administrativa, contable y operativa del taller.",
+    img: "/assets/instalaciones.jpg"
   }
 ];
 
