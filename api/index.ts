@@ -144,14 +144,33 @@ setInterval(() => {
 
 function createRateLimiter(maxRequests: number, windowMs: number, customMessage?: string) {
   return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    // 1. Peticiones CORS preflight nunca se limitan
+    if (req.method === 'OPTIONS') {
+      return next();
+    }
+
+    // 2. Administradores autenticados (con token Bearer) nunca deben ser bloqueados por rate limiters globales
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ') && authHeader.length > 20) {
+      return next();
+    }
+
+    // 3. Rutas administrativas del sistema
+    const rawPath = req.path || '';
+    if (rawPath.startsWith('/api/admin') || rawPath.startsWith('/admin')) {
+      return next();
+    }
+
     const rawIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip || req.socket.remoteAddress || 'unknown';
     // Normalize path (ignore query strings) to prevent bypassing via random query params
-    const normalizedPath = req.path.toLowerCase().replace(/\/+$/, '');
+    const normalizedPath = rawPath.toLowerCase().replace(/\/+$/, '');
     // For login routes: include email in key so shared IPs (office/taller networks) don't block each other
     const emailSuffix = (normalizedPath.includes('login') && req.body?.email)
       ? `:${String(req.body.email).toLowerCase().trim()}`
       : '';
-    const key = `${rawIp}:${normalizedPath}${emailSuffix}`;
+    // Incluir método HTTP en la clave para que peticiones GET concurrentes no consuman la cuota de peticiones PUT/POST
+    const method = (req.method || 'GET').toUpperCase();
+    const key = `${method}:${rawIp}:${normalizedPath}${emailSuffix}`;
     const now = Date.now();
 
     const entry = rateLimitStore.get(key);
@@ -184,7 +203,7 @@ function createRateLimiter(maxRequests: number, windowMs: number, customMessage?
 // Security Rate Limits: Strict protection against brute force and concurrent attacks
 const strictLimit = createRateLimiter(20, 5 * 60 * 1000, 'Demasiados intentos de acceso fallidos. Por seguridad, tu IP ha sido temporalmente limitada por 5 minutos.'); // 20 req / 5 min (login) — increased to avoid blocking shared IPs
 const standardLimit = createRateLimiter(15, 60 * 60 * 1000, 'Límite de solicitudes de contacto alcanzado. Intenta nuevamente en una hora.'); // 15 req / hora (leads form)
-const globalApiLimiter = createRateLimiter(120, 60 * 1000, 'Ráfaga de solicitudes excesiva detectada. Espera un momento antes de reintentar.'); // 120 req / min (global flood protection)
+const globalApiLimiter = createRateLimiter(600, 60 * 1000, 'Ráfaga de solicitudes excesiva detectada. Espera un momento antes de reintentar.'); // 600 req / min (amplia tolerancia para navegación en IPs compartidas)
 const relaxedLimit = createRateLimiter(1000, 15 * 60 * 1000); // 1000 req / 15 min (read)
 
 // =============================================================

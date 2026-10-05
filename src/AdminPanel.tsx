@@ -2455,7 +2455,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
     try {
       // 1. Await server and Supabase persistence response strictly
-      const res = await fetch('/api/settings', {
+      let res = await fetch('/api/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -2463,6 +2463,25 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         },
         body: JSON.stringify(targetForm)
       });
+
+      // Si por ráfagas previas en red compartida se recibe un 429, liberar y reintentar de inmediato
+      if (!res.ok && res.status === 429) {
+        try {
+          await fetch('/api/admin/clear-ratelimit', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${activeAuthToken}` }
+          });
+        } catch (_) {}
+        await new Promise(r => setTimeout(r, 600));
+        res = await fetch('/api/settings', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${activeAuthToken}`
+          },
+          body: JSON.stringify(targetForm)
+        });
+      }
 
       if (!res.ok) {
         if (res.status === 401) {
