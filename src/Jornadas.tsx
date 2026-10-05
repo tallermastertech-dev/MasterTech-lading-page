@@ -603,21 +603,21 @@ export default function Jornadas() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-primary/20 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-widest mb-6 shadow-lg shadow-amber-500/10"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-primary/20 border border-amber-500/30 text-amber-300 text-[11px] font-black uppercase tracking-widest mb-4 shadow-lg shadow-amber-500/10"
           >
-            <Flame className="w-4 h-4 text-amber-400 animate-pulse" />
-            <span>JORNADAS ESPECIALES AUTOMOTRICES 2026 — CUPOS LIMITADOS</span>
+            <Flame className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span>EDICIÓN 2026 · CUPOS LIMITADOS</span>
           </motion.div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight uppercase leading-[1.1] mb-6 max-w-4xl mx-auto"
+            className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-tight uppercase leading-tight mb-3 max-w-3xl mx-auto"
           >
-            <span style={{ color: '#ffffff' }}>TECNOLOGÍA DE ALTO NIVEL</span> <br />
-            <span className="text-amber-400 italic block mt-1 font-black" style={{ color: '#fbbf24' }}>
-              CON PRECIOS DE JORNADA
+            <span style={{ color: '#ffffff' }}>JORNADAS</span>{' '}
+            <span className="text-amber-400 font-black" style={{ color: '#fbbf24' }}>
+              ESPECIALES
             </span>
           </motion.h1>
 
@@ -625,10 +625,10 @@ export default function Jornadas() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10 font-medium"
+            className="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6 font-medium"
             style={{ color: '#cbd5e1' }}
           >
-            Aprovecha nuestros días de servicio especializado con equipos importados de diagnóstico y programación. Reserva tu turno a precio promocional antes de que agoten los cupos.
+            Servicios técnicos de alto nivel a precio promocional exclusivo. Reserva tu cupo antes del cierre de agenda.
           </motion.p>
 
           {/* Live Countdown Timer Widget */}
