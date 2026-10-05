@@ -18,7 +18,13 @@ import {
   Flame,
   Star,
   Activity,
-  Check
+  Check,
+  FileText,
+  AlertTriangle,
+  FileCheck,
+  ShieldAlert,
+  Printer,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
@@ -196,11 +202,98 @@ const JORNADAS_DATA: JornadaItem[] = [
   }
 ];
 
+export const JORNADA_POLICIES = [
+  {
+    number: "01",
+    title: "Vigencia y Disponibilidad",
+    items: [
+      { subtitle: "Vigencia", text: "La presente jornada especial es válida hasta finales del mes de octubre." },
+      { subtitle: "Días de Atención", text: "Los trabajos se programan y ejecutan exclusivamente todos los miércoles." },
+      { subtitle: "Disponibilidad", text: "Solo 3 cupos por miércoles, garantizando máxima calidad, exclusividad y atención personalizada para cada vehículo." }
+    ]
+  },
+  {
+    number: "02",
+    title: "Horario de Cita, Recepción y Puntualidad",
+    items: [
+      { subtitle: "Horario de Llegada", text: "La recepción de los vehículos se realiza en un horario estricto de 8:30 a.m. a 10:00 a.m." },
+      { subtitle: "Cláusula de Retrasos", text: "Al tratarse de una jornada limitada a 3 cupos diarios, la puntualidad es obligatoria para no alterar el cronograma del taller. En caso de llegar después de las 10:00 a.m. sin previo aviso, el cupo podrá ser reasignado o reprogramado para la siguiente fecha disponible, y ya no se podrá garantizar la entrega en el tiempo estándar." },
+      { subtitle: "Permanencia en el Taller", text: "Por normativas de seguridad industrial y operativa, los clientes no deben permanecer dentro de las bahías de trabajo durante los procesos técnicos." }
+    ]
+  },
+  {
+    number: "03",
+    title: "Tiempos de Trabajo y Pruebas de Calidad",
+    items: [
+      { subtitle: "Tiempo Estimado", text: "El tiempo de ejecución en el taller es de 1 día a 1 día y medio." },
+      { subtitle: "Pruebas en Carretera y Banco", text: "El proceso comprende trabajos estáticos (descarbonización de válvulas, reprogramación, kit de eliminación o simple según aplique, y banqueo de inyectores) y se complementa con rigurosas pruebas en carretera. Ningún vehículo es entregado sin antes validar su correcto funcionamiento y calibración en vía." }
+    ]
+  },
+  {
+    number: "04",
+    title: "Paquetes y Evaluación del Motor",
+    items: [
+      { subtitle: "Paquete Leve", text: "Diseñado y exclusivo para vehículos de 0 km o con poco uso (poca carbonilla)." },
+      { subtitle: "Paquete Crítico", text: "Requiere una evaluación técnica detallada del estado del motor; el alcance y el precio final se conversan y acuerdan directamente con el cliente antes de proceder." }
+    ]
+  },
+  {
+    number: "05",
+    title: "Cláusula ante Contratiempos Operativos o Técnicos",
+    items: [
+      { subtitle: "Hallazgos Ocultos", text: "Si durante el proceso de desmontaje, banqueo, reprogramación o pruebas en carretera se detecta un contratiempo imprevisto (fallas ocultas en sensores periféricos o desgaste severo preexistente), se le notificará de inmediato al cliente." },
+      { subtitle: "Extensión de Plazos", text: "Si esto requiere un tiempo superior al establecido, se coordinará la extensión de la entrega para priorizar la seguridad y el óptimo funcionamiento del motor." }
+    ]
+  },
+  {
+    number: "06",
+    title: "Registro Audiovisual, Inspección Inicial y Levantamiento de Estado",
+    items: [
+      { subtitle: "Evidencia de Recepción", text: "Todo vehículo que ingresa es sometido a un registro fotográfico y en video de su carrocería, componentes estéticos, tablero (kilometraje y testigos) y compartimento del motor al momento de la recepción como acta digital de estado inicial." },
+      { subtitle: "Registro de Proceso", text: "Se documenta en video y fotografía el avance técnico en el taller, garantizando al cliente la trazabilidad y veracidad de los trabajos ejecutados." },
+      { subtitle: "Uso de Contenido", text: "El material audiovisual obtenido podrá ser utilizado por el taller con fines de control de calidad, auditoría técnica y difusión en plataformas digitales (redes sociales), resguardando en todo momento la privacidad de las placas o datos de identificación." }
+    ]
+  },
+  {
+    number: "07",
+    title: "Responsabilidad sobre Objetos Personales y Vehículos",
+    items: [
+      { subtitle: "Objetos de Valor", text: "El taller no se hace responsable por objetos de valor, dispositivos electrónicos, herramientas o accesorios personales dejados en el interior del vehículo. Se solicita retirarlos antes de la entrega de llaves." },
+      { subtitle: "Accesorios Externos", text: "Daños en alerones aftermarket o rines con rayones previos deben ser notificados y asentados en el acta de recepción." }
+    ]
+  },
+  {
+    number: "08",
+    title: "Política de Retiro y Almacenaje Posterior a la Entrega",
+    items: [
+      { subtitle: "Plazo de Retiro", text: "Una vez que el vehículo esté listo y notificado, el cliente dispondrá de un plazo máximo de 48 horas para realizar el retiro de la unidad de las instalaciones del taller." },
+      { subtitle: "Cargos por Custodia", text: "Pasado este lapso sin un acuerdo previo, el taller se reserva el derecho de aplicar cargos diarios por concepto de estacionamiento y resguardo logístico." }
+    ]
+  },
+  {
+    number: "09",
+    title: "Garantía y Políticas de Cobertura",
+    items: [
+      { subtitle: "Garantía", text: "Se otorga una garantía de 3 meses directa sobre los trabajos realizados en la jornada." },
+      { subtitle: "Exclusiones", text: "La garantía quedará nula si el vehículo es intervenido por terceros ajenos al taller o presenta fallas derivadas de combustible contaminado o mal uso operativo." }
+    ]
+  },
+  {
+    number: "10",
+    title: "Métodos de Pago y Condiciones Financieras",
+    items: [
+      { subtitle: "Divisas y Bolívares", text: "Se aceptan pagos en Divisas ($) y Bolívares (Bs.) bajo la tasa de referencia legal establecida." },
+      { subtitle: "Liquidación", text: "El pago total del servicio debe efectuarse de manera obligatoria al momento de la entrega del vehículo, previa conformidad del cliente. No se realizan entregas a crédito." }
+    ]
+  }
+];
+
 export default function Jornadas() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
   const [activeJornadaId, setActiveJornadaId] = useState<string>("reprogramacion");
   const [selectedSlot, setSelectedSlot] = useState<string>('');
   const [isSlotValid, setIsSlotValid] = useState<boolean>(false);
+  const [showPoliciesModal, setShowPoliciesModal] = useState<boolean>(false);
 
   const tabsRef = React.useRef<HTMLDivElement>(null);
 
@@ -877,9 +970,21 @@ export default function Jornadas() {
                       <span>RESERVAR CUPO VÍA WHATSAPP ({currentJornada.promoPrice})</span>
                     </button>
 
-                    <p className="text-[10px] text-zinc-500 text-center">
-                      Reserva directa protegida. Al tocar el botón serás redirigido a nuestro WhatsApp oficial para confirmar tu cupo.
-                    </p>
+                    <div className="pt-3 border-t border-white/10 text-center space-y-1.5">
+                      <div className="flex flex-wrap items-center justify-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowPoliciesModal(true)}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 transition-colors cursor-pointer"
+                        >
+                          <FileText size={13} />
+                          <span>Ver Políticas, Condiciones y Cláusulas (10 Puntos)</span>
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-zinc-500">
+                        Vigencia Octubre · Recepción estricta 8:30 a 10:00 AM · 3 Cupos los Miércoles · Garantía 3 Meses.
+                      </p>
+                    </div>
                   </form>
                 </div>
               </motion.div>
@@ -887,6 +992,102 @@ export default function Jornadas() {
           </section>
         </main>
       )}
+
+      {/* =========================================================================
+          POLÍTICAS, CONDICIONES Y CLÁUSULAS OFICIALES DE LA JORNADA VIP
+          ========================================================================= */}
+      <section id="politicas-jornada" className="py-20 px-6 max-w-7xl mx-auto border-t border-white/10">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-wider mb-4">
+            <FileText size={14} className="text-amber-400" />
+            <span>Marco Operativo Oficial</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase">
+            POLÍTICAS, CONDICIONES Y CLÁUSULAS
+          </h2>
+          <p className="text-amber-400 font-bold text-sm sm:text-base mt-2 tracking-wide uppercase">
+            Jornada Especial de Mantenimiento y Servicios Técnicos
+          </p>
+          <p className="text-xs sm:text-sm text-zinc-400 mt-3 leading-relaxed">
+            Para garantizar la máxima calidad técnica, exclusividad y cumplimiento en los tiempos de entrega de cada vehículo, las Jornadas VIP se rigen bajo los siguientes 10 puntos operativos de estricto cumplimiento.
+          </p>
+          <div className="mt-4 flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowPoliciesModal(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer"
+            >
+              <FileText size={14} />
+              <span>Abrir Visor Completo de Cláusulas</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold transition-all cursor-pointer"
+            >
+              <Printer size={14} />
+              <span>Imprimir / PDF</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 10 Clauses Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          {JORNADA_POLICIES.map((policy) => (
+            <div 
+              key={policy.number}
+              className="bg-[#12141a]/95 border border-white/10 rounded-2xl p-5 sm:p-6 shadow-xl hover:border-amber-500/40 transition-all flex flex-col justify-between group"
+            >
+              <div>
+                {/* Header with Number & Title */}
+                <div className="flex items-center gap-3 pb-3 mb-4 border-b border-white/10">
+                  <span className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 font-mono font-black text-xs flex items-center justify-center shrink-0">
+                    {policy.number}
+                  </span>
+                  <h3 className="text-sm sm:text-base font-extrabold text-white uppercase tracking-tight group-hover:text-amber-300 transition-colors">
+                    {policy.title}
+                  </h3>
+                </div>
+
+                {/* Sub-items */}
+                <div className="space-y-3">
+                  {policy.items.map((sub, sIdx) => (
+                    <div key={sIdx} className="text-xs text-zinc-300 leading-relaxed flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+                      <div>
+                        <strong className="text-white font-bold">{sub.subtitle}: </strong>
+                        <span className="text-zinc-300">{sub.text}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom Banner Confirmation */}
+        <div className="mt-10 bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+          <div className="space-y-1">
+            <h4 className="text-white font-extrabold text-sm sm:text-base flex items-center justify-center sm:justify-start gap-2">
+              <ShieldCheck className="text-emerald-400" size={18} />
+              <span>Garantía de Calidad y Transparencia Técnica</span>
+            </h4>
+            <p className="text-xs text-zinc-400 max-w-2xl">
+              Solo 3 cupos semanales cada miércoles con recepción de 8:30 a 10:00 AM, pruebas dinámicas en carretera y 3 meses de garantía por escrito.
+            </p>
+          </div>
+
+          <a 
+            href={config.WHATSAPP_LINK || "https://wa.me/584123565012"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary !px-6 !py-3 text-xs font-bold whitespace-nowrap shadow-xl"
+          >
+            <span>CONSULTAR DISPONIBILIDAD</span>
+          </a>
+        </div>
+      </section>
 
       {/* Guarantees & Why MasterTech */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
@@ -940,6 +1141,102 @@ export default function Jornadas() {
           <p className="text-[11px] text-zinc-600">Porlamar, Isla de Margarita — Venezuela.</p>
         </div>
       </footer>
+
+      {/* Modal de Políticas, Condiciones y Cláusulas */}
+      <AnimatePresence>
+        {showPoliciesModal && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowPoliciesModal(false)}
+              className="fixed inset-0 bg-black/85 backdrop-blur-md"
+            />
+
+            {/* Modal Dialog */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-4xl bg-[#12141a] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[90vh]"
+            >
+              {/* Modal Header */}
+              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-amber-500/10 via-red-500/10 to-transparent">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                    <FileText size={20} />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">Documento Oficial</span>
+                    <h3 className="text-lg font-black text-white uppercase tracking-tight">Políticas, Condiciones y Cláusulas</h3>
+                    <p className="text-xs text-zinc-400">Jornada Especial de Mantenimiento y Servicios Técnicos</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer hidden sm:flex items-center gap-1.5 text-xs font-semibold"
+                    title="Imprimir o Guardar PDF"
+                  >
+                    <Printer size={15} />
+                    <span>Imprimir</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowPoliciesModal(false)}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 overflow-y-auto space-y-6 text-sm text-zinc-300">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {JORNADA_POLICIES.map((policy) => (
+                    <div key={policy.number} className="bg-black/50 border border-white/10 rounded-2xl p-4 space-y-2.5">
+                      <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+                        <span className="text-xs font-mono font-black text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded">
+                          {policy.number}
+                        </span>
+                        <h4 className="text-xs font-bold text-white uppercase">{policy.title}</h4>
+                      </div>
+                      <div className="space-y-2 text-xs">
+                        {policy.items.map((sub, sIdx) => (
+                          <div key={sIdx} className="flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1 shrink-0" />
+                            <div>
+                              <strong className="text-white font-semibold">{sub.subtitle}: </strong>
+                              <span className="text-zinc-400">{sub.text}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between">
+                <span className="text-xs text-zinc-500">MasterTech Isla de Margarita · Vigencia hasta fin de Octubre</span>
+                <button
+                  type="button"
+                  onClick={() => setShowPoliciesModal(false)}
+                  className="btn-primary !px-5 !py-2 text-xs font-bold cursor-pointer"
+                >
+                  Entendido y Conforme
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
       <BrechaCambiariaPanel />

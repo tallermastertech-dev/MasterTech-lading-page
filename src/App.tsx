@@ -1469,6 +1469,17 @@ export default function App() {
                               </a>
                             )}
                           </div>
+
+                          {/* Link to official policies */}
+                          <div className={isSingle ? 'pt-3 border-t border-slate-100 dark:border-slate-800/80' : 'px-6 pb-4 pt-1'}>
+                            <a
+                              href="/jornadas#politicas-jornada"
+                              className="text-[11px] text-amber-600 dark:text-amber-400 hover:underline font-semibold inline-flex items-center gap-1.5"
+                            >
+                              <FileText size={12} />
+                              <span>Sujeto a las 10 Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
+                            </a>
+                          </div>
                         </div>
                       </div>
                     );
