@@ -23,7 +23,6 @@ import {
   AlertTriangle,
   FileCheck,
   ShieldAlert,
-  Printer,
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -1205,14 +1204,6 @@ export default function Jornadas() {
               <FileText size={14} />
               <span>Abrir Visor Completo de Cláusulas</span>
             </button>
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold transition-all cursor-pointer"
-            >
-              <Printer size={14} />
-              <span>Imprimir / PDF</span>
-            </button>
           </div>
         </div>
 
@@ -1361,15 +1352,6 @@ export default function Jornadas() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => window.print()}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer hidden sm:flex items-center gap-1.5 text-xs font-semibold"
-                    title="Imprimir o Guardar PDF"
-                  >
-                    <Printer size={15} />
-                    <span>Imprimir</span>
-                  </button>
                   <button
                     type="button"
                     onClick={() => setShowPoliciesModal(false)}
