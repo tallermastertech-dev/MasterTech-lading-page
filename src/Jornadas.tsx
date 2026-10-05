@@ -312,6 +312,7 @@ export default function Jornadas() {
   const [isBookingSubmitting, setIsBookingSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [slotRefreshCounter, setSlotRefreshCounter] = useState(0);
+  const [acceptedPolicies, setAcceptedPolicies] = useState(false);
 
   // Countdown timer state (simulated target: 3 days remaining)
   const [timeLeft, setTimeLeft] = useState({ days: 3, hours: 14, mins: 28, secs: 45 });
@@ -496,6 +497,10 @@ export default function Jornadas() {
   const handleWhatsAppBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isBookingSubmitting) return;
+    if (!acceptedPolicies) {
+      alert("Debes marcar la casilla para aceptar las Políticas, Condiciones y Cláusulas Oficiales de la Jornada.");
+      return;
+    }
     setIsBookingSubmitting(true);
 
     const nameStr = clientName.trim() || "Cliente MasterTech";
@@ -567,6 +572,7 @@ export default function Jornadas() {
       `📞 *Teléfono:* ${clientPhone || "No indicado"}`,
       `📅 *Turno Solicitado:* ${slotStr}`,
       notes ? `📝 *Detalles/Notas:* ${notes}` : '',
+      `📋 *Términos:* He leído y acepto las Políticas y Cláusulas Oficiales de la Jornada`,
       ``,
       `¿Tienen disponibilidad de cupo para confirmar mi cita con el descuento especial?`
     ].filter(Boolean);
@@ -1075,10 +1081,44 @@ export default function Jornadas() {
                         </div>
                       </div>
 
+                      {/* Checkbox Obligatorio de Aceptación de Políticas */}
+                      <div className="pt-1">
+                        <label 
+                          className={`flex items-start gap-2.5 p-3 rounded-2xl border transition-all cursor-pointer select-none ${
+                            acceptedPolicies 
+                              ? 'bg-amber-500/10 border-amber-500/40 text-white' 
+                              : 'bg-black/60 border-white/10 hover:border-amber-500/30 text-zinc-300'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            required
+                            checked={acceptedPolicies}
+                            onChange={(e) => setAcceptedPolicies(e.target.checked)}
+                            className="mt-0.5 w-4 h-4 rounded border-amber-500/50 text-amber-500 focus:ring-amber-500/30 bg-black/80 cursor-pointer accent-amber-500 shrink-0"
+                          />
+                          <span className="text-xs leading-snug">
+                            Al marcar esta casilla, acepto las{' '}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowPoliciesModal(true);
+                              }}
+                              className="text-amber-400 font-bold underline underline-offset-2 hover:text-amber-300 inline cursor-pointer"
+                            >
+                              Políticas, Condiciones y Cláusulas Oficiales de la Jornada
+                            </button>
+                            . <span className="text-amber-400 font-black">*</span>
+                          </span>
+                        </label>
+                      </div>
+
                       <button
                         type="submit"
-                        disabled={isBookingSubmitting}
-                        className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-70"
+                        disabled={isBookingSubmitting || !acceptedPolicies}
+                        className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
                       >
                         <WhatsAppIcon size={18} />
                         <span>
@@ -1089,6 +1129,12 @@ export default function Jornadas() {
                         </span>
                       </button>
 
+                      {!acceptedPolicies && (
+                        <p className="text-[10px] text-amber-400/90 text-center font-semibold">
+                          * Marca la casilla obligatoria para habilitar el agendamiento de tu cita.
+                        </p>
+                      )}
+
                       {bookingSuccess && (
                         <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl text-center text-xs text-emerald-300 font-bold animate-fade-in">
                           Cita y cupo registrados en el sistema de MasterTech. Se abrió WhatsApp para tu confirmación directa.
@@ -1096,16 +1142,6 @@ export default function Jornadas() {
                       )}
 
                       <div className="pt-3 border-t border-white/10 text-center space-y-1.5">
-                        <div className="flex flex-wrap items-center justify-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setShowPoliciesModal(true)}
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 transition-colors cursor-pointer"
-                          >
-                            <FileText size={13} />
-                            <span>Sujeto a las Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
-                          </button>
-                        </div>
                         <p className="text-[10px] text-zinc-500">
                           Cupos Limitados por Jornada · Recepción puntual en turnos asignados · Garantía Oficial MasterTech.
                         </p>
