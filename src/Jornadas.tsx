@@ -978,7 +978,7 @@ export default function Jornadas() {
                           className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 transition-colors cursor-pointer"
                         >
                           <FileText size={13} />
-                          <span>Ver Políticas, Condiciones y Cláusulas (10 Puntos)</span>
+                          <span>Ver Políticas, Condiciones y Cláusulas</span>
                         </button>
                       </div>
                       <p className="text-[10px] text-zinc-500">
@@ -1009,7 +1009,7 @@ export default function Jornadas() {
             Jornada Especial de Mantenimiento y Servicios Técnicos
           </p>
           <p className="text-xs sm:text-sm text-zinc-400 mt-3 leading-relaxed">
-            Para garantizar la máxima calidad técnica, exclusividad y cumplimiento en los tiempos de entrega de cada vehículo, las Jornadas VIP se rigen bajo los siguientes 10 puntos operativos de estricto cumplimiento.
+            Para garantizar la máxima calidad técnica, exclusividad y cumplimiento en los tiempos de entrega de cada vehículo, las Jornadas VIP se rigen bajo las siguientes condiciones y cláusulas operativas de estricto cumplimiento.
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
             <button

@@ -1477,7 +1477,7 @@ export default function App() {
                               className="text-[11px] text-amber-600 dark:text-amber-400 hover:underline font-semibold inline-flex items-center gap-1.5"
                             >
                               <FileText size={12} />
-                              <span>Sujeto a las 10 Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
+                              <span>Sujeto a las Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
                             </a>
                           </div>
                         </div>
