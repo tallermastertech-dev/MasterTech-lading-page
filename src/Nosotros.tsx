@@ -37,63 +37,63 @@ const DEFAULT_TEAM_MEMBERS = [
     name: "Jesús Mata",
     role: "JEFE DE MECANICA",
     desc: "Experto en diagnóstico avanzado y reparación de motores con más de 15 años de experiencia multimarca.",
-    img: "/jesus.jpg"
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/1_jes_s_mata.jpg"
   },
   {
     id: 2,
     name: "J. Vicente Betancourt",
     role: "CEO - DIRECTOR",
     desc: "Dirección general y gestión estratégica de MasterTech Taller.",
-    img: "/assets/instalaciones.jpg"
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/2_j_vicente_betancourt.jpg"
   },
   {
     id: 3,
     name: "Brenda Santaella",
     role: "COORDINADORA LOGISTICA",
     desc: "Coordinación y gestión de repuestos e insumos automotrices.",
-    img: "/assets/instalaciones.jpg"
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/3_brenda_santaella.jpg"
   },
   {
     id: 4,
     name: "Ambar Salazar",
     role: "ASESORA DE LOGISTICA",
     desc: "Atención directa y seguimiento continuo a clientes.",
-    img: "/assets/instalaciones.jpg"
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/4_ambar_salazar.jpg"
   },
   {
     id: 5,
-    name: "Aaron Rivas",
-    role: "TECNICO ELECTRONICA",
-    desc: "Especialista en diagnóstico computarizado y reprogramación de módulos.",
-    img: "/assets/instalaciones.jpg"
+    name: "Beltran Lopez",
+    role: "TECNICO MECANICO",
+    desc: "Mantenimiento preventivo, correctivo y sistemas de suspensión.",
+    img: "/assets/servicio-electricidad.jpg"
   },
   {
     id: 6,
     name: "Domingo Blandin",
     role: "ASESOR DE SERVICIO",
     desc: "Asesoría técnica personalizada y recepción de vehículos.",
-    img: "/assets/instalaciones.jpg"
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/6_domingo_blandin.jpg"
   },
   {
     id: 7,
-    name: "Beltran Lopez",
-    role: "TECNICO MECANICO",
-    desc: "Mantenimiento preventivo, correctivo y sistemas de suspensión.",
-    img: "/assets/instalaciones.jpg"
+    name: "Aaron Rivas",
+    role: "TECNICO ELECTRONICA",
+    desc: "Especialista en diagnóstico computarizado y reprogramación de módulos.",
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/7_aaron_rivas.jpg"
   },
   {
     id: 8,
     name: "Jose Vasquez",
     role: "MARKETING - DESARROLLADOR WEB",
     desc: "Desarrollo tecnológico, presencia digital y comunicación.",
-    img: "/assets/instalaciones.jpg"
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/8_jose_vasquez.jpg"
   },
   {
     id: 9,
     name: "Olga Vera",
-    role: "ADMINISTRACIÓN",
-    desc: "Gestión administrativa, contable y operativa del taller.",
-    img: "/assets/instalaciones.jpg"
+    role: "ADMINISTRACION",
+    desc: "Gestión administrativa, control financiero y optimización de procesos operativos.",
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/equipo/9_olga_vera.jpg"
   }
 ];
 

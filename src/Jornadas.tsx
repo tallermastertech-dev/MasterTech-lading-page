@@ -52,6 +52,9 @@ interface JornadaItem {
   specs: { label: string; val: string }[];
   compatibleModels: string;
   popularAddon?: string;
+  jornadaDay?: string | number;
+  dateLabel?: string;
+  jornadaSlots?: string[] | string;
 }
 
 const JORNADAS_DATA: JornadaItem[] = [
@@ -274,11 +277,17 @@ export default function Jornadas() {
     if (config && config.JORNADAS_JSON !== undefined && config.JORNADAS_JSON !== null && config.JORNADAS_JSON !== '') {
       try {
         const parsed = JSON.parse(config.JORNADAS_JSON);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       } catch (e) {}
     }
     return JORNADAS_DATA;
   }, [config]);
+
+  useEffect(() => {
+    if (currentJornadasList.length > 0 && !currentJornadasList.some((j: any) => j.id === activeJornadaId)) {
+      setActiveJornadaId(currentJornadasList[0].id);
+    }
+  }, [currentJornadasList, activeJornadaId]);
 
   const rawJornada = currentJornadasList.find((j: any) => j.id === activeJornadaId) || currentJornadasList[0] || JORNADAS_DATA[0];
 
@@ -297,9 +306,74 @@ export default function Jornadas() {
       benefits: Array.isArray(rawJornada?.benefits) ? rawJornada.benefits : fallback.benefits,
       specs: Array.isArray(rawJornada?.specs) ? rawJornada.specs : fallback.specs,
       compatibleModels: rawJornada?.compatibleModels || fallback.compatibleModels,
-      icon: rawJornada?.icon || fallback.icon
+      icon: rawJornada?.icon || fallback.icon,
+      jornadaDay: rawJornada?.jornadaDay !== undefined ? rawJornada.jornadaDay : undefined,
+      dateLabel: rawJornada?.dateLabel || '',
+      jornadaSlots: rawJornada?.jornadaSlots || undefined
     };
   }, [rawJornada]);
+
+  const { jornadaDaysOfWeek, jornadaDateLabel, jornadaTurnos } = React.useMemo(() => {
+    let days: number[] = [3]; // Default Miércoles for VIP Jornada
+    let label = currentJornada.dateLabel || '';
+
+    if (currentJornada.jornadaDay !== undefined && currentJornada.jornadaDay !== null && currentJornada.jornadaDay !== '') {
+      const dayVal = String(currentJornada.jornadaDay);
+      if (dayVal.includes(',')) {
+        days = dayVal.split(',').map((n: string) => parseInt(n.trim(), 10)).filter((n: number) => !isNaN(n));
+      } else if (!isNaN(Number(dayVal))) {
+        days = [Number(dayVal)];
+      } else {
+        const lower = dayVal.toLowerCase();
+        if (lower.includes('lunes')) days = [1];
+        else if (lower.includes('martes')) days = [2];
+        else if (lower.includes('miercol') || lower.includes('miércol')) days = [3];
+        else if (lower.includes('jueves')) days = [4];
+        else if (lower.includes('viernes')) days = [5];
+        else if (lower.includes('sabado') || lower.includes('sábado')) days = [6];
+        else if (lower.includes('todos')) days = [0, 1, 2, 3, 4, 5, 6];
+      }
+    } else {
+      const searchStr = `${currentJornada.title} ${currentJornada.subtitle} ${currentJornada.discountBadge} ${currentJornada.duration}`.toLowerCase();
+      if (searchStr.includes('miercol') || searchStr.includes('miércol')) {
+        days = [3];
+      } else if (searchStr.includes('lunes')) {
+        days = [1];
+      } else if (searchStr.includes('viernes')) {
+        days = [5];
+      }
+    }
+
+    if (!label) {
+      if (days.length === 1) {
+        const dayMap: Record<number, string> = {
+          0: 'Sólo Domingos', 1: 'Sólo Lunes', 2: 'Sólo Martes', 3: 'Sólo Miércoles',
+          4: 'Sólo Jueves', 5: 'Sólo Viernes', 6: 'Sólo Sábados'
+        };
+        label = `Fecha (${dayMap[days[0]] || 'Día de Jornada'})`;
+      } else if (days.length === 5) {
+        label = 'Fecha (Lunes a Viernes)';
+      } else {
+        label = 'Fecha Disponible';
+      }
+    }
+
+    let turnos = ["08:30 AM", "10:30 AM", "02:00 PM"];
+    if (Array.isArray(currentJornada.jornadaSlots) && currentJornada.jornadaSlots.length > 0) {
+      turnos = currentJornada.jornadaSlots;
+    } else if (typeof currentJornada.jornadaSlots === 'string' && currentJornada.jornadaSlots.trim().length > 0) {
+      turnos = currentJornada.jornadaSlots.split(',').map((s: string) => s.trim()).filter(Boolean);
+    } else {
+      const searchStr = `${currentJornada.title} ${currentJornada.subtitle} ${currentJornada.discountBadge}`.toLowerCase();
+      if (searchStr.includes('5 cupos')) {
+        turnos = ["08:30 AM", "09:30 AM", "10:30 AM", "01:30 PM", "03:00 PM"];
+      } else if (searchStr.includes('3 cupos')) {
+        turnos = ["08:30 AM", "10:30 AM", "02:00 PM"];
+      }
+    }
+
+    return { jornadaDaysOfWeek: days, jornadaDateLabel: label, jornadaTurnos: turnos };
+  }, [currentJornada]);
 
   const handleWhatsAppBooking = (e: React.FormEvent) => {
     e.preventDefault();
@@ -623,12 +697,14 @@ export default function Jornadas() {
                       </div>
                     </div>
 
-                    <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
-                      <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
-                        <Flame className="w-4 h-4 text-amber-400" />
-                        {currentJornada.discountBadge}
-                      </span>
-                    </div>
+                    {currentJornada.discountBadge && (
+                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
+                        <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
+                          <Flame className="w-4 h-4 text-amber-400" />
+                          {currentJornada.discountBadge}
+                        </span>
+                      </div>
+                    )}
 
                     {currentJornada.popularAddon && (
                       <p className="text-[11px] text-zinc-400 italic text-center">
@@ -685,8 +761,12 @@ export default function Jornadas() {
 
                       {/* Slot Picker Integration */}
                       <div>
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible</label>
+                        <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible (Sólo Miércoles)</label>
                         <InspectionSlotPicker
+                          isJornada={true}
+                          allowedDaysOfWeek={[3]}
+                          dateLabel="Fecha (Sólo Miércoles)"
+                          customSlots={["08:30 AM", "10:30 AM", "02:00 PM"]}
                           onSelectSlot={(slotStr, isValid) => {
                             setSelectedSlot(slotStr);
                             setIsSlotValid(isValid);

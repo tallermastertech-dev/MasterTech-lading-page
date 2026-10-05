@@ -287,7 +287,7 @@ export default function App() {
       badge: 'Puesto de Trabajo #1',
       title: 'Mecánica Mayor & Motores',
       desc: 'Desarme técnico, calibración de tolerancias, rectificación y armado con grúa hidráulica según especificaciones de torque OEM.',
-      img: '/assets/instalaciones.webp',
+      img: '/assets/servicio-mecanica.webp',
       feature: 'Torque de precisión garantizado',
       servicioId: 'mecanica',
       servicioNombre: 'Mecánica General & Mantenimiento'

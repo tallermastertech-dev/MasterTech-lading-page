@@ -3174,13 +3174,50 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
   // Jornada Item Save
   const handleSaveJornadaItem = (jornada: any) => {
-    const isEdit = jornada.id && jornadasList.some(j => String(j.id) === String(jornada.id));
+    // Sanitize citations and normalize benefits/garantia
+    const cleanSubtitle = (jornada.subtitle || '').replace(/\[cite:\s*\d+\]/gi, '').replace(/\s{2,}/g, ' ').trim();
+    const cleanGarantia = jornada.garantia || (jornada.specs && jornada.specs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || '3 Meses';
+    const parsedBenefits = Array.isArray(jornada.benefits) && jornada.benefits.length > 0
+      ? jornada.benefits
+      : (jornada.rawBenefits ? jornada.rawBenefits.split('\n').map((b: string) => b.trim()).filter((b: string) => b.length > 0) : ['Descarbonización especializada', 'Banqueo de inyectores']);
+
+    let specsList = Array.isArray(jornada.specs) ? [...jornada.specs] : [];
+    if (specsList.length === 0) {
+      specsList = [
+        { label: 'Diagnóstico', val: 'Especializado' },
+        { label: 'Procedimiento', val: 'En Banco y Ruta' },
+        { label: 'Respaldo', val: 'Audiovisual 100%' },
+        { label: 'Garantía', val: cleanGarantia }
+      ];
+    } else {
+      const gIdx = specsList.findIndex((s: any) => s && s.label && s.label.toLowerCase().includes('garant'));
+      if (gIdx >= 0) {
+        specsList[gIdx] = { label: specsList[gIdx].label || 'Garantía', val: cleanGarantia };
+      }
+    }
+
+    const cleanJornadaItem = {
+      ...jornada,
+      subtitle: cleanSubtitle,
+      garantia: cleanGarantia,
+      specs: specsList,
+      compatibleModels: jornada.compatibleModels || 'Apto para todas las marcas.',
+      benefits: parsedBenefits,
+      jornadaDay: jornada.jornadaDay !== undefined ? String(jornada.jornadaDay) : '3',
+      dateLabel: jornada.dateLabel || 'Fecha (Sólo Miércoles)',
+      jornadaSlots: Array.isArray(jornada.jornadaSlots) && jornada.jornadaSlots.length > 0 
+        ? jornada.jornadaSlots 
+        : (typeof jornada.jornadaSlots === 'string' && jornada.jornadaSlots.trim() ? jornada.jornadaSlots.split(',').map((s: string) => s.trim()).filter(Boolean) : ['08:30 AM', '10:30 AM', '02:00 PM'])
+    };
+    delete cleanJornadaItem.rawBenefits;
+
+    const isEdit = cleanJornadaItem.id && jornadasList.some(j => String(j.id) === String(cleanJornadaItem.id));
     let updated: any[] = [];
     if (isEdit) {
-      updated = jornadasList.map(j => String(j.id) === String(jornada.id) ? jornada : j);
+      updated = jornadasList.map(j => String(j.id) === String(cleanJornadaItem.id) ? cleanJornadaItem : j);
     } else {
-      const newId = jornada.id || `jornada_${Date.now()}`;
-      updated = [{ ...jornada, id: newId }, ...jornadasList];
+      const newId = cleanJornadaItem.id || `jornada_${Date.now()}`;
+      updated = [{ ...cleanJornadaItem, id: newId }, ...jornadasList];
     }
 
     setJornadasList(updated);
@@ -8150,7 +8187,21 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <div className="flex items-center gap-2 pt-2 border-t border-white/5">
                       <button
                         onClick={() => {
-                          setEditingJornada(j);
+                          const existingSpecs = Array.isArray(j.specs) && j.specs.length > 0 ? [...j.specs] : [];
+                          const cleanG = j.garantia || (existingSpecs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || '3 Meses';
+                          while (existingSpecs.length < 4) {
+                            if (existingSpecs.length === 3) {
+                              existingSpecs.push({ label: 'Garantía', val: cleanG });
+                            } else {
+                              const defaults = [
+                                { label: 'Diagnóstico', val: 'Especializado' },
+                                { label: 'Procedimiento', val: 'En Banco y Ruta' },
+                                { label: 'Respaldo', val: 'Audiovisual 100%' }
+                              ];
+                              existingSpecs.push(defaults[existingSpecs.length] || { label: 'Característica', val: 'Incluida' });
+                            }
+                          }
+                          setEditingJornada({ ...j, specs: existingSpecs, garantia: cleanG });
                           setIsJornadaModalOpen(true);
                         }}
                         className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
@@ -10551,30 +10602,259 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <label className="text-zinc-400 font-bold block mb-1">Precio Regular</label>
                   <input
                     type="text"
-                    value={editingJornada.regularPrice}
+                    placeholder="Ej: $250 USD o ---"
+                    value={editingJornada.regularPrice || ''}
                     onChange={(e) => setEditingJornada({ ...editingJornada, regularPrice: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
                   />
                 </div>
                 <div>
                   <label className="text-zinc-400 font-bold block mb-1">Precio Jornada Promo</label>
                   <input
                     type="text"
-                    value={editingJornada.promoPrice}
+                    placeholder="Ej: $160 USD o Cupos Limitados"
+                    value={editingJornada.promoPrice || ''}
                     onChange={(e) => setEditingJornada({ ...editingJornada, promoPrice: e.target.value })}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold text-primary outline-none focus:border-primary"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white font-bold text-primary outline-none focus:border-primary text-xs"
                   />
                 </div>
               </div>
 
               <div>
+                <label className="text-zinc-400 font-bold block mb-1">
+                  Distintivo de Descuento / Ahorro (Cápsula con llama 🔥)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: AHORRAS $40 USD o 3 CUPOS / MIÉRCOLES o CUPOS LIMITADOS"
+                  value={editingJornada.discountBadge || ''}
+                  onChange={(e) => setEditingJornada({ ...editingJornada, discountBadge: e.target.value })}
+                  className="w-full bg-black/40 border border-amber-500/30 rounded-xl p-2.5 text-amber-300 font-bold outline-none focus:border-primary text-xs"
+                />
+                <span className="text-[10px] text-zinc-500 mt-1 block">
+                  Este texto aparece dentro de la cápsula naranja con la llama en la tarjeta de reserva.
+                </span>
+              </div>
+
+              <div>
                 <label className="text-zinc-400 font-bold block mb-1">Subtítulo / Descripción</label>
                 <textarea
-                  rows={2}
+                  rows={3}
                   value={editingJornada.subtitle}
                   onChange={(e) => setEditingJornada({ ...editingJornada, subtitle: e.target.value })}
-                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
+                  placeholder="Descripción detallada de la jornada..."
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
                 />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Garantía Oficial</label>
+                  <input
+                    type="text"
+                    placeholder="Ej: 3 Meses o 1 Año"
+                    value={editingJornada.garantia || (editingJornada.specs && editingJornada.specs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const updatedSpecs = Array.isArray(editingJornada.specs) ? [...editingJornada.specs] : [];
+                      const gIdx = updatedSpecs.findIndex((s: any) => s && s.label && s.label.toLowerCase().includes('garant'));
+                      if (gIdx >= 0) {
+                        updatedSpecs[gIdx] = { ...updatedSpecs[gIdx], val: val };
+                      } else {
+                        updatedSpecs.push({ label: 'Garantía', val: val });
+                      }
+                      setEditingJornada({
+                        ...editingJornada,
+                        garantia: val,
+                        specs: updatedSpecs
+                      });
+                    }}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="text-zinc-400 font-bold block mb-1">Vehículos Compatibles</label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Apto para todas las marcas..."
+                    value={editingJornada.compatibleModels || ''}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, compatibleModels: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Fichas Técnicas / Métricas (Grid de 4 Cajas) */}
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-white font-bold text-xs flex items-center gap-1.5">
+                    <ShieldCheck size={14} className="text-primary" /> Fichas / Métricas Destacadas (4 Cajas en Web)
+                  </label>
+                  <span className="text-[10px] text-zinc-500">
+                    Modifica el texto y valor de las 4 cajas destacadas
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {[0, 1, 2, 3].map((idx) => {
+                    const defaultLabels = ['Diagnóstico', 'Procedimiento', 'Respaldo', 'Garantía'];
+                    const defaultVals = ['Especializado', 'En Banco y Ruta', 'Audiovisual 100%', editingJornada.garantia || '1 Año'];
+                    const currentSpec = (editingJornada.specs && editingJornada.specs[idx]) || {
+                      label: defaultLabels[idx],
+                      val: defaultVals[idx]
+                    };
+                    return (
+                      <div key={idx} className="bg-black/40 border border-white/10 rounded-xl p-2.5 space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-zinc-500 font-bold uppercase w-12 shrink-0">Caja {idx + 1}:</span>
+                          <input
+                            type="text"
+                            placeholder="Etiqueta (ej. GARANTÍA)"
+                            value={currentSpec.label || ''}
+                            onChange={(e) => {
+                              const newLabel = e.target.value;
+                              const updatedSpecs = [...(editingJornada.specs || [])];
+                              while (updatedSpecs.length <= idx) updatedSpecs.push({ label: defaultLabels[updatedSpecs.length] || '', val: '' });
+                              updatedSpecs[idx] = { ...updatedSpecs[idx], label: newLabel };
+                              setEditingJornada({ ...editingJornada, specs: updatedSpecs });
+                            }}
+                            className="w-full bg-black/60 border border-white/10 rounded-lg px-2.5 py-1 text-zinc-300 text-xs font-bold outline-none focus:border-primary uppercase tracking-wider"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-zinc-500 font-bold uppercase w-12 shrink-0">Valor:</span>
+                          <input
+                            type="text"
+                            placeholder="Valor (ej. 1 Año o 3 Meses)"
+                            value={currentSpec.val || ''}
+                            onChange={(e) => {
+                              const newVal = e.target.value;
+                              const updatedSpecs = [...(editingJornada.specs || [])];
+                              while (updatedSpecs.length <= idx) updatedSpecs.push({ label: defaultLabels[updatedSpecs.length] || '', val: '' });
+                              updatedSpecs[idx] = { ...updatedSpecs[idx], val: newVal };
+                              const isGarantia = (currentSpec.label || '').toLowerCase().includes('garant') || idx === 3;
+                              setEditingJornada({
+                                ...editingJornada,
+                                specs: updatedSpecs,
+                                ...(isGarantia ? { ...editingJornada, garantia: newVal } : {})
+                              });
+                            }}
+                            className="w-full bg-black/60 border border-white/10 rounded-lg px-2.5 py-1 text-primary text-xs font-bold outline-none focus:border-primary"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Configuración de Día y Cupos / Turnos */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-amber-500/[0.04] border border-amber-500/20">
+                <div>
+                  <label className="text-amber-400 font-bold text-xs block mb-1 flex items-center gap-1.5">
+                    <Calendar size={13} /> Día de la Jornada
+                  </label>
+                  <select
+                    value={editingJornada.jornadaDay !== undefined ? String(editingJornada.jornadaDay) : '3'}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const dayMapLabels: Record<string, string> = {
+                        '1': 'Fecha (Sólo Lunes)',
+                        '2': 'Fecha (Sólo Martes)',
+                        '3': 'Fecha (Sólo Miércoles)',
+                        '4': 'Fecha (Sólo Jueves)',
+                        '5': 'Fecha (Sólo Viernes)',
+                        '6': 'Fecha (Sólo Sábado)',
+                        '1,2,3,4,5': 'Fecha (Lunes a Viernes)',
+                        '0,1,2,3,4,5,6': 'Fecha Disponible'
+                      };
+                      setEditingJornada({
+                        ...editingJornada,
+                        jornadaDay: val,
+                        dateLabel: dayMapLabels[val] || 'Fecha de la Jornada'
+                      });
+                    }}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs cursor-pointer font-bold"
+                  >
+                    <option value="3">Miércoles (Sólo Miércoles)</option>
+                    <option value="1">Lunes (Sólo Lunes)</option>
+                    <option value="2">Martes (Sólo Martes)</option>
+                    <option value="4">Jueves (Sólo Jueves)</option>
+                    <option value="5">Viernes (Sólo Viernes)</option>
+                    <option value="6">Sábado (Sólo Sábado)</option>
+                    <option value="1,2,3,4,5">Lunes a Viernes</option>
+                    <option value="0,1,2,3,4,5,6">Todos los días</option>
+                  </select>
+                  <span className="text-[10px] text-zinc-500 mt-1 block">
+                    Define qué día(s) del calendario estarán habilitados para reservar turno.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="text-amber-400 font-bold text-xs block mb-1 flex items-center gap-1.5">
+                    <Clock size={13} /> Turnos / Cupos Disponibles
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="08:30 AM, 10:30 AM, 02:00 PM"
+                    value={
+                      Array.isArray(editingJornada.jornadaSlots)
+                        ? editingJornada.jornadaSlots.join(', ')
+                        : (editingJornada.jornadaSlots || '08:30 AM, 10:30 AM, 02:00 PM')
+                    }
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const arr = val.split(',').map((s: string) => s.trim()).filter(Boolean);
+                      setEditingJornada({
+                        ...editingJornada,
+                        jornadaSlots: arr
+                      });
+                    }}
+                    className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs font-mono font-bold"
+                  />
+                  <span className="text-[10px] text-zinc-500 mt-1 block">
+                    Separados por coma. Ejemplo: 3 cupos = 3 horarios (08:30 AM, 10:30 AM, 02:00 PM).
+                  </span>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="text-zinc-400 font-bold text-xs block mb-1">
+                    Etiqueta visible del selector (Opcional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Fecha (Sólo Miércoles)"
+                    value={editingJornada.dateLabel || ''}
+                    onChange={(e) => setEditingJornada({ ...editingJornada, dateLabel: e.target.value })}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-zinc-400 font-bold block mb-1">
+                  Beneficios Incluidos (escribe un beneficio por línea)
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder={"Descarbonización química especializada de motor\nBanqueo y calibración computarizada de inyectores\nPruebas dinámicas en banco y carretera\nResguardo audiovisual del proceso"}
+                  value={editingJornada.rawBenefits !== undefined 
+                    ? editingJornada.rawBenefits 
+                    : (Array.isArray(editingJornada.benefits) ? editingJornada.benefits.join('\n') : '')}
+                  onChange={(e) => {
+                    const text = e.target.value;
+                    const parsed = text.split('\n').map((b: string) => b.trim()).filter((b: string) => b.length > 0);
+                    setEditingJornada({
+                      ...editingJornada,
+                      rawBenefits: text,
+                      benefits: parsed
+                    });
+                  }}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary font-mono text-xs leading-relaxed"
+                />
+                <span className="text-[10px] text-zinc-500 mt-1 block">
+                  Cada salto de línea creará un ítem con ícono de verificación en la página pública.
+                </span>
               </div>
 
               <ImageUploader
