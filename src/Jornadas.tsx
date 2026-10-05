@@ -595,7 +595,7 @@ export default function Jornadas() {
       <Navbar />
 
       {/* Hero Banner with Countdown Timer */}
-      <section className="relative pt-36 pb-20 px-6 overflow-hidden border-b border-white/10 jornada-hero-section">
+      <section className="relative pt-32 pb-8 sm:pb-10 px-6 overflow-hidden border-b border-white/10 jornada-hero-section">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-96 h-96 bg-amber-500/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -636,7 +636,7 @@ export default function Jornadas() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="inline-flex flex-col sm:flex-row items-center gap-4 bg-[#12141a]/95 backdrop-blur-xl border border-amber-500/40 p-4 md:p-6 rounded-3xl shadow-2xl mb-12"
+            className="inline-flex flex-col sm:flex-row items-center gap-4 bg-[#12141a]/95 backdrop-blur-xl border border-amber-500/40 p-4 md:p-5 rounded-3xl shadow-2xl mb-2"
           >
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest sm:pr-4 sm:border-r sm:border-white/10" style={{ color: '#fbbf24' }}>
               <Clock className="w-5 h-5 animate-spin" style={{ animationDuration: '6s', color: '#fbbf24' }} />
@@ -718,9 +718,9 @@ export default function Jornadas() {
       ) : (
         <main>
           {/* Jornadas Navigation Tabs Slider */}
-          <section className="py-8 px-4 md:px-6 max-w-7xl mx-auto">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-2">
+          <section className="pt-4 pb-6 px-4 md:px-6 max-w-7xl mx-auto">
+            <div className="text-center mb-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-1.5">
                 {currentJornadasList.length === 1 
                   ? "JORNADA ACTIVA PARA TU VEHÍCULO" 
                   : "SELECCIONA LA JORNADA PARA TU VEHÍCULO"}
