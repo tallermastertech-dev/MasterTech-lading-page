@@ -888,7 +888,7 @@ export default function App() {
       {/* =========================================================================
           SECTION 1: HERO - EDITORIAL LIGHT DEALER SHOWCASE
           ========================================================================= */}
-      <section className="relative pt-20 pb-5 sm:pb-7 lg:pt-22 lg:pb-7 px-4 sm:px-6 overflow-hidden bg-slate-950 text-white transition-colors duration-300 border-b border-slate-800">
+      <section className="relative pt-16 pb-2.5 sm:pb-3 lg:pt-16 lg:pb-3 px-4 sm:px-6 overflow-hidden bg-slate-950 text-white transition-colors duration-300 border-b border-slate-800">
         {/* Background Hero Image with 55% dark overlay */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img 
@@ -909,16 +909,16 @@ export default function App() {
         <div className="max-w-7xl mx-auto relative z-10 w-full">
           
           {/* Status & Location Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5 px-3.5 py-2 mb-3 lg:mb-4 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-xs text-slate-200 shadow-md">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 mb-2 lg:mb-2.5 rounded-lg bg-slate-900/80 backdrop-blur-md border border-white/10 text-xs text-slate-200 shadow-md">
             <div className="flex items-center gap-2">
-              <MapPin size={15} className="text-red-500 shrink-0" />
+              <MapPin size={14} className="text-red-500 shrink-0" />
               <span className="font-medium text-[11px] sm:text-xs">Calle Progreso, Av. Circunvalación Nte., Porlamar 6301, Nueva Esparta</span>
             </div>
             {(() => {
               const tallerStatus = getTallerStatus(config.IS_OPEN);
               return (
                 <div className="flex items-center gap-2">
-                  <span className={`w-2.5 h-2.5 rounded-full ${tallerStatus.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+                  <span className={`w-2 h-2 rounded-full ${tallerStatus.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
                   <span className="font-semibold text-white text-[11px] sm:text-xs">
                     {tallerStatus.badgeText}
                   </span>
@@ -927,7 +927,7 @@ export default function App() {
             })()}
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+          <div className="grid lg:grid-cols-12 gap-5 lg:gap-7 items-center">
             
             {/* Left Column: Authoritative Editorial Presentation */}
             <motion.div 
@@ -936,57 +936,57 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="lg:col-span-7"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-red-950/60 border border-red-500/30 text-red-400 text-xs font-bold tracking-wider mb-2.5 uppercase backdrop-blur-md shadow-sm">
-                <ShieldCheck size={14} className="text-red-500" />
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-md bg-red-950/60 border border-red-500/30 text-red-400 text-[11px] font-bold tracking-wider mb-2 uppercase backdrop-blur-md shadow-sm">
+                <ShieldCheck size={13} className="text-red-500" />
                 <span>TALLER MECÁNICO & CENTRO DE DIAGNÓSTICO</span>
               </div>
 
-              <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-2.5 lg:mb-3 leading-[1.12] drop-shadow-md">
+              <h1 className="text-white text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-black tracking-tight mb-2 leading-[1.12] drop-shadow-md">
                 Tecnología, Precisión y Confianza Automotriz
               </h1>
 
-              <p className="text-slate-200 text-sm sm:text-base mb-4 lg:mb-5 max-w-xl leading-relaxed font-normal drop-shadow-sm">
+              <p className="text-slate-200 text-xs sm:text-sm lg:text-[15px] mb-3 max-w-xl leading-relaxed font-normal drop-shadow-sm">
                 Atención especializada en <strong className="text-white font-bold">Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos de alta calidad.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4 lg:mb-5">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 mb-3">
                 <a 
                   href={config.WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary !px-6 !py-3 text-sm shadow-xl font-bold"
+                  className="btn-primary !px-5 !py-2.5 text-xs sm:text-sm shadow-xl font-bold"
                 >
-                  <WhatsAppIcon size={18} />
+                  <WhatsAppIcon size={17} />
                   <span>CONSULTAR POR WHATSAPP</span>
-                  <ArrowRight size={16} />
+                  <ArrowRight size={15} />
                 </a>
 
                 <a 
                   href="/servicios" 
-                  className="btn-secondary !px-5 !py-3 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all flex items-center gap-2"
+                  className="btn-secondary !px-4.5 !py-2.5 text-xs sm:text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all flex items-center gap-2"
                 >
-                  <Wrench size={16} className="text-red-400" />
+                  <Wrench size={15} className="text-red-400" />
                   <span>NUESTROS SERVICIOS</span>
                 </a>
               </div>
 
 
               {/* 3 Clean Key Trust Stats */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3.5 border-t border-white/10">
-                <div className="p-2.5 sm:p-3 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
+              <div className="grid grid-cols-3 gap-2 sm:gap-2.5 pt-2.5 border-t border-white/10">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
                   <div className="text-base sm:text-lg lg:text-xl font-black text-white">+6 Puestos</div>
-                  <div className="text-[10px] sm:text-xs text-slate-300 mt-0.5">Atención Simultánea</div>
+                  <div className="text-[10px] sm:text-[11px] text-slate-300 mt-0.5">Atención Simultánea</div>
                 </div>
 
-                <div className="p-2.5 sm:p-3 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
                   <div className="text-base sm:text-lg lg:text-xl font-black text-white">Escáner OEM</div>
-                  <div className="text-[10px] sm:text-xs text-slate-300 mt-0.5">Diagnóstico Preciso</div>
+                  <div className="text-[10px] sm:text-[11px] text-slate-300 mt-0.5">Diagnóstico Preciso</div>
                 </div>
 
-                <div className="p-2.5 sm:p-3 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left">
                   <div className="text-base sm:text-lg lg:text-xl font-black text-white">+1.850</div>
-                  <div className="text-[10px] sm:text-xs text-slate-300 mt-0.5">Vehículos Atendidos</div>
+                  <div className="text-[10px] sm:text-[11px] text-slate-300 mt-0.5">Vehículos Atendidos</div>
                 </div>
               </div>
             </motion.div>
@@ -1007,7 +1007,7 @@ export default function App() {
                 const directVideoSrc = isDirectVideoUrl(reelUrl) ? reelUrl : "/assets/taller_video.mp4";
 
                 return (
-                  <div className="relative w-full max-w-[270px] sm:max-w-[290px] lg:max-w-[310px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
+                  <div className="relative w-full max-w-[235px] sm:max-w-[250px] lg:max-w-[265px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-2xl group flex items-center justify-center">
                     {isInstagram ? (
                       <div className="absolute inset-0 w-full h-full overflow-hidden bg-black flex items-center justify-center">
                         <iframe 
@@ -1018,7 +1018,7 @@ export default function App() {
                             position: 'absolute',
                             width: '138%',
                             height: '150%',
-                            top: '-92px',
+                            top: '-78px',
                             left: '-19%',
                             maxWidth: 'none'
                           }}
@@ -1097,21 +1097,6 @@ export default function App() {
               })()}
             </motion.div>
 
-          </div>
-
-          {/* Indicador animado que invita a seguir bajando */}
-          <div className="flex justify-center items-center pt-2 sm:pt-3">
-            <button
-              type="button"
-              onClick={() => {
-                const target = document.getElementById('seccion-recursos') || document.querySelector('aside');
-                target?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors cursor-pointer group"
-            >
-              <span>Explorar Taller y Servicios</span>
-              <ChevronDown size={14} className="text-red-500 animate-bounce group-hover:translate-y-0.5 transition-transform" />
-            </button>
           </div>
         </div>
       </section>
