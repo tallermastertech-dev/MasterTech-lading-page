@@ -920,134 +920,190 @@ export default function Jornadas() {
                   </div>
                 </div>
 
-                {/* Right Booking Card & Price (5 cols) */}
-                <div className="lg:col-span-5 self-start lg:sticky lg:top-24 flex flex-col space-y-5 bg-black/60 border border-white/10 rounded-3xl p-6 relative h-fit shadow-xl">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block">PRECIO REGULAR</span>
-                        <span className="text-base text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
+                {/* Right Column (5 cols) */}
+                <div className="lg:col-span-5 space-y-5 flex flex-col">
+                  {/* Booking Card & Price */}
+                  <div className="flex flex-col space-y-5 bg-black/60 border border-white/10 rounded-3xl p-6 relative shadow-xl">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block">PRECIO REGULAR</span>
+                          <span className="text-base text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">PRECIO JORNADA</span>
+                          <span className="text-3xl font-display font-black text-primary">{currentJornada.promoPrice}</span>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">PRECIO JORNADA</span>
-                        <span className="text-3xl font-display font-black text-primary">{currentJornada.promoPrice}</span>
-                      </div>
+
+                      {currentJornada.discountBadge && (
+                        <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
+                          <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
+                            <Flame className="w-4 h-4 text-amber-400" />
+                            {currentJornada.discountBadge}
+                          </span>
+                        </div>
+                      )}
+
+                      {currentJornada.popularAddon && (
+                        <p className="text-[11px] text-zinc-400 italic text-center">
+                          {currentJornada.popularAddon}
+                        </p>
+                      )}
                     </div>
 
-                    {currentJornada.discountBadge && (
-                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
-                        <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
-                          <Flame className="w-4 h-4 text-amber-400" />
-                          {currentJornada.discountBadge}
-                        </span>
-                      </div>
-                    )}
+                    {/* Interactive Booking Form */}
+                    <form onSubmit={handleWhatsAppBooking} className="space-y-4 pt-2 border-t border-white/10">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-white flex items-center gap-1.5">
+                        <Calendar className="w-4 h-4 text-primary" />
+                        <span>APARTAR MI CUPO EN LA JORNADA</span>
+                      </h4>
 
-                    {currentJornada.popularAddon && (
-                      <p className="text-[11px] text-zinc-400 italic text-center">
-                        {currentJornada.popularAddon}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Interactive Booking Form */}
-                  <form onSubmit={handleWhatsAppBooking} className="space-y-4 pt-2 border-t border-white/10">
-                    <h4 className="text-xs font-black uppercase tracking-widest text-white flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-primary" />
-                      <span>APARTAR MI CUPO EN LA JORNADA</span>
-                    </h4>
-
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre Completo</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Ej. Carlos Pérez"
-                          value={clientName}
-                          onChange={(e) => setClientName(e.target.value)}
-                          className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-3">
                         <div>
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Teléfono</label>
-                          <input
-                            type="tel"
-                            required
-                            placeholder="Ej. 04123565012"
-                            value={clientPhone}
-                            onChange={(e) => setClientPhone(e.target.value)}
-                            className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Vehículo / Modelo</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre Completo</label>
                           <input
                             type="text"
                             required
-                            placeholder="Ej. Toyota Hilux 2020"
-                            value={clientVehicle}
-                            onChange={(e) => setClientVehicle(e.target.value)}
+                            placeholder="Ej. Carlos Pérez"
+                            value={clientName}
+                            onChange={(e) => setClientName(e.target.value)}
                             className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Teléfono</label>
+                            <input
+                              type="tel"
+                              required
+                              placeholder="Ej. 04123565012"
+                              value={clientPhone}
+                              onChange={(e) => setClientPhone(e.target.value)}
+                              className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Vehículo / Modelo</label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="Ej. Toyota Hilux 2020"
+                              value={clientVehicle}
+                              onChange={(e) => setClientVehicle(e.target.value)}
+                              className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Slot Picker Integration */}
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible (Sólo Miércoles)</label>
+                          <InspectionSlotPicker
+                            isJornada={true}
+                            allowedDaysOfWeek={[3]}
+                            dateLabel="Fecha (Sólo Miércoles)"
+                            customSlots={jornadaTurnos && jornadaTurnos.length > 0 ? jornadaTurnos : ["08:30 AM", "09:00 AM", "09:30 AM"]}
+                            onSelectSlot={(slotStr, isValid) => {
+                              setSelectedSlot(slotStr);
+                              setIsSlotValid(isValid);
+                            }}
                           />
                         </div>
                       </div>
 
-                      {/* Slot Picker Integration */}
+                      <button
+                        type="submit"
+                        disabled={isBookingSubmitting}
+                        className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-70"
+                      >
+                        <WhatsAppIcon size={18} />
+                        <span>
+                          {isBookingSubmitting
+                            ? 'REGISTRANDO Y CONECTANDO...'
+                            : `RESERVAR CUPO VÍA WHATSAPP${currentJornada.promoPrice && currentJornada.promoPrice !== '---' && currentJornada.promoPrice.trim().length > 0 ? ` (${currentJornada.promoPrice})` : ''}`
+                          }
+                        </span>
+                      </button>
+
+                      {bookingSuccess && (
+                        <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl text-center text-xs text-emerald-300 font-bold animate-fade-in">
+                          Cita y cupo registrados en el sistema de MasterTech. Se abrió WhatsApp para tu confirmación directa.
+                        </div>
+                      )}
+
+                      <div className="pt-3 border-t border-white/10 text-center space-y-1.5">
+                        <div className="flex flex-wrap items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowPoliciesModal(true)}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 transition-colors cursor-pointer"
+                          >
+                            <FileText size={13} />
+                            <span>Sujeto a las Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-zinc-500">
+                          Vigencia Octubre · Recepción estricta 8:30 a 10:00 AM · 3 Cupos los Miércoles · Garantía 3 Meses.
+                        </p>
+                      </div>
+                    </form>
+                  </div>
+
+                  {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial (Completa el espacio) */}
+                  <div className="bg-[#12141a]/95 border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl">
+                    <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                      <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                        <ShieldCheck size={18} />
+                      </div>
                       <div>
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible (Sólo Miércoles)</label>
-                        <InspectionSlotPicker
-                          isJornada={true}
-                          allowedDaysOfWeek={[3]}
-                          dateLabel="Fecha (Sólo Miércoles)"
-                          customSlots={jornadaTurnos && jornadaTurnos.length > 0 ? jornadaTurnos : ["08:30 AM", "09:00 AM", "09:30 AM"]}
-                          onSelectSlot={(slotStr, isValid) => {
-                            setSelectedSlot(slotStr);
-                            setIsSlotValid(isValid);
-                          }}
-                        />
+                        <h4 className="text-xs font-black uppercase tracking-wider text-white">Garantía y Protocolo de Calidad</h4>
+                        <p className="text-[10px] text-zinc-400">Tranquilidad absoluta para tu inversión automotriz</p>
                       </div>
                     </div>
 
-                    <button
-                      type="submit"
-                      disabled={isBookingSubmitting}
-                      className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-70"
-                    >
-                      <WhatsAppIcon size={18} />
-                      <span>
-                        {isBookingSubmitting
-                          ? 'REGISTRANDO Y CONECTANDO...'
-                          : `RESERVAR CUPO VÍA WHATSAPP${currentJornada.promoPrice && currentJornada.promoPrice !== '---' && currentJornada.promoPrice.trim().length > 0 ? ` (${currentJornada.promoPrice})` : ''}`
-                        }
-                      </span>
-                    </button>
-
-                    {bookingSuccess && (
-                      <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl text-center text-xs text-emerald-300 font-bold animate-fade-in">
-                        Cita y cupo registrados en el sistema de MasterTech. Se abrió WhatsApp para tu confirmación directa.
+                    <div className="grid grid-cols-1 gap-2.5">
+                      <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
+                        <Award className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <div className="text-left">
+                          <span className="text-xs font-bold text-white block">3 Meses de Garantía Directa</span>
+                          <p className="text-[11px] text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, calibraciones y reprogramaciones efectuadas.</p>
+                        </div>
                       </div>
-                    )}
 
-                    <div className="pt-3 border-t border-white/10 text-center space-y-1.5">
-                      <div className="flex flex-wrap items-center justify-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setShowPoliciesModal(true)}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 transition-colors cursor-pointer"
-                        >
-                          <FileText size={13} />
-                          <span>Sujeto a las Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
-                        </button>
+                      <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
+                        <Activity className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                        <div className="text-left">
+                          <span className="text-xs font-bold text-white block">Pruebas en Banco y Carretera</span>
+                          <p className="text-[11px] text-zinc-400 leading-snug">Ningún vehículo se entrega sin validación dinámica en vía y monitoreo de sensores en vivo.</p>
+                        </div>
                       </div>
-                      <p className="text-[10px] text-zinc-500">
-                        Vigencia Octubre · Recepción estricta 8:30 a 10:00 AM · 3 Cupos los Miércoles · Garantía 3 Meses.
-                      </p>
+
+                      <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
+                        <FileCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div className="text-left">
+                          <span className="text-xs font-bold text-white block">Acta Digital y Resguardo 24/7</span>
+                          <p className="text-[11px] text-zinc-400 leading-snug">Registro fotográfico y en video al recibir tu vehículo bajo monitoreo perimetral cerrado.</p>
+                        </div>
+                      </div>
                     </div>
-                  </form>
+
+                    <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-400">
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Pagos: $ Efectivo, Zelle y Bs. (Tasa BCV)</span>
+                      </div>
+                      <a
+                        href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
+                        className="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-bold"
+                      >
+                        <Phone size={12} />
+                        <span>Llamar al Taller</span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
