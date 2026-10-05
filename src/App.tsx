@@ -65,6 +65,7 @@ import Faq from './Faq';
 import Nosotros from './Nosotros';
 import Servicios from './Servicios';
 import Catalogo, { DEFAULT_CATALOG } from './Catalogo';
+import PrivateCatalogoGuard from './PrivateCatalogoGuard';
 import Jornadas from './Jornadas';
 import TrabajaConNosotros from './TrabajaConNosotros';
 import Jeep from './Jeep';
@@ -842,7 +843,7 @@ export default function App() {
   }
 
   if (isCatalogo) {
-    return <Catalogo />;
+    return <PrivateCatalogoGuard />;
   }
 
   if (isJornadas) {
@@ -962,11 +963,11 @@ export default function App() {
                 </a>
 
                 <a 
-                  href="/catalogo" 
+                  href="/servicios" 
                   className="btn-secondary !px-6 !py-3.5 text-sm bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-red-500 shadow-md backdrop-blur-md transition-all flex items-center gap-2"
                 >
-                  <Package size={16} className="text-red-400" />
-                  <span>CATÁLOGO DE REPUESTOS</span>
+                  <Wrench size={16} className="text-red-400" />
+                  <span>NUESTROS SERVICIOS</span>
                 </a>
               </div>
 
@@ -1143,17 +1144,13 @@ export default function App() {
               {activePromo.promoType === 'repuesto' ? (
                 <>
                   <a
-                    href={`/catalogo?search=${encodeURIComponent(activePromo.partNumber || activePromo.title)}`}
+                    href={`https://wa.me/584123565012?text=${encodeURIComponent(`Hola MasterTech, me interesa consultar disponibilidad del repuesto: ${activePromo.title || ''}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 bg-white hover:bg-amber-50 active:scale-95 text-red-700 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition-all cursor-pointer group"
                   >
-                    <span>{config.PROMO_BAR_BTN_TEXT || "Ver Repuesto"}</span>
+                    <span>{config.PROMO_BAR_BTN_TEXT || "Consultar Repuesto"}</span>
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                  </a>
-                  <a
-                    href="/catalogo"
-                    className="hidden sm:inline-flex items-center gap-1 text-xs text-white/80 hover:text-white underline underline-offset-4 px-2 py-1"
-                  >
-                    <span>{config.PROMO_BAR_LINK_TEXT || "Catálogo de repuestos"}</span>
                   </a>
                 </>
               ) : (
@@ -1254,20 +1251,25 @@ export default function App() {
               </a>
             </div>
 
-            {/* 4. Portal Catálogo de Repuestos & Autopartes */}
+            {/* 4. Repuestos & Autopartes Express */}
             <div className="p-6 rounded-2xl bg-white dark:bg-[#13171f] border border-slate-200 dark:border-slate-800 hover:border-red-500/50 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
                   <Package size={24} />
                 </div>
                 <span className="text-[11px] font-bold text-red-600 dark:text-red-400 uppercase tracking-wider block mb-1">Stock & Encargo</span>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Catálogo de Repuestos</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Repuestos & Autopartes</h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                   Frenos cerámicos, amortiguadores, lubricantes sintéticos y piezas OEM en Margarita o importación express desde EE.UU.
                 </p>
               </div>
-              <a href="/catalogo" className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform">
-                <span>Ver Catálogo de Repuestos</span>
+              <a 
+                href="https://wa.me/584123565012?text=Hola%20MasterTech%2C%20deseo%20cotizar%20un%20repuesto%20o%20importaci%C3%B3n%20para%20mi%20veh%C3%ADculo." 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-red-600 dark:text-red-400 group-hover:translate-x-1 transition-transform"
+              >
+                <span>Cotizar Repuestos por WhatsApp</span>
                 <ArrowRight size={14} />
               </a>
             </div>
@@ -1312,10 +1314,13 @@ export default function App() {
                 </a>
               ) : (
                 <a 
-                  href="/catalogo" 
+                  href="https://wa.me/584123565012?text=Hola%20MasterTech%2C%20deseo%20consultar%20ofertas%20en%20repuestos." 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn-secondary !px-5 !py-2.5 text-xs font-bold flex items-center justify-center gap-2"
                 >
-                  <span>Ver Catálogo de Repuestos</span>
+                  <WhatsAppIcon size={14} />
+                  <span>Cotizar Repuestos por WhatsApp</span>
                   <ArrowRight size={14} />
                 </a>
               )}
@@ -1569,10 +1574,12 @@ export default function App() {
                         <span>Consultar / Comprar Oferta</span>
                       </a>
                       <a
-                        href={`/catalogo?search=${encodeURIComponent(item.partNumber || item.title)}`}
+                        href={`${baseWa}?text=${encodeURIComponent(`Hola MasterTech, deseo consultar especificaciones técnicas y compatibilidad de: ${item.title}${item.partNumber ? ` (${item.partNumber})` : ''}.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="w-full inline-flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 font-semibold text-xs py-2 px-3 rounded-xl transition-all cursor-pointer"
                       >
-                        <span>Ver Ficha Técnica en Catálogo</span>
+                        <span>Consultar Ficha y Compatibilidad</span>
                         <ArrowRight size={13} />
                       </a>
                     </div>
@@ -1826,7 +1833,7 @@ export default function App() {
                 <li><span className="text-slate-500 cursor-default">Manuales por Motor (Próximamente)</span></li>
                 <li><a href="/jeep" className="hover:text-red-400 transition-colors">Especialista Jeep Margarita</a></li>
                 <li><a href="/toyota" className="hover:text-red-400 transition-colors">Especialista Toyota Margarita</a></li>
-                <li><a href="/catalogo" className="hover:text-red-400 transition-colors">Repuestos y Fluidos</a></li>
+                <li><a href="/jornadas" className="hover:text-red-400 transition-colors">Jornadas VIP y Promociones</a></li>
                 <li><a href="/faq" className="hover:text-red-400 transition-colors">Preguntas Frecuentes</a></li>
               </ul>
             </div>

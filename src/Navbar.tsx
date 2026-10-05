@@ -80,11 +80,6 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
     { title: "Especialista en Toyota — Margarita", desc: "Diagnóstico, mecánica y mantenimiento para toda la gama Toyota", href: "/toyota", icon: Wrench },
   ];
 
-  const catalogOptions = [
-    { title: "Frenos & Discos", desc: "Pastillas cerámicas, discos ventilados y kits completos de freno", href: "/catalogo?cat=Frenos %26 Discos", icon: Disc },
-    { title: "Aceites & Lubricantes", desc: "Motul, Mobil 1, Pennzoil 5W-30, 10W-40 API SP", href: "/catalogo?cat=Aceites %26 Lubricantes", icon: Droplet },
-    { title: "Filtros & Consumibles", desc: "Filtros de aire, cabina carbón activado e inyectores OEM", href: "/catalogo?cat=Filtros %26 Consumibles", icon: Filter },
-  ];
 
   const faqOptions = [
     { title: "¿Cuánto tiempo toma un servicio preventivo?", desc: "De 45 min a 1.5 hrs con atención agendada", href: "/faq", icon: Clock },
@@ -193,91 +188,6 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             </AnimatePresence>
           </div>
 
-          {/* 4. Catálogo Repuestos Mega Dropdown Trigger */}
-          <div 
-            className="relative"
-            onMouseEnter={() => setActiveDropdown('catalogo')}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
-            <a 
-              href="/catalogo"
-              className={`flex items-center gap-1.5 transition-colors py-2 cursor-pointer whitespace-nowrap ${
-                activePage === 'catalogo' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
-              }`}
-            >
-              <span>Catálogo</span>
-              <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === 'catalogo' ? 'rotate-180 text-primary' : ''}`} />
-            </a>
-
-            <AnimatePresence>
-              {activeDropdown === 'catalogo' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.18 }}
-                  className="navbar-dropdown absolute top-full right-0 w-[360px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
-                >
-                  {/* Header */}
-                  <div className="flex items-center justify-between pb-2.5 mb-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5" style={{ color: '#C2A472' }}>
-                      <Package size={12} />
-                      Categorías Populares
-                    </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ color: '#4ade80', backgroundColor: 'rgba(74,222,128,0.15)', border: '1px solid rgba(74,222,128,0.25)' }}>● Stock en Taller</span>
-                  </div>
-
-                  {/* 3 Categories — single column */}
-                  <div className="space-y-0.5 mb-3">
-                    {catalogOptions.map((opt, i) => (
-                      <a
-                        key={i}
-                        href={opt.href}
-                        className="flex items-center gap-3 p-2.5 rounded-xl transition-all group/cat"
-                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.07)'}
-                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.backgroundColor = ''}
-                      >
-                        {/* Icon */}
-                        <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(194,164,114,0.15)', border: '1px solid rgba(194,164,114,0.3)' }}>
-                          <opt.icon className="w-4 h-4" style={{ color: '#C2A472' }} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-bold text-xs leading-snug" style={{ color: '#f1f5f9' }}>{opt.title}</div>
-                          <div className="text-[11px] leading-tight mt-0.5 truncate" style={{ color: '#94a3b8' }}>{opt.desc}</div>
-                        </div>
-                        <ArrowRight size={12} style={{ color: 'rgba(194,164,114,0.5)' }} className="shrink-0 group-hover/cat:translate-x-0.5 transition-transform" />
-                      </a>
-                    ))}
-                  </div>
-
-                  {/* USA Import Card */}
-                  <a
-                    href="/catalogo?import=usa#solicitud-usa"
-                    className="flex items-center gap-3 p-3 rounded-xl relative overflow-hidden transition-all group/usa"
-                    style={{ background: 'linear-gradient(135deg, rgba(23,37,84,0.95) 0%, rgba(15,23,42,0.98) 100%)', border: '1px solid rgba(96,165,250,0.4)' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.7)'}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(96,165,250,0.4)'}
-                  >
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: 'rgba(59,130,246,0.2)', border: '1px solid rgba(96,165,250,0.4)' }}>
-                      <Plane className="w-4 h-4" style={{ color: '#60a5fa' }} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-black text-xs" style={{ color: '#ffffff' }}>Importar desde EE.UU.</div>
-                      <div className="text-[11px] mt-0.5" style={{ color: '#93c5fd' }}>Repuestos OEM con número de parte · Express USA</div>
-                    </div>
-                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded shrink-0" style={{ color: '#93c5fd', backgroundColor: 'rgba(59,130,246,0.25)', border: '1px solid rgba(96,165,250,0.4)' }}>EXPRESS</span>
-                  </a>
-
-                  {/* Footer */}
-                  <div className="pt-3 mt-3 flex items-center justify-end" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                    <a href="/catalogo" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap" style={{ color: '#C2A472' }}>
-                      <span>Ver Todo el Catálogo →</span>
-                    </a>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
 
           {/* 5. Preguntas Frecuentes Direct Link (No Chevron / No Dropdown) */}
           <a 
@@ -399,37 +309,6 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 )}
               </div>
 
-              {/* 4. Catálogo Repuestos Accordion */}
-              <div className="border-b border-white/5 pb-2">
-                <button
-                  onClick={() => setExpandedMobileAccordion(expandedMobileAccordion === 'catalogo' ? null : 'catalogo')}
-                  className="w-full flex items-center justify-between text-base font-medium text-white py-2"
-                >
-                  <span className="flex items-center gap-2">
-                    <Package size={18} className="text-primary" />
-                    <span>Catálogo</span>
-                  </span>
-                  <ChevronDown size={18} className={`transition-transform duration-200 ${expandedMobileAccordion === 'catalogo' ? 'rotate-180 text-primary' : ''}`} />
-                </button>
-                {expandedMobileAccordion === 'catalogo' && (
-                  <div className="pl-2 space-y-2 pt-2 text-xs">
-                    {catalogOptions.map((opt, i) => (
-                      <a
-                        key={i}
-                        href={opt.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center gap-3 text-zinc-300 hover:text-white py-1.5 font-medium group/item"
-                      >
-                        <MasterTechIconBadge icon={opt.icon} />
-                        <span>{opt.title}</span>
-                      </a>
-                    ))}
-                    <a href="/catalogo" onClick={() => setIsMobileMenuOpen(false)} className="block text-primary font-bold pt-1.5 pl-11">
-                      → Ver Catálogo de Repuestos Completo
-                    </a>
-                  </div>
-                )}
-              </div>
 
               {/* 5. Preguntas Frecuentes Direct Link */}
               <a
