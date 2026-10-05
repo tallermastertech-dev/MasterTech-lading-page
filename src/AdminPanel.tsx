@@ -3196,8 +3196,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       }
     }
 
+    const cleanImages = Array.isArray(jornada.images) 
+      ? jornada.images.filter((img: string) => typeof img === 'string' && img.trim().length > 0) 
+      : [];
+    const mainImg = jornada.img || cleanImages[0] || '/assets/servicio-mecanica.webp';
+
     const cleanJornadaItem = {
       ...jornada,
+      img: mainImg,
+      images: cleanImages,
       subtitle: cleanSubtitle,
       garantia: cleanGarantia,
       specs: specsList,
@@ -10857,13 +10864,76 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </span>
               </div>
 
-              <ImageUploader
-                label="Imagen Promocional"
-                value={editingJornada.img || ''}
-                onChange={(val) => setEditingJornada({ ...editingJornada, img: val })}
-                aspectRatio={16 / 9}
-                placeholder="/assets/servicio-mecanica.webp"
-              />
+              {/* Sección de Galería de Fotos de la Jornada */}
+              <div className="space-y-3 pt-3 border-t border-white/10">
+                <div className="flex items-center justify-between">
+                  <label className="text-white font-bold text-xs flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-amber-400" /> Galería de Fotos de la Jornada (Soporta múltiples imágenes)
+                  </label>
+                  <span className="text-[10px] text-zinc-500">
+                    Aparecen en el visor con miniaturas y flechas de navegación
+                  </span>
+                </div>
+
+                {/* Foto Principal */}
+                <ImageUploader
+                  label="Foto Principal (Portada de la Jornada)"
+                  value={editingJornada.img || ''}
+                  onChange={(val) => setEditingJornada({ ...editingJornada, img: val })}
+                  aspectRatio={16 / 9}
+                  placeholder="/assets/servicio-mecanica.webp"
+                  folder="jornadas"
+                />
+
+                {/* Fotos Adicionales */}
+                {(editingJornada.images || []).map((imgUrl: string, imgIdx: number) => (
+                  <div key={imgIdx} className="bg-black/30 p-3 rounded-2xl border border-white/5 space-y-2 relative group">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 font-bold">
+                        Foto Adicional #{imgIdx + 2}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentImgs = [...(editingJornada.images || [])];
+                          currentImgs.splice(imgIdx, 1);
+                          setEditingJornada({ ...editingJornada, images: currentImgs });
+                        }}
+                        className="text-zinc-500 hover:text-red-400 transition-colors p-1 flex items-center gap-1 text-[10px] font-bold cursor-pointer"
+                        title="Eliminar esta foto"
+                      >
+                        <Trash2 size={12} />
+                        <span>Quitar</span>
+                      </button>
+                    </div>
+                    <ImageUploader
+                      label=""
+                      value={imgUrl || ''}
+                      onChange={(val) => {
+                        const currentImgs = [...(editingJornada.images || [])];
+                        currentImgs[imgIdx] = val;
+                        setEditingJornada({ ...editingJornada, images: currentImgs });
+                      }}
+                      aspectRatio={16 / 9}
+                      placeholder="/assets/servicio-electricidad.webp"
+                      folder="jornadas"
+                    />
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const currentImgs = [...(editingJornada.images || [])];
+                    currentImgs.push('');
+                    setEditingJornada({ ...editingJornada, images: currentImgs });
+                  }}
+                  className="w-full py-2.5 rounded-xl border border-dashed border-amber-500/30 hover:border-amber-400/70 bg-amber-500/5 hover:bg-amber-500/10 text-amber-300 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <Plus size={14} />
+                  <span>+ Añadir Otra Foto a la Jornada (Galería Múltiple)</span>
+                </button>
+              </div>
             </div>
 
             <div className="pt-3 border-t border-white/10 flex justify-end gap-2">

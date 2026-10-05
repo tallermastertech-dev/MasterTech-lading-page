@@ -55,6 +55,7 @@ interface JornadaItem {
   jornadaDay?: string | number;
   dateLabel?: string;
   jornadaSlots?: string[] | string;
+  images?: string[];
 }
 
 const JORNADAS_DATA: JornadaItem[] = [
@@ -309,9 +310,21 @@ export default function Jornadas() {
       icon: rawJornada?.icon || fallback.icon,
       jornadaDay: rawJornada?.jornadaDay !== undefined ? rawJornada.jornadaDay : undefined,
       dateLabel: rawJornada?.dateLabel || '',
-      jornadaSlots: rawJornada?.jornadaSlots || undefined
+      jornadaSlots: rawJornada?.jornadaSlots || undefined,
+      images: Array.isArray(rawJornada?.images) ? rawJornada.images : []
     };
   }, [rawJornada]);
+
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+
+  useEffect(() => {
+    setActivePhotoIdx(0);
+  }, [activeJornadaId]);
+
+  const allPhotos = React.useMemo(() => {
+    const list = [currentJornada.img, ...(currentJornada.images || [])].filter((url: any) => typeof url === 'string' && url.trim().length > 0);
+    return Array.from(new Set(list));
+  }, [currentJornada.img, currentJornada.images]);
 
   const { jornadaDaysOfWeek, jornadaDateLabel, jornadaTurnos } = React.useMemo(() => {
     let days: number[] = [3]; // Default Miércoles for VIP Jornada
@@ -627,17 +640,78 @@ export default function Jornadas() {
                     </span>
                   </div>
 
-                  {currentJornada.img && (
-                    <div className="w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-black border border-white/10 relative shadow-xl">
-                      <img
-                        src={currentJornada.img}
-                        alt={currentJornada.title}
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.webp'; }}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent" />
+                  {allPhotos.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="w-full h-56 sm:h-72 md:h-80 rounded-2xl overflow-hidden bg-black border border-white/10 relative shadow-xl group">
+                        <img
+                          src={allPhotos[activePhotoIdx] || allPhotos[0]}
+                          alt={currentJornada.title}
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.webp'; }}
+                          className="w-full h-full object-cover transition-all duration-300"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#12141a] via-transparent to-transparent pointer-events-none" />
+
+                        {allPhotos.length > 1 && (
+                          <>
+                            {/* Counter badge */}
+                            <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[10px] font-bold text-white shadow-lg pointer-events-none">
+                              Foto {activePhotoIdx + 1} de {allPhotos.length}
+                            </div>
+
+                            {/* Left Navigation Arrow */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActivePhotoIdx((prev) => (prev === 0 ? allPhotos.length - 1 : prev - 1));
+                              }}
+                              className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/80 hover:bg-amber-500 text-white hover:text-black border border-white/20 hover:border-amber-500 flex items-center justify-center transition-all opacity-80 group-hover:opacity-100 cursor-pointer shadow-lg"
+                              title="Foto anterior"
+                            >
+                              <ChevronLeft size={18} />
+                            </button>
+
+                            {/* Right Navigation Arrow */}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActivePhotoIdx((prev) => (prev === allPhotos.length - 1 ? 0 : prev + 1));
+                              }}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/80 hover:bg-amber-500 text-white hover:text-black border border-white/20 hover:border-amber-500 flex items-center justify-center transition-all opacity-80 group-hover:opacity-100 cursor-pointer shadow-lg"
+                              title="Siguiente foto"
+                            >
+                              <ChevronRight size={18} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Thumbnail Strip */}
+                      {allPhotos.length > 1 && (
+                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                          {allPhotos.map((photoUrl: string, pIdx: number) => (
+                            <button
+                              type="button"
+                              key={pIdx}
+                              onClick={() => setActivePhotoIdx(pIdx)}
+                              className={`relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                                pIdx === activePhotoIdx 
+                                  ? 'border-amber-400 ring-2 ring-amber-400/40 scale-105 shadow-md' 
+                                  : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/40'
+                              }`}
+                            >
+                              <img
+                                src={photoUrl}
+                                alt={`Miniatura ${pIdx + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
 
