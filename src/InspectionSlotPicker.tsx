@@ -21,6 +21,7 @@ interface InspectionSlotPickerProps {
   dateLabel?: string;
   customSlots?: string[];
   isJornada?: boolean;
+  refreshTrigger?: number | string;
 }
 
 export default function InspectionSlotPicker({
@@ -28,7 +29,8 @@ export default function InspectionSlotPicker({
   allowedDaysOfWeek,
   dateLabel,
   customSlots,
-  isJornada
+  isJornada,
+  refreshTrigger
 }: InspectionSlotPickerProps) {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
@@ -48,12 +50,24 @@ export default function InspectionSlotPicker({
 
   useEffect(() => {
     fetchOccupiedSlots();
-  }, []);
+
+    const handleSlotsEvent = () => {
+      fetchOccupiedSlots();
+    };
+
+    window.addEventListener('mastertech_slots_updated', handleSlotsEvent);
+    window.addEventListener('storage', handleSlotsEvent);
+
+    return () => {
+      window.removeEventListener('mastertech_slots_updated', handleSlotsEvent);
+      window.removeEventListener('storage', handleSlotsEvent);
+    };
+  }, [refreshTrigger]);
 
   const fetchOccupiedSlots = async () => {
     let occupied: Record<string, string[]> = {};
     try {
-      const res = await fetch('/api/inspection-slots');
+      const res = await fetch(`/api/inspection-slots?_t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         occupied = data.occupied || {};
@@ -142,9 +156,10 @@ export default function InspectionSlotPicker({
       }
       const booked = occupiedSlots[activeDate] || [];
       const isValidTime = activeSlots.includes(selectedTime);
+      const isAvailable = isValidTime && !booked.includes(selectedTime);
       const firstFree = activeSlots.find(slot => !booked.includes(slot)) || activeSlots[0];
-      const activeTime = isValidTime ? selectedTime : firstFree;
-      if (!isValidTime) {
+      const activeTime = isAvailable ? selectedTime : firstFree;
+      if (activeTime !== selectedTime) {
         setSelectedTime(activeTime);
       }
       const isTaken = booked.includes(activeTime);

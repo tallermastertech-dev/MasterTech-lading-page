@@ -312,6 +312,7 @@ export default function Jornadas() {
   const [notes, setNotes] = useState('');
   const [isBookingSubmitting, setIsBookingSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [slotRefreshCounter, setSlotRefreshCounter] = useState(0);
 
   // Countdown timer state (simulated target: 3 days remaining)
   const [timeLeft, setTimeLeft] = useState({ days: 3, hours: 14, mins: 28, secs: 45 });
@@ -532,6 +533,13 @@ export default function Jornadas() {
       localStorage.setItem('mastertech_leads_store', JSON.stringify(existing.slice(0, 100)));
     } catch (_) {}
 
+    // Notificar inmediatamente al selector de cupos para marcar como OCUPADO en vivo
+    setSlotRefreshCounter(prev => prev + 1);
+    try {
+      window.dispatchEvent(new CustomEvent('mastertech_slots_updated'));
+      window.dispatchEvent(new Event('storage'));
+    } catch (_) {}
+
     // Envío a la API del servidor (persiste en tabla leads de Supabase, en SAVED_LEADS de settings y marca cupo en calendario)
     try {
       await fetch('/api/leads', {
@@ -539,6 +547,12 @@ export default function Jornadas() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadPayload)
       }).catch((err) => console.warn('Sync lead to server warning:', err));
+    } catch (_) {}
+
+    // Segunda sincronización para asegurar el refresco de cupos desde el servidor
+    setSlotRefreshCounter(prev => prev + 1);
+    try {
+      window.dispatchEvent(new CustomEvent('mastertech_slots_updated'));
     } catch (_) {}
 
     // 2. Construir y abrir mensaje de WhatsApp preformateado
@@ -1006,6 +1020,7 @@ export default function Jornadas() {
                             allowedDaysOfWeek={[3]}
                             dateLabel="Fecha (Sólo Miércoles)"
                             customSlots={jornadaTurnos && jornadaTurnos.length > 0 ? jornadaTurnos : ["08:30 AM", "09:00 AM", "09:30 AM"]}
+                            refreshTrigger={slotRefreshCounter}
                             onSelectSlot={(slotStr, isValid) => {
                               setSelectedSlot(slotStr);
                               setIsSlotValid(isValid);

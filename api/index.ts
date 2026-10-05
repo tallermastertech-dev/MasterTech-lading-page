@@ -648,6 +648,8 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
 
         const serializedSlots = JSON.stringify(currentOccupiedMap);
         memorySettingsCache['OCCUPIED_SLOTS_JSON'] = serializedSlots;
+        cachedOccupiedSlots = currentOccupiedMap;
+        cachedOccupiedSlotsTime = Date.now();
         saveSettingsToDisk();
         try {
           await supabase.from('settings').upsert([{ key: 'OCCUPIED_SLOTS_JSON', value: serializedSlots }], { onConflict: 'key' });
@@ -1114,6 +1116,20 @@ async function rebuildAndPersistOccupiedSlots(): Promise<Record<string, string[]
     }
   }
 
+  // Merge direct slot reservations from settings backup if present
+  try {
+    const rawSetting = memorySettingsCache['OCCUPIED_SLOTS_JSON'];
+    if (rawSetting) {
+      const parsed = JSON.parse(rawSetting);
+      for (const [dateStr, times] of Object.entries(parsed)) {
+        if (!occupied[dateStr]) occupied[dateStr] = [];
+        for (const t of (times as string[])) {
+          if (!occupied[dateStr].includes(t)) occupied[dateStr].push(t);
+        }
+      }
+    }
+  } catch (_) {}
+
   // Clear memoryOccupiedSlots and sync with active non-cancelled leads
   for (const k of Object.keys(memoryOccupiedSlots)) {
     delete memoryOccupiedSlots[k];
@@ -1362,9 +1378,13 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
 
 const handleGetInspectionSlots = async (req: express.Request, res: express.Response) => {
   try {
-    // TTL Cache-Control: Browser caches for 15s, Vercel Edge CDN caches for 30s, stale-while-revalidate for 60s
-    res.setHeader('Cache-Control', 'public, max-age=15, s-maxage=30, stale-while-revalidate=60');
-    const occupied = await getOccupiedSlotsMap();
+    // Disponibilidad en tiempo real estricta: No almacenar en caché
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    cachedOccupiedSlots = null;
+    cachedOccupiedSlotsTime = 0;
+    const occupied = await rebuildAndPersistOccupiedSlots();
     res.json({ occupied });
   } catch (err: any) {
     console.error("Error in GET /inspection-slots:", err);
