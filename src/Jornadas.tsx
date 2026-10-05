@@ -274,7 +274,7 @@ export const JORNADA_POLICIES = [
     number: "09",
     title: "Garantía y Políticas de Cobertura",
     items: [
-      { subtitle: "Garantía", text: "Se otorga una garantía de 3 meses directa sobre los trabajos realizados en la jornada." },
+      { subtitle: "Garantía", text: "Se otorga una garantía de 2 meses directa sobre los trabajos realizados en la jornada." },
       { subtitle: "Exclusiones", text: "La garantía quedará nula si el vehículo es intervenido por terceros ajenos al taller o presenta fallas derivadas de combustible contaminado o mal uso operativo." }
     ]
   },
@@ -1061,7 +1061,7 @@ export default function Jornadas() {
                           </button>
                         </div>
                         <p className="text-[10px] text-zinc-500">
-                          Vigencia Octubre · Recepción estricta 8:30 a 10:00 AM · 3 Cupos los Miércoles · Garantía 3 Meses.
+                          Vigencia Octubre · Recepción estricta 8:30 a 10:00 AM · 3 Cupos los Miércoles · Garantía 2 Meses.
                         </p>
                       </div>
                     </form>
@@ -1083,7 +1083,7 @@ export default function Jornadas() {
                       <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
                         <Award className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                         <div className="text-left">
-                          <span className="text-xs font-bold text-white block">3 Meses de Garantía Directa</span>
+                          <span className="text-xs font-bold text-white block">2 Meses de Garantía Directa</span>
                           <p className="text-[11px] text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, calibraciones y reprogramaciones efectuadas.</p>
                         </div>
                       </div>
@@ -1207,7 +1207,7 @@ export default function Jornadas() {
               <span>Garantía de Calidad y Transparencia Técnica</span>
             </h4>
             <p className="text-xs text-zinc-400 max-w-2xl">
-              Solo 3 cupos semanales cada miércoles con recepción de 8:30 a 10:00 AM, pruebas dinámicas en carretera y 3 meses de garantía por escrito.
+              Solo 3 cupos semanales cada miércoles con recepción de 8:30 a 10:00 AM, pruebas dinámicas en carretera y 2 meses de garantía por escrito.
             </p>
           </div>
 

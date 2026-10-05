@@ -3195,7 +3195,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const handleSaveJornadaItem = (jornada: any) => {
     // Sanitize citations and normalize benefits/garantia
     const cleanSubtitle = (jornada.subtitle || '').replace(/\[cite:\s*\d+\]/gi, '').replace(/\s{2,}/g, ' ').trim();
-    const cleanGarantia = jornada.garantia || (jornada.specs && jornada.specs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || '3 Meses';
+    const cleanGarantia = jornada.garantia || (jornada.specs && jornada.specs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || '2 Meses';
     const parsedBenefits = Array.isArray(jornada.benefits) && jornada.benefits.length > 0
       ? jornada.benefits
       : (jornada.rawBenefits ? jornada.rawBenefits.split('\n').map((b: string) => b.trim()).filter((b: string) => b.length > 0) : ['Descarbonización especializada', 'Banqueo de inyectores']);
@@ -8223,7 +8223,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       <button
                         onClick={() => {
                           const existingSpecs = Array.isArray(j.specs) && j.specs.length > 0 ? [...j.specs] : [];
-                          const cleanG = j.garantia || (existingSpecs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || '3 Meses';
+                          const cleanG = j.garantia || (existingSpecs.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val) || '2 Meses';
                           while (existingSpecs.length < 4) {
                             if (existingSpecs.length === 3) {
                               existingSpecs.push({ label: 'Garantía', val: cleanG });
