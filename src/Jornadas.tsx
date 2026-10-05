@@ -978,7 +978,7 @@ export default function Jornadas() {
                           className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 transition-colors cursor-pointer"
                         >
                           <FileText size={13} />
-                          <span>Ver Políticas, Condiciones y Cláusulas</span>
+                          <span>Sujeto a las Políticas, Condiciones y Cláusulas Oficiales de la Jornada</span>
                         </button>
                       </div>
                       <p className="text-[10px] text-zinc-500">
