@@ -729,7 +729,7 @@ export default function Jornadas() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
-                className="grid lg:grid-cols-12 gap-8 bg-[#12141a]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden"
+                className="grid lg:grid-cols-12 gap-8 items-start bg-[#12141a]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden"
               >
                 {/* Background Ambient Glow */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
@@ -871,7 +871,7 @@ export default function Jornadas() {
                 </div>
 
                 {/* Right Booking Card & Price (5 cols) */}
-                <div className="lg:col-span-5 flex flex-col justify-between space-y-6 bg-black/60 border border-white/10 rounded-3xl p-6 relative">
+                <div className="lg:col-span-5 self-start lg:sticky lg:top-24 flex flex-col space-y-5 bg-black/60 border border-white/10 rounded-3xl p-6 relative h-fit shadow-xl">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-white/10 pb-4">
                       <div>
