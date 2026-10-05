@@ -316,6 +316,7 @@ export default function Jornadas() {
   }, [rawJornada]);
 
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+  const [isHoveredGallery, setIsHoveredGallery] = useState(false);
 
   useEffect(() => {
     setActivePhotoIdx(0);
@@ -325,6 +326,15 @@ export default function Jornadas() {
     const list = [currentJornada.img, ...(currentJornada.images || [])].filter((url: any) => typeof url === 'string' && url.trim().length > 0);
     return Array.from(new Set(list));
   }, [currentJornada.img, currentJornada.images]);
+
+  // Auto-slide gallery every 3.5 seconds when multiple photos exist and user is not hovering
+  useEffect(() => {
+    if (allPhotos.length <= 1 || isHoveredGallery) return;
+    const interval = setInterval(() => {
+      setActivePhotoIdx((prev) => (prev + 1) % allPhotos.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [allPhotos.length, isHoveredGallery]);
 
   const { jornadaDaysOfWeek, jornadaDateLabel, jornadaTurnos } = React.useMemo(() => {
     let days: number[] = [3]; // Default Miércoles for VIP Jornada
@@ -641,13 +651,18 @@ export default function Jornadas() {
                   </div>
 
                   {allPhotos.length > 0 && (
-                    <div className="space-y-3">
+                    <div 
+                      className="space-y-3"
+                      onMouseEnter={() => setIsHoveredGallery(true)}
+                      onMouseLeave={() => setIsHoveredGallery(false)}
+                    >
                       <div className="w-full h-56 sm:h-72 md:h-80 rounded-2xl overflow-hidden bg-black border border-white/10 relative shadow-xl group">
                         <img
+                          key={activePhotoIdx}
                           src={allPhotos[activePhotoIdx] || allPhotos[0]}
                           alt={currentJornada.title}
                           onError={(e) => { (e.target as HTMLImageElement).src = '/assets/servicio-mecanica.webp'; }}
-                          className="w-full h-full object-cover transition-all duration-300"
+                          className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
                           loading="lazy"
                           decoding="async"
                         />
@@ -655,9 +670,10 @@ export default function Jornadas() {
 
                         {allPhotos.length > 1 && (
                           <>
-                            {/* Counter badge */}
-                            <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[10px] font-bold text-white shadow-lg pointer-events-none">
-                              Foto {activePhotoIdx + 1} de {allPhotos.length}
+                            {/* Counter badge with auto-slide pulse */}
+                            <div className="absolute top-3 right-3 bg-black/75 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-[10px] font-bold text-white shadow-lg pointer-events-none flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                              <span>Foto {activePhotoIdx + 1} de {allPhotos.length}</span>
                             </div>
 
                             {/* Left Navigation Arrow */}
