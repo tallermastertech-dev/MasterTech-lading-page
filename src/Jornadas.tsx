@@ -718,66 +718,115 @@ export default function Jornadas() {
       ) : (
         <main>
           {/* Jornadas Navigation Tabs Slider */}
-          <section className="py-10 px-4 md:px-6 max-w-7xl mx-auto">
-            <div className="text-center mb-8">
+          <section className="py-8 px-4 md:px-6 max-w-7xl mx-auto">
+            <div className="text-center mb-6">
               <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-2">
-                SELECCIONA LA JORNADA PARA TU VEHÍCULO
+                {currentJornadasList.length === 1 
+                  ? "JORNADA ACTIVA PARA TU VEHÍCULO" 
+                  : "SELECCIONA LA JORNADA PARA TU VEHÍCULO"}
               </h2>
               <p className="text-xs md:text-sm text-zinc-400">
-                Desliza o usa las flechas laterales para explorar todas las jornadas disponibles
+                {currentJornadasList.length === 1
+                  ? "Atención técnica especializada y cupos estrictamente limitados por fecha"
+                  : "Desliza o selecciona para explorar todas las jornadas disponibles"}
               </p>
             </div>
 
-            <div className="relative flex items-center group/slider">
-              {/* Left Slide Arrow */}
-              <button
-                type="button"
-                onClick={() => scrollTabs('left')}
-                className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
-                title="Deslizar hacia la izquierda"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-
-              {/* Scrollable Container */}
-              <div
-                ref={tabsRef}
-                className="flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none snap-x w-full"
-                style={{ scrollSnapType: 'x mandatory' }}
-              >
-                {currentJornadasList.map((j: any) => {
-                  const isActive = j.id === activeJornadaId;
-                  return (
-                    <button
-                      type="button"
-                      key={j.id}
-                      onClick={() => setActiveJornadaId(j.id)}
-                      className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
-                        isActive 
-                          ? 'bg-gradient-to-r from-amber-500/30 to-primary/30 border-primary text-white shadow-[0_10px_30px_rgba(194,164,114,0.3)] scale-105 z-10' 
-                          : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-amber-500/40 hover:bg-white/5'
-                      }`}
-                    >
-                      {j.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
-                      <div className="text-left">
-                        <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
-                        <span className="font-bold text-xs whitespace-nowrap">{j.title ? j.title.split('(')[0] : 'Jornada'}</span>
+            {currentJornadasList.length === 1 ? (
+              /* Cuando es una sola jornada: ocupa todo el ancho y se presenta de forma destacada sin flechas */
+              <div className="w-full">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-3xl bg-gradient-to-r from-amber-500/20 via-primary/20 to-amber-500/20 border-2 border-primary/60 shadow-[0_10px_35px_rgba(194,164,114,0.25)] text-white backdrop-blur-xl">
+                  <div className="flex items-center gap-4 text-center sm:text-left">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                      {currentJornada.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
+                    </div>
+                    <div>
+                      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
+                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-black tracking-wider">
+                          {currentJornada.badge || 'JORNADA ESPECIAL'}
+                        </span>
+                        <span className="text-xs text-zinc-300 font-semibold">
+                          Duración estimada: {currentJornada.duration}
+                        </span>
                       </div>
-                    </button>
-                  );
-                })}
-              </div>
+                      <h3 className="text-base sm:text-lg font-black text-white">
+                        {currentJornada.title}
+                      </h3>
+                    </div>
+                  </div>
 
-              {/* Right Slide Arrow */}
-              <button
-                type="button"
-                onClick={() => scrollTabs('right')}
-                className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
-                title="Deslizar hacia la derecha"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
+                  {currentJornada.promoPrice && currentJornada.promoPrice !== '---' && (
+                    <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10 w-full sm:w-auto">
+                      {currentJornada.regularPrice && (
+                        <span className="text-xs text-zinc-400 line-through block">
+                          {currentJornada.regularPrice}
+                        </span>
+                      )}
+                      <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
+                        {currentJornada.promoPrice}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="relative flex items-center group/slider">
+                {/* Left Slide Arrow - sólo si hay más de 3 jornadas */}
+                {currentJornadasList.length > 3 && (
+                  <button
+                    type="button"
+                    onClick={() => scrollTabs('left')}
+                    className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+                    title="Deslizar hacia la izquierda"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                )}
+
+                {/* Scrollable Container */}
+                <div
+                  ref={tabsRef}
+                  className={`flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none snap-x w-full ${
+                    currentJornadasList.length <= 3 ? 'justify-center' : ''
+                  }`}
+                  style={{ scrollSnapType: 'x mandatory' }}
+                >
+                  {currentJornadasList.map((j: any) => {
+                    const isActive = j.id === activeJornadaId;
+                    return (
+                      <button
+                        type="button"
+                        key={j.id}
+                        onClick={() => setActiveJornadaId(j.id)}
+                        className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
+                          isActive 
+                            ? 'bg-gradient-to-r from-amber-500/30 to-primary/30 border-primary text-white shadow-[0_10px_30px_rgba(194,164,114,0.3)] scale-105 z-10' 
+                            : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-amber-500/40 hover:bg-white/5'
+                        }`}
+                      >
+                        {j.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
+                        <div className="text-left">
+                          <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
+                          <span className="font-bold text-xs whitespace-nowrap">{j.title ? j.title.split('(')[0] : 'Jornada'}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Right Slide Arrow - sólo si hay más de 3 jornadas */}
+                {currentJornadasList.length > 3 && (
+                  <button
+                    type="button"
+                    onClick={() => scrollTabs('right')}
+                    className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+                    title="Deslizar hacia la derecha"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                )}
+              </div>
+            )}
           </section>
 
           {/* Selected Jornada Detail Display */}
