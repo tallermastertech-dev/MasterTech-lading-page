@@ -310,6 +310,8 @@ export default function Jornadas() {
   const [clientVehicle, setClientVehicle] = useState('');
   const [clientYear, setClientYear] = useState('');
   const [notes, setNotes] = useState('');
+  const [isBookingSubmitting, setIsBookingSubmitting] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Countdown timer state (simulated target: 3 days remaining)
   const [timeLeft, setTimeLeft] = useState({ days: 3, hours: 14, mins: 28, secs: 45 });
@@ -495,17 +497,62 @@ export default function Jornadas() {
     return { jornadaDaysOfWeek: days, jornadaDateLabel: label, jornadaTurnos: turnos };
   }, [currentJornada]);
 
-  const handleWhatsAppBooking = (e: React.FormEvent) => {
+  const handleWhatsAppBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    const nameStr = clientName || "Cliente MasterTech";
-    const vehicleStr = clientVehicle ? `${clientVehicle} ${clientYear}`.trim() : "Mi Vehículo";
-    const slotStr = selectedSlot ? `para el *${selectedSlot}*` : "lo antes posible";
+    if (isBookingSubmitting) return;
+    setIsBookingSubmitting(true);
+
+    const nameStr = clientName.trim() || "Cliente MasterTech";
+    const vehicleStr = clientVehicle ? `${clientVehicle} ${clientYear}`.trim() : "Vehículo no indicado";
+    const cleanSlotForWa = selectedSlot 
+      ? selectedSlot.replace(/^Cita (?:Inspección|Jornada VIP):\s*/i, '').trim()
+      : "lo antes posible";
+    const slotStr = selectedSlot ? `para el *${cleanSlotForWa}*` : "lo antes posible";
+
+    // 1. Guardar la cita / cupo de jornada en la base de datos de MasterTech para el calendario y gestor de citas del Admin
+    const leadPayload = {
+      nombre: nameStr,
+      telefono: clientPhone.trim() || "No indicado",
+      vehiculo: vehicleStr,
+      servicio: `Jornada VIP: ${currentJornada.title}`,
+      status: 'Confirmado',
+      fecha_hora: selectedSlot || '',
+      falla: `[Jornada VIP: ${currentJornada.title}] Precio: ${currentJornada.promoPrice && currentJornada.promoPrice !== '---' ? currentJornada.promoPrice : 'Promocional'}. ${notes ? `Notas: ${notes}` : ''}`.trim()
+    };
+
+    // Almacenamiento local preventivo inmediato en browser para el panel administrativo y selector de cupos
+    try {
+      const localObj = {
+        id: Date.now(),
+        ...leadPayload,
+        created_at: new Date().toISOString()
+      };
+      const existing = JSON.parse(localStorage.getItem('mastertech_leads_store') || '[]');
+      existing.unshift(localObj);
+      localStorage.setItem('mastertech_leads_store', JSON.stringify(existing.slice(0, 100)));
+    } catch (_) {}
+
+    // Envío a la API del servidor (persiste en tabla leads de Supabase, en SAVED_LEADS de settings y marca cupo en calendario)
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadPayload)
+      }).catch((err) => console.warn('Sync lead to server warning:', err));
+    } catch (_) {}
+
+    // 2. Construir y abrir mensaje de WhatsApp preformateado
+    const promoPriceDisplay = (currentJornada.promoPrice && currentJornada.promoPrice !== '---' && currentJornada.promoPrice.trim().length > 0)
+      ? currentJornada.promoPrice
+      : '';
 
     const messageLines = [
       `👋 *¡HOLA MASTERTECH! DESEO APARTAR MI CUPO DE JORNADA* 🛠️`,
       ``,
       `🎯 *Jornada Seleccionada:* ${currentJornada.title}`,
-      `🏷️ *Precio Especial:* ${currentJornada.promoPrice} _(${currentJornada.discountBadge})_`,
+      promoPriceDisplay 
+        ? `🏷️ *Precio Especial:* ${promoPriceDisplay} ${currentJornada.discountBadge ? `_(${currentJornada.discountBadge})_` : ''}`
+        : '',
       `👤 *Nombre:* ${nameStr}`,
       `🚗 *Vehículo:* ${vehicleStr}`,
       `📞 *Teléfono:* ${clientPhone || "No indicado"}`,
@@ -528,6 +575,9 @@ export default function Jornadas() {
     }
 
     window.open(finalUrl, '_blank');
+    setIsBookingSubmitting(false);
+    setBookingSuccess(true);
+    setTimeout(() => setBookingSuccess(false), 8000);
   };
 
   return (
@@ -964,11 +1014,23 @@ export default function Jornadas() {
 
                     <button
                       type="submit"
-                      className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer"
+                      disabled={isBookingSubmitting}
+                      className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-70"
                     >
                       <WhatsAppIcon size={18} />
-                      <span>RESERVAR CUPO VÍA WHATSAPP ({currentJornada.promoPrice})</span>
+                      <span>
+                        {isBookingSubmitting
+                          ? 'REGISTRANDO Y CONECTANDO...'
+                          : `RESERVAR CUPO VÍA WHATSAPP${currentJornada.promoPrice && currentJornada.promoPrice !== '---' && currentJornada.promoPrice.trim().length > 0 ? ` (${currentJornada.promoPrice})` : ''}`
+                        }
+                      </span>
                     </button>
+
+                    {bookingSuccess && (
+                      <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl text-center text-xs text-emerald-300 font-bold animate-fade-in">
+                        Cita y cupo registrados en el sistema de MasterTech. Se abrió WhatsApp para tu confirmación directa.
+                      </div>
+                    )}
 
                     <div className="pt-3 border-t border-white/10 text-center space-y-1.5">
                       <div className="flex flex-wrap items-center justify-center gap-2">

@@ -1805,7 +1805,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     if (s.includes('catálogo') || s.includes('catalogo') || s.includes('pedido') || f.includes('piezas') || f.includes('carrito')) {
       return 'catalogo';
     }
-    if (s.includes('línea de inspección') || s.includes('inspeccion') || s.includes('inspección') || l.fecha_hora || l.fecha_turno) {
+    if (s.includes('línea de inspección') || s.includes('inspeccion') || s.includes('inspección') || s.includes('jornada') || f.includes('jornada') || l.fecha_hora || l.fecha_turno) {
       return 'inspeccion';
     }
     return 'taller';
@@ -6623,6 +6623,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               filteredLeads.map((l, idx) => {
                                 const cat = getLeadCategory(l);
                                 const cvUrl = getCvDownloadUrl(l);
+                                const isJornadaLead = String(l.servicio || '').toLowerCase().includes('jornada') || String(l.falla || '').toLowerCase().includes('jornada');
 
                                 // Formatear saludo personalizado de WhatsApp según el tipo de solicitud
                                 let waMsg = `Hola ${l.nombre || ''}, te contactamos desde Taller MasterTech.`;
@@ -6630,6 +6631,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   waMsg = `Hola ${l.nombre || ''}, te contactamos desde la Coordinación de Recursos Humanos de Taller MasterTech sobre tu postulación laboral para el área de ${l.servicio || 'especialista'}.`;
                                 } else if (cat === 'catalogo') {
                                   waMsg = `Hola ${l.nombre || ''}, te contactamos desde el Departamento de Repuestos de Taller MasterTech sobre tu pedido de catálogo (${l.servicio || 'piezas'}).`;
+                                } else if (isJornadaLead) {
+                                  waMsg = `Hola ${l.nombre || ''}, te contactamos de Taller MasterTech para confirmar tu cupo reservado en la ${l.servicio || 'Jornada VIP'} para tu ${l.vehiculo || 'vehículo'}.`;
                                 } else if (cat === 'inspeccion') {
                                   waMsg = `Hola ${l.nombre || ''}, te contactamos de Taller MasterTech para confirmar tu cita en la Línea de Inspección Gratuita para tu ${l.vehiculo || 'vehículo'}.`;
                                 }
@@ -6649,9 +6652,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                         </span>
                                       )}
                                       {cat === 'inspeccion' && (
-                                        <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 inline-flex items-center gap-1">
-                                          <Calendar size={11} /> INSPECCIÓN
-                                        </span>
+                                        isJornadaLead ? (
+                                          <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-red-500/20 text-red-300 border border-red-500/40 inline-flex items-center gap-1">
+                                            <Flame size={11} className="text-red-400" /> JORNADA VIP
+                                          </span>
+                                        ) : (
+                                          <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 inline-flex items-center gap-1">
+                                            <Calendar size={11} /> INSPECCIÓN
+                                          </span>
+                                        )
                                       )}
                                       {cat === 'taller' && (
                                         <span className="px-2.5 py-1 rounded-md text-[9px] font-black uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 inline-flex items-center gap-1">
