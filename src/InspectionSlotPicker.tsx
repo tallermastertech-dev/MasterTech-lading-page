@@ -11,8 +11,8 @@ export const INSPECTION_SLOTS = [
 
 export const JORNADA_SLOTS = [
   "08:30 AM",
-  "10:30 AM",
-  "02:00 PM"
+  "09:00 AM",
+  "09:30 AM"
 ];
 
 interface InspectionSlotPickerProps {

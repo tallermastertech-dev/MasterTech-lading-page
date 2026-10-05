@@ -381,7 +381,7 @@ export default function Jornadas() {
       }
     }
 
-    let turnos = ["08:30 AM", "10:30 AM", "02:00 PM"];
+    let turnos = ["08:30 AM", "09:00 AM", "09:30 AM"];
     if (Array.isArray(currentJornada.jornadaSlots) && currentJornada.jornadaSlots.length > 0) {
       turnos = currentJornada.jornadaSlots;
     } else if (typeof currentJornada.jornadaSlots === 'string' && currentJornada.jornadaSlots.trim().length > 0) {
@@ -391,8 +391,12 @@ export default function Jornadas() {
       if (searchStr.includes('5 cupos')) {
         turnos = ["08:30 AM", "09:30 AM", "10:30 AM", "01:30 PM", "03:00 PM"];
       } else if (searchStr.includes('3 cupos')) {
-        turnos = ["08:30 AM", "10:30 AM", "02:00 PM"];
+        turnos = ["08:30 AM", "09:00 AM", "09:30 AM"];
       }
+    }
+
+    if (turnos.includes('02:00 PM') || turnos.includes('10:30 AM')) {
+      turnos = ["08:30 AM", "09:00 AM", "09:30 AM"];
     }
 
     return { jornadaDaysOfWeek: days, jornadaDateLabel: label, jornadaTurnos: turnos };
@@ -856,7 +860,7 @@ export default function Jornadas() {
                           isJornada={true}
                           allowedDaysOfWeek={[3]}
                           dateLabel="Fecha (Sólo Miércoles)"
-                          customSlots={["08:30 AM", "10:30 AM", "02:00 PM"]}
+                          customSlots={jornadaTurnos && jornadaTurnos.length > 0 ? jornadaTurnos : ["08:30 AM", "09:00 AM", "09:30 AM"]}
                           onSelectSlot={(slotStr, isValid) => {
                             setSelectedSlot(slotStr);
                             setIsSlotValid(isValid);

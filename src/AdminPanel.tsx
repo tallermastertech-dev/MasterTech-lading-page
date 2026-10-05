@@ -3214,7 +3214,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       dateLabel: jornada.dateLabel || 'Fecha (Sólo Miércoles)',
       jornadaSlots: Array.isArray(jornada.jornadaSlots) && jornada.jornadaSlots.length > 0 
         ? jornada.jornadaSlots 
-        : (typeof jornada.jornadaSlots === 'string' && jornada.jornadaSlots.trim() ? jornada.jornadaSlots.split(',').map((s: string) => s.trim()).filter(Boolean) : ['08:30 AM', '10:30 AM', '02:00 PM'])
+        : (typeof jornada.jornadaSlots === 'string' && jornada.jornadaSlots.trim() ? jornada.jornadaSlots.split(',').map((s: string) => s.trim()).filter(Boolean) : ['08:30 AM', '09:00 AM', '09:30 AM'])
     };
     delete cleanJornadaItem.rawBenefits;
 
@@ -10803,11 +10803,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </label>
                   <input
                     type="text"
-                    placeholder="08:30 AM, 10:30 AM, 02:00 PM"
+                    placeholder="08:30 AM, 09:00 AM, 09:30 AM"
                     value={
                       Array.isArray(editingJornada.jornadaSlots)
                         ? editingJornada.jornadaSlots.join(', ')
-                        : (editingJornada.jornadaSlots || '08:30 AM, 10:30 AM, 02:00 PM')
+                        : (editingJornada.jornadaSlots || '08:30 AM, 09:00 AM, 09:30 AM')
                     }
                     onChange={(e) => {
                       const val = e.target.value;
@@ -10820,7 +10820,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     className="w-full bg-black/60 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs font-mono font-bold"
                   />
                   <span className="text-[10px] text-zinc-500 mt-1 block">
-                    Separados por coma. Ejemplo: 3 cupos = 3 horarios (08:30 AM, 10:30 AM, 02:00 PM).
+                    Separados por coma. Ejemplo: 3 cupos = 3 horarios (08:30 AM, 09:00 AM, 09:30 AM).
                   </span>
                 </div>
 
