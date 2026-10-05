@@ -1077,22 +1077,24 @@ export default function App() {
                     <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black via-black/95 to-transparent pointer-events-none z-10" />
                     <div className="absolute inset-x-0 bottom-0 h-14 bg-black/90 backdrop-blur-sm z-15 pointer-events-none border-t border-white/10" />
 
-                    {/* Bottom Info & Instagram Direct Link */}
-                    <div className="absolute bottom-3 left-3 z-20 pointer-events-none">
-                      <p className="text-white text-xs font-bold leading-tight drop-shadow">Taller MasterTech</p>
-                      <p className="text-slate-300 text-[10px]">Porlamar, Margarita</p>
-                    </div>
+                    {/* Bottom Info & Instagram Direct Link Bar (Flexbox prevents any overlap) */}
+                    <div className="absolute inset-x-0 bottom-0 px-3 py-2.5 z-20 flex items-center justify-between gap-1.5">
+                      <div className="min-w-0 pointer-events-none pr-1">
+                        <p className="text-white text-xs font-bold leading-tight truncate">Taller MasterTech</p>
+                        <p className="text-slate-400 text-[10px] truncate leading-tight">Porlamar, Margarita</p>
+                      </div>
 
-                    <a 
-                      href={isInstagram ? reelUrl : (config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/")} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="absolute bottom-3 right-3 bg-black/90 hover:bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-20 flex items-center gap-1.5 shadow-lg transition-transform hover:scale-105 backdrop-blur-sm border border-white/20 cursor-pointer"
-                    >
-                      <Instagram size={13} className="text-pink-400" />
-                      <span>{isInstagram ? "Ver en Instagram" : "Instagram"}</span>
-                      <ExternalLink size={11} className="text-slate-400" />
-                    </a>
+                      <a 
+                        href={isInstagram ? reelUrl : (config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/")} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="bg-slate-900/90 hover:bg-black text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md border border-white/20 hover:border-pink-500/50 transition-all shrink-0 cursor-pointer hover:scale-105 active:scale-95"
+                      >
+                        <Instagram size={13} className="text-pink-400 shrink-0" />
+                        <span>Instagram</span>
+                        <ExternalLink size={10} className="text-slate-400 shrink-0" />
+                      </a>
+                    </div>
                   </div>
                 );
               })()}
