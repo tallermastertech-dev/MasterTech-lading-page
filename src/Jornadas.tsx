@@ -207,17 +207,17 @@ export const JORNADA_POLICIES = [
     number: "01",
     title: "Vigencia y Disponibilidad",
     items: [
-      { subtitle: "Vigencia", text: "La presente jornada especial es válida hasta finales del mes de octubre." },
-      { subtitle: "Días de Atención", text: "Los trabajos se programan y ejecutan exclusivamente todos los miércoles." },
-      { subtitle: "Disponibilidad", text: "Solo 3 cupos por miércoles, garantizando máxima calidad, exclusividad y atención personalizada para cada vehículo." }
+      { subtitle: "Vigencia de Jornada", text: "Cada jornada especial mantiene vigencia según las fechas y calendarios activos publicados periódicamente en la plataforma oficial del taller." },
+      { subtitle: "Días de Atención", text: "Los trabajos se programan y ejecutan en los días habilitados en el cronograma oficial de cada jornada especial (según la fecha seleccionada en su reserva)." },
+      { subtitle: "Disponibilidad de Cupos", text: "Cupos estrictamente limitados por jornada (generalmente 3 cupos diarios por fecha operativa), garantizando máxima calidad, exclusividad y atención técnica personalizada para cada vehículo." }
     ]
   },
   {
     number: "02",
     title: "Horario de Cita, Recepción y Puntualidad",
     items: [
-      { subtitle: "Horario de Llegada", text: "La recepción de los vehículos se realiza en un horario estricto de 8:30 a.m. a 10:00 a.m." },
-      { subtitle: "Cláusula de Retrasos", text: "Al tratarse de una jornada limitada a 3 cupos diarios, la puntualidad es obligatoria para no alterar el cronograma del taller. En caso de llegar después de las 10:00 a.m. sin previo aviso, el cupo podrá ser reasignado o reprogramado para la siguiente fecha disponible, y ya no se podrá garantizar la entrega en el tiempo estándar." },
+      { subtitle: "Horario de Recepción", text: "La recepción de los vehículos se realiza puntualmente en el turno y rango horario asignado en la reserva (turnos matutinos pautados entre 8:30 a.m. y 10:00 a.m., o el horario específico confirmado para su cita)." },
+      { subtitle: "Cláusula de Retrasos", text: "Al tratarse de jornadas con cupos limitados por día, la puntualidad es obligatoria para no alterar el cronograma del taller. En caso de llegar después de la ventana de recepción pautada sin previo aviso, el cupo podrá ser reasignado o reprogramado para la siguiente fecha disponible, sin garantía de entrega en el tiempo estándar." },
       { subtitle: "Permanencia en el Taller", text: "Por normativas de seguridad industrial y operativa, los clientes no deben permanecer dentro de las bahías de trabajo durante los procesos técnicos." }
     ]
   },
@@ -225,16 +225,16 @@ export const JORNADA_POLICIES = [
     number: "03",
     title: "Tiempos de Trabajo y Pruebas de Calidad",
     items: [
-      { subtitle: "Tiempo Estimado", text: "El tiempo de ejecución en el taller es de 1 día a 1 día y medio." },
-      { subtitle: "Pruebas en Carretera y Banco", text: "El proceso comprende trabajos estáticos (descarbonización de válvulas, reprogramación, kit de eliminación o simple según aplique, y banqueo de inyectores) y se complementa con rigurosas pruebas en carretera. Ningún vehículo es entregado sin antes validar su correcto funcionamiento y calibración en vía." }
+      { subtitle: "Tiempo Estimado", text: "El tiempo de ejecución varía según la naturaleza técnica de la jornada contratada (desde 1 a 3 horas en servicios rápidos o de calibración electrónica, hasta 1 o 2 días hábiles en trabajos de alta envergadura o desmontaje profundo)." },
+      { subtitle: "Pruebas en Carretera y Banco", text: "El proceso comprende procedimientos técnicos estáticos (diagnóstico computarizado, banqueo, calibración, descarbonización o reprogramación según la jornada contratada) y se complementa con rigurosas pruebas de validación. Ningún vehículo es entregado sin antes validar su correcto funcionamiento en banco o carretera." }
     ]
   },
   {
     number: "04",
     title: "Paquetes y Evaluación del Motor",
     items: [
-      { subtitle: "Paquete Leve", text: "Diseñado y exclusivo para vehículos de 0 km o con poco uso (poca carbonilla)." },
-      { subtitle: "Paquete Crítico", text: "Requiere una evaluación técnica detallada del estado del motor; el alcance y el precio final se conversan y acuerdan directamente con el cliente antes de proceder." }
+      { subtitle: "Paquete Estándar / Preventivo", text: "Diseñado para vehículos en condiciones regulares, de bajo kilometraje o mantenimientos programados de acuerdo con la jornada seleccionada." },
+      { subtitle: "Paquete Crítico / Avanzado", text: "Si durante la evaluación técnica inicial se detectan desgastes severos, fallas asociadas o requerimientos que excedan el alcance base de la jornada, se acuerda el alcance técnico y presupuesto directamente con el cliente antes de proceder." }
     ]
   },
   {
@@ -274,8 +274,8 @@ export const JORNADA_POLICIES = [
     number: "09",
     title: "Garantía y Políticas de Cobertura",
     items: [
-      { subtitle: "Garantía", text: "Se otorga una garantía de 2 meses directa sobre los trabajos realizados en la jornada." },
-      { subtitle: "Exclusiones", text: "La garantía quedará nula si el vehículo es intervenido por terceros ajenos al taller o presenta fallas derivadas de combustible contaminado o mal uso operativo." }
+      { subtitle: "Garantía Oficial", text: "Se otorga garantía directa por escrito sobre los trabajos realizados en la jornada (garantía estándar de 2 meses en mano de obra y ajustes mecánicos, o hasta 1 año según el servicio o software específico contratado)." },
+      { subtitle: "Exclusiones", text: "La garantía quedará nula si el vehículo es intervenido por terceros ajenos al taller, presenta negligencia operativa o fallas derivadas de combustible contaminado." }
     ]
   },
   {
@@ -486,13 +486,9 @@ export default function Jornadas() {
       const searchStr = `${currentJornada.title} ${currentJornada.subtitle} ${currentJornada.discountBadge}`.toLowerCase();
       if (searchStr.includes('5 cupos')) {
         turnos = ["08:30 AM", "09:30 AM", "10:30 AM", "01:30 PM", "03:00 PM"];
-      } else if (searchStr.includes('3 cupos')) {
+      } else {
         turnos = ["08:30 AM", "09:00 AM", "09:30 AM"];
       }
-    }
-
-    if (turnos.includes('02:00 PM') || turnos.includes('10:30 AM')) {
-      turnos = ["08:30 AM", "09:00 AM", "09:30 AM"];
     }
 
     return { jornadaDaysOfWeek: days, jornadaDateLabel: label, jornadaTurnos: turnos };
@@ -1014,11 +1010,13 @@ export default function Jornadas() {
 
                         {/* Slot Picker Integration */}
                         <div>
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Seleccionar Turno Disponible (Sólo Miércoles)</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
+                            Seleccionar Turno y {jornadaDateLabel}
+                          </label>
                           <InspectionSlotPicker
                             isJornada={true}
-                            allowedDaysOfWeek={[3]}
-                            dateLabel="Fecha (Sólo Miércoles)"
+                            allowedDaysOfWeek={jornadaDaysOfWeek}
+                            dateLabel={jornadaDateLabel}
                             customSlots={jornadaTurnos && jornadaTurnos.length > 0 ? jornadaTurnos : ["08:30 AM", "09:00 AM", "09:30 AM"]}
                             refreshTrigger={slotRefreshCounter}
                             onSelectSlot={(slotStr, isValid) => {
@@ -1061,7 +1059,7 @@ export default function Jornadas() {
                           </button>
                         </div>
                         <p className="text-[10px] text-zinc-500">
-                          Vigencia Octubre · Recepción estricta 8:30 a 10:00 AM · 3 Cupos los Miércoles · Garantía 2 Meses.
+                          Cupos Limitados por Jornada · Recepción puntual en turnos asignados · Garantía Oficial MasterTech.
                         </p>
                       </div>
                     </form>
@@ -1083,8 +1081,13 @@ export default function Jornadas() {
                       <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
                         <Award className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                         <div className="text-left">
-                          <span className="text-xs font-bold text-white block">2 Meses de Garantía Directa</span>
-                          <p className="text-[11px] text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, calibraciones y reprogramaciones efectuadas.</p>
+                          <span className="text-xs font-bold text-white block">
+                            {(() => {
+                              const rawG = currentJornada.specs?.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val || '2 Meses';
+                              return rawG.toLowerCase().includes('garant') ? rawG : `${rawG} de Garantía Directa`;
+                            })()}
+                          </span>
+                          <p className="text-[11px] text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, procedimientos técnicos y calibraciones efectuadas.</p>
                         </div>
                       </div>
 
@@ -1207,7 +1210,7 @@ export default function Jornadas() {
               <span>Garantía de Calidad y Transparencia Técnica</span>
             </h4>
             <p className="text-xs text-zinc-400 max-w-2xl">
-              Solo 3 cupos semanales cada miércoles con recepción de 8:30 a 10:00 AM, pruebas dinámicas en carretera y 2 meses de garantía por escrito.
+              Cupos limitados por jornada con atención personalizada para cada vehículo, recepción puntual en turnos asignados, rigurosas pruebas técnicas y garantía oficial por escrito.
             </p>
           </div>
 
@@ -1357,7 +1360,7 @@ export default function Jornadas() {
 
               {/* Modal Footer */}
               <div className="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between">
-                <span className="text-xs text-zinc-500">MasterTech Isla de Margarita · Vigencia hasta fin de Octubre</span>
+                <span className="text-xs text-zinc-500">MasterTech Isla de Margarita · Políticas Oficiales de Jornadas Especiales</span>
                 <button
                   type="button"
                   onClick={() => setShowPoliciesModal(false)}
