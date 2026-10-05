@@ -1329,264 +1329,310 @@ export default function App() {
 
           {/* Cards Grid */}
           {promoSectionTab === 'jornadas' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-              {processedJornadas.slice(0, 3).map((item: any, idx: number) => {
-                const baseWa = config?.WHATSAPP_LINK 
-                  ? config.WHATSAPP_LINK.split('?')[0] 
-                  : 'https://wa.me/584123565012';
-                const waMessage = `Hola Taller MasterTech, deseo agendar la promoción de ${item.title} con el precio especial de ${item.promoPrice || 'descuento'}.`;
-                const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
-                const isTop = idx === 0 && (item.discountPct > 0 || item.isSelectedPromo);
+            (() => {
+              const jornadasToShow = processedJornadas.slice(0, 3);
+              const isSingle = jornadasToShow.length === 1;
+              const gridClass = isSingle
+                ? "w-full"
+                : jornadasToShow.length === 2
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch"
+                  : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch";
 
-                return (
-                  <div 
-                    key={item.id || idx}
-                    id={`promo-${item.id}`}
-                    className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl group ${
-                      isTop 
-                        ? 'border-red-500/80 ring-2 ring-red-500/30' 
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                    }`}
-                  >
-                    {/* Top highlight badge for maximum discount or selected promo */}
-                    {isTop && (
-                      <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
-                        <Flame size={13} className="text-amber-300 animate-pulse" />
-                        <span>{item.isSelectedPromo ? "OFERTA DESTACADA EN PORTADA" : "MAYOR DESCUENTO ACTIVO"}</span>
-                      </div>
-                    )}
+              return (
+                <div className={gridClass}>
+                  {jornadasToShow.map((item: any, idx: number) => {
+                    const baseWa = config?.WHATSAPP_LINK 
+                      ? config.WHATSAPP_LINK.split('?')[0] 
+                      : 'https://wa.me/584123565012';
+                    const waMessage = `Hola Taller MasterTech, deseo agendar la promoción de ${item.title} con el precio especial de ${item.promoPrice || 'descuento'}.`;
+                    const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
+                    const isTop = idx === 0 && (item.discountPct > 0 || item.isSelectedPromo);
 
-                    <div>
-                      {/* Image Container with Badges */}
-                      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 group/img">
-                        <img 
-                          src={item.img || "/assets/servicio-mecanica.webp"} 
-                          alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                        
-                        {/* Category Badge */}
-                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
-                          {item.badge}
-                        </div>
+                    return (
+                      <div 
+                        key={item.id || idx}
+                        id={`promo-${item.id}`}
+                        className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 overflow-hidden shadow-sm hover:shadow-xl group ${
+                          isTop 
+                            ? 'border-red-500/80 ring-2 ring-red-500/30' 
+                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                        } ${isSingle ? 'lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
+                      >
+                        {/* Top highlight badge for maximum discount or selected promo */}
+                        {isTop && (
+                          <div className={`bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm ${
+                            isSingle ? 'lg:col-span-12' : ''
+                          }`}>
+                            <Flame size={13} className="text-amber-300 animate-pulse" />
+                            <span>{item.isSelectedPromo ? "OFERTA DESTACADA EN PORTADA" : "MAYOR DESCUENTO ACTIVO"}</span>
+                          </div>
+                        )}
 
-                        {/* Prominent Discount Badge */}
-                        <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
-                          <Tag size={12} />
-                          <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
-                        </div>
+                        {/* Image Container with Badges */}
+                        <div className={`relative overflow-hidden bg-slate-900 group/img ${
+                          isSingle 
+                            ? 'lg:col-span-5 aspect-[16/10] lg:aspect-auto lg:h-full min-h-[280px] sm:min-h-[340px]' 
+                            : 'aspect-[16/10]'
+                        }`}>
+                          <img 
+                            src={item.img || "/assets/servicio-mecanica.webp"} 
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          
+                          {/* Category Badge */}
+                          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                            {item.badge}
+                          </div>
 
-                        {/* Pricing Tag Overlay */}
-                        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-                          <div>
-                            {item.regularPrice && (
-                              <span className="text-slate-300 line-through text-xs block font-medium">
-                                Precio Normal: {item.regularPrice}
+                          {/* Prominent Discount Badge */}
+                          <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
+                            <Tag size={12} />
+                            <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
+                          </div>
+
+                          {/* Pricing Tag Overlay */}
+                          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                            <div>
+                              {item.regularPrice && (
+                                <span className="text-slate-300 line-through text-xs block font-medium">
+                                  Precio Normal: {item.regularPrice}
+                                </span>
+                              )}
+                              <span className={`${isSingle ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-2xl'} font-black text-white tracking-tight drop-shadow`}>
+                                {item.promoPrice}
+                              </span>
+                            </div>
+                            {item.duration && (
+                              <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
+                                <Clock size={12} className="text-red-400" />
+                                <span>{item.duration}</span>
                               </span>
                             )}
-                            <span className="text-2xl font-black text-white tracking-tight drop-shadow">
-                              {item.promoPrice}
-                            </span>
                           </div>
-                          {item.duration && (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
-                              <Clock size={12} className="text-red-400" />
-                              <span>{item.duration}</span>
-                            </span>
-                          )}
+                        </div>
+
+                        {/* Content Section & Actions */}
+                        <div className={`${isSingle ? 'lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-between' : 'flex flex-col justify-between flex-1'}`}>
+                          <div className={isSingle ? '' : 'p-6'}>
+                            <h3 className={`${isSingle ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-lg'} font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors`}>
+                              {item.title}
+                            </h3>
+                            <p className={`${isSingle ? 'text-sm sm:text-base' : 'text-xs'} text-slate-600 dark:text-slate-400 mb-4 leading-relaxed`}>
+                              {item.subtitle}
+                            </p>
+
+                            {/* Benefits List */}
+                            {item.benefits && item.benefits.length > 0 && (
+                              <div className={`${isSingle ? 'grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5 pt-4' : 'space-y-2 mb-4 pt-3'} border-t border-slate-100 dark:border-slate-800`}>
+                                {item.benefits.slice(0, isSingle ? 6 : 3).map((benefit: string, bIdx: number) => (
+                                  <div key={bIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                                    <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                                    <span className="leading-tight">{benefit}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Compatible Models */}
+                            {item.compatibleModels && (
+                              <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 sm:p-3 text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-4">
+                                <Car size={14} className="text-red-500 shrink-0 mt-0.5" />
+                                <span className="leading-tight">
+                                  <strong className="text-slate-800 dark:text-slate-200 font-semibold">Modelos:</strong> {item.compatibleModels}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Actions Block */}
+                          <div className={isSingle ? 'pt-2 flex flex-col sm:flex-row items-center gap-3' : 'p-6 pt-0'}>
+                            <a
+                              href={waHref}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`${isSingle ? 'w-full sm:flex-1 py-3.5 text-sm' : 'w-full py-3 text-xs'} inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold px-4 rounded-xl shadow-md transition-all cursor-pointer`}
+                            >
+                              <MessageCircle size={16} />
+                              <span>Reservar Cupo con Descuento</span>
+                            </a>
+
+                            {isSingle && (
+                              <a
+                                href="/jornadas"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 py-3.5 px-5 rounded-xl border border-slate-300 dark:border-white/10 hover:border-red-500 text-slate-700 dark:text-zinc-200 hover:text-red-600 dark:hover:text-red-400 text-xs font-bold transition-all whitespace-nowrap"
+                              >
+                                <span>Ver Jornadas VIP</span>
+                                <ArrowRight size={14} />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
-
-                      {/* Content Section */}
-                      <div className="p-6">
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                          {item.subtitle}
-                        </p>
-
-                        {/* Benefits List */}
-                        {item.benefits && item.benefits.length > 0 && (
-                          <div className="space-y-2 mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-                            {item.benefits.slice(0, 3).map((benefit: string, bIdx: number) => (
-                              <div key={bIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                                <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
-                                <span className="leading-tight">{benefit}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Compatible Models */}
-                        {item.compatibleModels && (
-                          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 text-[11px] text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-2">
-                            <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
-                            <span className="leading-tight line-clamp-2">
-                              <strong className="text-slate-800 dark:text-slate-200 font-semibold">Modelos:</strong> {item.compatibleModels}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Actions Block */}
-                    <div className="p-6 pt-0">
-                      <a
-                        href={waHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all cursor-pointer"
-                      >
-                        <MessageCircle size={16} />
-                        <span>Reservar Cupo con Descuento</span>
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              );
+            })()
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-              {processedRepuestos.slice(0, 3).map((item: any, idx: number) => {
-                const baseWa = config?.WHATSAPP_LINK 
-                  ? config.WHATSAPP_LINK.split('?')[0] 
-                  : 'https://wa.me/584123565012';
-                const waMessage = `Hola Taller MasterTech, deseo consultar la oferta del repuesto: ${item.title} (OEM ${item.partNumber || 'N/A'}) con el precio especial de ${item.promoPrice || item.price}.`;
-                const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
-                const isTop = idx === 0 && (item.discountPct > 0 || item.isSelectedPromo);
+            (() => {
+              const repuestosToShow = processedRepuestos.slice(0, 3);
+              const isSingle = repuestosToShow.length === 1;
+              const gridClass = isSingle
+                ? "w-full"
+                : repuestosToShow.length === 2
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch"
+                  : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch";
 
-                return (
-                  <div 
-                    key={item.id || idx}
-                    id={`promo-${item.id}`}
-                    className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl group ${
-                      isTop 
-                        ? 'border-red-500/80 ring-2 ring-red-500/30' 
-                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                    }`}
-                  >
-                    {/* Top highlight badge */}
-                    {isTop && (
-                      <div className="bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm">
-                        <Flame size={13} className="text-amber-300 animate-pulse" />
-                        <span>{item.isSelectedPromo ? "OFERTA DESTACADA EN PORTADA" : "MEJOR DESCUENTO EN REPUESTOS"}</span>
-                      </div>
-                    )}
+              return (
+                <div className={gridClass}>
+                  {repuestosToShow.map((item: any, idx: number) => {
+                    const baseWa = config?.WHATSAPP_LINK 
+                      ? config.WHATSAPP_LINK.split('?')[0] 
+                      : 'https://wa.me/584123565012';
+                    const waMessage = `Hola Taller MasterTech, deseo consultar la oferta del repuesto: ${item.title} (OEM ${item.partNumber || 'N/A'}) con el precio especial de ${item.promoPrice || item.price}.`;
+                    const waHref = `${baseWa}?text=${encodeURIComponent(waMessage)}`;
+                    const isTop = idx === 0 && (item.discountPct > 0 || item.isSelectedPromo);
 
-                    <div>
-                      {/* Image Container with Badges */}
-                      <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 group/img">
-                        <img 
-                          src={item.img || "/assets/cat_frenos_discos.webp"} 
-                          alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                        
-                        {/* Category Badge */}
-                        <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
-                          {item.category || item.badge || 'Repuesto OEM'}
-                        </div>
+                    return (
+                      <div 
+                        key={item.id || idx}
+                        id={`promo-${item.id}`}
+                        className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 overflow-hidden shadow-sm hover:shadow-xl group ${
+                          isTop 
+                            ? 'border-red-500/80 ring-2 ring-red-500/30' 
+                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                        } ${isSingle ? 'lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
+                      >
+                        {/* Top highlight badge */}
+                        {isTop && (
+                          <div className={`bg-gradient-to-r from-red-600 to-amber-600 text-white text-[11px] font-black uppercase tracking-wider py-1.5 px-4 text-center flex items-center justify-center gap-1.5 shadow-sm ${
+                            isSingle ? 'lg:col-span-12' : ''
+                          }`}>
+                            <Flame size={13} className="text-amber-300 animate-pulse" />
+                            <span>{item.isSelectedPromo ? "OFERTA DESTACADA EN PORTADA" : "MEJOR DESCUENTO EN REPUESTOS"}</span>
+                          </div>
+                        )}
 
-                        {/* Prominent Discount Badge */}
-                        <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
-                          <Tag size={12} />
-                          <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : (item.discountBadge || 'OFERTA')}</span>
-                        </div>
+                        {/* Image Container with Badges */}
+                        <div className={`relative overflow-hidden bg-slate-900 group/img ${
+                          isSingle 
+                            ? 'lg:col-span-5 aspect-[16/10] lg:aspect-auto lg:h-full min-h-[280px] sm:min-h-[340px]' 
+                            : 'aspect-[16/10]'
+                        }`}>
+                          <img 
+                            src={item.img || "/assets/cat_frenos_discos.webp"} 
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          
+                          {/* Category Badge */}
+                          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                            {item.category || item.badge || 'Repuesto OEM'}
+                          </div>
 
-                        {/* Pricing Tag Overlay */}
-                        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-                          <div>
-                            {item.regularPrice && (
-                              <span className="text-slate-300 line-through text-xs block font-medium">
-                                Regular: {item.regularPrice}
+                          {/* Prominent Discount Badge */}
+                          <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
+                            <Tag size={12} />
+                            <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : (item.discountBadge || 'OFERTA')}</span>
+                          </div>
+
+                          {/* Pricing Tag Overlay */}
+                          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                            <div>
+                              {item.regularPrice && (
+                                <span className="text-slate-300 line-through text-xs block font-medium">
+                                  Regular: {item.regularPrice}
+                                </span>
+                              )}
+                              <span className={`${isSingle ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-2xl'} font-black text-white tracking-tight drop-shadow`}>
+                                {item.promoPrice || item.price}
+                              </span>
+                            </div>
+                            {item.partNumber && (
+                              <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-mono font-bold">
+                                <span>OEM #{item.partNumber}</span>
                               </span>
                             )}
-                            <span className="text-2xl font-black text-white tracking-tight drop-shadow">
-                              {item.promoPrice || item.price}
-                            </span>
                           </div>
-                          {item.partNumber && (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-mono font-bold">
-                              <span>OEM #{item.partNumber}</span>
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Content Section */}
-                      <div className="p-6">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-[10px] uppercase tracking-wider font-extrabold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded border border-red-200 dark:border-red-900/40">
-                            {item.badge || 'OEM Importado'}
-                          </span>
-                          {item.stock !== undefined && (
-                            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
-                              Stock: {item.stock} disponibles
-                            </span>
-                          )}
                         </div>
 
-                        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 leading-relaxed line-clamp-2">
-                          {item.desc}
-                        </p>
+                        {/* Content Section & Actions */}
+                        <div className={`${isSingle ? 'lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-between' : 'flex flex-col justify-between flex-1'}`}>
+                          <div className={isSingle ? '' : 'p-6'}>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-[10px] uppercase tracking-wider font-extrabold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded border border-red-200 dark:border-red-900/40">
+                                {item.badge || 'OEM Importado'}
+                              </span>
+                              {item.stock !== undefined && (
+                                <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                                  Stock: {item.stock} disponibles
+                                </span>
+                              )}
+                            </div>
 
-                        {/* Specs List */}
-                        {item.specs && item.specs.length > 0 && (
-                          <div className="space-y-1.5 mb-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-                            {item.specs.slice(0, 3).map((spec: string, sIdx: number) => (
-                              <div key={sIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                                <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-0.5" />
-                                <span className="leading-tight line-clamp-1">{spec}</span>
+                            <h3 className={`${isSingle ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-base'} font-bold text-slate-900 dark:text-white mb-2 leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors`}>
+                              {item.title}
+                            </h3>
+                            <p className={`${isSingle ? 'text-sm sm:text-base' : 'text-xs'} text-slate-600 dark:text-slate-400 mb-4 leading-relaxed`}>
+                              {item.desc}
+                            </p>
+
+                            {/* Specs List */}
+                            {item.specs && item.specs.length > 0 && (
+                              <div className={`${isSingle ? 'grid grid-cols-1 sm:grid-cols-2 gap-2 mb-5 pt-3' : 'space-y-1.5 mb-4 pt-3'} border-t border-slate-100 dark:border-slate-800`}>
+                                {item.specs.slice(0, isSingle ? 6 : 3).map((spec: string, sIdx: number) => (
+                                  <div key={sIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                                    <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-0.5" />
+                                    <span className="leading-tight line-clamp-1">{spec}</span>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        )}
+                            )}
 
-                        {/* Compatible Models */}
-                        {item.compatibility && (
-                          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 text-[11px] text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-2">
-                            <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
-                            <span className="leading-tight line-clamp-2">
-                              <strong className="text-slate-800 dark:text-slate-200 font-semibold">Compatibilidad:</strong> {item.compatibility}
-                            </span>
+                            {/* Compatible Models */}
+                            {item.compatibility && (
+                              <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-2.5 sm:p-3 text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-800/60 flex items-start gap-1.5 mb-4">
+                                <Car size={13} className="text-red-500 shrink-0 mt-0.5" />
+                                <span className="leading-tight">
+                                  <strong className="text-slate-800 dark:text-slate-200 font-semibold">Compatibilidad:</strong> {item.compatibility}
+                                </span>
+                              </div>
+                            )}
                           </div>
-                        )}
+
+                          {/* Actions Block */}
+                          <div className={isSingle ? 'pt-2 flex flex-col sm:flex-row items-center gap-3' : 'p-6 pt-0 space-y-2'}>
+                            <a
+                              href={waHref}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`${isSingle ? 'w-full sm:flex-1 py-3.5 text-sm' : 'w-full py-3 text-xs'} inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold px-4 rounded-xl shadow-md transition-all cursor-pointer`}
+                            >
+                              <MessageCircle size={16} />
+                              <span>Consultar / Comprar Oferta</span>
+                            </a>
+                            <a
+                              href={`${baseWa}?text=${encodeURIComponent(`Hola MasterTech, deseo consultar especificaciones técnicas y compatibilidad de: ${item.title}${item.partNumber ? ` (${item.partNumber})` : ''}.`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`${isSingle ? 'w-full sm:w-auto py-3.5 px-5' : 'w-full py-2 px-3'} inline-flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 font-semibold text-xs rounded-xl transition-all cursor-pointer whitespace-nowrap`}
+                            >
+                              <span>Consultar Ficha y Compatibilidad</span>
+                              <ArrowRight size={13} />
+                            </a>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Actions Block */}
-                    <div className="p-6 pt-0 space-y-2">
-                      <a
-                        href={waHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition-all cursor-pointer"
-                      >
-                        <MessageCircle size={16} />
-                        <span>Consultar / Comprar Oferta</span>
-                      </a>
-                      <a
-                        href={`${baseWa}?text=${encodeURIComponent(`Hola MasterTech, deseo consultar especificaciones técnicas y compatibilidad de: ${item.title}${item.partNumber ? ` (${item.partNumber})` : ''}.`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full inline-flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 font-semibold text-xs py-2 px-3 rounded-xl transition-all cursor-pointer"
-                      >
-                        <span>Consultar Ficha y Compatibilidad</span>
-                        <ArrowRight size={13} />
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              );
+            })()
           )}
 
         </div>
