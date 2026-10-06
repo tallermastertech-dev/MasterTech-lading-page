@@ -51,14 +51,25 @@ export const ZelleIcon = ({ size = 20, className = "" }: { size?: number; classN
   </svg>
 );
 
-export const PagoMovilIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
+export const BanescoPanamaIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
-    <rect width="40" height="40" rx="9" fill="#0066CC"/>
-    <rect x="11" y="8" width="18" height="24" rx="3.5" stroke="white" strokeWidth="2.2"/>
-    <line x1="17" y1="28" x2="23" y2="28" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M22 14C23.5 15.2 23.5 17.8 22 19" stroke="#FFD700" strokeWidth="2.2" strokeLinecap="round"/>
-    <path d="M25 11.5C28 14.5 28 21.5 25 24.5" stroke="#FFD700" strokeWidth="2.2" strokeLinecap="round"/>
-    <text x="14" y="21" fill="white" fontSize="8" fontWeight="900" fontFamily="system-ui, sans-serif">Bs</text>
+    <rect width="40" height="40" rx="9" fill="#007A33" />
+    {/* Banesco ribbon wave in white and golden-yellow */}
+    <path 
+      d="M10 23.5C10 23.5 13 13.5 21.5 13.5C26.5 13.5 28.5 16.5 28.5 19.5C28.5 23 25 25.8 19 25.8C15 25.8 12 24.8 12 24.8" 
+      stroke="white" 
+      strokeWidth="3.2" 
+      strokeLinecap="round" 
+    />
+    <path 
+      d="M14 27.8C17.5 29.5 23.5 29.2 27.5 26.8" 
+      stroke="#FFC72C" 
+      strokeWidth="2.8" 
+      strokeLinecap="round" 
+    />
+    {/* PA badge */}
+    <rect x="23" y="6" width="13" height="8" rx="2" fill="#004D20" stroke="white" strokeWidth="0.8" />
+    <text x="29.5" y="12.2" fill="white" fontSize="5.5" fontWeight="900" textAnchor="middle" fontFamily="system-ui, sans-serif">PA</text>
   </svg>
 );
 
@@ -98,10 +109,10 @@ export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) =
         </div>
       </div>
       <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
-        <PagoMovilIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+        <BanescoPanamaIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
         <div className="min-w-0">
-          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Pago Móvil</span>
-          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Bs. a tasa autorizada</span>
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco Panamá</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia en USD</span>
         </div>
       </div>
     </div>
@@ -416,7 +427,7 @@ export const JORNADA_POLICIES = [
       },
       { 
         subtitle: "Métodos de Pago Aceptados", 
-        text: "Aceptamos exclusivamente: 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), y 4) Pago Móvil (a tasa oficial / autorizada al momento del pago)." 
+        text: "Aceptamos exclusivamente métodos en divisas: 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), y 4) Banesco Panamá (transferencias en dólares USD)." 
       },
       { 
         subtitle: "Liquidación Inmediata de Unidad", 
@@ -1370,8 +1381,8 @@ export default function Jornadas() {
                             <span className="truncate">Binance</span>
                           </div>
                           <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <PagoMovilIcon size={18} className="shrink-0" />
-                            <span className="truncate">Pago Móvil</span>
+                            <BanescoPanamaIcon size={18} className="shrink-0" />
+                            <span className="truncate">Banesco PA</span>
                           </div>
                         </div>
                       </div>
