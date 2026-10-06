@@ -965,7 +965,7 @@ export default function App() {
 
                 <a 
                   href="/servicios" 
-                  className="btn-secondary !px-5 !py-2.5 text-xs sm:text-sm bg-white/10 hover:bg-white/15 text-white border border-white/20 hover:border-red-500/50 shadow-md backdrop-blur-md transition-all flex items-center justify-center gap-2 font-semibold rounded-xl"
+                  className="!px-5 !py-2.5 text-xs sm:text-sm !bg-white/10 hover:!bg-white/20 !text-white !border !border-white/25 hover:!border-red-500/60 shadow-md backdrop-blur-md transition-all flex items-center justify-center gap-2 font-semibold rounded-xl cursor-pointer"
                 >
                   <Wrench size={15} className="text-red-400" />
                   <span>NUESTROS SERVICIOS</span>
@@ -1357,7 +1357,7 @@ export default function App() {
                         id={`promo-${item.id}`}
                         className={`relative rounded-3xl bg-white dark:bg-[#13171f] border transition-all duration-300 overflow-hidden shadow-sm hover:shadow-xl group ${
                           isTop 
-                            ? 'border-red-500/80 ring-2 ring-red-500/30' 
+                            ? 'border-red-500 shadow-md shadow-red-500/10 dark:ring-1 dark:ring-red-500/40' 
                             : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                         } ${isSingle ? 'lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
                       >
@@ -1399,14 +1399,20 @@ export default function App() {
                           {/* Pricing Tag Overlay */}
                           <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
                             <div>
-                              {item.regularPrice && (
+                              {item.regularPrice && item.regularPrice !== '---' && (
                                 <span className="text-slate-300 line-through text-xs block font-medium">
                                   Precio Normal: {item.regularPrice}
                                 </span>
                               )}
-                              <span className={`${isSingle ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-2xl'} font-black text-white tracking-tight drop-shadow`}>
-                                {item.promoPrice}
-                              </span>
+                              {(item.promoPrice && item.promoPrice !== '---') ? (
+                                <span className={`${isSingle ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-2xl'} font-black text-white tracking-tight drop-shadow`}>
+                                  {item.promoPrice}
+                                </span>
+                              ) : (
+                                <span className="text-base sm:text-xl font-bold text-amber-300 tracking-tight drop-shadow">
+                                  {item.discountBadge || "Cupo con Descuento"}
+                                </span>
+                              )}
                             </div>
                             {item.duration && (
                               <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
@@ -1768,9 +1774,9 @@ export default function App() {
       {/* =========================================================================
           SECTION 4: LLAMADO A LA ACCIÓN & CONTACTO RÁPIDO
           ========================================================================= */}
-      <section className="py-14 sm:py-20 px-4 sm:px-6 bg-slate-900 text-white transition-colors duration-300">
+      <section className="py-14 sm:py-20 px-4 sm:px-6 bg-slate-100 dark:bg-[#0c0e12] transition-colors duration-300 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-5xl mx-auto">
-          <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 text-white">
             <div className="max-w-xl space-y-3">
               <span className="text-xs font-bold text-red-500 uppercase tracking-widest block">
                 ATENCIÓN PROFESIONAL EN MARGARITA
@@ -1807,7 +1813,7 @@ export default function App() {
 
               <a 
                 href="/contacto" 
-                className="btn-secondary !px-7 !py-3.5 text-xs font-semibold justify-center bg-white/10 hover:bg-white/20 text-white border-white/20"
+                className="!px-7 !py-3.5 text-xs font-semibold justify-center !bg-white/10 hover:!bg-white/20 !text-white !border !border-white/20 rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer"
               >
                 <span>Agendar Cita en Línea</span>
               </a>
@@ -1858,28 +1864,28 @@ export default function App() {
                   href={config.INSTAGRAM_LINK || "https://www.instagram.com/tallermastertech/"} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-9 h-9 rounded-lg bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
+                  className="social-btn w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-800 hover:!bg-red-600 text-slate-700 dark:text-white hover:!text-white flex items-center justify-center transition-all shadow-sm border border-slate-300 dark:border-white/10 group/social"
                   title="Instagram"
                 >
-                  <Instagram size={16} />
+                  <Instagram size={16} className="text-slate-700 dark:text-white group-hover/social:!text-white transition-colors" />
                 </a>
                 <a 
                   href={config.TIKTOK_LINK || "https://www.tiktok.com/@tallermastertech"} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-9 h-9 rounded-lg bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
+                  className="social-btn w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-800 hover:!bg-red-600 text-slate-700 dark:text-white hover:!text-white flex items-center justify-center transition-all shadow-sm border border-slate-300 dark:border-white/10 group/social"
                   title="TikTok"
                 >
-                  <TikTokIcon size={16} />
+                  <TikTokIcon size={16} className="text-slate-700 dark:text-white group-hover/social:!text-white transition-colors" />
                 </a>
                 <a 
                   href={config.YOUTUBE_LINK || "https://www.youtube.com/@tallermastertech"} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-9 h-9 rounded-lg bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
+                  className="social-btn w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-800 hover:!bg-red-600 text-slate-700 dark:text-white hover:!text-white flex items-center justify-center transition-all shadow-sm border border-slate-300 dark:border-white/10 group/social"
                   title="YouTube"
                 >
-                  <Youtube size={16} />
+                  <Youtube size={16} className="text-slate-700 dark:text-white group-hover/social:!text-white transition-colors" />
                 </a>
               </div>
             </div>

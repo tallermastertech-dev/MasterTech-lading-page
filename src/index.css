@@ -257,6 +257,27 @@ html.theme-light .theme-footer a,
 html.theme-light .theme-footer p,
 html.theme-light .theme-footer span { color: #475569; }
 
+/* Social icon buttons in light mode footer */
+html.theme-light .theme-footer a[title="Instagram"],
+html.theme-light .theme-footer a[title="TikTok"],
+html.theme-light .theme-footer a[title="YouTube"] {
+  background-color: #e2e8f0 !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+}
+html.theme-light .theme-footer a[title="Instagram"]:hover,
+html.theme-light .theme-footer a[title="TikTok"]:hover,
+html.theme-light .theme-footer a[title="YouTube"]:hover {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border-color: #dc2626 !important;
+}
+html.theme-light .theme-footer a[title="Instagram"] svg,
+html.theme-light .theme-footer a[title="TikTok"] svg,
+html.theme-light .theme-footer a[title="YouTube"] svg {
+  color: inherit !important;
+}
+
 /* Brands Ticker */
 html.theme-light .brands-ticker {
   background-color: #e9edf2 !important;
