@@ -4,6 +4,7 @@ import {
   Car,
   MapPin,
   ArrowRight,
+  ChevronDown,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
@@ -185,10 +186,10 @@ export default function Contacto() {
   };
 
   return (
-    <div className="theme-root min-h-screen selection:bg-primary selection:text-black flex flex-col overflow-x-hidden w-full max-w-full">
+    <div className="theme-root min-h-screen selection:bg-primary selection:text-white flex flex-col overflow-x-hidden w-full max-w-full bg-slate-50 dark:bg-[#0a0b0f] text-slate-900 dark:text-white transition-colors duration-300">
       {/* Background glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-primary/8 blur-[140px] rounded-full" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-primary/5 dark:bg-primary/8 blur-[140px] rounded-full" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full" />
       </div>
 
@@ -203,7 +204,7 @@ export default function Contacto() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-6 py-16 relative z-10">
+      <main className="flex-1 flex items-center justify-center px-6 py-12 sm:py-16 relative z-10">
         <div className="w-full max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -216,38 +217,38 @@ export default function Contacto() {
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 Agenda tu cita
               </div>
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-tight mb-4 uppercase">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight leading-tight mb-4 uppercase text-slate-900 dark:text-white">
                 SOLICITA TU CITA DE REVISIÓN <br />
                 <span className="text-primary">EN TALLER MASTERTECH</span>
               </h1>
-              <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto font-medium leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 dark:text-zinc-300 max-w-2xl mx-auto font-medium leading-relaxed">
                 Revisión preventiva y asesoría especializada con presupuesto previo antes de cualquier intervención.
               </p>
             </div>
 
             {/* Booking Form — full width */}
-            <div className="bg-white/5 p-8 rounded-3xl border border-white/10">
+            <div className="bg-white dark:bg-[#12141a]/95 p-6 sm:p-10 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl dark:shadow-2xl">
               <AnimatePresence mode="wait">
                 {formStatus === 'success' ? (
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-12"
+                    className="text-center py-10"
                   >
-                    <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-6" />
-                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-4">¡CITA SOLICITADA!</h2>
+                    <CheckCircle2 className="w-20 h-20 text-emerald-500 mx-auto mb-6" />
+                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-4 text-slate-900 dark:text-white">¡CITA SOLICITADA!</h2>
                     {selectedService === 'Línea de inspección gratuita' ? (
                       <>
                         <div className="inline-block bg-primary/20 border border-primary text-primary px-4 py-2 rounded-full font-bold tracking-widest text-sm mb-6 animate-pulse">
                           {(config.SUCCESS_BADGE && !config.SUCCESS_BADGE.includes('30%')) ? config.SUCCESS_BADGE : '¡TIENES HASTA UN 15% DE DESCUENTO!'}
                         </div>
-                        <p className="text-zinc-400 max-w-sm mx-auto">
+                        <p className="text-slate-600 dark:text-zinc-400 max-w-sm mx-auto">
                           {config.SUCCESS_TEXT || 'Un técnico especialista se comunicará contigo vía WhatsApp en breve para coordinar tu descuento y cita.'}
                         </p>
                       </>
                     ) : (
-                      <p className="text-zinc-400 text-lg max-w-sm mx-auto">
+                      <p className="text-slate-600 dark:text-zinc-400 text-base sm:text-lg max-w-sm mx-auto">
                         Tu solicitud ha sido registrada con éxito. Un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu cita.
                       </p>
                     )}
@@ -258,35 +259,35 @@ export default function Contacto() {
                         href={config.GOOGLE_MAPS_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-primary/40 hover:bg-white/8 transition-all duration-300 group"
+                        className="flex items-center justify-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl hover:border-primary/40 hover:bg-slate-100 dark:hover:bg-white/8 transition-all duration-300 group shadow-sm"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                        <div className="w-9 h-9 rounded-xl bg-red-100 dark:bg-white/5 border border-red-200 dark:border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
                           <MapPin size={16} />
                         </div>
                         <div className="text-left">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Ubicación</p>
-                          <p className="text-sm font-black text-white leading-tight">Porlamar,<br/>Nueva Esparta</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500">Ubicación</p>
+                          <p className="text-sm font-black text-slate-900 dark:text-white leading-tight">Porlamar,<br/>Nueva Esparta</p>
                         </div>
                       </a>
                       <a
                         href={whatsappUrl || config.WHATSAPP_LINK || 'https://wa.me/584123565012'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 p-4 bg-[#25D366]/20 border border-[#25D366]/40 rounded-2xl hover:border-[#25D366] hover:bg-[#25D366]/30 transition-all duration-300 group"
+                        className="flex items-center justify-center gap-3 p-4 bg-emerald-50 dark:bg-[#25D366]/20 border border-emerald-200 dark:border-[#25D366]/40 rounded-2xl hover:border-[#25D366] hover:bg-emerald-100 dark:hover:bg-[#25D366]/30 transition-all duration-300 group shadow-sm"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-[#25D366]/30 border border-[#25D366]/40 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-[#25D366]/30 border border-emerald-200 dark:border-[#25D366]/40 flex items-center justify-center text-emerald-600 dark:text-[#25D366] group-hover:bg-emerald-600 dark:group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
                           <WhatsAppIcon size={18} className="fill-current" />
                         </div>
                         <div className="text-left">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Confirmar</p>
-                          <p className="text-sm font-black text-[#25D366]">Chat en<br/>WhatsApp</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-emerald-700 dark:text-zinc-400">Confirmar</p>
+                          <p className="text-sm font-black text-emerald-600 dark:text-[#25D366]">Chat en<br/>WhatsApp</p>
                         </div>
                       </a>
                     </div>
 
                     <button
                       onClick={() => { setFormStatus('idle'); setSelectedService('Línea de inspección gratuita'); }}
-                      className="mt-6 text-primary font-bold uppercase tracking-widest text-xs hover:underline"
+                      className="mt-6 text-primary font-bold uppercase tracking-widest text-xs hover:underline cursor-pointer"
                     >
                       Solicitar otra cita
                     </button>
@@ -300,79 +301,82 @@ export default function Contacto() {
                     className="space-y-5"
                   >
                     <div className="mb-6">
-                      <h2 className="text-2xl font-black tracking-tight mb-1">Completa tu registro</h2>
-                      <p className="text-sm text-zinc-500">Solo unos datos y te contactamos por WhatsApp al instante.</p>
+                      <h2 className="text-2xl font-black tracking-tight mb-1 text-slate-900 dark:text-white">Completa tu registro</h2>
+                      <p className="text-sm text-slate-500 dark:text-zinc-400">Solo unos datos y te contactamos por WhatsApp al instante.</p>
                     </div>
 
                     {/* Nombre + Teléfono */}
                     <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="contacto-nombre" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Nombre</label>
+                      <div className="space-y-1.5">
+                        <label htmlFor="contacto-nombre" className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-400 ml-2 sm:ml-4">Nombre</label>
                         <input
                           id="contacto-nombre"
                           required
                           name="nombre"
                           type="text"
                           placeholder="Ej: Carlos Rodríguez"
-                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-white"
+                          className="w-full bg-slate-50 dark:bg-black/60 border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 sm:py-4 px-5 sm:px-6 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-600 text-slate-900 dark:text-white text-sm font-semibold shadow-sm hover:border-slate-400 dark:hover:border-white/20"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <label htmlFor="contacto-telefono" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Teléfono</label>
+                      <div className="space-y-1.5">
+                        <label htmlFor="contacto-telefono" className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-400 ml-2 sm:ml-4">Teléfono</label>
                         <input
                           id="contacto-telefono"
                           required
                           name="telefono"
                           type="tel"
                           placeholder="Ej: 0412 000 0000"
-                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-white"
+                          className="w-full bg-slate-50 dark:bg-black/60 border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 sm:py-4 px-5 sm:px-6 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-600 text-slate-900 dark:text-white text-sm font-semibold shadow-sm hover:border-slate-400 dark:hover:border-white/20"
                         />
                       </div>
                     </div>
 
                     {/* Vehículo */}
-                    <div className="space-y-2">
-                      <label htmlFor="contacto-vehiculo" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Vehículo</label>
+                    <div className="space-y-1.5">
+                      <label htmlFor="contacto-vehiculo" className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-400 ml-2 sm:ml-4">Vehículo</label>
                       <div className="relative">
-                        <Car className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600" />
+                        <Car className="absolute left-5 sm:left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-zinc-500" />
                         <input
                           id="contacto-vehiculo"
                           required
                           name="vehiculo"
                           type="text"
                           placeholder="Ej: Toyota Hilux 2022 — Gris"
-                          className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-14 pr-6 focus:border-primary outline-none transition-all placeholder:text-zinc-700 text-white"
+                          className="w-full bg-slate-50 dark:bg-black/60 border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 sm:py-4 pl-12 sm:pl-14 pr-5 sm:pr-6 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-600 text-slate-900 dark:text-white text-sm font-semibold shadow-sm hover:border-slate-400 dark:hover:border-white/20"
                         />
                       </div>
                     </div>
 
                     {/* Servicio */}
-                    <div className="space-y-2">
-                      <label htmlFor="contacto-servicio" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Servicio Requerido</label>
-                      <select
-                        id="contacto-servicio"
-                        name="servicio"
-                        value={selectedService}
-                        onChange={(e) => setSelectedService(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 focus:border-primary outline-none transition-all appearance-none cursor-pointer text-white"
-                      >
-                        <option value="Línea de inspección gratuita">Línea de inspección gratuita</option>
-                        {services.length > 0 ? (
-                          services.map((s, idx) => (
-                            <option key={s.id || idx} value={s.title}>{s.title}</option>
-                          ))
-                        ) : (
-                          <>
-                            <option value="Mecánica general">Mecánica general</option>
-                            <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
-                            <option value="Electricidad y electrónica">Electricidad y electrónica</option>
-                            <option value="Frenos y suspensión">Frenos y suspensión</option>
-                            <option value="Inyección electrónica">Inyección electrónica</option>
-                            <option value="Climatización">Climatización</option>
-                          </>
-                        )}
-                        <option value="Otro">Otro (Especificar)</option>
-                      </select>
+                    <div className="space-y-1.5">
+                      <label htmlFor="contacto-servicio" className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-400 ml-2 sm:ml-4">Servicio Requerido</label>
+                      <div className="relative">
+                        <select
+                          id="contacto-servicio"
+                          name="servicio"
+                          value={selectedService}
+                          onChange={(e) => setSelectedService(e.target.value)}
+                          className="w-full bg-slate-50 dark:bg-black/60 border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 sm:py-4 pl-5 sm:pl-6 pr-10 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all appearance-none cursor-pointer text-slate-900 dark:text-white text-sm font-semibold shadow-sm hover:border-slate-400 dark:hover:border-white/20"
+                        >
+                          <option value="Línea de inspección gratuita" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Línea de inspección gratuita</option>
+                          {services.length > 0 ? (
+                            services.map((s, idx) => (
+                              <option key={s.id || idx} value={s.title} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">{s.title}</option>
+                            ))
+                          ) : (
+                            <>
+                              <option value="Mecánica general" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Mecánica general</option>
+                              <option value="Mantenimiento preventivo" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Mantenimiento preventivo</option>
+                              <option value="Electricidad y electrónica" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Electricidad y electrónica</option>
+                              <option value="Frenos y suspensión" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Frenos y suspensión</option>
+                              <option value="Inyección electrónica" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Inyección electrónica</option>
+                              <option value="Climatización" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Climatización</option>
+                            </>
+                          )}
+                          <option value="Otro" className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1">Otro (Especificar)</option>
+                        </select>
+                        <ChevronDown className="w-4 h-4 absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-zinc-400" />
+                      </div>
                     </div>
 
                     {selectedService === 'Línea de inspección gratuita' && (
@@ -385,8 +389,8 @@ export default function Contacto() {
                     )}
 
                     {/* Descripción — siempre visible */}
-                    <motion.div layout className="space-y-2">
-                      <label htmlFor="contacto-descripcion" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">
+                    <motion.div layout className="space-y-1.5">
+                      <label htmlFor="contacto-descripcion" className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-400 ml-2 sm:ml-4">
                         {selectedService === 'Otro' ? 'Descripción del Servicio' : 'Descripción / Observaciones'}
                       </label>
                       <textarea
@@ -411,7 +415,7 @@ export default function Contacto() {
                             : 'Describe detalladamente lo que necesitas...'
                         }
                         rows={3}
-                        className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 px-6 focus:border-primary outline-none transition-all text-sm resize-none text-white placeholder:text-zinc-700"
+                        className="w-full bg-slate-50 dark:bg-black/60 border border-slate-300 dark:border-white/10 rounded-2xl py-3.5 sm:py-4 px-5 sm:px-6 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all text-sm resize-none text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-zinc-600 shadow-sm hover:border-slate-400 dark:hover:border-white/20"
                       />
                     </motion.div>
 
@@ -419,7 +423,7 @@ export default function Contacto() {
                     <button
                       disabled={formStatus === 'loading'}
                       type="submit"
-                      className="btn-primary w-full !py-5 shadow-[0_20px_50px_rgba(194,164,114,0.3)] flex items-center justify-center gap-3 text-base"
+                      className="btn-primary w-full !py-4 sm:!py-5 shadow-[0_20px_50px_rgba(194,164,114,0.3)] flex items-center justify-center gap-3 text-sm sm:text-base cursor-pointer"
                     >
                       {formStatus === 'loading' ? (
                         'Procesando...'
@@ -438,14 +442,14 @@ export default function Contacto() {
                         href={config.GOOGLE_MAPS_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-primary/40 hover:bg-white/8 transition-all duration-300 group"
+                        className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl hover:border-primary/40 hover:bg-slate-100 dark:hover:bg-white/8 transition-all duration-300 group shadow-sm"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-white/5 border border-red-200 dark:border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
                           <MapPin size={18} />
                         </div>
                         <div>
-                          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-0.5">Ubicación</p>
-                          <p className="text-sm font-black text-white leading-tight">Porlamar,<br/>Nueva Esparta</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 mb-0.5">Ubicación</p>
+                          <p className="text-sm font-black text-slate-900 dark:text-white leading-tight">Porlamar,<br/>Nueva Esparta</p>
                         </div>
                       </a>
 
@@ -453,19 +457,19 @@ export default function Contacto() {
                         href={config.WHATSAPP_LINK}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-4 bg-[#25D366]/10 border border-[#25D366]/20 rounded-2xl hover:border-[#25D366]/50 hover:bg-[#25D366]/15 transition-all duration-300 group"
+                        className="flex items-center gap-3 p-4 bg-emerald-50 dark:bg-[#25D366]/10 border border-emerald-200 dark:border-[#25D366]/20 rounded-2xl hover:border-[#25D366]/50 hover:bg-emerald-100 dark:hover:bg-[#25D366]/15 transition-all duration-300 group shadow-sm"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-[#25D366]/15 border border-[#25D366]/20 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-[#25D366]/15 border border-emerald-200 dark:border-[#25D366]/20 flex items-center justify-center text-emerald-600 dark:text-[#25D366] group-hover:bg-emerald-600 dark:group-hover:bg-[#25D366] group-hover:text-white transition-all shrink-0">
                           <WhatsAppIcon size={20} className="fill-current" />
                         </div>
                         <div>
-                          <p className="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-0.5">Escríbenos ahora</p>
-                          <p className="text-sm font-black text-[#25D366]">Chat en WhatsApp</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-emerald-700 dark:text-zinc-400 mb-0.5">Escríbenos ahora</p>
+                          <p className="text-sm font-black text-emerald-600 dark:text-[#25D366]">Chat en WhatsApp</p>
                         </div>
                       </a>
                     </div>
 
-                    <p className="text-[11px] sm:text-xs text-center text-zinc-500 leading-relaxed font-medium pt-1 sm:pt-2">Una vez enviado, un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu hora exacta. ¡Te esperamos en nuestro taller!</p>
+                    <p className="text-[11px] sm:text-xs text-center text-slate-500 dark:text-zinc-500 leading-relaxed font-medium pt-1 sm:pt-2">Una vez enviado, un asesor de servicio te contactará de inmediato por WhatsApp para confirmar tu hora exacta. ¡Te esperamos en nuestro taller!</p>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -475,7 +479,7 @@ export default function Contacto() {
       </main>
 
       {/* Footer */}
-      <footer className="py-5 text-center text-zinc-600 text-xs border-t border-white/5 relative z-10 bg-black/40">
+      <footer className="py-5 text-center text-slate-500 dark:text-zinc-500 text-xs border-t border-slate-200 dark:border-white/5 relative z-10 bg-slate-100 dark:bg-black/40">
         © 2026 SOLUCIONES MASTERTECH C.A. Todos los derechos reservados.
       </footer>
     </div>
