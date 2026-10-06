@@ -888,8 +888,8 @@ export default function App() {
       {/* =========================================================================
           SECTION 1: HERO - EDITORIAL LIGHT DEALER SHOWCASE
           ========================================================================= */}
-      <section className="relative pt-[78px] sm:pt-[82px] lg:pt-[86px] pb-2 sm:pb-2.5 lg:pb-2.5 px-4 sm:px-6 overflow-hidden bg-slate-950 text-white transition-colors duration-300 border-b border-slate-800">
-        {/* Background Hero Image with 55% dark overlay */}
+      <section className="relative pt-[74px] sm:pt-[82px] lg:pt-[86px] pb-10 sm:pb-8 lg:pb-4 px-4 sm:px-6 overflow-hidden bg-slate-950 text-white transition-colors duration-300 border-b border-slate-800">
+        {/* Background Hero Image with protective contrast overlay for crisp legibility */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img 
             src={config.HERO_IMG || "/assets/instalaciones.webp"} 
@@ -897,9 +897,9 @@ export default function App() {
             className="w-full h-full object-cover object-center select-none"
             loading="eager"
           />
-          {/* Capa de oscuridad al 55% para que la imagen de fondo se aprecie con total claridad */}
-          <div className="absolute inset-0 bg-slate-950/55 dark:bg-black/55 backdrop-blur-[0.5px]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/50" />
+          {/* Capa de contraste optimizada: mayor opacidad en movil para legibilidad total del texto */}
+          <div className="absolute inset-0 bg-slate-950/80 sm:bg-slate-950/60 dark:bg-black/85 sm:dark:bg-black/60 backdrop-blur-[1px] sm:backdrop-blur-[0.5px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-950/75 to-slate-950/95 sm:from-slate-950/90 sm:via-transparent sm:to-slate-950/50" />
         </div>
 
         {/* Subtle high-end architectural automotive dot pattern background */}
@@ -909,17 +909,20 @@ export default function App() {
         <div className="max-w-7xl mx-auto relative z-10 w-full">
           
           {/* Status & Location Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2 px-3.5 py-1.5 mb-2.5 lg:mb-3 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/10 text-xs text-slate-200 shadow-md">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2 px-3 sm:px-3.5 py-1.5 mb-3 lg:mb-3.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-white/10 text-xs text-slate-200 shadow-md">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
               <MapPin size={13} className="text-red-500 shrink-0" />
-              <span className="font-medium text-[11px] sm:text-xs text-slate-300">Calle Progreso, Av. Circunvalación Nte., Porlamar 6301, Nueva Esparta</span>
+              <span className="font-medium text-[11px] sm:text-xs text-slate-200 truncate">
+                <span className="sm:hidden">Porlamar · Isla de Margarita</span>
+                <span className="hidden sm:inline">Calle Progreso, Av. Circunvalación Nte., Porlamar 6301, Nueva Esparta</span>
+              </span>
             </div>
             {(() => {
               const tallerStatus = getTallerStatus(config.IS_OPEN);
               return (
-                <div className="flex items-center gap-1.5 shrink-0 bg-slate-950/60 px-2.5 py-0.5 rounded-full border border-white/5">
+                <div className="flex items-center gap-1.5 shrink-0 bg-slate-950/70 px-2 sm:px-2.5 py-0.5 rounded-full border border-white/10">
                   <span className={`w-2 h-2 rounded-full ${tallerStatus.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-                  <span className="font-semibold text-white text-[11px]">
+                  <span className="font-semibold text-white text-[10px] sm:text-[11px] whitespace-nowrap">
                     {tallerStatus.badgeText}
                   </span>
                 </div>
@@ -936,27 +939,27 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="lg:col-span-7 flex flex-col justify-center"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-red-950/70 border border-red-500/30 text-red-400 text-[11px] font-bold tracking-wider mb-2 uppercase backdrop-blur-md shadow-sm w-fit">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 rounded-full bg-red-950/80 border border-red-500/35 text-red-300 text-[10px] sm:text-[11px] font-bold tracking-wider mb-2 uppercase backdrop-blur-md shadow-sm w-fit">
                 <ShieldCheck size={13} className="text-red-400 shrink-0" />
                 <span>TALLER MECÁNICO & CENTRO DE DIAGNÓSTICO</span>
               </div>
 
-              <h1 className="text-white text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black tracking-tight mb-2 leading-[1.16] drop-shadow-md">
+              <h1 className="text-white text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black tracking-tight mb-2 leading-[1.18] drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 Tecnología, Precisión <br className="hidden sm:inline" />
                 <span>y Confianza Automotriz</span>
               </h1>
 
-              <p className="text-slate-200/90 text-xs sm:text-[13px] mb-3 max-w-xl leading-relaxed font-normal drop-shadow-sm">
-                Atención especializada en <strong className="text-white font-semibold">Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos de alta calidad.
+              <p className="text-slate-100 sm:text-slate-200/95 text-xs sm:text-[13px] mb-3.5 max-w-xl leading-relaxed font-normal drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                Atención especializada en <strong className="text-white font-bold">Jeep, Toyota y todas las marcas</strong> en Porlamar. Diagnóstico computarizado por escáner de nivel OEM, mecánica integral, climatización y repuestos de alta calidad.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 mb-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5 mb-3.5">
                 <a 
                   href={config.WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary !px-5 !py-2.5 text-xs sm:text-sm shadow-xl font-bold flex items-center justify-center gap-2 rounded-xl"
+                  className="btn-primary !px-4 sm:!px-5 !py-2.5 text-xs sm:text-sm shadow-xl font-bold flex items-center justify-center gap-2 rounded-xl"
                 >
                   <WhatsAppIcon size={17} />
                   <span>CONSULTAR POR WHATSAPP</span>
@@ -965,7 +968,7 @@ export default function App() {
 
                 <a 
                   href="/servicios" 
-                  className="!px-5 !py-2.5 text-xs sm:text-sm !bg-white/10 hover:!bg-white/20 !text-white !border !border-white/25 hover:!border-red-500/60 shadow-md backdrop-blur-md transition-all flex items-center justify-center gap-2 font-semibold rounded-xl cursor-pointer"
+                  className="!px-4 sm:!px-5 !py-2.5 text-xs sm:text-sm !bg-white/10 hover:!bg-white/20 !text-white !border !border-white/25 hover:!border-red-500/60 shadow-md backdrop-blur-md transition-all flex items-center justify-center gap-2 font-semibold rounded-xl cursor-pointer"
                 >
                   <Wrench size={15} className="text-red-400" />
                   <span>NUESTROS SERVICIOS</span>
@@ -974,19 +977,19 @@ export default function App() {
 
 
               {/* 3 Clean Key Trust Stats */}
-              <div className="grid grid-cols-3 gap-2.5 sm:gap-3 pt-2.5 border-t border-white/10">
-                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/75 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left transition-colors hover:border-white/20">
-                  <div className="text-base sm:text-lg font-black text-white tracking-tight">+6 Puestos</div>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-2.5 border-t border-white/10">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left transition-colors hover:border-white/20">
+                  <div className="text-sm sm:text-base lg:text-lg font-black text-white tracking-tight">+6 Puestos</div>
                   <div className="text-[10px] sm:text-[11px] text-slate-300 font-medium mt-0.5 leading-tight">Atención Simultánea</div>
                 </div>
 
-                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/75 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left transition-colors hover:border-white/20">
-                  <div className="text-base sm:text-lg font-black text-white tracking-tight">Escáner OEM</div>
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left transition-colors hover:border-white/20">
+                  <div className="text-sm sm:text-base lg:text-lg font-black text-white tracking-tight">Escáner OEM</div>
                   <div className="text-[10px] sm:text-[11px] text-slate-300 font-medium mt-0.5 leading-tight">Diagnóstico Preciso</div>
                 </div>
 
-                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/75 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left transition-colors hover:border-white/20">
-                  <div className="text-base sm:text-lg font-black text-white tracking-tight">+1.850</div>
+                <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/10 shadow-sm text-center sm:text-left transition-colors hover:border-white/20">
+                  <div className="text-sm sm:text-base lg:text-lg font-black text-white tracking-tight">+1.850</div>
                   <div className="text-[10px] sm:text-[11px] text-slate-300 font-medium mt-0.5 leading-tight">Vehículos Atendidos</div>
                 </div>
               </div>
@@ -997,7 +1000,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="lg:col-span-5 relative w-full flex justify-center items-center"
+              className="lg:col-span-5 relative w-full flex justify-center items-center mt-2 sm:mt-3 lg:mt-0"
             >
               {(() => {
                 const reelUrl = (config.HERO_REEL_URL || '').trim();
@@ -1008,7 +1011,7 @@ export default function App() {
                 const directVideoSrc = isDirectVideoUrl(reelUrl) ? reelUrl : "/assets/taller_video.mp4";
 
                 return (
-                  <div className="relative w-full max-w-[210px] sm:max-w-[225px] lg:max-w-[235px] xl:max-w-[245px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-white/15 shadow-2xl group flex items-center justify-center">
+                  <div className="relative w-full max-w-[195px] sm:max-w-[215px] lg:max-w-[235px] xl:max-w-[245px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-white/15 shadow-2xl group flex items-center justify-center">
                     {isInstagram ? (
                       <div className="absolute inset-0 w-full h-full overflow-hidden bg-black flex items-center justify-center">
                         <iframe 
