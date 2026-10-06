@@ -991,11 +991,15 @@ export default function Jornadas() {
                       <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4">
                         <div>
                           <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 block">PRECIO REGULAR</span>
-                          <span className="text-base text-slate-400 dark:text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
+                          <span className="text-base text-slate-400 dark:text-zinc-400 line-through font-bold">
+                            {currentJornada.regularPrice && currentJornada.regularPrice !== '---' ? currentJornada.regularPrice : 'Consultar'}
+                          </span>
                         </div>
                         <div className="text-right">
                           <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">PRECIO JORNADA</span>
-                          <span className="text-3xl font-display font-black text-red-600 dark:text-primary">{currentJornada.promoPrice}</span>
+                          <span className="text-2xl sm:text-3xl font-display font-black text-red-600 dark:text-primary">
+                            {currentJornada.promoPrice && currentJornada.promoPrice !== '---' ? currentJornada.promoPrice : 'Cupo Promocional'}
+                          </span>
                         </div>
                       </div>
 

@@ -1359,7 +1359,7 @@ export default function App() {
                           isTop 
                             ? 'border-red-500 shadow-md shadow-red-500/10 dark:ring-1 dark:ring-red-500/40' 
                             : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                        } ${isSingle ? 'lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
+                        } ${isSingle ? 'flex flex-col lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
                       >
                         {/* Top highlight badge for maximum discount or selected promo */}
                         {isTop && (
@@ -1383,24 +1383,26 @@ export default function App() {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
                           
                           {/* Category Badge */}
-                          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                          <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
                             {item.badge}
                           </div>
 
-                          {/* Prominent Discount Badge */}
-                          <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
-                            <Tag size={12} />
-                            <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
-                          </div>
+                          {/* Prominent Discount Badge (only if discount percentage exists or if not already showing the badge below) */}
+                          {(item.discountPct > 0 || (item.discountBadge && item.promoPrice && item.promoPrice !== '---')) && (
+                            <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full shadow-lg border border-red-400 flex items-center gap-1">
+                              <Tag size={12} />
+                              <span>{item.discountPct > 0 ? `-${item.discountPct}% OFF` : item.discountBadge}</span>
+                            </div>
+                          )}
 
-                          {/* Pricing Tag Overlay */}
-                          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                          {/* Pricing & Duration Tag Overlay */}
+                          <div className="absolute bottom-4 sm:bottom-5 left-4 sm:left-5 right-4 sm:right-5 flex items-end justify-between gap-2.5">
                             <div>
                               {item.regularPrice && item.regularPrice !== '---' && (
-                                <span className="text-slate-300 line-through text-xs block font-medium">
+                                <span className="text-slate-300 line-through text-xs block font-semibold mb-0.5 drop-shadow">
                                   Precio Normal: {item.regularPrice}
                                 </span>
                               )}
@@ -1409,14 +1411,15 @@ export default function App() {
                                   {item.promoPrice}
                                 </span>
                               ) : (
-                                <span className="text-base sm:text-xl font-bold text-amber-300 tracking-tight drop-shadow">
-                                  {item.discountBadge || "Cupo con Descuento"}
-                                </span>
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md border border-amber-500/50 text-amber-300 font-black text-xs sm:text-sm tracking-wide shadow-md">
+                                  <Sparkles size={14} className="text-amber-400 shrink-0" />
+                                  <span>{item.discountBadge || "Cupo con Descuento"}</span>
+                                </div>
                               )}
                             </div>
                             {item.duration && (
-                              <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-medium">
-                                <Clock size={12} className="text-red-400" />
+                              <span className="inline-flex items-center gap-1.5 text-xs text-white/95 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 font-bold shadow-md shrink-0">
+                                <Clock size={13} className="text-red-400 shrink-0" />
                                 <span>{item.duration}</span>
                               </span>
                             )}
@@ -1524,7 +1527,7 @@ export default function App() {
                           isTop 
                             ? 'border-red-500/80 ring-2 ring-red-500/30' 
                             : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                        } ${isSingle ? 'lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
+                        } ${isSingle ? 'flex flex-col lg:grid lg:grid-cols-12 items-stretch' : 'flex flex-col justify-between'}`}
                       >
                         {/* Top highlight badge */}
                         {isTop && (
@@ -1548,10 +1551,10 @@ export default function App() {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
                           
                           {/* Category Badge */}
-                          <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
+                          <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md">
                             {item.category || item.badge || 'Repuesto OEM'}
                           </div>
 
@@ -1562,10 +1565,10 @@ export default function App() {
                           </div>
 
                           {/* Pricing Tag Overlay */}
-                          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                          <div className="absolute bottom-4 sm:bottom-5 left-4 sm:left-5 right-4 sm:right-5 flex items-end justify-between gap-2.5">
                             <div>
                               {item.regularPrice && (
-                                <span className="text-slate-300 line-through text-xs block font-medium">
+                                <span className="text-slate-300 line-through text-xs block font-semibold mb-0.5 drop-shadow">
                                   Regular: {item.regularPrice}
                                 </span>
                               )}
@@ -1574,7 +1577,7 @@ export default function App() {
                               </span>
                             </div>
                             {item.partNumber && (
-                              <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-white/10 font-mono font-bold">
+                              <span className="inline-flex items-center gap-1 text-[11px] text-white/90 bg-black/80 backdrop-blur-sm px-2.5 py-1.5 rounded-xl border border-white/15 font-mono font-bold shadow-md">
                                 <span>OEM #{item.partNumber}</span>
                               </span>
                             )}
