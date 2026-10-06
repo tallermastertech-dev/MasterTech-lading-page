@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { getTallerStatus } from './utils/tallerStatus';
 
 interface NavbarProps {
-  activePage?: 'inicio' | 'nosotros' | 'servicios' | 'catalogo' | 'faq' | 'contacto';
+  activePage?: 'inicio' | 'nosotros' | 'servicios' | 'catalogo' | 'faq' | 'contacto' | 'jornadas';
   config?: any;
 }
 

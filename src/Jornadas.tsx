@@ -596,21 +596,21 @@ export default function Jornadas() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0b0f] text-white selection:bg-primary selection:text-black font-sans jornada-scope">
-      <Navbar />
+    <div className="theme-root min-h-screen bg-slate-50 dark:bg-[#0a0b0f] text-slate-900 dark:text-white selection:bg-primary selection:text-white font-sans transition-colors duration-300">
+      <Navbar activePage="jornadas" />
 
       {/* Hero Banner with Countdown Timer */}
-      <section className="relative pt-32 pb-8 sm:pb-10 px-6 overflow-hidden border-b border-white/10 jornada-hero-section">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
+      <section className="relative pt-32 pb-8 sm:pb-10 px-6 overflow-hidden border-b border-slate-200 dark:border-white/10 bg-slate-100/60 dark:bg-transparent">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-primary/5 dark:bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-96 h-96 bg-amber-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-primary/20 border border-amber-500/30 text-amber-300 text-[11px] font-black uppercase tracking-widest mb-4 shadow-lg shadow-amber-500/10"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 dark:bg-gradient-to-r dark:from-amber-500/20 dark:to-primary/20 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-[11px] font-black uppercase tracking-widest mb-4 shadow-sm dark:shadow-lg dark:shadow-amber-500/10"
           >
-            <Flame className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <Flame className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400 animate-pulse" />
             <span>EDICIÓN 2026 · CUPOS LIMITADOS</span>
           </motion.div>
 
@@ -618,10 +618,10 @@ export default function Jornadas() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-tight uppercase leading-tight mb-3 max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl md:text-5xl font-display font-black tracking-tight uppercase leading-tight mb-3 max-w-3xl mx-auto text-slate-900 dark:text-white"
           >
-            <span style={{ color: '#ffffff' }}>JORNADAS</span>{' '}
-            <span className="text-amber-400 font-black" style={{ color: '#fbbf24' }}>
+            <span>JORNADAS</span>{' '}
+            <span className="text-amber-500 dark:text-amber-400 font-black">
               ESPECIALES
             </span>
           </motion.h1>
@@ -630,8 +630,7 @@ export default function Jornadas() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6 font-medium"
-            style={{ color: '#cbd5e1' }}
+            className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6 font-medium"
           >
             Servicios técnicos de alto nivel a precio promocional exclusivo. Reserva tu cupo antes del cierre de agenda.
           </motion.p>
@@ -641,11 +640,11 @@ export default function Jornadas() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="inline-flex flex-col sm:flex-row items-center gap-4 bg-[#12141a]/95 backdrop-blur-xl border border-amber-500/40 p-4 md:p-5 rounded-3xl shadow-2xl mb-2"
+            className="inline-flex flex-col sm:flex-row items-center gap-4 bg-white dark:bg-[#12141a]/95 backdrop-blur-xl border border-amber-500/40 p-4 md:p-5 rounded-3xl shadow-xl dark:shadow-2xl mb-2"
           >
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest sm:pr-4 sm:border-r sm:border-white/10" style={{ color: '#fbbf24' }}>
-              <Clock className="w-5 h-5 animate-spin" style={{ animationDuration: '6s', color: '#fbbf24' }} />
-              <span style={{ color: '#fbbf24' }}>{config.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}</span>
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest sm:pr-4 sm:border-r border-slate-200 dark:border-white/10 text-amber-600 dark:text-amber-400">
+              <Clock className="w-5 h-5 animate-spin text-amber-500 dark:text-amber-400" style={{ animationDuration: '6s' }} />
+              <span>{config.JORNADA_COUNTDOWN_TITLE || 'CIERRE DE CUPOS JORNADA:'}</span>
             </div>
 
             <div className="flex items-center gap-3">
@@ -656,15 +655,15 @@ export default function Jornadas() {
                 { val: timeLeft.secs, unit: "Seg" }
               ].map((t, idx) => (
                 <React.Fragment key={idx}>
-                  <div className="bg-black/70 border border-white/15 rounded-2xl px-3.5 py-2 min-w-[65px] text-center">
-                    <span className="text-2xl md:text-3xl font-display font-black block leading-none" style={{ color: '#fbbf24' }}>
+                  <div className="bg-slate-100 dark:bg-black/70 border border-slate-200 dark:border-white/15 rounded-2xl px-3.5 py-2 min-w-[65px] text-center shadow-sm">
+                    <span className="text-2xl md:text-3xl font-display font-black block leading-none text-slate-900 dark:text-amber-400">
                       {String(t.val).padStart(2, '0')}
                     </span>
-                    <span className="text-[9px] font-bold uppercase tracking-widest mt-1 block" style={{ color: '#a1a1aa' }}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest mt-1 block text-slate-500 dark:text-zinc-400">
                       {t.unit}
                     </span>
                   </div>
-                  {idx < 3 && <span className="text-xl font-bold" style={{ color: 'rgba(251, 191, 36, 0.6)' }}>:</span>}
+                  {idx < 3 && <span className="text-xl font-bold text-amber-500/60 dark:text-amber-400/60">:</span>}
                 </React.Fragment>
               ))}
             </div>
@@ -725,12 +724,12 @@ export default function Jornadas() {
           {/* Jornadas Navigation Tabs Slider */}
           <section className="pt-4 pb-6 px-4 md:px-6 max-w-7xl mx-auto">
             <div className="text-center mb-4">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-white mb-1.5">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-black uppercase tracking-tight text-slate-900 dark:text-white mb-1.5">
                 {currentJornadasList.length === 1 
                   ? "JORNADA ACTIVA PARA TU VEHÍCULO" 
                   : "SELECCIONA LA JORNADA PARA TU VEHÍCULO"}
               </h2>
-              <p className="text-xs md:text-sm text-zinc-400">
+              <p className="text-xs md:text-sm text-slate-500 dark:text-zinc-400">
                 {currentJornadasList.length === 1
                   ? "Atención técnica especializada y cupos estrictamente limitados por fecha"
                   : "Desliza o selecciona para explorar todas las jornadas disponibles"}
@@ -740,34 +739,34 @@ export default function Jornadas() {
             {currentJornadasList.length === 1 ? (
               /* Cuando es una sola jornada: ocupa todo el ancho y se presenta de forma destacada sin flechas */
               <div className="w-full">
-                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-3xl bg-gradient-to-r from-amber-500/20 via-primary/20 to-amber-500/20 border-2 border-primary/60 shadow-[0_10px_35px_rgba(194,164,114,0.25)] text-white backdrop-blur-xl">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-3xl bg-white dark:bg-gradient-to-r dark:from-amber-500/20 dark:via-primary/20 dark:to-amber-500/20 border-2 border-amber-500/30 dark:border-primary/60 shadow-md dark:shadow-[0_10px_35px_rgba(194,164,114,0.25)] text-slate-900 dark:text-white backdrop-blur-xl">
                   <div className="flex items-center gap-4 text-center sm:text-left">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
-                      {currentJornada.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
+                    <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                      {currentJornada.icon || <Zap className="w-6 h-6 text-amber-600 dark:text-amber-400 shrink-0" />}
                     </div>
                     <div>
                       <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
                         <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-black tracking-wider">
                           {currentJornada.badge || 'JORNADA ESPECIAL'}
                         </span>
-                        <span className="text-xs text-zinc-300 font-semibold">
+                        <span className="text-xs text-slate-500 dark:text-zinc-300 font-semibold">
                           Duración estimada: {currentJornada.duration}
                         </span>
                       </div>
-                      <h3 className="text-base sm:text-lg font-black text-white">
+                      <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
                         {currentJornada.title}
                       </h3>
                     </div>
                   </div>
 
                   {currentJornada.promoPrice && currentJornada.promoPrice !== '---' && (
-                    <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/10 w-full sm:w-auto">
+                    <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-white/10 w-full sm:w-auto">
                       {currentJornada.regularPrice && (
-                        <span className="text-xs text-zinc-400 line-through block">
+                        <span className="text-xs text-slate-400 dark:text-zinc-400 line-through block">
                           {currentJornada.regularPrice}
                         </span>
                       )}
-                      <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
+                      <span className="text-xl sm:text-2xl font-black text-red-600 dark:text-amber-400 font-mono">
                         {currentJornada.promoPrice}
                       </span>
                     </div>
@@ -781,7 +780,7 @@ export default function Jornadas() {
                   <button
                     type="button"
                     onClick={() => scrollTabs('left')}
-                    className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+                    className="hidden md:flex absolute -left-4 z-20 w-11 h-11 rounded-full bg-white dark:bg-black/90 hover:bg-amber-500 text-slate-800 dark:text-amber-400 hover:text-black border border-slate-200 dark:border-amber-500/40 items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
                     title="Deslizar hacia la izquierda"
                   >
                     <ChevronLeft className="w-6 h-6" />
@@ -805,13 +804,13 @@ export default function Jornadas() {
                         onClick={() => setActiveJornadaId(j.id)}
                         className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
                           isActive 
-                            ? 'bg-gradient-to-r from-amber-500/30 to-primary/30 border-primary text-white shadow-[0_10px_30px_rgba(194,164,114,0.3)] scale-105 z-10' 
-                            : 'bg-[#12141a] border-white/10 text-zinc-400 hover:text-white hover:border-amber-500/40 hover:bg-white/5'
+                            ? 'bg-amber-500/15 dark:bg-gradient-to-r dark:from-amber-500/30 dark:to-primary/30 border-amber-500 dark:border-primary text-slate-900 dark:text-white shadow-md scale-105 z-10' 
+                            : 'bg-white dark:bg-[#12141a] border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-amber-500/40'
                         }`}
                       >
-                        {j.icon || <Zap className="w-6 h-6 text-amber-400 shrink-0" />}
+                        {j.icon || <Zap className="w-6 h-6 text-amber-500 dark:text-amber-400 shrink-0" />}
                         <div className="text-left">
-                          <span className="block text-[10px] font-black uppercase text-amber-400 tracking-wider">{j.badge}</span>
+                          <span className="block text-[10px] font-black uppercase text-amber-600 dark:text-amber-400 tracking-wider">{j.badge}</span>
                           <span className="font-bold text-xs whitespace-nowrap">{j.title ? j.title.split('(')[0] : 'Jornada'}</span>
                         </div>
                       </button>
@@ -824,7 +823,7 @@ export default function Jornadas() {
                   <button
                     type="button"
                     onClick={() => scrollTabs('right')}
-                    className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-black/90 hover:bg-amber-500 text-amber-400 hover:text-black border border-amber-500/40 items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+                    className="hidden md:flex absolute -right-4 z-20 w-11 h-11 rounded-full bg-white dark:bg-black/90 hover:bg-amber-500 text-slate-800 dark:text-amber-400 hover:text-black border border-slate-200 dark:border-amber-500/40 items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
                     title="Deslizar hacia la derecha"
                   >
                     <ChevronRight className="w-6 h-6" />
@@ -843,7 +842,7 @@ export default function Jornadas() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
-                className="grid lg:grid-cols-12 gap-8 items-start bg-[#12141a]/90 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden"
+                className="grid lg:grid-cols-12 gap-8 items-start bg-white dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-10 shadow-lg dark:shadow-2xl relative overflow-hidden text-slate-900 dark:text-white"
               >
                 {/* Background Ambient Glow */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
@@ -942,44 +941,44 @@ export default function Jornadas() {
                     </div>
                   )}
 
-                  <h2 className="text-2xl md:text-4xl font-display font-black tracking-tight uppercase text-white leading-tight">
+                  <h2 className="text-2xl md:text-4xl font-display font-black tracking-tight uppercase text-slate-900 dark:text-white leading-tight">
                     {currentJornada.title}
                   </h2>
 
-                  <p className="text-zinc-300 text-sm md:text-base leading-relaxed">
+                  <p className="text-slate-600 dark:text-zinc-300 text-sm md:text-base leading-relaxed">
                     {currentJornada.subtitle}
                   </p>
                   {/* Specs Grid */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                     {(currentJornada.specs || []).map((s, idx) => (
-                      <div key={idx} className="bg-black/50 border border-white/10 rounded-2xl p-3 text-center">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block mb-1">{s.label}</span>
-                        <span className="text-xs md:text-sm font-bold text-primary block truncate">{s.val}</span>
+                      <div key={idx} className="bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-2xl p-3 text-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 block mb-1">{s.label}</span>
+                        <span className="text-xs md:text-sm font-bold text-red-600 dark:text-primary block truncate">{s.val}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Benefits Checklist */}
-                  <div className="space-y-3 pt-4 border-t border-white/10">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-amber-400">BENEFICIOS INCLUIDOS EN LA JORNADA:</h3>
+                  <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-white/10">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">BENEFICIOS INCLUIDOS EN LA JORNADA:</h3>
                     <div className="space-y-2.5">
                       {(currentJornada.benefits || []).map((benefit, idx) => (
                         <div key={idx} className="flex items-start gap-3">
-                          <div className="w-5 h-5 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-0.5">
+                          <div className="w-5 h-5 rounded-full bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 flex items-center justify-center shrink-0 mt-0.5">
                             <Check className="w-3 h-3 text-primary" />
                           </div>
-                          <span className="text-xs md:text-sm text-zinc-300 font-medium leading-normal">{benefit}</span>
+                          <span className="text-xs md:text-sm text-slate-700 dark:text-zinc-300 font-medium leading-normal">{benefit}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Vehicle Compatibility Banner */}
-                  <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex items-start gap-3">
-                    <Car className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 flex items-start gap-3">
+                    <Car className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">VEHÍCULOS Y MARCAS COMPATIBLES:</span>
-                      <p className="text-xs text-zinc-300 leading-relaxed">{currentJornada.compatibleModels}</p>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-400 block mb-1">VEHÍCULOS Y MARCAS COMPATIBLES:</span>
+                      <p className="text-xs text-slate-700 dark:text-zinc-300 leading-relaxed">{currentJornada.compatibleModels}</p>
                     </div>
                   </div>
                 </div>
@@ -987,84 +986,84 @@ export default function Jornadas() {
                 {/* Right Column (5 cols) */}
                 <div className="lg:col-span-5 space-y-5 flex flex-col">
                   {/* Booking Card & Price */}
-                  <div className="flex flex-col space-y-5 bg-black/60 border border-white/10 rounded-3xl p-6 relative shadow-xl">
+                  <div className="flex flex-col space-y-5 bg-slate-50 dark:bg-black/60 border border-slate-200 dark:border-white/10 rounded-3xl p-6 relative shadow-md dark:shadow-xl">
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4">
                         <div>
-                          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 block">PRECIO REGULAR</span>
-                          <span className="text-base text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 block">PRECIO REGULAR</span>
+                          <span className="text-base text-slate-400 dark:text-zinc-400 line-through font-bold">{currentJornada.regularPrice}</span>
                         </div>
                         <div className="text-right">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">PRECIO JORNADA</span>
-                          <span className="text-3xl font-display font-black text-primary">{currentJornada.promoPrice}</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">PRECIO JORNADA</span>
+                          <span className="text-3xl font-display font-black text-red-600 dark:text-primary">{currentJornada.promoPrice}</span>
                         </div>
                       </div>
 
                       {currentJornada.discountBadge && (
                         <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
-                          <span className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center justify-center gap-1.5">
-                            <Flame className="w-4 h-4 text-amber-400" />
+                          <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
+                            <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                             {currentJornada.discountBadge}
                           </span>
                         </div>
                       )}
 
                       {currentJornada.popularAddon && (
-                        <p className="text-[11px] text-zinc-400 italic text-center">
+                        <p className="text-[11px] text-slate-500 dark:text-zinc-400 italic text-center">
                           {currentJornada.popularAddon}
                         </p>
                       )}
                     </div>
 
                     {/* Interactive Booking Form */}
-                    <form onSubmit={handleWhatsAppBooking} className="space-y-4 pt-2 border-t border-white/10">
-                      <h4 className="text-xs font-black uppercase tracking-widest text-white flex items-center gap-1.5">
+                    <form onSubmit={handleWhatsAppBooking} className="space-y-4 pt-2 border-t border-slate-200 dark:border-white/10">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white flex items-center gap-1.5">
                         <Calendar className="w-4 h-4 text-primary" />
                         <span>APARTAR MI CUPO EN LA JORNADA</span>
                       </h4>
 
                       <div className="space-y-3">
                         <div>
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Nombre Completo</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 block mb-1">Nombre Completo</label>
                           <input
                             type="text"
                             required
                             placeholder="Ej. Carlos Pérez"
                             value={clientName}
                             onChange={(e) => setClientName(e.target.value)}
-                            className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                            className="w-full bg-white dark:bg-black/80 border border-slate-300 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Teléfono</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 block mb-1">Teléfono</label>
                             <input
                               type="tel"
                               required
                               placeholder="Ej. 04123565012"
                               value={clientPhone}
                               onChange={(e) => setClientPhone(e.target.value)}
-                              className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                              className="w-full bg-white dark:bg-black/80 border border-slate-300 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary"
                             />
                           </div>
 
                           <div>
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Vehículo / Modelo</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 block mb-1">Vehículo / Modelo</label>
                             <input
                               type="text"
                               required
                               placeholder="Ej. Toyota Hilux 2020"
                               value={clientVehicle}
                               onChange={(e) => setClientVehicle(e.target.value)}
-                              className="w-full bg-black/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-primary"
+                              className="w-full bg-white dark:bg-black/80 border border-slate-300 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-primary"
                             />
                           </div>
                         </div>
 
                         {/* Slot Picker Integration */}
                         <div>
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block mb-1">
                             Seleccionar Turno y {jornadaDateLabel}
                           </label>
                           <InspectionSlotPicker
@@ -1086,8 +1085,8 @@ export default function Jornadas() {
                         <label 
                           className={`flex items-start gap-2.5 p-3 rounded-2xl border transition-all cursor-pointer select-none ${
                             acceptedPolicies 
-                              ? 'bg-amber-500/10 border-amber-500/40 text-white' 
-                              : 'bg-black/60 border-white/10 hover:border-amber-500/30 text-zinc-300'
+                              ? 'bg-amber-100/60 dark:bg-amber-500/10 border-amber-500/40 text-slate-900 dark:text-white' 
+                              : 'bg-white dark:bg-black/60 border-slate-200 dark:border-white/10 hover:border-amber-500/30 text-slate-700 dark:text-zinc-300'
                           }`}
                         >
                           <input
@@ -1095,7 +1094,7 @@ export default function Jornadas() {
                             required
                             checked={acceptedPolicies}
                             onChange={(e) => setAcceptedPolicies(e.target.checked)}
-                            className="mt-0.5 w-4 h-4 rounded border-amber-500/50 text-amber-500 focus:ring-amber-500/30 bg-black/80 cursor-pointer accent-amber-500 shrink-0"
+                            className="mt-0.5 w-4 h-4 rounded border-amber-500/50 text-amber-500 focus:ring-amber-500/30 bg-white dark:bg-black/80 cursor-pointer accent-amber-500 shrink-0"
                           />
                           <span className="text-xs leading-snug">
                             Al marcar esta casilla, acepto las{' '}
@@ -1106,11 +1105,11 @@ export default function Jornadas() {
                                 e.stopPropagation();
                                 setShowPoliciesModal(true);
                               }}
-                              className="text-amber-400 font-bold underline underline-offset-2 hover:text-amber-300 inline cursor-pointer"
+                              className="text-amber-600 dark:text-amber-400 font-bold underline underline-offset-2 hover:text-amber-500 inline cursor-pointer"
                             >
                               Políticas, Condiciones y Cláusulas Oficiales de la Jornada
                             </button>
-                            . <span className="text-amber-400 font-black">*</span>
+                            . <span className="text-amber-600 dark:text-amber-400 font-black">*</span>
                           </span>
                         </label>
                       </div>
@@ -1118,7 +1117,7 @@ export default function Jornadas() {
                       <button
                         type="submit"
                         disabled={isBookingSubmitting || !acceptedPolicies}
-                        className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-[0_10px_25px_rgba(194,164,114,0.3)] hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
+                        className="w-full btn-primary !py-4 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 border-none shadow-md hover:scale-[1.02] transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
                       >
                         <WhatsAppIcon size={18} />
                         <span>
@@ -1130,19 +1129,19 @@ export default function Jornadas() {
                       </button>
 
                       {!acceptedPolicies && (
-                        <p className="text-[10px] text-amber-400/90 text-center font-semibold">
+                        <p className="text-[10px] text-amber-600 dark:text-amber-400/90 text-center font-semibold">
                           * Marca la casilla obligatoria para habilitar el agendamiento de tu cita.
                         </p>
                       )}
 
                       {bookingSuccess && (
-                        <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl text-center text-xs text-emerald-300 font-bold animate-fade-in">
+                        <div className="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl text-center text-xs text-emerald-700 dark:text-emerald-300 font-bold animate-fade-in">
                           Cita y cupo registrados en el sistema de MasterTech. Se abrió WhatsApp para tu confirmación directa.
                         </div>
                       )}
 
-                      <div className="pt-3 border-t border-white/10 text-center space-y-1.5">
-                        <p className="text-[10px] text-zinc-500">
+                      <div className="pt-3 border-t border-slate-200 dark:border-white/10 text-center space-y-1.5">
+                        <p className="text-[10px] text-slate-500 dark:text-zinc-500">
                           Cupos Limitados por Jornada · Recepción puntual en turnos asignados · Garantía Oficial MasterTech.
                         </p>
                       </div>
@@ -1150,28 +1149,28 @@ export default function Jornadas() {
                   </div>
 
                   {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial (Completa el espacio) */}
-                  <div className="bg-[#12141a]/95 border border-white/10 rounded-3xl p-6 space-y-4 shadow-xl">
-                    <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
-                      <div className="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                  <div className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-3xl p-6 space-y-4 shadow-md dark:shadow-xl">
+                    <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-white/10">
+                      <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
                         <ShieldCheck size={18} />
                       </div>
                       <div>
-                        <h4 className="text-xs font-black uppercase tracking-wider text-white">Garantía y Protocolo de Calidad</h4>
-                        <p className="text-[10px] text-zinc-400">Tranquilidad absoluta para tu inversión automotriz</p>
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Garantía y Protocolo de Calidad</h4>
+                        <p className="text-[10px] text-slate-500 dark:text-zinc-400">Tranquilidad absoluta para tu inversión automotriz</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-2.5">
-                      <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
-                        <Award className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-2xl p-3">
+                        <Award className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
                         <div className="text-left">
-                          <span className="text-xs font-bold text-white block">
+                          <span className="text-xs font-bold text-slate-900 dark:text-white block">
                             {(() => {
                               const rawG = currentJornada.specs?.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val || '2 Meses';
                               return rawG.toLowerCase().includes('garant') ? rawG : `${rawG} de Garantía Directa`;
                             })()}
                           </span>
-                          <p className="text-[11px] text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, procedimientos técnicos y calibraciones efectuadas.</p>
+                          <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, procedimientos técnicos y calibraciones efectuadas.</p>
                         </div>
                       </div>
 
@@ -1216,26 +1215,26 @@ export default function Jornadas() {
       {/* =========================================================================
           POLÍTICAS, CONDICIONES Y CLÁUSULAS OFICIALES DE LA JORNADA VIP
           ========================================================================= */}
-      <section id="politicas-jornada" className="py-20 px-6 max-w-7xl mx-auto border-t border-white/10">
+      <section id="politicas-jornada" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200 dark:border-white/10">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-black uppercase tracking-wider mb-4">
-            <FileText size={14} className="text-amber-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs font-black uppercase tracking-wider mb-4">
+            <FileText size={14} className="text-amber-500 dark:text-amber-400" />
             <span>Marco Operativo Oficial</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
             POLÍTICAS, CONDICIONES Y CLÁUSULAS
           </h2>
-          <p className="text-amber-400 font-bold text-sm sm:text-base mt-2 tracking-wide uppercase">
+          <p className="text-amber-600 dark:text-amber-400 font-bold text-sm sm:text-base mt-2 tracking-wide uppercase">
             Jornada Especial de Mantenimiento y Servicios Técnicos
           </p>
-          <p className="text-xs sm:text-sm text-zinc-400 mt-3 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-3 leading-relaxed">
             Para garantizar la máxima calidad técnica, exclusividad y cumplimiento en los tiempos de entrega de cada vehículo, las Jornadas VIP se rigen bajo las siguientes condiciones y cláusulas operativas de estricto cumplimiento.
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
               type="button"
               onClick={() => setShowPoliciesModal(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs font-bold transition-all cursor-pointer"
             >
               <FileText size={14} />
               <span>Abrir Visor Completo de Cláusulas</span>
@@ -1248,15 +1247,15 @@ export default function Jornadas() {
           {JORNADA_POLICIES.map((policy) => (
             <div 
               key={policy.number}
-              className="bg-[#12141a]/95 border border-white/10 rounded-2xl p-5 sm:p-6 shadow-xl hover:border-amber-500/40 transition-all flex flex-col justify-between group"
+              className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-xl hover:border-amber-500/40 transition-all flex flex-col justify-between group"
             >
               <div>
                 {/* Header with Number & Title */}
-                <div className="flex items-center gap-3 pb-3 mb-4 border-b border-white/10">
-                  <span className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 font-mono font-black text-xs flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-3 pb-3 mb-4 border-b border-slate-100 dark:border-white/10">
+                  <span className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 font-mono font-black text-xs flex items-center justify-center shrink-0">
                     {policy.number}
                   </span>
-                  <h3 className="text-sm sm:text-base font-extrabold text-white uppercase tracking-tight group-hover:text-amber-300 transition-colors">
+                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
                     {policy.title}
                   </h3>
                 </div>
@@ -1264,11 +1263,11 @@ export default function Jornadas() {
                 {/* Sub-items */}
                 <div className="space-y-3">
                   {policy.items.map((sub, sIdx) => (
-                    <div key={sIdx} className="text-xs text-zinc-300 leading-relaxed flex items-start gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+                    <div key={sIdx} className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 mt-1.5 shrink-0" />
                       <div>
-                        <strong className="text-white font-bold">{sub.subtitle}: </strong>
-                        <span className="text-zinc-300">{sub.text}</span>
+                        <strong className="text-slate-800 dark:text-white font-bold">{sub.subtitle}: </strong>
+                        <span className="text-slate-600 dark:text-zinc-300">{sub.text}</span>
                       </div>
                     </div>
                   ))}
@@ -1281,11 +1280,11 @@ export default function Jornadas() {
         {/* Bottom Banner Confirmation */}
         <div className="mt-10 bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div className="space-y-1">
-            <h4 className="text-white font-extrabold text-sm sm:text-base flex items-center justify-center sm:justify-start gap-2">
-              <ShieldCheck className="text-emerald-400" size={18} />
+            <h4 className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base flex items-center justify-center sm:justify-start gap-2">
+              <ShieldCheck className="text-emerald-500 dark:text-emerald-400" size={18} />
               <span>Garantía de Calidad y Transparencia Técnica</span>
             </h4>
-            <p className="text-xs text-zinc-400 max-w-2xl">
+            <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-2xl">
               Cupos limitados por jornada con atención personalizada para cada vehículo, recepción puntual en turnos asignados, rigurosas pruebas técnicas y garantía oficial por escrito.
             </p>
           </div>
@@ -1304,37 +1303,37 @@ export default function Jornadas() {
       {/* Guarantees & Why MasterTech */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-[#12141a] p-6 rounded-3xl border border-white/10 flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400">
+          <div className="bg-white dark:bg-[#12141a] p-6 rounded-3xl border border-slate-200 dark:border-white/10 flex items-start gap-4 shadow-sm dark:shadow-none">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 flex items-center justify-center shrink-0 text-amber-600 dark:text-amber-400">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white mb-1">Garantía Total MasterTech</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Garantía Total MasterTech</h3>
+              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
                 Todos nuestros trabajos de reprogramación, electrónica y climatización incluyen respaldo directo por escrito y garantía de satisfacción.
               </p>
             </div>
           </div>
 
-          <div className="bg-[#12141a] p-6 rounded-3xl border border-white/10 flex items-start gap-4">
+          <div className="bg-white dark:bg-[#12141a] p-6 rounded-3xl border border-slate-200 dark:border-white/10 flex items-start gap-4 shadow-sm dark:shadow-none">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0 text-primary">
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white mb-1">Equipos Importados OEM</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Equipos Importados OEM</h3>
+              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
                 Utilizamos escáneres multimarca y programadores de última generación para garantizar lecturas quirúrgicas sin riesgos en tu vehículo.
               </p>
             </div>
           </div>
 
-          <div className="bg-[#12141a] p-6 rounded-3xl border border-white/10 flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-400">
+          <div className="bg-white dark:bg-[#12141a] p-6 rounded-3xl border border-slate-200 dark:border-white/10 flex items-start gap-4 shadow-sm dark:shadow-none">
+            <div className="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-500/10 border border-cyan-300 dark:border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-600 dark:text-cyan-400">
               <Clock className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white mb-1">Atención VIP & Lounge</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Atención VIP & Lounge</h3>
+              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
                 Espera cómodamente en nuestra área climatizada VIP con Wi-Fi de alta velocidad, café de cortesía y atención personalizada.
               </p>
             </div>
@@ -1343,14 +1342,14 @@ export default function Jornadas() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-white/10 text-center text-xs text-zinc-500">
+      <footer className="py-12 border-t border-slate-200 dark:border-white/10 text-center text-xs text-slate-500 dark:text-zinc-500 bg-slate-100 dark:bg-transparent">
         <div className="max-w-7xl mx-auto px-6 space-y-4">
           <div className="flex justify-center items-center gap-2">
             <img src={config.LOGO_URL || "/logo.png"} alt="MasterTech" className="h-6 object-contain" />
-            <span className="font-display font-black tracking-widest text-white text-sm">MASTERTECH</span>
+            <span className="font-display font-black tracking-widest text-slate-900 dark:text-white text-sm">MASTERTECH</span>
           </div>
           <p>© 2026 SOLUCIONES MASTERTECH C.A. Todos los derechos reservados.</p>
-          <p className="text-[11px] text-zinc-600">Porlamar, Isla de Margarita — Venezuela.</p>
+          <p className="text-[11px] text-slate-400 dark:text-zinc-600">Porlamar, Isla de Margarita — Venezuela.</p>
         </div>
       </footer>
 
@@ -1364,7 +1363,7 @@ export default function Jornadas() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowPoliciesModal(false)}
-              className="fixed inset-0 bg-black/85 backdrop-blur-md"
+              className="fixed inset-0 bg-black/80 backdrop-blur-md"
             />
 
             {/* Modal Dialog */}
@@ -1372,18 +1371,18 @@ export default function Jornadas() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-4xl bg-[#12141a] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-4xl bg-white dark:bg-[#12141a] border border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[90vh] text-slate-900 dark:text-white"
             >
               {/* Modal Header */}
-              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-amber-500/10 via-red-500/10 to-transparent">
+              <div className="p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-gradient-to-r from-amber-500/10 via-red-500/10 to-transparent">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
                     <FileText size={20} />
                   </div>
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block">Documento Oficial</span>
-                    <h3 className="text-lg font-black text-white uppercase tracking-tight">Políticas, Condiciones y Cláusulas</h3>
-                    <p className="text-xs text-zinc-400">Jornada Especial de Mantenimiento y Servicios Técnicos</p>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">Documento Oficial</span>
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">Políticas, Condiciones y Cláusulas</h3>
+                    <p className="text-xs text-slate-500 dark:text-zinc-400">Jornada Especial de Mantenimiento y Servicios Técnicos</p>
                   </div>
                 </div>
 
@@ -1391,7 +1390,7 @@ export default function Jornadas() {
                   <button
                     type="button"
                     onClick={() => setShowPoliciesModal(false)}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                    className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                   >
                     <X size={20} />
                   </button>
@@ -1399,23 +1398,23 @@ export default function Jornadas() {
               </div>
 
               {/* Modal Body */}
-              <div className="p-6 overflow-y-auto space-y-6 text-sm text-zinc-300">
+              <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-zinc-300">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {JORNADA_POLICIES.map((policy) => (
-                    <div key={policy.number} className="bg-black/50 border border-white/10 rounded-2xl p-4 space-y-2.5">
-                      <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
-                        <span className="text-xs font-mono font-black text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded">
+                    <div key={policy.number} className="bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-2xl p-4 space-y-2.5">
+                      <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-white/10">
+                        <span className="text-xs font-mono font-black text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/20 px-2 py-0.5 rounded">
                           {policy.number}
                         </span>
-                        <h4 className="text-xs font-bold text-white uppercase">{policy.title}</h4>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase">{policy.title}</h4>
                       </div>
                       <div className="space-y-2 text-xs">
                         {policy.items.map((sub, sIdx) => (
                           <div key={sIdx} className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1 shrink-0" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 mt-1 shrink-0" />
                             <div>
-                              <strong className="text-white font-semibold">{sub.subtitle}: </strong>
-                              <span className="text-zinc-400">{sub.text}</span>
+                              <strong className="text-slate-800 dark:text-white font-semibold">{sub.subtitle}: </strong>
+                              <span className="text-slate-600 dark:text-zinc-400">{sub.text}</span>
                             </div>
                           </div>
                         ))}
@@ -1426,8 +1425,8 @@ export default function Jornadas() {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between">
-                <span className="text-xs text-zinc-500">MasterTech Isla de Margarita · Políticas Oficiales de Jornadas Especiales</span>
+              <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/60 flex items-center justify-between">
+                <span className="text-xs text-slate-500 dark:text-zinc-500">MasterTech Isla de Margarita · Políticas Oficiales de Jornadas Especiales</span>
                 <button
                   type="button"
                   onClick={() => setShowPoliciesModal(false)}
