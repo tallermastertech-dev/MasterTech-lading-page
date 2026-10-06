@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Calendar, Clock } from 'lucide-react';
+import { Calendar, Clock, ChevronDown } from 'lucide-react';
 
 export const INSPECTION_SLOTS = [
   "08:30 AM",
@@ -196,10 +196,10 @@ export default function InspectionSlotPicker({
   const freeSlotsCount = Math.max(0, activeSlots.length - bookedForSelectedDate.length);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
       {/* Cubículo 1: Selector de Fecha */}
-      <div className="space-y-2 text-left">
-        <label htmlFor="slot-fecha-select" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4 flex items-center gap-1.5 whitespace-nowrap h-4">
+      <div className="space-y-1.5 text-left">
+        <label htmlFor="slot-fecha-select" className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 ml-1 sm:ml-2 flex items-center gap-1.5 whitespace-nowrap h-4">
           <Calendar size={13} className="text-primary shrink-0" /> <span>{effectiveDateLabel}</span>
         </label>
         <div className="relative">
@@ -208,29 +208,32 @@ export default function InspectionSlotPicker({
             name="fecha_inspeccion"
             value={selectedDate}
             onChange={(e) => handleDateSelect(e.target.value)}
-            className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all appearance-none cursor-pointer text-white text-sm font-bold pr-10"
+            className="w-full bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 rounded-xl py-2.5 sm:py-3 pl-3.5 sm:pl-4 pr-10 text-slate-900 dark:text-white text-xs sm:text-sm font-bold shadow-sm focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400 dark:hover:border-white/30"
           >
             {availableDays.map((d) => {
               const booked = occupiedSlots[d.dateStr] || [];
               const isFull = booked.length >= activeSlots.length;
               return (
-                <option key={d.dateStr} value={d.dateStr} disabled={isFull}>
+                <option 
+                  key={d.dateStr} 
+                  value={d.dateStr} 
+                  disabled={isFull}
+                  className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1"
+                >
                   {d.label} {isFull ? '(LLENO)' : ''}
                 </option>
               );
             })}
           </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400 text-xs">
-            ▼
-          </div>
+          <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-zinc-400" />
         </div>
       </div>
 
       {/* Cubículo 2: Selector de Horario / Turno */}
-      <div className="space-y-2 text-left">
-        <label htmlFor="slot-hora-select" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-2 sm:ml-4 flex items-center justify-between pr-2 whitespace-nowrap h-4">
+      <div className="space-y-1.5 text-left">
+        <label htmlFor="slot-hora-select" className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-zinc-400 ml-1 sm:ml-2 flex items-center justify-between pr-2 whitespace-nowrap h-4">
           <span className="flex items-center gap-1.5"><Clock size={13} className="text-primary shrink-0" /> Hora (Turno)</span>
-          <span className="text-primary font-bold">{freeSlotsCount}/{activeSlots.length} libres</span>
+          <span className="text-primary font-bold text-[10px]">{freeSlotsCount}/{activeSlots.length} libres</span>
         </label>
         <div className="relative">
           <select 
@@ -238,20 +241,23 @@ export default function InspectionSlotPicker({
             name="hora_inspeccion"
             value={selectedTime}
             onChange={(e) => handleTimeSelect(e.target.value)}
-            className="w-full bg-black/40 border border-white/10 rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 focus:border-primary outline-none transition-all appearance-none cursor-pointer text-white text-sm font-bold pr-10"
+            className="w-full bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 rounded-xl py-2.5 sm:py-3 pl-3.5 sm:pl-4 pr-10 text-slate-900 dark:text-white text-xs sm:text-sm font-bold shadow-sm focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all appearance-none cursor-pointer hover:border-slate-400 dark:hover:border-white/30"
           >
             {activeSlots.map((slot) => {
               const isTaken = bookedForSelectedDate.includes(slot);
               return (
-                <option key={slot} value={slot} disabled={isTaken}>
+                <option 
+                  key={slot} 
+                  value={slot} 
+                  disabled={isTaken}
+                  className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white py-1"
+                >
                   {slot} {isTaken ? '(OCUPADO)' : ''}
                 </option>
               );
             })}
           </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400 text-xs">
-            ▼
-          </div>
+          <ChevronDown className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-zinc-400" />
         </div>
       </div>
     </div>
