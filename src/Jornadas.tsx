@@ -37,18 +37,21 @@ const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?
 );
 
 export const BinanceIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 126.61 126.61" fill="none" className={className}>
-    <path d="M63.31 0L35.29 28.02l14.01 14.01 14.01-14.01 14.01 14.01 14.01-14.01L63.31 0zM14.01 49.3L0 63.31l14.01 14.01 14.01-14.01L14.01 49.3zm98.59 0l-14.01 14.01 14.01 14.01 14.01-14.01-14.01-14.01zM63.31 42.03L49.3 56.04l14.01 14.01 14.01-14.01-14.01-14.01zM35.29 98.59L63.31 126.61l28.02-28.02-14.01-14.01-14.01 14.01-14.01-14.01-14.01 14.01z" fill="#F3BA2F"/>
-  </svg>
+  <div style={{ width: size, height: size }} className={`shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-black ${className}`}>
+    <img src="/assets/logo_binance.png" alt="Binance Pay" className="w-full h-full object-cover select-none pointer-events-none" />
+  </div>
 );
 
 export const ZelleIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
-    <rect width="40" height="40" rx="9" fill="#7414CA"/>
-    <path d="M12 14.5H28L15 25.5H28" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="20" cy="8.5" r="2.2" fill="white"/>
-    <circle cx="20" cy="31.5" r="2.2" fill="white"/>
-  </svg>
+  <div style={{ width: size, height: size }} className={`shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-[#7414CA] ${className}`}>
+    <img src="/assets/logo_zelle.png" alt="Zelle" className="w-full h-full object-cover select-none pointer-events-none" />
+  </div>
+);
+
+export const PagoMovilIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
+  <div style={{ width: size, height: size }} className={`shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-white p-0.5 border border-slate-200 dark:border-white/10 ${className}`}>
+    <img src="/assets/logo_pagomovil.png" alt="Pago Móvil" className="w-full h-full object-contain select-none pointer-events-none" />
+  </div>
 );
 
 export const BanescoPanamaIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
@@ -84,35 +87,40 @@ export const CashUsdIcon = ({ size = 20, className = "" }: { size?: number; clas
 
 export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) => {
   return (
-    <div className={`grid ${compact ? 'grid-cols-2 sm:grid-cols-4 gap-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3'}`}>
-      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
-        <CashUsdIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+    <div className={`grid ${compact ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3'}`}>
+      <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <CashUsdIcon size={compact ? 26 : 32} className="shrink-0 rounded-lg shadow-sm" />
         <div className="min-w-0">
           <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Efectivo ($ USD)</span>
           <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Billetes en buen estado</span>
         </div>
       </div>
-      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
-        <ZelleIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+      <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <ZelleIcon size={compact ? 26 : 32} className="shadow-sm" />
         <div className="min-w-0">
           <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Zelle</span>
-          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia directa USD</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Directo USD</span>
         </div>
       </div>
-      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
-        <div className="w-[28px] h-[28px] sm:w-[34px] sm:h-[34px] rounded-lg bg-[#181A20] flex items-center justify-center p-1.5 shrink-0 shadow-sm border border-amber-500/30">
-          <BinanceIcon size={compact ? 18 : 22} />
-        </div>
+      <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <BinanceIcon size={compact ? 26 : 32} className="shadow-sm" />
         <div className="min-w-0">
           <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Binance Pay</span>
-          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">USDT sin comisiones</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">USDT sin comisión</span>
         </div>
       </div>
-      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
-        <BanescoPanamaIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+      <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <PagoMovilIcon size={compact ? 26 : 32} className="shadow-sm" />
         <div className="min-w-0">
-          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco Panamá</span>
-          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia en USD</span>
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Pago Móvil</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Bs. tasa oficial</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm col-span-2 sm:col-span-1">
+        <BanescoPanamaIcon size={compact ? 26 : 32} className="shrink-0 rounded-lg shadow-sm" />
+        <div className="min-w-0">
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco PA</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia USD</span>
         </div>
       </div>
     </div>
@@ -427,7 +435,7 @@ export const JORNADA_POLICIES = [
       },
       { 
         subtitle: "Métodos de Pago Aceptados", 
-        text: "Aceptamos exclusivamente métodos en divisas: 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), y 4) Banesco Panamá (transferencias en dólares USD)." 
+        text: "Aceptamos exclusivamente: 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), 4) Pago Móvil (a tasa oficial / autorizada al momento del pago), y 5) Banesco Panamá (transferencias en dólares USD)." 
       },
       { 
         subtitle: "Liquidación Inmediata de Unidad", 
@@ -1277,16 +1285,15 @@ export default function Jornadas() {
                               Solo Pago en Divisas · Cero Descuento
                             </span>
                             <span className="text-[10px] text-slate-600 dark:text-zinc-400 block truncate">
-                              Efectivo $, Zelle, Binance Pay y Banesco PA
+                              Efectivo $, Zelle, Binance, Pago Móvil y Banesco PA
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           <CashUsdIcon size={16} />
                           <ZelleIcon size={16} />
-                          <div className="w-4 h-4 rounded bg-[#181A20] flex items-center justify-center p-0.5">
-                            <BinanceIcon size={10} />
-                          </div>
+                          <BinanceIcon size={16} />
+                          <PagoMovilIcon size={16} />
                           <BanescoPanamaIcon size={16} />
                         </div>
                       </div>
@@ -1388,7 +1395,7 @@ export default function Jornadas() {
                         <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
                           Métodos Aceptados para Liquidación:
                         </span>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
                           <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
                             <CashUsdIcon size={18} className="shrink-0" />
                             <span className="truncate">$ Efectivo</span>
@@ -1398,12 +1405,14 @@ export default function Jornadas() {
                             <span className="truncate">Zelle</span>
                           </div>
                           <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <div className="w-[18px] h-[18px] rounded bg-[#181A20] flex items-center justify-center p-0.5 shrink-0">
-                              <BinanceIcon size={12} />
-                            </div>
+                            <BinanceIcon size={18} className="shrink-0" />
                             <span className="truncate">Binance</span>
                           </div>
                           <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                            <PagoMovilIcon size={18} className="shrink-0" />
+                            <span className="truncate">Pago Móvil</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs col-span-2 sm:col-span-1">
                             <BanescoPanamaIcon size={18} className="shrink-0" />
                             <span className="truncate">Banesco PA</span>
                           </div>
