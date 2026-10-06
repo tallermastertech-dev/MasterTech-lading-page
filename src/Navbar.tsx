@@ -26,8 +26,8 @@ const WhatsAppIcon = ({ size = 18, className = "" }: { size?: number; className?
 const MasterTechIconBadge = ({ icon: IconComponent, isUSA = false }: { icon: any; isUSA?: boolean }) => (
   <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-sm transition-all ${
     isUSA
-      ? 'bg-blue-950/80 border-blue-500/50 text-blue-400 group-hover/item:bg-blue-900 group-hover/item:border-blue-300'
-      : 'bg-black/60 border-primary/30 text-primary group-hover/item:bg-primary/20 group-hover/item:border-primary'
+      ? 'bg-blue-50 dark:bg-blue-950/80 border-blue-200 dark:border-blue-500/50 text-blue-600 dark:text-blue-400 group-hover/item:bg-blue-100 dark:group-hover/item:bg-blue-900 group-hover/item:border-blue-300'
+      : 'bg-amber-50 dark:bg-black/60 border-amber-300/60 dark:border-primary/30 text-primary group-hover/item:bg-amber-100/70 dark:group-hover/item:bg-primary/20 group-hover/item:border-primary'
   }`}>
     <IconComponent className="w-4 h-4 transition-transform group-hover/item:scale-110" />
   </div>
@@ -108,7 +108,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           <a 
             href="/" 
             className={`transition-colors py-2 whitespace-nowrap ${
-              activePage === 'inicio' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              activePage === 'inicio' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-primary dark:hover:text-white'
             }`}
           >
             Inicio
@@ -118,7 +118,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           <a 
             href="/nosotros" 
             className={`transition-colors py-2 whitespace-nowrap ${
-              activePage === 'nosotros' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              activePage === 'nosotros' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-primary dark:hover:text-white'
             }`}
           >
             Nosotros
@@ -133,7 +133,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             <a 
               href="/servicios"
               className={`flex items-center gap-1.5 transition-colors py-2 cursor-pointer whitespace-nowrap ${
-                activePage === 'servicios' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
+                activePage === 'servicios' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-primary dark:hover:text-white'
               }`}
             >
               <span>Servicios</span>
@@ -147,14 +147,14 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.18 }}
-                  className="navbar-dropdown absolute top-full left-1/2 -translate-x-1/2 w-[420px] rounded-2xl p-4 shadow-2xl mt-1 z-50"
+                  className="navbar-dropdown absolute top-full left-1/2 -translate-x-1/2 w-[420px] rounded-2xl p-4 shadow-2xl mt-1 z-50 border transition-colors"
                 >
-                  <div className="flex items-center justify-between pb-2 mb-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1" style={{ color: '#C2A472' }}>
+                  <div className="navbar-dropdown-divider flex items-center justify-between pb-2 mb-2.5 border-b border-slate-200 dark:border-white/10">
+                    <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1 text-primary dark:text-[#C2A472]">
                       <Wrench size={12} />
                       <span>Especialidades Principales</span>
                     </span>
-                    <span className="text-[10px] font-bold" style={{ color: '#71717a' }}>Diagnóstico Computarizado</span>
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-zinc-500">Diagnóstico Computarizado</span>
                   </div>
 
                   <div className="space-y-1">
@@ -162,23 +162,23 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                       <a
                         key={i}
                         href={opt.href}
-                        className="navbar-dropdown-item flex items-start gap-3 p-2.5 rounded-xl transition-colors"
+                        className="navbar-dropdown-item flex items-start gap-3 p-2.5 rounded-xl transition-colors hover:bg-slate-100 dark:hover:bg-white/5"
                       >
                         <MasterTechIconBadge icon={opt.icon} />
                         <div>
-                          <div className="nav-opt-title font-bold text-xs leading-snug">{opt.title}</div>
-                          <div className="nav-opt-desc text-[11px] font-normal leading-tight mt-0.5">{opt.desc}</div>
+                          <div className="nav-opt-title font-bold text-xs leading-snug text-slate-900 dark:text-slate-100">{opt.title}</div>
+                          <div className="nav-opt-desc text-[11px] font-normal leading-tight mt-0.5 text-slate-500 dark:text-slate-400">{opt.desc}</div>
                         </div>
                       </a>
                     ))}
                   </div>
 
-                  <div className="pt-3 mt-3 flex items-center justify-between gap-2" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                    <span className="text-[11px] font-bold flex items-center gap-1.5 shrink-0" style={{ color: '#cbd5e1' }}>
-                      <Cpu size={13} style={{ color: '#C2A472' }} />
+                  <div className="navbar-dropdown-divider pt-3 mt-3 flex items-center justify-between gap-2 border-t border-slate-200 dark:border-white/10">
+                    <span className="text-[11px] font-bold flex items-center gap-1.5 shrink-0 text-slate-600 dark:text-slate-300">
+                      <Cpu size={13} className="text-primary dark:text-[#C2A472]" />
                       <span>Escáner Multimarca</span>
                     </span>
-                    <a href="/servicios" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap shrink-0" style={{ color: '#C2A472' }}>
+                    <a href="/servicios" className="flex items-center gap-1 text-xs font-black hover:underline whitespace-nowrap shrink-0 text-primary dark:text-[#C2A472]">
                       <span>Ver Todos los Servicios</span>
                       <ArrowRight size={12} />
                     </a>
@@ -188,12 +188,11 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             </AnimatePresence>
           </div>
 
-
           {/* 5. Preguntas Frecuentes Direct Link (No Chevron / No Dropdown) */}
           <a 
             href="/faq" 
             className={`transition-colors py-2 whitespace-nowrap ${
-              activePage === 'faq' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-white'
+              activePage === 'faq' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-primary dark:hover:text-white'
             }`}
           >
             Preguntas Frecuentes
@@ -204,7 +203,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
         <div className="hidden lg:flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-all cursor-pointer shadow-sm hover:scale-105"
+            className="p-2.5 rounded-full bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/15 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-sm hover:scale-105"
             title={theme === 'dark' ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro'}
             aria-label="Cambiar tema"
           >
@@ -231,7 +230,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
         <div className="flex items-center gap-2 lg:hidden">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 transition-colors"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-zinc-300 transition-colors"
             title={theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
             aria-label="Cambiar tema"
           >
@@ -239,7 +238,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
           </button>
 
           <button 
-            className="text-white p-2 hover:bg-white/10 rounded-xl transition-colors"
+            className="text-slate-800 dark:text-white p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
@@ -254,14 +253,14 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="theme-mobile-menu lg:hidden border-b overflow-hidden"
+            className="theme-mobile-menu lg:hidden border-b overflow-hidden bg-white dark:bg-[#0c0e12] border-slate-200 dark:border-white/10"
           >
             <div className="max-w-7xl mx-auto px-6 py-6 space-y-4 max-h-[80vh] overflow-y-auto">
               {/* 1. Inicio */}
               <a
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-medium text-slate-900 dark:text-white hover:text-primary transition-colors py-2 border-b border-slate-100 dark:border-white/5"
               >
                 <Home size={18} className="text-primary" />
                 <span>Inicio</span>
@@ -271,17 +270,17 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
               <a
                 href="/nosotros"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-medium text-slate-900 dark:text-white hover:text-primary transition-colors py-2 border-b border-slate-100 dark:border-white/5"
               >
                 <Users size={18} className="text-primary" />
                 <span>Nosotros</span>
               </a>
 
               {/* 3. Servicios Taller Accordion */}
-              <div className="border-b border-white/5 pb-2">
+              <div className="border-b border-slate-100 dark:border-white/5 pb-2">
                 <button
                   onClick={() => setExpandedMobileAccordion(expandedMobileAccordion === 'servicios' ? null : 'servicios')}
-                  className="w-full flex items-center justify-between text-base font-medium text-white py-2"
+                  className="w-full flex items-center justify-between text-base font-medium text-slate-900 dark:text-white py-2"
                 >
                   <span className="flex items-center gap-2">
                     <Wrench size={18} className="text-primary" />
@@ -296,7 +295,7 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                         key={i}
                         href={opt.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center gap-3 text-zinc-300 hover:text-white py-1.5 font-medium group/item"
+                        className="flex items-center gap-3 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white py-1.5 font-medium group/item"
                       >
                         <MasterTechIconBadge icon={opt.icon} />
                         <span>{opt.title}</span>
@@ -309,12 +308,11 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                 )}
               </div>
 
-
               {/* 5. Preguntas Frecuentes Direct Link */}
               <a
                 href="/faq"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 text-base font-medium text-white hover:text-primary transition-colors py-2 border-b border-white/5"
+                className="flex items-center gap-2.5 text-base font-medium text-slate-900 dark:text-white hover:text-primary transition-colors py-2 border-b border-slate-100 dark:border-white/5"
               >
                 <HelpCircle size={18} className="text-primary" />
                 <span>Preguntas Frecuentes</span>
@@ -323,13 +321,13 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
               {/* Theme Toggle Button (Mobile) */}
               <button
                 onClick={toggleTheme}
-                className="w-full flex items-center justify-between p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all cursor-pointer"
+                className="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
                   {theme === 'dark' ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-blue-500" />}
                   <span className="text-sm font-bold">{theme === 'dark' ? 'Activar Modo Claro' : 'Activar Modo Oscuro'}</span>
                 </div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10 text-zinc-300 flex items-center gap-1">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-zinc-300 flex items-center gap-1">
                   {theme === 'dark' ? <><Sun size={10} className="text-amber-400" /> CLARO</> : <><Moon size={10} className="text-blue-400" /> OSCURO</>}
                 </span>
               </button>

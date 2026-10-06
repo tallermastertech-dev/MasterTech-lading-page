@@ -216,18 +216,40 @@ html.theme-light .theme-mobile-menu button {
   color: #0f172a;
 }
 
-/* Dropdown Menus (Always dark aesthetic for tech luxury look) */
+/* Dropdown Menus (Dark mode default) */
 .navbar-dropdown {
-  background-color: #12141a !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  color: #ffffff !important;
+  background-color: #12141a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #ffffff;
 }
-.navbar-dropdown * { color: inherit; }
 .navbar-dropdown .nav-opt-title { color: #e2e8f0 !important; font-weight: 700 !important; }
 .navbar-dropdown .nav-opt-desc  { color: #94a3b8 !important; font-weight: 400 !important; }
 .navbar-dropdown-item:hover { background-color: rgba(255, 255, 255, 0.08) !important; }
+
+/* Light Mode Dropdown Menus */
+html.theme-light .navbar-dropdown,
+html:not(.dark) .navbar-dropdown {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+  color: #0f172a !important;
+}
+html.theme-light .navbar-dropdown .nav-opt-title,
+html:not(.dark) .navbar-dropdown .nav-opt-title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+html.theme-light .navbar-dropdown .nav-opt-desc,
+html:not(.dark) .navbar-dropdown .nav-opt-desc {
+  color: #64748b !important;
+  font-weight: 400 !important;
+}
+html.theme-light .navbar-dropdown-item:hover,
+html:not(.dark) .navbar-dropdown-item:hover {
+  background-color: #f1f5f9 !important;
+}
 
 /* Forms & Inputs */
 .theme-input {
