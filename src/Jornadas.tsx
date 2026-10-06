@@ -36,6 +36,131 @@ const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?
   </svg>
 );
 
+export const BinanceIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 126.61 126.61" fill="none" className={className}>
+    <path d="M63.31 0L35.29 28.02l14.01 14.01 14.01-14.01 14.01 14.01 14.01-14.01L63.31 0zM14.01 49.3L0 63.31l14.01 14.01 14.01-14.01L14.01 49.3zm98.59 0l-14.01 14.01 14.01 14.01 14.01-14.01-14.01-14.01zM63.31 42.03L49.3 56.04l14.01 14.01 14.01-14.01-14.01-14.01zM35.29 98.59L63.31 126.61l28.02-28.02-14.01-14.01-14.01 14.01-14.01-14.01-14.01 14.01z" fill="#F3BA2F"/>
+  </svg>
+);
+
+export const ZelleIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
+    <rect width="40" height="40" rx="9" fill="#7414CA"/>
+    <path d="M12 14.5H28L15 25.5H28" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="20" cy="8.5" r="2.2" fill="white"/>
+    <circle cx="20" cy="31.5" r="2.2" fill="white"/>
+  </svg>
+);
+
+export const PagoMovilIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
+    <rect width="40" height="40" rx="9" fill="#0066CC"/>
+    <rect x="11" y="8" width="18" height="24" rx="3.5" stroke="white" strokeWidth="2.2"/>
+    <line x1="17" y1="28" x2="23" y2="28" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M22 14C23.5 15.2 23.5 17.8 22 19" stroke="#FFD700" strokeWidth="2.2" strokeLinecap="round"/>
+    <path d="M25 11.5C28 14.5 28 21.5 25 24.5" stroke="#FFD700" strokeWidth="2.2" strokeLinecap="round"/>
+    <text x="14" y="21" fill="white" fontSize="8" fontWeight="900" fontFamily="system-ui, sans-serif">Bs</text>
+  </svg>
+);
+
+export const CashUsdIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
+    <rect width="40" height="40" rx="9" fill="#059669"/>
+    <rect x="7" y="11" width="26" height="18" rx="3" stroke="white" strokeWidth="2.2"/>
+    <circle cx="20" cy="20" r="4.5" stroke="white" strokeWidth="2"/>
+    <text x="20" y="23.5" fill="white" fontSize="10" fontWeight="900" textAnchor="middle" fontFamily="system-ui, sans-serif">$</text>
+  </svg>
+);
+
+export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) => {
+  return (
+    <div className={`grid ${compact ? 'grid-cols-2 sm:grid-cols-4 gap-2' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3'}`}>
+      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <CashUsdIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+        <div className="min-w-0">
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Efectivo ($ USD)</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Billetes en buen estado</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <ZelleIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+        <div className="min-w-0">
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Zelle</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia directa USD</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <div className="w-[28px] h-[28px] sm:w-[34px] sm:h-[34px] rounded-lg bg-[#181A20] flex items-center justify-center p-1.5 shrink-0 shadow-sm border border-amber-500/30">
+          <BinanceIcon size={compact ? 18 : 22} />
+        </div>
+        <div className="min-w-0">
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Binance Pay</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">USDT sin comisiones</span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
+        <PagoMovilIcon size={compact ? 28 : 34} className="shrink-0 rounded-lg shadow-sm" />
+        <div className="min-w-0">
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Pago Móvil</span>
+          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Bs. a tasa autorizada</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const AvisoTerminosJornada = () => (
+  <div className="bg-gradient-to-br from-amber-500/15 via-red-500/10 to-amber-500/5 dark:from-amber-950/40 dark:via-red-950/30 dark:to-black/50 border-2 border-amber-500/50 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-lg mb-8">
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-amber-500/30">
+      <div className="flex items-start sm:items-center gap-3">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-500 text-slate-950 font-black flex items-center justify-center shrink-0 shadow-md">
+          <AlertTriangle size={24} className="stroke-[2.5]" />
+        </div>
+        <div>
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">
+            Condición Contractual e Institucional Obligatoria
+          </span>
+          <h3 className="text-base sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+            CERO POSIBILIDAD DE DESCUENTO · PAGO EXCLUSIVO EN DIVISAS
+          </h3>
+        </div>
+      </div>
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-600 text-white text-[11px] font-black uppercase tracking-wider shadow-sm w-fit shrink-0">
+        <ShieldAlert size={14} />
+        <span>TARIFA PROMOCIONAL FIJA Y NO NEGOCIABLE</span>
+      </div>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-4 py-4 text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-zinc-300">
+      <div className="p-3.5 rounded-xl bg-white/90 dark:bg-black/40 border border-amber-500/20 space-y-1">
+        <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-black text-xs uppercase tracking-wide">
+          <X size={14} className="stroke-[3]" />
+          <span>Cero Descuentos Adicionales</span>
+        </div>
+        <p className="text-slate-600 dark:text-zinc-300 text-xs">
+          Las Jornadas Especiales cuentan de antemano con la tarifa promocional máxima permitida por el taller (ahorros de hasta 40% respecto a precio regular). Por normativa estricta, <strong className="text-slate-950 dark:text-white font-bold">no se otorgan rebajas, descuentos adicionales ni convenios particulares</strong> bajo ningún motivo.
+        </p>
+      </div>
+
+      <div className="p-3.5 rounded-xl bg-white/90 dark:bg-black/40 border border-amber-500/20 space-y-1">
+        <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-black text-xs uppercase tracking-wide">
+          <Check size={14} className="stroke-[3]" />
+          <span>Modalidad Solo Pago en Divisas</span>
+        </div>
+        <p className="text-slate-600 dark:text-zinc-300 text-xs">
+          La ejecución técnica de la jornada se realiza y liquida <strong className="text-slate-950 dark:text-white font-bold">únicamente bajo modalidad de pago en divisas ($ USD)</strong> o su equivalente exacto mediante los canales electrónicos autorizados. No se otorgan plazos de crédito.
+        </p>
+      </div>
+    </div>
+
+    <div className="pt-2">
+      <span className="text-[11px] font-black uppercase tracking-wider text-slate-800 dark:text-zinc-200 block mb-2.5">
+        Canales y Métodos de Pago Autorizados:
+      </span>
+      <MetodosPagoJornada compact={false} />
+    </div>
+  </div>
+);
+
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
   WHATSAPP_LINK: "https://wa.link/xnj37f",
@@ -279,10 +404,24 @@ export const JORNADA_POLICIES = [
   },
   {
     number: "10",
-    title: "Métodos de Pago y Condiciones Financieras",
+    title: "Política Financiera: Pago en Divisas y Cero Posibilidad de Descuento",
     items: [
-      { subtitle: "Divisas y Bolívares", text: "Se aceptan pagos en Divisas ($) y Bolívares (Bs.) bajo la tasa de referencia legal establecida." },
-      { subtitle: "Liquidación", text: "El pago total del servicio debe efectuarse de manera obligatoria al momento de la entrega del vehículo, previa conformidad del cliente. No se realizan entregas a crédito." }
+      { 
+        subtitle: "Cero Posibilidad de Descuento Adicional", 
+        text: "Cada tarifa de Jornada Especial ya incluye el beneficio promocional máximo otorgado por el taller (descuentos de hasta un 40% sobre el precio de lista). Por normativa institucional estricta, existe CERO posibilidad de descuentos adicionales, convenios, rebajas o regateos. Las tarifas son netas, fijas y no negociables." 
+      },
+      { 
+        subtitle: "Modalidad Solo Pago en Divisas", 
+        text: "Las Jornadas Especiales se ejecutan y liquidan de manera exclusiva bajo la modalidad de PAGO EN DIVISAS ($ USD) o sus canales digitales autorizados por la administración." 
+      },
+      { 
+        subtitle: "Métodos de Pago Aceptados", 
+        text: "Aceptamos exclusivamente: 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), y 4) Pago Móvil (a tasa oficial / autorizada al momento del pago)." 
+      },
+      { 
+        subtitle: "Liquidación Inmediata de Unidad", 
+        text: "El monto total acordado debe ser cancelado íntegramente al momento de la entrega del vehículo, previa conformidad y prueba del servicio. No se entregan vehículos con saldo pendiente ni se otorga financiamiento a crédito." 
+      }
     ]
   }
 ];
@@ -1113,7 +1252,7 @@ export default function Jornadas() {
                             >
                               Políticas, Condiciones y Cláusulas Oficiales de la Jornada
                             </button>
-                            . <span className="text-amber-600 dark:text-amber-400 font-black">*</span>
+                            {' '}(incluyendo la condición de <strong className="text-slate-900 dark:text-white font-bold">pago exclusivo en divisas y cero posibilidad de descuento adicional</strong>). <span className="text-amber-600 dark:text-amber-400 font-black">*</span>
                           </span>
                         </label>
                       </div>
@@ -1152,7 +1291,7 @@ export default function Jornadas() {
                     </form>
                   </div>
 
-                  {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial (Completa el espacio) */}
+                  {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial */}
                   <div className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-3xl p-6 space-y-4 shadow-md dark:shadow-xl">
                     <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-white/10">
                       <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
@@ -1178,35 +1317,64 @@ export default function Jornadas() {
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
+                      <div className="flex items-start gap-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-2xl p-3">
                         <Activity className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                         <div className="text-left">
-                          <span className="text-xs font-bold text-white block">Pruebas en Banco y Carretera</span>
-                          <p className="text-[11px] text-zinc-400 leading-snug">Ningún vehículo se entrega sin validación dinámica en vía y monitoreo de sensores en vivo.</p>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white block">Pruebas en Banco y Carretera</span>
+                          <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-snug">Ningún vehículo se entrega sin validación dinámica en vía y monitoreo de sensores en vivo.</p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-3 bg-black/40 border border-white/5 rounded-2xl p-3">
-                        <FileCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-2xl p-3">
+                        <FileCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                         <div className="text-left">
-                          <span className="text-xs font-bold text-white block">Acta Digital y Resguardo 24/7</span>
-                          <p className="text-[11px] text-zinc-400 leading-snug">Registro fotográfico y en video al recibir tu vehículo bajo monitoreo perimetral cerrado.</p>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white block">Acta Digital y Resguardo 24/7</span>
+                          <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-snug">Registro fotográfico y en video al recibir tu vehículo bajo monitoreo perimetral cerrado.</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-400">
-                      <div className="flex items-center gap-1.5 font-medium">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>Pagos: $ Efectivo, Zelle y Bs. (Tasa BCV)</span>
+                    {/* Resumen Financiero y Canales de Pago */}
+                    <div className="pt-3 border-t border-slate-200 dark:border-white/10 space-y-2.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]">
+                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                          <span>Jornada: Solo Pago en Divisas · Cero Descuento</span>
+                        </div>
+                        <a
+                          href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
+                          className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:text-amber-500 font-bold text-xs shrink-0"
+                        >
+                          <Phone size={12} />
+                          <span>Llamar al Taller</span>
+                        </a>
                       </div>
-                      <a
-                        href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
-                        className="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-bold"
-                      >
-                        <Phone size={12} />
-                        <span>Llamar al Taller</span>
-                      </a>
+
+                      <div className="p-2.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-500/30 space-y-1.5">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
+                          Métodos Aceptados para Liquidación:
+                        </span>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                            <CashUsdIcon size={18} className="shrink-0" />
+                            <span className="truncate">$ Efectivo</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                            <ZelleIcon size={18} className="shrink-0" />
+                            <span className="truncate">Zelle</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                            <div className="w-[18px] h-[18px] rounded bg-[#181A20] flex items-center justify-center p-0.5 shrink-0">
+                              <BinanceIcon size={12} />
+                            </div>
+                            <span className="truncate">Binance</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                            <PagoMovilIcon size={18} className="shrink-0" />
+                            <span className="truncate">Pago Móvil</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1245,6 +1413,9 @@ export default function Jornadas() {
             </button>
           </div>
         </div>
+
+        {/* Banner Oficial de Politica Financiera, Cero Descuento y Metodos Aceptados */}
+        <AvisoTerminosJornada />
 
         {/* 10 Clauses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
@@ -1403,6 +1574,9 @@ export default function Jornadas() {
 
               {/* Modal Body */}
               <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-zinc-300">
+                {/* Banner Oficial de Politica Financiera, Cero Descuento y Metodos Aceptados */}
+                <AvisoTerminosJornada />
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {JORNADA_POLICIES.map((policy) => (
                     <div key={policy.number} className="bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-2xl p-4 space-y-2.5">
