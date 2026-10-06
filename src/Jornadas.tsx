@@ -889,17 +889,17 @@ export default function Jornadas() {
             {currentJornadasList.length === 1 ? (
               /* Cuando es una sola jornada: ocupa todo el ancho y se presenta de forma destacada sin flechas */
               <div className="w-full">
-                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-3xl bg-white dark:bg-gradient-to-r dark:from-amber-500/20 dark:via-primary/20 dark:to-amber-500/20 border-2 border-amber-500/30 dark:border-primary/60 shadow-md dark:shadow-[0_10px_35px_rgba(194,164,114,0.25)] text-slate-900 dark:text-white backdrop-blur-xl">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-3xl bg-white dark:bg-[#12141a] dark:bg-gradient-to-r dark:from-amber-950/30 dark:via-[#12141a] dark:to-red-950/20 border-2 border-amber-500/30 dark:border-amber-500/40 shadow-md dark:shadow-2xl text-slate-900 dark:text-white backdrop-blur-xl">
                   <div className="flex items-center gap-4 text-center sm:text-left">
                     <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
                       {currentJornada.icon || <Zap className="w-6 h-6 text-amber-600 dark:text-amber-400 shrink-0" />}
                     </div>
                     <div>
                       <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
-                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-black tracking-wider">
+                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-black tracking-wider shadow-sm">
                           {currentJornada.badge || 'JORNADA ESPECIAL'}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-zinc-300 font-semibold">
+                        <span className="text-xs text-slate-600 dark:text-zinc-300 font-semibold">
                           Duración estimada: {currentJornada.duration}
                         </span>
                       </div>
@@ -954,7 +954,7 @@ export default function Jornadas() {
                         onClick={() => setActiveJornadaId(j.id)}
                         className={`flex items-center gap-3 px-5 py-4 rounded-2xl border text-xs font-bold transition-all shrink-0 cursor-pointer snap-start ${
                           isActive 
-                            ? 'bg-amber-500/15 dark:bg-gradient-to-r dark:from-amber-500/30 dark:to-primary/30 border-amber-500 dark:border-primary text-slate-900 dark:text-white shadow-md scale-105 z-10' 
+                            ? 'bg-amber-500/15 dark:bg-[#181a22] dark:bg-gradient-to-r dark:from-amber-950/50 dark:to-red-950/40 border-amber-500 dark:border-amber-500/60 text-slate-900 dark:text-white shadow-md scale-105 z-10' 
                             : 'bg-white dark:bg-[#12141a] border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:border-amber-500/40'
                         }`}
                       >
