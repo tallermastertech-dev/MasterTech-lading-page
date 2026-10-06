@@ -1237,7 +1237,7 @@ export default function Jornadas() {
                       {/* Checkbox Obligatorio de Aceptación de Políticas */}
                       <div className="pt-1">
                         <label 
-                          className={`flex items-start gap-2.5 p-3 rounded-2xl border transition-all cursor-pointer select-none ${
+                          className={`flex items-center gap-2.5 p-3 rounded-2xl border transition-all cursor-pointer select-none ${
                             acceptedPolicies 
                               ? 'bg-amber-100/60 dark:bg-amber-500/10 border-amber-500/40 text-slate-900 dark:text-white' 
                               : 'bg-white dark:bg-black/60 border-slate-200 dark:border-white/10 hover:border-amber-500/30 text-slate-700 dark:text-zinc-300'
@@ -1248,10 +1248,10 @@ export default function Jornadas() {
                             required
                             checked={acceptedPolicies}
                             onChange={(e) => setAcceptedPolicies(e.target.checked)}
-                            className="mt-0.5 w-4 h-4 rounded border-amber-500/50 text-amber-500 focus:ring-amber-500/30 bg-white dark:bg-black/80 cursor-pointer accent-amber-500 shrink-0"
+                            className="w-4 h-4 rounded border-amber-500/50 text-amber-500 focus:ring-amber-500/30 bg-white dark:bg-black/80 cursor-pointer accent-amber-500 shrink-0"
                           />
                           <span className="text-xs leading-snug">
-                            Al marcar esta casilla, acepto las{' '}
+                            Acepto las{' '}
                             <button
                               type="button"
                               onClick={(e) => {
@@ -1261,11 +1261,34 @@ export default function Jornadas() {
                               }}
                               className="text-amber-600 dark:text-amber-400 font-bold underline underline-offset-2 hover:text-amber-500 inline cursor-pointer"
                             >
-                              Políticas, Condiciones y Cláusulas Oficiales de la Jornada
+                              Políticas y Condiciones de la Jornada
                             </button>
-                            {' '}(incluyendo la condición de <strong className="text-slate-900 dark:text-white font-bold">pago exclusivo en divisas y cero posibilidad de descuento adicional</strong>). <span className="text-amber-600 dark:text-amber-400 font-black">*</span>
+                            . <span className="text-amber-600 dark:text-amber-400 font-black">*</span>
                           </span>
                         </label>
+                      </div>
+
+                      {/* Aviso Independiente: Modalidad Divisas y Cero Descuento */}
+                      <div className="p-3 rounded-2xl bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/30 flex items-center justify-between gap-3 text-xs">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <ShieldAlert size={16} className="text-amber-600 dark:text-amber-400 shrink-0" />
+                          <div className="min-w-0">
+                            <span className="font-black text-slate-900 dark:text-white block text-[11px] uppercase tracking-wide">
+                              Solo Pago en Divisas · Cero Descuento
+                            </span>
+                            <span className="text-[10px] text-slate-600 dark:text-zinc-400 block truncate">
+                              Efectivo $, Zelle, Binance Pay y Banesco PA
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <CashUsdIcon size={16} />
+                          <ZelleIcon size={16} />
+                          <div className="w-4 h-4 rounded bg-[#181A20] flex items-center justify-center p-0.5">
+                            <BinanceIcon size={10} />
+                          </div>
+                          <BanescoPanamaIcon size={16} />
+                        </div>
                       </div>
 
                       <button
