@@ -143,14 +143,14 @@ const CONFIG = {
 const DEFAULT_JORNADAS = [
   {
     id: "reprogramacion",
-    badge: "Jornada de Potenciación",
-    title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
-    subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
+    badge: "Jornada de Protección & Potenciación",
+    title: "Protección TNGA, Descarbonización, Entonación & Reprogramación",
+    subtitle: "Descarbonización de válvulas de admisión, entonación de inyección directa y de puerto, sensores aire/combustible, ignición y reprogramación de ECU.",
     img: "/assets/servicio-mecanica.webp",
-    regularPrice: "$250 USD",
-    promoPrice: "$160 USD",
-    discountBadge: "AHORRAS $90 USD (36% OFF)",
-    duration: "2 a 3 horas",
+    regularPrice: "Desde $1,075 USD",
+    promoPrice: "Desde $698 USD",
+    discountBadge: "HASTA 35% OFF",
+    duration: "3 a 5 horas",
     benefits: [
       "Incremento de +15% a +35% de HP y Torque comprobables",
       "Eliminación total del retardo (lag) del pedal del acelerador",
@@ -393,6 +393,11 @@ export default function App() {
   // Calculate discount percentage dynamically for each promotion (both Jornadas and Repuestos)
   const getPromoDiscountPct = (item: any): number => {
     if (!item) return 0;
+    if (item.id === 'reprogramacion' || (Array.isArray(item.packages) && item.packages.length > 0)) {
+      return 35;
+    }
+    const matchPct = (item.discountBadge || item.badge || '').match(/(\d+)%/);
+    if (matchPct && matchPct[1]) return parseInt(matchPct[1], 10);
     if (item.regularPrice && (item.promoPrice || item.price)) {
       const reg = parseFloat(String(item.regularPrice).replace(/[^0-9.]/g, ''));
       const pro = parseFloat(String(item.promoPrice || item.price).replace(/[^0-9.]/g, ''));
@@ -400,8 +405,6 @@ export default function App() {
         return Math.round(((reg - pro) / reg) * 100);
       }
     }
-    const matchPct = (item.discountBadge || item.badge || '').match(/(\d+)%/);
-    if (matchPct && matchPct[1]) return parseInt(matchPct[1], 10);
     return 0;
   };
 
@@ -1130,17 +1133,26 @@ export default function App() {
               
               <div className="flex items-center gap-2 flex-wrap justify-center text-xs sm:text-sm">
                 <span className="bg-white text-red-700 font-black px-2.5 py-0.5 rounded shadow-sm tracking-wide shrink-0">
-                  {activePromo.discountPct > 0 ? `-${activePromo.discountPct}% OFF` : (activePromo.discountBadge || (activePromo.promoType === 'repuesto' ? "PRECIO ESPECIAL" : "OFERTA"))}
+                  {activePromo.promoType === 'jornada' 
+                    ? `HASTA ${activePromo.discountPct || 35}% OFF`
+                    : (activePromo.discountPct > 0 ? `-${activePromo.discountPct}% OFF` : (activePromo.discountBadge || "PRECIO ESPECIAL"))
+                  }
                 </span>
                 <span className="font-bold text-white/95 drop-shadow-sm">
                   {activePromo.title}
                 </span>
-                {(activePromo.promoPrice || activePromo.regularPrice || activePromo.price) && (
-                  <span className="font-semibold text-amber-200 flex items-center gap-1.5 ml-1">
-                    {activePromo.regularPrice && (
-                      <span className="line-through text-white/60 text-xs">{activePromo.regularPrice}</span>
-                    )}
-                    <span className="text-white font-extrabold text-sm">{activePromo.promoPrice || activePromo.price}</span>
+                {activePromo.promoType === 'repuesto' ? (
+                  (activePromo.promoPrice || activePromo.regularPrice || activePromo.price) && (
+                    <span className="font-semibold text-amber-200 flex items-center gap-1.5 ml-1">
+                      {activePromo.regularPrice && (
+                        <span className="line-through text-white/60 text-xs">{activePromo.regularPrice}</span>
+                      )}
+                      <span className="text-white font-extrabold text-sm">{activePromo.promoPrice || activePromo.price}</span>
+                    </span>
+                  )
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/40 border border-white/20 text-amber-300 font-bold text-xs ml-1">
+                    Cupos Limitados por Fecha
                   </span>
                 )}
               </div>
@@ -1409,7 +1421,12 @@ export default function App() {
                                   Precio Normal: {item.regularPrice}
                                 </span>
                               )}
-                              {(item.promoPrice && item.promoPrice !== '---') ? (
+                              {(item.id === 'reprogramacion' || (Array.isArray(item.packages) && item.packages.length > 0)) ? (
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md border border-amber-500/50 text-amber-300 font-black text-xs sm:text-sm tracking-wide shadow-md">
+                                  <Sparkles size={14} className="text-amber-400 shrink-0" />
+                                  <span>HASTA 35% OFF</span>
+                                </div>
+                              ) : (item.promoPrice && item.promoPrice !== '---') ? (
                                 <span className={`${isSingle ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-2xl'} font-black text-white tracking-tight drop-shadow`}>
                                   {item.promoPrice}
                                 </span>

@@ -999,18 +999,22 @@ export default function Jornadas() {
                     </div>
                   </div>
 
-                  {(activePackage ? effectivePercentDiscount : (effectivePromoPrice && effectivePromoPrice !== '---')) && (
-                    <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-white/10 w-full sm:w-auto">
-                      {effectiveRegularPrice && effectiveRegularPrice !== '---' && (
-                        <span className="text-xs text-slate-400 dark:text-zinc-400 line-through block">
-                          {effectiveRegularPrice}
-                        </span>
-                      )}
-                      <span className="text-xl sm:text-2xl font-black text-red-600 dark:text-amber-400 font-mono">
-                        {activePackage ? effectivePercentDiscount : effectivePromoPrice}
+                  <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-white/10 w-full sm:w-auto">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block whitespace-nowrap mb-0.5">
+                      DESCUENTO DE JORNADA
+                    </span>
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-display font-black text-red-600 dark:text-amber-400 block tracking-tight">
+                      {currentJornada.packages && currentJornada.packages.length > 0
+                        ? (effectivePercentDiscount || '35% OFF')
+                        : (effectivePercentDiscount || effectivePromoPrice)
+                      }
+                    </span>
+                    {effectiveRegularPrice && effectiveRegularPrice !== '---' && (
+                      <span className="text-xs text-slate-400 dark:text-zinc-500 line-through block mt-0.5">
+                        {effectiveRegularPrice}
                       </span>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             ) : (
