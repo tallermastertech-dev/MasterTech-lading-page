@@ -405,7 +405,57 @@ const DEFAULT_CATALOG: CatalogItem[] = [
 
 
 const DEFAULT_JORNADAS = [
-  { id: "reprogramacion", badge: "Jornada de Potenciación", title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)", subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).", img: "/assets/servicio-mecanica.webp", regularPrice: "$250 USD", promoPrice: "$160 USD", discountBadge: "AHORRAS $90 USD", duration: "2 a 3 horas", benefits: ["Incremento de +15% a +35% de HP y Torque comprobables", "Eliminación total del retardo (lag) del pedal del acelerador", "Ahorro de hasta un 10% de combustible en viajes largos y autopista"], specs: [{ label: "Potencia Extra", val: "+25 HP a +65 HP" }, { label: "Garantía", val: "1 Año Software" }], compatibleModels: "Toyota, Jeep, Ford, Chevrolet, Nissan, VW & Turbo." },
+  { 
+    id: "reprogramacion", 
+    badge: "Jornada de Protección & Potenciación", 
+    title: "Protección TNGA, Descarbonización, Entonación & Reprogramación", 
+    subtitle: "Descarbonización de válvulas de admisión, entonación de inyección directa y de puerto, sensores aire/combustible, ignición y reprogramación de ECU para optimización y tropicalización.", 
+    img: "/assets/servicio-mecanica.webp", 
+    regularPrice: "Desde $950 USD", 
+    promoPrice: "Desde $698 USD", 
+    discountBadge: "3 NIVELES DISPONIBLES", 
+    duration: "3 a 5 horas", 
+    benefits: [
+      "Descarbonización profunda de válvulas de admisión y cámaras",
+      "Entonación de inyección directa D4-S y de puerto",
+      "Servicio de sensores de oxígeno / relación aire-combustible e ignición",
+      "Reprogramación y optimización de ECU con tropicalización y calibración de fábrica",
+      "Garantía técnica oficial de 60 días por escrito"
+    ], 
+    specs: [
+      { label: "Garantía", val: "60 Días Escrito" },
+      { label: "Diagnóstico", val: "Banco y Escáner OEM" },
+      { label: "Inyección", val: "Directa + Puerto" },
+      { label: "Validación", val: "Ruta y En Vivo" }
+    ], 
+    compatibleModels: "Modelos Toyota TNGA motorización M20A, A25A, T24A-FTS y V35A-FTS sin hibridación eléctrica.",
+    packages: [
+      {
+        id: "pkg_m20_a25",
+        name: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
+        subtitle: "Toyota TNGA 2.0 y 2.5L sin hibridación (Descarbonización, entonación inyección y reprogramación ECU)",
+        regularPrice: "$950 USD",
+        promoPrice: "$698 USD",
+        discountBadge: "AHORRAS $252 USD"
+      },
+      {
+        id: "pkg_t24a_fts",
+        name: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+        subtitle: "Toyota TNGA motorización T24A-FTS (Válvulas, inyección directa/puerto, sensores y ECU 60 días)",
+        regularPrice: "$1,650 USD",
+        promoPrice: "$1,299 USD",
+        discountBadge: "AHORRAS $351 USD"
+      },
+      {
+        id: "pkg_v35a_fts",
+        name: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+        subtitle: "Toyota TNGA motorización V35A-FTS (Descarbonización, inyección, sensores aire/combustible y ECU)",
+        regularPrice: "$1,950 USD",
+        promoPrice: "$1,499 USD",
+        discountBadge: "AHORRAS $451 USD"
+      }
+    ]
+  },
   { id: "egr-dpf", badge: "Solución Electrónica Definitiva", title: "Desactivación Electrónica EGR / DPF / AdBlue / DTC Off", subtitle: "Elimina fallas molestas de Check Engine, atascamiento de Válvula EGR y problemas de Filtro DPF o AdBlue sin dañar el motor.", img: "/assets/servicio-electricidad.jpg", regularPrice: "$180 USD", promoPrice: "$120 USD", discountBadge: "AHORRAS $60 USD", duration: "1.5 a 2.5 horas", benefits: ["Anulación electrónica limpia de Válvula EGR", "Solución definitiva a regeneración atascada de Filtro DPF", "Eliminación de modo emergencia/limitación por AdBlue"], specs: [{ label: "Falla EGR/DPF", val: "100% Resuelta" }, { label: "Check Engine", val: "Luz Apagada" }], compatibleModels: "Toyota Hilux/Fortuner, Ford Ranger, Mitsubishi, Nissan NP300, VW Amarok." }
 ];
 
@@ -3220,10 +3270,22 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       : [];
     const mainImg = jornada.img || cleanImages[0] || '/assets/servicio-mecanica.webp';
 
+    const cleanPackages = Array.isArray(jornada.packages) 
+      ? jornada.packages.map((pkg: any, idx: number) => ({
+          id: pkg.id || `pkg_${idx}_${Date.now()}`,
+          name: pkg.name || `Paquete ${idx + 1}`,
+          subtitle: pkg.subtitle || '',
+          regularPrice: pkg.regularPrice || '',
+          promoPrice: pkg.promoPrice || '',
+          discountBadge: pkg.discountBadge || ''
+        }))
+      : [];
+
     const cleanJornadaItem = {
       ...jornada,
       img: mainImg,
       images: cleanImages,
+      packages: cleanPackages,
       subtitle: cleanSubtitle,
       garantia: cleanGarantia,
       specs: specsList,
@@ -8217,6 +8279,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           {j.discountBadge}
                         </span>
                       </div>
+
+                      {Array.isArray(j.packages) && j.packages.length > 0 && (
+                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5 text-[11px] space-y-1.5">
+                          <span className="font-black text-amber-400 uppercase flex items-center gap-1.5 text-[10px]">
+                            <Package size={13} />
+                            <span>{j.packages.length} Paquetes / Niveles de Precios Registrados:</span>
+                          </span>
+                          <div className="flex flex-wrap gap-1.5 text-zinc-300">
+                            {j.packages.map((p: any, pI: number) => (
+                              <span key={pI} className="bg-black/60 px-2 py-1 rounded-lg border border-white/10 text-[10px] flex items-center gap-1">
+                                <span className="font-bold text-white truncate max-w-[150px]">{p.name.split('(')[0].trim()}:</span>
+                                <strong className="text-primary font-mono">{p.promoPrice}</strong>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-2 pt-2 border-t border-white/5">
@@ -8236,7 +8315,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               existingSpecs.push(defaults[existingSpecs.length] || { label: 'Característica', val: 'Incluida' });
                             }
                           }
-                          setEditingJornada({ ...j, specs: existingSpecs, garantia: cleanG });
+                          const existingPkgs = Array.isArray(j.packages) ? [...j.packages] : [];
+                          setEditingJornada({ ...j, specs: existingSpecs, garantia: cleanG, packages: existingPkgs });
                           setIsJornadaModalOpen(true);
                         }}
                         className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
@@ -10669,6 +10749,193 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 <span className="text-[10px] text-zinc-500 mt-1 block">
                   Este texto aparece dentro de la cápsula naranja con la llama en la tarjeta de reserva.
                 </span>
+              </div>
+
+              {/* Sección de Paquetes / Niveles de Precios de la Jornada */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-white/10">
+                  <div>
+                    <span className="text-xs font-black uppercase text-amber-400 flex items-center gap-1.5">
+                      <Package size={15} />
+                      <span>Paquetes de Precios / Motorizaciones (Hasta 3 o más)</span>
+                    </span>
+                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                      Permite registrar hasta 3 precios distintos según el motor o paquete (ej. $698, $1,299 y $1,499).
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const defaultToyotaPkgs = [
+                          {
+                            id: `pkg_m20_${Date.now()}`,
+                            name: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
+                            subtitle: "Toyota TNGA 2.0 y 2.5L sin hibridación (Descarbonización, entonación y reprogramación)",
+                            regularPrice: "$950 USD",
+                            promoPrice: "$698 USD",
+                            discountBadge: "AHORRAS $252 USD"
+                          },
+                          {
+                            id: `pkg_t24a_${Date.now()}`,
+                            name: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+                            subtitle: "Toyota TNGA motorización T24A-FTS (Válvulas, inyección directa/puerto, sensores y ECU)",
+                            regularPrice: "$1,650 USD",
+                            promoPrice: "$1,299 USD",
+                            discountBadge: "AHORRAS $351 USD"
+                          },
+                          {
+                            id: `pkg_v35a_${Date.now()}`,
+                            name: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+                            subtitle: "Toyota TNGA motorización V35A-FTS (Descarbonización, inyección, sensores y ECU 60 días)",
+                            regularPrice: "$1,950 USD",
+                            promoPrice: "$1,499 USD",
+                            discountBadge: "AHORRAS $451 USD"
+                          }
+                        ];
+                        setEditingJornada({
+                          ...editingJornada,
+                          packages: defaultToyotaPkgs,
+                          regularPrice: editingJornada.regularPrice || "Desde $950 USD",
+                          promoPrice: editingJornada.promoPrice || "Desde $698 USD"
+                        });
+                      }}
+                      className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-[10px] font-black uppercase flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      <Sparkles size={12} />
+                      <span>Cargar 3 Paquetes Toyota ($698, $1,299, $1,499)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentPkgs = Array.isArray(editingJornada.packages) ? [...editingJornada.packages] : [];
+                        const num = currentPkgs.length + 1;
+                        currentPkgs.push({
+                          id: `pkg_${Date.now()}_${num}`,
+                          name: `Paquete ${num}`,
+                          subtitle: "Descripción del paquete o motorización",
+                          regularPrice: "",
+                          promoPrice: "$100 USD",
+                          discountBadge: ""
+                        });
+                        setEditingJornada({ ...editingJornada, packages: currentPkgs });
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-dark text-black text-[10px] font-black uppercase flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      <Plus size={12} />
+                      <span>+ Agregar Paquete</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Lista de paquetes */}
+                {(!editingJornada.packages || editingJornada.packages.length === 0) ? (
+                  <div className="p-3 text-center rounded-xl bg-black/30 border border-dashed border-white/10 text-zinc-400 text-xs">
+                    <span>No hay paquetes individuales configurados. La jornada usará el precio único de arriba.</span>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {editingJornada.packages.map((pkg: any, pIdx: number) => (
+                      <div key={pkg.id || pIdx} className="bg-black/50 border border-white/10 rounded-xl p-3 space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-black uppercase text-amber-400 flex items-center gap-1.5">
+                            <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center text-[10px] font-mono">
+                              {pIdx + 1}
+                            </span>
+                            <span>Paquete #{pIdx + 1}</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = editingJornada.packages.filter((_: any, i: number) => i !== pIdx);
+                              setEditingJornada({ ...editingJornada, packages: updated });
+                            }}
+                            className="text-zinc-500 hover:text-red-400 text-xs p-1 cursor-pointer transition-colors"
+                            title="Eliminar este paquete"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Nombre / Motorización</label>
+                            <input
+                              type="text"
+                              placeholder="Ej: Motor 2.0L / 2.5L (M20A-FKS)"
+                              value={pkg.name || ''}
+                              onChange={(e) => {
+                                const updated = [...editingJornada.packages];
+                                updated[pIdx] = { ...updated[pIdx], name: e.target.value };
+                                setEditingJornada({ ...editingJornada, packages: updated });
+                              }}
+                              className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-primary"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Aplica a / Detalle</label>
+                            <input
+                              type="text"
+                              placeholder="Ej: Toyota TNGA sin hibridación"
+                              value={pkg.subtitle || ''}
+                              onChange={(e) => {
+                                const updated = [...editingJornada.packages];
+                                updated[pIdx] = { ...updated[pIdx], subtitle: e.target.value };
+                                setEditingJornada({ ...editingJornada, packages: updated });
+                              }}
+                              className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-white text-xs outline-none focus:border-primary"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-2">
+                          <div>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Precio Regular</label>
+                            <input
+                              type="text"
+                              placeholder="Ej: $950 USD"
+                              value={pkg.regularPrice || ''}
+                              onChange={(e) => {
+                                const updated = [...editingJornada.packages];
+                                updated[pIdx] = { ...updated[pIdx], regularPrice: e.target.value };
+                                setEditingJornada({ ...editingJornada, packages: updated });
+                              }}
+                              className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-zinc-300 text-xs outline-none focus:border-primary"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-amber-400 font-bold block mb-0.5">Precio Promo *</label>
+                            <input
+                              type="text"
+                              placeholder="Ej: $698 USD"
+                              value={pkg.promoPrice || ''}
+                              onChange={(e) => {
+                                const updated = [...editingJornada.packages];
+                                updated[pIdx] = { ...updated[pIdx], promoPrice: e.target.value };
+                                setEditingJornada({ ...editingJornada, packages: updated });
+                              }}
+                              className="w-full bg-black/60 border border-amber-500/40 rounded-lg p-2 text-primary font-black text-xs outline-none focus:border-primary"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Ahorro / Badge (Opcional)</label>
+                            <input
+                              type="text"
+                              placeholder="Ej: AHORRAS $252 USD"
+                              value={pkg.discountBadge || ''}
+                              onChange={(e) => {
+                                const updated = [...editingJornada.packages];
+                                updated[pIdx] = { ...updated[pIdx], discountBadge: e.target.value };
+                                setEditingJornada({ ...editingJornada, packages: updated });
+                              }}
+                              className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-amber-300 text-xs outline-none focus:border-primary"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>

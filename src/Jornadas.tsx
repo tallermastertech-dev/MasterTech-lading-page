@@ -23,6 +23,7 @@ import {
   AlertTriangle,
   FileCheck,
   ShieldAlert,
+  Package,
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -120,6 +121,15 @@ const CONFIG_DEFAULT = {
   LOGO_URL: "/logo.png",
 };
 
+export interface JornadaPackage {
+  id: string;
+  name: string;
+  subtitle?: string;
+  regularPrice?: string;
+  promoPrice: string;
+  discountBadge?: string;
+}
+
 interface JornadaItem {
   id: string;
   badge: string;
@@ -139,35 +149,62 @@ interface JornadaItem {
   dateLabel?: string;
   jornadaSlots?: string[] | string;
   images?: string[];
+  packages?: JornadaPackage[];
 }
 
 const JORNADAS_DATA: JornadaItem[] = [
   {
     id: "reprogramacion",
-    badge: "Jornada de Potenciación",
-    title: "Reprogramación Electrónica & Chiptuning (Stage 1 / Stage 2)",
-    subtitle: "Aumenta la potencia y el torque de tu vehículo de forma segura optimizando el software de la computadora (ECU/TCU).",
+    badge: "Jornada de Protección & Potenciación",
+    title: "Protección TNGA, Descarbonización, Entonación & Reprogramación",
+    subtitle: "Descarbonización de válvulas de admisión, entonación de inyección directa y de puerto, sensores aire/combustible, ignición y reprogramación de ECU para optimización y tropicalización.",
     icon: <Zap className="w-6 h-6 text-primary" />,
     img: "/assets/servicio-mecanica.webp",
-    regularPrice: "$250 USD",
-    promoPrice: "$160 USD",
-    discountBadge: "AHORRAS $90 USD",
-    duration: "2 a 3 horas",
+    regularPrice: "Desde $950 USD",
+    promoPrice: "Desde $698 USD",
+    discountBadge: "3 NIVELES DISPONIBLES",
+    duration: "3 a 5 horas",
     benefits: [
-      "Incremento de +15% a +35% de HP y Torque comprobables",
-      "Eliminación total del retardo (lag) del pedal del acelerador",
-      "Ahorro de hasta un 10% de combustible en viajes largos y autopista",
-      "Optimización de curvas de cambios en cajas automáticas (TCU Tuning)",
-      "Respaldo de mapa original 100% reversible en todo momento"
+      "Descarbonización profunda de válvulas de admisión y cámaras",
+      "Entonación y calibración de inyección directa D4-S y de puerto",
+      "Servicio de sensores de oxígeno / relación aire-combustible e ignición",
+      "Reprogramación y optimización de ECU con tropicalización y calibración de fábrica",
+      "Garantía técnica oficial de 60 días por escrito"
     ],
     specs: [
-      { label: "Potencia Extra", val: "+25 HP a +65 HP" },
-      { label: "Respuesta Acelerador", val: "Instantánea (0s lag)" },
-      { label: "Consumo Carretera", val: "-10% consumo" },
-      { label: "Garantía", val: "1 Año Software" }
+      { label: "Garantía", val: "60 Días Escrito" },
+      { label: "Diagnóstico", val: "Banco y Escáner OEM" },
+      { label: "Inyección", val: "Directa + Puerto" },
+      { label: "Validación", val: "Ruta y En Vivo" }
     ],
-    compatibleModels: "Toyota (Hilux, Fortuner, 4Runner, Camry, Machito), Jeep (Cherokee, Grand Cherokee, Wrangler), Ford (F-150, Explorer, Mustang), Chevrolet (Silverado, Tahoe, Colorado), Nissan, VW & Turbo.",
-    popularAddon: "Incluye diagnóstico computarizado pre-tune sin costo adicional."
+    compatibleModels: "Modelos Toyota TNGA motorización M20A, A25A, T24A-FTS y V35A-FTS sin hibridación eléctrica.",
+    popularAddon: "3 paquetes especializados según cilindrada y motorización de tu unidad.",
+    packages: [
+      {
+        id: "pkg_m20_a25",
+        name: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
+        subtitle: "Toyota TNGA 2.0 y 2.5L sin hibridación (Descarbonización, entonación y reprogramación)",
+        regularPrice: "$950 USD",
+        promoPrice: "$698 USD",
+        discountBadge: "AHORRAS $252 USD"
+      },
+      {
+        id: "pkg_t24a_fts",
+        name: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+        subtitle: "Toyota TNGA motorización T24A-FTS (Válvulas, inyección directa/puerto, sensores y ECU 60 días)",
+        regularPrice: "$1,650 USD",
+        promoPrice: "$1,299 USD",
+        discountBadge: "AHORRAS $351 USD"
+      },
+      {
+        id: "pkg_v35a_fts",
+        name: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+        subtitle: "Toyota TNGA motorización V35A-FTS (Descarbonización, inyección, sensores y ECU 60 días)",
+        regularPrice: "$1,950 USD",
+        promoPrice: "$1,499 USD",
+        discountBadge: "AHORRAS $451 USD"
+      }
+    ]
   },
   {
     id: "egr-dpf",
@@ -499,9 +536,34 @@ export default function Jornadas() {
       jornadaDay: rawJornada?.jornadaDay !== undefined ? rawJornada.jornadaDay : undefined,
       dateLabel: rawJornada?.dateLabel || '',
       jornadaSlots: rawJornada?.jornadaSlots || undefined,
-      images: Array.isArray(rawJornada?.images) ? rawJornada.images : []
+      images: Array.isArray(rawJornada?.images) ? rawJornada.images : [],
+      packages: Array.isArray(rawJornada?.packages) && rawJornada.packages.length > 0
+        ? rawJornada.packages
+        : (fallback.id === rawJornada?.id && fallback.packages ? fallback.packages : [])
     };
   }, [rawJornada]);
+
+  const [selectedPackageId, setSelectedPackageId] = useState<string>('');
+
+  // Sincronizar paquete activo al cambiar de jornada
+  useEffect(() => {
+    if (currentJornada.packages && currentJornada.packages.length > 0) {
+      if (!selectedPackageId || !currentJornada.packages.some(p => p.id === selectedPackageId)) {
+        setSelectedPackageId(currentJornada.packages[0].id);
+      }
+    } else {
+      setSelectedPackageId('');
+    }
+  }, [currentJornada.id, currentJornada.packages]);
+
+  const activePackage = React.useMemo(() => {
+    if (!currentJornada.packages || currentJornada.packages.length === 0) return null;
+    return currentJornada.packages.find(p => p.id === selectedPackageId) || currentJornada.packages[0];
+  }, [currentJornada.packages, selectedPackageId]);
+
+  const effectiveRegularPrice = activePackage?.regularPrice || currentJornada.regularPrice;
+  const effectivePromoPrice = activePackage?.promoPrice || currentJornada.promoPrice;
+  const effectiveDiscountBadge = activePackage?.discountBadge || currentJornada.discountBadge;
 
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const [isHoveredGallery, setIsHoveredGallery] = useState(false);
@@ -607,10 +669,10 @@ export default function Jornadas() {
       nombre: nameStr,
       telefono: clientPhone.trim() || "No indicado",
       vehiculo: vehicleStr,
-      servicio: `Jornada VIP: ${currentJornada.title}`,
+      servicio: activePackage ? `Jornada VIP: ${currentJornada.title} - ${activePackage.name}` : `Jornada VIP: ${currentJornada.title}`,
       status: 'Confirmado',
       fecha_hora: selectedSlot || '',
-      falla: `[Jornada VIP: ${currentJornada.title}] Precio: ${currentJornada.promoPrice && currentJornada.promoPrice !== '---' ? currentJornada.promoPrice : 'Promocional'}. ${notes ? `Notas: ${notes}` : ''}`.trim()
+      falla: `[Jornada VIP: ${currentJornada.title}${activePackage ? ` | Paquete: ${activePackage.name}` : ''}] Precio: ${effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Promocional'}. ${notes ? `Notas: ${notes}` : ''}`.trim()
     };
 
     // Almacenamiento local preventivo inmediato en browser para el panel administrativo y selector de cupos
@@ -648,16 +710,17 @@ export default function Jornadas() {
     } catch (_) {}
 
     // 2. Construir y abrir mensaje de WhatsApp preformateado
-    const promoPriceDisplay = (currentJornada.promoPrice && currentJornada.promoPrice !== '---' && currentJornada.promoPrice.trim().length > 0)
-      ? currentJornada.promoPrice
+    const promoPriceDisplay = (effectivePromoPrice && effectivePromoPrice !== '---' && effectivePromoPrice.trim().length > 0)
+      ? effectivePromoPrice
       : '';
 
     const messageLines = [
       `👋 *¡HOLA MASTERTECH! DESEO APARTAR MI CUPO DE JORNADA* 🛠️`,
       ``,
       `🎯 *Jornada Seleccionada:* ${currentJornada.title}`,
+      activePackage ? `📦 *Paquete / Motorización:* ${activePackage.name}` : '',
       promoPriceDisplay 
-        ? `🏷️ *Precio Especial:* ${promoPriceDisplay} ${currentJornada.discountBadge ? `_(${currentJornada.discountBadge})_` : ''}`
+        ? `🏷️ *Precio Especial:* ${promoPriceDisplay} ${effectiveDiscountBadge ? `_(${effectiveDiscountBadge})_` : ''}`
         : '',
       `👤 *Nombre:* ${nameStr}`,
       `🚗 *Vehículo:* ${vehicleStr}`,
@@ -851,15 +914,15 @@ export default function Jornadas() {
                     </div>
                   </div>
 
-                  {currentJornada.promoPrice && currentJornada.promoPrice !== '---' && (
+                  {effectivePromoPrice && effectivePromoPrice !== '---' && (
                     <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-white/10 w-full sm:w-auto">
-                      {currentJornada.regularPrice && (
+                      {effectiveRegularPrice && effectiveRegularPrice !== '---' && (
                         <span className="text-xs text-slate-400 dark:text-zinc-400 line-through block">
-                          {currentJornada.regularPrice}
+                          {effectiveRegularPrice}
                         </span>
                       )}
                       <span className="text-xl sm:text-2xl font-black text-red-600 dark:text-amber-400 font-mono">
-                        {currentJornada.promoPrice}
+                        {effectivePromoPrice}
                       </span>
                     </div>
                   )}
@@ -1080,26 +1143,93 @@ export default function Jornadas() {
                   {/* Booking Card & Price */}
                   <div className="flex flex-col space-y-5 bg-slate-50 dark:bg-black/60 border border-slate-200 dark:border-white/10 rounded-3xl p-6 relative shadow-md dark:shadow-xl">
                     <div className="space-y-4">
+                      {/* Selector Interactivo de Paquetes / Motorizaciones (cuando existen 2 o más opciones) */}
+                      {currentJornada.packages && currentJornada.packages.length > 0 && (
+                        <div className="space-y-2 pb-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                              <Package size={14} />
+                              <span>Paquete / Motorización ({currentJornada.packages.length} Opciones):</span>
+                            </span>
+                            <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-semibold">
+                              Elige tu versión
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-2">
+                            {currentJornada.packages.map((pkg) => {
+                              const isSelected = (activePackage?.id || currentJornada.packages![0].id) === pkg.id;
+                              return (
+                                <button
+                                  key={pkg.id}
+                                  type="button"
+                                  onClick={() => setSelectedPackageId(pkg.id)}
+                                  className={`w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                                    isSelected
+                                      ? 'bg-amber-500/15 dark:bg-amber-950/40 border-amber-500 shadow-sm ring-1 ring-amber-500/50'
+                                      : 'bg-white dark:bg-black/40 border-slate-200 dark:border-white/10 hover:border-amber-500/40'
+                                  }`}
+                                >
+                                  <div className="flex items-start gap-2.5 min-w-0">
+                                    <div className={`w-4 h-4 rounded-full border-2 mt-0.5 flex items-center justify-center shrink-0 transition-all ${
+                                      isSelected ? 'border-amber-500 bg-amber-500' : 'border-slate-300 dark:border-zinc-600'
+                                    }`}>
+                                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-black" />}
+                                    </div>
+                                    <div className="min-w-0">
+                                      <span className={`text-xs font-black block leading-tight truncate ${
+                                        isSelected ? 'text-amber-950 dark:text-amber-300' : 'text-slate-900 dark:text-white'
+                                      }`}>
+                                        {pkg.name}
+                                      </span>
+                                      {pkg.subtitle && (
+                                        <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-tight line-clamp-1 mt-0.5">
+                                          {pkg.subtitle}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="text-right shrink-0">
+                                    <span className="text-xs sm:text-sm font-black font-display text-red-600 dark:text-primary block">
+                                      {pkg.promoPrice}
+                                    </span>
+                                    {pkg.regularPrice && (
+                                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 line-through block">
+                                        {pkg.regularPrice}
+                                      </span>
+                                    )}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4">
                         <div>
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 block">PRECIO REGULAR</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 block">
+                            {activePackage ? `PRECIO REGULAR (${activePackage.name.split('(')[0].trim()})` : 'PRECIO REGULAR'}
+                          </span>
                           <span className="text-base text-slate-400 dark:text-zinc-400 line-through font-bold">
-                            {currentJornada.regularPrice && currentJornada.regularPrice !== '---' ? currentJornada.regularPrice : 'Consultar'}
+                            {effectiveRegularPrice && effectiveRegularPrice !== '---' ? effectiveRegularPrice : 'Consultar'}
                           </span>
                         </div>
                         <div className="text-right">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">PRECIO JORNADA</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">
+                            {activePackage ? 'PRECIO JORNADA' : 'PRECIO JORNADA'}
+                          </span>
                           <span className="text-2xl sm:text-3xl font-display font-black text-red-600 dark:text-primary">
-                            {currentJornada.promoPrice && currentJornada.promoPrice !== '---' ? currentJornada.promoPrice : 'Cupo Promocional'}
+                            {effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional'}
                           </span>
                         </div>
                       </div>
 
-                      {currentJornada.discountBadge && (
+                      {effectiveDiscountBadge && (
                         <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
                           <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
                             <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-                            {currentJornada.discountBadge}
+                            {effectiveDiscountBadge}
                           </span>
                         </div>
                       )}
@@ -1240,7 +1370,7 @@ export default function Jornadas() {
                         <span>
                           {isBookingSubmitting
                             ? 'REGISTRANDO Y CONECTANDO...'
-                            : `RESERVAR CUPO VÍA WHATSAPP${currentJornada.promoPrice && currentJornada.promoPrice !== '---' && currentJornada.promoPrice.trim().length > 0 ? ` (${currentJornada.promoPrice})` : ''}`
+                            : `RESERVAR CUPO VÍA WHATSAPP${effectivePromoPrice && effectivePromoPrice !== '---' && effectivePromoPrice.trim().length > 0 ? ` (${effectivePromoPrice})` : ''}`
                           }
                         </span>
                       </button>
