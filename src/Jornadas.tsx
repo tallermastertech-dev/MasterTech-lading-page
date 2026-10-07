@@ -540,11 +540,88 @@ export default function Jornadas() {
       dateLabel: rawJornada?.dateLabel || '',
       jornadaSlots: rawJornada?.jornadaSlots || undefined,
       images: Array.isArray(rawJornada?.images) ? rawJornada.images : [],
-      packages: Array.isArray(rawJornada?.packages) && rawJornada.packages.length > 0
-        ? rawJornada.packages
-        : (fallback.id === rawJornada?.id && fallback.packages ? fallback.packages : [])
+      packages: (() => {
+        const rawPackages = Array.isArray(rawJornada?.packages) && rawJornada.packages.length > 0
+          ? rawJornada.packages
+          : (fallback.id === rawJornada?.id && fallback.packages ? fallback.packages : []);
+
+        return rawPackages.map((p: JornadaPackage) => {
+          let name = p.name || '';
+          let subtitle = p.subtitle || '';
+          let discountBadge = p.discountBadge || '';
+          let regularPrice = p.regularPrice || '';
+          let promoPrice = p.promoPrice || '';
+
+          const nLower = name.toLowerCase();
+          const pId = (p.id || '').toLowerCase();
+          if (pId.includes('m20') || nLower.includes('m20a') || nLower.includes('2.0l') || nLower.includes('corolla')) {
+            name = 'Corolla, RAV4, Camry, Levin';
+            subtitle = subtitle || 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
+            regularPrice = regularPrice || '$1,075 USD';
+            promoPrice = promoPrice || '$698 USD';
+            discountBadge = '35% OFF';
+          } else if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('turbo 2.4l') || nLower.includes('tacoma')) {
+            name = 'Tacoma, Highlander, Lexus RX / TX';
+            subtitle = subtitle || 'Motor Turbo 2.4L (T24A-FTS no híbrido)';
+            regularPrice = regularPrice || '$1,944 USD';
+            promoPrice = promoPrice || '$1,299 USD';
+            discountBadge = '33% OFF';
+          } else if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra')) {
+            name = 'Tundra, Land Cruiser 300, Sequoia, Lexus LX';
+            subtitle = subtitle || 'Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)';
+            regularPrice = regularPrice || '$2,200 USD';
+            promoPrice = promoPrice || '$1,499 USD';
+            discountBadge = '31% OFF';
+          }
+
+          return {
+            ...p,
+            name,
+            subtitle,
+            discountBadge,
+            regularPrice,
+            promoPrice
+          };
+        });
+      })()
     };
   }, [rawJornada]);
+
+  const getPackageDiscountPercent = (pkg?: JornadaPackage | null, regPrice?: string, pPrice?: string, dBadge?: string): string => {
+    if (pkg) {
+      const b = (pkg.discountBadge || '').trim();
+      const percentMatch = b.match(/(\d+)\s*%/);
+      if (percentMatch) return `${percentMatch[1]}% OFF`;
+
+      const regNum = parseFloat((pkg.regularPrice || '').replace(/[^0-9.]/g, ''));
+      const promoNum = parseFloat((pkg.promoPrice || '').replace(/[^0-9.]/g, ''));
+      if (regNum > 0 && promoNum > 0 && regNum > promoNum) {
+        return `${Math.round(((regNum - promoNum) / regNum) * 100)}% OFF`;
+      }
+
+      const ahorroMatch = b.match(/(\d+[\d,.]*)/);
+      if (ahorroMatch && regNum > 0) {
+        const ahorroNum = parseFloat(ahorroMatch[1].replace(/,/g, ''));
+        if (ahorroNum > 0) {
+          return `${Math.round((ahorroNum / regNum) * 100)}% OFF`;
+        }
+      }
+      if (b) return b;
+    }
+
+    if (dBadge) {
+      const percentMatch = dBadge.match(/(\d+)\s*%/);
+      if (percentMatch) return `${percentMatch[1]}% OFF`;
+    }
+
+    const regNum = parseFloat((regPrice || '').replace(/[^0-9.]/g, ''));
+    const promoNum = parseFloat((pPrice || '').replace(/[^0-9.]/g, ''));
+    if (regNum > 0 && promoNum > 0 && regNum > promoNum) {
+      return `${Math.round(((regNum - promoNum) / regNum) * 100)}% OFF`;
+    }
+
+    return dBadge || 'DESC. VIP';
+  };
 
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
 
@@ -567,6 +644,10 @@ export default function Jornadas() {
   const effectiveRegularPrice = activePackage?.regularPrice || currentJornada.regularPrice;
   const effectivePromoPrice = activePackage?.promoPrice || currentJornada.promoPrice;
   const effectiveDiscountBadge = activePackage?.discountBadge || currentJornada.discountBadge;
+
+  const effectivePercentDiscount = React.useMemo(() => {
+    return getPackageDiscountPercent(activePackage, effectiveRegularPrice, effectivePromoPrice, effectiveDiscountBadge);
+  }, [activePackage, effectiveRegularPrice, effectivePromoPrice, effectiveDiscountBadge]);
 
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const [isHoveredGallery, setIsHoveredGallery] = useState(false);
@@ -1200,7 +1281,7 @@ export default function Jornadas() {
                                         ? 'bg-red-600 text-white shadow-red-500/20'
                                         : 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
                                     }`}>
-                                      {pkg.discountBadge || pkg.promoPrice}
+                                      {getPackageDiscountPercent(pkg, pkg.regularPrice, pkg.promoPrice, pkg.discountBadge)}
                                     </span>
                                     <span className="text-[9px] text-slate-400 dark:text-zinc-500 uppercase font-black block mt-0.5 text-right whitespace-nowrap">
                                       Descuento
@@ -1224,22 +1305,27 @@ export default function Jornadas() {
                         </div>
                         <div className="text-right shrink-0">
                           <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block whitespace-nowrap">
-                            PRECIO JORNADA
+                            {activePackage ? 'DESCUENTO DE JORNADA' : 'PRECIO JORNADA'}
                           </span>
                           <span className="text-xl sm:text-2xl lg:text-3xl font-display font-black text-red-600 dark:text-primary whitespace-nowrap block tracking-tight">
-                            {effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional'}
+                            {activePackage
+                              ? effectivePercentDiscount
+                              : (effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional')}
                           </span>
                         </div>
                       </div>
 
-                      {effectiveDiscountBadge && (
-                        <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
-                          <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
-                            <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-                            AHORRAS {effectiveDiscountBadge} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})
-                          </span>
-                        </div>
-                      )}
+                      <div className="bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center space-y-1">
+                        <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
+                          <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0" />
+                          AHORRAS {effectivePercentDiscount} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})
+                        </span>
+                        <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-snug">
+                          {activePackage 
+                            ? 'Tarifa promocional protegida. Tu cotización con precio final y cupo reservado se confirman al enviar tu solicitud por WhatsApp.'
+                            : 'Cupo exclusivo con beneficio especial aplicado a tu vehículo.'}
+                        </p>
+                      </div>
 
                       {currentJornada.popularAddon && (
                         <p className="text-[11px] text-slate-500 dark:text-zinc-400 italic text-center">
