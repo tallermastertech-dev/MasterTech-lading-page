@@ -48,12 +48,6 @@ export const ZelleIcon = ({ size = 20, className = "" }: { size?: number; classN
   </div>
 );
 
-export const PagoMovilIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
-  <div style={{ width: size, height: size }} className={`shrink-0 rounded-full overflow-hidden flex items-center justify-center bg-white p-0.5 border border-slate-200 dark:border-white/10 ${className}`}>
-    <img src="/assets/logo_pagomovil.png" alt="Pago Móvil" className="w-full h-full object-contain select-none pointer-events-none" />
-  </div>
-);
-
 export const BanescoPanamaIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
   <svg width={size} height={size} viewBox="0 0 40 40" fill="none" className={className}>
     <rect width="40" height="40" rx="9" fill="#007A33" />
@@ -87,7 +81,7 @@ export const CashUsdIcon = ({ size = 20, className = "" }: { size?: number; clas
 
 export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) => {
   return (
-    <div className={`grid ${compact ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3'}`}>
+    <div className={`grid ${compact ? 'grid-cols-2 sm:grid-cols-4 gap-2' : 'grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3'}`}>
       <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
         <CashUsdIcon size={compact ? 26 : 32} className="shrink-0 rounded-lg shadow-sm" />
         <div className="min-w-0">
@@ -110,16 +104,9 @@ export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) =
         </div>
       </div>
       <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
-        <PagoMovilIcon size={compact ? 26 : 32} className="shadow-sm" />
-        <div className="min-w-0">
-          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Pago Móvil</span>
-          <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Bs. tasa oficial</span>
-        </div>
-      </div>
-      <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm col-span-2 sm:col-span-1">
         <BanescoPanamaIcon size={compact ? 26 : 32} className="shrink-0 rounded-lg shadow-sm" />
         <div className="min-w-0">
-          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco PA</span>
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco Panamá</span>
           <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia USD</span>
         </div>
       </div>
@@ -382,7 +369,7 @@ export const JORNADA_POLICIES = [
       },
       { 
         subtitle: "Métodos de Pago Aceptados", 
-        text: "Aceptamos exclusivamente: 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), 4) Pago Móvil (a tasa oficial / autorizada al momento del pago), y 5) Banesco Panamá (transferencias en dólares USD)." 
+        text: "Aceptamos exclusivamente métodos en divisas ($ USD): 1) Dólares en Efectivo ($ USD en billetes en buen estado sin tachaduras ni roturas), 2) Zelle (transferencias electrónicas directas en USD), 3) Binance Pay (criptoactivos estables USDT sin comisiones), y 4) Banesco Panamá (transferencias directas en dólares USD)." 
       },
       { 
         subtitle: "Liquidación Inmediata de Unidad", 
@@ -1232,7 +1219,7 @@ export default function Jornadas() {
                               Solo Pago en Divisas · Cero Descuento
                             </span>
                             <span className="text-[10px] text-slate-600 dark:text-zinc-400 block truncate">
-                              Efectivo $, Zelle, Binance, Pago Móvil y Banesco PA
+                              Efectivo $, Zelle, Binance Pay y Banesco Panamá
                             </span>
                           </div>
                         </div>
@@ -1240,7 +1227,6 @@ export default function Jornadas() {
                           <CashUsdIcon size={16} />
                           <ZelleIcon size={16} />
                           <BinanceIcon size={16} />
-                          <PagoMovilIcon size={16} />
                           <BanescoPanamaIcon size={16} />
                         </div>
                       </div>
@@ -1342,7 +1328,7 @@ export default function Jornadas() {
                         <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
                           Métodos Aceptados para Liquidación:
                         </span>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
                           <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
                             <CashUsdIcon size={18} className="shrink-0" />
                             <span className="truncate">$ Efectivo</span>
@@ -1356,10 +1342,6 @@ export default function Jornadas() {
                             <span className="truncate">Binance</span>
                           </div>
                           <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <PagoMovilIcon size={18} className="shrink-0" />
-                            <span className="truncate">Pago Móvil</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs col-span-2 sm:col-span-1">
                             <BanescoPanamaIcon size={18} className="shrink-0" />
                             <span className="truncate">Banesco PA</span>
                           </div>
@@ -1452,7 +1434,7 @@ export default function Jornadas() {
                   <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
                     Canales de Pago Autorizados:
                   </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
                     <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
                       <CashUsdIcon size={16} />
                       <span className="truncate">$ Efectivo</span>
@@ -1466,10 +1448,6 @@ export default function Jornadas() {
                       <span className="truncate">Binance</span>
                     </div>
                     <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                      <PagoMovilIcon size={16} />
-                      <span className="truncate">Pago Móvil</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs col-span-2 sm:col-span-1">
                       <BanescoPanamaIcon size={16} />
                       <span className="truncate">Banesco PA</span>
                     </div>
@@ -1642,7 +1620,7 @@ export default function Jornadas() {
                           <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
                             Canales de Pago Autorizados:
                           </span>
-                          <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
                             <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
                               <CashUsdIcon size={14} />
                               <span className="truncate">$ Efectivo</span>
@@ -1656,10 +1634,6 @@ export default function Jornadas() {
                               <span className="truncate">Binance</span>
                             </div>
                             <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                              <PagoMovilIcon size={14} />
-                              <span className="truncate">Pago Móvil</span>
-                            </div>
-                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs col-span-2 sm:col-span-1">
                               <BanescoPanamaIcon size={14} />
                               <span className="truncate">Banesco PA</span>
                             </div>
