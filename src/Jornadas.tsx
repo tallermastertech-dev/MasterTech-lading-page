@@ -999,7 +999,7 @@ export default function Jornadas() {
                     </div>
                   </div>
 
-                  {effectivePromoPrice && effectivePromoPrice !== '---' && (
+                  {(activePackage ? effectivePercentDiscount : (effectivePromoPrice && effectivePromoPrice !== '---')) && (
                     <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-white/10 w-full sm:w-auto">
                       {effectiveRegularPrice && effectiveRegularPrice !== '---' && (
                         <span className="text-xs text-slate-400 dark:text-zinc-400 line-through block">
@@ -1007,7 +1007,7 @@ export default function Jornadas() {
                         </span>
                       )}
                       <span className="text-xl sm:text-2xl font-black text-red-600 dark:text-amber-400 font-mono">
-                        {effectivePromoPrice}
+                        {activePackage ? effectivePercentDiscount : effectivePromoPrice}
                       </span>
                     </div>
                   )}
@@ -1463,7 +1463,7 @@ export default function Jornadas() {
                         <span>
                           {isBookingSubmitting
                             ? 'REGISTRANDO Y CONECTANDO...'
-                            : `RESERVAR CUPO VÍA WHATSAPP${effectivePromoPrice && effectivePromoPrice !== '---' && effectivePromoPrice.trim().length > 0 ? ` (${effectivePromoPrice})` : ''}`
+                            : `RESERVAR CUPO VÍA WHATSAPP${activePackage ? ` (${effectivePercentDiscount})` : (effectivePromoPrice && effectivePromoPrice !== '---' && effectivePromoPrice.trim().length > 0 ? ` (${effectivePromoPrice})` : '')}`
                           }
                         </span>
                       </button>
