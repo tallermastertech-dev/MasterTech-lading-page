@@ -411,9 +411,9 @@ const DEFAULT_JORNADAS = [
     title: "Protección TNGA, Descarbonización, Entonación & Reprogramación", 
     subtitle: "Descarbonización de válvulas de admisión, entonación de inyección directa y de puerto, sensores aire/combustible, ignición y reprogramación de ECU para optimización y tropicalización.", 
     img: "/assets/servicio-mecanica.webp", 
-    regularPrice: "Desde $950 USD", 
+    regularPrice: "Desde $1,075 USD", 
     promoPrice: "Desde $698 USD", 
-    discountBadge: "3 NIVELES DISPONIBLES", 
+    discountBadge: "HASTA 35% OFF", 
     duration: "3 a 5 horas", 
     benefits: [
       "Descarbonización profunda de válvulas de admisión y cámaras",
@@ -432,27 +432,27 @@ const DEFAULT_JORNADAS = [
     packages: [
       {
         id: "pkg_m20_a25",
-        name: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
-        subtitle: "Toyota TNGA 2.0 y 2.5L sin hibridación (Descarbonización, entonación inyección y reprogramación ECU)",
-        regularPrice: "$950 USD",
+        name: "Corolla, RAV4, Camry, Levin",
+        subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
+        regularPrice: "$1,075 USD",
         promoPrice: "$698 USD",
-        discountBadge: "AHORRAS $252 USD"
+        discountBadge: "35% OFF"
       },
       {
         id: "pkg_t24a_fts",
-        name: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
-        subtitle: "Toyota TNGA motorización T24A-FTS (Válvulas, inyección directa/puerto, sensores y ECU 60 días)",
-        regularPrice: "$1,650 USD",
+        name: "Tacoma, Highlander, Lexus RX / TX",
+        subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+        regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
-        discountBadge: "AHORRAS $351 USD"
+        discountBadge: "33% OFF"
       },
       {
         id: "pkg_v35a_fts",
-        name: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
-        subtitle: "Toyota TNGA motorización V35A-FTS (Descarbonización, inyección, sensores aire/combustible y ECU)",
-        regularPrice: "$1,950 USD",
+        name: "Tundra, Land Cruiser 300, Sequoia, Lexus LX",
+        subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+        regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
-        discountBadge: "AHORRAS $451 USD"
+        discountBadge: "31% OFF"
       }
     ]
   },
@@ -10809,33 +10809,33 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         const defaultToyotaPkgs = [
                           {
                             id: `pkg_m20_${Date.now()}`,
-                            name: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
-                            subtitle: "Toyota TNGA 2.0 y 2.5L sin hibridación (Descarbonización, entonación y reprogramación)",
-                            regularPrice: "$950 USD",
+                            name: "Corolla, RAV4, Camry, Levin",
+                            subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
+                            regularPrice: "$1,075 USD",
                             promoPrice: "$698 USD",
-                            discountBadge: "AHORRAS $252 USD"
+                            discountBadge: "35% OFF"
                           },
                           {
                             id: `pkg_t24a_${Date.now()}`,
-                            name: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
-                            subtitle: "Toyota TNGA motorización T24A-FTS (Válvulas, inyección directa/puerto, sensores y ECU)",
-                            regularPrice: "$1,650 USD",
+                            name: "Tacoma, Highlander, Lexus RX / TX",
+                            subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+                            regularPrice: "$1,944 USD",
                             promoPrice: "$1,299 USD",
-                            discountBadge: "AHORRAS $351 USD"
+                            discountBadge: "33% OFF"
                           },
                           {
                             id: `pkg_v35a_${Date.now()}`,
-                            name: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
-                            subtitle: "Toyota TNGA motorización V35A-FTS (Descarbonización, inyección, sensores y ECU 60 días)",
-                            regularPrice: "$1,950 USD",
+                            name: "Tundra, Land Cruiser 300, Sequoia, Lexus LX",
+                            subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+                            regularPrice: "$2,200 USD",
                             promoPrice: "$1,499 USD",
-                            discountBadge: "AHORRAS $451 USD"
+                            discountBadge: "31% OFF"
                           }
                         ];
                         setEditingJornada({
                           ...editingJornada,
                           packages: defaultToyotaPkgs,
-                          regularPrice: editingJornada.regularPrice || "Desde $950 USD",
+                          regularPrice: editingJornada.regularPrice || "Desde $1,075 USD",
                           promoPrice: editingJornada.promoPrice || "Desde $698 USD"
                         });
                       }}
@@ -10949,10 +10949,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           <div>
-                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Nombre / Motorización</label>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Modelos de Vehículo *</label>
                             <input
                               type="text"
-                              placeholder="Ej: Motor 2.0L / 2.5L (M20A-FKS)"
+                              placeholder="Ej: Corolla, RAV4, Camry, Levin"
                               value={pkg.name || ''}
                               onChange={(e) => {
                                 const updated = [...editingJornada.packages];
@@ -10963,10 +10963,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             />
                           </div>
                           <div>
-                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Aplica a / Detalle</label>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Motorización / Detalle</label>
                             <input
                               type="text"
-                              placeholder="Ej: Toyota TNGA sin hibridación"
+                              placeholder="Ej: Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)"
                               value={pkg.subtitle || ''}
                               onChange={(e) => {
                                 const updated = [...editingJornada.packages];
@@ -10983,7 +10983,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Precio Regular</label>
                             <input
                               type="text"
-                              placeholder="Ej: $950 USD"
+                              placeholder="Ej: $1,075 USD"
                               value={pkg.regularPrice || ''}
                               onChange={(e) => {
                                 const updated = [...editingJornada.packages];
@@ -11008,10 +11008,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             />
                           </div>
                           <div>
-                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Ahorro / Badge (Opcional)</label>
+                            <label className="text-[10px] text-zinc-400 font-bold block mb-0.5">Descuento / % Badge</label>
                             <input
                               type="text"
-                              placeholder="Ej: AHORRAS $252 USD"
+                              placeholder="Ej: 35% OFF"
                               value={pkg.discountBadge || ''}
                               onChange={(e) => {
                                 const updated = [...editingJornada.packages];

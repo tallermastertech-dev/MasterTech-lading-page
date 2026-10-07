@@ -162,9 +162,9 @@ const JORNADAS_DATA: JornadaItem[] = [
     subtitle: "Descarbonización de válvulas de admisión, entonación de inyección directa y de puerto, sensores aire/combustible, ignición y reprogramación de ECU para optimización y tropicalización.",
     icon: <Zap className="w-6 h-6 text-primary" />,
     img: "/assets/servicio-mecanica.webp",
-    regularPrice: "Desde $950 USD",
+    regularPrice: "Desde $1,075 USD",
     promoPrice: "Desde $698 USD",
-    discountBadge: "3 NIVELES DISPONIBLES",
+    discountBadge: "HASTA 35% OFF",
     duration: "3 a 5 horas",
     benefits: [
       "Descarbonización profunda de válvulas de admisión y cámaras",
@@ -184,27 +184,27 @@ const JORNADAS_DATA: JornadaItem[] = [
     packages: [
       {
         id: "pkg_m20_a25",
-        name: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
-        subtitle: "Toyota TNGA 2.0 y 2.5L sin hibridación (Descarbonización, entonación y reprogramación)",
-        regularPrice: "$950 USD",
+        name: "Corolla, RAV4, Camry, Levin",
+        subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
+        regularPrice: "$1,075 USD",
         promoPrice: "$698 USD",
-        discountBadge: "AHORRAS $252 USD"
+        discountBadge: "35% OFF"
       },
       {
         id: "pkg_t24a_fts",
-        name: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
-        subtitle: "Toyota TNGA motorización T24A-FTS (Válvulas, inyección directa/puerto, sensores y ECU 60 días)",
-        regularPrice: "$1,650 USD",
+        name: "Tacoma, Highlander, Lexus RX / TX",
+        subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+        regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
-        discountBadge: "AHORRAS $351 USD"
+        discountBadge: "33% OFF"
       },
       {
         id: "pkg_v35a_fts",
-        name: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
-        subtitle: "Toyota TNGA motorización V35A-FTS (Descarbonización, inyección, sensores y ECU 60 días)",
-        regularPrice: "$1,950 USD",
+        name: "Tundra, Land Cruiser 300, Sequoia, Lexus LX",
+        subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+        regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
-        discountBadge: "AHORRAS $451 USD"
+        discountBadge: "31% OFF"
       }
     ]
   },
@@ -721,9 +721,10 @@ export default function Jornadas() {
       `👋 *¡HOLA MASTERTECH! DESEO APARTAR MI CUPO DE JORNADA* 🛠️`,
       ``,
       `🎯 *Jornada Seleccionada:* ${currentJornada.title}`,
-      activePackage ? `📦 *Paquete / Motorización:* ${activePackage.name}` : '',
+      activePackage ? `🚘 *Modelo(s):* ${activePackage.name}` : '',
+      activePackage?.subtitle ? `⚙️ *Motorización:* ${activePackage.subtitle}` : '',
       promoPriceDisplay 
-        ? `🏷️ *Precio Especial:* ${promoPriceDisplay} ${effectiveDiscountBadge ? `_(${effectiveDiscountBadge})_` : ''}`
+        ? `🏷️ *Precio Promocional de Jornada:* ${promoPriceDisplay} ${effectiveDiscountBadge ? `_(${effectiveDiscountBadge})_` : ''}`
         : '',
       `👤 *Nombre:* ${nameStr}`,
       `🚗 *Vehículo:* ${vehicleStr}`,
@@ -1194,14 +1195,16 @@ export default function Jornadas() {
                                     </div>
                                   </div>
                                   <div className="text-right shrink-0">
-                                    <span className="text-xs sm:text-sm font-black font-display text-red-600 dark:text-primary block whitespace-nowrap">
-                                      {pkg.promoPrice}
+                                    <span className={`inline-block px-2.5 py-1 rounded-lg text-xs font-black tracking-tight whitespace-nowrap shadow-xs transition-all ${
+                                      isSelected
+                                        ? 'bg-red-600 text-white shadow-red-500/20'
+                                        : 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
+                                    }`}>
+                                      {pkg.discountBadge || pkg.promoPrice}
                                     </span>
-                                    {pkg.regularPrice && (
-                                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 line-through block whitespace-nowrap">
-                                        {pkg.regularPrice}
-                                      </span>
-                                    )}
+                                    <span className="text-[9px] text-slate-400 dark:text-zinc-500 uppercase font-black block mt-0.5 text-right whitespace-nowrap">
+                                      Descuento
+                                    </span>
                                   </div>
                                 </button>
                               );
@@ -1213,7 +1216,7 @@ export default function Jornadas() {
                       <div className="flex items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
                         <div className="min-w-0 pr-1">
                           <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-zinc-500 block leading-tight">
-                            {activePackage ? `PRECIO REGULAR (${activePackage.name.split('(')[0].trim()})` : 'PRECIO REGULAR'}
+                            {activePackage ? `PRECIO REGULAR (${activePackage.name.split(/[,(]/)[0].trim()})` : 'PRECIO REGULAR'}
                           </span>
                           <span className="text-sm sm:text-base text-slate-400 dark:text-zinc-400 line-through font-bold whitespace-nowrap block mt-0.5">
                             {effectiveRegularPrice && effectiveRegularPrice !== '---' ? effectiveRegularPrice : 'Consultar'}
@@ -1221,7 +1224,7 @@ export default function Jornadas() {
                         </div>
                         <div className="text-right shrink-0">
                           <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block whitespace-nowrap">
-                            {activePackage ? 'PRECIO JORNADA' : 'PRECIO JORNADA'}
+                            PRECIO JORNADA
                           </span>
                           <span className="text-xl sm:text-2xl lg:text-3xl font-display font-black text-red-600 dark:text-primary whitespace-nowrap block tracking-tight">
                             {effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional'}
@@ -1233,7 +1236,7 @@ export default function Jornadas() {
                         <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center">
                           <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
                             <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-                            {effectiveDiscountBadge}
+                            AHORRAS {effectiveDiscountBadge} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})
                           </span>
                         </div>
                       )}
