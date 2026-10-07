@@ -1139,10 +1139,79 @@ export default function Jornadas() {
                       <p className="text-xs text-slate-700 dark:text-zinc-300 leading-relaxed">{currentJornada.compatibleModels}</p>
                     </div>
                   </div>
+
+                  {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial */}
+                  <div className="bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-5 space-y-4 shadow-sm">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                          <ShieldCheck size={18} />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Garantía y Protocolo de Calidad</h4>
+                          <p className="text-[10px] text-slate-500 dark:text-zinc-400">Tranquilidad absoluta para tu inversión automotriz</p>
+                        </div>
+                      </div>
+                      <a
+                        href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
+                        className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:text-amber-500 font-bold text-xs shrink-0"
+                      >
+                        <Phone size={12} />
+                        <span>Llamar al Taller</span>
+                      </a>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="flex flex-col gap-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/5 rounded-xl p-3">
+                        <div className="flex items-center gap-1.5 text-amber-500 dark:text-amber-400">
+                          <Award className="w-4 h-4 shrink-0" />
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">
+                            {(() => {
+                              const rawG = currentJornada.specs?.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val || '2 Meses';
+                              return rawG.toLowerCase().includes('garant') ? rawG : `${rawG} de Garantía`;
+                            })()}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 dark:text-zinc-400 leading-snug">Cobertura total sobre mano de obra y calibraciones.</p>
+                      </div>
+
+                      <div className="flex flex-col gap-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/5 rounded-xl p-3">
+                        <div className="flex items-center gap-1.5 text-primary">
+                          <Activity className="w-4 h-4 shrink-0" />
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">Banco y Carretera</span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 dark:text-zinc-400 leading-snug">Validación dinámica en vía y monitoreo en vivo.</p>
+                      </div>
+
+                      <div className="flex flex-col gap-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/5 rounded-xl p-3">
+                        <div className="flex items-center gap-1.5 text-emerald-500 dark:text-emerald-400">
+                          <FileCheck className="w-4 h-4 shrink-0" />
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">Acta Digital 24/7</span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 dark:text-zinc-400 leading-snug">Registro fotográfico y video al recibir tu vehículo.</p>
+                      </div>
+                    </div>
+
+                    {/* Resumen Financiero y Canales de Pago */}
+                    <div className="pt-3 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                        <span className="font-bold text-slate-900 dark:text-white text-[11px]">
+                          Modalidad Divisas · Canales Autorizados:
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <CashUsdIcon size={20} />
+                        <ZelleIcon size={20} />
+                        <BinanceIcon size={20} />
+                        <BanescoPanamaIcon size={20} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right Column (5 cols) */}
-                <div className="lg:col-span-5 space-y-5 flex flex-col">
+                <div className="lg:col-span-5 space-y-5 flex flex-col lg:sticky lg:top-24">
                   {/* Booking Card & Price */}
                   <div className="flex flex-col space-y-5 bg-slate-50 dark:bg-black/60 border border-slate-200 dark:border-white/10 rounded-3xl p-6 relative shadow-md dark:shadow-xl">
                     <div className="space-y-4">
@@ -1396,87 +1465,6 @@ export default function Jornadas() {
                         </p>
                       </div>
                     </form>
-                  </div>
-
-                  {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial */}
-                  <div className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-3xl p-6 space-y-4 shadow-md dark:shadow-xl">
-                    <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-white/10">
-                      <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
-                        <ShieldCheck size={18} />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Garantía y Protocolo de Calidad</h4>
-                        <p className="text-[10px] text-slate-500 dark:text-zinc-400">Tranquilidad absoluta para tu inversión automotriz</p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-2.5">
-                      <div className="flex items-start gap-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-2xl p-3">
-                        <Award className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
-                        <div className="text-left">
-                          <span className="text-xs font-bold text-slate-900 dark:text-white block">
-                            {(() => {
-                              const rawG = currentJornada.specs?.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val || '2 Meses';
-                              return rawG.toLowerCase().includes('garant') ? rawG : `${rawG} de Garantía Directa`;
-                            })()}
-                          </span>
-                          <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-snug">Cobertura total sobre la mano de obra, procedimientos técnicos y calibraciones efectuadas.</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-2xl p-3">
-                        <Activity className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                        <div className="text-left">
-                          <span className="text-xs font-bold text-slate-900 dark:text-white block">Pruebas en Banco y Carretera</span>
-                          <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-snug">Ningún vehículo se entrega sin validación dinámica en vía y monitoreo de sensores en vivo.</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/5 rounded-2xl p-3">
-                        <FileCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
-                        <div className="text-left">
-                          <span className="text-xs font-bold text-slate-900 dark:text-white block">Acta Digital y Resguardo 24/7</span>
-                          <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-snug">Registro fotográfico y en video al recibir tu vehículo bajo monitoreo perimetral cerrado.</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Resumen Financiero y Canales de Pago */}
-                    <div className="pt-3 border-t border-slate-200 dark:border-white/10 space-y-2.5">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]">
-                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                          <span>Jornada: Solo Pago en Divisas · Cero Descuento</span>
-                        </div>
-                        <a
-                          href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
-                          className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:text-amber-500 font-bold text-xs shrink-0"
-                        >
-                          <Phone size={12} />
-                          <span>Llamar al Taller</span>
-                        </a>
-                      </div>
-
-                      <div className="p-2.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-500/30 space-y-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
-                          Métodos Aceptados para Liquidación:
-                        </span>
-                        <div className="grid grid-cols-4 gap-2">
-                          <div title="Dólares en Efectivo ($ USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                            <CashUsdIcon size={22} />
-                          </div>
-                          <div title="Zelle (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                            <ZelleIcon size={22} />
-                          </div>
-                          <div title="Binance Pay (USDT)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                            <BinanceIcon size={22} />
-                          </div>
-                          <div title="Banesco Panamá (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                            <BanescoPanamaIcon size={22} />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </motion.div>
