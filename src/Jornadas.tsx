@@ -127,59 +127,6 @@ export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) =
   );
 };
 
-export const AvisoTerminosJornada = () => (
-  <div className="bg-gradient-to-br from-amber-500/15 via-red-500/10 to-amber-500/5 dark:from-amber-950/40 dark:via-red-950/30 dark:to-black/50 border-2 border-amber-500/50 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-lg mb-8">
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-amber-500/30">
-      <div className="flex items-start sm:items-center gap-3">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-500 text-slate-950 font-black flex items-center justify-center shrink-0 shadow-md">
-          <AlertTriangle size={24} className="stroke-[2.5]" />
-        </div>
-        <div>
-          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">
-            Condición Contractual e Institucional Obligatoria
-          </span>
-          <h3 className="text-base sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
-            CERO POSIBILIDAD DE DESCUENTO · PAGO EXCLUSIVO EN DIVISAS
-          </h3>
-        </div>
-      </div>
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-600 text-white text-[11px] font-black uppercase tracking-wider shadow-sm w-fit shrink-0">
-        <ShieldAlert size={14} />
-        <span>TARIFA PROMOCIONAL FIJA Y NO NEGOCIABLE</span>
-      </div>
-    </div>
-
-    <div className="grid md:grid-cols-2 gap-4 py-4 text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-zinc-300">
-      <div className="p-3.5 rounded-xl bg-white/90 dark:bg-black/40 border border-amber-500/20 space-y-1">
-        <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-black text-xs uppercase tracking-wide">
-          <X size={14} className="stroke-[3]" />
-          <span>Cero Descuentos Adicionales</span>
-        </div>
-        <p className="text-slate-600 dark:text-zinc-300 text-xs">
-          Las Jornadas Especiales cuentan de antemano con la tarifa promocional máxima permitida por el taller (ahorros de hasta 40% respecto a precio regular). Por normativa estricta, <strong className="text-slate-950 dark:text-white font-bold">no se otorgan rebajas, descuentos adicionales ni convenios particulares</strong> bajo ningún motivo.
-        </p>
-      </div>
-
-      <div className="p-3.5 rounded-xl bg-white/90 dark:bg-black/40 border border-amber-500/20 space-y-1">
-        <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-black text-xs uppercase tracking-wide">
-          <Check size={14} className="stroke-[3]" />
-          <span>Modalidad Solo Pago en Divisas</span>
-        </div>
-        <p className="text-slate-600 dark:text-zinc-300 text-xs">
-          La ejecución técnica de la jornada se realiza y liquida <strong className="text-slate-950 dark:text-white font-bold">únicamente bajo modalidad de pago en divisas ($ USD)</strong> o su equivalente exacto mediante los canales electrónicos autorizados. No se otorgan plazos de crédito.
-        </p>
-      </div>
-    </div>
-
-    <div className="pt-2">
-      <span className="text-[11px] font-black uppercase tracking-wider text-slate-800 dark:text-zinc-200 block mb-2.5">
-        Canales y Métodos de Pago Autorizados:
-      </span>
-      <MetodosPagoJornada compact={false} />
-    </div>
-  </div>
-);
-
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
   WHATSAPP_LINK: "https://wa.link/xnj37f",
@@ -1457,25 +1404,33 @@ export default function Jornadas() {
           </div>
         </div>
 
-        {/* Banner Oficial de Politica Financiera, Cero Descuento y Metodos Aceptados */}
-        <AvisoTerminosJornada />
-
         {/* 10 Clauses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {JORNADA_POLICIES.map((policy) => (
             <div 
               key={policy.number}
-              className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-xl hover:border-amber-500/40 transition-all flex flex-col justify-between group"
+              className={`bg-white dark:bg-[#12141a]/95 border rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-xl transition-all flex flex-col justify-between group ${
+                policy.number === '10' 
+                  ? 'border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-white dark:via-[#12141a]/95 to-transparent hover:border-amber-500' 
+                  : 'border-slate-200 dark:border-white/10 hover:border-amber-500/40'
+              }`}
             >
               <div>
                 {/* Header with Number & Title */}
-                <div className="flex items-center gap-3 pb-3 mb-4 border-b border-slate-100 dark:border-white/10">
-                  <span className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 font-mono font-black text-xs flex items-center justify-center shrink-0">
-                    {policy.number}
-                  </span>
-                  <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
-                    {policy.title}
-                  </h3>
+                <div className="flex items-center justify-between gap-3 pb-3 mb-4 border-b border-slate-100 dark:border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 font-mono font-black text-xs flex items-center justify-center shrink-0">
+                      {policy.number}
+                    </span>
+                    <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
+                      {policy.title}
+                    </h3>
+                  </div>
+                  {policy.number === '10' && (
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-red-600 text-white shrink-0">
+                      TARIFA FIJA
+                    </span>
+                  )}
                 </div>
 
                 {/* Sub-items */}
@@ -1491,6 +1446,36 @@ export default function Jornadas() {
                   ))}
                 </div>
               </div>
+
+              {policy.number === '10' && (
+                <div className="pt-3.5 mt-3 border-t border-slate-200 dark:border-white/10 space-y-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+                    Canales de Pago Autorizados:
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                      <CashUsdIcon size={16} />
+                      <span className="truncate">$ Efectivo</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                      <ZelleIcon size={16} />
+                      <span className="truncate">Zelle</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                      <BinanceIcon size={16} />
+                      <span className="truncate">Binance</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                      <PagoMovilIcon size={16} />
+                      <span className="truncate">Pago Móvil</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs col-span-2 sm:col-span-1">
+                      <BanescoPanamaIcon size={16} />
+                      <span className="truncate">Banesco PA</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -1617,17 +1602,28 @@ export default function Jornadas() {
 
               {/* Modal Body */}
               <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-zinc-300">
-                {/* Banner Oficial de Politica Financiera, Cero Descuento y Metodos Aceptados */}
-                <AvisoTerminosJornada />
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {JORNADA_POLICIES.map((policy) => (
-                    <div key={policy.number} className="bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-2xl p-4 space-y-2.5">
-                      <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-white/10">
-                        <span className="text-xs font-mono font-black text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/20 px-2 py-0.5 rounded">
-                          {policy.number}
-                        </span>
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase">{policy.title}</h4>
+                    <div 
+                      key={policy.number} 
+                      className={`bg-slate-50 dark:bg-black/50 border rounded-2xl p-4 space-y-2.5 ${
+                        policy.number === '10' 
+                          ? 'border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-slate-50 dark:via-black/50 to-transparent' 
+                          : 'border-slate-200 dark:border-white/10'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-white/10">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-xs font-mono font-black text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/20 px-2 py-0.5 rounded">
+                            {policy.number}
+                          </span>
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase">{policy.title}</h4>
+                        </div>
+                        {policy.number === '10' && (
+                          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-red-600 text-white shrink-0">
+                            TARIFA FIJA
+                          </span>
+                        )}
                       </div>
                       <div className="space-y-2 text-xs">
                         {policy.items.map((sub, sIdx) => (
@@ -1640,6 +1636,36 @@ export default function Jornadas() {
                           </div>
                         ))}
                       </div>
+
+                      {policy.number === '10' && (
+                        <div className="pt-2.5 mt-2 border-t border-slate-200 dark:border-white/10 space-y-1.5">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+                            Canales de Pago Autorizados:
+                          </span>
+                          <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
+                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                              <CashUsdIcon size={14} />
+                              <span className="truncate">$ Efectivo</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                              <ZelleIcon size={14} />
+                              <span className="truncate">Zelle</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                              <BinanceIcon size={14} />
+                              <span className="truncate">Binance</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
+                              <PagoMovilIcon size={14} />
+                              <span className="truncate">Pago Móvil</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs col-span-2 sm:col-span-1">
+                              <BanescoPanamaIcon size={14} />
+                              <span className="truncate">Banesco PA</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
