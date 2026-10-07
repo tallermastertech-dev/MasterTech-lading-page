@@ -1194,11 +1194,11 @@ export default function Jornadas() {
                                     </div>
                                   </div>
                                   <div className="text-right shrink-0">
-                                    <span className="text-xs sm:text-sm font-black font-display text-red-600 dark:text-primary block">
+                                    <span className="text-xs sm:text-sm font-black font-display text-red-600 dark:text-primary block whitespace-nowrap">
                                       {pkg.promoPrice}
                                     </span>
                                     {pkg.regularPrice && (
-                                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 line-through block">
+                                      <span className="text-[10px] text-slate-400 dark:text-zinc-500 line-through block whitespace-nowrap">
                                         {pkg.regularPrice}
                                       </span>
                                     )}
@@ -1210,20 +1210,20 @@ export default function Jornadas() {
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-4">
-                        <div>
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-500 block">
+                      <div className="flex items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
+                        <div className="min-w-0 pr-1">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-zinc-500 block leading-tight">
                             {activePackage ? `PRECIO REGULAR (${activePackage.name.split('(')[0].trim()})` : 'PRECIO REGULAR'}
                           </span>
-                          <span className="text-base text-slate-400 dark:text-zinc-400 line-through font-bold">
+                          <span className="text-sm sm:text-base text-slate-400 dark:text-zinc-400 line-through font-bold whitespace-nowrap block mt-0.5">
                             {effectiveRegularPrice && effectiveRegularPrice !== '---' ? effectiveRegularPrice : 'Consultar'}
                           </span>
                         </div>
-                        <div className="text-right">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400 block">
+                        <div className="text-right shrink-0">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block whitespace-nowrap">
                             {activePackage ? 'PRECIO JORNADA' : 'PRECIO JORNADA'}
                           </span>
-                          <span className="text-2xl sm:text-3xl font-display font-black text-red-600 dark:text-primary">
+                          <span className="text-xl sm:text-2xl lg:text-3xl font-display font-black text-red-600 dark:text-primary whitespace-nowrap block tracking-tight">
                             {effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional'}
                           </span>
                         </div>
