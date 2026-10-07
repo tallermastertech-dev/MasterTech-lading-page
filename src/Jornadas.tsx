@@ -24,6 +24,8 @@ import {
   FileCheck,
   ShieldAlert,
   Package,
+  ChevronDown,
+  ChevronUp,
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -422,6 +424,7 @@ export default function Jornadas() {
   const [selectedSlot, setSelectedSlot] = useState<string>('');
   const [isSlotValid, setIsSlotValid] = useState<boolean>(false);
   const [showPoliciesModal, setShowPoliciesModal] = useState<boolean>(false);
+  const [isPoliciesExpanded, setIsPoliciesExpanded] = useState<boolean>(false);
 
   const tabsRef = React.useRef<HTMLDivElement>(null);
 
@@ -1483,88 +1486,148 @@ export default function Jornadas() {
       )}
 
       {/* =========================================================================
-          POLÍTICAS, CONDICIONES Y CLÁUSULAS OFICIALES DE LA JORNADA VIP
+          POLÍTICAS, CONDICIONES Y CLÁUSULAS OFICIALES DE LA JORNADA VIP (FORMATO COMPACTO)
           ========================================================================= */}
-      <section id="politicas-jornada" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200 dark:border-white/10">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs font-black uppercase tracking-wider mb-4">
-            <FileText size={14} className="text-amber-500 dark:text-amber-400" />
-            <span>Marco Operativo Oficial</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
-            POLÍTICAS, CONDICIONES Y CLÁUSULAS
-          </h2>
-          <p className="text-amber-600 dark:text-amber-400 font-bold text-sm sm:text-base mt-2 tracking-wide uppercase">
-            Jornada Especial de Mantenimiento y Servicios Técnicos
-          </p>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-3 leading-relaxed">
-            Para garantizar la máxima calidad técnica, exclusividad y cumplimiento en los tiempos de entrega de cada vehículo, las Jornadas VIP se rigen bajo las siguientes condiciones y cláusulas operativas de estricto cumplimiento.
-          </p>
-          <div className="mt-4 flex items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={() => setShowPoliciesModal(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs font-bold transition-all cursor-pointer"
-            >
-              <FileText size={14} />
-              <span>Abrir Visor Completo de Cláusulas</span>
-            </button>
-          </div>
-        </div>
+      <section id="politicas-jornada" className="py-12 sm:py-16 px-6 max-w-7xl mx-auto border-t border-slate-200 dark:border-white/10">
+        <div className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 shadow-lg dark:shadow-2xl relative overflow-hidden text-slate-900 dark:text-white">
+          {/* Ambient Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/5 blur-[100px] rounded-full pointer-events-none" />
 
-        {/* 10 Clauses Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-          {JORNADA_POLICIES.map((policy) => (
-            <div 
-              key={policy.number}
-              className={`bg-white dark:bg-[#12141a]/95 border rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-xl transition-all flex flex-col justify-between group ${
-                policy.number === '10' 
-                  ? 'md:col-span-2 border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-white dark:via-[#12141a]/95 to-transparent hover:border-amber-500' 
-                  : 'border-slate-200 dark:border-white/10 hover:border-amber-500/40'
-              }`}
-            >
-              <div>
-                {/* Header with Number & Title */}
-                <div className="flex items-center justify-between gap-3 pb-3 mb-4 border-b border-slate-100 dark:border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 font-mono font-black text-xs flex items-center justify-center shrink-0">
-                      {policy.number}
-                    </span>
-                    <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white uppercase tracking-tight group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
-                      {policy.title}
-                    </h3>
-                  </div>
-                  {policy.number === '10' && (
-                    <span className="hidden sm:inline-flex items-center gap-1 text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-red-600 text-white shrink-0">
-                      TARIFA FIJA
-                    </span>
-                  )}
-                </div>
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200 dark:border-white/10">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-wider mb-3">
+                <FileText size={13} />
+                <span>Marco Operativo Oficial</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                Políticas y Condiciones de la Jornada
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-400 mt-1 max-w-2xl leading-relaxed">
+                Para asegurar máxima calidad técnica, puntualidad y transparencia, todas las jornadas se rigen bajo normativa de cumplimiento estricto.
+              </p>
+            </div>
 
-                {/* Sub-items */}
-                <div className={policy.number === '10' ? "grid grid-cols-1 md:grid-cols-2 gap-3" : "space-y-3"}>
-                  {policy.items.map((sub, sIdx) => (
-                    <div key={sIdx} className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed flex items-start gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 mt-1.5 shrink-0" />
-                      <div>
-                        <strong className="text-slate-800 dark:text-white font-bold">{sub.subtitle}: </strong>
-                        <span className="text-slate-600 dark:text-zinc-300">{sub.text}</span>
+            {/* Quick Actions */}
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowPoliciesModal(true)}
+                className="btn-primary !px-5 !py-2.5 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-md hover:scale-105 transition-all cursor-pointer"
+              >
+                <FileText size={15} />
+                <span>Leer las 10 Cláusulas Completas</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsPoliciesExpanded(!isPoliciesExpanded)}
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-zinc-300 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <span>{isPoliciesExpanded ? 'Ocultar desglose en pantalla' : 'Ver desglose en pantalla'}</span>
+                {isPoliciesExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+              </button>
+            </div>
+          </div>
+
+          {/* 3 Executive Pillars Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black/40 border border-slate-200/80 dark:border-white/5 space-y-2">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <Clock size={16} />
+              </div>
+              <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                1. Puntualidad y Turnos Asignados
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-relaxed">
+                Recepción por cita previa programada para dedicar atención técnica exclusiva y cumplir con exactitud los tiempos de entrega.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black/40 border border-slate-200/80 dark:border-white/5 space-y-2">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <ShieldCheck size={16} />
+              </div>
+              <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                2. Garantía Técnica por Escrito
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-relaxed">
+                Respaldo técnico directo de satisfacción (hasta 60 días o 1 año según el servicio), validado con banco de prueba y escáner OEM.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-black/40 border border-slate-200/80 dark:border-white/5 space-y-2">
+              <div className="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center">
+                <ShieldAlert size={16} />
+              </div>
+              <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                3. Solo Divisas · Cero Descuento
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-relaxed">
+                El precio de jornada ya incluye la tarifa promocional preferencial definitiva. Modalidad exclusiva en divisas autorizadas.
+              </p>
+            </div>
+          </div>
+
+          {/* Métodos de Pago Autorizados Strip */}
+          <div className="mt-5 p-3.5 rounded-2xl bg-amber-500/5 dark:bg-amber-950/20 border border-amber-500/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <span className="font-bold text-slate-700 dark:text-zinc-300 text-[11px] uppercase tracking-wide">
+              Canales de Pago Autorizados para Jornadas:
+            </span>
+            <div className="w-full sm:w-auto">
+              <MetodosPagoJornada compact={true} />
+            </div>
+          </div>
+
+          {/* Desglose Completo Expandible (Sólo si el usuario pulsa 'Ver desglose en pantalla') */}
+          <AnimatePresence>
+            {isPoliciesExpanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden pt-6 mt-6 border-t border-slate-200 dark:border-white/10"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {JORNADA_POLICIES.map((policy) => (
+                    <div 
+                      key={policy.number}
+                      className={`bg-slate-50 dark:bg-black/50 border rounded-2xl p-4 space-y-2.5 ${
+                        policy.number === '10' 
+                          ? 'md:col-span-2 border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-slate-50 dark:via-black/50 to-transparent' 
+                          : 'border-slate-200 dark:border-white/10'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-white/10">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-xs font-mono font-black text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-500/20 px-2 py-0.5 rounded">
+                            {policy.number}
+                          </span>
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase">{policy.title}</h4>
+                        </div>
+                        {policy.number === '10' && (
+                          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-red-600 text-white shrink-0">
+                            TARIFA FIJA
+                          </span>
+                        )}
+                      </div>
+                      <div className={policy.number === '10' ? "grid grid-cols-1 md:grid-cols-2 gap-3 text-xs" : "space-y-2 text-xs"}>
+                        {policy.items.map((sub, sIdx) => (
+                          <div key={sIdx} className="flex items-start gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 mt-1 shrink-0" />
+                            <div>
+                              <strong className="text-slate-800 dark:text-white font-semibold">{sub.subtitle}: </strong>
+                              <span className="text-slate-600 dark:text-zinc-400">{sub.text}</span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {policy.number === '10' && (
-                <div className="pt-3.5 mt-3 border-t border-slate-200 dark:border-white/10 space-y-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
-                    Canales de Pago Autorizados:
-                  </span>
-                  <MetodosPagoJornada compact={false} />
-                </div>
-              )}
-            </div>
-          ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Bottom Banner Confirmation */}
