@@ -1000,13 +1000,13 @@ export default function Jornadas() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.4 }}
-                className="grid lg:grid-cols-12 gap-8 items-start bg-white dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-10 shadow-lg dark:shadow-2xl relative overflow-hidden text-slate-900 dark:text-white"
+                className="space-y-8 text-slate-900 dark:text-white"
               >
-                {/* Background Ambient Glow */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
-
-                {/* Left Content (7 cols) */}
-                <div className="lg:col-span-7 space-y-6">
+                <div className="grid lg:grid-cols-12 gap-8 items-start">
+                  {/* Left Content (7 cols) */}
+                  <div className="lg:col-span-7 bg-white dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-lg dark:shadow-2xl space-y-6 relative overflow-hidden">
+                    {/* Background Ambient Glow */}
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 blur-[90px] rounded-full pointer-events-none" />
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
                       <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
@@ -1140,81 +1140,13 @@ export default function Jornadas() {
                     </div>
                   </div>
 
-                  {/* Tarjeta de Garantía, Protocolo y Respaldo Oficial */}
-                  <div className="bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-5 space-y-4 shadow-sm">
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
-                          <ShieldCheck size={18} />
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Garantía y Protocolo de Calidad</h4>
-                          <p className="text-[10px] text-slate-500 dark:text-zinc-400">Tranquilidad absoluta para tu inversión automotriz</p>
-                        </div>
-                      </div>
-                      <a
-                        href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
-                        className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:text-amber-500 font-bold text-xs shrink-0"
-                      >
-                        <Phone size={12} />
-                        <span>Llamar al Taller</span>
-                      </a>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="flex flex-col gap-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/5 rounded-xl p-3">
-                        <div className="flex items-center gap-1.5 text-amber-500 dark:text-amber-400">
-                          <Award className="w-4 h-4 shrink-0" />
-                          <span className="text-xs font-bold text-slate-900 dark:text-white">
-                            {(() => {
-                              const rawG = currentJornada.specs?.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val || '2 Meses';
-                              return rawG.toLowerCase().includes('garant') ? rawG : `${rawG} de Garantía`;
-                            })()}
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-600 dark:text-zinc-400 leading-snug">Cobertura total sobre mano de obra y calibraciones.</p>
-                      </div>
-
-                      <div className="flex flex-col gap-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/5 rounded-xl p-3">
-                        <div className="flex items-center gap-1.5 text-primary">
-                          <Activity className="w-4 h-4 shrink-0" />
-                          <span className="text-xs font-bold text-slate-900 dark:text-white">Banco y Carretera</span>
-                        </div>
-                        <p className="text-[10px] text-slate-600 dark:text-zinc-400 leading-snug">Validación dinámica en vía y monitoreo en vivo.</p>
-                      </div>
-
-                      <div className="flex flex-col gap-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/5 rounded-xl p-3">
-                        <div className="flex items-center gap-1.5 text-emerald-500 dark:text-emerald-400">
-                          <FileCheck className="w-4 h-4 shrink-0" />
-                          <span className="text-xs font-bold text-slate-900 dark:text-white">Acta Digital 24/7</span>
-                        </div>
-                        <p className="text-[10px] text-slate-600 dark:text-zinc-400 leading-snug">Registro fotográfico y video al recibir tu vehículo.</p>
-                      </div>
-                    </div>
-
-                    {/* Resumen Financiero y Canales de Pago */}
-                    <div className="pt-3 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                        <span className="font-bold text-slate-900 dark:text-white text-[11px]">
-                          Modalidad Divisas · Canales Autorizados:
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <CashUsdIcon size={20} />
-                        <ZelleIcon size={20} />
-                        <BinanceIcon size={20} />
-                        <BanescoPanamaIcon size={20} />
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
-                {/* Right Column (5 cols) */}
-                <div className="lg:col-span-5 space-y-5 flex flex-col lg:sticky lg:top-24">
-                  {/* Booking Card & Price */}
-                  <div className="flex flex-col space-y-5 bg-slate-50 dark:bg-black/60 border border-slate-200 dark:border-white/10 rounded-3xl p-6 relative shadow-md dark:shadow-xl">
-                    <div className="space-y-4">
+                {/* Right Column (5 cols) - Tarjeta de Reserva Directa */}
+                <div className="lg:col-span-5 bg-white dark:bg-[#12141a]/95 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl space-y-5 lg:sticky lg:top-24 relative overflow-hidden flex flex-col">
+                  {/* Background Ambient Glow */}
+                  <div className="absolute top-0 right-0 w-60 h-60 bg-amber-500/5 blur-[80px] rounded-full pointer-events-none" />
+                  <div className="space-y-4">
                       {/* Selector Interactivo de Paquetes / Motorizaciones (cuando existen 2 o más opciones) */}
                       {currentJornada.packages && currentJornada.packages.length > 0 && (
                         <div className="space-y-2 pb-1">
@@ -1465,9 +1397,84 @@ export default function Jornadas() {
                         </p>
                       </div>
                     </form>
+                </div>
+              </div>
+
+              {/* Fila de Garantía Oficial y Protocolo Técnico a Ancho Completo */}
+              <div className="bg-white dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-lg dark:shadow-2xl space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-white/10">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                      <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">Garantía Oficial y Protocolo Técnico</h4>
+                      <p className="text-[11px] text-slate-500 dark:text-zinc-400">Tranquilidad absoluta y respaldo documentado para tu inversión automotriz</p>
+                    </div>
+                  </div>
+                  <a
+                    href={`tel:${(config.PHONE_NUMBER || "+584123565012").replace(/\s/g, '')}`}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:text-amber-500 font-bold text-xs shrink-0 transition-colors"
+                  >
+                    <Phone size={13} />
+                    <span>Llamar al Taller</span>
+                  </a>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 text-amber-500 dark:text-amber-400">
+                      <Award className="w-5 h-5 shrink-0" />
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        {(() => {
+                          const rawG = currentJornada.specs?.find((s: any) => s && s.label && s.label.toLowerCase().includes('garant'))?.val || '2 Meses';
+                          return rawG.toLowerCase().includes('garant') ? rawG : `${rawG} de Garantía Escrita`;
+                        })()}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-relaxed">
+                      Cobertura técnica total sobre la mano de obra, procedimientos de descarbonización y calibraciones electrónicas.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 text-primary">
+                      <Activity className="w-5 h-5 shrink-0" />
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">Validación en Banco y Carretera</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-relaxed">
+                      Ningún vehículo se entrega sin chequeo exhaustivo en banco, prueba dinámica en vía y monitoreo en vivo de sensores OEM.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/5 rounded-2xl p-4">
+                    <div className="flex items-center gap-2 text-emerald-500 dark:text-emerald-400">
+                      <FileCheck className="w-5 h-5 shrink-0" />
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">Acta Digital y Resguardo Seguro</span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 dark:text-zinc-400 leading-relaxed">
+                      Registro audiovisual con reporte de recepción al ingresar tu vehículo bajo monitoreo de seguridad cerrado.
+                    </p>
                   </div>
                 </div>
-              </motion.div>
+
+                {/* Resumen Financiero y Canales de Pago */}
+                <div className="pt-3 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    <span className="font-bold text-slate-900 dark:text-white text-[11px] uppercase tracking-wide">
+                      Jornada: Solo Pago en Divisas · Cero Descuento Adicional
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <CashUsdIcon size={20} />
+                    <ZelleIcon size={20} />
+                    <BinanceIcon size={20} />
+                    <BanescoPanamaIcon size={20} />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
             </AnimatePresence>
           </section>
         </main>
