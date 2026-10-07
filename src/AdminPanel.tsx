@@ -1931,7 +1931,20 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [jornadasList, setJornadasList] = useState<any[]>(() => {
     try {
       const s = localStorage.getItem('mastertech_settings_store');
-      if (s) { const p = JSON.parse(s); if (p.JORNADAS_JSON) return JSON.parse(p.JORNADAS_JSON); }
+      if (s) {
+        const p = JSON.parse(s);
+        if (p.JORNADAS_JSON) {
+          const parsed = JSON.parse(p.JORNADAS_JSON);
+          if (Array.isArray(parsed)) {
+            return parsed.map((item: any) => {
+              if ((item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) && (!Array.isArray(item.packages) || item.packages.length === 0)) {
+                return { ...item, packages: DEFAULT_JORNADAS[0].packages };
+              }
+              return item;
+            });
+          }
+        }
+      }
     } catch (e) {}
     return DEFAULT_JORNADAS;
   });
@@ -2231,7 +2244,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
 
     if (merged.JORNADAS_JSON) {
-      try { const p = JSON.parse(merged.JORNADAS_JSON); if (Array.isArray(p)) setJornadasList(p); } catch (e) {}
+      try {
+        const p = JSON.parse(merged.JORNADAS_JSON);
+        if (Array.isArray(p)) {
+          const hydrated = p.map((item: any) => {
+            if ((item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) && (!Array.isArray(item.packages) || item.packages.length === 0)) {
+              return { ...item, packages: DEFAULT_JORNADAS[0].packages };
+            }
+            return item;
+          });
+          setJornadasList(hydrated);
+        }
+      } catch (e) {}
     }
     if (merged.PROVEEDORES_JSON !== undefined && merged.PROVEEDORES_JSON !== null) {
       try { 
@@ -3281,11 +3305,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }))
       : [];
 
+    let cleanPromoPrice = (jornada.promoPrice || '').trim();
+    let cleanRegularPrice = (jornada.regularPrice || '').trim();
+
+    if (cleanPackages.length > 0 && (!cleanPromoPrice || cleanPromoPrice === '---')) {
+      cleanPromoPrice = cleanPackages.length > 1 ? `Desde ${cleanPackages[0].promoPrice}` : cleanPackages[0].promoPrice;
+    }
+    if (cleanPackages.length > 0 && (!cleanRegularPrice || cleanRegularPrice === '---') && cleanPackages[0].regularPrice) {
+      cleanRegularPrice = cleanPackages.length > 1 ? `Desde ${cleanPackages[0].regularPrice}` : cleanPackages[0].regularPrice;
+    }
+
     const cleanJornadaItem = {
       ...jornada,
       img: mainImg,
       images: cleanImages,
       packages: cleanPackages,
+      promoPrice: cleanPromoPrice || '$60 USD',
+      regularPrice: cleanRegularPrice || '$100 USD',
       subtitle: cleanSubtitle,
       garantia: cleanGarantia,
       specs: specsList,
@@ -7765,7 +7801,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         duration: "1 a 2 horas",
                         benefits: ["Beneficio 1", "Beneficio 2"],
                         specs: [{ label: "Garantía", val: "1 Año" }],
-                        compatibleModels: "Apto para todas las marcas."
+                        compatibleModels: "Apto para todas las marcas.",
+                        packages: []
                       });
                       setIsJornadaModalOpen(true);
                     }}
@@ -8315,7 +8352,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               existingSpecs.push(defaults[existingSpecs.length] || { label: 'Característica', val: 'Incluida' });
                             }
                           }
-                          const existingPkgs = Array.isArray(j.packages) ? [...j.packages] : [];
+                          const existingPkgs = Array.isArray(j.packages) && j.packages.length > 0
+                            ? [...j.packages]
+                            : (j.id === 'reprogramacion' || j.id === DEFAULT_JORNADAS[0].id ? [...(DEFAULT_JORNADAS[0].packages || [])] : []);
                           setEditingJornada({ ...j, specs: existingSpecs, garantia: cleanG, packages: existingPkgs });
                           setIsJornadaModalOpen(true);
                         }}
@@ -10844,17 +10883,68 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             </span>
                             <span>Paquete #{pIdx + 1}</span>
                           </span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = editingJornada.packages.filter((_: any, i: number) => i !== pIdx);
-                              setEditingJornada({ ...editingJornada, packages: updated });
-                            }}
-                            className="text-zinc-500 hover:text-red-400 text-xs p-1 cursor-pointer transition-colors"
-                            title="Eliminar este paquete"
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            {pIdx > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [...editingJornada.packages];
+                                  const temp = updated[pIdx - 1];
+                                  updated[pIdx - 1] = updated[pIdx];
+                                  updated[pIdx] = temp;
+                                  setEditingJornada({ ...editingJornada, packages: updated });
+                                }}
+                                className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                                title="Subir orden"
+                              >
+                                <ArrowUp size={13} />
+                              </button>
+                            )}
+                            {pIdx < editingJornada.packages.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [...editingJornada.packages];
+                                  const temp = updated[pIdx + 1];
+                                  updated[pIdx + 1] = updated[pIdx];
+                                  updated[pIdx] = temp;
+                                  setEditingJornada({ ...editingJornada, packages: updated });
+                                }}
+                                className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                                title="Bajar orden"
+                              >
+                                <ArrowDown size={13} />
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentPkgs = [...editingJornada.packages];
+                                const cloned = {
+                                  ...pkg,
+                                  id: `pkg_${Date.now()}_copy`,
+                                  name: `${pkg.name || 'Paquete'} (Copia)`
+                                };
+                                currentPkgs.splice(pIdx + 1, 0, cloned);
+                                setEditingJornada({ ...editingJornada, packages: currentPkgs });
+                              }}
+                              className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-amber-400 transition-colors cursor-pointer"
+                              title="Duplicar este paquete"
+                            >
+                              <Copy size={13} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = editingJornada.packages.filter((_: any, i: number) => i !== pIdx);
+                                setEditingJornada({ ...editingJornada, packages: updated });
+                              }}
+                              className="text-zinc-500 hover:text-red-400 p-1 cursor-pointer transition-colors"
+                              title="Eliminar este paquete"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
