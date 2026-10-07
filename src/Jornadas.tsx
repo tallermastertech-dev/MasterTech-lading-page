@@ -106,7 +106,7 @@ export const MetodosPagoJornada = ({ compact = false }: { compact?: boolean }) =
       <div className="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-sm">
         <BanescoPanamaIcon size={compact ? 26 : 32} className="shrink-0 rounded-lg shadow-sm" />
         <div className="min-w-0">
-          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco Panamá</span>
+          <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Banesco PA</span>
           <span className="text-[10px] text-slate-500 dark:text-zinc-400 block truncate">Transferencia USD</span>
         </div>
       </div>
@@ -1389,7 +1389,7 @@ export default function Jornadas() {
               key={policy.number}
               className={`bg-white dark:bg-[#12141a]/95 border rounded-2xl p-5 sm:p-6 shadow-sm dark:shadow-xl transition-all flex flex-col justify-between group ${
                 policy.number === '10' 
-                  ? 'border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-white dark:via-[#12141a]/95 to-transparent hover:border-amber-500' 
+                  ? 'md:col-span-2 border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-white dark:via-[#12141a]/95 to-transparent hover:border-amber-500' 
                   : 'border-slate-200 dark:border-white/10 hover:border-amber-500/40'
               }`}
             >
@@ -1412,7 +1412,7 @@ export default function Jornadas() {
                 </div>
 
                 {/* Sub-items */}
-                <div className="space-y-3">
+                <div className={policy.number === '10' ? "grid grid-cols-1 md:grid-cols-2 gap-3" : "space-y-3"}>
                   {policy.items.map((sub, sIdx) => (
                     <div key={sIdx} className="text-xs text-slate-600 dark:text-zinc-300 leading-relaxed flex items-start gap-2.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 mt-1.5 shrink-0" />
@@ -1430,20 +1430,7 @@ export default function Jornadas() {
                   <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
                     Canales de Pago Autorizados:
                   </span>
-                  <div className="grid grid-cols-4 gap-2">
-                    <div title="Dólares en Efectivo ($ USD)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
-                      <CashUsdIcon size={20} />
-                    </div>
-                    <div title="Zelle (USD)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
-                      <ZelleIcon size={20} />
-                    </div>
-                    <div title="Binance Pay (USDT)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
-                      <BinanceIcon size={20} />
-                    </div>
-                    <div title="Banesco Panamá (USD)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
-                      <BanescoPanamaIcon size={20} />
-                    </div>
-                  </div>
+                  <MetodosPagoJornada compact={false} />
                 </div>
               )}
             </div>
@@ -1578,7 +1565,7 @@ export default function Jornadas() {
                       key={policy.number} 
                       className={`bg-slate-50 dark:bg-black/50 border rounded-2xl p-4 space-y-2.5 ${
                         policy.number === '10' 
-                          ? 'border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-slate-50 dark:via-black/50 to-transparent' 
+                          ? 'md:col-span-2 border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-slate-50 dark:via-black/50 to-transparent' 
                           : 'border-slate-200 dark:border-white/10'
                       }`}
                     >
@@ -1595,7 +1582,7 @@ export default function Jornadas() {
                           </span>
                         )}
                       </div>
-                      <div className="space-y-2 text-xs">
+                      <div className={policy.number === '10' ? "grid grid-cols-1 md:grid-cols-2 gap-3 text-xs" : "space-y-2 text-xs"}>
                         {policy.items.map((sub, sIdx) => (
                           <div key={sIdx} className="flex items-start gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 mt-1 shrink-0" />
@@ -1612,20 +1599,7 @@ export default function Jornadas() {
                           <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
                             Canales de Pago Autorizados:
                           </span>
-                          <div className="grid grid-cols-4 gap-2">
-                            <div title="Dólares en Efectivo ($ USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                              <CashUsdIcon size={18} />
-                            </div>
-                            <div title="Zelle (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                              <ZelleIcon size={18} />
-                            </div>
-                            <div title="Binance Pay (USDT)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                              <BinanceIcon size={18} />
-                            </div>
-                            <div title="Banesco Panamá (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
-                              <BanescoPanamaIcon size={18} />
-                            </div>
-                          </div>
+                          <MetodosPagoJornada compact={true} />
                         </div>
                       )}
                     </div>
