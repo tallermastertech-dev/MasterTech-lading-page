@@ -1328,22 +1328,18 @@ export default function Jornadas() {
                         <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
                           Métodos Aceptados para Liquidación:
                         </span>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
-                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <CashUsdIcon size={18} className="shrink-0" />
-                            <span className="truncate">$ Efectivo</span>
+                        <div className="grid grid-cols-4 gap-2">
+                          <div title="Dólares en Efectivo ($ USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                            <CashUsdIcon size={22} />
                           </div>
-                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <ZelleIcon size={18} className="shrink-0" />
-                            <span className="truncate">Zelle</span>
+                          <div title="Zelle (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                            <ZelleIcon size={22} />
                           </div>
-                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <BinanceIcon size={18} className="shrink-0" />
-                            <span className="truncate">Binance</span>
+                          <div title="Binance Pay (USDT)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                            <BinanceIcon size={22} />
                           </div>
-                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                            <BanescoPanamaIcon size={18} className="shrink-0" />
-                            <span className="truncate">Banesco PA</span>
+                          <div title="Banesco Panamá (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                            <BanescoPanamaIcon size={22} />
                           </div>
                         </div>
                       </div>
@@ -1434,22 +1430,18 @@ export default function Jornadas() {
                   <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
                     Canales de Pago Autorizados:
                   </span>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                      <CashUsdIcon size={16} />
-                      <span className="truncate">$ Efectivo</span>
+                  <div className="grid grid-cols-4 gap-2">
+                    <div title="Dólares en Efectivo ($ USD)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
+                      <CashUsdIcon size={20} />
                     </div>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                      <ZelleIcon size={16} />
-                      <span className="truncate">Zelle</span>
+                    <div title="Zelle (USD)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
+                      <ZelleIcon size={20} />
                     </div>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                      <BinanceIcon size={16} />
-                      <span className="truncate">Binance</span>
+                    <div title="Binance Pay (USDT)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
+                      <BinanceIcon size={20} />
                     </div>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-black/50 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                      <BanescoPanamaIcon size={16} />
-                      <span className="truncate">Banesco PA</span>
+                    <div title="Banesco Panamá (USD)" className="flex items-center justify-center py-2 rounded-lg bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 shadow-xs">
+                      <BanescoPanamaIcon size={20} />
                     </div>
                   </div>
                 </div>
@@ -1620,22 +1612,18 @@ export default function Jornadas() {
                           <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
                             Canales de Pago Autorizados:
                           </span>
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px] font-bold text-slate-800 dark:text-zinc-200">
-                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                              <CashUsdIcon size={14} />
-                              <span className="truncate">$ Efectivo</span>
+                          <div className="grid grid-cols-4 gap-2">
+                            <div title="Dólares en Efectivo ($ USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                              <CashUsdIcon size={18} />
                             </div>
-                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                              <ZelleIcon size={14} />
-                              <span className="truncate">Zelle</span>
+                            <div title="Zelle (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                              <ZelleIcon size={18} />
                             </div>
-                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                              <BinanceIcon size={14} />
-                              <span className="truncate">Binance</span>
+                            <div title="Binance Pay (USDT)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                              <BinanceIcon size={18} />
                             </div>
-                            <div className="flex items-center gap-1.5 bg-white dark:bg-black/40 p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-xs">
-                              <BanescoPanamaIcon size={14} />
-                              <span className="truncate">Banesco PA</span>
+                            <div title="Banesco Panamá (USD)" className="flex items-center justify-center py-2 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 shadow-xs">
+                              <BanescoPanamaIcon size={18} />
                             </div>
                           </div>
                         </div>
