@@ -436,7 +436,7 @@ const DEFAULT_JORNADAS = [
         subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
         regularPrice: "$1,075 USD",
         promoPrice: "$698 USD",
-        discountBadge: "35% OFF"
+        discountBadge: "AHORRAS $381 USD"
       },
       {
         id: "pkg_t24a_fts",
@@ -444,7 +444,7 @@ const DEFAULT_JORNADAS = [
         subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
         regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
-        discountBadge: "33% OFF"
+        discountBadge: "AHORRAS $645 USD"
       },
       {
         id: "pkg_v35a_fts",
@@ -452,7 +452,7 @@ const DEFAULT_JORNADAS = [
         subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
         regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
-        discountBadge: "31% OFF"
+        discountBadge: "AHORRAS $701 USD"
       }
     ]
   },
@@ -10813,7 +10813,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
                             regularPrice: "$1,075 USD",
                             promoPrice: "$698 USD",
-                            discountBadge: "35% OFF"
+                            discountBadge: "AHORRAS $381 USD"
                           },
                           {
                             id: `pkg_t24a_${Date.now()}`,
@@ -10821,7 +10821,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
                             regularPrice: "$1,944 USD",
                             promoPrice: "$1,299 USD",
-                            discountBadge: "33% OFF"
+                            discountBadge: "AHORRAS $645 USD"
                           },
                           {
                             id: `pkg_v35a_${Date.now()}`,
@@ -10829,7 +10829,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
                             regularPrice: "$2,200 USD",
                             promoPrice: "$1,499 USD",
-                            discountBadge: "31% OFF"
+                            discountBadge: "AHORRAS $701 USD"
                           }
                         ];
                         setEditingJornada({

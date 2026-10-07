@@ -188,7 +188,7 @@ const JORNADAS_DATA: JornadaItem[] = [
         subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
         regularPrice: "$1,075 USD",
         promoPrice: "$698 USD",
-        discountBadge: "35% OFF"
+        discountBadge: "AHORRAS $381 USD"
       },
       {
         id: "pkg_t24a_fts",
@@ -196,7 +196,7 @@ const JORNADAS_DATA: JornadaItem[] = [
         subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
         regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
-        discountBadge: "33% OFF"
+        discountBadge: "AHORRAS $645 USD"
       },
       {
         id: "pkg_v35a_fts",
@@ -204,7 +204,7 @@ const JORNADAS_DATA: JornadaItem[] = [
         subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
         regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
-        discountBadge: "31% OFF"
+        discountBadge: "AHORRAS $701 USD"
       }
     ]
   },
@@ -559,19 +559,19 @@ export default function Jornadas() {
             subtitle = subtitle || 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
             regularPrice = regularPrice || '$1,075 USD';
             promoPrice = promoPrice || '$698 USD';
-            discountBadge = '35% OFF';
+            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $381 USD';
           } else if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('turbo 2.4l') || nLower.includes('tacoma')) {
             name = 'Tacoma, Highlander, Lexus RX / TX';
             subtitle = subtitle || 'Motor Turbo 2.4L (T24A-FTS no híbrido)';
             regularPrice = regularPrice || '$1,944 USD';
             promoPrice = promoPrice || '$1,299 USD';
-            discountBadge = '33% OFF';
+            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $645 USD';
           } else if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra')) {
             name = 'Tundra, Land Cruiser 300, Sequoia, Lexus LX';
             subtitle = subtitle || 'Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)';
             regularPrice = regularPrice || '$2,200 USD';
             promoPrice = promoPrice || '$1,499 USD';
-            discountBadge = '31% OFF';
+            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $701 USD';
           }
 
           return {
@@ -586,6 +586,22 @@ export default function Jornadas() {
       })()
     };
   }, [rawJornada]);
+
+  const getPackageSavingsBadge = (pkg?: JornadaPackage | null): string => {
+    if (!pkg) return '';
+    const b = (pkg.discountBadge || '').trim();
+    if (/^AHORRAS/i.test(b)) {
+      return b;
+    }
+    const regNum = parseFloat((pkg.regularPrice || '').replace(/[^0-9.]/g, ''));
+    const promoNum = parseFloat((pkg.promoPrice || '').replace(/[^0-9.]/g, ''));
+    if (regNum > 0 && promoNum > 0 && regNum > promoNum) {
+      const diff = Math.round(regNum - promoNum);
+      return `AHORRAS $${diff} USD`;
+    }
+    if (b && !b.includes('%')) return b;
+    return 'AHORRO VIP';
+  };
 
   const getPackageDiscountPercent = (pkg?: JornadaPackage | null, regPrice?: string, pPrice?: string, dBadge?: string): string => {
     if (pkg) {
@@ -1285,7 +1301,7 @@ export default function Jornadas() {
                                         ? 'bg-red-600 text-white shadow-red-500/20'
                                         : 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
                                     }`}>
-                                      {getPackageDiscountPercent(pkg, pkg.regularPrice, pkg.promoPrice, pkg.discountBadge)}
+                                      {getPackageSavingsBadge(pkg)}
                                     </span>
                                     <span className="text-[9px] text-slate-400 dark:text-zinc-500 uppercase font-black block mt-0.5 text-right whitespace-nowrap">
                                       Descuento
