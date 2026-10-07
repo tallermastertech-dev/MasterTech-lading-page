@@ -179,7 +179,7 @@ const JORNADAS_DATA: JornadaItem[] = [
       { label: "Inyección", val: "Directa + Puerto" },
       { label: "Validación", val: "Ruta y En Vivo" }
     ],
-    compatibleModels: "Modelos Toyota TNGA motorización M20A, A25A, T24A-FTS y V35A-FTS sin hibridación eléctrica.",
+    compatibleModels: "Modelos Toyota TNGA: Corolla, RAV4, Camry, Tacoma, 4Runner, Highlander, Tundra, Land Cruiser 300, Sequoia, Lexus RX/TX/LX (motores M20A, A25A, T24A-FTS 2.4L Turbo y V35A-FTS 3.5L Twin-Turbo sin hibridación eléctrica).",
     popularAddon: "3 paquetes especializados según cilindrada y motorización de tu unidad.",
     packages: [
       {
@@ -192,8 +192,8 @@ const JORNADAS_DATA: JornadaItem[] = [
       },
       {
         id: "pkg_t24a_fts",
-        name: "Tacoma, Highlander, Lexus RX / TX",
-        subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+        name: "Tacoma, 4Runner, Highlander, Lexus RX / TX",
+        subtitle: "Motor 2.4L Turbo (T24A-FTS no híbrido)",
         regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
         discountBadge: "AHORRAS $645 USD"
@@ -201,7 +201,7 @@ const JORNADAS_DATA: JornadaItem[] = [
       {
         id: "pkg_v35a_fts",
         name: "Tundra, Land Cruiser 300, Sequoia, Lexus LX",
-        subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+        subtitle: "Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)",
         regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
         discountBadge: "AHORRAS $701 USD"
@@ -553,22 +553,23 @@ export default function Jornadas() {
           let promoPrice = p.promoPrice || '';
 
           const nLower = name.toLowerCase();
+          const sLower = subtitle.toLowerCase();
           const pId = (p.id || '').toLowerCase();
-          if (pId.includes('m20') || nLower.includes('m20a') || nLower.includes('2.0l') || nLower.includes('corolla')) {
+          if (pId.includes('m20') || nLower.includes('m20a') || nLower.includes('2.0l') || nLower.includes('corolla') || sLower.includes('m20a') || sLower.includes('2.0')) {
             name = 'Corolla, RAV4, Camry, Levin';
-            subtitle = subtitle || 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
+            subtitle = 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
             regularPrice = regularPrice || '$1,075 USD';
             promoPrice = promoPrice || '$698 USD';
             discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $381 USD';
-          } else if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('turbo 2.4l') || nLower.includes('tacoma')) {
-            name = 'Tacoma, Highlander, Lexus RX / TX';
-            subtitle = subtitle || 'Motor Turbo 2.4L (T24A-FTS no híbrido)';
+          } else if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('turbo') || nLower.includes('tacoma') || nLower.includes('4runner') || sLower.includes('t24a') || sLower.includes('2.4l')) {
+            name = 'Tacoma, 4Runner, Highlander, Lexus RX / TX';
+            subtitle = 'Motor 2.4L Turbo (T24A-FTS no híbrido)';
             regularPrice = regularPrice || '$1,944 USD';
             promoPrice = promoPrice || '$1,299 USD';
             discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $645 USD';
-          } else if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra')) {
+          } else if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra') || sLower.includes('v35a') || sLower.includes('3.5')) {
             name = 'Tundra, Land Cruiser 300, Sequoia, Lexus LX';
-            subtitle = subtitle || 'Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)';
+            subtitle = 'Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)';
             regularPrice = regularPrice || '$2,200 USD';
             promoPrice = promoPrice || '$1,499 USD';
             discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $701 USD';
@@ -1289,7 +1290,7 @@ export default function Jornadas() {
                                         {pkg.name}
                                       </span>
                                       {pkg.subtitle && (
-                                        <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-tight line-clamp-1 mt-0.5">
+                                        <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-tight line-clamp-2 mt-0.5">
                                           {pkg.subtitle}
                                         </p>
                                       )}

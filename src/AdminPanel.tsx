@@ -428,7 +428,7 @@ const DEFAULT_JORNADAS = [
       { label: "Inyección", val: "Directa + Puerto" },
       { label: "Validación", val: "Ruta y En Vivo" }
     ], 
-    compatibleModels: "Modelos Toyota TNGA motorización M20A, A25A, T24A-FTS y V35A-FTS sin hibridación eléctrica.",
+    compatibleModels: "Modelos Toyota TNGA: Corolla, RAV4, Camry, Tacoma, 4Runner, Highlander, Tundra, Land Cruiser 300, Sequoia, Lexus RX/TX/LX (motores M20A, A25A, T24A-FTS 2.4L Turbo y V35A-FTS 3.5L Twin-Turbo sin hibridación eléctrica).",
     packages: [
       {
         id: "pkg_m20_a25",
@@ -440,8 +440,8 @@ const DEFAULT_JORNADAS = [
       },
       {
         id: "pkg_t24a_fts",
-        name: "Tacoma, Highlander, Lexus RX / TX",
-        subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+        name: "Tacoma, 4Runner, Highlander, Lexus RX / TX",
+        subtitle: "Motor 2.4L Turbo (T24A-FTS no híbrido)",
         regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
         discountBadge: "AHORRAS $645 USD"
@@ -449,7 +449,7 @@ const DEFAULT_JORNADAS = [
       {
         id: "pkg_v35a_fts",
         name: "Tundra, Land Cruiser 300, Sequoia, Lexus LX",
-        subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+        subtitle: "Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)",
         regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
         discountBadge: "AHORRAS $701 USD"
@@ -1937,8 +1937,38 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           const parsed = JSON.parse(p.JORNADAS_JSON);
           if (Array.isArray(parsed)) {
             return parsed.map((item: any) => {
-              if ((item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) && (!Array.isArray(item.packages) || item.packages.length === 0)) {
-                return { ...item, packages: DEFAULT_JORNADAS[0].packages };
+              if (item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) {
+                if (!Array.isArray(item.packages) || item.packages.length === 0) {
+                  return { ...item, packages: DEFAULT_JORNADAS[0].packages };
+                }
+                const updatedPkgs = item.packages.map((pkg: any) => {
+                  const pId = (pkg.id || '').toLowerCase();
+                  const nLower = (pkg.name || '').toLowerCase();
+                  const sLower = (pkg.subtitle || '').toLowerCase();
+                  if (pId.includes('m20') || nLower.includes('m20a') || nLower.includes('2.0l') || nLower.includes('corolla') || sLower.includes('m20a') || sLower.includes('2.0')) {
+                    return {
+                      ...pkg,
+                      name: 'Corolla, RAV4, Camry, Levin',
+                      subtitle: 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)'
+                    };
+                  }
+                  if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('tacoma') || nLower.includes('4runner') || sLower.includes('t24a') || sLower.includes('2.4l')) {
+                    return {
+                      ...pkg,
+                      name: 'Tacoma, 4Runner, Highlander, Lexus RX / TX',
+                      subtitle: 'Motor 2.4L Turbo (T24A-FTS no híbrido)'
+                    };
+                  }
+                  if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra') || sLower.includes('v35a') || sLower.includes('3.5')) {
+                    return {
+                      ...pkg,
+                      name: 'Tundra, Land Cruiser 300, Sequoia, Lexus LX',
+                      subtitle: 'Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)'
+                    };
+                  }
+                  return pkg;
+                });
+                return { ...item, packages: updatedPkgs };
               }
               return item;
             });
@@ -2248,8 +2278,38 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         const p = JSON.parse(merged.JORNADAS_JSON);
         if (Array.isArray(p)) {
           const hydrated = p.map((item: any) => {
-            if ((item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) && (!Array.isArray(item.packages) || item.packages.length === 0)) {
-              return { ...item, packages: DEFAULT_JORNADAS[0].packages };
+            if (item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) {
+              if (!Array.isArray(item.packages) || item.packages.length === 0) {
+                return { ...item, packages: DEFAULT_JORNADAS[0].packages };
+              }
+              const updatedPkgs = item.packages.map((pkg: any) => {
+                const pId = (pkg.id || '').toLowerCase();
+                const nLower = (pkg.name || '').toLowerCase();
+                const sLower = (pkg.subtitle || '').toLowerCase();
+                if (pId.includes('m20') || nLower.includes('m20a') || nLower.includes('2.0l') || nLower.includes('corolla') || sLower.includes('m20a') || sLower.includes('2.0')) {
+                  return {
+                    ...pkg,
+                    name: 'Corolla, RAV4, Camry, Levin',
+                    subtitle: 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)'
+                  };
+                }
+                if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('tacoma') || nLower.includes('4runner') || sLower.includes('t24a') || sLower.includes('2.4l')) {
+                  return {
+                    ...pkg,
+                    name: 'Tacoma, 4Runner, Highlander, Lexus RX / TX',
+                    subtitle: 'Motor 2.4L Turbo (T24A-FTS no híbrido)'
+                  };
+                }
+                if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra') || sLower.includes('v35a') || sLower.includes('3.5')) {
+                  return {
+                    ...pkg,
+                    name: 'Tundra, Land Cruiser 300, Sequoia, Lexus LX',
+                    subtitle: 'Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)'
+                  };
+                }
+                return pkg;
+              });
+              return { ...item, packages: updatedPkgs };
             }
             return item;
           });
@@ -10817,8 +10877,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           },
                           {
                             id: `pkg_t24a_${Date.now()}`,
-                            name: "Tacoma, Highlander, Lexus RX / TX",
-                            subtitle: "Motor Turbo 2.4L (T24A-FTS no híbrido)",
+                            name: "Tacoma, 4Runner, Highlander, Lexus RX / TX",
+                            subtitle: "Motor 2.4L Turbo (T24A-FTS no híbrido)",
                             regularPrice: "$1,944 USD",
                             promoPrice: "$1,299 USD",
                             discountBadge: "AHORRAS $645 USD"
@@ -10826,7 +10886,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           {
                             id: `pkg_v35a_${Date.now()}`,
                             name: "Tundra, Land Cruiser 300, Sequoia, Lexus LX",
-                            subtitle: "Motor Twin-Turbo 3.5L (V35A-FTS no híbrido)",
+                            subtitle: "Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)",
                             regularPrice: "$2,200 USD",
                             promoPrice: "$1,499 USD",
                             discountBadge: "AHORRAS $701 USD"
