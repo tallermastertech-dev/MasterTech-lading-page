@@ -859,18 +859,18 @@ async function getAdminUsersList(): Promise<any[]> {
   const masterEmail = (process.env.ADMIN_EMAIL || 'admin@tallermastertech.com').toLowerCase().trim();
   const masterPass = process.env.ADMIN_PASSWORD || 'mastertech2026';
 
-  const masterUser = {
-    id: 'master-admin-user',
-    name: 'Administrador MasterTech',
-    email: masterEmail,
-    password: masterPass,
-    role: 'CEO - Director',
-    accessLevel: 'full',
-    createdAt: new Date().toISOString()
-  };
+  const defaultKnownUsers = [
+    { id: 'user-jvaask16', name: 'J. Vicente Betancourt', email: 'jvaask16@gmail.com', password: 'Jvaask2006..', role: 'CEO - Director', accessLevel: 'full', createdAt: '2026-10-02T18:12:21.439Z' },
+    { id: 'user-josevbv', name: 'J. Vicente Betancourt', email: 'josevbv@gmail.com', password: 'Jvaask2006..', role: 'CEO - Director', accessLevel: 'full', createdAt: '2026-10-02T18:12:21.439Z' },
+    { id: 'user-olga', name: 'Olga Vera', email: 'fovi07@gmail.com', password: 'fovi07', role: 'Administración', accessLevel: 'full', createdAt: '2026-10-02T18:12:21.439Z' },
+    { id: 'user-ambar', name: 'Ambar Salazar', email: 'salferambar@gmail.com', password: 'salferambar', role: 'Asesora de Logística', accessLevel: 'logistica', createdAt: '2026-10-02T18:12:21.439Z' },
+    { id: 'user-brenda', name: 'Brenda Santaella', email: 'bresantaella@gmail.com', password: 'admin123', role: 'Coordinadora Logística', accessLevel: 'logistica', createdAt: '2026-10-02T18:12:21.439Z' },
+    { id: 'user-taller', name: 'Control Taller', email: 'tallermastertech@gmail.com', password: 'Tallermastertech', role: 'Control de Taller', accessLevel: 'control_taller', createdAt: '2026-10-02T18:12:21.439Z' },
+    { id: 'master-admin-user', name: 'Administrador MasterTech', email: masterEmail, password: masterPass, role: 'CEO - Director', accessLevel: 'full', createdAt: '2026-10-02T18:12:21.439Z' }
+  ];
 
   try {
-    // Force a fresh read from Supabase directly (bypass TTL cache for user list)
+    // 1. Force a fresh read from Supabase directly (bypass TTL cache for user list)
     const { data, error } = await supabase
       .from('settings')
       .select('value')
@@ -885,31 +885,40 @@ async function getAdminUsersList(): Promise<any[]> {
     if (rawValue) {
       const parsed = JSON.parse(rawValue);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Merge: ensure master admin is always included even if not in DB list
+        memorySettingsCache['ADMIN_USERS_JSON'] = rawValue;
         const hasMaster = parsed.some(u => (u.email || '').toLowerCase().trim() === masterEmail);
         console.log(`[getAdminUsersList] Loaded ${parsed.length} users from DB. Master present: ${hasMaster}`);
-        if (!hasMaster) return [masterUser, ...parsed];
+        if (!hasMaster) return [{ id: 'master-admin-user', name: 'Administrador MasterTech', email: masterEmail, password: masterPass, role: 'CEO - Director', accessLevel: 'full', createdAt: new Date().toISOString() }, ...parsed];
         return parsed;
       }
     }
   } catch (e: any) {
-    console.warn('[getAdminUsersList] Exception parsing ADMIN_USERS_JSON:', e?.message);
+    console.warn('[getAdminUsersList] Exception parsing ADMIN_USERS_JSON from DB:', e?.message);
   }
 
-  // Fallback: also try from settings cache
+  // 2. Memory cache check
+  if (memorySettingsCache['ADMIN_USERS_JSON']) {
+    try {
+      const parsed = JSON.parse(memorySettingsCache['ADMIN_USERS_JSON']);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    } catch (_) {}
+  }
+
+  // 3. Fallback: also try from settings cache
   try {
     const settings = await getSettings();
     if (settings.ADMIN_USERS_JSON) {
       const parsed = JSON.parse(settings.ADMIN_USERS_JSON);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        console.log(`[getAdminUsersList] Loaded ${parsed.length} users from settings cache.`);
         return parsed;
       }
     }
   } catch (e) {}
 
-  console.log('[getAdminUsersList] Falling back to master admin only.');
-  return [masterUser];
+  console.log('[getAdminUsersList] Falling back to default known users.');
+  return defaultKnownUsers;
 }
 
 // Helper: Audit Logging System (Auditoría de Actividades de Usuarios)
@@ -946,7 +955,7 @@ async function recordAuditLog(entry: {
       timestamp: new Date().toISOString()
     };
     const updated = [newLog, ...currentLogs].slice(0, 300);
-    await supabase.from('settings').upsert({ key: 'AUDIT_LOGS_JSON', value: JSON.stringify(updated) });
+    await supabase.from('settings').upsert([{ key: 'AUDIT_LOGS_JSON', value: JSON.stringify(updated) }], { onConflict: 'key' });
   } catch (e) {
     console.error("Error recording audit log:", e);
   }
@@ -955,7 +964,7 @@ async function recordAuditLog(entry: {
 // Handler reutilizable para POST /login con soporte multiusuario por correo y contraseña
 const handlePostLogin = async (req: express.Request, res: express.Response) => {
   const email = sanitizeString(req.body.email, 200)?.trim().toLowerCase();
-  const password = sanitizeString(req.body.password, 200)?.trim();
+  const password = typeof req.body.password === 'string' ? req.body.password.trim() : '';
   const adminUsers = await getAdminUsersList();
   let matchedUser = null;
 
@@ -1224,7 +1233,7 @@ const handlePutLead = async (req: express.Request, res: express.Response) => {
   try {
     const serializedLeads = JSON.stringify(savedLeads.slice(0, 200));
     memorySettingsCache['SAVED_LEADS'] = serializedLeads;
-    await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }]);
+    await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
   } catch (e) {}
 
   try {
@@ -1268,7 +1277,7 @@ const handleDeleteLead = async (req: express.Request, res: express.Response) => 
       savedLeads = savedLeads.filter((l: any) => String(l.id) !== idStr);
       const serializedLeads = JSON.stringify(savedLeads.slice(0, 200));
       memorySettingsCache['SAVED_LEADS'] = serializedLeads;
-      await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }]);
+      await supabase.from('settings').upsert([{ key: 'SAVED_LEADS', value: serializedLeads }], { onConflict: 'key' });
     } catch (e) {}
   }
 
@@ -1308,6 +1317,9 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
     const upsertRows: { key: string; value: string }[] = [];
 
     for (const [key, value] of entries) {
+      // PROTEGER ADMIN_USERS_JSON: no permitir que se sobreescriba desde el formulario general de settings
+      if (key === 'ADMIN_USERS_JSON') continue;
+
       let valStr = value === null || value === undefined ? '' : String(value);
 
       // FIREWALL ANTI-BASE64: Si un valor es una imagen Base64 pesada (>25KB), subirla a Supabase Storage y guardar solo la URL
@@ -1835,7 +1847,6 @@ app.get(['/api/admin/users', '/admin/users'], authenticateAdmin, async (_req, re
 
 app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, res) => {
   try {
-
     const { id, name, email, password, role, accessLevel } = req.body || {};
     if (!name || !email) {
       return res.status(400).json({ error: 'Nombre y correo son requeridos.' });
@@ -1843,18 +1854,21 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
 
     const currentUsers = await getAdminUsersList();
     const cleanEmail = String(email).trim().toLowerCase();
-    
+    const cleanPassword = typeof password === 'string' ? password.trim() : '';
+
     let updatedUsers: any[] = [];
-    if (id && currentUsers.some(u => u.id === id)) {
-      updatedUsers = currentUsers.map(u => {
-        if (u.id === id) {
+    const existingIndex = currentUsers.findIndex(u => (id && u.id === id) || (u.email && String(u.email).toLowerCase().trim() === cleanEmail));
+
+    if (existingIndex !== -1) {
+      updatedUsers = currentUsers.map((u, idx) => {
+        if (idx === existingIndex) {
           return {
             ...u,
             name: String(name).trim(),
             email: cleanEmail,
             role: role || u.role,
             accessLevel: accessLevel || u.accessLevel || 'logistica',
-            ...(password ? { password: String(password).trim() } : {})
+            ...(cleanPassword ? { password: cleanPassword } : {})
           };
         }
         return u;
@@ -1865,7 +1879,7 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
         id: newId,
         name: String(name).trim(),
         email: cleanEmail,
-        password: password ? String(password).trim() : 'mastertech2026',
+        password: cleanPassword || 'mastertech2026',
         role: role || 'Asesor Logística',
         accessLevel: accessLevel || 'logistica',
         createdAt: new Date().toISOString()
@@ -1874,20 +1888,31 @@ app.post(['/api/admin/users', '/admin/users'], authenticateAdmin, async (req, re
     }
 
     const jsonStr = JSON.stringify(updatedUsers);
-    await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
-    
+    const { error: upsertErr } = await supabase
+      .from('settings')
+      .upsert([{ key: 'ADMIN_USERS_JSON', value: jsonStr }], { onConflict: 'key' });
+
+    if (upsertErr) {
+      console.error('[POST /api/admin/users] Error persistiendo en Supabase:', upsertErr);
+      return res.status(500).json({ error: 'Error al persistir usuario en base de datos: ' + upsertErr.message });
+    }
+
+    memorySettingsCache['ADMIN_USERS_JSON'] = jsonStr;
+    saveSettingsToDisk();
+    invalidateSettingsCache();
+
     // Registrar en auditoría con el actor real
     const { actorName, actorEmail, actorRole } = req.body || {};
     recordAuditLog({
       userName: actorName || 'J. Vicente Betancourt',
       userEmail: actorEmail || 'josevbv@gmail.com',
       userRole: actorRole || 'CEO - Director',
-      action: id ? 'Modificación de Usuario' : 'Creación de Usuario',
+      action: existingIndex !== -1 ? 'Modificación de Usuario' : 'Creación de Usuario',
       category: 'USUARIOS',
-      details: `${id ? 'Modificó los datos del perfil' : 'Creó nuevo perfil de acceso para'} ${name} (${cleanEmail}) con rol ${role || 'Asesor'}`
+      details: `${existingIndex !== -1 ? 'Modificó los datos del perfil' + (cleanPassword ? ' y contraseña' : '') : 'Creó nuevo perfil de acceso para'} ${name} (${cleanEmail}) con rol ${role || 'Asesor'}`
     }).catch(() => {});
 
-    res.json({ success: true, message: 'Usuario guardado correctamente.' });
+    res.json({ success: true, message: 'Usuario y contraseña guardados correctamente.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al guardar usuario', details: err.message });
   }
@@ -1905,7 +1930,18 @@ app.delete(['/api/admin/users/:id', '/admin/users/:id'], authenticateAdmin, asyn
     const targetUser = currentUsers.find(u => u.id === id);
     const updatedUsers = currentUsers.filter(u => u.id !== id);
     const jsonStr = JSON.stringify(updatedUsers);
-    await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
+    const { error: upsertErr } = await supabase
+      .from('settings')
+      .upsert([{ key: 'ADMIN_USERS_JSON', value: jsonStr }], { onConflict: 'key' });
+
+    if (upsertErr) {
+      console.error('[DELETE /api/admin/users] Error eliminando en Supabase:', upsertErr);
+      return res.status(500).json({ error: 'Error al eliminar usuario en base de datos: ' + upsertErr.message });
+    }
+
+    memorySettingsCache['ADMIN_USERS_JSON'] = jsonStr;
+    saveSettingsToDisk();
+    invalidateSettingsCache();
 
     // Registrar en auditoría con el actor real
     recordAuditLog({
@@ -1929,7 +1965,18 @@ app.post(['/api/admin/users/reset-passwords', '/admin/users/reset-passwords'], a
     const currentUsers = await getAdminUsersList();
     const resetUsers = currentUsers.map((u: any) => ({ ...u, password: 'admin123' }));
     const jsonStr = JSON.stringify(resetUsers);
-    await supabase.from('settings').upsert({ key: 'ADMIN_USERS_JSON', value: jsonStr });
+    const { error: upsertErr } = await supabase
+      .from('settings')
+      .upsert([{ key: 'ADMIN_USERS_JSON', value: jsonStr }], { onConflict: 'key' });
+
+    if (upsertErr) {
+      console.error('[POST /api/admin/users/reset-passwords] Error en Supabase:', upsertErr);
+      return res.status(500).json({ error: 'Error al resetear contraseñas en base de datos: ' + upsertErr.message });
+    }
+
+    memorySettingsCache['ADMIN_USERS_JSON'] = jsonStr;
+    saveSettingsToDisk();
+    invalidateSettingsCache();
 
     const { actorName, actorEmail, actorRole } = req.body || {};
     recordAuditLog({
@@ -1999,7 +2046,7 @@ app.post(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (req, res)
 
 app.delete(['/api/admin/logs', '/admin/logs'], authenticateAdmin, async (_req, res) => {
   try {
-    await supabase.from('settings').upsert({ key: 'AUDIT_LOGS_JSON', value: '[]' });
+    await supabase.from('settings').upsert([{ key: 'AUDIT_LOGS_JSON', value: '[]' }], { onConflict: 'key' });
     res.json({ success: true, message: 'Historial de auditoría vaciado correctamente.' });
   } catch (err: any) {
     res.status(500).json({ error: 'Error al limpiar logs', details: err.message });

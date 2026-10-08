@@ -796,6 +796,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [editingUser, setEditingUser] = useState<any>(null);
   const [userModalError, setUserModalError] = useState('');
   const [isSavingUser, setIsSavingUser] = useState(false);
+  const [showModalPassword, setShowModalPassword] = useState(false);
 
   // Permission Checker: Full Access (CEO, Director, Super Admin, Administrador, Marketing), Logística (Dashboard + Citas + Catálogo + Jornadas + Proveedores)
   const isFullAdminUser = (user: any) => {
@@ -2528,6 +2529,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         setIsUserModalOpen(false);
         setEditingUser(null);
         fetchAdminUsers();
+        alert('Perfil y contraseña guardados correctamente.');
       } else {
         setUserModalError(data.error || 'Error al guardar el usuario.');
       }
@@ -2586,6 +2588,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       JORNADAS_JSON: (customPayload && customPayload.JORNADAS_JSON !== undefined) ? customPayload.JORNADAS_JSON : JSON.stringify(jornadasList),
       PROVEEDORES_JSON: (customPayload && customPayload.PROVEEDORES_JSON !== undefined) ? customPayload.PROVEEDORES_JSON : JSON.stringify(proveedoresList)
     };
+    delete (targetForm as any).ADMIN_USERS_JSON;
 
     try {
       // 1. Await server and Supabase persistence response strictly
@@ -9725,6 +9728,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   onClick={() => {
                     setEditingUser({ name: '', email: '', password: '', role: 'Administrador' });
                     setUserModalError('');
+                    setShowModalPassword(false);
                     setIsUserModalOpen(true);
                   }}
                   className="btn-primary !py-2.5 !px-4 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 border-none shadow-lg cursor-pointer shrink-0"
@@ -9819,6 +9823,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             onClick={() => {
                               setEditingUser({ ...u, password: '', accessLevel: isFull ? 'full' : 'logistica' });
                               setUserModalError('');
+                              setShowModalPassword(false);
                               setIsUserModalOpen(true);
                             }}
                             className="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-900 dark:text-zinc-300 hover:text-black dark:hover:text-white text-xs font-black py-2 px-3 rounded-xl border border-slate-300 dark:border-white/10 transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
@@ -9905,14 +9910,24 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block">
                           {editingUser.id ? 'Nueva Contraseña (dejar vacío para no cambiarla)' : 'Contraseña de Acceso *'}
                         </label>
-                        <input
-                          type="password"
-                          required={!editingUser.id}
-                          value={editingUser.password || ''}
-                          onChange={(e) => setEditingUser({ ...editingUser, password: e.target.value })}
-                          placeholder="••••••••••••"
-                          className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white font-mono outline-none focus:border-amber-400"
-                        />
+                        <div className="relative">
+                          <input
+                            type={showModalPassword ? "text" : "password"}
+                            required={!editingUser.id}
+                            value={editingUser.password || ''}
+                            onChange={(e) => setEditingUser({ ...editingUser, password: e.target.value })}
+                            placeholder={editingUser.id ? "Escribe nueva clave para cambiarla" : "••••••••••••"}
+                            className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 pl-3 pr-10 text-xs text-white font-mono outline-none focus:border-amber-400"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowModalPassword(!showModalPassword)}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 p-1 transition-colors cursor-pointer"
+                            title={showModalPassword ? "Ocultar" : "Mostrar"}
+                          >
+                            {showModalPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                          </button>
+                        </div>
                       </div>
 
                       {/* Role Selector */}
