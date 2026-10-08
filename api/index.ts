@@ -1324,14 +1324,30 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
 
       let valStr = value === null || value === undefined ? '' : String(value);
 
-      // FIREWALL ANTI-BASE64: Si un valor es una imagen Base64 pesada (>25KB), subirla a Supabase Storage y guardar solo la URL
+      // FIREWALL ANTI-BASE64: Si un valor es una imagen Base64 pesada (>25KB), optimizar a WebP con Sharp, subirla a Supabase Storage y guardar solo la URL
       if (valStr.startsWith('data:image/') && valStr.length > 25000) {
         try {
           const matches = valStr.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
           if (matches && matches.length === 3) {
-            const contentType = matches[1];
-            const buffer = Buffer.from(matches[2], 'base64');
-            const ext = contentType.includes('png') ? 'png' : (contentType.includes('webp') ? 'webp' : 'jpg');
+            let contentType = matches[1];
+            let buffer = Buffer.from(matches[2], 'base64');
+            let ext = 'webp';
+
+            if (buffer && contentType.startsWith('image/') && !contentType.includes('svg')) {
+              try {
+                const sharpModule = await import('sharp');
+                const sharp = sharpModule.default;
+                buffer = await sharp(buffer)
+                  .resize({ width: 1200, height: 1200, fit: 'inside', withoutEnlargement: true })
+                  .webp({ quality: 80 })
+                  .toBuffer();
+                contentType = 'image/webp';
+                ext = 'webp';
+              } catch (_) {
+                ext = contentType.includes('png') ? 'png' : (contentType.includes('webp') ? 'webp' : 'jpg');
+              }
+            }
+
             const cleanKey = key.toLowerCase().replace(/[^a-z0-9]/g, '_');
             const storagePath = `settings_media/${cleanKey}_${Date.now()}.${ext}`;
             const { error: upErr } = await supabase.storage.from('mastertech-media').upload(storagePath, buffer, {

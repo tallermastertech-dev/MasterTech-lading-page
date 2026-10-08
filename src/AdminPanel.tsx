@@ -2769,7 +2769,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(img, 0, 0, w, h);
-          processedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+          try {
+            const webpUrl = canvas.toDataURL('image/webp', 0.80);
+            processedDataUrl = webpUrl.startsWith('data:image/webp') ? webpUrl : canvas.toDataURL('image/jpeg', 0.80);
+          } catch (_) {
+            processedDataUrl = canvas.toDataURL('image/jpeg', 0.80);
+          }
         } else {
           processedDataUrl = (reader.result?.toString() || '');
         }
@@ -2777,15 +2782,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         // Vista previa inmediata para que el usuario no espere
         callback(processedDataUrl);
 
-        // Subir a la carpeta correspondiente en Supabase Storage (mastertech-media/{folder})
+        // Subir en formato WebP a Supabase Storage (mastertech-media/{folder})
         try {
+          const rawBaseName = (file.name || 'img').replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_');
           const res = await fetch('/api/upload-media', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               image: processedDataUrl,
               folder,
-              filename: file.name
+              filename: `${rawBaseName}.webp`
             })
           });
           const data = await res.json();

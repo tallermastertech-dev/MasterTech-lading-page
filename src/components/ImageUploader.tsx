@@ -120,7 +120,7 @@ export default function ImageUploader({
       onChange(croppedImage);
       setIsModalOpen(false);
 
-      // Sincronizar automáticamente en Supabase Storage mastertech-media/{folder}
+      // Sincronizar automáticamente en Supabase Storage mastertech-media/{folder} en formato WebP ultraligero
       try {
         const cleanName = label.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 30) || 'media';
         const res = await fetch('/api/upload-media', {
@@ -129,7 +129,7 @@ export default function ImageUploader({
           body: JSON.stringify({
             image: croppedImage,
             folder: folder || 'contenido',
-            filename: `${cleanName}.jpg`
+            filename: `${cleanName}.webp`
           })
         });
         const data = await res.json();

@@ -60,7 +60,7 @@ export default async function getCroppedImg(
     targetHeight
   );
 
-  // Intentar exportar como WebP optimizado (pesa 70% menos que JPEG)
+  // Exportar como WebP optimizado (pesa 70-80% menos que JPEG/PNG)
   try {
     const webpData = canvas.toDataURL('image/webp', quality);
     if (webpData.startsWith('data:image/webp')) {
