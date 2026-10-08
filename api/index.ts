@@ -2739,6 +2739,462 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
       };
     }
 
+    // ══════════════════════════════════════════════════════════════════
+    // RODAMIENTOS / TRANSMISIÓN / DIFERENCIAL (TOYOTA / JEEP / KOYO / TIMKEN)
+    // ══════════════════════════════════════════════════════════════════
+    // Koyo DG4180 / DG4180WR / 90366-41001 / 90366-T0044: Toyota Meru, Prado, Hilux
+    if (/^DG4180/i.test(c) || /^9036641001/i.test(c) || /^90366T0044/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Transmisión Delantera / Piñón de Diferencial Toyota Meru & Prado (Koyo DG4180 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$45.00',
+        partNumber: 'DG4180',
+        compatibilidad: 'Toyota Land Cruiser Meru (RZJ90 2.7L), Land Cruiser Prado 90/95/120 (RZJ95, VZJ95, 1KZ, 5VZ), 4Runner 4x4 (1996-2009), Hilux 4x4, Fortuner 4x4, Tacoma',
+        descripcionCorta: 'Rodamiento de transmisión delantera y piñón de ataque de diferencial Koyo Japón original para Toyota Land Cruiser Meru, Prado y 4Runner.',
+        descripcionDetallada: 'Rodamiento genuino Koyo Japón ref. #DG4180 (DG4180WR / 90366-41001 / 90366-T0044). Diseñado para la transmisión delantera y piñón de ataque de diferencial en vehículos Toyota 4x4. Fabricado en acero aleado de alta pureza con tratamiento térmico para soportar cargas axiales y radiales extremas en condiciones severas off-road.',
+        specs: [
+          'Fabricación Koyo (JTEKT Corporation Japan) de precisión milimétrica OEM',
+          'Aplicación: Transmisión delantera / eje de mando / piñón de ataque de diferencial',
+          'Alta capacidad de carga dinámica y resistencia al desgaste bajo exigencia 4x4',
+          'Cruces OEM: Koyo DG4180 / DG4180WR / DG4180RR1D / Toyota 90366-41001 / 90366-T0044',
+          'Garantía de instalación y ajuste de piñón en Taller MasterTech'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo DG4180', 'Koyo DG4180WR', 'Toyota 90366-41001', 'Toyota 90366-T0044', 'Nachi DG4180']
+      };
+    }
+
+    // Koyo DG3580 / 90366-35080: Toyota Meru, Prado, Hilux
+    if (/^DG3580/i.test(c) || /^9036635080/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Caja de Cambios / Transferencia Toyota Meru, Prado & Hilux (Koyo DG3580 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$42.00',
+        partNumber: 'DG3580',
+        compatibilidad: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95/120, Hilux 4x4 & 4Runner',
+        descripcionCorta: 'Rodamiento de caja y transfer Koyo Japón para Toyota Meru, Prado y Hilux. Alta precisión y reducción de fricción.',
+        descripcionDetallada: 'Rodamiento genuino Koyo Japón ref. #DG3580 / DG3580WR (OEM Toyota 90366-35080). Rodamiento de alta resistencia mecánica para cajas sincrónicas y caja de transferencia 4WD.',
+        specs: [
+          'Fabricación Koyo Japón grado OEM',
+          'Aplicación: Caja de velocidades y caja de transferencia 4x4',
+          'Tolerancia milimétrica y sellado contra impurezas',
+          'Referencia OEM: Koyo DG3580 / 90366-35080'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo DG3580', 'Toyota 90366-35080']
+      };
+    }
+
+    // Koyo DG4074 / 90366-40074: Toyota Meru, Prado, Hilux
+    if (/^DG4074/i.test(c) || /^9036640074/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Eje de Mando / Transmisión Delantera Toyota Meru, Prado & Hilux (Koyo DG4074 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$45.00',
+        partNumber: 'DG4074',
+        compatibilidad: 'Toyota Meru (RZJ90), Prado 90/95, Hilux 2.7L / 4.0L & Fortuner',
+        descripcionCorta: 'Rodamiento de eje de mando y entrada de transmisión Koyo Japón para Toyota Meru, Prado y Hilux.',
+        descripcionDetallada: 'Rodamiento Koyo Japón ref. #DG4074 / DG407412 (OEM 90366-40074). Diseñado para soportar alto torque continuo en el eje de entrada de la caja de cambios.',
+        specs: [
+          'Fabricación Koyo Japón de alta precisión',
+          'Ubicación: Eje de mando / entrada de transmisión',
+          'Pistas templadas con tratamiento térmico antifatiga',
+          'Referencia OEM: DG4074 / 90366-40074'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo DG4074', 'Toyota 90366-40074']
+      };
+    }
+
+    // Koyo DG3062 / 90366-30062: Toyota Corolla, Yaris, Hilux
+    if (/^DG3062/i.test(c) || /^9036630062/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Caja Sincrónica / Transmisión Toyota Corolla, Yaris & Hilux (Koyo DG3062 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$35.00',
+        partNumber: 'DG3062',
+        compatibilidad: 'Toyota Corolla 1.6L/1.8L, Yaris 1.3L/1.5L, Hilux & Matrix',
+        descripcionCorta: 'Rodamiento de caja de velocidades manual Koyo Japón para vehículos Toyota. Giro suave y máxima durabilidad.',
+        descripcionDetallada: 'Rodamiento de precisión Koyo Japón ref. #DG3062 / DG3062W (OEM 90366-30062). Componente original de la transmisión manual Toyota.',
+        specs: [
+          'Fabricación Koyo Japón grado OEM',
+          'Aplicación: Caja manual / transmisión sincronizada',
+          'Baja fricción y silencioso giro a altas RPM',
+          'Referencia OEM: DG3062 / 90366-30062'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo DG3062', 'Toyota 90366-30062']
+      };
+    }
+
+    // Koyo STA4185 / 90366-41851: Toyota Hilux, Fortuner, Meru 4x4
+    if (/^STA4185/i.test(c) || /^9036641851/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Piñón de Ataque Delantero Toyota Hilux, Fortuner & Meru 4x4 (Koyo STA4185 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$48.00',
+        partNumber: 'STA4185',
+        compatibilidad: 'Toyota Hilux 4x4 (Kavak/Vigo), Fortuner 4x4, Meru (RZJ90), Prado 90/95/120',
+        descripcionCorta: 'Rodamiento cónico de piñón de ataque de diferencial Koyo Japón para Toyota Hilux, Fortuner y Meru.',
+        descripcionDetallada: 'Rodamiento cónico de piñón de ataque original Koyo Japón ref. #STA4185 (OEM 90366-41851). Diseñado para soportar empuje axial del engranaje hipoidal bajo máxima carga 4WD.',
+        specs: [
+          'Rodamiento cónico de rodillos Koyo Japón OEM',
+          'Aplicación: Piñón de ataque diferencial delantero/trasero',
+          'Acero tratado térmicamente para servicio severo',
+          'Referencia OEM: STA4185 / 90366-41851'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo STA4185', 'Toyota 90366-41851']
+      };
+    }
+
+    // Koyo TR0708 / 90366-35087: Toyota Meru, Prado, Hilux
+    if (/^TR0708/i.test(c) || /^9036635087/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Cónico Piñón de Ataque Toyota Meru, Prado & Hilux (Koyo TR070802 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$45.00',
+        partNumber: 'TR070802',
+        compatibilidad: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95/120, Hilux 4x4, 4Runner',
+        descripcionCorta: 'Rodamiento de piñón de diferencial Koyo Japón para Toyota Land Cruiser Meru, Prado 90/95 y Hilux.',
+        descripcionDetallada: 'Rodamiento cónico original Koyo Japón ref. #TR070802 / TR0708-2 (OEM 90366-35087). Ajuste preciso para eliminar holguras y zumbidos en el diferencial.',
+        specs: [
+          'Rodillos cónicos templados de precisión Koyo Japón',
+          'Aplicación: Piñón de ataque diferencial Toyota',
+          'Elimina ruidos y desajustes de piñón y corona',
+          'Referencia OEM: TR070802 / 90366-35087'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo TR070802', 'Toyota 90366-35087']
+      };
+    }
+
+    // Koyo TR0305 / 90366-30067: Toyota Machito, Hilux, Meru
+    if (/^TR0305/i.test(c) || /^9036630067/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Piñón Diferencial Toyota Machito, Hilux & Meru (Koyo TR0305 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$48.00',
+        partNumber: 'TR0305AF',
+        compatibilidad: 'Toyota Land Cruiser Machito / Hembrita Serie 70, Hilux 4x4, Meru, Fortuner',
+        descripcionCorta: 'Rodamiento cónico para piñón de diferencial Koyo Japón para Toyota Land Cruiser Machito Serie 70, Hilux y Meru.',
+        descripcionDetallada: 'Rodamiento cónico original Koyo Japón ref. #TR0305AF (OEM 90366-30067). Máxima resistencia para tren motriz 4x4 de trabajo pesado.',
+        specs: [
+          'Rodamiento cónico de alta carga Koyo Japón OEM',
+          'Aplicación: Diferencial trasero y delantero',
+          'Acero de máxima tenacidad bajo carga de choque',
+          'Referencia OEM: TR0305AF / 90366-30067'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo TR0305AF', 'Toyota 90366-30067']
+      };
+    }
+
+    // Koyo TR0607 / 90366-34001: Toyota Prado, Meru
+    if (/^TR0607/i.test(c) || /^9036634001/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Diferencial Delantero / Transfer Toyota Prado & Meru (Koyo TR0607 OEM)',
+        categoria: 'Inyección & Motor',
+        precio: '$44.00',
+        partNumber: 'TR0607J',
+        compatibilidad: 'Toyota Land Cruiser Prado 90/95, Meru (RZJ90), 4Runner & Hilux',
+        descripcionCorta: 'Rodamiento de diferencial y caja de transferencia Koyo Japón para Toyota Prado, Meru y 4Runner.',
+        descripcionDetallada: 'Rodamiento original Koyo Japón ref. #TR0607J (OEM 90366-34001). Diseñado para ensamble en diferencial delantero y caja transfer.',
+        specs: [
+          'Fabricación Koyo Japón de precisión OEM',
+          'Aplicación: Diferencial delantero y transfer',
+          'Referencia OEM: TR0607J / 90366-34001'
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Koyo TR0607J', 'Toyota 90366-34001']
+      };
+    }
+
+    // Toyota Wheel Bearing 90363-40068: Toyota Meru, Prado 90/95
+    if (/^9036340068/i.test(c) || /^4357035010/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Rueda Delantera Toyota Land Cruiser Meru & Prado 90/95 OEM (90363-40068)',
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$38.00',
+        partNumber: '90363-40068',
+        compatibilidad: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95 (RZJ95, VZJ95), 4Runner (1996-2002), Hilux Surf',
+        descripcionCorta: 'Rodamiento de manzana y rueda delantera Koyo / Nachi Japón original para Toyota Meru, Prado 90/95 y 4Runner.',
+        descripcionDetallada: 'Rodamiento de rueda delantera OEM Toyota ref. #90363-40068 (Koyo / Nachi Japón). Doble hilera de bolas angular para soporte de rueda delantera en vehículos 4x4.',
+        specs: [
+          'Fabricación Koyo / Nachi Japón grado OEM Toyota',
+          'Doble hilera de bolas con pistas rectificadas',
+          'Sellado estanco contra agua, lodo y arena',
+          'Referencia OEM: 90363-40068 / 43570-35010'
+        ],
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Toyota 90363-40068', 'Koyo DAC4074W', 'Nachi 40BWD12']
+      };
+    }
+
+    // Toyota Wheel Hub Bearing 90369-54001 / 43570-60011: Hilux, Fortuner, Prado 120/150
+    if (/^9036954001/i.test(c) || /^4357060011/i.test(c) || /^4357060010/i.test(c)) {
+      return {
+        titulo: 'Rodamiento / Cubo de Rueda Delantera Toyota Hilux, Fortuner, Prado 120/150 (90369-54001)',
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$55.00',
+        partNumber: '90369-54001',
+        compatibilidad: 'Toyota Hilux Kavak / Vigo (2005-2022), Fortuner (2005-2022), Prado 120/150, 4Runner (2003-2024), Tacoma',
+        descripcionCorta: 'Rodamiento y manzana de rueda delantera Koyo Japón original para Toyota Hilux Kavak, Fortuner, Prado 120/150 y 4Runner.',
+        descripcionDetallada: 'Cubo y rodamiento de rueda delantera OEM Toyota ref. #90369-54001 / 43570-60011 (Koyo Japón). Incluye pista magnética para sensor ABS.',
+        specs: [
+          'Rodamiento de rueda sellado con sensor ABS integrado Koyo Japón',
+          'Alta durabilidad y resistencia al impacto en caminos irregulares',
+          'Referencia OEM: 90369-54001 / 43570-60011 / 43570-60010'
+        ],
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Toyota 90369-54001', 'Toyota 43570-60011', 'Koyo 2DUF054N-2']
+      };
+    }
+
+    // Toyota Crown Bearing 90366-50007: Hilux, Fortuner, Meru
+    if (/^9036650007/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Corona Diferencial Toyota Hilux Kavak, Fortuner & Meru (90366-50007)',
+        categoria: 'Inyección & Motor',
+        precio: '$52.00',
+        partNumber: '90366-50007',
+        compatibilidad: 'Toyota Hilux 4x4, Fortuner, Land Cruiser Meru, Prado 90/95/120 & 4Runner',
+        descripcionCorta: 'Rodamiento de caja de satélites y corona de diferencial Koyo Japón original para Toyota Hilux, Fortuner, Meru y Prado.',
+        descripcionDetallada: 'Rodamiento cónico de soporte de corona diferencial OEM Toyota ref. #90366-50007 (Koyo Japón). Ajuste perfecto para regular precarga de diferencial.',
+        specs: [
+          'Rodamiento cónico lateral de diferencial Koyo Japón',
+          'Soporta la carga lateral de corona de transmisión',
+          'Referencia OEM: 90366-50007'
+        ],
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Toyota 90366-50007', 'Koyo 50007']
+      };
+    }
+
+    // Timken SET10: Jeep Cherokee XJ, Grand Cherokee ZJ/WJ, Wrangler TJ
+    if (/^SET10/i.test(c) || /^U399/i.test(c)) {
+      return {
+        titulo: 'Rodamiento y Pista Rueda Trasera Timken OEM Dana 35 / Dana 44 (SET10)',
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$32.00',
+        partNumber: 'SET10',
+        compatibilidad: 'Jeep Cherokee XJ (1990-2001), Grand Cherokee ZJ/WJ (1993-2004), Wrangler TJ/YJ (1990-2006) con ejes Dana 35 / Dana 44',
+        descripcionCorta: 'Kit de rodamiento y pista cónica Timken original para eje trasero Dana 35 y Dana 44 en Jeep Cherokee XJ, Grand Cherokee y Wrangler TJ.',
+        descripcionDetallada: 'Rodamiento cónico original Timken USA ref. #SET10 (U399 / A-10). Fabricado en acero carburizado para soportar la carga axial y radial de palieres traseros.',
+        specs: [
+          'Acero carburizado Timken USA de máxima resistencia al impacto',
+          'Incluye cono de rodillos y pista templada rectificada',
+          'Aplicación: Palier y rueda trasera puente Dana 35 / Dana 44',
+          'Referencia OEM: Timken SET10 / U399'
+        ],
+        badge: 'Timken USA OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Timken SET10', 'Spicer 706894X', 'Mopar 83503064']
+      };
+    }
+
+    // Timken SET80: Jeep Wrangler JK
+    if (/^SET80/i.test(c)) {
+      return {
+        titulo: 'Rodamiento Eje Trasero Dana 44 Timken / Mopar Jeep Wrangler JK (SET80)',
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$38.00',
+        partNumber: 'SET80',
+        compatibilidad: 'Jeep Wrangler JK 3.8L / 3.6L (2007-2018), Jeep Liberty KK (2008-2012)',
+        descripcionCorta: 'Rodamiento de palier trasero Dana 44 original Timken para Jeep Wrangler JK y Jeep Liberty KK.',
+        descripcionDetallada: 'Rodamiento y retenedor de eje trasero Timken ref. #SET80. Diseñado para puentes traseros Dana 44 en Jeep Wrangler JK.',
+        specs: [
+          'Rodamiento de rodillos cilíndricos/cónicos Timken USA',
+          'Ajuste directo en eje Dana 44 trasero',
+          'Referencia OEM: Timken SET80'
+        ],
+        badge: 'Timken USA OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Timken SET80', 'Mopar 68008523AA']
+      };
+    }
+
+    // Wheel Hub 513288: Jeep Grand Cherokee WK2
+    if (/^513288|^513277/i.test(c)) {
+      return {
+        titulo: 'Manzana / Cubo Rodamiento Rueda Delantera Mopar / Timken Jeep Grand Cherokee WK2 (513288)',
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$145.00',
+        partNumber: '513288',
+        compatibilidad: 'Jeep Grand Cherokee WK2 3.6L / 5.7L HEMI (2011-2021), Dodge Durango (2011-2021)',
+        descripcionCorta: 'Cubo de rueda con rodamiento sellado y sensor ABS integrado para Jeep Grand Cherokee WK2 y Dodge Durango.',
+        descripcionDetallada: 'Manzana y rodamiento de rueda delantera ref. #513288 (Mopar OEM). Rodamiento de doble hilera sellado de por vida con sensor ABS integrado.',
+        specs: [
+          'Rodamiento de rueda integrado grado OEM de alta resistencia',
+          'Sensor de velocidad ABS Hall effect integrado',
+          'Referencia OEM: 513288 / 68022632AD'
+        ],
+        badge: 'Mopar / Timken OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Mopar 68022632AD', 'Timken HA590432', '513288']
+      };
+    }
+
+    // Wheel Hub 515096: Jeep Wrangler JK
+    if (/^515096|^515097/i.test(c)) {
+      return {
+        titulo: 'Manzana / Cubo Rodamiento Rueda Delantera Timken / Mopar Jeep Wrangler JK (515096)',
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$135.00',
+        partNumber: '515096',
+        compatibilidad: 'Jeep Wrangler JK 2D/4D (2007-2018) con puente Dana 30 o Dana 44',
+        descripcionCorta: 'Cubo de rueda delantera con rodamiento reforzado y sensor ABS para Jeep Wrangler JK ejes Dana 30 y Dana 44.',
+        descripcionDetallada: 'Manzana de rueda delantera ref. #515096 (Mopar OEM). Para servicio off-road pesado y neumáticos sobredimensionados.',
+        specs: [
+          'Ensamble completo de cubo con sensor ABS y espárragos grado 10.9',
+          'Ajuste directo en Jeep Wrangler JK',
+          'Referencia OEM: 515096 / 68008522AA'
+        ],
+        badge: 'Mopar / Timken OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: ['Mopar 68008522AA', 'Timken HA590242', '515096']
+      };
+    }
+
+    // Smart Koyo DG Regex
+    if (/^DG[0-9]{4}/i.test(c)) {
+      return {
+        titulo: `Rodamiento de Transmisión / Caja Koyo OEM (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$45.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota (Meru, Prado, Hilux, Fortuner, 4Runner) y transmisiones japonesas 4WD',
+        descripcionCorta: `Rodamiento de transmisión y caja de transferencia Koyo Japón original #${raw.toUpperCase()} para vehículos 4x4.`,
+        descripcionDetallada: `Rodamiento de transmisión y engranajes genuino Koyo Japón ref. #${raw.toUpperCase()}. Fabricado en acero aleado tratado térmicamente para servicio severo, soportando alto torque y fricción continua.`,
+        specs: [
+          'Fabricación Koyo (Japón) de precisión milimétrica OEM',
+          'Aplicación: Transmisión, eje de mando o piñón de diferencial',
+          'Pistas rectificadas con alta resistencia a fatiga mecánica',
+          `Referencia OEM: ${raw.toUpperCase()}`
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: [`Koyo ${raw.toUpperCase()}`]
+      };
+    }
+
+    // Smart Koyo TR / STA Regex
+    if (/^TR[0-9]{4}|^STA[0-9]{4}/i.test(c)) {
+      return {
+        titulo: `Rodamiento Cónico Piñón de Ataque / Diferencial Koyo OEM (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$48.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota Land Cruiser (Machito, Meru, Prado), Hilux, Fortuner, 4Runner & Tacoma 4x4',
+        descripcionCorta: `Rodamiento cónico de piñón de ataque y diferencial Koyo Japón original #${raw.toUpperCase()}.`,
+        descripcionDetallada: `Rodamiento de rodillos cónicos Koyo Japón ref. #${raw.toUpperCase()}. Diseñado para absorber empuje axial y radial en piñones de ataque y diferenciales de tracción integral.`,
+        specs: [
+          'Rodillos cónicos templados de precisión Koyo Japón',
+          'Aplicación: Piñón de ataque y soporte de diferencial',
+          'Resistencia a cargas de choque en condiciones 4x4 extremas',
+          `Referencia OEM: ${raw.toUpperCase()}`
+        ],
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: [`Koyo ${raw.toUpperCase()}`]
+      };
+    }
+
+    // Smart Toyota 90366 Transmission / Differential Bearings
+    if (/^90366/i.test(c)) {
+      return {
+        titulo: `Rodamiento Cónico Transmisión / Diferencial Toyota OEM (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$48.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota Land Cruiser, Meru, Prado, Hilux, Fortuner, Tacoma & 4Runner',
+        descripcionCorta: `Rodamiento cónico original Toyota / Koyo #${raw.toUpperCase()} para diferencial y caja de cambios.`,
+        descripcionDetallada: `Rodamiento cónico genuino Toyota Genuine Parts ref. #${raw.toUpperCase()} (fabricado por Koyo Japón). Tolerancias de fábrica para eliminar vibraciones y desgastes en el tren motriz.`,
+        specs: [
+          'Fabricación original bajo especificaciones Toyota Genuine Parts',
+          'Aplicación: Piñón de ataque, diferencial o caja de velocidades',
+          'Ajuste directo Plug & Play con tolerancias originales',
+          `Referencia OEM Toyota: ${raw.toUpperCase()}`
+        ],
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: [`Toyota ${raw.toUpperCase()}`]
+      };
+    }
+
+    // Smart Toyota 90363 / 90369 Wheel Bearings
+    if (/^90363|^90369/i.test(c)) {
+      return {
+        titulo: `Rodamiento de Rueda Delantera / Trasera Toyota OEM (#${raw.toUpperCase()})`,
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$45.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota Corolla, Yaris, RAV4, Hilux, Fortuner, Prado, Meru & 4Runner',
+        descripcionCorta: `Rodamiento de rueda genuino Toyota Genuine Parts #${raw.toUpperCase()} de alta durabilidad y sellado estanco.`,
+        descripcionDetallada: `Rodamiento de rueda delantera/trasera OEM Toyota ref. #${raw.toUpperCase()}. Construcción sellada de precisión para giro silencioso y máxima protección contra arena, lodo y agua.`,
+        specs: [
+          'Rodamiento de rueda sellado con pistas rectificadas grado OEM',
+          'Diseñado para soportar impactos y baches sin desajuste',
+          `Referencia OEM Toyota: ${raw.toUpperCase()}`
+        ],
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: [`Toyota ${raw.toUpperCase()}`]
+      };
+    }
+
+    // Smart Timken SET Series
+    if (/^SET[0-9]{1,3}/i.test(c)) {
+      return {
+        titulo: `Rodamiento y Pista Cónica Timken OEM (#${raw.toUpperCase()})`,
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$35.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Jeep Wrangler, Cherokee, Grand Cherokee, Dodge & Ford con ejes Dana',
+        descripcionCorta: `Rodamiento cónico original Timken USA #${raw.toUpperCase()} para rueda y palieres de tracción.`,
+        descripcionDetallada: `Rodamiento cónico de alta resistencia Timken ref. #${raw.toUpperCase()}. Diseñado para soportar cargas pesadas en puentes motrices.`,
+        specs: [
+          'Fabricación Timken USA de alta durabilidad',
+          'Pistas rectificadas para tolerancia milimétrica',
+          `Referencia OEM: Timken ${raw.toUpperCase()}`
+        ],
+        badge: 'Timken USA OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: [`Timken ${raw.toUpperCase()}`]
+      };
+    }
+
     // POLY-V / SERPENTINE BELT — 6PK389, PK389-16N00-TP, 7PK1105, 8PK2030
 
     const beltM = seg0.match(/^([0-9]?)PK([0-9]{3,5})$/i) || c.match(/^([0-9]?)PK([0-9]{3,5})/);
@@ -3522,6 +3978,10 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
         // Detect Brand
         const brandList = [
           { name: 'Toyota', regex: /\btoyota\b|\bscion\b|\blexus\b/i, badge: 'Toyota Genuine Parts' },
+          { name: 'Koyo (JTEKT Japan)', regex: /\bkoyo\b|\bjtekt\b/i, badge: 'Koyo OEM Japan' },
+          { name: 'Timken', regex: /\btimken\b/i, badge: 'Timken USA OEM' },
+          { name: 'Nachi', regex: /\bnachi\b/i, badge: 'Nachi Japan OEM' },
+          { name: 'SKF', regex: /\bskf\b/i, badge: 'SKF Original' },
           { name: 'Mopar / Jeep', regex: /\bmopar\b|\bjeep\b|\bchrysler\b|\bdodge\b|\bram\b/i, badge: 'Mopar Genuine Parts' },
           { name: 'Ford', regex: /\bford\b|\bmotorcraft\b|\blincoln\b/i, badge: 'Motorcraft OEM Parts' },
           { name: 'Chevrolet / GM', regex: /\bgm\b|\bchevrolet\b|\bchevy\b|\bacdelco\b|\bgmc\b/i, badge: 'GM Genuine Parts' },
@@ -3543,7 +4003,17 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
         let esPartName = 'Repuesto Automotriz Especializado';
         let defaultPrice = '$85.00';
 
-        if (/distance sensor|radar sensor|adaptive cruise|sensor assembly millime|tss\b|adas\b/i.test(combined)) {
+        if (/bearing|rodamiento|rolinera|cojinete|ball bearing|roller bearing/i.test(combined)) {
+          if (/wheel|rueda|manzana|hub/i.test(combined)) {
+            cat = 'Suspensión & Amortiguadores';
+            esPartName = 'Rodamiento / Cubo de Rueda';
+            defaultPrice = '$45.00';
+          } else {
+            cat = 'Inyección & Motor';
+            esPartName = 'Rodamiento Transmisión / Diferencial';
+            defaultPrice = '$45.00';
+          }
+        } else if (/distance sensor|radar sensor|adaptive cruise|sensor assembly millime|tss\b|adas\b/i.test(combined)) {
           cat = 'Baterías & Electricidad';
           esPartName = 'Sensor de Distancia / Radar Frontal ADAS (TSS)';
           defaultPrice = '$340.00';
@@ -3602,6 +4072,7 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
         }
 
         const vehicleModels = [
+          'Meru', 'Prado', 'Land Cruiser', 'Machito',
           'Corolla', 'Corolla Cross', 'RAV4', 'Camry', 'Hilux', 'Fortuner', 'Yaris', 'Tacoma', 'Tundra', 'Highlander', 'Prius', '4Runner',
           'Wrangler', 'Grand Cherokee', 'Gladiator', 'Cherokee', 'Compass', 'Durango', 'RAM 1500', 'RAM 2500', 'Chrysler 300',
           'Explorer', 'Edge', 'F-150', 'Escape', 'Focus', 'Fusion', 'Mustang', 'Expedition',
@@ -3665,13 +4136,13 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
     if (!parsedJson && apiKey && apiKey.startsWith('AIza')) {
       const promptText = `Eres el MAYOR EXPERTO MUNDIAL en decodificacion de numeros de parte OEM automotriz. Numero de parte: "${pNum}". Devuelve UNICAMENTE JSON valido sin markdown.
 
-PREFIJOS OEM TOYOTA/LEXUS: 87139=Filtro Cabina/Habitaculo, 17801=Filtro Aire Motor, 90915=Filtro Aceite, 23221/23220=Bomba Gasolina en Tanque, 23300=Filtro Gasolina, 22030/23801=Cuerpo Aceleracion ETCS-i drive-by-wire, 42607=Sensor TPMS 315MHz, 04465=Pastillas Freno Delanteras Ceramicas, 04466=Pastillas Freno Traseras, 22204=Sensor MAF Hilo Caliente 0-5V, 89465/89467=Sensor O2 Lambda 4 cables calentado ZrO2, 23250=Inyector Combustible Multipunto solenoid, 90919=Sensor CKP/CMP Hall Effect, 89615=Sensor Detonacion Knock piezoel, 11201=Tapa Valvulas con PCV, 28100=Motor Arranque Starter 1.0-1.4kW, 27060=Alternador 80-100A OAD polea, 48520=Amortiguador Delantero gas N2, 48530=Amortiguador Trasero, 43550/43560=Cubo Manzana Rueda Delantera con sensor ABS, 42410=Cubo Rueda Trasera, 43330/48654=Rotula Suspension Ball Joint PTFE, 48820/48825=Eslabon Barra Estabilizadora Sway Bar Link, 45516=Terminal Direccion Exterior Outer Tie Rod, 45503=Terminal Direccion Interior Inner Tie Rod, 44200/44201=Rack Pinion Direccion EPS, 44310=Bomba Direccion Hidraulica paletas, 47510=Cilindro Maestro Freno, 47730/47750=Caliper Freno piston Stainless, 43206/43512=Disco Rotor Freno ventilado hierro gris, 44610=Servo Freno Booster vacio 9 pulgadas, 04311=Disco Embrague 215mm organico-ceramico, 31250=Plato Presion Embrague diafragma Belleville, 31230=Collarin Rodamiento Embrague, 43470/43430=Semieje Junta Homocinetica CV Axle, 16400/16410=Radiador aluminio, 16271/16281=Manguera Radiador EPDM, 16031=Tapa Radiador 1.1bar, 16801/16802=Ventilador Electrico Radiador, 16100/16110=Bomba Agua accionada correa sello SiC, 88320/88310=Compresor A/C piston axial variable, 88501/88450=Condensador A/C aluminio microceldas, 88899/88716=Valvula Expansion A/C termostatica, 13070/13073=Kit Cadena Distribucion completo con tensor y guias, 13568/13507=Correa Distribucion Timing Belt HNBR aramida, 90916=Correa Serpentin polyV EPDM, 15100/15010=Bomba Aceite, 12361/12372=Soporte Motor Mount, 17505/17560=Catalizador, 17740=Silenciador Mofle, 53101/53111=Cofre Capo acero, 52119=Paragolpes PP+EPDM, 12204=Valvula PCV Ventilacion Carter NBR, 25620/25800=Valvula EGR electronica, 77740/77741=Canister EVAP Carbon Activo, 89422/83420=Sensor ECT Temperatura Refrigerante NTC, 89452/89453=Sensor TPS Posicion Acelerador doble pista, 22365=Sensor MAP IAT Presion Admision, 83800=Tablero Cluster, 89170=Modulo SRS Airbag, 85720/85710=Motor Elevalunas Electrico, 69120/69130=Actuador Cerradura Puerta, 90080=Bujias Encendido Denso iridio/platino.
+PREFIJOS OEM TOYOTA/LEXUS: DG4180/DG3580/DG4074=Rodamiento Transmision Delantera/Pinon Toyota Meru/Prado Koyo, TR0708/TR0305=Rodamiento Pinon Ataque Diferencial Koyo, 90366=Rodamiento Diferencial/Transmision Koyo/Nachi, 90363/90369=Rodamiento Rueda Delantera, 87139=Filtro Cabina/Habitaculo, 17801=Filtro Aire Motor, 90915=Filtro Aceite, 23221/23220=Bomba Gasolina en Tanque, 23300=Filtro Gasolina, 22030/23801=Cuerpo Aceleracion ETCS-i drive-by-wire, 42607=Sensor TPMS 315MHz, 04465=Pastillas Freno Delanteras Ceramicas, 04466=Pastillas Freno Traseras, 22204=Sensor MAF Hilo Caliente 0-5V, 89465/89467=Sensor O2 Lambda 4 cables calentado ZrO2, 23250=Inyector Combustible Multipunto solenoid, 90919=Sensor CKP/CMP Hall Effect, 89615=Sensor Detonacion Knock piezoel, 11201=Tapa Valvulas con PCV, 28100=Motor Arranque Starter 1.0-1.4kW, 27060=Alternador 80-100A OAD polea, 48520=Amortiguador Delantero gas N2, 48530=Amortiguador Trasero, 43550/43560=Cubo Manzana Rueda Delantera con sensor ABS, 42410=Cubo Rueda Trasera, 43330/48654=Rotula Suspension Ball Joint PTFE, 48820/48825=Eslabon Barra Estabilizadora Sway Bar Link, 45516=Terminal Direccion Exterior Outer Tie Rod, 45503=Terminal Direccion Interior Inner Tie Rod, 44200/44201=Rack Pinion Direccion EPS, 44310=Bomba Direccion Hidraulica paletas, 47510=Cilindro Maestro Freno, 47730/47750=Caliper Freno piston Stainless, 43206/43512=Disco Rotor Freno ventilado hierro gris, 44610=Servo Freno Booster vacio 9 pulgadas, 04311=Disco Embrague 215mm organico-ceramico, 31250=Plato Presion Embrague diafragma Belleville, 31230=Collarin Rodamiento Embrague, 43470/43430=Semieje Junta Homocinetica CV Axle, 16400/16410=Radiador aluminio, 16271/16281=Manguera Radiador EPDM, 16031=Tapa Radiador 1.1bar, 16801/16802=Ventilador Electrico Radiador, 16100/16110=Bomba Agua accionada correa sello SiC, 88320/88310=Compresor A/C piston axial variable, 88501/88450=Condensador A/C aluminio microceldas, 88899/88716=Valvula Expansion A/C termostatica, 13070/13073=Kit Cadena Distribucion completo con tensor y guias, 13568/13507=Correa Distribucion Timing Belt HNBR aramida, 90916=Correa Serpentin polyV EPDM, 15100/15010=Bomba Aceite, 12361/12372=Soporte Motor Mount, 17505/17560=Catalizador, 17740=Silenciador Mofle, 53101/53111=Cofre Capo acero, 52119=Paragolpes PP+EPDM, 12204=Valvula PCV Ventilacion Carter NBR, 25620/25800=Valvula EGR electronica, 77740/77741=Canister EVAP Carbon Activo, 89422/83420=Sensor ECT Temperatura Refrigerante NTC, 89452/89453=Sensor TPS Posicion Acelerador doble pista, 22365=Sensor MAP IAT Presion Admision, 83800=Tablero Cluster, 89170=Modulo SRS Airbag, 85720/85710=Motor Elevalunas Electrico, 69120/69130=Actuador Cerradura Puerta, 90080=Bujias Encendido Denso iridio/platino.
 
-PREFIJOS NISSAN/INFINITI: 27277=Filtro Cabina, 22460=Sensor MAF Hitachi, 17040/17050=Bomba Gasolina, 22448=Bobina COP, 22401=Bujias NGK, 21010=Bomba Agua. HONDA/ACURA: 80292=Filtro Cabina, 30520=Bobina COP NGK, 45022=Pastillas Freno Genuine. MOPAR/JEEP/DODGE: 68XXXXXXXX=ECM/PCM Stellantis, 04884899=Filtro Aceite Heavy Duty, 68231879=Compresor A/C, 05184651=Bomba Agua 3.6L Pentastar, 56028394=Bobina COP Pentastar, 68066265=Bomba Gasolina WK2. GM/AC DELCO: PF48=Filtro Aceite V8 5.3L Silverado, PF63=Filtro Aceite Duramax/Turbo, 13503909=Filtro Cabina GM. FORD/MOTORCRAFT: FL820S/FL1A=Filtro Aceite EcoBoost/Coyote, DG511/DG508/DG457=Bobina COP 4.6L/5.4L V8 Triton, FP79/FP76/FP82=Filtro Cabina Ford, MS10A/AT4Z-7251=PTU Transfer Case Explorer/Edge. NGK: TR55GP=Bujia Platino V8 GM/Ford, BKR5E/BKR6E=Bujia 4cil Toyota/Honda, LFR6AIX=Bujia Iridio V6 Toyota Fortuner. BOSCH: 0258XXXXXX=Sensor O2 Lambda ZrO2, 0280XXXXXX=Inyector EV6. KYB: 3XXXXX/344XXX=Amortiguadores Excel-G gas N2. AISIN: CKT/CKN=Kit Embrague OEM Toyota. GATES: K06XXXX=Correa Serpentin polyV, AW/WPT=Bomba Agua. CLOYES: 9-XXXX=Kit Cadena Distribucion.
+PREFIJOS NISSAN/INFINITI: 27277=Filtro Cabina, 22460=Sensor MAF Hitachi, 17040/17050=Bomba Gasolina, 22448=Bobina COP, 22401=Bujias NGK, 21010=Bomba Agua. HONDA/ACURA: 80292=Filtro Cabina, 30520=Bobina COP NGK, 45022=Pastillas Freno Genuine. MOPAR/JEEP/DODGE: SET10/SET80=Rodamiento Eje Trasero Dana 35/44 Timken, 68XXXXXXXX=ECM/PCM Stellantis, 04884899=Filtro Aceite Heavy Duty, 68231879=Compresor A/C, 05184651=Bomba Agua 3.6L Pentastar, 56028394=Bobina COP Pentastar, 68066265=Bomba Gasolina WK2. GM/AC DELCO: PF48=Filtro Aceite V8 5.3L Silverado, PF63=Filtro Aceite Duramax/Turbo, 13503909=Filtro Cabina GM. FORD/MOTORCRAFT: FL820S/FL1A=Filtro Aceite EcoBoost/Coyote, DG511/DG508/DG457=Bobina COP 4.6L/5.4L V8 Triton, FP79/FP76/FP82=Filtro Cabina Ford, MS10A/AT4Z-7251=PTU Transfer Case Explorer/Edge. NGK: TR55GP=Bujia Platino V8 GM/Ford, BKR5E/BKR6E=Bujia 4cil Toyota/Honda, LFR6AIX=Bujia Iridio V6 Toyota Fortuner. BOSCH: 0258XXXXXX=Sensor O2 Lambda ZrO2, 0280XXXXXX=Inyector EV6. KYB: 3XXXXX/344XXX=Amortiguadores Excel-G gas N2. AISIN: CKT/CKN=Kit Embrague OEM Toyota. GATES: K06XXXX=Correa Serpentin polyV, AW/WPT=Bomba Agua. CLOYES: 9-XXXX=Kit Cadena Distribucion.
 
 COMPATIBILIDAD: Se ESPECIFICO con Marca+Modelo+Cilindrada+Codigo Motor+Rango Anios. Ejemplo: "Toyota Corolla 1.8L (2ZR-FE) 2009-2019, Matrix 2009-2014; Nissan Altima 2.5L (QR25DE) 2007-2018".
 
-PRECIOS MERCADO REAL: filtro cabina $12-28, filtro aceite $8-25, sensor MAF $45-150, sensor O2 $30-120, sensor ECT/TPS $20-80, inyector $35-120, cuerpo aceleracion $80-250, bobina COP $25-85, bujias set-4 $30-120, bomba gasolina $80-220, bomba agua $35-150, termostato $15-50, radiador $120-350, correa serpentin $20-55, kit cadena $150-450, amortiguador unitario $45-180, pastillas set-2 $30-120, disco freno $40-150, kit embrague $150-450, semieje CV $80-220, cubo rueda $60-180, compresor A/C $180-650, motor arranque $80-250, alternador $90-280, transfer case PTU $350-750.
+PRECIOS MERCADO REAL: filtro cabina $12-28, filtro aceite $8-25, sensor MAF $45-150, sensor O2 $30-120, sensor ECT/TPS $20-80, inyector $35-120, cuerpo aceleracion $80-250, bobina COP $25-85, bujias set-4 $30-120, bomba gasolina $80-220, bomba agua $35-150, termostato $15-50, radiador $120-350, correa serpentin $20-55, kit cadena $150-450, amortiguador unitario $45-180, pastillas set-2 $30-120, disco freno $40-150, kit embrague $150-450, semieje CV $80-220, cubo rueda $60-180, compresor A/C $180-650, motor arranque $80-250, alternador $90-280, transfer case PTU $350-750, rodamientos caja/diferencial $35-65.
 
 DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
 {"titulo":"[Tipo ESPECIFICO de repuesto NO generico con Marca+Modelo+Motorizacion+Anios]","categoria":"[Inyección & Motor | Frenos & Discos | Suspensión & Amortiguadores | Aceites & Lubricantes | Baterías & Electricidad | Filtros & Consumibles | Fluidos & Climatización | Cuidado & Detailing]","compatibilidad":"[Marca Modelo Cilindrada Codigo-Motor Anios — varios vehiculos con punto y coma]","descripcionCorta":"[1-2 oraciones tecnicas con material y beneficio clave]","descripcionDetallada":"[Descripcion tecnica completa con material, dimensiones, especificaciones, temperatura de operacion e intervalo de reemplazo]","specs":["[Material o composicion exacta del repuesto]","[Dimensiones o capacidad principal]","[Parametros electricos o mecanicos clave]","[Intervalo de reemplazo o vida util]","[Norma o numero OEM original equivalente]"],"precio":"[$XX.XX (solo monto numerico con signo $, ej: $45.00)]","referencias":["[Numero OEM original exacto del fabricante]","[Equivalente aftermarket Marca + Numero]","[Otra referencia cruzada importante]"]}`;
@@ -3713,7 +4184,14 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
     // STEP 3: Smart structural fallback
     if (!parsedJson || !parsedJson.titulo) {
       const u3 = pNum.toUpperCase();
-      if (/SHOCK|AMORT|STRUT|Monroe|GABRIEL|KYB|RANCHO/i.test(u3)) parsedJson = { titulo: `Amortiguador Gas Nitrógeno/Suspensión OEM (${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Vehículos 4x4 y SUV: Jeep, Toyota, Nissan, Ford & Chevrolet Heavy Duty', descripcionCorta: 'Amortiguador gas nitrógeno doble tubo para absorción de impactos y estabilidad.', descripcionDetallada: `Amortiguador OEM #${pNum}. Control direccional en autopista y off-road.` };
+      if (/^DG4180/i.test(u3)) parsedJson = { titulo: `Rodamiento Transmisión Delantera / Piñón Diferencial Toyota Meru & Prado (Koyo DG4180 OEM)`, categoria: 'Inyección & Motor', compatibilidad: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95/120, 4Runner, Hilux 4x4 & Fortuner', descripcionCorta: 'Rodamiento de transmisión delantera y piñón de diferencial Koyo Japón original.', descripcionDetallada: `Rodamiento Koyo Japón OEM #${pNum}. Diseñado para soportar alto torque y cargas extremas en la transmisión delantera y piñón de ataque.`, precio: '$45.00', badge: 'Koyo Japan OEM' };
+      else if (/^DG[0-9]{4}/i.test(u3)) parsedJson = { titulo: `Rodamiento de Transmisión / Caja Koyo OEM (#${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Toyota (Meru, Prado, Hilux, Fortuner, 4Runner) y cajas 4WD', descripcionCorta: 'Rodamiento de transmisión y caja de transferencia Koyo Japón original.', descripcionDetallada: `Rodamiento Koyo OEM #${pNum}. Pistas templadas con tratamiento térmico antifatiga.`, precio: '$45.00', badge: 'Koyo Japan OEM' };
+      else if (/^TR[0-9]{4}|^STA[0-9]{4}/i.test(u3)) parsedJson = { titulo: `Rodamiento Cónico Piñón de Ataque / Diferencial Koyo OEM (#${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Toyota Land Cruiser (Machito, Meru, Prado), Hilux, Fortuner & 4Runner 4x4', descripcionCorta: 'Rodamiento cónico de piñón de ataque y diferencial Koyo Japón original.', descripcionDetallada: `Rodamiento cónico Koyo OEM #${pNum}. Absorbe empuje axial y radial severo en diferenciales 4WD.`, precio: '$48.00', badge: 'Koyo Japan OEM' };
+      else if (/^90366/i.test(u3)) parsedJson = { titulo: `Rodamiento Cónico Diferencial / Transmisión Toyota OEM (#${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Toyota Land Cruiser, Meru, Prado, Hilux, Fortuner & 4Runner', descripcionCorta: 'Rodamiento cónico original Toyota / Koyo para diferencial y caja.', descripcionDetallada: `Rodamiento genuino Toyota OEM #${pNum}. Tolerancias milimétricas de fábrica.`, precio: '$48.00', badge: 'Toyota Genuine Parts' };
+      else if (/^90363|^90369|^43570/i.test(u3)) parsedJson = { titulo: `Rodamiento / Cubo de Rueda Delantera Toyota OEM (#${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Toyota Corolla, Yaris, RAV4, Hilux, Fortuner, Prado, Meru & 4Runner', descripcionCorta: 'Rodamiento de rueda delantera sellado de alta resistencia con pistas rectificadas.', descripcionDetallada: `Rodamiento de rueda Toyota OEM #${pNum}. Doble hilera de bolas/rodillos sellado de por vida.`, precio: '$45.00', badge: 'Toyota Genuine Parts' };
+      else if (/^SET[0-9]{1,3}/i.test(u3)) parsedJson = { titulo: `Rodamiento y Pista Rueda / Eje Timken OEM (#${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Jeep Wrangler, Cherokee, Grand Cherokee, Dodge & Ford ejes Dana', descripcionCorta: 'Kit de rodamiento y pista cónica Timken original para ejes de tracción y rueda.', descripcionDetallada: `Rodamiento cónico Timken OEM #${pNum}. Fabricado en acero carburizado de alta durabilidad para puentes Dana 30, 35 y 44.`, precio: '$35.00', badge: 'Timken USA OEM' };
+      else if (/RODAMIENTO|BEARING|ROLINERA|COJINETE|CHUMACERA/i.test(u3)) parsedJson = { titulo: `Rodamiento Automotriz de Precisión OEM (${pNum})`, categoria: /RUEDA|WHEEL|MANZANA|HUB/i.test(u3) ? 'Suspensión & Amortiguadores' : 'Inyección & Motor', compatibilidad: 'Toyota, Jeep, Ford, Chevrolet & Nissan 4x4 / SUV', descripcionCorta: 'Rodamiento automotriz de alta durabilidad con pistas templadas por inducción.', descripcionDetallada: `Rodamiento de precisión OEM #${pNum}. Capacidad de carga radial y axial calibrada según especificaciones de ingeniería original.`, precio: '$40.00', badge: 'Repuesto Certificado OEM' };
+      else if (/SHOCK|AMORT|STRUT|Monroe|GABRIEL|KYB|RANCHO/i.test(u3)) parsedJson = { titulo: `Amortiguador Gas Nitrógeno/Suspensión OEM (${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Vehículos 4x4 y SUV: Jeep, Toyota, Nissan, Ford & Chevrolet Heavy Duty', descripcionCorta: 'Amortiguador gas nitrógeno doble tubo para absorción de impactos y estabilidad.', descripcionDetallada: `Amortiguador OEM #${pNum}. Control direccional en autopista y off-road.` };
       else if (/ROD|LINK|TIE|TERMINAL|BARRA|ROTULA|SUSP/i.test(u3)) parsedJson = { titulo: `Barra / Terminal de Dirección OEM (${pNum})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Jeep Wrangler / Cherokee, Ford, GM & Toyota 4x4', descripcionCorta: 'Componente forjado de dirección y alineación de alta resistencia mecánica.', descripcionDetallada: `Terminal de dirección OEM #${pNum}. Rótula sellada libre de mantenimiento para alineación precisa.` };
       else if (/CLUTCH|EMBRAGUE|AISIN|EXEDY|LUK|SACHS/i.test(u3)) parsedJson = { titulo: `Kit Embrague / Transmisión OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Toyota, Chevrolet, Nissan, Ford & Hyundai con transmisión manual (2000-2024)', descripcionCorta: 'Kit embrague con disco de fricción, plato de presión y collarín. Acople suave sin vibraciones.', descripcionDetallada: `Kit OEM #${pNum}. Disco cerámico-orgánico. Garantía 2años/50,000km.` };
       else if (/COIL|BOBINA|COP|IGNITION/i.test(u3)) parsedJson = { titulo: `Bobina de Encendido COP OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Multimarca con sistema COP: Toyota, Ford, GM, Jeep & Nissan (2000-2024)', descripcionCorta: 'Bobina COP alta energía de chispa (>100 mJ), núcleo ferrita, conector OEM.', descripcionDetallada: `Bobina OEM #${pNum}. Chispa constante en todo el rango de RPM.` };
@@ -3722,11 +4200,15 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
       else if (/TRANSFER|PTU|DIFERENCIAL|CASE|MS10/i.test(u3)) parsedJson = { titulo: `Caja de Transferencia / PTU AWD OEM (${pNum})`, categoria: 'Inyección & Motor', compatibilidad: 'Vehículos SUV y 4WD/AWD Ford, Jeep, Dodge, Toyota', descripcionCorta: 'Caja de transferencia / PTU para distribución de torque a las 4 ruedas.', descripcionDetallada: `Unidad OEM #${pNum}. Verifique lubricación con fluido sintético 75W-140.` };
       else if (/^(?:P|0)?(68[0-9]{6}|05[0-9]{6}|52[0-9]{6}|53[0-9]{6}|56[0-9]{6})/i.test(u3)) parsedJson = { titulo: `Repuesto Original Mopar OEM (#${pNum.toUpperCase()})`, categoria: 'Suspensión & Amortiguadores', compatibilidad: 'Jeep Wrangler JL/JK, Grand Cherokee WK2, RAM 1500 & Dodge Durango', descripcionCorta: `Componente original de fábrica Mopar Stellantis OEM #${pNum}.`, descripcionDetallada: `Repuesto original Mopar #${pNum}. Fabricado bajo especificaciones de equipo original para Jeep, Dodge y RAM.`, precio: '$125.00', badge: 'Mopar Genuine Parts' };
       else if (/88210|8210|RADAR|DISTANCE|ADAS|CRUISE|SAFETY/i.test(u3)) parsedJson = { titulo: `Sensor de Distancia / Radar Frontal ADAS OEM (#${pNum.toUpperCase()})`, categoria: 'Baterías & Electricidad', compatibilidad: 'Toyota Corolla / RAV4 / Camry / Highlander con sistema Safety Sense TSS', descripcionCorta: `Sensor radar de ondas milimétricas para Control Crucero Adaptativo y Alerta de Colisión OEM #${pNum}.`, descripcionDetallada: `Sensor radar OEM #${pNum}. Requiere calibración con escáner TechStream tras instalación.`, precio: '$340.00', badge: 'Toyota Genuine Parts' };
-      else parsedJson = { titulo: `Repuesto Automotriz OEM #${pNum.toUpperCase()}`, categoria: 'Filtros & Consumibles', compatibilidad: 'Consultar compatibilidad en catálogo OEM del fabricante', descripcionCorta: `Componente original o equivalente certificado OEM #${pNum}.`, descripcionDetallada: `Repuesto OEM #${pNum}. Consulte catálogo del fabricante para confirmar aplicación exacta.` };
+      else parsedJson = { titulo: `Repuesto Automotriz OEM #${pNum.toUpperCase()}`, categoria: 'Inyección & Motor', compatibilidad: 'Consultar compatibilidad en catálogo OEM del fabricante', descripcionCorta: `Componente original o equivalente certificado OEM #${pNum}.`, descripcionDetallada: `Repuesto OEM #${pNum}. Consulte catálogo del fabricante para confirmar aplicación exacta.` };
     }
 
     const normalizeCategory = (rawCat: string): string => {
       const cl = (rawCat || '').toLowerCase();
+      if (cl.includes('rodamiento') || cl.includes('rolinera') || cl.includes('bearing') || cl.includes('cojinete')) {
+        if (cl.includes('rueda') || cl.includes('wheel') || cl.includes('manzana') || cl.includes('hub')) return 'Suspensión & Amortiguadores';
+        return 'Inyección & Motor';
+      }
       if (cl.includes('freno') || cl.includes('brake') || cl.includes('pastilla') || cl.includes('disco') || cl.includes('caliper')) return 'Frenos & Discos';
       if (cl.includes('suspensi') || cl.includes('amortiguador') || cl.includes('shock') || cl.includes('strut') || cl.includes('rotula') || cl.includes('terminal')) return 'Suspensión & Amortiguadores';
       if (cl.includes('aceite') || cl.includes('lubricant') || cl.includes('oil') || cl.includes('atf') || cl.includes('valvulina')) return 'Aceites & Lubricantes';
@@ -3736,7 +4218,7 @@ DEVUELVE SOLO ESTE JSON (nada de texto antes o despues):
       if (cl.includes('inyec') || cl.includes('motor') || cl.includes('transmi') || cl.includes('transfer') || cl.includes('ptu') || cl.includes('diferencial') || cl.includes('embrague') || cl.includes('clutch') || cl.includes('cardan') || cl.includes('turbo') || cl.includes('valvula')) return 'Inyección & Motor';
       if (cl.includes('cuidado') || cl.includes('detail') || cl.includes('estetica') || cl.includes('limpi')) return 'Cuidado & Detailing';
       if (rawCat && rawCat.trim().length > 3) return rawCat.trim();
-      return 'Filtros & Consumibles';
+      return 'Inyección & Motor';
     };
 
     const finalCategory = normalizeCategory(parsedJson?.categoria || parsedJson?.category || '');

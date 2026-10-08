@@ -3232,6 +3232,466 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         img: '/assets/promo_turbo_charger.webp',
         msg: '✅ Datos decodificados con éxito desde catálogo OEM Ford FoMoCo.'
       };
+    } else if (cleanP.startsWith('DG4180') || rawUpper.startsWith('DG4180') || cleanP.includes('DG4180') || cleanP === 'DG4180WR' || cleanP.startsWith('9036641001') || cleanP.startsWith('90366T0044')) {
+      localMatch = {
+        title: 'Rodamiento Transmisión Delantera / Piñón de Diferencial Toyota Meru & Prado (Koyo DG4180 OEM)',
+        category: 'Inyección & Motor',
+        price: '$45.00',
+        partNumber: 'DG4180',
+        desc: 'Rodamiento de transmisión delantera y piñón de ataque de diferencial Koyo Japón original para Toyota Land Cruiser Meru, Prado y 4Runner.',
+        longDesc: 'Rodamiento genuino Koyo Japón ref. #DG4180 (DG4180WR / 90366-41001 / 90366-T0044). Diseñado para la transmisión delantera y piñón de ataque de diferencial en vehículos Toyota 4x4. Fabricado en acero aleado de alta pureza con tratamiento térmico para soportar cargas axiales y radiales extremas en condiciones severas off-road.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Meru (RZJ90 2.7L), Land Cruiser Prado 90/95/120 (RZJ95, VZJ95, 1KZ, 5VZ), 4Runner 4x4 (1996-2009), Hilux 4x4, Fortuner 4x4, Tacoma',
+        specs: [
+          'Fabricación Koyo (JTEKT Corporation Japan) de precisión milimétrica OEM',
+          'Aplicación: Transmisión delantera / eje de mando / piñón de ataque de diferencial',
+          'Alta capacidad de carga dinámica y resistencia al desgaste bajo exigencia 4x4',
+          'Cruces OEM: Koyo DG4180 / DG4180WR / DG4180RR1D / Toyota 90366-41001 / 90366-T0044',
+          'Garantía de instalación y ajuste de piñón en Taller MasterTech'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo Japón decodificado al instante para Toyota Meru / Prado.'
+      };
+    } else if (cleanP.startsWith('DG3580') || rawUpper.startsWith('DG3580') || cleanP.startsWith('9036635080')) {
+      localMatch = {
+        title: 'Rodamiento Caja de Cambios / Transferencia Toyota Meru, Prado & Hilux (Koyo DG3580 OEM)',
+        category: 'Inyección & Motor',
+        price: '$42.00',
+        partNumber: 'DG3580',
+        desc: 'Rodamiento de caja y transfer Koyo Japón para Toyota Meru, Prado y Hilux. Alta precisión y reducción de fricción.',
+        longDesc: 'Rodamiento genuino Koyo Japón ref. #DG3580 / DG3580WR (OEM Toyota 90366-35080). Rodamiento de alta resistencia mecánica para cajas sincrónicas y caja de transferencia 4WD.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95/120, Hilux 4x4 & 4Runner',
+        specs: [
+          'Fabricación Koyo Japón grado OEM',
+          'Aplicación: Caja de velocidades y caja de transferencia 4x4',
+          'Tolerancia milimétrica y sellado contra impurezas',
+          'Referencia OEM: Koyo DG3580 / 90366-35080'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('DG4074') || rawUpper.startsWith('DG4074') || cleanP.startsWith('9036640074')) {
+      localMatch = {
+        title: 'Rodamiento Eje de Mando / Transmisión Delantera Toyota Meru, Prado & Hilux (Koyo DG4074 OEM)',
+        category: 'Inyección & Motor',
+        price: '$45.00',
+        partNumber: 'DG4074',
+        desc: 'Rodamiento de eje de mando y entrada de transmisión Koyo Japón para Toyota Meru, Prado y Hilux.',
+        longDesc: 'Rodamiento Koyo Japón ref. #DG4074 / DG407412 (OEM 90366-40074). Diseñado para soportar alto torque continuo en el eje de entrada de la caja de cambios.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Meru (RZJ90), Prado 90/95, Hilux 2.7L / 4.0L & Fortuner',
+        specs: [
+          'Fabricación Koyo Japón de alta precisión',
+          'Ubicación: Eje de mando / entrada de transmisión',
+          'Pistas templadas con tratamiento térmico antifatiga',
+          'Referencia OEM: DG4074 / 90366-40074'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('DG3062') || rawUpper.startsWith('DG3062') || cleanP.startsWith('9036630062')) {
+      localMatch = {
+        title: 'Rodamiento Caja Sincrónica / Transmisión Toyota Corolla, Yaris & Hilux (Koyo DG3062 OEM)',
+        category: 'Inyección & Motor',
+        price: '$35.00',
+        partNumber: 'DG3062',
+        desc: 'Rodamiento de caja de velocidades manual Koyo Japón para vehículos Toyota. Giro suave y máxima durabilidad.',
+        longDesc: 'Rodamiento de precisión Koyo Japón ref. #DG3062 / DG3062W (OEM 90366-30062). Componente original de la transmisión manual Toyota.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla 1.6L/1.8L, Yaris 1.3L/1.5L, Hilux & Matrix',
+        specs: [
+          'Fabricación Koyo Japón grado OEM',
+          'Aplicación: Caja manual / transmisión sincronizada',
+          'Baja fricción y silencioso giro a altas RPM',
+          'Referencia OEM: DG3062 / 90366-30062'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('STA4185') || rawUpper.startsWith('STA4185') || cleanP.startsWith('9036641851')) {
+      localMatch = {
+        title: 'Rodamiento Piñón de Ataque Delantero Toyota Hilux, Fortuner & Meru 4x4 (Koyo STA4185 OEM)',
+        category: 'Inyección & Motor',
+        price: '$48.00',
+        partNumber: 'STA4185',
+        desc: 'Rodamiento cónico de piñón de ataque de diferencial Koyo Japón para Toyota Hilux, Fortuner y Meru.',
+        longDesc: 'Rodamiento cónico de piñón de ataque original Koyo Japón ref. #STA4185 (OEM 90366-41851). Diseñado para soportar empuje axial del engranaje hipoidal bajo máxima carga 4WD.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Hilux 4x4 (Kavak/Vigo), Fortuner 4x4, Meru (RZJ90), Prado 90/95/120',
+        specs: [
+          'Rodamiento cónico de rodillos Koyo Japón OEM',
+          'Aplicación: Piñón de ataque diferencial delantero/trasero',
+          'Acero tratado térmicamente para servicio severo',
+          'Referencia OEM: STA4185 / 90366-41851'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('TR0708') || rawUpper.startsWith('TR0708') || cleanP.startsWith('9036635087')) {
+      localMatch = {
+        title: 'Rodamiento Cónico Piñón de Ataque Toyota Meru, Prado & Hilux (Koyo TR070802 OEM)',
+        category: 'Inyección & Motor',
+        price: '$45.00',
+        partNumber: 'TR070802',
+        desc: 'Rodamiento de piñón de diferencial Koyo Japón para Toyota Land Cruiser Meru, Prado 90/95 y Hilux.',
+        longDesc: 'Rodamiento cónico original Koyo Japón ref. #TR070802 / TR0708-2 (OEM 90366-35087). Ajuste preciso para eliminar holguras y zumbidos en el diferencial.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95/120, Hilux 4x4, 4Runner',
+        specs: [
+          'Rodillos cónicos templados de precisión Koyo Japón',
+          'Aplicación: Piñón de ataque diferencial Toyota',
+          'Elimina ruidos y desajustes de piñón y corona',
+          'Referencia OEM: TR070802 / 90366-35087'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('TR0305') || rawUpper.startsWith('TR0305') || cleanP.startsWith('9036630067')) {
+      localMatch = {
+        title: 'Rodamiento Piñón Diferencial Toyota Machito, Hilux & Meru (Koyo TR0305 OEM)',
+        category: 'Inyección & Motor',
+        price: '$48.00',
+        partNumber: 'TR0305AF',
+        desc: 'Rodamiento cónico para piñón de diferencial Koyo Japón para Toyota Land Cruiser Machito Serie 70, Hilux y Meru.',
+        longDesc: 'Rodamiento cónico original Koyo Japón ref. #TR0305AF (OEM 90366-30067). Máxima resistencia para tren motriz 4x4 de trabajo pesado.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Machito / Hembrita Serie 70, Hilux 4x4, Meru, Fortuner',
+        specs: [
+          'Rodamiento cónico de alta carga Koyo Japón OEM',
+          'Aplicación: Diferencial trasero y delantero',
+          'Acero de máxima tenacidad bajo carga de choque',
+          'Referencia OEM: TR0305AF / 90366-30067'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('TR0607') || rawUpper.startsWith('TR0607') || cleanP.startsWith('9036634001')) {
+      localMatch = {
+        title: 'Rodamiento Diferencial Delantero / Transfer Toyota Prado & Meru (Koyo TR0607 OEM)',
+        category: 'Inyección & Motor',
+        price: '$44.00',
+        partNumber: 'TR0607J',
+        desc: 'Rodamiento de diferencial y caja de transferencia Koyo Japón para Toyota Prado, Meru y 4Runner.',
+        longDesc: 'Rodamiento original Koyo Japón ref. #TR0607J (OEM 90366-34001). Diseñado para ensamble en diferencial delantero y caja transfer.',
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Prado 90/95, Meru (RZJ90), 4Runner & Hilux',
+        specs: [
+          'Fabricación Koyo Japón de precisión OEM',
+          'Aplicación: Diferencial delantero y transfer',
+          'Referencia OEM: TR0607J / 90366-34001'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Koyo decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('9036340068') || rawUpper.startsWith('90363-40068') || cleanP.startsWith('4357035010')) {
+      localMatch = {
+        title: 'Rodamiento Rueda Delantera Toyota Land Cruiser Meru & Prado 90/95 OEM (90363-40068)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$38.00',
+        partNumber: '90363-40068',
+        desc: 'Rodamiento de manzana y rueda delantera Koyo / Nachi Japón original para Toyota Meru, Prado 90/95 y 4Runner.',
+        longDesc: 'Rodamiento de rueda delantera OEM Toyota ref. #90363-40068 (Koyo / Nachi Japón). Doble hilera de bolas angular para soporte de rueda delantera en vehículos 4x4.',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Meru (RZJ90), Prado 90/95 (RZJ95, VZJ95), 4Runner (1996-2002), Hilux Surf',
+        specs: [
+          'Fabricación Koyo / Nachi Japón grado OEM Toyota',
+          'Doble hilera de bolas con pistas rectificadas',
+          'Sellado estanco contra agua, lodo y arena',
+          'Referencia OEM: 90363-40068 / 43570-35010'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento de rueda delantera Toyota Meru / Prado decodificado al instante.'
+      };
+    } else if (cleanP.startsWith('9036954001') || cleanP.startsWith('4357060011') || cleanP.startsWith('4357060010')) {
+      localMatch = {
+        title: 'Rodamiento / Cubo de Rueda Delantera Toyota Hilux, Fortuner, Prado 120/150 (90369-54001)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$55.00',
+        partNumber: '90369-54001',
+        desc: 'Rodamiento y manzana de rueda delantera Koyo Japón original para Toyota Hilux Kavak, Fortuner, Prado 120/150 y 4Runner.',
+        longDesc: 'Cubo y rodamiento de rueda delantera OEM Toyota ref. #90369-54001 / 43570-60011 (Koyo Japón). Incluye pista magnética para sensor ABS.',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Hilux Kavak / Vigo (2005-2022), Fortuner (2005-2022), Prado 120/150, 4Runner (2003-2024), Tacoma',
+        specs: [
+          'Rodamiento de rueda sellado con sensor ABS integrado Koyo Japón',
+          'Alta durabilidad y resistencia al impacto en caminos irregulares',
+          'Referencia OEM: 90369-54001 / 43570-60011 / 43570-60010'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento de rueda Hilux / Fortuner / Prado decodificado al instante.'
+      };
+    } else if (cleanP.startsWith('9036650007')) {
+      localMatch = {
+        title: 'Rodamiento Corona Diferencial Toyota Hilux Kavak, Fortuner & Meru (90366-50007)',
+        category: 'Inyección & Motor',
+        price: '$52.00',
+        partNumber: '90366-50007',
+        desc: 'Rodamiento de caja de satélites y corona de diferencial Koyo Japón original para Toyota Hilux, Fortuner, Meru y Prado.',
+        longDesc: 'Rodamiento cónico de soporte de corona diferencial OEM Toyota ref. #90366-50007 (Koyo Japón). Ajuste perfecto para regular precarga de diferencial.',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Hilux 4x4, Fortuner, Land Cruiser Meru, Prado 90/95/120 & 4Runner',
+        specs: [
+          'Rodamiento cónico lateral de diferencial Koyo Japón',
+          'Soporta la carga lateral de corona de transmisión',
+          'Referencia OEM: 90366-50007'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento corona diferencial Toyota decodificado con éxito.'
+      };
+    } else if (cleanP.startsWith('4120180126') || cleanP.startsWith('4120180127') || cleanP.startsWith('4120169') || cleanP.includes('412018012')) {
+      localMatch = {
+        title: 'Relación Corona y Piñón Diferencial Toyota Meru & Prado 90/95 4.10 / 4.30 OEM (41201-80126)',
+        category: 'Inyección & Motor',
+        price: '$385.00',
+        partNumber: '41201-80126',
+        desc: 'Conjunto corona y piñón de ataque original Toyota para diferencial delantero/trasero en Land Cruiser Meru y Prado.',
+        longDesc: 'Kit de piñón y corona hipoidal OEM Toyota ref. #41201-80126 / 41201-80127. Dientes cementados con tratamiento térmico de alta profundidad para soportar el torque off-road.',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Meru (RZJ90), Land Cruiser Prado 90/95 (RZJ95, VZJ95 1996-2003)',
+        specs: [
+          'Engranajes hipoidales tallados y emparejados por proceso Gleason OEM',
+          'Relación de transmisión 41:10 (4.10) o 43:10 (4.30)',
+          'Máxima resistencia al desgaste y cero zumbidos tras asentamiento',
+          'Referencia OEM: 41201-80126 / 41201-80127'
+        ],
+        img: '/assets/promo_turbo_charger.webp',
+        msg: '✅ Corona y piñón Toyota Meru / Prado decodificado al instante.'
+      };
+    } else if (cleanP.startsWith('4343060020') || cleanP.startsWith('4343060060')) {
+      localMatch = {
+        title: 'Semieje / Punta de Eje Delantera Toyota Land Cruiser Meru (RZJ90) & Prado 90/95 (43430-60020)',
+        category: 'Inyección & Motor',
+        price: '$165.00',
+        partNumber: '43430-60020',
+        desc: 'Semieje delantero completo con triceta y junta homocinética original Toyota para Land Cruiser Meru y Prado.',
+        longDesc: 'Semieje homocinético frontal OEM Toyota ref. #43430-60020 / 43430-60060. Incluye fuelle de neopreno reforzado y grasa de molibdeno para alta temperatura.',
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser Meru (RZJ90 2.7L), Prado 90/95 (RZJ95, VZJ95, KDJ95 1996-2002)',
+        specs: [
+          'Eje de acero forjado de alta resistencia torsional',
+          'Junta homocinética exterior e interior con triceta de rodillos',
+          'Guardapolvos de neopreno de alta elasticidad off-road',
+          'Referencia OEM: 43430-60020 / 43430-60060'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Semieje Toyota Meru / Prado decodificado al instante.'
+      };
+    } else if (cleanP.startsWith('SET10') || rawUpper.startsWith('SET10') || cleanP === 'U399') {
+      localMatch = {
+        title: 'Rodamiento y Pista Rueda Trasera Timken OEM Dana 35 / Dana 44 (SET10)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$32.00',
+        partNumber: 'SET10',
+        desc: 'Kit de rodamiento y pista cónica Timken original para eje trasero Dana 35 y Dana 44 en Jeep Cherokee XJ, Grand Cherokee y Wrangler TJ.',
+        longDesc: 'Rodamiento cónico original Timken USA ref. #SET10 (U399 / A-10). Fabricado en acero carburizado para soportar la carga axial y radial de palieres traseros.',
+        badge: 'Timken USA OEM',
+        isImportedUSA: true,
+        compatibility: 'Jeep Cherokee XJ (1990-2001), Grand Cherokee ZJ/WJ (1993-2004), Wrangler TJ/YJ (1990-2006) con ejes Dana 35 / Dana 44',
+        specs: [
+          'Acero carburizado Timken USA de máxima resistencia al impacto',
+          'Incluye cono de rodillos y pista templada rectificada',
+          'Aplicación: Palier y rueda trasera puente Dana 35 / Dana 44',
+          'Referencia OEM: Timken SET10 / U399'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Timken SET10 decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('SET80') || rawUpper.startsWith('SET80')) {
+      localMatch = {
+        title: 'Rodamiento Eje Trasero Dana 44 Timken / Mopar Jeep Wrangler JK (SET80)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$38.00',
+        partNumber: 'SET80',
+        desc: 'Rodamiento de palier trasero Dana 44 original Timken para Jeep Wrangler JK y Jeep Liberty KK.',
+        longDesc: 'Rodamiento y retenedor de eje trasero Timken ref. #SET80. Diseñado para puentes traseros Dana 44 en Jeep Wrangler JK.',
+        badge: 'Timken USA OEM',
+        isImportedUSA: true,
+        compatibility: 'Jeep Wrangler JK 3.8L / 3.6L (2007-2018), Jeep Liberty KK (2008-2012)',
+        specs: [
+          'Rodamiento de rodillos cilíndricos/cónicos Timken USA',
+          'Ajuste directo en eje Dana 44 trasero',
+          'Referencia OEM: Timken SET80'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Rodamiento Timken SET80 decodificado con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('513288') || cleanP.startsWith('513277')) {
+      localMatch = {
+        title: 'Manzana / Cubo Rodamiento Rueda Delantera Mopar / Timken Jeep Grand Cherokee WK2 (513288)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$145.00',
+        partNumber: '513288',
+        desc: 'Cubo de rueda con rodamiento sellado y sensor ABS integrado para Jeep Grand Cherokee WK2 y Dodge Durango.',
+        longDesc: 'Manzana y rodamiento de rueda delantera ref. #513288 (Mopar OEM). Rodamiento de doble hilera sellado de por vida con sensor ABS integrado.',
+        badge: 'Mopar / Timken OEM',
+        isImportedUSA: true,
+        compatibility: 'Jeep Grand Cherokee WK2 3.6L / 5.7L HEMI (2011-2021), Dodge Durango (2011-2021)',
+        specs: [
+          'Rodamiento de rueda integrado grado OEM de alta resistencia',
+          'Sensor de velocidad ABS Hall effect integrado',
+          'Referencia OEM: 513288 / 68022632AD'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Manzana de rueda WK2 decodificada con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('515096') || cleanP.startsWith('515097')) {
+      localMatch = {
+        title: 'Manzana / Cubo Rodamiento Rueda Delantera Timken / Mopar Jeep Wrangler JK (515096)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$135.00',
+        partNumber: '515096',
+        desc: 'Cubo de rueda delantera con rodamiento reforzado y sensor ABS para Jeep Wrangler JK ejes Dana 30 y Dana 44.',
+        longDesc: 'Manzana de rueda delantera ref. #515096 (Mopar OEM). Para servicio off-road pesado y neumáticos sobredimensionados.',
+        badge: 'Mopar / Timken OEM',
+        isImportedUSA: true,
+        compatibility: 'Jeep Wrangler JK 2D/4D (2007-2018) con puente Dana 30 o Dana 44',
+        specs: [
+          'Ensamble completo de cubo con sensor ABS y espárragos grado 10.9',
+          'Ajuste directo en Jeep Wrangler JK',
+          'Referencia OEM: 515096 / 68008522AA'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Manzana de rueda Wrangler JK decodificada con éxito desde catálogo OEM.'
+      };
+    } else if (cleanP.startsWith('515152') || cleanP.startsWith('68249007')) {
+      localMatch = {
+        title: 'Manzana / Cubo Rodamiento Rueda Delantera Mopar Jeep Wrangler JL & Gladiator JT (68249007AA)',
+        category: 'Suspensión & Amortiguadores',
+        price: '$175.00',
+        partNumber: '68249007AA',
+        desc: 'Cubo de rueda original Mopar OEM para Jeep Wrangler JL y Gladiator JT con sensor ABS y sellos de alta protección.',
+        longDesc: 'Manzana y rodamiento de rueda delantera Mopar OEM #68249007AA (reemplaza revisiones anteriores). Diseñado para puentes Dana 30 / Dana 44 AdvanTEK.',
+        badge: 'Mopar Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Jeep Wrangler JL (2018-2024), Jeep Gladiator JT (2020-2024)',
+        specs: [
+          'Rodamiento de rueda Heavy Duty original Mopar Stellantis',
+          'Sensor ABS preinstalado con conector sellado IP67',
+          'Referencia OEM: 68249007AA / 515152'
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: '✅ Manzana de rueda Wrangler JL decodificada con éxito desde catálogo Mopar.'
+      };
+    } else if (/^DG[0-9]{4}/i.test(cleanP)) {
+      // Smart Koyo DG Series Bearings (Deep Groove Transmission Bearings)
+      localMatch = {
+        title: `Rodamiento de Transmisión / Caja Koyo OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$45.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: `Rodamiento de transmisión y caja de transferencia Koyo Japón original #${cleanRaw.toUpperCase()} para vehículos 4x4.`,
+        longDesc: `Rodamiento de transmisión y engranajes genuino Koyo Japón ref. #${cleanRaw.toUpperCase()}. Fabricado en acero aleado tratado térmicamente para servicio severo, soportando alto torque y fricción continua.`,
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota (Meru, Prado, Hilux, Fortuner, 4Runner) y transmisiones japonesas 4WD',
+        specs: [
+          'Fabricación Koyo (Japón) de precisión milimétrica OEM',
+          'Aplicación: Transmisión, eje de mando o piñón de diferencial',
+          'Pistas rectificadas con alta resistencia a fatiga mecánica',
+          `Referencia OEM: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: `✅ Rodamiento Koyo Japón #${cleanRaw.toUpperCase()} decodificado desde catálogo OEM.`
+      };
+    } else if (/^TR[0-9]{4}|^STA[0-9]{4}/i.test(cleanP)) {
+      // Smart Koyo TR / STA Series Bearings (Tapered Roller Differential & Pinion Bearings)
+      localMatch = {
+        title: `Rodamiento Cónico Piñón de Ataque / Diferencial Koyo OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$48.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: `Rodamiento cónico de piñón de ataque y diferencial Koyo Japón original #${cleanRaw.toUpperCase()}.`,
+        longDesc: `Rodamiento de rodillos cónicos Koyo Japón ref. #${cleanRaw.toUpperCase()}. Diseñado para absorber empuje axial y radial en piñones de ataque y diferenciales de tracción integral.`,
+        badge: 'Koyo Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser (Machito, Meru, Prado), Hilux, Fortuner, 4Runner & Tacoma 4x4',
+        specs: [
+          'Rodillos cónicos templados de precisión Koyo Japón',
+          'Aplicación: Piñón de ataque y soporte de diferencial',
+          'Resistencia a cargas de choque en condiciones 4x4 extremas',
+          `Referencia OEM: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: `✅ Rodamiento diferencial Koyo #${cleanRaw.toUpperCase()} decodificado desde catálogo OEM.`
+      };
+    } else if (/^90366/i.test(cleanP)) {
+      // Smart Toyota 90366 Transmission / Differential Bearings
+      localMatch = {
+        title: `Rodamiento Cónico Transmisión / Diferencial Toyota OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$48.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: `Rodamiento cónico original Toyota / Koyo #${cleanRaw.toUpperCase()} para diferencial y caja de cambios.`,
+        longDesc: `Rodamiento cónico genuino Toyota Genuine Parts ref. #${cleanRaw.toUpperCase()} (fabricado por Koyo Japón). Tolerancias de fábrica para eliminar vibraciones y desgastes en el tren motriz.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Land Cruiser, Meru, Prado, Hilux, Fortuner, Tacoma & 4Runner',
+        specs: [
+          'Fabricación original bajo especificaciones Toyota Genuine Parts',
+          'Aplicación: Piñón de ataque, diferencial o caja de velocidades',
+          'Ajuste directo Plug & Play con tolerancias originales',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: `✅ Rodamiento OEM Toyota #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/^90363|^90369/i.test(cleanP)) {
+      // Smart Toyota 90363 / 90369 Wheel Bearings
+      localMatch = {
+        title: `Rodamiento de Rueda Delantera / Trasera Toyota OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Suspensión & Amortiguadores',
+        price: '$45.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: `Rodamiento de rueda genuino Toyota Genuine Parts #${cleanRaw.toUpperCase()} de alta durabilidad y sellado estanco.`,
+        longDesc: `Rodamiento de rueda delantera/trasera OEM Toyota ref. #${cleanRaw.toUpperCase()}. Construcción sellada de precisión para giro silencioso y máxima protección contra arena, lodo y agua.`,
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Toyota Corolla, Yaris, RAV4, Hilux, Fortuner, Prado, Meru & 4Runner',
+        specs: [
+          'Rodamiento de rueda sellado con pistas rectificadas grado OEM',
+          'Diseñado para soportar impactos y baches sin desajuste',
+          `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: `✅ Rodamiento de rueda Toyota #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/RODAMIENTO|BEARING|ROLINERA|COJINETE|CHUMACERA/i.test(cleanRaw) || /RODAMIENTO|BEARING|ROLINERA|COJINETE|CHUMACERA/i.test(rawSearch)) {
+      const isWheel = /RUEDA|WHEEL|MANZANA|HUB/i.test(cleanRaw) || /RUEDA|WHEEL|MANZANA|HUB/i.test(rawSearch);
+      localMatch = {
+        title: isWheel
+          ? `Rodamiento de Rueda de Alta Precisión OEM (${cleanRaw.toUpperCase()})`
+          : `Rodamiento de Transmisión / Diferencial de Alta Precisión OEM (${cleanRaw.toUpperCase()})`,
+        category: isWheel ? 'Suspensión & Amortiguadores' : 'Inyección & Motor',
+        price: '$45.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: `Rodamiento automotriz de alta durabilidad y tolerancias de precisión original OEM ref. #${cleanRaw.toUpperCase()}.`,
+        longDesc: `Rodamiento automotriz de alta precisión ref. #${cleanRaw.toUpperCase()}. Fabricado con acero templado al cromo para soportar cargas dinámicas severas en carretera y off-road. Pistas y rodillos rectificados para un funcionamiento silencioso.`,
+        badge: 'Repuesto Certificado OEM',
+        isImportedUSA: true,
+        compatibility: 'Vehículos 4x4 y livianos: Toyota, Jeep, Ford, Chevrolet, Nissan (consultar aplicación por VIN)',
+        specs: [
+          'Acero aleado de alta pureza con pistas templadas por inducción',
+          'Tolerancias de rotación balanceadas para giro silencioso',
+          'Garantía de instalación en Taller MasterTech',
+          `Referencia OEM: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: `✅ Rodamiento #${cleanRaw.toUpperCase()} completado desde catálogo de rodamientos.`
+      };
     }
 
     if (localMatch) {

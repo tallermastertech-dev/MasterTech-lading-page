@@ -287,6 +287,29 @@ export const DEFAULT_CATALOG: CatalogItem[] = [
     stock: 9,
     isImportedUSA: true
   },
+  {
+    id: 110,
+    title: "Rodamiento Transmisión Delantera / Piñón de Diferencial Toyota Meru & Prado (Koyo DG4180 OEM)",
+    category: "Inyección & Motor",
+    price: "$45.00",
+    regularPrice: "$55.00",
+    discountBadge: "AHORRAS $10 USD (18% OFF)",
+    isPromo: true,
+    desc: "Rodamiento de transmisión delantera y piñón de diferencial Koyo Japón original para Toyota Land Cruiser Meru, Prado y 4Runner.",
+    longDesc: "Rodamiento genuino Koyo Japón ref. #DG4180 (DG4180WR / 90366-41001 / 90366-T0044). Diseñado para la transmisión delantera y piñón de ataque de diferencial en vehículos Toyota 4x4. Fabricado en acero aleado de alta pureza con tratamiento térmico para soportar cargas axiales y radiales extremas.",
+    img: "/assets/cat_suspension_amortiguadores.webp",
+    badge: "Koyo Japan OEM",
+    specs: [
+      "Fabricación Koyo (Japón) de precisión milimétrica OEM",
+      "Transmisión delantera / piñón de ataque de diferencial",
+      "Alta capacidad de carga dinámica para servicio severo 4x4",
+      "Cruces OEM: Koyo DG4180 / DG4180WR / Toyota 90366-41001 / 90366-T0044"
+    ],
+    compatibility: "Toyota Land Cruiser Meru (RZJ90 2.7L), Prado 90/95/120, 4Runner, Hilux 4x4, Fortuner",
+    partNumber: "DG4180",
+    stock: 8,
+    isImportedUSA: true
+  },
 
   // 8. Cuidado & Detailing
   {
@@ -350,7 +373,9 @@ export const OEM_BRANDS = [
   { name: "Chemours", label: "Chemours", origin: "USA · Gas R134a", color: "from-cyan-600 to-blue-700" },
   { name: "Prestone", label: "Prestone", origin: "USA · Coolant OAT", color: "from-yellow-500 to-amber-600" },
   { name: "Garrett", label: "Garrett", origin: "USA · Turbo OEM", color: "from-slate-700 to-slate-900" },
-  { name: "Meguiar's", label: "Meguiar's", origin: "USA · Detailing", color: "from-purple-600 to-indigo-800" }
+  { name: "Meguiar's", label: "Meguiar's", origin: "USA · Detailing", color: "from-purple-600 to-indigo-800" },
+  { name: "Koyo", label: "Koyo", origin: "Japón · Rodamientos OEM", color: "from-blue-700 to-teal-800" },
+  { name: "Timken", label: "Timken", origin: "USA · Rodamientos Ejes", color: "from-orange-600 to-amber-800" }
 ];
 
 export interface VehicleSubModelOption {
