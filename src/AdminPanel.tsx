@@ -2239,22 +2239,26 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       if (stored) localData = JSON.parse(stored);
     } catch (e) {}
 
-    // Priority: serverData is the source of truth for persistent collections, falling back to localData
-    const merged: any = { ...(localData || {}), ...(serverData || {}) };
-    setSettings(merged);
-    setSettingsForm(merged);
+    // Server is the ultimate source of truth. Only use localStorage for keys not present in serverData.
+    const activeSource: any = { ...(localData || {}), ...(serverData || {}) };
+    setSettings(activeSource);
+    setSettingsForm(activeSource);
 
-    const catalogRaw = (serverData && serverData.CATALOG_PRODUCTS_JSON !== undefined && serverData.CATALOG_PRODUCTS_JSON !== null)
-      ? serverData.CATALOG_PRODUCTS_JSON
-      : (localData && localData.CATALOG_PRODUCTS_JSON !== undefined && localData.CATALOG_PRODUCTS_JSON !== null ? localData.CATALOG_PRODUCTS_JSON : null);
+    // Helper: prioritize serverData if key exists, otherwise localData
+    const getCollectionRaw = (key: string) => {
+      if (serverData && serverData[key] !== undefined && serverData[key] !== null) return serverData[key];
+      if (localData && localData[key] !== undefined && localData[key] !== null) return localData[key];
+      return null;
+    };
 
+    const catalogRaw = getCollectionRaw('CATALOG_PRODUCTS_JSON');
     if (catalogRaw !== null) {
       try { 
         const p = typeof catalogRaw === 'string' ? JSON.parse(catalogRaw) : catalogRaw; 
         if (Array.isArray(p)) {
           const sanitized = sanitizeCatalogItems(p);
           setCatalogItems(sanitized);
-          merged.CATALOG_PRODUCTS_JSON = JSON.stringify(sanitized);
+          activeSource.CATALOG_PRODUCTS_JSON = JSON.stringify(sanitized);
         }
       } catch (e) {}
     } else {
@@ -2262,7 +2266,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
       const autoPublishToken = token || localStorage.getItem('mastertech_admin_token') || '';
       if (autoPublishToken) {
-        const autoPayload = { ...merged, CATALOG_PRODUCTS_JSON: JSON.stringify(DEFAULT_CATALOG) };
+        const autoPayload = { ...activeSource, CATALOG_PRODUCTS_JSON: JSON.stringify(DEFAULT_CATALOG) };
         fetch('/api/settings', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${autoPublishToken}` },
@@ -2276,9 +2280,10 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       }
     }
 
-    if (merged.JORNADAS_JSON) {
+    const jornadasRaw = getCollectionRaw('JORNADAS_JSON');
+    if (jornadasRaw !== null) {
       try {
-        const p = JSON.parse(merged.JORNADAS_JSON);
+        const p = typeof jornadasRaw === 'string' ? JSON.parse(jornadasRaw) : jornadasRaw;
         if (Array.isArray(p)) {
           const hydrated = p.map((item: any) => {
             if (item.id === 'reprogramacion' || item.id === DEFAULT_JORNADAS[0].id) {
@@ -2320,50 +2325,68 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }
       } catch (e) {}
     }
-    if (merged.PROVEEDORES_JSON !== undefined && merged.PROVEEDORES_JSON !== null) {
+
+    const proveedoresRaw = getCollectionRaw('PROVEEDORES_JSON');
+    if (proveedoresRaw !== null) {
       try { 
-        const p = typeof merged.PROVEEDORES_JSON === 'string' ? JSON.parse(merged.PROVEEDORES_JSON) : merged.PROVEEDORES_JSON; 
+        const p = typeof proveedoresRaw === 'string' ? JSON.parse(proveedoresRaw) : proveedoresRaw; 
         if (Array.isArray(p)) {
           setProveedoresList(p);
         }
       } catch (e) {}
     }
-    if (merged.TEAM_MEMBERS_JSON) {
-      try { const p = JSON.parse(merged.TEAM_MEMBERS_JSON); if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
+
+    const teamRaw = getCollectionRaw('TEAM_MEMBERS_JSON');
+    if (teamRaw !== null) {
+      try { const p = typeof teamRaw === 'string' ? JSON.parse(teamRaw) : teamRaw; if (Array.isArray(p)) setTeamMembers(p); } catch (e) {}
     }
-    if (merged.REVIEWS_JSON) {
-      try { const p = JSON.parse(merged.REVIEWS_JSON); if (Array.isArray(p)) setReviews(p); } catch (e) {}
+
+    const reviewsRaw = getCollectionRaw('REVIEWS_JSON');
+    if (reviewsRaw !== null) {
+      try { const p = typeof reviewsRaw === 'string' ? JSON.parse(reviewsRaw) : reviewsRaw; if (Array.isArray(p)) setReviews(p); } catch (e) {}
     }
-    if (merged.SERVICES_JSON) {
-      try { const p = JSON.parse(merged.SERVICES_JSON); if (Array.isArray(p)) setServices(p); } catch (e) {}
+
+    const servicesRaw = getCollectionRaw('SERVICES_JSON');
+    if (servicesRaw !== null) {
+      try { const p = typeof servicesRaw === 'string' ? JSON.parse(servicesRaw) : servicesRaw; if (Array.isArray(p)) setServices(p); } catch (e) {}
     }
-    if (merged.FAQS_JSON) {
-      try { const p = JSON.parse(merged.FAQS_JSON); if (Array.isArray(p)) setFaqs(p); } catch (e) {}
+
+    const faqsRaw = getCollectionRaw('FAQS_JSON');
+    if (faqsRaw !== null) {
+      try { const p = typeof faqsRaw === 'string' ? JSON.parse(faqsRaw) : faqsRaw; if (Array.isArray(p)) setFaqs(p); } catch (e) {}
     }
-    if (merged.INSTALACIONES_JSON) {
-      try { const p = JSON.parse(merged.INSTALACIONES_JSON); if (Array.isArray(p) && p.length > 0) setInstalaciones(p); } catch (e) {}
+
+    const instalacionesRaw = getCollectionRaw('INSTALACIONES_JSON');
+    if (instalacionesRaw !== null) {
+      try { const p = typeof instalacionesRaw === 'string' ? JSON.parse(instalacionesRaw) : instalacionesRaw; if (Array.isArray(p)) setInstalaciones(p); } catch (e) {}
     }
-    if (merged.SAVED_REMINDERS) {
+
+    const remindersRaw = getCollectionRaw('SAVED_REMINDERS');
+    if (remindersRaw !== null) {
       try {
-        const r = typeof merged.SAVED_REMINDERS === 'string' ? JSON.parse(merged.SAVED_REMINDERS) : merged.SAVED_REMINDERS;
-        if (Array.isArray(r) && r.length > 0) {
+        const r = typeof remindersRaw === 'string' ? JSON.parse(remindersRaw) : remindersRaw;
+        if (Array.isArray(r)) {
           setReminders(r);
           localStorage.setItem('mastertech_reminders_cache', JSON.stringify(r));
         }
       } catch (e) {}
     }
-    if (merged.TALLER_CONTROL_JSON) {
+
+    const controlRaw = getCollectionRaw('TALLER_CONTROL_JSON');
+    if (controlRaw !== null) {
       try {
-        const b = typeof merged.TALLER_CONTROL_JSON === 'string' ? JSON.parse(merged.TALLER_CONTROL_JSON) : merged.TALLER_CONTROL_JSON;
-        if (Array.isArray(b) && b.length > 0) {
+        const b = typeof controlRaw === 'string' ? JSON.parse(controlRaw) : controlRaw;
+        if (Array.isArray(b)) {
           setTallerBays(b);
           localStorage.setItem('mastertech_taller_control_cache', JSON.stringify(b));
         }
       } catch (e) {}
     }
-    if (merged.HISTORIAL_ENTREGAS_JSON) {
+
+    const entregasRaw = getCollectionRaw('HISTORIAL_ENTREGAS_JSON');
+    if (entregasRaw !== null) {
       try {
-        const h = typeof merged.HISTORIAL_ENTREGAS_JSON === 'string' ? JSON.parse(merged.HISTORIAL_ENTREGAS_JSON) : merged.HISTORIAL_ENTREGAS_JSON;
+        const h = typeof entregasRaw === 'string' ? JSON.parse(entregasRaw) : entregasRaw;
         if (Array.isArray(h)) {
           setTallerEntregas(h);
           localStorage.setItem('mastertech_taller_entregas_cache', JSON.stringify(h));

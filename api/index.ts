@@ -375,7 +375,7 @@ async function getSettings(force = false) {
 
     if (!error && Array.isArray(data) && data.length > 0) {
       for (const s of data) {
-        if (s.value !== null && s.value !== undefined && s.value !== '') {
+        if (s.value !== null && s.value !== undefined) {
           settingsObj[s.key] = String(s.value);
           // Sync in-memory cache with authoritative DB rows
           memorySettingsCache[s.key] = String(s.value);
@@ -586,11 +586,13 @@ const handleGetSettings = async (req: express.Request, res: express.Response) =>
   try {
     const authHeader = req.headers.authorization || '';
     const hasAdminToken = authHeader.startsWith('Bearer ') && authHeader.length > 20;
-    const isBypass = hasAdminToken && req.query._force === 'true';
+    const isBypass = hasAdminToken || req.query._force === 'true' || req.query._t !== undefined || req.query.t !== undefined;
     const settings = await getSettings(isBypass);
     
-    // Caché pública y edge CDN para reducir consumo de egress en 99%
-    res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=300');
+    // Strict real-time freshness: never cache settings so additions and deletions reflect everywhere immediately
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.json(settings);
   } catch (error) {
     res.status(500).json({ error: 'Error del servidor' });
