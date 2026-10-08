@@ -1871,18 +1871,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   const sanitizeCatalogItems = (items: any[]): CatalogItem[] => {
-    if (!Array.isArray(items)) return DEFAULT_CATALOG;
+    if (!items || !Array.isArray(items)) return DEFAULT_CATALOG;
     const valid = items.filter(item => {
       if (!item) return false;
       const title = String(item.title || '').trim();
       const priceStr = String(item.price || item.promoPrice || '').replace(/[^0-9.]/g, '');
       const priceNum = parseFloat(priceStr);
-      return title.length > 0 && !isNaN(priceNum) && priceNum > 0;
+      return title.length > 0 && !isNaN(priceNum) && priceNum >= 0;
     });
 
-    const baseList = valid.length > 0 ? valid : DEFAULT_CATALOG;
-
-    return baseList.map(item => {
+    return valid.map(item => {
       let copy = { ...item };
       if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
         if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {
@@ -1909,7 +1907,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       const s = localStorage.getItem('mastertech_settings_store');
       if (s) { 
         const p = JSON.parse(s); 
-        if (p.CATALOG_PRODUCTS_JSON) {
+        if (p.CATALOG_PRODUCTS_JSON !== undefined && p.CATALOG_PRODUCTS_JSON !== null) {
           const items = typeof p.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(p.CATALOG_PRODUCTS_JSON) : p.CATALOG_PRODUCTS_JSON;
           if (Array.isArray(items)) {
             return sanitizeCatalogItems(items);
@@ -2241,14 +2239,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       if (stored) localData = JSON.parse(stored);
     } catch (e) {}
 
-    // Priority: localData (current user edits) overrides serverData
-    const merged: any = { ...(serverData || {}), ...(localData || {}) };
+    // Priority: serverData is the source of truth for persistent collections, falling back to localData
+    const merged: any = { ...(localData || {}), ...(serverData || {}) };
     setSettings(merged);
     setSettingsForm(merged);
 
-    if (merged.CATALOG_PRODUCTS_JSON) {
+    const catalogRaw = (serverData && serverData.CATALOG_PRODUCTS_JSON !== undefined && serverData.CATALOG_PRODUCTS_JSON !== null)
+      ? serverData.CATALOG_PRODUCTS_JSON
+      : (localData && localData.CATALOG_PRODUCTS_JSON !== undefined && localData.CATALOG_PRODUCTS_JSON !== null ? localData.CATALOG_PRODUCTS_JSON : null);
+
+    if (catalogRaw !== null) {
       try { 
-        const p = typeof merged.CATALOG_PRODUCTS_JSON === 'string' ? JSON.parse(merged.CATALOG_PRODUCTS_JSON) : merged.CATALOG_PRODUCTS_JSON; 
+        const p = typeof catalogRaw === 'string' ? JSON.parse(catalogRaw) : catalogRaw; 
         if (Array.isArray(p)) {
           const sanitized = sanitizeCatalogItems(p);
           setCatalogItems(sanitized);
@@ -2256,7 +2258,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         }
       } catch (e) {}
     } else {
-      // No catalog in Supabase yet — auto-publish DEFAULT_CATALOG so the public page reads it
+      // First-time initialization only (neither Supabase nor localStorage had CATALOG_PRODUCTS_JSON)
       setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
       const autoPublishToken = token || localStorage.getItem('mastertech_admin_token') || '';
       if (autoPublishToken) {
@@ -3274,7 +3276,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   };
 
   // Catalog Item Save
-  const handleSaveCatalogItem = (product: CatalogItem) => {
+  const handleSaveCatalogItem = async (product: CatalogItem) => {
     const titleTrim = String(product.title || '').trim();
     if (!titleTrim) {
       alert('Por favor escribe un título o nombre para el repuesto antes de guardar.');
@@ -3282,17 +3284,17 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     }
     const matchP = String(product.price || '').match(/(\d+(?:\.\d+)?)/);
     const parsedVal = matchP ? parseFloat(matchP[1]) : 0;
-    if (isNaN(parsedVal) || parsedVal <= 0) {
-      alert('Por favor ingresa un precio válido mayor a $0.');
+    if (isNaN(parsedVal) || parsedVal < 0) {
+      alert('Por favor ingresa un precio válido numérico.');
       return;
     }
     const formattedPrice = `$${parsedVal.toFixed(2)}`;
     const cleanProduct = { ...product, title: titleTrim, price: formattedPrice };
 
-    const isEdit = cleanProduct.id && catalogItems.some(p => p.id === cleanProduct.id);
+    const isEdit = cleanProduct.id && catalogItems.some(p => String(p.id) === String(cleanProduct.id));
     let updated: CatalogItem[] = [];
     if (isEdit) {
-      updated = catalogItems.map(p => p.id === cleanProduct.id ? cleanProduct : p);
+      updated = catalogItems.map(p => String(p.id) === String(cleanProduct.id) ? cleanProduct : p);
     } else {
       updated = [{ ...cleanProduct, id: Date.now() }, ...catalogItems];
     }
@@ -3305,16 +3307,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     setSettings(updatedForm);
     setIsCatalogModalOpen(false);
     setEditingProduct(null);
-    handleSaveSettings(updatedForm);
+
+    // Save directly to Supabase and storage with explicit payload
+    await handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: jsonStr });
 
     logClientAction(
       isEdit ? 'Modificación de Repuesto' : 'Creación de Repuesto',
       'CATALOGO',
-      `${isEdit ? 'Modificó datos del repuesto' : 'Añadió nuevo repuesto'} "${product.title}" (${product.category || 'General'}, ${product.price || '$0'}).`
+      `${isEdit ? 'Modificó datos del repuesto' : 'Añadió nuevo repuesto'} "${cleanProduct.title}" (${cleanProduct.category || 'General'}, ${cleanProduct.price || '$0'}).`
     );
   };
 
-  const handleDeleteCatalogItem = (id: number | string) => {
+  const handleDeleteCatalogItem = async (id: number | string) => {
     if (!window.confirm('¿Eliminar este repuesto o producto del catálogo?')) return;
     const targetProd = catalogItems.find(p => String(p.id) === String(id));
     const updated = catalogItems.filter(p => String(p.id) !== String(id));
@@ -3323,7 +3327,9 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     const updatedForm = { ...settingsForm, CATALOG_PRODUCTS_JSON: jsonStr };
     setSettingsForm(updatedForm);
     setSettings(updatedForm);
-    handleSaveSettings(updatedForm);
+
+    // Save directly to Supabase and storage with explicit payload
+    await handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: jsonStr });
 
     logClientAction('Eliminación de Repuesto', 'CATALOGO', `Eliminó el repuesto "${targetProd?.title || id}" del catálogo.`);
   };
@@ -7759,63 +7765,114 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
               )}
 
               {/* Products Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {catalogItems.map((prod) => (
-                  <div key={prod.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-4 space-y-3 flex flex-col justify-between">
-                    <div className="space-y-3">
-                      <div className="w-full h-40 rounded-xl bg-black border border-white/10 overflow-hidden relative">
-                        <img src={prod.img || "/assets/servicio-mecanica.webp"} alt={prod.title} className="w-full h-full object-cover" />
-                        {prod.partNumber && (
-                          <span className="absolute top-2 left-2 text-[9px] font-mono font-bold bg-black/80 text-amber-400 px-2 py-0.5 rounded-md border border-white/10">
-                            OEM: {prod.partNumber}
-                          </span>
-                        )}
-                        {prod.isPromo && (
-                          <span className="absolute top-2 right-2 text-[9px] font-black bg-red-600 text-white px-2 py-0.5 rounded-md border border-red-400 flex items-center gap-1 shadow">
-                            <Tag size={10} />
-                            <span>{prod.discountBadge || 'OFERTA'}</span>
-                          </span>
-                        )}
-                        <div className="absolute bottom-2 right-2 flex items-center gap-1.5">
-                          {prod.regularPrice && (
-                            <span className="text-[10px] line-through text-zinc-400 bg-black/80 px-1.5 py-0.5 rounded border border-white/10 font-bold">
-                              {prod.regularPrice}
+              {catalogItems.length === 0 ? (
+                <div className="bg-[#12141a] border border-dashed border-white/10 rounded-2xl p-12 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 mx-auto flex items-center justify-center">
+                    <Package size={32} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-white">El catálogo está vacío</h3>
+                    <p className="text-xs text-zinc-400 mt-1 max-w-md mx-auto">
+                      Has limpiado los productos de demostración. Puedes comenzar a añadir tus repuestos reales o restaurar los de ejemplo.
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center gap-3 pt-2">
+                    <button
+                      onClick={() => {
+                        setEditingProduct({
+                          id: 0,
+                          title: '',
+                          category: 'Frenos & Discos',
+                          price: '$0.00',
+                          regularPrice: '',
+                          isPromo: false,
+                          discountBadge: '',
+                          desc: '',
+                          img: '/assets/cat_frenos_discos.webp',
+                          images: [],
+                          partNumber: '',
+                          stock: 10,
+                          badge: 'MasterTech OEM',
+                          isImportedUSA: true
+                        });
+                        setIsCatalogModalOpen(true);
+                      }}
+                      className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase border-none flex items-center gap-2 cursor-pointer shadow-lg"
+                    >
+                      <Plus size={16} />
+                      <span>+ Crear Primer Repuesto</span>
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (!window.confirm('¿Deseas restaurar la lista de repuestos de plantilla inicial?')) return;
+                        setCatalogItems(DEFAULT_CATALOG);
+                        await handleSaveSection('catalogo', { CATALOG_PRODUCTS_JSON: JSON.stringify(DEFAULT_CATALOG) });
+                      }}
+                      className="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      Restaurar Plantillas Demo
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {catalogItems.map((prod) => (
+                    <div key={prod.id} className="bg-[#12141a] border border-white/10 rounded-2xl p-4 space-y-3 flex flex-col justify-between">
+                      <div className="space-y-3">
+                        <div className="w-full h-40 rounded-xl bg-black border border-white/10 overflow-hidden relative">
+                          <img src={prod.img || "/assets/servicio-mecanica.webp"} alt={prod.title} className="w-full h-full object-cover" />
+                          {prod.partNumber && (
+                            <span className="absolute top-2 left-2 text-[9px] font-mono font-bold bg-black/80 text-amber-400 px-2 py-0.5 rounded-md border border-white/10">
+                              OEM: {prod.partNumber}
                             </span>
                           )}
-                          <span className="text-xs font-black text-amber-400 bg-black/90 px-2.5 py-1 rounded-lg border border-amber-500/30">
-                            {prod.price}
-                          </span>
+                          {prod.isPromo && (
+                            <span className="absolute top-2 right-2 text-[9px] font-black bg-red-600 text-white px-2 py-0.5 rounded-md border border-red-400 flex items-center gap-1 shadow">
+                              <Tag size={10} />
+                              <span>{prod.discountBadge || 'OFERTA'}</span>
+                            </span>
+                          )}
+                          <div className="absolute bottom-2 right-2 flex items-center gap-1.5">
+                            {prod.regularPrice && (
+                              <span className="text-[10px] line-through text-zinc-400 bg-black/80 px-1.5 py-0.5 rounded border border-white/10 font-bold">
+                                {prod.regularPrice}
+                              </span>
+                            )}
+                            <span className="text-xs font-black text-amber-400 bg-black/90 px-2.5 py-1 rounded-lg border border-amber-500/30">
+                              {prod.price}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-[10px] font-bold uppercase text-zinc-500 block">{prod.category}</span>
+                          <h3 className="font-bold text-white text-sm leading-snug line-clamp-1">{prod.title}</h3>
+                          <p className="text-xs text-zinc-400 line-clamp-2 mt-1">{prod.desc}</p>
                         </div>
                       </div>
 
-                      <div>
-                        <span className="text-[10px] font-bold uppercase text-zinc-500 block">{prod.category}</span>
-                        <h3 className="font-bold text-white text-sm leading-snug line-clamp-1">{prod.title}</h3>
-                        <p className="text-xs text-zinc-400 line-clamp-2 mt-1">{prod.desc}</p>
+                      <div className="flex items-center gap-2 pt-3 border-t border-white/5">
+                        <button
+                          onClick={() => {
+                            setEditingProduct(prod);
+                            setIsCatalogModalOpen(true);
+                          }}
+                          className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        >
+                          <Edit size={14} />
+                          <span>Editar</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCatalogItem(prod.id)}
+                          className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors cursor-pointer"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-2 pt-3 border-t border-white/5">
-                      <button
-                        onClick={() => {
-                          setEditingProduct(prod);
-                          setIsCatalogModalOpen(true);
-                        }}
-                        className="flex-1 bg-white/5 hover:bg-amber-500/20 border border-white/10 text-white text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                      >
-                        <Edit size={14} />
-                        <span>Editar</span>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteCatalogItem(prod.id)}
-                        className="bg-white/5 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 border border-white/10 p-2 rounded-xl transition-colors cursor-pointer"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

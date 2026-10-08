@@ -1314,18 +1314,16 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
     }
 
     const sanitizeCatalogItems = (items: any[]): any[] => {
-      if (!Array.isArray(items)) return DEFAULT_CATALOG;
+      if (!items || !Array.isArray(items)) return DEFAULT_CATALOG;
       const valid = items.filter(item => {
         if (!item) return false;
         const title = String(item.title || '').trim();
         const priceStr = String(item.price || item.promoPrice || '').replace(/[^0-9.]/g, '');
         const priceNum = parseFloat(priceStr);
-        return title.length > 0 && !isNaN(priceNum) && priceNum > 0;
+        return title.length > 0 && !isNaN(priceNum) && priceNum >= 0;
       });
 
-      const baseList = valid.length > 0 ? valid : DEFAULT_CATALOG;
-
-      return baseList.map(item => {
+      return valid.map(item => {
         let copy = { ...item };
         if (copy.id === 101 || copy.partNumber === '88210-02040' || (copy.title && copy.title.toLowerCase().includes('radar frontal'))) {
           if (!copy.img || copy.img.includes('cat_baterias_electricidad') || copy.img.includes('placeholder')) {
@@ -1353,11 +1351,11 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
           const localData = JSON.parse(stored);
           if (localData) {
             setConfig((prev: any) => ({ ...prev, ...localData }));
-            if (localData.CATALOG_PRODUCTS_JSON) {
+            if (localData.CATALOG_PRODUCTS_JSON !== undefined && localData.CATALOG_PRODUCTS_JSON !== null) {
               const parsed = typeof localData.CATALOG_PRODUCTS_JSON === 'string' 
                 ? JSON.parse(localData.CATALOG_PRODUCTS_JSON) 
                 : localData.CATALOG_PRODUCTS_JSON;
-              if (Array.isArray(parsed) && parsed.length > 0) {
+              if (Array.isArray(parsed)) {
                 setCatalogItems(sanitizeCatalogItems(parsed));
                 setIsCatalogLoading(false);
               }
@@ -1388,23 +1386,25 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
             }
           }
           setConfig((prev: any) => ({ ...prev, ...merged }));
-          const catalogSource = data?.CATALOG_PRODUCTS_JSON || currentLocal?.CATALOG_PRODUCTS_JSON;
-          if (catalogSource) {
+          const catalogSource = (data && data.CATALOG_PRODUCTS_JSON !== undefined && data.CATALOG_PRODUCTS_JSON !== null)
+            ? data.CATALOG_PRODUCTS_JSON
+            : (currentLocal && currentLocal.CATALOG_PRODUCTS_JSON !== undefined && currentLocal.CATALOG_PRODUCTS_JSON !== null ? currentLocal.CATALOG_PRODUCTS_JSON : null);
+
+          if (catalogSource !== null) {
             const parsed = typeof catalogSource === 'string' ? JSON.parse(catalogSource) : catalogSource;
-            if (Array.isArray(parsed) && parsed.length > 0) {
+            if (Array.isArray(parsed)) {
               setCatalogItems(sanitizeCatalogItems(parsed));
             }
           } else {
-            // Supabase returned no catalog — use DEFAULT_CATALOG as fallback
+            // First-time fallback only if catalog was never defined
             setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
           }
         } else {
-          // No Supabase data at all — use DEFAULT_CATALOG
-          setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
+          // No settings received — fallback to DEFAULT_CATALOG only if currently uninitialized
+          setCatalogItems(prev => prev && prev.length > 0 ? prev : sanitizeCatalogItems(DEFAULT_CATALOG));
         }
       } catch (err) {
-        // Network error — use DEFAULT_CATALOG
-        setCatalogItems(sanitizeCatalogItems(DEFAULT_CATALOG));
+        setCatalogItems(prev => prev && prev.length > 0 ? prev : sanitizeCatalogItems(DEFAULT_CATALOG));
       } finally {
         setIsCatalogLoading(false);
       }
