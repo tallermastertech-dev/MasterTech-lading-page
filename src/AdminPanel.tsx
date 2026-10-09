@@ -908,6 +908,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsSuccessMessage, setSettingsSuccessMessage] = useState('');
   const [settingsErrorMessage, setSettingsErrorMessage] = useState('');
+  const [adminHeroSlot, setAdminHeroSlot] = useState<number>(1);
+  const [adminHeroPreviewSlide, setAdminHeroPreviewSlide] = useState<number>(0);
 
   // Leads State & Segregated Categories (Trabajo, Catálogo, Inspección, Taller)
   const [leads, setLeads] = useState<any[]>([]);
@@ -3691,6 +3693,395 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
         ],
         img: '/assets/cat_suspension_amortiguadores.webp',
         msg: `✅ Rodamiento #${cleanRaw.toUpperCase()} completado desde catálogo de rodamientos.`
+      };
+    } else if (/PERMATEX|82180|81160|81878|24200|27100|59214|ULTRA GREY|ULTRA BLACK|ULTRA COPPER|TRABARROSCAS/i.test(cleanRaw) || /PERMATEX|TRABARROSCAS/i.test(rawSearch)) {
+      const isThreadlocker = /242|271|TRABARROSCAS|THREADLOCKER/i.test(cleanRaw) || /TRABARROSCAS/i.test(rawSearch);
+      localMatch = {
+        title: isThreadlocker
+          ? `Fijador de Roscas Permatex Threadlocker Grado Automotriz (#${cleanRaw.toUpperCase()})`
+          : `Formador de Empacaduras / Silicona RTV Permatex Original (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: isThreadlocker ? '$11.00' : '$14.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Formulación química profesional de grado automotriz de alta resistencia a temperatura, aceite, fluidos refrigerantes y vibración mecánica.',
+        longDesc: `Químico automotriz profesional Permatex ref. #${cleanRaw.toUpperCase()}. Diseñado para sellado estanco resistente a aceite, agua y presión extrema sin degradarse con el tiempo. Seguro para sensores.`,
+        badge: 'Permatex USA',
+        isImportedUSA: true,
+        compatibility: 'Aplicación universal profesional: cárter, tapas de válvulas, bombas de agua, termostatos y fijación de tornillos',
+        specs: [
+          'Resistencia térmica de -54°C hasta +370°C',
+          'Seguro para sensores de oxígeno (Sensor-Safe)',
+          'Máxima adhesión y flexibilidad ante dilatación térmica',
+          `Referencia Permatex: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_inyeccion_motor.webp',
+        msg: `✅ Producto químico Permatex #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/LIQUI\s*MOLY|LIQUIMOLY|CERATEC|3721|MOS2|2500|2591|MOLYGEN|TOP\s*TEC|INJECTION\s*CLEANER|1803|2522/i.test(cleanRaw) || /LIQUI\s*MOLY/i.test(rawSearch)) {
+      const isCeratec = /CERATEC|3721/i.test(cleanRaw) || /CERATEC/i.test(rawSearch);
+      localMatch = {
+        title: isCeratec
+          ? `Tratamiento Cerámico Antidesgaste de Motor Liqui Moly Cera Tec 300ml (#${cleanRaw.toUpperCase()})`
+          : `Aditivo / Lubricante Sintético de Alto Rendimiento Liqui Moly Alemania (#${cleanRaw.toUpperCase()})`,
+        category: 'Aceites & Lubricantes',
+        price: isCeratec ? '$32.00' : '$24.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Tecnología alemana de alta precisión con partículas microcerámicas para protección extrema contra el desgaste y fricción del motor.',
+        longDesc: `Producto genuino Liqui Moly Alemania ref. #${cleanRaw.toUpperCase()}. Reduce el rozamiento directo metal-metal, suaviza el funcionamiento del motor y reduce el consumo de combustible. Apto para motores a gasolina y diésel.`,
+        badge: 'Liqui Moly Germany',
+        isImportedUSA: true,
+        compatibility: 'Vehículos a gasolina y diésel (Toyota, Jeep, Ford, Chevrolet, Hyundai, Honda y marcas europeas)',
+        specs: [
+          'Formulado y fabricado en Alemania bajo normas DIN/ISO',
+          'Protección comprobada de hasta 50.000 km por aplicación',
+          'Compatible con aceites minerales, semisintéticos y 100% sintéticos',
+          `Referencia Liqui Moly: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_aceites_lubricantes.webp',
+        msg: `✅ Producto Liqui Moly #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/WD-?40|WD40/i.test(cleanRaw) || /WD-?40|WD40/i.test(rawSearch)) {
+      localMatch = {
+        title: `Lubricante Multiusos & Desplazador de Humedad WD-40 Specialist (#${cleanRaw.toUpperCase()})`,
+        category: 'Cuidado & Detailing',
+        price: '$9.50',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Fórmula original multiacción que penetra, lubrica, protege contra corrosión, afloja piezas trabadas y desplaza humedad en circuitos eléctricos.',
+        longDesc: `Aerosol profesional WD-40 ref. #${cleanRaw.toUpperCase()}. Válvula de doble acción para aplicación puntual o en abanico. Imprescindible para el mantenimiento automotriz y protección anticorrosiva en clima marino.`,
+        badge: 'WD-40 Company',
+        isImportedUSA: true,
+        compatibility: 'Mantenimiento automotriz multimarca e industrial',
+        specs: [
+          'Dieléctrico: seguro para conectores, bornes y sistemas eléctricos',
+          'Poder penetrante instantáneo en tuercas y piezas oxidadas',
+          'Protección anticorrosiva de larga duración',
+          `Referencia WD-40: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_detailing_cuidado.webp',
+        msg: `✅ Producto WD-40 #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/JOHNSEN|JOHNSENJ|2234|2232|4610|4700|6700/i.test(cleanRaw) || /JOHNSEN/i.test(rawSearch)) {
+      const isBrake = /2234|2232|FRENO|BRAKE/i.test(cleanRaw) || /FRENO/i.test(rawSearch);
+      localMatch = {
+        title: isBrake
+          ? `Líquido de Frenos Johnsen's Premium DOT 4 / DOT 3 (#${cleanRaw.toUpperCase()})`
+          : `Fluido Químico Automotriz Johnsen's USA (#${cleanRaw.toUpperCase()})`,
+        category: isBrake ? 'Frenos & Discos' : 'Climatización & A/C',
+        price: '$9.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Fluidos automotrices de grado profesional envasados en USA bajo estándares federales de seguridad vial y rendimiento térmico.',
+        longDesc: `Fluido original Johnsen's USA ref. #${cleanRaw.toUpperCase()}. Alto punto de ebullición húmedo y seco para evitar vapor lock y garantizar respuesta hidráulica firme y segura.`,
+        badge: "Johnsen's USA",
+        isImportedUSA: true,
+        compatibility: 'Sistemas de frenos de disco y tambor con o sin frenos ABS / ESP multimarca',
+        specs: [
+          'Cumple con normativas federales FMVSS 116 y SAE J1703/J1704',
+          'Inhibidores de corrosión para proteger tuberías y pistones',
+          'Envasado y sellado en Estados Unidos',
+          `Referencia Johnsen's: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_frenos_discos.webp',
+        msg: `✅ Producto Johnsen's #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/VALVOLINE|MAXLIFE|SYNPOWER/i.test(cleanRaw) || /VALVOLINE/i.test(rawSearch)) {
+      localMatch = {
+        title: `Aceite de Motor / Transmisión Valvoline Advanced (#${cleanRaw.toUpperCase()})`,
+        category: 'Aceites & Lubricantes',
+        price: '$14.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Lubricante formulado con tecnología antidesgaste avanzada para prolongar la vida útil del motor o transmisión.',
+        longDesc: `Lubricante premium Valvoline ref. #${cleanRaw.toUpperCase()}. Excelente estabilidad térmica en altas temperaturas de operación y protección superior contra lodos y depósitos de carbón.`,
+        badge: 'Valvoline USA',
+        isImportedUSA: true,
+        compatibility: 'Motores modernos a gasolina y transmisiones automáticas',
+        specs: [
+          'Normas API SP / ILSAC GF-6A',
+          'Protección reforzada contra detonación a baja velocidad (LSPI)',
+          'Reducción de consumo de aceite por evaporación',
+          `Referencia Valvoline: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_aceites_lubricantes.webp',
+        msg: `✅ Lubricante Valvoline #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/CASTROL|MAGNATEC|EDGE/i.test(cleanRaw) || /CASTROL/i.test(rawSearch)) {
+      localMatch = {
+        title: `Aceite de Motor Sintético Castrol Advanced Performance (#${cleanRaw.toUpperCase()})`,
+        category: 'Aceites & Lubricantes',
+        price: '$15.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Aceite de motor con tecnología de moléculas inteligentes y titanio líquido para máxima resistencia a la presión.',
+        longDesc: `Lubricante sintético Castrol ref. #${cleanRaw.toUpperCase()}. Brinda protección instantánea desde el momento del arranque y reduce la fricción en exigencia severa de carretera y tráfico urbano.`,
+        badge: 'Castrol Performance',
+        isImportedUSA: true,
+        compatibility: 'Vehículos a gasolina y turbo alimentados multimarca',
+        specs: [
+          'Homologaciones API SP / ACEA C3 / A3/B4',
+          'Fluidez inmediata en arranques en frío',
+          'Película lubricante reforzada contra cizallamiento',
+          `Referencia Castrol: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_aceites_lubricantes.webp',
+        msg: `✅ Lubricante Castrol #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/TYC|FARO TYC|STOP TYC|RADIADOR TYC|VENTILADOR TYC/i.test(cleanRaw) || /TYC/i.test(rawSearch)) {
+      localMatch = {
+        title: `Componente de Iluminación / Refrigeración TYC Certified (#${cleanRaw.toUpperCase()})`,
+        category: 'Climatización & A/C',
+        price: '$68.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Repuesto de reemplazo directo con especificaciones geométricas y ópticas equivalentes al equipo original (DOT/SAE/CAPA certified).',
+        longDesc: `Pieza automotriz certificada TYC ref. #${cleanRaw.toUpperCase()}. Calce exacto Plug & Play sin adaptaciones. Fabricada con materiales de alta durabilidad y protección UV contra amarilleo.`,
+        badge: 'TYC Automotive',
+        isImportedUSA: true,
+        compatibility: 'Aplicaciones según modelo específico (Toyota, Jeep, Ford, Chevrolet, Honda)',
+        specs: [
+          'Certificaciones de calidad internacional ISO/TS 16949 y DOT/SAE',
+          'Lente de policarbonato de alta resistencia a impactos y radiación solar',
+          'Enchufes y fijaciones idénticas a la pieza de fábrica',
+          `Referencia TYC: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_inyeccion_motor.webp',
+        msg: `✅ Repuesto TYC #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/K&N|KN FILTERS?|33-2385|33-2129|HP-1002|HP-2011/i.test(cleanRaw) || /K&N|FILTRO KN/i.test(rawSearch)) {
+      localMatch = {
+        title: `Filtro de Aire / Aceite de Alto Flujo K&N High-Flow (#${cleanRaw.toUpperCase()})`,
+        category: 'Filtros & Mantenimiento',
+        price: '$72.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Filtro de alto rendimiento diseñado para aumentar el flujo de aire y caballos de fuerza con máxima eficiencia de retención de partículas.',
+        longDesc: `Filtro de rendimiento K&N Engineering USA ref. #${cleanRaw.toUpperCase()}. Construido con gasa de algodón multicapa engrasada para protección superior del motor y respuesta inmediata al acelerador.`,
+        badge: 'K&N Engineering USA',
+        isImportedUSA: true,
+        compatibility: 'Encaje directo en caja de aire original (Drop-in OEM) según modelo',
+        specs: [
+          'Lavable y reutilizable de por vida con kit de mantenimiento K&N',
+          'Hasta un 50% más de flujo de aire que los filtros de papel tradicionales',
+          'Garantía limitada de 1 millón de millas',
+          `Referencia K&N: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        msg: `✅ Filtro K&N #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/WAGNER|QC1083|QC1363|QC1303|ZD1083|THERMOQUIET/i.test(cleanRaw) || /WAGNER/i.test(rawSearch)) {
+      localMatch = {
+        title: `Pastillas de Freno Cerámicas Wagner ThermoQuiet (#${cleanRaw.toUpperCase()})`,
+        category: 'Frenos & Discos',
+        price: '$52.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Pastillas de freno cerámicas silenciosas con tecnología IMI moldeada de una sola pieza para disipar calor y vibraciones.',
+        longDesc: `Juego de pastillas de freno Wagner ThermoQuiet ref. #${cleanRaw.toUpperCase()}. Formulación cerámica 100% libre de cobre para frenado suave, potente y libre de chirridos.`,
+        badge: 'Wagner ThermoQuiet USA',
+        isImportedUSA: true,
+        compatibility: 'Vehículos americanos y japoneses (Jeep, Ford, Chevrolet, Toyota)',
+        specs: [
+          'Aislador moldeado integrado que elimina laminillas sueltas',
+          'Baja emisión de polvillo en rines y máxima duración de discos',
+          'Ranuras y biseles específicos de equipo original',
+          `Referencia Wagner: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_frenos_discos.webp',
+        msg: `✅ Pastillas Wagner #${cleanRaw.toUpperCase()} decodificadas con éxito.`
+      };
+    } else if (/BOSCH|0258|0280|0580/i.test(cleanRaw) || /BOSCH/i.test(rawSearch)) {
+      localMatch = {
+        title: `Componente de Inyección / Encendido Bosch Alemania OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$38.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Tecnología alemana de equipo original para máxima precisión de combustible, encendido o monitoreo electrónico.',
+        longDesc: `Componente original Bosch ref. #${cleanRaw.toUpperCase()}. Calibración estricta y fiabilidad superior probada en las exigencias más altas de la industria automotriz.`,
+        badge: 'Bosch Germany',
+        isImportedUSA: true,
+        compatibility: 'Línea automotriz multimarca (consultar aplicación por VIN)',
+        specs: [
+          'Fabricación bajo tolerancias de equipo original de planta',
+          'Resistencia superior a la corrosión y altas temperaturas de motor',
+          'Respaldo de calidad y durabilidad Bosch',
+          `Referencia Bosch: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_inyeccion_motor.webp',
+        msg: `✅ Componente Bosch #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/RAYBESTOS|RAYBESTO|ELEMENT3/i.test(cleanRaw) || /RAYBESTOS|RAYBESTO/i.test(rawSearch)) {
+      localMatch = {
+        title: `Pastillas / Discos de Freno Raybestos Element3 Hybrid (#${cleanRaw.toUpperCase()})`,
+        category: 'Frenos & Discos',
+        price: '$48.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Fricción híbrida avanzada (EHT) que une lo mejor de la cerámica y el semimetálico para frenadas enérgicas y silenciosas.',
+        longDesc: `Pastillas de freno Raybestos Element3 ref. #${cleanRaw.toUpperCase()}. Diseñadas en USA para máxima potencia de frenado y vida útil extendida de los componentes de fricción.`,
+        badge: 'Raybestos Brakes USA',
+        isImportedUSA: true,
+        compatibility: 'Vehículos SUV, pickups y sedanes (Jeep, Toyota, Ford, GM)',
+        specs: [
+          'Formulación híbrida de fricción mejorada Element3 EHT',
+          'Laminillas multicapa de acero inoxidable para control de ruido',
+          'Alto coeficiente de fricción ante exigencias de temperatura',
+          `Referencia Raybestos: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_frenos_discos.webp',
+        msg: `✅ Frenos Raybestos #${cleanRaw.toUpperCase()} decodificados con éxito.`
+      };
+    } else if (/YUKKAZO/i.test(cleanRaw) || /YUKKAZO/i.test(rawSearch)) {
+      localMatch = {
+        title: `Rótula / Terminal de Dirección & Suspensión Yukkazo HD (#${cleanRaw.toUpperCase()})`,
+        category: 'Suspensión & Amortiguadores',
+        price: '$26.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Componente de tren delantero forjado en acero tratado térmicamente para soportar impactos y trabajo rudo en carretera y off-road.',
+        longDesc: `Pieza de suspensión Yukkazo ref. #${cleanRaw.toUpperCase()}. Rótula pre-engrasada con guardapolvo estanco de cloropreno que evita la entrada de polvo y humedad.`,
+        badge: 'Yukkazo Suspension',
+        isImportedUSA: true,
+        compatibility: 'Toyota (Hilux, Fortuner, 4Runner, Corolla), Jeep (Cherokee, Grand Cherokee), Ford y Chevrolet',
+        specs: [
+          'Acero forjado estructural de alta resistencia mecánica',
+          'Fuelle protector con anillos de retención elásticos',
+          'Alineación precisa y eliminación de holguras en volante',
+          `Referencia Yukkazo: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        msg: `✅ Componente Yukkazo #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/HONDA GENUINE|HONDA OEM|15400-PLM|15400PLM/i.test(cleanRaw) || /HONDA GENUINE/i.test(rawSearch)) {
+      localMatch = {
+        title: `Repuesto Genuino Honda Genuine Parts OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Filtros & Mantenimiento',
+        price: '$38.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Pieza original de fábrica importada para vehículos Honda y Acura, fabricada bajo las normas oficiales de ingeniería japonesa.',
+        longDesc: `Repuesto original Honda Genuine Parts ref. #${cleanRaw.toUpperCase()}. Garantiza ajuste milimétrico, cero fugas y preservación de la vida útil del vehículo.`,
+        badge: 'Honda Genuine Parts',
+        isImportedUSA: true,
+        compatibility: 'Honda Civic, CR-V, Accord, Pilot, HR-V, Fit & Acura',
+        specs: [
+          '100% Genuino Honda Genuine Parts en empaque oficial',
+          'Calidad y materiales certificados de planta',
+          'Máxima compatibilidad y fiabilidad de marcha',
+          `Referencia OEM Honda: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        msg: `✅ Repuesto Honda Genuine Parts #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/GATES|MICRO-V|MICRO V|K060|K070|TCKWP/i.test(cleanRaw) || /GATES|CORREA GATES/i.test(rawSearch)) {
+      localMatch = {
+        title: `Correa de Serpentín / Distribución Gates Micro-V Heavy Duty (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$34.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Correa automotriz construida con compuesto de caucho EPDM reforzado con cuerdas de aramida para evitar grietas, chirridos y elongación.',
+        longDesc: `Correa de alta durabilidad Gates USA ref. #${cleanRaw.toUpperCase()}. Diseñada para operar sin ruidos ni deslizamientos bajo temperaturas extremas de compartimiento de motor.`,
+        badge: 'Gates USA',
+        isImportedUSA: true,
+        compatibility: 'Sistemas de accesorios de motor (alternador, bomba de agua, dirección hidráulica y compresor A/C)',
+        specs: [
+          'Material EPDM resistente al calor, ozono y fluidos de motor',
+          'Perfil de ranuras rectificado de precisión que elimina ruidos',
+          'Vida útil estimada de más de 100.000 km',
+          `Referencia Gates: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_inyeccion_motor.webp',
+        msg: `✅ Correa Gates #${cleanRaw.toUpperCase()} decodificada con éxito.`
+      };
+    } else if (/ACDELCO|AC DELCO|PF47|PF48|PF63|41-110|41-162/i.test(cleanRaw) || /ACDELCO/i.test(rawSearch)) {
+      localMatch = {
+        title: `Repuesto Original GM / Filtro / Bujía ACDelco (#${cleanRaw.toUpperCase()})`,
+        category: 'Filtros & Mantenimiento',
+        price: '$35.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Equipo original validado por General Motors para vehículos Chevrolet, GMC, Cadillac y aplicaciones multimarca.',
+        longDesc: `Componente certificado ACDelco ref. #${cleanRaw.toUpperCase()}. Rendimiento garantizado y compatibilidad exacta con los estándares de fábrica de General Motors.`,
+        badge: 'ACDelco GM Original',
+        isImportedUSA: true,
+        compatibility: 'Vehículos Chevrolet, GM y multimarca',
+        specs: [
+          'Fabricación bajo rigurosas especificaciones de equipo original (OE)',
+          'Excelente rendimiento y resistencia en uso severo',
+          'Respaldo de garantía y autenticidad ACDelco',
+          `Referencia ACDelco: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        msg: `✅ Producto ACDelco #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/NGK|IRIDIUM IX|LFR6AIX|BKR6EIX|LZKAR6AP|ILKAR7B11|TR55IX/i.test(cleanRaw) || /NGK|BUJIA NGK/i.test(rawSearch)) {
+      localMatch = {
+        title: `Juego de Bujías de Iridio NGK Iridium IX High Performance (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$44.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Electrodo ultrafino de iridio de 0.6 mm soldado por láser para máxima inflamabilidad, chispa potente y ahorro de gasolina.',
+        longDesc: `Juego de bujías NGK Spark Plugs Japón ref. #${cleanRaw.toUpperCase()}. Proporciona aceleración más rápida, ralentí perfectamente estable y resistencia superior al desgaste por arco eléctrico.`,
+        badge: 'NGK Spark Plugs Japan',
+        isImportedUSA: true,
+        compatibility: 'Motores modernos a gasolina de alta compresión y turboalimentados',
+        specs: [
+          'Punta de iridio con corte cónico en el electrodo de tierra',
+          'Revestimiento metálico trivalente anticorrosión y antiadherente',
+          'Durabilidad estimada de hasta 100.000 km',
+          `Referencia NGK: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_inyeccion_motor.webp',
+        msg: `✅ Bujías NGK #${cleanRaw.toUpperCase()} decodificadas con éxito.`
+      };
+    } else if (/DENSO|SK20R11|IK20|IK16|SC20HR11|234-9049|234-4209/i.test(cleanRaw) || /DENSO/i.test(rawSearch)) {
+      localMatch = {
+        title: `Bujía / Sensor de Oxígeno / Alternador Denso Japan OEM (#${cleanRaw.toUpperCase()})`,
+        category: 'Inyección & Motor',
+        price: '$45.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Equipamiento original de las marcas líderes japonesas. Máxima precisión de lectura y durabilidad electrónica de primer nivel.',
+        longDesc: `Componente original Denso Japón ref. #${cleanRaw.toUpperCase()}. Diseñado para igualar o superar el rendimiento de las piezas instaladas en la línea de montaje de fábrica.`,
+        badge: 'Denso Japan OEM',
+        isImportedUSA: true,
+        compatibility: 'Toyota, Honda, Subaru, Suzuki y marcas compatibles',
+        specs: [
+          'Fabricación japonesa de precisión milimétrica',
+          'Ajuste directo First Time Fit sin adaptaciones',
+          'Máxima eficiencia en consumo y emisiones de escape',
+          `Referencia Denso: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_inyeccion_motor.webp',
+        msg: `✅ Componente Denso #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/WIX|51348|51515|57060|51372|33002/i.test(cleanRaw) || /WIX/i.test(rawSearch)) {
+      localMatch = {
+        title: `Filtro de Aceite / Aire / Combustible WIX Filters XP Heavy Duty (#${cleanRaw.toUpperCase()})`,
+        category: 'Filtros & Mantenimiento',
+        price: '$16.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Filtración sintética pesada WIX XP diseñada para intervalos extendidos de mantenimiento y máxima retención de micropartículas.',
+        longDesc: `Filtro premium WIX Filters USA ref. #${cleanRaw.toUpperCase()}. Medio filtrante sintético reforzado que resiste altas presiones y flujo continuo de lubricante limpio.`,
+        badge: 'WIX Filters USA',
+        isImportedUSA: true,
+        compatibility: 'Pickups, SUVs y vehículos de trabajo pesado (Jeep, Ford, Dodge, Chevrolet, Toyota)',
+        specs: [
+          'Válvula de silicona antidrenaje resistente a altas temperaturas',
+          'Retención del 99% de partículas dañinas en aceite',
+          'Carcasa de acero reforzado contra golpes y sobrepresión',
+          `Referencia WIX: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        msg: `✅ Filtro WIX #${cleanRaw.toUpperCase()} decodificado con éxito.`
+      };
+    } else if (/WINNER|24MR-800|34-850|42-700|78-900|27-850/i.test(cleanRaw) || /WINNER|BATERIA WINNER/i.test(rawSearch)) {
+      localMatch = {
+        title: `Batería Automotriz Sellada Winner Calcio-Plata Libre de Mantenimiento (#${cleanRaw.toUpperCase()})`,
+        category: 'Baterías & Eléctrico',
+        price: '$95.00',
+        partNumber: cleanRaw.toUpperCase(),
+        desc: 'Batería automotriz sellada con placas de aleación Calcio-Plata de alto amperaje de arranque en frío (CCA), 100% libre de mantenimiento.',
+        longDesc: `Batería Winner sellada ref. #${cleanRaw.toUpperCase()}. Diseñada para soportar altas temperaturas tropicales y vibraciones en baches y terrenos difíciles sin pérdida de electrolito.`,
+        badge: 'Winner Baterías Selladas',
+        isImportedUSA: false,
+        compatibility: 'Línea liviana y pesada de vehículos nacionales e importados',
+        specs: [
+          'Tecnología Calcio-Plata de mínima autodescarga',
+          'Ojo visor indicador de estado de carga integrado',
+          'Garantía y chequeo del sistema eléctrico en Taller MasterTech',
+          `Referencia Winner: ${cleanRaw.toUpperCase()}`
+        ],
+        img: '/assets/cat_baterias_electrico.webp',
+        msg: `✅ Batería Winner #${cleanRaw.toUpperCase()} decodificada con éxito.`
       };
     }
 
@@ -7818,39 +8209,54 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                       </p>
                     </div>
                     <button
-                      onClick={() => handleSaveSection('catalogo_images', {
-                        CATALOG_HERO_IMG: settingsForm.CATALOG_HERO_IMG || '',
-                        CATALOG_HERO_TITLE: settingsForm.CATALOG_HERO_TITLE || '',
-                        CATALOG_HERO_SUBTITLE: settingsForm.CATALOG_HERO_SUBTITLE || '',
-                        CATALOG_HERO_BADGE: settingsForm.CATALOG_HERO_BADGE || '',
-                        CAT_IMG_FRENOS: settingsForm.CAT_IMG_FRENOS || '',
-                        CAT_IMG_SUSPENSION: settingsForm.CAT_IMG_SUSPENSION || '',
-                        CAT_IMG_ACEITES: settingsForm.CAT_IMG_ACEITES || '',
-                        CAT_IMG_BATERIAS: settingsForm.CAT_IMG_BATERIAS || '',
-                        CAT_IMG_FILTROS: settingsForm.CAT_IMG_FILTROS || '',
-                        CAT_IMG_CLIMATIZACION: settingsForm.CAT_IMG_CLIMATIZACION || '',
-                        CAT_IMG_MOTOR: settingsForm.CAT_IMG_MOTOR || '',
-                        CAT_IMG_DETAILING: settingsForm.CAT_IMG_DETAILING || '',
-                        PROMO_IMG_FRENOS: settingsForm.PROMO_IMG_FRENOS || '',
-                        PROMO_1_TAG: settingsForm.PROMO_1_TAG || '',
-                        PROMO_1_TITLE_1: settingsForm.PROMO_1_TITLE_1 || '',
-                        PROMO_1_TITLE_2: settingsForm.PROMO_1_TITLE_2 || '',
-                        PROMO_1_DESC: settingsForm.PROMO_1_DESC || '',
-                        PROMO_1_BTN: settingsForm.PROMO_1_BTN || '',
-                        PROMO_IMG_SUSPENSION: settingsForm.PROMO_IMG_SUSPENSION || '',
-                        PROMO_2_TAG: settingsForm.PROMO_2_TAG || '',
-                        PROMO_2_TITLE_1: settingsForm.PROMO_2_TITLE_1 || '',
-                        PROMO_2_TITLE_2: settingsForm.PROMO_2_TITLE_2 || '',
-                        PROMO_2_DESC: settingsForm.PROMO_2_DESC || '',
-                        PROMO_2_BTN: settingsForm.PROMO_2_BTN || '',
-                        PROMO_IMG_MOTOR: settingsForm.PROMO_IMG_MOTOR || '',
-                        PROMO_3_TAG: settingsForm.PROMO_3_TAG || '',
-                        PROMO_3_TITLE_1: settingsForm.PROMO_3_TITLE_1 || '',
-                        PROMO_3_TITLE_2: settingsForm.PROMO_3_TITLE_2 || '',
-                        PROMO_3_DESC: settingsForm.PROMO_3_DESC || '',
-                        PROMO_3_BTN: settingsForm.PROMO_3_BTN || '',
-                        CATALOG_PRODUCTS_JSON: JSON.stringify(sanitizeCatalogItems(catalogItems))
-                      })}
+                      onClick={() => {
+                        const heroUrls = [
+                          settingsForm.CATALOG_HERO_IMG,
+                          settingsForm.CATALOG_HERO_IMG_2,
+                          settingsForm.CATALOG_HERO_IMG_3,
+                          settingsForm.CATALOG_HERO_IMG_4,
+                          settingsForm.CATALOG_HERO_IMG_5,
+                        ].filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+
+                        handleSaveSection('catalogo_images', {
+                          CATALOG_HERO_IMG: settingsForm.CATALOG_HERO_IMG || '',
+                          CATALOG_HERO_IMG_2: settingsForm.CATALOG_HERO_IMG_2 || '',
+                          CATALOG_HERO_IMG_3: settingsForm.CATALOG_HERO_IMG_3 || '',
+                          CATALOG_HERO_IMG_4: settingsForm.CATALOG_HERO_IMG_4 || '',
+                          CATALOG_HERO_IMG_5: settingsForm.CATALOG_HERO_IMG_5 || '',
+                          CATALOG_HERO_IMAGES_JSON: JSON.stringify(heroUrls),
+                          CATALOG_HERO_TITLE: settingsForm.CATALOG_HERO_TITLE || '',
+                          CATALOG_HERO_SUBTITLE: settingsForm.CATALOG_HERO_SUBTITLE || '',
+                          CATALOG_HERO_BADGE: settingsForm.CATALOG_HERO_BADGE || '',
+                          CAT_IMG_FRENOS: settingsForm.CAT_IMG_FRENOS || '',
+                          CAT_IMG_SUSPENSION: settingsForm.CAT_IMG_SUSPENSION || '',
+                          CAT_IMG_ACEITES: settingsForm.CAT_IMG_ACEITES || '',
+                          CAT_IMG_BATERIAS: settingsForm.CAT_IMG_BATERIAS || '',
+                          CAT_IMG_FILTROS: settingsForm.CAT_IMG_FILTROS || '',
+                          CAT_IMG_CLIMATIZACION: settingsForm.CAT_IMG_CLIMATIZACION || '',
+                          CAT_IMG_MOTOR: settingsForm.CAT_IMG_MOTOR || '',
+                          CAT_IMG_DETAILING: settingsForm.CAT_IMG_DETAILING || '',
+                          PROMO_IMG_FRENOS: settingsForm.PROMO_IMG_FRENOS || '',
+                          PROMO_1_TAG: settingsForm.PROMO_1_TAG || '',
+                          PROMO_1_TITLE_1: settingsForm.PROMO_1_TITLE_1 || '',
+                          PROMO_1_TITLE_2: settingsForm.PROMO_1_TITLE_2 || '',
+                          PROMO_1_DESC: settingsForm.PROMO_1_DESC || '',
+                          PROMO_1_BTN: settingsForm.PROMO_1_BTN || '',
+                          PROMO_IMG_SUSPENSION: settingsForm.PROMO_IMG_SUSPENSION || '',
+                          PROMO_2_TAG: settingsForm.PROMO_2_TAG || '',
+                          PROMO_2_TITLE_1: settingsForm.PROMO_2_TITLE_1 || '',
+                          PROMO_2_TITLE_2: settingsForm.PROMO_2_TITLE_2 || '',
+                          PROMO_2_DESC: settingsForm.PROMO_2_DESC || '',
+                          PROMO_2_BTN: settingsForm.PROMO_2_BTN || '',
+                          PROMO_IMG_MOTOR: settingsForm.PROMO_IMG_MOTOR || '',
+                          PROMO_3_TAG: settingsForm.PROMO_3_TAG || '',
+                          PROMO_3_TITLE_1: settingsForm.PROMO_3_TITLE_1 || '',
+                          PROMO_3_TITLE_2: settingsForm.PROMO_3_TITLE_2 || '',
+                          PROMO_3_DESC: settingsForm.PROMO_3_DESC || '',
+                          PROMO_3_BTN: settingsForm.PROMO_3_BTN || '',
+                          CATALOG_PRODUCTS_JSON: JSON.stringify(sanitizeCatalogItems(catalogItems))
+                        });
+                      }}
                       disabled={savingSection === 'catalogo_images'}
                       className="btn-primary !py-2 !px-4 text-xs font-bold uppercase border-none flex items-center gap-2 shadow-md cursor-pointer"
                     >
@@ -7859,63 +8265,305 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </button>
                   </div>
 
-                  {/* 1. Vitrina 3D Principal Hero */}
+                  {/* 1. Vitrina 3D Principal Hero Carrusel */}
                   <div className="space-y-4 bg-black/40 p-4 rounded-xl border border-white/5">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                        <span>1. Vitrina 3D Principal (Frenos, Suspensión & Motor Showcase)</span>
-                      </h3>
-                      <span className="text-[10px] text-zinc-400 font-mono">Cabecera de /catalogo</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <h3 className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                          <span>1. Vitrina 3D Principal - Carrusel de hasta 5 Imágenes</span>
+                        </h3>
+                        <p className="text-[11px] text-zinc-400 mt-0.5">
+                          Configura de 1 a 5 imágenes que rotarán automáticamente en la tarjeta flotante 3D del catálogo.
+                        </p>
+                      </div>
+                      <span className="text-[10px] text-zinc-400 font-mono bg-white/5 px-2.5 py-1 rounded-full border border-white/10 w-fit">
+                        Cabecera de /catalogo
+                      </span>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <ImageUploader
-                        label="Imagen Showcase Principal 3D"
-                        value={settingsForm.CATALOG_HERO_IMG || ''}
-                        onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG: val })}
-                        aspectRatio={1 / 1}
-                        placeholder="/assets/autoparts_hero_showcase.webp"
-                      />
+                    {/* Selector de Slots 1 al 5 */}
+                    <div className="bg-white/[0.02] border border-white/10 rounded-xl p-3">
+                      <div className="flex items-center justify-between mb-2.5">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-zinc-300">
+                          Seleccionar Slot para Subir / Modificar:
+                        </span>
+                        <span className="text-[10px] font-mono text-amber-400 font-bold">
+                          {[
+                            settingsForm.CATALOG_HERO_IMG,
+                            settingsForm.CATALOG_HERO_IMG_2,
+                            settingsForm.CATALOG_HERO_IMG_3,
+                            settingsForm.CATALOG_HERO_IMG_4,
+                            settingsForm.CATALOG_HERO_IMG_5,
+                          ].filter((u): u is string => typeof u === 'string' && u.trim().length > 0).length} de 5 slots activos
+                        </span>
+                      </div>
 
-                      <div className="space-y-3">
-                        <div>
-                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
-                            Título de la Tarjeta Flotante
-                          </label>
-                          <input
-                            type="text"
-                            value={settingsForm.CATALOG_HERO_TITLE || ''}
-                            onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_TITLE: e.target.value })}
-                            placeholder="Frenos, Suspensión & Motor"
-                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-red-500"
-                          />
+                      <div className="grid grid-cols-5 gap-2">
+                        {[1, 2, 3, 4, 5].map((slotNum) => {
+                          const key = slotNum === 1 ? 'CATALOG_HERO_IMG' : `CATALOG_HERO_IMG_${slotNum}`;
+                          const val = (settingsForm as any)[key] || '';
+                          const isFilled = typeof val === 'string' && val.trim().length > 0;
+                          const isActive = adminHeroSlot === slotNum;
+
+                          return (
+                            <button
+                              key={slotNum}
+                              type="button"
+                              onClick={() => {
+                                setAdminHeroSlot(slotNum);
+                                setAdminHeroPreviewSlide(slotNum - 1);
+                              }}
+                              className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all text-center cursor-pointer ${
+                                isActive
+                                  ? 'bg-red-600/20 border-red-500 text-white shadow-lg shadow-red-500/10'
+                                  : isFilled
+                                  ? 'bg-white/5 border-white/20 text-zinc-300 hover:border-white/40'
+                                  : 'bg-black/40 border-white/5 text-zinc-500 hover:border-white/10'
+                              }`}
+                            >
+                              <div className="flex items-center gap-1.5 mb-1">
+                                <span className={`w-1.5 h-1.5 rounded-full ${isFilled ? 'bg-emerald-400' : 'bg-zinc-600'}`} />
+                                <span className="text-[11px] font-black">Slot {slotNum}</span>
+                              </div>
+                              <span className="text-[9px] uppercase tracking-wider truncate max-w-full font-mono">
+                                {slotNum === 1 ? 'Principal' : isFilled ? 'Activo' : 'Vacío'}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Editor del Slot Activo + Vista Previa Live */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      {/* Lado izquierdo: Uploader del Slot Seleccionado */}
+                      <div className="bg-black/50 border border-white/10 rounded-xl p-4 space-y-3">
+                        <div className="flex items-center justify-between pb-2 border-b border-white/5">
+                          <div className="flex items-center gap-2">
+                            <span className="px-2 py-0.5 rounded bg-red-600 text-white text-[10px] font-black uppercase">
+                              Slot {adminHeroSlot} {adminHeroSlot === 1 && '(Principal)'}
+                            </span>
+                            <span className="text-xs text-zinc-400 font-medium">
+                              {adminHeroSlot === 1
+                                ? 'Imagen fija/base'
+                                : 'Imagen carrusel'}
+                            </span>
+                          </div>
+                          {adminHeroSlot > 1 && (settingsForm as any)[`CATALOG_HERO_IMG_${adminHeroSlot}`] && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const key = `CATALOG_HERO_IMG_${adminHeroSlot}`;
+                                setSettingsForm({ ...settingsForm, [key]: '' });
+                              }}
+                              className="text-[10px] text-red-400 hover:text-red-300 font-bold uppercase tracking-wider hover:underline cursor-pointer"
+                            >
+                              Limpiar Slot
+                            </button>
+                          )}
                         </div>
 
-                        <div>
-                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
-                            Subtítulo / Descripción Corta
-                          </label>
-                          <input
-                            type="text"
-                            value={settingsForm.CATALOG_HERO_SUBTITLE || ''}
-                            onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_SUBTITLE: e.target.value })}
-                            placeholder="Rendimiento garantizado y compatibilidad exacta"
-                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-xs text-white outline-none focus:border-red-500"
+                        {adminHeroSlot === 1 ? (
+                          <ImageUploader
+                            label="Imagen Slot 1 (Principal)"
+                            value={settingsForm.CATALOG_HERO_IMG || ''}
+                            onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG: val })}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/autoparts_hero_showcase.webp"
                           />
+                        ) : adminHeroSlot === 2 ? (
+                          <ImageUploader
+                            label="Imagen Slot 2 (Carrusel)"
+                            value={settingsForm.CATALOG_HERO_IMG_2 || ''}
+                            onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG_2: val })}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/autoparts_hero_showcase.webp"
+                          />
+                        ) : adminHeroSlot === 3 ? (
+                          <ImageUploader
+                            label="Imagen Slot 3 (Carrusel)"
+                            value={settingsForm.CATALOG_HERO_IMG_3 || ''}
+                            onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG_3: val })}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/autoparts_hero_showcase.webp"
+                          />
+                        ) : adminHeroSlot === 4 ? (
+                          <ImageUploader
+                            label="Imagen Slot 4 (Carrusel)"
+                            value={settingsForm.CATALOG_HERO_IMG_4 || ''}
+                            onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG_4: val })}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/autoparts_hero_showcase.webp"
+                          />
+                        ) : (
+                          <ImageUploader
+                            label="Imagen Slot 5 (Carrusel)"
+                            value={settingsForm.CATALOG_HERO_IMG_5 || ''}
+                            onChange={(val) => setSettingsForm({ ...settingsForm, CATALOG_HERO_IMG_5: val })}
+                            aspectRatio={1 / 1}
+                            placeholder="/assets/autoparts_hero_showcase.webp"
+                          />
+                        )}
+
+                        {/* Campos de Textos de la tarjeta */}
+                        <div className="pt-2 border-t border-white/5 space-y-2.5">
+                          <div>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                              Título de la Tarjeta Flotante
+                            </label>
+                            <input
+                              type="text"
+                              value={settingsForm.CATALOG_HERO_TITLE || ''}
+                              onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_TITLE: e.target.value })}
+                              placeholder="Frenos, Suspensión & Motor"
+                              className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-xs text-white outline-none focus:border-red-500"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                                Subtítulo Corto
+                              </label>
+                              <input
+                                type="text"
+                                value={settingsForm.CATALOG_HERO_SUBTITLE || ''}
+                                onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_SUBTITLE: e.target.value })}
+                                placeholder="Rendimiento garantizado y compatibilidad exacta"
+                                className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-xs text-white outline-none focus:border-red-500"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
+                                Distintivo / Badge
+                              </label>
+                              <input
+                                type="text"
+                                value={settingsForm.CATALOG_HERO_BADGE || ''}
+                                onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_BADGE: e.target.value })}
+                                placeholder="OEM 100%"
+                                className="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-xs text-white font-mono outline-none focus:border-red-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Lado derecho: Vista Previa Interactiva en Vivo del Carrusel */}
+                      <div className="bg-black/50 border border-white/10 rounded-xl p-4 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
+                              <Sparkles size={12} className="text-amber-400" />
+                              Vista Previa Interactiva del Carrusel
+                            </span>
+                            <span className="text-[10px] text-zinc-500 font-mono">
+                              Simulación exacta de /catalogo
+                            </span>
+                          </div>
+
+                          {/* Tarjeta 3D idéntica a Catalogo.tsx */}
+                          {(() => {
+                            const previewList = [
+                              settingsForm.CATALOG_HERO_IMG,
+                              settingsForm.CATALOG_HERO_IMG_2,
+                              settingsForm.CATALOG_HERO_IMG_3,
+                              settingsForm.CATALOG_HERO_IMG_4,
+                              settingsForm.CATALOG_HERO_IMG_5,
+                            ].filter((u): u is string => typeof u === 'string' && u.trim().length > 0);
+                            const displayList = previewList.length > 0 ? previewList : ['/assets/autoparts_hero_showcase.webp'];
+                            const safeIdx = Math.min(Math.max(adminHeroPreviewSlide, 0), displayList.length - 1);
+                            const currentImg = displayList[safeIdx >= 0 ? safeIdx : 0];
+
+                            return (
+                              <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.06] to-transparent p-4 shadow-2xl">
+                                <div className="relative aspect-square max-h-[260px] mx-auto flex items-center justify-center">
+                                  {/* Indicadores de slides tipo cápsula arriba */}
+                                  {displayList.length > 1 && (
+                                    <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/15">
+                                      {displayList.map((_, idx) => (
+                                        <button
+                                          key={idx}
+                                          type="button"
+                                          onClick={() => setAdminHeroPreviewSlide(idx)}
+                                          className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                                            idx === safeIdx ? 'w-4 bg-red-500' : 'w-1.5 bg-white/40 hover:bg-white/70'
+                                          }`}
+                                          title={`Diapositiva ${idx + 1}`}
+                                        />
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {/* Flechas de navegación */}
+                                  {displayList.length > 1 && (
+                                    <>
+                                      <button
+                                        type="button"
+                                        onClick={() => setAdminHeroPreviewSlide((safeIdx - 1 + displayList.length) % displayList.length)}
+                                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/70 hover:bg-red-600 text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer"
+                                      >
+                                        <ChevronLeft size={14} />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => setAdminHeroPreviewSlide((safeIdx + 1) % displayList.length)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/70 hover:bg-red-600 text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer"
+                                      >
+                                        <ChevronRight size={14} />
+                                      </button>
+                                    </>
+                                  )}
+
+                                  {/* Imagen actual */}
+                                  <img
+                                    src={currentImg}
+                                    alt="Hero Showcase Preview"
+                                    className="w-full h-full object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.8)]"
+                                    onError={(e) => {
+                                      (e.currentTarget as HTMLImageElement).src = '/assets/autoparts_hero_showcase.webp';
+                                    }}
+                                  />
+
+                                  {/* Badge flotante inferior */}
+                                  <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-md border border-white/15 rounded-xl p-2.5 flex items-center justify-between">
+                                    <div className="min-w-0 pr-2">
+                                      <h4 className="text-white font-bold text-xs truncate">
+                                        {settingsForm.CATALOG_HERO_TITLE || 'Frenos, Suspensión & Motor'}
+                                      </h4>
+                                      <p className="text-[10px] text-zinc-400 truncate">
+                                        {settingsForm.CATALOG_HERO_SUBTITLE || 'Rendimiento garantizado y compatibilidad exacta'}
+                                      </p>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                                      {displayList.length > 1 && (
+                                        <span className="text-[9px] font-mono font-bold bg-white/10 text-zinc-300 px-1.5 py-0.5 rounded border border-white/10">
+                                          {safeIdx + 1}/{displayList.length}
+                                        </span>
+                                      )}
+                                      <span className="bg-red-600/90 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-md tracking-wider">
+                                        {settingsForm.CATALOG_HERO_BADGE || 'OEM 100%'}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })()}
                         </div>
 
-                        <div>
-                          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1">
-                            Distintivo / Badge (Esquina Derecha)
-                          </label>
-                          <input
-                            type="text"
-                            value={settingsForm.CATALOG_HERO_BADGE || ''}
-                            onChange={(e) => setSettingsForm({ ...settingsForm, CATALOG_HERO_BADGE: e.target.value })}
-                            placeholder="OEM 100%"
-                            className="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-xs text-white font-mono outline-none focus:border-red-500"
-                          />
+                        <div className="mt-3 p-2.5 rounded-lg bg-white/[0.03] border border-white/5 text-[11px] text-zinc-400">
+                          <p className="flex items-center gap-1.5 text-zinc-300 font-semibold mb-0.5">
+                            <Info size={12} className="text-red-400" />
+                            Comportamiento en la tienda:
+                          </p>
+                          <ul className="list-disc list-inside text-[10px] text-zinc-400 space-y-0.5">
+                            <li>Si se configura 1 imagen: Se muestra fija y limpia.</li>
+                            <li>Si se configuran 2 o más: Rota sola cada 4.5s con animación suave.</li>
+                            <li>Soporta deslizamiento táctil (swipe) en móviles y flechas en desktop.</li>
+                          </ul>
                         </div>
                       </div>
                     </div>
@@ -11156,11 +11804,42 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   <label className="text-zinc-400 font-bold block mb-1">Distintivo / Badge</label>
                   <input
                     type="text"
+                    list="catalog-brand-suggestions"
                     value={editingProduct.badge || ''}
                     onChange={(e) => setEditingProduct({ ...editingProduct, badge: e.target.value })}
-                    placeholder="Ej. Mantenimiento Esencial"
+                    placeholder="Ej. Toyota Genuine Parts, Mopar, Bosch..."
                     className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary"
                   />
+                  <datalist id="catalog-brand-suggestions">
+                    <option value="Toyota Genuine Parts" />
+                    <option value="Honda Genuine Parts" />
+                    <option value="Mopar Genuine Parts" />
+                    <option value="Permatex USA" />
+                    <option value="Liqui Moly Germany" />
+                    <option value="WD-40 Company" />
+                    <option value="Johnsen's USA" />
+                    <option value="Valvoline USA" />
+                    <option value="Castrol Performance" />
+                    <option value="TYC Automotive" />
+                    <option value="K&N Engineering USA" />
+                    <option value="Wagner ThermoQuiet USA" />
+                    <option value="Bosch Germany" />
+                    <option value="Raybestos Brakes USA" />
+                    <option value="Yukkazo Suspension" />
+                    <option value="Gates USA" />
+                    <option value="ACDelco GM Original" />
+                    <option value="NGK Spark Plugs Japan" />
+                    <option value="Denso Japan OEM" />
+                    <option value="WIX Filters USA" />
+                    <option value="Winner Baterías Selladas" />
+                    <option value="Brembo Racing" />
+                    <option value="KYB Japan" />
+                    <option value="Monroe Shocks" />
+                    <option value="Motul France" />
+                    <option value="Duncan Baterías" />
+                    <option value="Koyo Japan OEM" />
+                    <option value="Timken USA OEM" />
+                  </datalist>
                 </div>
                 <div className="flex items-center pt-5">
                   <label className="flex items-center gap-2 cursor-pointer text-white font-bold select-none">

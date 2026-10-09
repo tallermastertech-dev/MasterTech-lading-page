@@ -3195,6 +3195,416 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
       };
     }
 
+    // ══════════════════════════════════════════════════════════════════
+    // MARCAS OFICIALES MASTERTECH (PERMATEX, LIQUI MOLY, WD-40, JOHNSEN'S,
+    // VALVOLINE, CASTROL, TYC, K&N, WAGNER, BOSCH, RAYBESTOS, YUKKAZO,
+    // GATES, ACDELCO, NGK, DENSO, WIX, WINNER)
+    // ══════════════════════════════════════════════════════════════════
+    if (/PERMATEX|82180|81160|81878|24200|27100|59214|ULTRAGREY|ULTRABLACK|ULTRACOPPER|TRABARROSCAS/i.test(c)) {
+      const isThreadlocker = /242|271|TRABARROSCAS|THREADLOCKER/i.test(c);
+      return {
+        titulo: isThreadlocker
+          ? `Fijador de Roscas Permatex Threadlocker Grado Automotriz (#${raw.toUpperCase()})`
+          : `Formador de Empacaduras / Silicona RTV Permatex Original (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: isThreadlocker ? '$11.00' : '$14.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Aplicación universal profesional: cárter, tapas de válvulas, bombas de agua, termostatos y tornillería de motor',
+        descripcionCorta: 'Formulación química profesional de grado automotriz de alta resistencia a temperatura, aceite y vibración.',
+        descripcionDetallada: `Producto químico automotriz Permatex USA ref. #${raw.toUpperCase()}. Diseñado para sellado estanco resistente a aceite, refrigerante y presión extrema sin degradarse con el tiempo. Seguro para sensores.`,
+        specs: [
+          'Resistencia térmica extrema de -54°C hasta +370°C',
+          'Seguro para sensores de oxígeno (Sensor-Safe)',
+          'Excelente adhesión y flexibilidad ante dilatación térmica',
+          `Referencia Permatex: ${raw.toUpperCase()}`
+        ],
+        badge: 'Permatex USA',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`Permatex ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/LIQUIMOLY|CERATEC|3721|MOS2|2500|2591|MOLYGEN|TOPTEC|INJECTIONCLEANER|1803|2522/i.test(c)) {
+      const isCeratec = /CERATEC|3721/i.test(c);
+      return {
+        titulo: isCeratec
+          ? `Tratamiento Cerámico Antidesgaste de Motor Liqui Moly Cera Tec 300ml (#${raw.toUpperCase()})`
+          : `Aditivo / Lubricante Sintético de Alto Rendimiento Liqui Moly Alemania (#${raw.toUpperCase()})`,
+        categoria: 'Aceites & Lubricantes',
+        precio: isCeratec ? '$32.00' : '$24.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Motores modernos a gasolina y diésel (Toyota, Jeep, Ford, Chevrolet, marcas europeas)',
+        descripcionCorta: 'Tecnología alemana de alta precisión con partículas microcerámicas para protección extrema contra el desgaste del motor.',
+        descripcionDetallada: `Producto genuino Liqui Moly Alemania ref. #${raw.toUpperCase()}. Reduce el rozamiento directo metal-metal, suaviza el funcionamiento del motor y optimiza el consumo de combustible.`,
+        specs: [
+          'Formulado y fabricado en Alemania bajo normas DIN/ISO',
+          'Protección comprobada de hasta 50.000 km por aplicación',
+          'Compatible con aceites minerales, semisintéticos y 100% sintéticos',
+          `Referencia Liqui Moly: ${raw.toUpperCase()}`
+        ],
+        badge: 'Liqui Moly Germany',
+        isImportedUSA: true,
+        img: '/assets/cat_aceites_lubricantes.webp',
+        referencias: [`Liqui Moly ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/WD-?40|WD40/i.test(c)) {
+      return {
+        titulo: `Lubricante Multiusos & Desplazador de Humedad WD-40 Specialist (#${raw.toUpperCase()})`,
+        categoria: 'Cuidado & Detailing',
+        precio: '$9.50',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Mantenimiento automotriz multimarca e industrial',
+        descripcionCorta: 'Fórmula original multiacción que penetra, lubrica, protege contra corrosión y desplaza la humedad.',
+        descripcionDetallada: `Aerosol profesional WD-40 ref. #${raw.toUpperCase()}. Válvula de doble acción para aplicación puntual o en abanico. Protección anticorrosiva indispensable en ambientes húmedos y marinos.`,
+        specs: [
+          'Dieléctrico: seguro para conectores, bornes y circuitos eléctricos',
+          'Poder penetrante instantáneo en tuercas y piezas oxidadas',
+          'Protección anticorrosiva de larga duración',
+          `Referencia WD-40: ${raw.toUpperCase()}`
+        ],
+        badge: 'WD-40 Company',
+        isImportedUSA: true,
+        img: '/assets/cat_detailing_cuidado.webp',
+        referencias: [`WD-40 ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/JOHNSEN|JOHNSENJ|2234|2232|4610|4700|6700/i.test(c)) {
+      const isBrake = /2234|2232|FRENO|BRAKE/i.test(c);
+      return {
+        titulo: isBrake
+          ? `Líquido de Frenos Johnsen's Premium DOT 4 / DOT 3 (#${raw.toUpperCase()})`
+          : `Fluido Químico Automotriz Johnsen's USA (#${raw.toUpperCase()})`,
+        categoria: isBrake ? 'Frenos & Discos' : 'Climatización & A/C',
+        precio: '$9.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Sistemas de frenos de disco y tambor con o sin frenos ABS / ESP multimarca',
+        descripcionCorta: 'Fluidos automotrices de grado profesional envasados en USA bajo estándares federales de seguridad vial.',
+        descripcionDetallada: `Fluido original Johnsen's USA ref. #${raw.toUpperCase()}. Alto punto de ebullición húmedo y seco para evitar vapor lock y garantizar respuesta hidráulica firme y segura.`,
+        specs: [
+          'Cumple con normativas federales FMVSS 116 y SAE J1703/J1704',
+          'Inhibidores de corrosión para proteger tuberías y pistones',
+          'Envasado y sellado en Estados Unidos',
+          `Referencia Johnsen's: ${raw.toUpperCase()}`
+        ],
+        badge: "Johnsen's USA",
+        isImportedUSA: true,
+        img: '/assets/cat_frenos_discos.webp',
+        referencias: [`Johnsen's ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/VALVOLINE|MAXLIFE|SYNPOWER/i.test(c)) {
+      return {
+        titulo: `Aceite de Motor / Transmisión Valvoline Advanced (#${raw.toUpperCase()})`,
+        categoria: 'Aceites & Lubricantes',
+        precio: '$14.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Motores modernos a gasolina y transmisiones automáticas multimarca',
+        descripcionCorta: 'Lubricante formulado con tecnología antidesgaste avanzada para prolongar la vida útil del motor o transmisión.',
+        descripcionDetallada: `Lubricante premium Valvoline ref. #${raw.toUpperCase()}. Excelente estabilidad térmica en altas temperaturas de operación y protección superior contra lodos y depósitos de carbón.`,
+        specs: [
+          'Normas API SP / ILSAC GF-6A',
+          'Protección reforzada contra detonación a baja velocidad (LSPI)',
+          'Reducción de consumo de aceite por evaporación',
+          `Referencia Valvoline: ${raw.toUpperCase()}`
+        ],
+        badge: 'Valvoline USA',
+        isImportedUSA: true,
+        img: '/assets/cat_aceites_lubricantes.webp',
+        referencias: [`Valvoline ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/CASTROL|MAGNATEC|EDGE/i.test(c)) {
+      return {
+        titulo: `Aceite de Motor Sintético Castrol Advanced Performance (#${raw.toUpperCase()})`,
+        categoria: 'Aceites & Lubricantes',
+        precio: '$15.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Vehículos a gasolina y turbo alimentados multimarca',
+        descripcionCorta: 'Aceite de motor con tecnología de moléculas inteligentes y titanio líquido para máxima resistencia a la presión.',
+        descripcionDetallada: `Lubricante sintético Castrol ref. #${raw.toUpperCase()}. Brinda protección instantánea desde el momento del arranque y reduce la fricción en exigencia severa.`,
+        specs: [
+          'Homologaciones API SP / ACEA C3 / A3/B4',
+          'Fluidez inmediata en arranques en frío',
+          'Película lubricante reforzada contra cizallamiento',
+          `Referencia Castrol: ${raw.toUpperCase()}`
+        ],
+        badge: 'Castrol Performance',
+        isImportedUSA: true,
+        img: '/assets/cat_aceites_lubricantes.webp',
+        referencias: [`Castrol ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/TYC/i.test(c)) {
+      return {
+        titulo: `Componente de Iluminación / Refrigeración TYC Certified (#${raw.toUpperCase()})`,
+        categoria: 'Climatización & A/C',
+        precio: '$68.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Aplicaciones según modelo específico (Toyota, Jeep, Ford, Chevrolet, Honda)',
+        descripcionCorta: 'Repuesto de reemplazo directo con especificaciones geométricas y ópticas equivalentes al equipo original.',
+        descripcionDetallada: `Pieza automotriz certificada TYC ref. #${raw.toUpperCase()}. Calce exacto Plug & Play sin adaptaciones. Fabricada con materiales de alta durabilidad y protección UV contra amarilleo.`,
+        specs: [
+          'Certificaciones de calidad internacional ISO/TS 16949 y DOT/SAE',
+          'Lente de policarbonato de alta resistencia a impactos y radiación solar',
+          'Enchufes y fijaciones idénticas a la pieza de fábrica',
+          `Referencia TYC: ${raw.toUpperCase()}`
+        ],
+        badge: 'TYC Automotive',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`TYC ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/K&N|KN|332385|332129|HP1002|HP2011/i.test(c)) {
+      return {
+        titulo: `Filtro de Aire / Aceite de Alto Flujo K&N High-Flow (#${raw.toUpperCase()})`,
+        categoria: 'Filtros & Mantenimiento',
+        precio: '$72.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Encaje directo en caja de aire original (Drop-in OEM) según modelo',
+        descripcionCorta: 'Filtro de alto rendimiento diseñado para aumentar el flujo de aire y aceleración con máxima protección.',
+        descripcionDetallada: `Filtro de rendimiento K&N Engineering USA ref. #${raw.toUpperCase()}. Construido con gasa de algodón multicapa engrasada para protección superior del motor y respuesta inmediata al acelerador.`,
+        specs: [
+          'Lavable y reutilizable de por vida con kit de mantenimiento K&N',
+          'Hasta un 50% más de flujo de aire que los filtros de papel tradicionales',
+          'Garantía limitada de 1 millón de millas',
+          `Referencia K&N: ${raw.toUpperCase()}`
+        ],
+        badge: 'K&N Engineering USA',
+        isImportedUSA: true,
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        referencias: [`K&N ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/WAGNER|QC1083|QC1363|QC1303|ZD1083|THERMOQUIET/i.test(c)) {
+      return {
+        titulo: `Pastillas de Freno Cerámicas Wagner ThermoQuiet (#${raw.toUpperCase()})`,
+        categoria: 'Frenos & Discos',
+        precio: '$52.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Vehículos americanos y japoneses (Jeep, Ford, Chevrolet, Toyota)',
+        descripcionCorta: 'Pastillas de freno cerámicas silenciosas con tecnología IMI moldeada de una sola pieza para disipar calor y vibraciones.',
+        descripcionDetallada: `Juego de pastillas de freno Wagner ThermoQuiet ref. #${raw.toUpperCase()}. Formulación cerámica 100% libre de cobre para frenado suave, potente y libre de chirridos.`,
+        specs: [
+          'Aislador moldeado integrado que elimina laminillas sueltas',
+          'Baja emisión de polvillo en rines y máxima duración de discos',
+          'Ranuras y biseles específicos de equipo original',
+          `Referencia Wagner: ${raw.toUpperCase()}`
+        ],
+        badge: 'Wagner ThermoQuiet USA',
+        isImportedUSA: true,
+        img: '/assets/cat_frenos_discos.webp',
+        referencias: [`Wagner ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/BOSCH|0258|0280|0580/i.test(c)) {
+      return {
+        titulo: `Componente de Inyección / Encendido Bosch Alemania OEM (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$38.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Línea automotriz multimarca (consultar aplicación por VIN)',
+        descripcionCorta: 'Tecnología alemana de equipo original para máxima precisión de combustible, encendido o monitoreo electrónico.',
+        descripcionDetallada: `Componente original Bosch ref. #${raw.toUpperCase()}. Calibración estricta y fiabilidad superior probada en las exigencias más altas de la industria automotriz.`,
+        specs: [
+          'Fabricación bajo tolerancias de equipo original de planta',
+          'Resistencia superior a la corrosión y altas temperaturas de motor',
+          'Respaldo de calidad y durabilidad Bosch',
+          `Referencia Bosch: ${raw.toUpperCase()}`
+        ],
+        badge: 'Bosch Germany',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`Bosch ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/RAYBESTOS|RAYBESTO|ELEMENT3/i.test(c)) {
+      return {
+        titulo: `Pastillas / Discos de Freno Raybestos Element3 Hybrid (#${raw.toUpperCase()})`,
+        categoria: 'Frenos & Discos',
+        precio: '$48.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Vehículos SUV, pickups y sedanes (Jeep, Toyota, Ford, GM)',
+        descripcionCorta: 'Fricción híbrida avanzada (EHT) que une lo mejor de la cerámica y el semimetálico para frenadas enérgicas y silenciosas.',
+        descripcionDetallada: `Pastillas de freno Raybestos Element3 ref. #${raw.toUpperCase()}. Diseñadas en USA para máxima potencia de frenado y vida útil extendida de los componentes de fricción.`,
+        specs: [
+          'Formulación híbrida de fricción mejorada Element3 EHT',
+          'Laminillas multicapa de acero inoxidable para control de ruido',
+          'Alto coeficiente de fricción ante exigencias de temperatura',
+          `Referencia Raybestos: ${raw.toUpperCase()}`
+        ],
+        badge: 'Raybestos Brakes USA',
+        isImportedUSA: true,
+        img: '/assets/cat_frenos_discos.webp',
+        referencias: [`Raybestos ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/YUKKAZO/i.test(c)) {
+      return {
+        titulo: `Rótula / Terminal de Dirección & Suspensión Yukkazo HD (#${raw.toUpperCase()})`,
+        categoria: 'Suspensión & Amortiguadores',
+        precio: '$26.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota (Hilux, Fortuner, 4Runner, Corolla), Jeep (Cherokee, Grand Cherokee), Ford y Chevrolet',
+        descripcionCorta: 'Componente de tren delantero forjado en acero tratado térmicamente para soportar trabajo rudo.',
+        descripcionDetallada: `Pieza de suspensión Yukkazo ref. #${raw.toUpperCase()}. Rótula pre-engrasada con guardapolvo estanco de cloropreno que evita la entrada de polvo y humedad.`,
+        specs: [
+          'Acero forjado estructural de alta resistencia mecánica',
+          'Fuelle protector con anillos de retención elásticos',
+          'Alineación precisa y eliminación de holguras en volante',
+          `Referencia Yukkazo: ${raw.toUpperCase()}`
+        ],
+        badge: 'Yukkazo Suspension',
+        isImportedUSA: true,
+        img: '/assets/cat_suspension_amortiguadores.webp',
+        referencias: [`Yukkazo ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/GATES/i.test(c)) {
+      return {
+        titulo: `Correa de Serpentín / Distribución Gates Micro-V Heavy Duty (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$34.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Sistemas de accesorios de motor (alternador, bomba de agua, dirección hidráulica y compresor A/C)',
+        descripcionCorta: 'Correa automotriz construida con compuesto de caucho EPDM reforzado con cuerdas de aramida para evitar ruidos y elongación.',
+        descripcionDetallada: `Correa de alta durabilidad Gates USA ref. #${raw.toUpperCase()}. Diseñada para operar sin ruidos ni deslizamientos bajo temperaturas extremas de compartimiento de motor.`,
+        specs: [
+          'Material EPDM resistente al calor, ozono y fluidos de motor',
+          'Perfil de ranuras rectificado de precisión que elimina ruidos',
+          'Vida útil estimada de más de 100.000 km',
+          `Referencia Gates: ${raw.toUpperCase()}`
+        ],
+        badge: 'Gates USA',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`Gates ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/ACDELCO|PF47|PF48|PF63|41110|41162/i.test(c)) {
+      return {
+        titulo: `Repuesto Original GM / Filtro / Bujía ACDelco (#${raw.toUpperCase()})`,
+        categoria: 'Filtros & Mantenimiento',
+        precio: '$35.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Vehículos Chevrolet, GM y multimarca',
+        descripcionCorta: 'Equipo original validado por General Motors para vehículos Chevrolet, GMC y aplicaciones multimarca.',
+        descripcionDetallada: `Componente certificado ACDelco ref. #${raw.toUpperCase()}. Rendimiento garantizado y compatibilidad exacta con los estándares de fábrica de General Motors.`,
+        specs: [
+          'Fabricación bajo rigurosas especificaciones de equipo original (OE)',
+          'Excelente rendimiento y resistencia en uso severo',
+          'Respaldo de garantía y autenticidad ACDelco',
+          `Referencia ACDelco: ${raw.toUpperCase()}`
+        ],
+        badge: 'ACDelco GM Original',
+        isImportedUSA: true,
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        referencias: [`ACDelco ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/NGK|IRIDIUMIX|LFR6AIX|BKR6EIX|LZKAR6AP|ILKAR7B11|TR55IX/i.test(c)) {
+      return {
+        titulo: `Juego de Bujías de Iridio NGK Iridium IX High Performance (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$44.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Motores modernos a gasolina de alta compresión y turboalimentados',
+        descripcionCorta: 'Electrodo ultrafino de iridio de 0.6 mm soldado por láser para máxima inflamabilidad y chispa potente.',
+        descripcionDetallada: `Juego de bujías NGK Spark Plugs Japón ref. #${raw.toUpperCase()}. Proporciona aceleración más rápida, ralentí perfectamente estable y resistencia superior al desgaste por arco eléctrico.`,
+        specs: [
+          'Punta de iridio con corte cónico en el electrodo de tierra',
+          'Revestimiento metálico trivalente anticorrosión y antiadherente',
+          'Durabilidad estimada de hasta 100.000 km',
+          `Referencia NGK: ${raw.toUpperCase()}`
+        ],
+        badge: 'NGK Spark Plugs Japan',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`NGK ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/DENSO|SK20R11|IK20|IK16|SC20HR11|2349049|2344209/i.test(c)) {
+      return {
+        titulo: `Bujía / Sensor de Oxígeno / Alternador Denso Japan OEM (#${raw.toUpperCase()})`,
+        categoria: 'Inyección & Motor',
+        precio: '$45.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota, Honda, Subaru, Suzuki y marcas compatibles',
+        descripcionCorta: 'Equipamiento original de las marcas líderes japonesas. Máxima precisión de lectura y durabilidad electrónica.',
+        descripcionDetallada: `Componente original Denso Japón ref. #${raw.toUpperCase()}. Diseñado para igualar o superar el rendimiento de las piezas instaladas en la línea de montaje de fábrica.`,
+        specs: [
+          'Fabricación japonesa de precisión milimétrica',
+          'Ajuste directo First Time Fit sin adaptaciones',
+          'Máxima eficiencia en consumo y emisiones de escape',
+          `Referencia Denso: ${raw.toUpperCase()}`
+        ],
+        badge: 'Denso Japan OEM',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`Denso ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/WIX|51348|51515|57060|51372|33002/i.test(c)) {
+      return {
+        titulo: `Filtro de Aceite / Aire / Combustible WIX Filters XP Heavy Duty (#${raw.toUpperCase()})`,
+        categoria: 'Filtros & Mantenimiento',
+        precio: '$16.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Pickups, SUVs y vehículos de trabajo pesado (Jeep, Ford, Dodge, Chevrolet, Toyota)',
+        descripcionCorta: 'Filtración sintética pesada WIX XP diseñada para intervalos extendidos de mantenimiento y máxima retención.',
+        descripcionDetallada: `Filtro premium WIX Filters USA ref. #${raw.toUpperCase()}. Medio filtrante sintético reforzado que resiste altas presiones y flujo continuo de lubricante limpio.`,
+        specs: [
+          'Válvula de silicona antidrenaje resistente a altas temperaturas',
+          'Retención del 99% de partículas dañinas en aceite',
+          'Carcasa de acero reforzado contra golpes y sobrepresión',
+          `Referencia WIX: ${raw.toUpperCase()}`
+        ],
+        badge: 'WIX Filters USA',
+        isImportedUSA: true,
+        img: '/assets/cat_filtros_mantenimiento.webp',
+        referencias: [`WIX ${raw.toUpperCase()}`]
+      };
+    }
+
+    if (/WINNER|24MR800|34850|42700|78900|27850/i.test(c)) {
+      return {
+        titulo: `Batería Automotriz Sellada Winner Calcio-Plata Libre de Mantenimiento (#${raw.toUpperCase()})`,
+        categoria: 'Baterías & Eléctrico',
+        precio: '$95.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Línea liviana y pesada de vehículos nacionales e importados',
+        descripcionCorta: 'Batería automotriz sellada con placas de aleación Calcio-Plata de alto amperaje de arranque en frío (CCA).',
+        descripcionDetallada: `Batería Winner sellada ref. #${raw.toUpperCase()}. Diseñada para soportar altas temperaturas tropicales y vibraciones en baches y terrenos difíciles sin pérdida de electrolito.`,
+        specs: [
+          'Tecnología Calcio-Plata de mínima autodescarga',
+          'Ojo visor indicador de estado de carga integrado',
+          'Garantía y chequeo del sistema eléctrico en Taller MasterTech',
+          `Referencia Winner: ${raw.toUpperCase()}`
+        ],
+        badge: 'Winner Baterías Selladas',
+        isImportedUSA: false,
+        img: '/assets/cat_baterias_electrico.webp',
+        referencias: [`Winner ${raw.toUpperCase()}`]
+      };
+    }
+
     // POLY-V / SERPENTINE BELT — 6PK389, PK389-16N00-TP, 7PK1105, 8PK2030
 
     const beltM = seg0.match(/^([0-9]?)PK([0-9]{3,5})$/i) || c.match(/^([0-9]?)PK([0-9]{3,5})/);
@@ -3977,15 +4387,37 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
 
         // Detect Brand
         const brandList = [
-          { name: 'Toyota', regex: /\btoyota\b|\bscion\b|\blexus\b/i, badge: 'Toyota Genuine Parts' },
+          { name: 'Toyota Genuine Parts', regex: /\btoyota\b|\bscion\b|\blexus\b/i, badge: 'Toyota Genuine Parts OEM' },
+          { name: 'Honda Genuine Parts', regex: /\bhonda\b|\bacura\b/i, badge: 'Honda Genuine Parts OEM' },
+          { name: 'Mopar', regex: /\bmopar\b|\bjeep\b|\bchrysler\b|\bdodge\b|\bram\b/i, badge: 'Mopar Genuine Parts' },
+          { name: 'Permatex', regex: /\bpermatex\b|\bultra grey\b|\bultra black\b|\bultra copper\b|\btrabarroscas\b/i, badge: 'Permatex USA' },
+          { name: 'Liqui Moly', regex: /\bliqui\s*moly\b|\bceratec\b|\bmolygen\b|\btop tec\b/i, badge: 'Liqui Moly Germany' },
+          { name: 'WD-40', regex: /\bwd-?40\b/i, badge: 'WD-40 Company' },
+          { name: "Johnsen's", regex: /\bjohnsen(?:s|j)?\b/i, badge: "Johnsen's USA" },
+          { name: 'Valvoline', regex: /\bvalvoline\b|\bmaxlife\b|\bsynpower\b/i, badge: 'Valvoline USA' },
+          { name: 'Castrol', regex: /\bcastrol\b|\bmagnatec\b/i, badge: 'Castrol Performance' },
+          { name: 'TYC', regex: /\btyc\b/i, badge: 'TYC Automotive' },
+          { name: 'K&N', regex: /\bk&n\b|\bkn filters?\b/i, badge: 'K&N Engineering USA' },
+          { name: 'Wagner', regex: /\bwagner\b|\bthermoquiet\b/i, badge: 'Wagner ThermoQuiet USA' },
+          { name: 'Bosch', regex: /\bbosch\b/i, badge: 'Bosch Germany' },
+          { name: 'Raybestos', regex: /\braybestos?\b|\belement3\b/i, badge: 'Raybestos Brakes USA' },
+          { name: 'Yukkazo', regex: /\byukkazo\b/i, badge: 'Yukkazo Suspension' },
+          { name: 'Gates', regex: /\bgates\b|\bmicro-v\b/i, badge: 'Gates USA' },
+          { name: 'ACDelco', regex: /\bacdelco\b|\bac delco\b|\bgm\b|\bchevrolet\b|\bchevy\b/i, badge: 'ACDelco GM Original' },
+          { name: 'NGK', regex: /\bngk\b|\biridium ix\b/i, badge: 'NGK Spark Plugs Japan' },
+          { name: 'Denso', regex: /\bdenso\b/i, badge: 'Denso Japan OEM' },
+          { name: 'WIX Filters', regex: /\bwix\b/i, badge: 'WIX Filters USA' },
+          { name: 'Winner', regex: /\bwinner\b/i, badge: 'Winner Baterías Selladas' },
+          { name: 'Brembo', regex: /\bbrembo\b/i, badge: 'Brembo Racing' },
+          { name: 'KYB', regex: /\bkyb\b/i, badge: 'KYB Japan' },
+          { name: 'Monroe', regex: /\bmonroe\b/i, badge: 'Monroe Shocks' },
+          { name: 'Motul', regex: /\bmotul\b/i, badge: 'Motul France' },
+          { name: 'Duncan', regex: /\bduncan\b/i, badge: 'Duncan Baterías' },
           { name: 'Koyo (JTEKT Japan)', regex: /\bkoyo\b|\bjtekt\b/i, badge: 'Koyo OEM Japan' },
           { name: 'Timken', regex: /\btimken\b/i, badge: 'Timken USA OEM' },
           { name: 'Nachi', regex: /\bnachi\b/i, badge: 'Nachi Japan OEM' },
           { name: 'SKF', regex: /\bskf\b/i, badge: 'SKF Original' },
-          { name: 'Mopar / Jeep', regex: /\bmopar\b|\bjeep\b|\bchrysler\b|\bdodge\b|\bram\b/i, badge: 'Mopar Genuine Parts' },
           { name: 'Ford', regex: /\bford\b|\bmotorcraft\b|\blincoln\b/i, badge: 'Motorcraft OEM Parts' },
-          { name: 'Chevrolet / GM', regex: /\bgm\b|\bchevrolet\b|\bchevy\b|\bacdelco\b|\bgmc\b/i, badge: 'GM Genuine Parts' },
-          { name: 'Honda', regex: /\bhonda\b|\bacura\b/i, badge: 'Honda Genuine Parts' },
           { name: 'Nissan', regex: /\bnissan\b|\binfiniti\b/i, badge: 'Nissan Genuine Parts' },
           { name: 'Hyundai', regex: /\bhyundai\b|\bkia\b|\bmobis\b/i, badge: 'Hyundai / Mobis OEM' }
         ];

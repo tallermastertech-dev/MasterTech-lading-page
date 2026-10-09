@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
@@ -357,25 +357,38 @@ const CATEGORIES = [
 ];
 
 export const OEM_BRANDS = [
-  { name: "Todas", label: "Todas las Marcas", badge: "Catálogo Completo" },
-  { name: "Brembo", label: "Brembo", origin: "Italia · Frenos", color: "from-red-600 to-rose-700" },
-  { name: "Mopar", label: "Mopar", origin: "USA · Original OEM", color: "from-blue-600 to-indigo-700" },
-  { name: "Wagner", label: "Wagner", origin: "USA · Cerámica", color: "from-amber-600 to-yellow-700" },
-  { name: "Monroe", label: "Monroe", origin: "USA · Amortiguadores", color: "from-yellow-600 to-amber-700" },
-  { name: "KYB", label: "KYB", origin: "Japón · Suspensión", color: "from-red-500 to-orange-600" },
-  { name: "Motul", label: "Motul", origin: "Francia · Lubricantes", color: "from-red-600 to-red-800" },
-  { name: "Mobil 1", label: "Mobil 1", origin: "USA · Sintético", color: "from-blue-700 to-sky-700" },
-  { name: "Duncan", label: "Duncan", origin: "Líder VE · Baterías", color: "from-emerald-600 to-teal-700" },
-  { name: "ACDelco", label: "ACDelco", origin: "GM Original · Baterías", color: "from-blue-600 to-cyan-700" },
-  { name: "Denso", label: "Denso", origin: "Japón · Alternadores", color: "from-red-700 to-rose-800" },
-  { name: "Bosch", label: "Bosch", origin: "Alemania · Inyección", color: "from-blue-800 to-slate-800" },
-  { name: "K&N", label: "K&N", origin: "USA · Filtros Flujo", color: "from-orange-600 to-red-700" },
-  { name: "Chemours", label: "Chemours", origin: "USA · Gas R134a", color: "from-cyan-600 to-blue-700" },
-  { name: "Prestone", label: "Prestone", origin: "USA · Coolant OAT", color: "from-yellow-500 to-amber-600" },
-  { name: "Garrett", label: "Garrett", origin: "USA · Turbo OEM", color: "from-slate-700 to-slate-900" },
-  { name: "Meguiar's", label: "Meguiar's", origin: "USA · Detailing", color: "from-purple-600 to-indigo-800" },
-  { name: "Koyo", label: "Koyo", origin: "Japón · Rodamientos OEM", color: "from-blue-700 to-teal-800" },
-  { name: "Timken", label: "Timken", origin: "USA · Rodamientos Ejes", color: "from-orange-600 to-amber-800" }
+  { name: "Todas", label: "Todas las Marcas", badge: "Catálogo Completo", origin: "Inventario General", color: "from-zinc-700 to-zinc-900" },
+  // Marcas Oficiales Solicitadas
+  { name: "Toyota Genuine Parts", label: "Toyota Genuine Parts", origin: "Japón · Original OEM", badge: "Genuino Toyota", color: "from-red-600 to-rose-700" },
+  { name: "Honda Genuine Parts", label: "Honda Genuine Parts", origin: "Japón · Original OEM", badge: "Genuino Honda", color: "from-red-700 to-zinc-800" },
+  { name: "Mopar", label: "Mopar", origin: "USA · Original OEM Jeep / RAM", badge: "Genuino Mopar", color: "from-blue-600 to-indigo-700" },
+  { name: "Bosch", label: "Bosch", origin: "Alemania · Inyección & Sensores", badge: "Tecnología Alemana", color: "from-blue-800 to-slate-800" },
+  { name: "Denso", label: "Denso", origin: "Japón · Sensores & Alternadores", badge: "Japón OEM", color: "from-red-700 to-rose-800" },
+  { name: "NGK", label: "NGK", origin: "Japón · Bujías Iridio & Bobinas", badge: "Líder en Encendido", color: "from-amber-500 to-red-600" },
+  { name: "ACDelco", label: "ACDelco", origin: "USA · GM Original & Filtros", badge: "Líder GM", color: "from-blue-600 to-cyan-700" },
+  { name: "Winner", label: "Winner", origin: "Líder VE · Baterías Selladas", badge: "Calcio-Plata", color: "from-emerald-600 to-teal-700" },
+  { name: "Wagner", label: "Wagner", origin: "USA · Cerámica ThermoQuiet", badge: "Frenos Cerámicos", color: "from-amber-600 to-yellow-700" },
+  { name: "Raybestos", label: "Raybestos", origin: "USA · Frenos & Rotores Element3", badge: "Frenos Premium", color: "from-red-700 to-slate-800" },
+  { name: "Gates", label: "Gates", origin: "USA · Correas Micro-V & Tiempo", badge: "Distribución Heavy Duty", color: "from-red-600 to-red-800" },
+  { name: "WIX Filters", label: "WIX Filters", origin: "USA · Filtración Sintética XP", badge: "Filtración Pesada", color: "from-amber-500 to-yellow-600" },
+  { name: "K&N", label: "K&N", origin: "USA · Filtros de Alto Flujo", badge: "Alto Rendimiento", color: "from-orange-600 to-red-700" },
+  { name: "Liqui Moly", label: "Liqui Moly", origin: "Alemania · Lubricantes & Ceratec", badge: "Lubricantes Premium", color: "from-blue-600 to-red-600" },
+  { name: "Valvoline", label: "Valvoline", origin: "USA · Aceites MaxLife & ATF", badge: "Sintéticos Avanzados", color: "from-blue-700 to-red-600" },
+  { name: "Castrol", label: "Castrol", origin: "UK/USA · EDGE Fluid Titanium", badge: "Máxima Presión", color: "from-emerald-600 to-red-600" },
+  { name: "Permatex", label: "Permatex", origin: "USA · Siliconas RTV & Químicos", badge: "Selladores & RTV", color: "from-blue-600 to-cyan-700" },
+  { name: "WD-40", label: "WD-40", origin: "USA · Lubricación & Dieléctrico", badge: "Multiuso & Protección", color: "from-blue-700 to-amber-500" },
+  { name: "Johnsen's", label: "Johnsen's", origin: "USA · Fluidos de Freno & A/C", badge: "Fluidos Certificados", color: "from-amber-600 to-orange-700" },
+  { name: "TYC", label: "TYC", origin: "Taiwán/USA · Iluminación & Radiadores", badge: "Calce Directo CAPA", color: "from-sky-600 to-blue-800" },
+  { name: "Yukkazo", label: "Yukkazo", origin: "Japón/VE · Rótulas & Suspensión", badge: "Tren Delantero", color: "from-yellow-600 to-amber-700" },
+  // Complementarias de Alto Rendimiento
+  { name: "Brembo", label: "Brembo", origin: "Italia · Frenos de Rendimiento", badge: "Brembo Racing", color: "from-red-600 to-rose-700" },
+  { name: "KYB", label: "KYB", origin: "Japón · Amortiguadores", badge: "Suspensión Japón", color: "from-red-500 to-orange-600" },
+  { name: "Monroe", label: "Monroe", origin: "USA · Amortiguadores Gas", badge: "Confort & Control", color: "from-yellow-600 to-amber-700" },
+  { name: "Motul", label: "Motul", origin: "Francia · Lubricantes 100% Sintéticos", badge: "300V & 8100", color: "from-red-600 to-red-800" },
+  { name: "Mobil 1", label: "Mobil 1", origin: "USA · Sintético Avanzado", badge: "Protección Total", color: "from-blue-700 to-sky-700" },
+  { name: "Duncan", label: "Duncan", origin: "Líder VE · Baterías Automotrices", badge: "Garantía Nacional", color: "from-emerald-600 to-teal-700" },
+  { name: "Koyo", label: "Koyo", origin: "Japón · Rodamientos OEM", badge: "Rodamientos Japón", color: "from-blue-700 to-teal-800" },
+  { name: "Timken", label: "Timken", origin: "USA · Rodamientos Ejes & Piñón", badge: "Carga Pesada", color: "from-orange-600 to-amber-800" }
 ];
 
 export interface VehicleSubModelOption {
@@ -972,6 +985,75 @@ export default function Catalogo() {
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [isCatalogLoading, setIsCatalogLoading] = useState(true);
 
+  // 3D Hero Carousel State (Up to 5 images)
+  const heroImages = useMemo(() => {
+    let list: string[] = [];
+    if (config.CATALOG_HERO_IMAGES_JSON) {
+      try {
+        const parsed = JSON.parse(config.CATALOG_HERO_IMAGES_JSON);
+        if (Array.isArray(parsed)) {
+          list = parsed.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+        }
+      } catch (e) {}
+    }
+    if (list.length === 0) {
+      const candidates = [
+        config.CATALOG_HERO_IMG,
+        config.CATALOG_HERO_IMG_2,
+        config.CATALOG_HERO_IMG_3,
+        config.CATALOG_HERO_IMG_4,
+        config.CATALOG_HERO_IMG_5
+      ].filter((img): img is string => typeof img === 'string' && img.trim().length > 0);
+      list = candidates;
+    }
+    if (list.length === 0) {
+      list = ["/assets/autoparts_hero_showcase.webp"];
+    }
+    return list.slice(0, 5);
+  }, [
+    config.CATALOG_HERO_IMAGES_JSON,
+    config.CATALOG_HERO_IMG,
+    config.CATALOG_HERO_IMG_2,
+    config.CATALOG_HERO_IMG_3,
+    config.CATALOG_HERO_IMG_4,
+    config.CATALOG_HERO_IMG_5
+  ]);
+
+  const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+  const [isHeroHovered, setIsHeroHovered] = useState(false);
+  const touchStartXRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (heroImages.length <= 1 || isHeroHovered) return;
+    const interval = setInterval(() => {
+      setCurrentHeroSlide(prev => (prev + 1) % heroImages.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [heroImages.length, isHeroHovered]);
+
+  useEffect(() => {
+    if (currentHeroSlide >= heroImages.length) {
+      setCurrentHeroSlide(0);
+    }
+  }, [heroImages.length, currentHeroSlide]);
+
+  const handleTouchStartHero = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEndHero = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    touchStartXRef.current = null;
+    if (Math.abs(deltaX) > 40) {
+      if (deltaX < 0) {
+        setCurrentHeroSlide(prev => (prev + 1) % heroImages.length);
+      } else {
+        setCurrentHeroSlide(prev => (prev - 1 + heroImages.length) % heroImages.length);
+      }
+    }
+  };
+
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedBrand, setSelectedBrand] = useState<string>("Todas");
   const [selectedVehicle, setSelectedVehicle] = useState<string>("Todos");
@@ -1523,10 +1605,36 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
       const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
 
       // 2. Brand filter
-      const matchesBrand = selectedBrand === "Todas" || 
-        (item.badge && item.badge.toLowerCase().includes(selectedBrand.toLowerCase())) ||
-        item.title.toLowerCase().includes(selectedBrand.toLowerCase()) ||
-        (item.desc && item.desc.toLowerCase().includes(selectedBrand.toLowerCase()));
+      let matchesBrand = selectedBrand === "Todas";
+      if (!matchesBrand) {
+        const selLower = selectedBrand.toLowerCase();
+        const searchTerms = [selLower];
+        if (selLower.includes('toyota')) searchTerms.push('toyota');
+        if (selLower.includes('honda')) searchTerms.push('honda');
+        if (selLower.includes('wix')) searchTerms.push('wix');
+        if (selLower.includes('wd-40') || selLower.includes('wd40')) searchTerms.push('wd-40', 'wd40');
+        if (selLower.includes('johnsen')) searchTerms.push('johnsen');
+        if (selLower.includes('raybest')) searchTerms.push('raybesto', 'raybestos');
+        if (selLower.includes('winner')) searchTerms.push('winner');
+        if (selLower.includes('mopar')) searchTerms.push('mopar');
+        if (selLower.includes('permatex')) searchTerms.push('permatex');
+        if (selLower.includes('liqui moly') || selLower.includes('liquimoly')) searchTerms.push('liqui moly', 'liquimoly');
+        if (selLower.includes('valvoline')) searchTerms.push('valvoline');
+        if (selLower.includes('castrol')) searchTerms.push('castrol');
+        if (selLower.includes('acdelco') || selLower.includes('ac delco')) searchTerms.push('acdelco', 'ac delco');
+        if (selLower.includes('yukkazo')) searchTerms.push('yukkazo');
+        if (selLower.includes('k&n') || selLower.includes('kn')) searchTerms.push('k&n', 'kn');
+        if (selLower.includes('tyc')) searchTerms.push('tyc');
+        if (selLower.includes('wagner')) searchTerms.push('wagner');
+        if (selLower.includes('bosch')) searchTerms.push('bosch');
+        if (selLower.includes('gates')) searchTerms.push('gates');
+        if (selLower.includes('ngk')) searchTerms.push('ngk');
+        if (selLower.includes('denso')) searchTerms.push('denso');
+
+        const fullProductText = `${item.badge || ''} ${item.title || ''} ${item.desc || ''} ${item.longDesc || ''} ${(item.specs || []).join(' ')} ${item.compatibility || ''} ${item.partNumber || ''}`.toLowerCase();
+
+        matchesBrand = searchTerms.some(term => fullProductText.includes(term));
+      }
 
       // 3. Vehicle compatibility filter (from step selector or legacy)
       let matchesVehicle = true;
@@ -1720,12 +1828,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 pt-3 text-[11px] text-slate-500 dark:text-slate-400">
                 <span className="font-semibold text-slate-700 dark:text-slate-300 mr-1">Búsquedas rápidas:</span>
                 {[
-                  "Brembo",
+                  "Toyota Genuine",
+                  "Mopar",
+                  "Bosch",
+                  "Liqui Moly",
+                  "Permatex",
                   "Wagner",
-                  "Motul 5W-30",
-                  "KYB",
-                  "Batería Duncan",
-                  "Mopar"
+                  "Denso",
+                  "Gates",
+                  "Valvoline",
+                  "ACDelco",
+                  "Winner"
                 ].map((tag) => (
                   <button
                     key={tag}
@@ -1743,28 +1856,85 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </div>
             </div>
 
-            {/* Right 3D Auto Parts Visual */}
+            {/* Right 3D Auto Parts Visual - Carousel up to 5 images */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
               className="lg:col-span-6 flex items-center justify-center relative"
             >
-              <div className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group">
-                <img 
-                  src={config.CATALOG_HERO_IMG || "/assets/autoparts_hero_showcase.webp"} 
-                  alt="Auto Parts Showcase MasterTech"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
-                />
+              <div 
+                className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group select-none"
+                onMouseEnter={() => setIsHeroHovered(true)}
+                onMouseLeave={() => setIsHeroHovered(false)}
+                onTouchStart={handleTouchStartHero}
+                onTouchEnd={handleTouchEndHero}
+              >
+                {/* Images with smooth transition */}
+                <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.img 
+                      key={currentHeroSlide}
+                      src={heroImages[currentHeroSlide] || "/assets/autoparts_hero_showcase.webp"} 
+                      alt={`Auto Parts Showcase MasterTech ${currentHeroSlide + 1}`}
+                      loading="lazy"
+                      decoding="async"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.03 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
+                    />
+                  </AnimatePresence>
+                </div>
 
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 dark:from-black/60 via-transparent to-transparent pointer-events-none" />
 
+                {/* Top Pagination Dots / Indicators (only if > 1 image) */}
+                {heroImages.length > 1 && (
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-slate-200 dark:border-white/15 z-20 shadow-md">
+                    {heroImages.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(idx); }}
+                        aria-label={`Ir a diapositiva ${idx + 1}`}
+                        className={`transition-all duration-300 rounded-full h-1.5 cursor-pointer ${
+                          idx === currentHeroSlide
+                            ? "w-6 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.9)]"
+                            : "w-2 bg-slate-400 dark:bg-white/40 hover:bg-slate-600 dark:hover:bg-white/80"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Left/Right Navigation Buttons (only if > 1 image) */}
+                {heroImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(prev => (prev - 1 + heroImages.length) % heroImages.length); }}
+                      aria-label="Imagen anterior"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg z-20 cursor-pointer"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(prev => (prev + 1) % heroImages.length); }}
+                      aria-label="Siguiente imagen"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg z-20 cursor-pointer"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </>
+                )}
+
                 {/* Floating Micro-Badge */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-md">
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-md z-10">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-600 dark:text-red-400 font-bold">
+                    <div className="w-8 h-8 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-600 dark:text-red-400 font-bold shrink-0">
                       <Flame size={16} />
                     </div>
                     <div>
@@ -1772,10 +1942,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <div className="text-[10px] text-slate-600 dark:text-slate-300">{config.CATALOG_HERO_SUBTITLE || "Rendimiento garantizado y compatibilidad exacta"}</div>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-lg border border-red-500/30">
-                    {config.CATALOG_HERO_BADGE || "OEM 100%"}
-                  </span>
-
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-lg border border-red-500/30">
+                      {config.CATALOG_HERO_BADGE || "OEM 100%"}
+                    </span>
+                    {heroImages.length > 1 && (
+                      <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
+                        {currentHeroSlide + 1}/{heroImages.length}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -2109,6 +2285,97 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   ¿SU VEHÍCULO NO SE ENCUENTRA EN EL CATÁLOGO?
                 </button>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION: MARCAS CON LAS QUE TRABAJAMOS (MARCAS CERTIFICADAS & ORIGINALES) */}
+        {/* ========================================================================= */}
+        <section id="marcas-aliadas" className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
+                <span className="text-[11px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider">Marcas Oficiales & Aliadas</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                <span>Marcas con las que Trabajamos</span> <span className="text-red-600 dark:text-red-400 italic">/ En Catálogo</span>
+              </h2>
+              <p className="text-xs text-slate-600 dark:text-zinc-400 mt-1">
+                Selecciona cualquier marca para filtrar de inmediato repuestos 100% genuinos y certificados con garantía.
+              </p>
+            </div>
+
+            {selectedBrand !== "Todas" && (
+              <button
+                type="button"
+                onClick={() => setSelectedBrand("Todas")}
+                className="text-xs text-red-600 dark:text-red-400 font-bold flex items-center gap-1.5 cursor-pointer bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-xl border border-red-500/20 transition-all self-start sm:self-auto shrink-0"
+              >
+                <X size={13} />
+                <span>Restablecer ({selectedBrand})</span>
+              </button>
+            )}
+          </div>
+
+          {/* Carrusel / Grid de Marcas */}
+          <div className="relative">
+            <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-700/50 scrollbar-track-transparent">
+              {OEM_BRANDS.map((brand) => {
+                const isSelected = selectedBrand === brand.name;
+                return (
+                  <button
+                    key={brand.name}
+                    type="button"
+                    onClick={() => {
+                      if (selectedBrand === brand.name) {
+                        setSelectedBrand("Todas");
+                      } else {
+                        setSelectedBrand(brand.name);
+                        const el = document.getElementById('catalogo-grid');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className={`flex-shrink-0 group relative p-3 rounded-2xl border transition-all duration-200 text-left cursor-pointer min-w-[170px] sm:min-w-[190px] flex flex-col justify-between ${
+                      isSelected
+                        ? 'bg-red-600/15 border-red-500 ring-2 ring-red-500/30 shadow-lg shadow-red-500/10'
+                        : 'bg-white dark:bg-[#12141a] border-slate-200 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-1.5 mb-1.5">
+                      <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                        isSelected 
+                          ? 'bg-red-600 text-white' 
+                          : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 group-hover:text-slate-900 dark:group-hover:text-white'
+                      }`}>
+                        {brand.badge || 'Certificado'}
+                      </span>
+                      {isSelected && (
+                        <CheckCircle2 size={13} className="text-red-500 shrink-0" />
+                      )}
+                    </div>
+
+                    <div>
+                      <h4 className={`text-sm font-black tracking-tight leading-snug truncate ${
+                        isSelected ? 'text-red-600 dark:text-red-400' : 'text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400'
+                      }`}>
+                        {brand.label}
+                      </h4>
+                      <p className="text-[10px] text-slate-500 dark:text-zinc-400 truncate mt-0.5">
+                        {brand.origin || 'Líder Automotriz'}
+                      </p>
+                    </div>
+
+                    <div className="mt-2 pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px]">
+                      <span className={`font-semibold ${isSelected ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-zinc-400'}`}>
+                        {isSelected ? 'Filtro Activo' : 'Ver Repuestos'}
+                      </span>
+                      <ArrowRight size={11} className={`transition-transform group-hover:translate-x-0.5 ${isSelected ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`} />
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
