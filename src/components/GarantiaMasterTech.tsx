@@ -241,189 +241,25 @@ export default function GarantiaMasterTech({ onOpenBooking }: GarantiaMasterTech
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
             Cero letra chica y cero improvisaciones. Toda intervención mecánica, eléctrica y repuesto suministrado en Taller MasterTech queda respaldado formalmente en tu orden digital de servicio.
           </p>
-        </div>
 
-        {/* ========================================================================= */}
-        {/* 2. MASTER GUARANTEE CERTIFICATE VAULT (EL CERTIFICADO REDISEÑADO)         */}
-        {/* ========================================================================= */}
-        <div className="relative rounded-3xl p-6 sm:p-10 lg:p-12 bg-gradient-to-br from-[#0e121a] via-[#121622] to-[#090b10] border border-white/15 shadow-2xl text-white overflow-hidden group">
-          
-          {/* Geometric tech grid & radial spotlight */}
-          <div className="absolute inset-0 bg-[radial-gradient(#ef4444_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/15 blur-[100px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setIsTermsModalOpen(true)}
+              className="px-5 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-zinc-100 font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            >
+              <FileText size={15} />
+              <span>Ver Términos &amp; Condiciones</span>
+            </button>
 
-          {/* Top Decorative Certificate Header Bar */}
-          <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/10 text-xs">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400">
-                <ShieldCheck size={16} />
-              </div>
-              <span className="font-mono font-bold tracking-wider uppercase text-zinc-300">
-                Certificado Oficial de Respaldo Técnico
-              </span>
-              <span className="hidden sm:inline-block text-zinc-600">•</span>
-              <span className="hidden sm:inline-block font-mono text-zinc-400">
-                Taller MasterTech · Porlamar, Isla de Margarita
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-mono text-[11px] font-bold text-emerald-400 tracking-wider uppercase">
-                Estado: Activo &amp; Vinculado a Orden Digital
-              </span>
-            </div>
-          </div>
-
-          {/* Main Certificate Grid */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8">
-            
-            {/* Left Side: Escudo / Sello Holográfico de Confianza */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-2xl bg-black/50 backdrop-blur-md border border-white/10 shadow-xl relative overflow-hidden">
-              
-              {/* Outer Glow Ring */}
-              <div className="relative flex items-center justify-center w-40 h-40 sm:w-48 sm:h-48 mb-6">
-                <div 
-                  className="absolute inset-0 rounded-full p-[3px] animate-spin" 
-                  style={{ animationDuration: '14s', background: 'conic-gradient(from 0deg, #ef4444, #f59e0b, #ef4444, transparent, transparent)' }}
-                >
-                  <div className="w-full h-full rounded-full bg-[#0d1017]" />
-                </div>
-                
-                <div className="absolute inset-3 rounded-full border border-red-500/25" />
-                <div className="absolute inset-6 rounded-full bg-red-600/15 blur-lg animate-pulse" style={{ animationDuration: '3s' }} />
-
-                {/* MasterTech Emblem */}
-                <div className="relative z-10 flex flex-col items-center justify-center">
-                  <img
-                    src="/logo.png"
-                    alt="Logo MasterTech"
-                    className="w-20 h-20 sm:w-24 sm:h-24 object-contain filter drop-shadow-[0_0_24px_rgba(239,68,68,0.85)] group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              </div>
-
-              {/* Title & Seal Details */}
-              <div className="space-y-1 mb-5">
-                <div className="font-display font-black text-2xl tracking-[0.15em] uppercase text-white">
-                  MASTER<span className="text-red-500 italic">TECH</span>
-                </div>
-                <div className="text-[11px] font-black tracking-[0.25em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-amber-400">
-                  Sello Oficial de Calidad y Respaldo
-                </div>
-                <p className="text-[10px] font-mono text-zinc-400 tracking-wider">
-                  REGISTRO: MT-CERT-2026-OFICIAL
-                </p>
-              </div>
-
-              {/* 3 Metric Capsules */}
-              <div className="grid grid-cols-3 gap-2 w-full pt-4 border-t border-white/10 text-center">
-                <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-                  <div className="text-base sm:text-lg font-black text-red-400">3–6</div>
-                  <div className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">Meses</div>
-                </div>
-                <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-                  <div className="text-base sm:text-lg font-black text-emerald-400">OEM</div>
-                  <div className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">Piezas</div>
-                </div>
-                <div className="p-2 rounded-xl bg-white/5 border border-white/5">
-                  <div className="text-base sm:text-lg font-black text-amber-400">100%</div>
-                  <div className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">Escrita</div>
-                </div>
-              </div>
-
-              {/* Bottom Note */}
-              <div className="mt-4 pt-3 flex items-center justify-center gap-1.5 text-[10px] font-bold text-zinc-300">
-                <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
-                <span>Estipulada formalmente en tu orden digital</span>
-              </div>
-            </div>
-
-            {/* Right Side: Declaración Ejecutiva & Acciones */}
-            <div className="lg:col-span-7 space-y-6">
-              
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 text-xs font-black tracking-wider uppercase text-red-400 bg-red-600/15 border border-red-500/30 px-3.5 py-1 rounded-full">
-                  <Sparkles size={14} className="text-red-400" />
-                  <span>Compromiso de Blindaje y Transparencia</span>
-                </div>
-
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white tracking-tight leading-tight">
-                  Garantía Directa en Mano de Obra y Repuestos Suministrados
-                </h2>
-
-                <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
-                  Cada reparación ejecutada en nuestras instalaciones cuenta con respaldo técnico formal estipulado en tu orden de servicio digital. Si suministramos el repuesto, la garantía es total (pieza + mano de obra). Si traes tu pieza, garantizamos el ensamble técnico con torquímetro y especificación de fábrica.
-                </p>
-              </div>
-
-              {/* 4 Feature Checkpoints */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.04] border border-white/10">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-xs font-bold text-white block">Trazabilidad por WhatsApp</span>
-                    <span className="text-[11px] text-zinc-400">Fotos y videos de la falla antes de iniciar.</span>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.04] border border-white/10">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-xs font-bold text-white block">Aprobación Previa Obligatoria</span>
-                    <span className="text-[11px] text-zinc-400">Presupuesto detallado sin costos sorpresa.</span>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.04] border border-white/10">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-xs font-bold text-white block">Torque de Manual Oficial</span>
-                    <span className="text-[11px] text-zinc-400">Ajuste con torquímetro según fabricante.</span>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.04] border border-white/10">
-                  <CheckCircle2 size={16} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-xs font-bold text-white block">Tasa Oficial BCV del Día</span>
-                    <span className="text-[11px] text-zinc-400">Cobro exacto en Bs sin recargos.</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-white/10">
-                <button
-                  type="button"
-                  onClick={() => setIsTermsModalOpen(true)}
-                  className="px-5 py-3 rounded-xl bg-white text-slate-900 hover:bg-zinc-200 font-bold text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2 cursor-pointer"
-                >
-                  <FileText size={16} />
-                  <span>Ver Términos &amp; Condiciones</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleWhatsAppInquiry}
-                  className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2 cursor-pointer"
-                >
-                  <MessageCircle size={16} />
-                  <span>Consultar por WhatsApp</span>
-                </button>
-
-                <a
-                  href="#faq-grid"
-                  className="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider transition-all border border-white/10 flex items-center gap-2"
-                >
-                  <span>Preguntas Frecuentes</span>
-                  <ArrowRight size={14} />
-                </a>
-              </div>
-
-            </div>
-
+            <button
+              type="button"
+              onClick={handleWhatsAppInquiry}
+              className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-2 cursor-pointer"
+            >
+              <MessageCircle size={15} />
+              <span>Consultar por WhatsApp</span>
+            </button>
           </div>
         </div>
 
