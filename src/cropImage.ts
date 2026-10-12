@@ -70,3 +70,48 @@ export default async function getCroppedImg(
 
   return canvas.toDataURL('image/jpeg', quality);
 }
+
+export async function getOptimizedFullImg(
+  imageSrc: string,
+  maxDimension: number = 1600,
+  quality: number = 0.85
+): Promise<string> {
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    return imageSrc;
+  }
+
+  let targetWidth = image.naturalWidth || image.width;
+  let targetHeight = image.naturalHeight || image.height;
+
+  if (maxDimension > 0 && (targetWidth > maxDimension || targetHeight > maxDimension)) {
+    if (targetWidth > targetHeight) {
+      targetHeight = Math.round((targetHeight * maxDimension) / targetWidth);
+      targetWidth = maxDimension;
+    } else {
+      targetWidth = Math.round((targetWidth * maxDimension) / targetHeight);
+      targetHeight = maxDimension;
+    }
+  }
+
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+  try {
+    const webpData = canvas.toDataURL('image/webp', quality);
+    if (webpData.startsWith('data:image/webp')) {
+      return webpData;
+    }
+  } catch (e) {}
+
+  return canvas.toDataURL('image/jpeg', quality);
+}
+
