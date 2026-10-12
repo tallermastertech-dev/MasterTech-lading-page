@@ -3319,25 +3319,114 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
       };
     }
 
-    if (/CASTROL|MAGNATEC|EDGE/i.test(c)) {
+    // ------------------------------------------------------------------
+    // CASTROL - LUBRICANTES Y ACEITES SINTÉTICOS DE MOTOR
+    // Incluye código 15B0D2 (Castrol EDGE High Mileage 0W-20 Full Synthetic 5QT Jug),
+    // 1597B2, 1598B1, 15B9AD, 15E728, 15D3BC, 152C82, 03124, 03084, 03083, GTX, EDGE, MAGNATEC
+    // ------------------------------------------------------------------
+    if (/^15B0D2$/i.test(c) || /15B0D2/i.test(rawC)) {
       return {
-        titulo: `Aceite de Motor Sintético Castrol Advanced Performance (#${raw.toUpperCase()})`,
+        titulo: 'Aceite de Motor Castrol EDGE High Mileage 0W-20 Full Synthetic Galón 5 Cuartos (#15B0D2)',
         categoria: 'Aceites & Lubricantes',
-        precio: '$15.00',
-        partNumber: raw.toUpperCase(),
-        compatibilidad: 'Vehículos a gasolina y turbo alimentados multimarca',
-        descripcionCorta: 'Aceite de motor con tecnología de moléculas inteligentes y titanio líquido para máxima resistencia a la presión.',
-        descripcionDetallada: `Lubricante sintético Castrol ref. #${raw.toUpperCase()}. Brinda protección instantánea desde el momento del arranque y reduce la fricción en exigencia severa.`,
+        precio: '$48.00',
+        partNumber: '15B0D2',
+        compatibilidad: 'Vehículos con más de 75,000 millas (Toyota, Honda, Jeep, Ford, Chevrolet, Nissan, Subaru, Lexus). Cumple Chrysler MS-6395, Ford WSS-M2C947-B1 / WSS-M2C962-A1',
+        descripcionCorta: 'Aceite 100% sintético avanzado de alta viscosidad SAE 0W-20 en presentación de 5 cuartos (4.73L) para motores con más de 75,000 millas.',
+        descripcionDetallada: 'Aceite de motor Castrol EDGE High Mileage SAE 0W-20 Full Synthetic ref. #15B0D2 (envase jug de 5 cuartos / 4.73 litros). Formulado específicamente para vehículos con más de 75,000 millas / 120,000 km. Incorpora tecnología de reemplazo de fósforo (Phosphorus Replacement Technology) para proteger convertidores catalíticos y sistemas de emisiones, junto con acondicionadores de sellos que reducen fugas, evaporación y quema de aceite.',
         specs: [
-          'Homologaciones API SP / ACEA C3 / A3/B4',
-          'Fluidez inmediata en arranques en frío',
-          'Película lubricante reforzada contra cizallamiento',
+          'Viscosidad: SAE 0W-20 100% Sintético Avanzado (Advanced Full Synthetic)',
+          'Presentación: Galón / Garrafa de 5 Cuartos de Galón (4.73 Litros / 5 Quarts)',
+          'Normas y Certificaciones: API SP, SN PLUS, SN, SM / ILSAC GF-6',
+          'Aprobaciones de Fabricante: Chrysler MS-6395, Ford WSS-M2C947-B1 / WSS-M2C962-A1',
+          'Tecnología High Mileage con protección antidesgaste para más de 75,000 millas',
+          'Referencia Castrol: 15B0D2'
+        ],
+        badge: 'Castrol USA Genuine',
+        isImportedUSA: true,
+        img: '/assets/cat_aceites_lubricantes.webp',
+        referencias: ['Castrol 15B0D2', 'Castrol EDGE High Mileage 0W-20', 'Castrol 03124']
+      };
+    }
+
+    if (/CASTROL|MAGNATEC|EDGE|GTX|1597B2|1598B1|15B9AD|15E728|15D3BC|152C82|15D4DC|03124|03084|03083/i.test(c)) {
+      const is0W20 = /0W-?20|1597B2|15E728|03124/i.test(c);
+      const is5W30 = /5W-?30|1598B1|15D3BC|03084/i.test(c);
+      const is5W20 = /5W-?20|15B9AD|152C82|03083/i.test(c);
+      const is10W30 = /10W-?30/i.test(c);
+      const is10W40 = /10W-?40|GTX/i.test(c);
+      const is20W50 = /20W-?50/i.test(c);
+      const visc = is0W20 ? '0W-20' : is5W30 ? '5W-30' : is5W20 ? '5W-20' : is10W30 ? '10W-30' : is10W40 ? '10W-40' : is20W50 ? '20W-50' : 'Sintético Avanzado';
+      const isJug = /1597B2|1598B1|15B9AD|03124|03084|03083|JUG|GALON|5QT/i.test(c);
+
+      return {
+        titulo: `Aceite de Motor Castrol EDGE / Magnatec ${visc} ${isJug ? 'Galón 5QT' : '1 Cuarto'} (#${raw.toUpperCase()})`,
+        categoria: 'Aceites & Lubricantes',
+        precio: isJug ? '$46.00' : '$14.50',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Vehículos a gasolina, turbocargados y de inyección directa GDI (Toyota, Jeep, Ford, Chevrolet, Honda, Hyundai, Nissan). Normas API SP / ILSAC GF-6',
+        descripcionCorta: `Lubricante de motor Castrol con tecnología Fluid TITANIUM o moléculas inteligentes Magnatec para protección instantánea antidesgaste.`,
+        descripcionDetallada: `Aceite de motor Castrol original grado ${visc} ref. #${raw.toUpperCase()}. Diseñado para soportar presiones extremas de operación, evitar detonación prematura (LSPI) y mantener la fluidez térmica ideal en arranques y trabajo continuo.`,
+        specs: [
+          `Viscosidad: SAE ${visc}`,
+          `Presentación: ${isJug ? 'Garrafa de 5 Cuartos (4.73 Litros)' : 'Botella de 1 Cuarto (946 ml)'}`,
+          'Normas internacionales: API SP / ILSAC GF-6A / ACEA A3/B4 / C3',
+          'Protección comprobada contra lodos, barnices y fricción de componentes internos',
           `Referencia Castrol: ${raw.toUpperCase()}`
         ],
         badge: 'Castrol Performance',
         isImportedUSA: true,
         img: '/assets/cat_aceites_lubricantes.webp',
         referencias: [`Castrol ${raw.toUpperCase()}`]
+      };
+    }
+
+    // ------------------------------------------------------------------
+    // TOYOTA GENUINE PARTS - REPUESTOS ORIGINALES TOYOTA
+    // ------------------------------------------------------------------
+    if (/TOYOTAGENUINE|TOYOTA.*PART|08880|08885|08886|04465|04466|90915|17801|87139|16100|43550|43560|48510|48520|48530|48820|45046|45047|45503/i.test(c) && !/MOPAR/i.test(c)) {
+      return {
+        titulo: `Repuesto Original Toyota Genuine Parts Japón (#${raw.toUpperCase()})`,
+        categoria: /08880|08885|08886/i.test(c) ? 'Aceites & Lubricantes' : /04465|04466/i.test(c) ? 'Frenos & Discos' : /90915|17801|87139/i.test(c) ? 'Filtros & Mantenimiento' : 'Inyección & Motor',
+        precio: '$42.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Toyota (Hilux, Fortuner, 4Runner, Corolla, Yaris, Prado, Land Cruiser, Tacoma, RAV4, Camry)',
+        descripcionCorta: 'Pieza original certificada Toyota Motor Corporation empaquetada de fábrica bajo estrictos estándares de ingeniería.',
+        descripcionDetallada: `Componente genuino Toyota Genuine Parts ref. #${raw.toUpperCase()}. Calce exacto Plug & Play, máxima durabilidad y preservación de la garantía de fábrica de tu vehículo.`,
+        specs: [
+          'Fabricado en Japón o plantas oficiales OEM Toyota',
+          'Tolerancias dimensionales y metalúrgicas de equipo original',
+          'Durabilidad superior probada en las condiciones más exigentes',
+          `Referencia Toyota: ${raw.toUpperCase()}`
+        ],
+        badge: 'Toyota Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`Toyota ${raw.toUpperCase()}`]
+      };
+    }
+
+    // ------------------------------------------------------------------
+    // HONDA GENUINE PARTS - REPUESTOS ORIGINALES HONDA
+    // ------------------------------------------------------------------
+    if (/HONDAGENUINE|HONDA.*PART|08200|08798|15400|17220|80292|45022|43022|30520|12290|19010|51605|51606/i.test(c) && !/MOPAR/i.test(c)) {
+      return {
+        titulo: `Repuesto Original Honda Genuine Parts (#${raw.toUpperCase()})`,
+        categoria: /08200|08798/i.test(c) ? 'Aceites & Lubricantes' : /45022|43022/i.test(c) ? 'Frenos & Discos' : /15400|17220|80292/i.test(c) ? 'Filtros & Mantenimiento' : 'Inyección & Motor',
+        precio: '$45.00',
+        partNumber: raw.toUpperCase(),
+        compatibilidad: 'Honda (Civic, CR-V, Accord, Pilot, Fit, HR-V, Odyssey, Ridgeline) y Acura',
+        descripcionCorta: 'Componente legítimo Honda OEM de fábrica para máxima eficiencia y fiabilidad de tu automóvil.',
+        descripcionDetallada: `Repuesto original Honda Genuine Parts ref. #${raw.toUpperCase()}. Diseñado específicamente para sincronizar de forma exacta con la electrónica y mecánica de motores VTEC, i-VTEC y transmisiones CVT/automáticas Honda.`,
+        specs: [
+          'Ingeniería original Honda Motor Co., Ltd.',
+          'Cumplimiento exacto de tolerancias y especificaciones de fábrica',
+          'Máxima longevidad y protección del sistema mecánico',
+          `Referencia Honda: ${raw.toUpperCase()}`
+        ],
+        badge: 'Honda Genuine Parts',
+        isImportedUSA: true,
+        img: '/assets/cat_inyeccion_motor.webp',
+        referencias: [`Honda ${raw.toUpperCase()}`]
       };
     }
 
@@ -4571,6 +4660,29 @@ app.post(['/api/ai-autofill', '/api/autofill-part', '/ai-autofill', '/autofill-p
 PREFIJOS OEM TOYOTA/LEXUS: DG4180/DG3580/DG4074=Rodamiento Transmision Delantera/Pinon Toyota Meru/Prado Koyo, TR0708/TR0305=Rodamiento Pinon Ataque Diferencial Koyo, 90366=Rodamiento Diferencial/Transmision Koyo/Nachi, 90363/90369=Rodamiento Rueda Delantera, 87139=Filtro Cabina/Habitaculo, 17801=Filtro Aire Motor, 90915=Filtro Aceite, 23221/23220=Bomba Gasolina en Tanque, 23300=Filtro Gasolina, 22030/23801=Cuerpo Aceleracion ETCS-i drive-by-wire, 42607=Sensor TPMS 315MHz, 04465=Pastillas Freno Delanteras Ceramicas, 04466=Pastillas Freno Traseras, 22204=Sensor MAF Hilo Caliente 0-5V, 89465/89467=Sensor O2 Lambda 4 cables calentado ZrO2, 23250=Inyector Combustible Multipunto solenoid, 90919=Sensor CKP/CMP Hall Effect, 89615=Sensor Detonacion Knock piezoel, 11201=Tapa Valvulas con PCV, 28100=Motor Arranque Starter 1.0-1.4kW, 27060=Alternador 80-100A OAD polea, 48520=Amortiguador Delantero gas N2, 48530=Amortiguador Trasero, 43550/43560=Cubo Manzana Rueda Delantera con sensor ABS, 42410=Cubo Rueda Trasera, 43330/48654=Rotula Suspension Ball Joint PTFE, 48820/48825=Eslabon Barra Estabilizadora Sway Bar Link, 45516=Terminal Direccion Exterior Outer Tie Rod, 45503=Terminal Direccion Interior Inner Tie Rod, 44200/44201=Rack Pinion Direccion EPS, 44310=Bomba Direccion Hidraulica paletas, 47510=Cilindro Maestro Freno, 47730/47750=Caliper Freno piston Stainless, 43206/43512=Disco Rotor Freno ventilado hierro gris, 44610=Servo Freno Booster vacio 9 pulgadas, 04311=Disco Embrague 215mm organico-ceramico, 31250=Plato Presion Embrague diafragma Belleville, 31230=Collarin Rodamiento Embrague, 43470/43430=Semieje Junta Homocinetica CV Axle, 16400/16410=Radiador aluminio, 16271/16281=Manguera Radiador EPDM, 16031=Tapa Radiador 1.1bar, 16801/16802=Ventilador Electrico Radiador, 16100/16110=Bomba Agua accionada correa sello SiC, 88320/88310=Compresor A/C piston axial variable, 88501/88450=Condensador A/C aluminio microceldas, 88899/88716=Valvula Expansion A/C termostatica, 13070/13073=Kit Cadena Distribucion completo con tensor y guias, 13568/13507=Correa Distribucion Timing Belt HNBR aramida, 90916=Correa Serpentin polyV EPDM, 15100/15010=Bomba Aceite, 12361/12372=Soporte Motor Mount, 17505/17560=Catalizador, 17740=Silenciador Mofle, 53101/53111=Cofre Capo acero, 52119=Paragolpes PP+EPDM, 12204=Valvula PCV Ventilacion Carter NBR, 25620/25800=Valvula EGR electronica, 77740/77741=Canister EVAP Carbon Activo, 89422/83420=Sensor ECT Temperatura Refrigerante NTC, 89452/89453=Sensor TPS Posicion Acelerador doble pista, 22365=Sensor MAP IAT Presion Admision, 83800=Tablero Cluster, 89170=Modulo SRS Airbag, 85720/85710=Motor Elevalunas Electrico, 69120/69130=Actuador Cerradura Puerta, 90080=Bujias Encendido Denso iridio/platino.
 
 PREFIJOS NISSAN/INFINITI: 27277=Filtro Cabina, 22460=Sensor MAF Hitachi, 17040/17050=Bomba Gasolina, 22448=Bobina COP, 22401=Bujias NGK, 21010=Bomba Agua. HONDA/ACURA: 80292=Filtro Cabina, 30520=Bobina COP NGK, 45022=Pastillas Freno Genuine. MOPAR/JEEP/DODGE: SET10/SET80=Rodamiento Eje Trasero Dana 35/44 Timken, 68XXXXXXXX=ECM/PCM Stellantis, 04884899=Filtro Aceite Heavy Duty, 68231879=Compresor A/C, 05184651=Bomba Agua 3.6L Pentastar, 56028394=Bobina COP Pentastar, 68066265=Bomba Gasolina WK2. GM/AC DELCO: PF48=Filtro Aceite V8 5.3L Silverado, PF63=Filtro Aceite Duramax/Turbo, 13503909=Filtro Cabina GM. FORD/MOTORCRAFT: FL820S/FL1A=Filtro Aceite EcoBoost/Coyote, DG511/DG508/DG457=Bobina COP 4.6L/5.4L V8 Triton, FP79/FP76/FP82=Filtro Cabina Ford, MS10A/AT4Z-7251=PTU Transfer Case Explorer/Edge. NGK: TR55GP=Bujia Platino V8 GM/Ford, BKR5E/BKR6E=Bujia 4cil Toyota/Honda, LFR6AIX=Bujia Iridio V6 Toyota Fortuner. BOSCH: 0258XXXXXX=Sensor O2 Lambda ZrO2, 0280XXXXXX=Inyector EV6. KYB: 3XXXXX/344XXX=Amortiguadores Excel-G gas N2. AISIN: CKT/CKN=Kit Embrague OEM Toyota. GATES: K06XXXX=Correa Serpentin polyV, AW/WPT=Bomba Agua. CLOYES: 9-XXXX=Kit Cadena Distribucion.
+
+MARCAS OFICIALES MASTERTECH:
+- CASTROL: 15B0D2=Aceite Castrol EDGE High Mileage 0W-20 Full Synthetic Galon 5QT, 1597B2=Castrol EDGE 0W-20 5QT, 1598B1=Castrol EDGE 5W-30 5QT, 15B9AD=Castrol EDGE 5W-20 5QT, 15E728=Castrol 0W-20 1QT, 15D3BC=Castrol 5W-30 1QT.
+- PERMATEX: 82180=Ultra Black RTV, 81160=High-Temp Red RTV, 81878=Ultra Copper, 24200=Threadlocker Blue 242, 27100=Threadlocker Red 271.
+- LIQUI MOLY: 3721=Cera Tec 300ml, 2500=Oil Additive MoS2, 1803=Injection Cleaner.
+- WD-40: Specialist lubricante penetrante y desplazador de humedad.
+- JOHNSEN'S: 2234=Dot 4 Brake Fluid, 2232=Dot 3 Brake Fluid, 4610=R134a refrigerante.
+- VALVOLINE: MaxLife High Mileage, SynPower Full Synthetic 0W-20, 5W-20, 5W-30.
+- TYC: Conjuntos de iluminacion y enfriamiento certificados CAPA/DOT.
+- K&N: Filtros de alto flujo Drop-In y filtros de aceite HP.
+- WAGNER: QC1083/QC1363 Pastillas ceramicas ThermoQuiet.
+- BOSCH: Sensores de oxigeno, bujias Double Iridium, bombas de combustible.
+- RAYBESTOS: Element3 EHT pastillas y rotores grado profesional.
+- YUKKAZO: Rotulas, terminales y bieletas de direccion reforzadas.
+- GATES: Correas serpentin Micro-V EPDM y mangueras.
+- ACDELCO: Filtros PF48/PF63, bujias profesionales y componentes GM.
+- NGK: Bujias Laser Iridium, Iridium IX, bobinas de encendido.
+- DENSO: Sensores O2 First Time Fit, bujias Iridium Power/TT, alternadores.
+- WIX FILTERS: Filtros de aceite XP 51348, 51515, 57060, filtros de cabina.
+- WINNER: Baterias selladas Calcio-Plata libres de mantenimiento.
+- TOYOTA GENUINE PARTS: 04465/04466 pastillas, 90915 filtros aceite, 17801 filtros aire.
+- HONDA GENUINE PARTS: 15400 filtros aceite, 45022 pastillas, fluidos DW-1/HCF-2.
+- MOPAR GENUINE PARTS: Fluidos ATF+4, filtros de aceite Pentastar, terminales de direccion.
 
 COMPATIBILIDAD: Se ESPECIFICO con Marca+Modelo+Cilindrada+Codigo Motor+Rango Anios. Ejemplo: "Toyota Corolla 1.8L (2ZR-FE) 2009-2019, Matrix 2009-2014; Nissan Altima 2.5L (QR25DE) 2007-2018".
 
