@@ -2984,25 +2984,25 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         <AnimatePresence>
           {isUsaModalOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/85 backdrop-blur-md overflow-y-auto">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="bg-[#12141a] border border-blue-500/50 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8 max-h-[92vh] flex flex-col usa-import-modal"
+                className="bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-blue-500/50 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8 max-h-[92vh] flex flex-col usa-import-modal transition-colors"
               >
                 {/* Header */}
-                <div className="p-5 sm:p-6 border-b border-white/10 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950 flex items-center justify-between usa-import-header" style={{ backgroundColor: '#0f172a', color: '#ffffff' }}>
+                <div className="p-5 sm:p-6 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gradient-to-r dark:from-blue-950 dark:via-slate-900 dark:to-blue-950 flex items-center justify-between usa-import-header">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-blue-500/20 border border-blue-400/60 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
-                      <Plane size={20} className="animate-pulse text-sky-400 usa-plane-icon" style={{ color: '#38bdf8', stroke: '#38bdf8' }} />
+                    <div className="w-10 h-10 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30 dark:border-blue-400/60 flex items-center justify-center shadow-lg shadow-blue-500/10 shrink-0">
+                      <Plane size={20} className="animate-pulse text-blue-600 dark:text-sky-400 usa-plane-icon" />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-white flex items-center gap-2 usa-import-title" style={{ color: '#ffffff' }}>
-                        <span className="usa-import-title" style={{ color: '#ffffff' }}>Solicitud de Importación EE.UU.</span>
-                        <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-400/40 px-2 py-0.5 rounded-full font-bold" style={{ color: '#93c5fd', backgroundColor: 'rgba(59, 130, 246, 0.2)' }}>OEM Directo</span>
+                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-2 usa-import-title">
+                        <span>Solicitud de Importación EE.UU.</span>
+                        <span className="text-[10px] bg-blue-500/15 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/30 dark:border-blue-400/40 px-2 py-0.5 rounded-full font-bold">OEM Directo</span>
                       </h2>
-                      <p className="text-zinc-300 text-xs mt-0.5 usa-import-desc" style={{ color: '#cbd5e1' }}>
+                      <p className="text-slate-600 dark:text-zinc-300 text-xs mt-0.5 usa-import-desc">
                         Ingresa el N° de parte o datos del repuesto para cotización express desde EE.UU.
                       </p>
                     </div>
@@ -3010,11 +3010,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                   <button
                     onClick={() => setIsUsaModalOpen(false)}
-                    className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', color: '#ffffff' }}
+                    className="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/15 hover:bg-slate-300 dark:hover:bg-white/25 text-slate-700 dark:text-white flex items-center justify-center transition-all cursor-pointer hdr-btn"
                     title="Cerrar modal"
                   >
-                    <X size={18} style={{ color: '#ffffff', stroke: '#ffffff' }} />
+                    <X size={18} />
                   </button>
                 </div>
 
@@ -3022,11 +3021,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <form onSubmit={handleUsaSubmit} className="p-6 overflow-y-auto space-y-4 flex-1">
                   {usaFormSubmitted ? (
                     <div className="text-center py-8 space-y-4">
-                      <div className="w-14 h-14 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto text-2xl">
+                      <div className="w-14 h-14 rounded-full bg-green-500/20 border border-green-500/40 text-green-500 dark:text-green-400 flex items-center justify-center mx-auto text-2xl">
                         <CheckCircle2 size={32} />
                       </div>
-                      <h3 className="text-xl font-bold text-white">¡Solicitud Generada Exitosamente!</h3>
-                      <p className="text-xs text-zinc-300 max-w-md mx-auto leading-relaxed">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white">¡Solicitud Generada Exitosamente!</h3>
+                      <p className="text-xs text-slate-600 dark:text-zinc-300 max-w-md mx-auto leading-relaxed">
                         Se ha abierto tu chat de WhatsApp con el resumen de la solicitud. Un especialista de MasterTech revisará la disponibilidad del número de parte OEM en EE.UU. y te enviará la cotización exacta en USD.
                       </p>
                       <button
@@ -3042,9 +3041,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Part Number & Product Name */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="usa-part-number" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#93c5fd' }}>
-                            <Tag size={12} className="text-blue-400" />
-                            <span style={{ color: '#93c5fd' }}>Número de Parte OEM / Código (Recomendado)</span>
+                          <label htmlFor="usa-part-number" className="block text-xs font-bold mb-1 flex items-center gap-1 text-blue-600 dark:text-blue-300">
+                            <Tag size={12} className="text-blue-500 dark:text-blue-400" />
+                            <span>Número de Parte OEM / Código (Recomendado)</span>
                           </label>
                           <input
                             id="usa-part-number"
@@ -3053,15 +3052,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.partNumber}
                             onChange={(e) => setUsaForm({ ...usaForm, partNumber: e.target.value })}
                             placeholder="Ej. #52008899AD / Mopar / Denso"
-                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-blue-400 transition-colors font-mono"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-blue-500 transition-colors font-mono"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-product-name" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#f1f5f9' }}>
-                            <Package size={12} className="text-primary" />
-                            <span style={{ color: '#f1f5f9' }}>Nombre o Descripción del Repuesto *</span>
+                          <label htmlFor="usa-product-name" className="block text-xs font-bold mb-1 flex items-center gap-1 text-slate-800 dark:text-slate-100">
+                            <Package size={12} className="text-red-500" />
+                            <span>Nombre o Descripción del Repuesto *</span>
                           </label>
                           <input
                             id="usa-product-name"
@@ -3071,16 +3069,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.productName}
                             onChange={(e) => setUsaForm({ ...usaForm, productName: e.target.value })}
                             placeholder="Ej. Bomba de agua, Juego de inyectores, Sensor O2"
-                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500 transition-colors"
                           />
                         </div>
                       </div>
 
                       {/* Vehicle Details: Brand, Model, Year, Engine */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/5 p-3.5 rounded-2xl border border-white/10">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-white/5 p-3.5 rounded-2xl border border-slate-200 dark:border-white/10">
                         <div>
-                          <label htmlFor="usa-brand" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Marca *</label>
+                          <label htmlFor="usa-brand" className="block text-[11px] font-bold mb-1 text-slate-700 dark:text-slate-300">Marca *</label>
                           <input
                             id="usa-brand"
                             name="usa-brand"
@@ -3089,13 +3086,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.brand}
                             onChange={(e) => setUsaForm({ ...usaForm, brand: e.target.value })}
                             placeholder="Jeep / Toyota"
-                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-white dark:bg-[#0d0e12] border border-slate-300 dark:border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-model" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Modelo *</label>
+                          <label htmlFor="usa-model" className="block text-[11px] font-bold mb-1 text-slate-700 dark:text-slate-300">Modelo *</label>
                           <input
                             id="usa-model"
                             name="usa-model"
@@ -3104,13 +3100,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.model}
                             onChange={(e) => setUsaForm({ ...usaForm, model: e.target.value })}
                             placeholder="Grand Cherokee"
-                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-white dark:bg-[#0d0e12] border border-slate-300 dark:border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-year" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Año *</label>
+                          <label htmlFor="usa-year" className="block text-[11px] font-bold mb-1 text-slate-700 dark:text-slate-300">Año *</label>
                           <input
                             id="usa-year"
                             name="usa-year"
@@ -3119,13 +3114,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.year}
                             onChange={(e) => setUsaForm({ ...usaForm, year: e.target.value })}
                             placeholder="2018"
-                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-white dark:bg-[#0d0e12] border border-slate-300 dark:border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-engine" className="block text-[11px] font-bold mb-1" style={{ color: '#e2e8f0' }}>Motor</label>
+                          <label htmlFor="usa-engine" className="block text-[11px] font-bold mb-1 text-slate-700 dark:text-slate-300">Motor</label>
                           <input
                             id="usa-engine"
                             name="usa-engine"
@@ -3133,8 +3127,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.engine}
                             onChange={(e) => setUsaForm({ ...usaForm, engine: e.target.value })}
                             placeholder="3.6L V6"
-                            className="w-full bg-[#0d0e12] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-white dark:bg-[#0d0e12] border border-slate-300 dark:border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500"
                           />
                         </div>
                       </div>
@@ -3142,9 +3135,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Serial VIN & Shipping Method */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="usa-vin" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#f1f5f9' }}>
-                            <ShieldCheck size={12} className="text-green-400" />
-                            <span style={{ color: '#f1f5f9' }}>Número de Chasis / Serial VIN (17 dígitos)</span>
+                          <label htmlFor="usa-vin" className="block text-xs font-bold mb-1 flex items-center gap-1 text-slate-800 dark:text-slate-100">
+                            <ShieldCheck size={12} className="text-emerald-500 dark:text-green-400" />
+                            <span>Número de Chasis / Serial VIN (17 dígitos)</span>
                           </label>
                           <input
                             id="usa-vin"
@@ -3153,23 +3146,21 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.vin}
                             onChange={(e) => setUsaForm({ ...usaForm, vin: e.target.value.toUpperCase() })}
                             placeholder="Ej. 1C4RJFAG8JC123456 (Opcional)"
-                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors font-mono uppercase"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500 transition-colors font-mono uppercase"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-shipping" className="block text-xs font-bold mb-1 flex items-center gap-1" style={{ color: '#93c5fd' }}>
-                            <Plane size={12} className="text-blue-400" />
-                            <span style={{ color: '#93c5fd' }}>Modalidad de Logística Preferida</span>
+                          <label htmlFor="usa-shipping" className="block text-xs font-bold mb-1 flex items-center gap-1 text-blue-600 dark:text-blue-300">
+                            <Plane size={12} className="text-blue-500 dark:text-blue-400" />
+                            <span>Modalidad de Logística Preferida</span>
                           </label>
                           <select
                             id="usa-shipping"
                             name="usa-shipping"
                             value={usaForm.shippingMode}
                             onChange={(e) => setUsaForm({ ...usaForm, shippingMode: e.target.value })}
-                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-blue-400 transition-colors font-medium"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white outline-none focus:border-blue-500 transition-colors font-medium cursor-pointer"
                           >
                             <option value="Express Aéreo (7 a 15 días hábiles)">Express Aéreo (7 a 15 días hábiles - Urgente)</option>
                             <option value="Marítimo Estándar (21 a 40 días hábiles)">Marítimo Estándar (21 a 40 días hábiles - Económico)</option>
@@ -3180,7 +3171,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Client Name & Phone */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="usa-client-name" className="block text-xs font-bold mb-1" style={{ color: '#f1f5f9' }}>Nombre y Apellido *</label>
+                          <label htmlFor="usa-client-name" className="block text-xs font-bold mb-1 text-slate-800 dark:text-slate-100">Nombre y Apellido *</label>
                           <input
                             id="usa-client-name"
                             name="usa-client-name"
@@ -3189,13 +3180,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.clientName}
                             onChange={(e) => setUsaForm({ ...usaForm, clientName: e.target.value })}
                             placeholder="Tu nombre completo"
-                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500 transition-colors"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="usa-phone" className="block text-xs font-bold mb-1" style={{ color: '#f1f5f9' }}>Teléfono WhatsApp *</label>
+                          <label htmlFor="usa-phone" className="block text-xs font-bold mb-1 text-slate-800 dark:text-slate-100">Teléfono WhatsApp *</label>
                           <input
                             id="usa-phone"
                             name="usa-phone"
@@ -3204,15 +3194,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             value={usaForm.phone}
                             onChange={(e) => setUsaForm({ ...usaForm, phone: e.target.value })}
                             placeholder="+58 412 1234567"
-                            className="w-full bg-[#0d0e12] border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors"
-                            style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                            className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500 transition-colors"
                           />
                         </div>
                       </div>
 
                       {/* Additional Notes */}
                       <div>
-                        <label htmlFor="usa-notes" className="block text-xs font-bold mb-1" style={{ color: '#f1f5f9' }}>Notas Adicionales o Detalles del Repuesto</label>
+                        <label htmlFor="usa-notes" className="block text-xs font-bold mb-1 text-slate-800 dark:text-slate-100">Notas Adicionales o Detalles del Repuesto</label>
                         <textarea
                           id="usa-notes"
                           name="usa-notes"
@@ -3220,8 +3209,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           value={usaForm.notes}
                           onChange={(e) => setUsaForm({ ...usaForm, notes: e.target.value })}
                           placeholder="Especifica lado (derecho/izquierdo), si requieres kit completo o consultas extra..."
-                          className="w-full bg-[#0d0e12] border border-white/20 rounded-xl p-3 text-xs text-white placeholder-zinc-400 outline-none focus:border-primary transition-colors resize-none"
-                          style={{ backgroundColor: '#0d0e12', color: '#ffffff' }}
+                          className="w-full bg-slate-50 dark:bg-[#0d0e12] border border-slate-300 dark:border-white/20 rounded-xl p-3 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 outline-none focus:border-red-500 transition-colors resize-none"
                         />
                       </div>
 
@@ -3624,27 +3612,27 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         <AnimatePresence>
           {isCartOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 dark:bg-black/85 backdrop-blur-md overflow-y-auto">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="carrito-modal rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col bg-[#12141a] border border-red-500/40"
+                className="carrito-modal rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-red-500/40 transition-colors"
               >
                 {/* Header */}
-                <div className="p-4 sm:p-5 flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-red-950/60 via-slate-900 to-red-950/60">
+                <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gradient-to-r dark:from-red-950/60 dark:via-slate-900 dark:to-red-950/60">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md shrink-0 bg-red-500/20 border border-red-500/40 text-red-500">
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shadow-md shrink-0 bg-red-500/10 dark:bg-red-500/20 border border-red-500/30 dark:border-red-500/40 text-red-600 dark:text-red-500">
                       <ShoppingCart size={20} />
                     </div>
                     <div>
-                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight flex items-center gap-2 text-white">
+                      <h2 className="text-base sm:text-lg font-black uppercase tracking-tight flex items-center gap-2 text-slate-900 dark:text-white">
                         <span>Mi Carrito de Repuestos</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/40">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30 dark:border-red-500/40">
                           {cartTotalItems} {cartTotalItems === 1 ? 'pieza' : 'piezas'}
                         </span>
                       </h2>
-                      <p className="text-xs mt-0.5 text-slate-300">
+                      <p className="text-xs mt-0.5 text-slate-600 dark:text-slate-300">
                         Selecciona cantidades y envía el pedido completo a nuestros asesores por WhatsApp.
                       </p>
                     </div>
@@ -3652,7 +3640,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="p-2 rounded-full transition-colors cursor-pointer bg-white/10 text-white hover:bg-white/20"
+                    className="p-2 rounded-full transition-colors cursor-pointer bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white hover:bg-slate-300 dark:hover:bg-white/20"
                     title="Cerrar carrito"
                   >
                     <X size={18} />
@@ -3663,11 +3651,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 <div className="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
                   {cartSuccess ? (
                     <div className="text-center py-8 space-y-4">
-                      <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl shadow-lg" style={{ backgroundColor: 'rgba(34, 197, 94, 0.15)', border: '2px solid #22c55e', color: '#4ade80' }}>
+                      <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto text-2xl shadow-lg bg-emerald-500/15 border-2 border-emerald-500 text-emerald-600 dark:text-emerald-400">
                         <CheckCircle2 size={36} />
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-black tracking-tight" style={{ color: '#ffffff' }}>¡Pedido Enviado a WhatsApp!</h3>
-                      <p className="text-xs sm:text-sm max-w-md mx-auto leading-relaxed" style={{ color: '#e2e8f0' }}>
+                      <h3 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">¡Pedido Enviado a WhatsApp!</h3>
+                      <p className="text-xs sm:text-sm max-w-md mx-auto leading-relaxed text-slate-600 dark:text-slate-300">
                         Se ha generado el desglose de tu pedido multielemento. El equipo de MasterTech revisará el stock y te confirmará disponibilidad inmediata.
                       </p>
                       <div className="flex gap-3 justify-center pt-3">
@@ -3682,13 +3670,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     </div>
                   ) : cart.length === 0 ? (
                     <div
-                      className="text-center py-12 space-y-4 flex flex-col items-center justify-center text-white"
+                      className="text-center py-12 space-y-4 flex flex-col items-center justify-center text-slate-900 dark:text-white"
                     >
                       <ShoppingBag size={48} className="mx-auto mb-1 text-slate-400" />
-                      <h3 className="text-lg font-black text-white">
+                      <h3 className="text-lg font-black text-slate-900 dark:text-white">
                         Tu carrito está vacío
                       </h3>
-                      <p className="text-xs max-w-xs mx-auto leading-relaxed text-slate-300">
+                      <p className="text-xs max-w-xs mx-auto leading-relaxed text-slate-600 dark:text-slate-300">
                         Navega por nuestro catálogo y presiona "+ Añadir" en las piezas que necesites para tu vehículo.
                       </p>
                       <button
@@ -3707,31 +3695,31 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           const itemPriceNum = parsePrice(item.product.price);
                           const itemSubtotal = (itemPriceNum * item.quantity).toFixed(2);
                           return (
-                            <div key={item.product.id} className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
-                              <img src={item.product.img} alt={item.product.title} className="w-14 h-14 object-cover rounded-xl shrink-0 border border-white/10 bg-black" />
+                            <div key={item.product.id} className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                              <img src={item.product.img} alt={item.product.title} className="w-14 h-14 object-cover rounded-xl shrink-0 border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-black" />
                               
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-xs font-bold truncate text-slate-100">{item.product.title}</h4>
+                                <h4 className="text-xs font-bold truncate text-slate-900 dark:text-slate-100">{item.product.title}</h4>
                                 {item.product.partNumber && (
-                                  <span className="text-[10px] font-mono block mt-0.5 text-slate-400">#{item.product.partNumber}</span>
+                                  <span className="text-[10px] font-mono block mt-0.5 text-slate-500 dark:text-slate-400">#{item.product.partNumber}</span>
                                 )}
-                                <span className="text-xs font-black block mt-0.5 text-white">{item.product.price} <span className="text-[10px] font-normal text-slate-400">/ c/u</span></span>
+                                <span className="text-xs font-black block mt-0.5 text-slate-900 dark:text-white">{item.product.price} <span className="text-[10px] font-normal text-slate-500 dark:text-slate-400">/ c/u</span></span>
                               </div>
 
                               {/* Quantity Controls */}
-                              <div className="flex items-center gap-1.5 rounded-xl p-1 bg-black/60 border border-white/15">
+                              <div className="flex items-center gap-1.5 rounded-xl p-1 bg-white dark:bg-black/60 border border-slate-200 dark:border-white/15">
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, -1)}
-                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors bg-white/10 hover:bg-red-600 text-white"
+                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors bg-slate-100 dark:bg-white/10 hover:bg-red-600 hover:text-white text-slate-800 dark:text-white"
                                 >
                                   <Minus size={12} />
                                 </button>
-                                <span className="font-bold text-xs px-2 min-w-[1.5rem] text-center text-white">{item.quantity}</span>
+                                <span className="font-bold text-xs px-2 min-w-[1.5rem] text-center text-slate-900 dark:text-white">{item.quantity}</span>
                                 <button
                                   type="button"
                                   onClick={() => updateCartQty(item.product.id, 1)}
-                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors bg-white/10 hover:bg-red-600 text-white"
+                                  className="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs cursor-pointer transition-colors bg-slate-100 dark:bg-white/10 hover:bg-red-600 hover:text-white text-slate-800 dark:text-white"
                                 >
                                   <Plus size={12} />
                                 </button>
@@ -3739,11 +3727,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                               {/* Subtotal & Trash */}
                               <div className="text-right shrink-0 min-w-[70px]">
-                                <span className="text-xs font-black block text-white">${itemSubtotal}</span>
+                                <span className="text-xs font-black block text-slate-900 dark:text-white">${itemSubtotal}</span>
                                 <button
                                   type="button"
                                   onClick={() => removeFromCart(item.product.id)}
-                                  className="text-[10px] mt-1 flex items-center gap-0.5 justify-end ml-auto cursor-pointer text-slate-400 hover:text-red-400 transition-colors"
+                                  className="text-[10px] mt-1 flex items-center gap-0.5 justify-end ml-auto cursor-pointer text-slate-400 hover:text-red-500 transition-colors"
                                 >
                                   <Trash2 size={12} />
                                 </button>
@@ -3754,20 +3742,20 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       </div>
 
                       {/* Order Calculation Summary Box */}
-                      <div className="p-4 rounded-2xl space-y-2 bg-gradient-to-r from-red-950/30 via-slate-900 to-red-950/30 border border-red-500/30">
-                        <div className="flex justify-between items-center text-xs text-slate-400">
+                      <div className="p-4 rounded-2xl space-y-2 bg-red-50/70 dark:bg-gradient-to-r dark:from-red-950/30 dark:via-slate-900 dark:to-red-950/30 border border-red-200 dark:border-red-500/30">
+                        <div className="flex justify-between items-center text-xs text-slate-600 dark:text-slate-400">
                           <span>Cantidad Total de Repuestos:</span>
-                          <span className="font-bold text-white">{cartTotalItems} unidades</span>
+                          <span className="font-bold text-slate-900 dark:text-white">{cartTotalItems} unidades</span>
                         </div>
-                        <div className="flex justify-between items-center pt-2 text-sm font-black border-t border-white/10">
-                          <span className="uppercase tracking-wider text-white">Monto Total Estimado:</span>
-                          <span className="text-xl font-display text-white font-mono">${cartTotalAmount.toFixed(2)} USD</span>
+                        <div className="flex justify-between items-center pt-2 text-sm font-black border-t border-red-200 dark:border-white/10">
+                          <span className="uppercase tracking-wider text-slate-900 dark:text-white">Monto Total Estimado:</span>
+                          <span className="text-xl font-display text-slate-900 dark:text-white font-mono">${cartTotalAmount.toFixed(2)} USD</span>
                         </div>
                       </div>
 
                       {/* Customer Inputs */}
-                      <div className="space-y-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                        <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-white">
+                      <div className="space-y-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                        <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-slate-900 dark:text-white">
                           <User size={13} className="text-red-500" />
                           <span>Datos del Solicitante (Para Enviar Presupuesto)</span>
                         </h4>
@@ -3778,8 +3766,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             placeholder="Tu Nombre *"
                             value={cartClient.name}
                             onChange={(e) => setCartClient({ ...cartClient, name: e.target.value })}
-                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:border-red-500"
                           />
                           <input
                             type="tel"
@@ -3787,16 +3774,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             placeholder="Teléfono / WhatsApp *"
                             value={cartClient.phone}
                             onChange={(e) => setCartClient({ ...cartClient, phone: e.target.value })}
-                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:border-red-500"
                           />
                           <input
                             type="text"
                             placeholder="Vehículo (Ej. Jeep 2018)"
                             value={cartClient.vehicle}
                             onChange={(e) => setCartClient({ ...cartClient, vehicle: e.target.value })}
-                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:border-red-500"
                           />
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
@@ -3805,16 +3790,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             placeholder="Ubicación (Ej. Porlamar, Margarita)"
                             value={cartClient.location}
                             onChange={(e) => setCartClient({ ...cartClient, location: e.target.value })}
-                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:border-red-500"
                           />
                           <input
                             type="text"
                             placeholder="Notas o detalles adicionales (Opcional)"
                             value={cartClient.notes}
                             onChange={(e) => setCartClient({ ...cartClient, notes: e.target.value })}
-                            className="w-full rounded-xl px-3 py-2 text-xs outline-none"
-                            style={{ backgroundColor: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff' }}
+                            className="w-full rounded-xl px-3 py-2 text-xs outline-none bg-white dark:bg-black/70 border border-slate-300 dark:border-white/15 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:border-red-500"
                           />
                         </div>
                       </div>
@@ -3824,8 +3807,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         <button
                           type="button"
                           onClick={clearCart}
-                          className="px-4 py-3 rounded-2xl text-xs font-bold border transition-all cursor-pointer hover:bg-white/10"
-                          style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.18)', color: '#f1f5f9' }}
+                          className="px-4 py-3 rounded-2xl text-xs font-bold border transition-all cursor-pointer bg-slate-100 dark:bg-white/10 border-slate-300 dark:border-white/20 text-slate-700 dark:text-white hover:bg-slate-200 dark:hover:bg-white/20"
                         >
                           Vaciar
                         </button>
@@ -3834,7 +3816,6 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           type="submit"
                           disabled={isSubmittingCart}
                           className="flex-1 bg-[#25D366] hover:bg-[#20ba5a] text-black font-black uppercase text-xs tracking-wider py-3.5 px-6 rounded-2xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
-                          style={{ color: '#000000' }}
                         >
                           <WhatsAppIcon size={18} />
                           <span>{isSubmittingCart ? 'Procesando...' : `Enviar Pedido (${cartTotalItems} piezas - $${cartTotalAmount.toFixed(2)})`}</span>
