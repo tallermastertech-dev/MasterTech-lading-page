@@ -2989,7 +2989,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-blue-500/50 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8 max-h-[92vh] flex flex-col usa-import-modal transition-colors"
+                className="bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-blue-500/50 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-8 max-h-[92vh] flex flex-col transition-colors"
               >
                 {/* Header */}
                 <div className="p-5 sm:p-6 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gradient-to-r dark:from-blue-950 dark:via-slate-900 dark:to-blue-950 flex items-center justify-between usa-import-header">
@@ -3240,7 +3240,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="catalogo-product-modal bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col transition-colors"
+              className="bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col transition-colors"
             >
               {/* Modal Header */}
               <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-black/60">
@@ -3617,7 +3617,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, scale: 0.95, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
-                className="carrito-modal rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-red-500/40 transition-colors"
+                className="rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative my-6 max-h-[92vh] flex flex-col bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-red-500/40 transition-colors"
               >
                 {/* Header */}
                 <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gradient-to-r dark:from-red-950/60 dark:via-slate-900 dark:to-red-950/60">

@@ -310,33 +310,16 @@ html.theme-light .brands-ticker .brand-ticker-item:hover { color: #dc2626 !impor
 html.theme-light .brands-ticker .marquee-fade-left  { background: linear-gradient(to right, #e9edf2, transparent) !important; }
 html.theme-light .brands-ticker .marquee-fade-right { background: linear-gradient(to left,  #e9edf2, transparent) !important; }
 
-/* Modals (Product, USA Import, Cart, MT-01 chat stay dark) */
-.usa-import-modal,
-.mt01-chat-modal,
-.catalogo-product-modal,
-.carrito-modal {
+/* Modals (MT-01 chat stays dark brand aesthetic) */
+.mt01-chat-modal {
   background-color: #12141a !important;
   color: #ffffff !important;
 }
-.usa-import-modal *,
-.mt01-chat-modal *,
-.catalogo-product-modal *,
-.carrito-modal * {
+.mt01-chat-modal * {
   color: inherit;
 }
-.catalogo-product-modal h2,
-.catalogo-product-modal h3,
-.catalogo-product-modal h4,
-.usa-import-modal h2,
-.usa-import-modal h3,
 .mt01-chat-modal h3 {
   color: #ffffff !important;
-}
-.catalogo-product-modal p,
-.catalogo-product-modal span:not([class*="text-amber"]):not([class*="text-green"]):not([class*="text-blue"]),
-.usa-import-modal p,
-.usa-import-modal span {
-  color: #cbd5e1 !important;
 }
 
 /* Glass Card Adaptive Utility */
