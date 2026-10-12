@@ -3247,23 +3247,24 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* Product Detail Modal */}
         <AnimatePresence>
           {selectedProduct && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 dark:bg-black/80 backdrop-blur-md">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="catalogo-product-modal bg-[#12141a] border border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col"
+              className="catalogo-product-modal bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col transition-colors"
             >
               {/* Modal Header */}
-              <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-black/60">
+              <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-black/60">
                 <div className="flex items-center gap-2">
                   <Tag size={16} className="text-red-500" />
-                  <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">{selectedProduct.category}</span>
+                  <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 uppercase tracking-wider">{selectedProduct.category}</span>
                 </div>
                 <button 
                   type="button"
                   onClick={() => setSelectedProduct(null)}
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                  title="Cerrar modal"
                 >
                   <X size={18} />
                 </button>
@@ -3280,7 +3281,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Gallery Viewer */}
                       <div className="space-y-3">
                         <div 
-                          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-xl group cursor-zoom-in"
+                          className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 dark:bg-black border border-slate-200 dark:border-white/10 shadow-xl group cursor-zoom-in"
                           onClick={() => setLightboxImage(currentImg)}
                           title="Haz clic o toca para ver la imagen en pantalla completa"
                         >
@@ -3313,7 +3314,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                                   type="button"
                                   onClick={() => setActiveImageIndex(pIdx)}
                                   className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                                    isActive ? 'border-red-500 scale-105 shadow-md shadow-red-500/30' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
+                                    isActive ? 'border-red-500 scale-105 shadow-md shadow-red-500/30' : 'border-slate-300 dark:border-white/10 opacity-70 hover:opacity-100 hover:border-slate-500 dark:hover:border-white/30'
                                   }`}
                                 >
                                   <img src={photo} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
@@ -3327,38 +3328,38 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       <div className="space-y-3">
                         <div className="flex flex-wrap items-center gap-2">
                           {selectedProduct.partNumber && (
-                            <span className="text-xs font-mono font-bold text-red-400 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full inline-block">
+                            <span className="text-xs font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/25 px-3 py-1 rounded-full inline-block">
                               N° OEM: {selectedProduct.partNumber}
                             </span>
                           )}
 
                           <span className={`text-xs font-bold px-3 py-1 rounded-full inline-block ${
                             (selectedProduct.stock ?? 10) > 0 
-                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
-                              : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' 
+                              : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
                           }`}>
                             {selectedProduct.isImportedUSA ? '● Stock en Tienda · Original USA' : `● ${selectedProduct.stock ?? 10} en Stock Tienda`}
                           </span>
                         </div>
 
-                        <h3 className="text-xl font-bold leading-snug text-white">{selectedProduct.title}</h3>
+                        <h3 className="text-xl font-bold leading-snug text-slate-900 dark:text-white">{selectedProduct.title}</h3>
                         
                         <div className="pt-1 flex items-baseline gap-2">
-                          <span className="text-3xl font-black font-display text-white">
+                          <span className="text-3xl font-black font-display text-slate-900 dark:text-white">
                             {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)}` : selectedProduct.price}
                           </span>
-                          <span className="text-xs font-bold text-zinc-400">USD</span>
+                          <span className="text-xs font-bold text-slate-500 dark:text-zinc-400">USD</span>
                           {selectedProduct.isImportedUSA && (
-                            <span className="text-[11px] text-emerald-300 font-semibold ml-2 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
-                              <Globe size={11} className="text-amber-300" />
+                            <span className="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold ml-2 bg-emerald-500/15 dark:bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <Globe size={11} className="text-amber-500 dark:text-amber-300" />
                               <span>Original USA en Stock</span>
                             </span>
                           )}
                         </div>
 
-                        <p className="text-xs leading-relaxed mt-1 text-slate-300">{selectedProduct.desc}</p>
+                        <p className="text-xs leading-relaxed mt-1 text-slate-600 dark:text-slate-300">{selectedProduct.desc}</p>
 
-                        <div className="p-3 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300 flex items-center gap-2.5">
+                        <div className="p-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-xs text-slate-700 dark:text-slate-300 flex items-center gap-2.5">
                           <Wrench size={16} className="text-red-500 shrink-0" />
                           <span><strong>Servicio de Taller:</strong> Podemos realizar la instalación, diagnóstico y calibración de esta pieza en nuestras instalaciones en Porlamar.</span>
                         </div>
@@ -3366,31 +3367,31 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     </div>
 
                     {selectedProduct.isImportedUSA && (
-                      <div className="p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-2xl text-xs text-emerald-200 flex items-center gap-3 shadow-md">
+                      <div className="p-4 bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-500/30 rounded-2xl text-xs text-emerald-900 dark:text-emerald-200 flex items-center gap-3 shadow-md">
                         <div>
-                          <strong className="block font-bold text-white flex items-center gap-1.5">
-                            <Globe size={13} className="text-amber-400" />
+                          <strong className="block font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <Globe size={13} className="text-amber-500 dark:text-amber-400" />
                             <span>Repuesto Original Importado desde EE.UU. (En Stock en Tienda)</span>
                           </strong>
-                          <p className="text-[11px] mt-0.5 text-emerald-200/90">Producto con especificaciones originales OEM importado desde EE.UU. Disponible para retiro inmediato en tienda o instalación directa con garantía en taller.</p>
+                          <p className="text-[11px] mt-0.5 text-emerald-800 dark:text-emerald-200/90">Producto con especificaciones originales OEM importado desde EE.UU. Disponible para retiro inmediato en tienda o instalación directa con garantía en taller.</p>
                         </div>
                       </div>
                     )}
 
                     {selectedProduct.longDesc && (
-                      <div className="space-y-2 rounded-2xl border p-4 bg-black/40 border-white/10">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Ficha Técnica &amp; Detalles de Calidad</h4>
-                        <p className="text-xs leading-relaxed text-slate-300">{selectedProduct.longDesc}</p>
+                      <div className="space-y-2 rounded-2xl border p-4 bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10">
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-slate-200">Ficha Técnica &amp; Detalles de Calidad</h4>
+                        <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">{selectedProduct.longDesc}</p>
                       </div>
                     )}
 
                     {selectedProduct.specs && selectedProduct.specs.length > 0 && (
                       <div className="space-y-2">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Especificaciones Técnicas:</h4>
+                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-slate-200">Especificaciones Técnicas:</h4>
                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {selectedProduct.specs.map((spec, i) => (
-                            <li key={i} className="text-xs flex items-center gap-2 text-slate-300">
-                              <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                            <li key={i} className="text-xs flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                              <CheckCircle2 size={14} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
                               <span>{spec}</span>
                             </li>
                           ))}
@@ -3399,9 +3400,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     )}
 
                     {selectedProduct.compatibility && (
-                      <div className="p-3.5 bg-red-950/20 border border-red-500/25 rounded-2xl text-xs text-zinc-200 flex items-center gap-3 shadow-md mb-2">
+                      <div className="p-3.5 bg-red-500/10 dark:bg-red-950/20 border border-red-500/25 rounded-2xl text-xs text-slate-800 dark:text-zinc-200 flex items-center gap-3 shadow-md mb-2">
                         <ShieldCheck size={18} className="text-red-500 shrink-0" />
-                        <span><strong className="text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
+                        <span><strong className="text-slate-900 dark:text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
                       </div>
                     )}
                   </div>
@@ -3409,14 +3410,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               })()}
 
               {/* Modal Footer CTA */}
-              <div className="p-4 sm:p-6 border-t border-white/10 bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
+              <div className="p-4 sm:p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xs text-zinc-400">Total:</span>
-                  <span className="text-2xl font-black text-white font-mono">
+                  <span className="text-xs text-slate-500 dark:text-zinc-400">Total:</span>
+                  <span className="text-2xl font-black text-slate-900 dark:text-white font-mono">
                     {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)} USD` : selectedProduct.price}
                   </span>
                   {selectedProduct.isImportedUSA && (
-                    <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-400/30">Envío Directo</span>
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30">En Stock</span>
                   )}
                 </div>
 
@@ -3425,7 +3426,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     href={getWhatsAppMessage(selectedProduct.title, selectedProduct.price, selectedProduct.partNumber, selectedProduct.isImportedUSA, selectedProduct.stock)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3.5 rounded-xl bg-white/10 hover:bg-[#25D366] text-zinc-300 hover:text-black transition-all flex items-center justify-center cursor-pointer border border-white/15"
+                    className="p-3.5 rounded-xl bg-slate-200 dark:bg-white/10 hover:bg-[#25D366] text-slate-800 dark:text-zinc-300 hover:text-black transition-all flex items-center justify-center cursor-pointer border border-slate-300 dark:border-white/15"
                     title="Consultar por WhatsApp"
                   >
                     <WhatsAppIcon size={18} />
