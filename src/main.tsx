@@ -6,7 +6,7 @@ import './index.css';
 // Force clear stale cache & default to light theme on landing page
 if (typeof window !== 'undefined') {
   try {
-    const APP_VERSION = 'v5.2';
+    const APP_VERSION = 'v5.3';
     if (localStorage.getItem('mastertech_app_version') !== APP_VERSION) {
       localStorage.setItem('mastertech_app_version', APP_VERSION);
       localStorage.removeItem('mastertech_admin_theme');
