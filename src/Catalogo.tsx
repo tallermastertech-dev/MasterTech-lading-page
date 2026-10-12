@@ -1883,7 +1883,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 1.03 }}
                       transition={{ duration: 0.4, ease: "easeOut" }}
-                      className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700"
+                      className={`w-full h-full ${(config.CATALOG_HERO_FIT || 'cover') === 'contain' ? 'object-contain' : 'object-cover'} drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700`}
                     />
                   </AnimatePresence>
                 </div>

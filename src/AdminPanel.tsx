@@ -8228,6 +8228,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           CATALOG_HERO_TITLE: settingsForm.CATALOG_HERO_TITLE || '',
                           CATALOG_HERO_SUBTITLE: settingsForm.CATALOG_HERO_SUBTITLE || '',
                           CATALOG_HERO_BADGE: settingsForm.CATALOG_HERO_BADGE || '',
+                          CATALOG_HERO_FIT: settingsForm.CATALOG_HERO_FIT || 'contain',
                           CAT_IMG_FRENOS: settingsForm.CAT_IMG_FRENOS || '',
                           CAT_IMG_SUSPENSION: settingsForm.CAT_IMG_SUSPENSION || '',
                           CAT_IMG_ACEITES: settingsForm.CAT_IMG_ACEITES || '',
@@ -8448,6 +8449,54 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                               />
                             </div>
                           </div>
+
+                          {/* Modo de visualización de imagen (Ajustar completa sin cortar vs Rellenar sin espacios vacíos) */}
+                          <div className="pt-2 border-t border-white/5">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block mb-1.5">
+                              Ajuste de Imagen (Evitar espacios vacíos)
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                              <button
+                                type="button"
+                                onClick={() => setSettingsForm({ ...settingsForm, CATALOG_HERO_FIT: 'cover' })}
+                                className={`px-3 py-2 rounded-lg border text-left cursor-pointer transition-all ${
+                                  (settingsForm.CATALOG_HERO_FIT || 'contain') === 'cover'
+                                    ? 'bg-red-600/20 border-red-500 text-white shadow-md'
+                                    : 'bg-black/40 border-white/10 text-zinc-400 hover:border-white/20'
+                                }`}
+                              >
+                                <div className="text-[11px] font-bold text-white flex items-center justify-between">
+                                  <span>Rellenar Todo</span>
+                                  {(settingsForm.CATALOG_HERO_FIT || 'contain') === 'cover' && (
+                                    <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                                  )}
+                                </div>
+                                <p className="text-[9px] text-zinc-400 mt-0.5">
+                                  Cubre todo el marco sin dejar bordes ni espacios vacíos arriba/abajo.
+                                </p>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => setSettingsForm({ ...settingsForm, CATALOG_HERO_FIT: 'contain' })}
+                                className={`px-3 py-2 rounded-lg border text-left cursor-pointer transition-all ${
+                                  (settingsForm.CATALOG_HERO_FIT || 'contain') === 'contain'
+                                    ? 'bg-red-600/20 border-red-500 text-white shadow-md'
+                                    : 'bg-black/40 border-white/10 text-zinc-400 hover:border-white/20'
+                                }`}
+                              >
+                                <div className="text-[11px] font-bold text-white flex items-center justify-between">
+                                  <span>Contener Completa</span>
+                                  {(settingsForm.CATALOG_HERO_FIT || 'contain') === 'contain' && (
+                                    <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                                  )}
+                                </div>
+                                <p className="text-[9px] text-zinc-400 mt-0.5">
+                                  Muestra la foto 100% entera según su proporción original.
+                                </p>
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
@@ -8521,7 +8570,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                   <img
                                     src={currentImg}
                                     alt="Hero Showcase Preview"
-                                    className="w-full h-full object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.8)]"
+                                    className={`w-full h-full ${(settingsForm.CATALOG_HERO_FIT || 'contain') === 'cover' ? 'object-cover' : 'object-contain'} filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.8)]`}
                                     onError={(e) => {
                                       (e.currentTarget as HTMLImageElement).src = '/assets/autoparts_hero_showcase.webp';
                                     }}
