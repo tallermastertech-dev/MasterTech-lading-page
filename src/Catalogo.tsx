@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
@@ -1719,10 +1719,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
   const getWhatsAppMessage = (productName: string, price: string, partNumber?: string, isImportedUSA?: boolean, stock?: number) => {
     const partInfo = partNumber ? ` (N° Parte OEM: ${partNumber})` : '';
     let text = '';
-    if (stock === 0 || isImportedUSA) {
-      text = `*CONSULTA DE REPUESTO IMPORTADO DESDE EE.UU.*\n\n📦 *Pieza:* _${productName}_${partInfo}\n💵 *Precio estimado:* _${price}_\n\n_Hola Taller MasterTech 🛠️, quisiera consultar tiempos de importación directa y costo total puesto en taller._`;
+    if (isImportedUSA) {
+      text = `📦 *CONSULTA DE REPUESTO EN STOCK (ORIGINAL EE.UU.)*\n\n📦 *Pieza:* _${productName}_${partInfo}\n💵 *Precio:* _${price}_\n\n_Hola Taller MasterTech, me interesa este repuesto original importado desde EE.UU. disponible en stock en su tienda. ¿Puedo coordinar el retiro inmediato o la instalación en taller?_`;
     } else {
-      text = `📦 *CONSULTA DE REPUESTO EN STOCK*\n\n📦 *Pieza:* _${productName}_${partInfo}\n💵 *Precio publicado:* _${price}_\n\n_Hola Taller MasterTech 🛠️, me interesa comprar este repuesto. ¿Puedo coordinar el retiro o la instalación en taller?_`;
+      text = `📦 *CONSULTA DE REPUESTO EN STOCK*\n\n📦 *Pieza:* _${productName}_${partInfo}\n💵 *Precio publicado:* _${price}_\n\n_Hola Taller MasterTech, me interesa comprar este repuesto. ¿Puedo coordinar el retiro o la instalación en taller?_`;
     }
     return buildDirectWhatsAppUrl(config.PHONE_NUMBER, text);
   };
@@ -2502,19 +2502,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 }`}
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span>En Taller ({catalogItems.filter(i => !i.isImportedUSA).length})</span>
+                <span>En Tienda ({catalogItems.filter(i => !i.isImportedUSA).length})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setAvailabilityFilter('usa')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                   availabilityFilter === 'usa'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-emerald-600 text-white shadow-sm'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <Plane size={12} />
-                <span>Express USA ({catalogItems.filter(i => i.isImportedUSA).length})</span>
+                <Globe size={12} className="text-amber-300" />
+                <span>Originales EE.UU. en Stock ({catalogItems.filter(i => i.isImportedUSA).length})</span>
               </button>
             </div>
           </div>}
@@ -2765,14 +2765,15 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {/* Availability Badge Top-Right */}
                       <div className="absolute top-2.5 right-2.5 pointer-events-none">
                         {item.isImportedUSA ? (
-                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-blue-600/90 text-white border border-blue-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
-                            <Plane size={10} />
-                            <span>USA Express</span>
+                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-emerald-600/90 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                            <Globe size={10} className="text-amber-300" />
+                            <span>Stock Tienda · Original USA</span>
                           </span>
                         ) : (
                           <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-emerald-600/90 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                            <span>Stock Taller</span>
+                            <span>Stock en Tienda</span>
                           </span>
                         )}
                       </div>
@@ -3334,9 +3335,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           <span className={`text-xs font-bold px-3 py-1 rounded-full inline-block ${
                             (selectedProduct.stock ?? 10) > 0 
                               ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
-                              : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                              : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                           }`}>
-                            {selectedProduct.isImportedUSA ? '✈ Pedido USA (7 a 15 días)' : `● ${selectedProduct.stock ?? 10} en Stock Taller`}
+                            {selectedProduct.isImportedUSA ? '● Stock en Tienda · Original USA' : `● ${selectedProduct.stock ?? 10} en Stock Tienda`}
                           </span>
                         </div>
 
@@ -3348,8 +3349,9 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           </span>
                           <span className="text-xs font-bold text-zinc-400">USD</span>
                           {selectedProduct.isImportedUSA && (
-                            <span className="text-[11px] text-blue-400 font-semibold ml-2 bg-blue-950/60 border border-blue-500/30 px-2 py-0.5 rounded-full">
-                              Importación Express
+                            <span className="text-[11px] text-emerald-300 font-semibold ml-2 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <Globe size={11} className="text-amber-300" />
+                              <span>Original USA en Stock</span>
                             </span>
                           )}
                         </div>
@@ -3364,10 +3366,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     </div>
 
                     {selectedProduct.isImportedUSA && (
-                      <div className="p-4 bg-blue-950/60 border border-blue-500/40 rounded-2xl text-xs text-blue-200 flex items-center gap-3 shadow-md">
+                      <div className="p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-2xl text-xs text-emerald-200 flex items-center gap-3 shadow-md">
                         <div>
-                          <strong className="block font-bold text-white">Repuesto Importado Directamente desde EE.UU.</strong>
-                          <p className="text-[11px] mt-0.5 text-blue-200">Producto con especificaciones originales OEM importado desde EE.UU. Garantía de durabilidad y ajuste perfecto en taller.</p>
+                          <strong className="block font-bold text-white flex items-center gap-1.5">
+                            <Globe size={13} className="text-amber-400" />
+                            <span>Repuesto Original Importado desde EE.UU. (En Stock en Tienda)</span>
+                          </strong>
+                          <p className="text-[11px] mt-0.5 text-emerald-200/90">Producto con especificaciones originales OEM importado desde EE.UU. Disponible para retiro inmediato en tienda o instalación directa con garantía en taller.</p>
                         </div>
                       </div>
                     )}

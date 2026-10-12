@@ -11842,16 +11842,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   </datalist>
                 </div>
                 <div className="flex items-center pt-5">
-                  <label className="flex items-center gap-2 cursor-pointer text-white font-bold select-none">
+                  <label className="flex items-center gap-2 cursor-pointer text-white font-bold select-none group">
                     <input
                       type="checkbox"
                       checked={!!editingProduct.isImportedUSA}
                       onChange={(e) => setEditingProduct({ ...editingProduct, isImportedUSA: e.target.checked })}
                       className="w-4 h-4 accent-amber-400 rounded cursor-pointer"
                     />
-                    <span className="text-xs text-amber-300 flex items-center gap-1.5">
-                      <Globe size={13} />
-                      <span>Importado desde EE.UU.</span>
+                    <span className="text-xs text-amber-300 flex items-center gap-1.5 group-hover:text-amber-200 transition-colors">
+                      <Globe size={13} className="text-amber-400 shrink-0" />
+                      <span>Original e Importado desde EE.UU. (En Stock en Tienda)</span>
                     </span>
                   </label>
                 </div>
