@@ -1733,7 +1733,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
       <Navbar activePage="catalogo" config={config} />
 
       {/* Main Container */}
-      <main className="pt-24 pb-20 max-w-[1760px] mx-auto px-3 sm:px-6 space-y-16">
+      <main className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
         
         {/* ========================================================================= */}
         {/* SECTION 1: HERO SHOWCASE (DISEÑO PROFESIONAL MASTERTECH) */}
@@ -2519,7 +2519,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             </div>
           </div>}
 
-          <div style={{ display: isCatalogLoading ? 'none' : undefined }}>
+          <div style={{ display: isCatalogLoading ? 'none' : undefined }} className="space-y-4">
 
           {/* BARRA DE ESTADO / ACCESO RÁPIDO DE VEHÍCULO */}
           <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/10 shadow-sm">
@@ -2724,7 +2724,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">
               {filteredItems.map((item, idx) => {
                 const numericPrice = parsePrice(item.price);
 
@@ -2753,27 +2753,24 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                         className="w-full h-full object-contain group-hover/img:scale-108 transition-transform duration-500 drop-shadow-md rounded-xl"
                       />
 
-                      {/* Brand Badge Top-Left */}
-                      {item.badge && (
-                        <div className="absolute top-2.5 left-2.5 pointer-events-none">
-                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider leading-tight block max-w-[130px] truncate bg-black/85 text-white border border-white/20 backdrop-blur-md shadow-md">
+                      {/* Badges Bar (Brand and Stock) with clear layout */}
+                      <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between gap-1.5 pointer-events-none z-10">
+                        {item.badge ? (
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider leading-tight max-w-[48%] truncate bg-black/85 text-white border border-white/20 backdrop-blur-md shadow-md">
                             {item.badge}
                           </span>
-                        </div>
-                      )}
+                        ) : <span />}
 
-                      {/* Availability Badge Top-Right */}
-                      <div className="absolute top-2.5 right-2.5 pointer-events-none">
                         {item.isImportedUSA ? (
-                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-emerald-600/90 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider bg-emerald-600 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1 shrink-0">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                            <Globe size={10} className="text-amber-300" />
-                            <span>Stock Tienda · Original USA</span>
+                            <Globe size={9} className="text-amber-300" />
+                            <span>Stock · USA</span>
                           </span>
                         ) : (
-                          <span className="font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider bg-emerald-600/90 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1">
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider bg-emerald-600 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1 shrink-0">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                            <span>Stock en Tienda</span>
+                            <span>En Stock</span>
                           </span>
                         )}
                       </div>
