@@ -2765,12 +2765,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider bg-emerald-600 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1 shrink-0">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                             <Globe size={9} className="text-amber-300" />
-                            <span>Stock · USA</span>
+                            <span>{item.stock ?? 10} en Tienda · USA</span>
                           </span>
                         ) : (
                           <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider bg-emerald-600 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1 shrink-0">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                            <span>En Stock</span>
+                            <span>{item.stock ?? 10} en Stock</span>
                           </span>
                         )}
                       </div>
@@ -3318,12 +3318,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             </span>
                           )}
 
-                          <span className={`text-xs font-bold px-3 py-1 rounded-full inline-block ${
-                            (selectedProduct.stock ?? 10) > 0 
-                              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' 
-                              : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
-                          }`}>
-                            {selectedProduct.isImportedUSA ? '● Stock en Tienda · Original USA' : `● ${selectedProduct.stock ?? 10} en Stock Tienda`}
+                          <span className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                            {selectedProduct.isImportedUSA 
+                              ? `● ${selectedProduct.stock ?? 10} disponibles en Tienda (Original USA)`
+                              : `● ${selectedProduct.stock ?? 10} disponibles en Tienda`}
                           </span>
                         </div>
 
@@ -3401,8 +3400,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <span className="text-2xl font-black text-slate-900 dark:text-white font-mono">
                     {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)} USD` : selectedProduct.price}
                   </span>
-                  {selectedProduct.isImportedUSA && (
-                    <span className="text-[10px] bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30">En Stock</span>
+                  {selectedProduct.isImportedUSA ? (
+                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30">
+                      {selectedProduct.stock ?? 10} en Stock · USA
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30">
+                      {selectedProduct.stock ?? 10} en Stock
+                    </span>
                   )}
                 </div>
 
