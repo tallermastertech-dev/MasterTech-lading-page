@@ -130,8 +130,8 @@ async function syncTripleBackup() {
       
       let pushed = false;
       try {
-        const psGetToken = `powershell -NoProfile -Command "$src = 'using System; using System.Runtime.InteropServices; using System.Text; public class CR { [DllImport(\\\"advapi32.dll\\\", EntryPoint=\\\"CredReadW\\\", CharSet=CharSet.Unicode)] public static extern bool CredRead(string t, int ty, int r, out IntPtr p); [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)] public struct C { public int F, T; public string TN, C; public System.Runtime.InteropServices.ComTypes.FILETIME L; public int CBS; public IntPtr CB; public int P, AC; public IntPtr A; public string TA, UN; } public static string GP(string t) { IntPtr p; if (CredRead(t, 1, 0, out p)) { C c = (C)Marshal.PtrToStructure(p, typeof(C)); byte[] b = new byte[c.CBS]; Marshal.Copy(c.CB, b, 0, c.CBS); return Encoding.UTF8.GetString(b); } return null; } }'; Add-Type -TypeDefinition $src; [CR]::GP('GitHub - https://api.github.com/tallermastertech-dev')"`;
-        const token = execSync(psGetToken, { encoding: 'utf-8' }).trim();
+        const psScript = path.join(__dirname, 'get_github_token.ps1');
+        const token = execSync(`powershell -NoProfile -ExecutionPolicy Bypass -File "${psScript}"`, { encoding: 'utf-8' }).trim();
         if (token) {
           const pushUrl = `https://x-access-token:${token}@github.com/tallermastertech-dev/MasterTech-lading-page.git`;
           execSync(`"${GIT_EXEC}" push "${pushUrl}" main:main`, { cwd: REPO_DIR, stdio: 'inherit' });
