@@ -2351,72 +2351,94 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
 
         {/* ========================================================================= */}
-        {/* SECTION 3: POPULAR CATEGORIES (CATEGORÍAS POPULARES EN GRID) */}
+        {/* SECTION 3: POPULAR CATEGORIES (CARRUSEL / BARRA COMPACTA POR SISTEMA)     */}
         {/* ========================================================================= */}
-        <section className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>
-                <span className="text-[11px] font-black uppercase text-red-600 dark:text-red-400 tracking-wider">Exploración por Sistema</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                <span>Categorías</span> <span className="text-red-600 dark:text-red-400 italic">Principales</span>
-              </h2>
+        <section className="space-y-2.5">
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+              <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">
+                Categorías de Repuestos
+              </h3>
+              <span className="text-[11px] font-mono text-slate-400 dark:text-zinc-500 font-semibold">
+                (9 sistemas)
+              </span>
             </div>
-            <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-sm">
-              Selecciona una categoría para filtrar el inventario o cotizar piezas específicas para tu vehículo.
-            </p>
+
+            {selectedCategory && (
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("")}
+                className="text-xs text-red-600 dark:text-red-400 font-bold hover:underline cursor-pointer flex items-center gap-1"
+              >
+                <span>Mostrar todas</span>
+                <X size={12} />
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
-            {[
-              { name: "Frenos & Discos", label: "Frenos & Discos", icon: <Disc size={20} className="text-red-500" />, img: config.CAT_IMG_FRENOS || "/assets/cat_frenos_discos.webp", desc: "Pastillas cerámicas y discos ranurados" },
-              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", icon: <Layers size={20} className="text-red-500" />, img: config.CAT_IMG_SUSPENSION || "/assets/cat_suspension_amortiguadores.webp", desc: "Coilovers y amortiguadores de gas" },
-              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", icon: <Droplets size={20} className="text-red-500" />, img: config.CAT_IMG_ACEITES || "/assets/cat_aceites_lubricantes.webp", desc: "Sintéticos 5W-30 y fluidos ATF" },
-              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", icon: <Zap size={20} className="text-red-500" />, img: config.CAT_IMG_BATERIAS || "/assets/cat_baterias_electricidad.webp", desc: "Baterías AGM y alternadores 140A" },
-              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-red-500" />, img: config.CAT_IMG_FILTROS || "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
-              { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-red-500" />, img: config.CAT_IMG_CLIMATIZACION || "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
-              { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-red-500" />, img: config.CAT_IMG_MOTOR || "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
-              { name: "Partes & Piezas", label: "Partes & Piezas", icon: <Wrench size={20} className="text-red-500" />, img: config.CAT_IMG_PARTES || "/assets/product_engine_piston_crankshaft.webp", desc: "Componentes mecánicos, tren motriz y recambios" },
-              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-red-500" />, img: config.CAT_IMG_DETAILING || "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
-            ].map((catItem, idx) => {
+          {/* Compact Category Rail */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-0.5 scrollbar-none select-none">
+            {/* Chip: Todos */}
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCategory("");
+                const el = document.getElementById('catalogo-grid');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 border shadow-sm ${
+                !selectedCategory
+                  ? 'bg-red-600 text-white border-red-600 shadow-red-600/20'
+                  : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/10 hover:border-red-500/40 hover:bg-slate-50 dark:hover:bg-[#161822]'
+              }`}
+            >
+              <Package size={14} />
+              <span>Todos ({catalogItems.length})</span>
+            </button>
 
+            {[
+              { name: "Frenos & Discos", label: "Frenos & Discos", img: config.CAT_IMG_FRENOS || "/assets/cat_frenos_discos.webp" },
+              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", img: config.CAT_IMG_SUSPENSION || "/assets/cat_suspension_amortiguadores.webp" },
+              { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", img: config.CAT_IMG_ACEITES || "/assets/cat_aceites_lubricantes.webp" },
+              { name: "Baterías & Electricidad", label: "Baterías & Electricidad", img: config.CAT_IMG_BATERIAS || "/assets/cat_baterias_electricidad.webp" },
+              { name: "Filtros & Consumibles", label: "Filtros & Consumibles", img: config.CAT_IMG_FILTROS || "/assets/cat_filtros_oem.webp" },
+              { name: "Fluidos & Climatización", label: "Fluidos & Climatización", img: config.CAT_IMG_CLIMATIZACION || "/assets/cat_climatizacion.webp" },
+              { name: "Inyección & Motor", label: "Inyección & Motor", img: config.CAT_IMG_MOTOR || "/assets/promo_turbo_charger.webp" },
+              { name: "Partes & Piezas", label: "Partes & Piezas", img: config.CAT_IMG_PARTES || "/assets/product_engine_piston_crankshaft.webp" },
+              { name: "Cuidado & Detailing", label: "Cuidado & Detailing", img: config.CAT_IMG_DETAILING || "/assets/cat_cuidado_estetica.webp" }
+            ].map((catItem, idx) => {
               const count = catalogItems.filter(item => item.category === catItem.name).length;
               const isSelected = selectedCategory === catItem.name;
 
               return (
-                <div
+                <button
                   key={idx}
+                  type="button"
                   onClick={() => {
-                    setSelectedCategory(catItem.name);
+                    setSelectedCategory(isSelected ? "" : catItem.name);
                     const el = document.getElementById('catalogo-grid');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center gap-3.5 group select-none shadow-sm hover:shadow-md ${
+                  className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer flex items-center gap-2 shrink-0 shadow-sm ${
                     isSelected
-                      ? 'is-selected ring-2 ring-red-600 bg-red-50 dark:bg-red-950/20 border-red-500'
-                      : 'bg-white dark:bg-[#12141a]/90 border-slate-200 dark:border-white/10 hover:border-red-500/40 hover:bg-slate-50 dark:hover:bg-[#161822]'
+                      ? 'bg-red-50 dark:bg-red-950/30 border-red-500 text-red-600 dark:text-red-400 font-black ring-1 ring-red-500'
+                      : 'bg-white dark:bg-[#12141a] border-slate-200 dark:border-white/10 hover:border-red-500/40 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-50 dark:hover:bg-[#161822]'
                   }`}
                 >
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-slate-100 dark:bg-[#0c0e14] border border-slate-200 dark:border-white/10 shrink-0 p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform shadow-inner">
+                  <div className="w-6 h-6 rounded-lg overflow-hidden bg-slate-100 dark:bg-[#0c0e14] shrink-0 border border-slate-200 dark:border-white/10 p-0.5">
                     <img 
                       src={catItem.img} 
                       alt={catItem.label} 
                       onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded"
                     />
                   </div>
-
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors leading-tight truncate">
-                      {catItem.label}
-                    </h4>
-                    <span className="category-count text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold block mt-0.5">
-                      ({count} {count === 1 ? 'pieza' : 'piezas'})
-                    </span>
-                  </div>
-                </div>
+                  <span className="text-xs whitespace-nowrap">{catItem.label}</span>
+                  <span className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 font-bold">
+                    ({count})
+                  </span>
+                </button>
               );
             })}
           </div>
