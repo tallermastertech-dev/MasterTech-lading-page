@@ -1,7 +1,7 @@
 {
   "metadata": {
     "fuente": "Sincronizacion Triple MasterTech",
-    "timestamp": "2026-10-14T20:10:46.382Z",
+    "timestamp": "2026-10-14T20:16:54.790Z",
     "total_productos": 24,
     "total_leads": 3,
     "total_configuraciones": 42
@@ -125,7 +125,7 @@
       "id": 61,
       "key": "OCCUPIED_SLOTS_JSON",
       "value": "{\"2026-10-12\":[\"09:30 AM\"],\"2026-10-07\":[\"08:30 AM\"],\"2026-09-28\":[\"09:00 AM\"]}",
-      "updated_at": "2026-10-14T20:10:21.639526+00:00"
+      "updated_at": "2026-10-14T20:15:02.812771+00:00"
     },
     {
       "id": 49,
