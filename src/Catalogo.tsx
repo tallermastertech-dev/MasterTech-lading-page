@@ -1844,19 +1844,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
       <Navbar activePage="catalogo" config={config} />
 
       {/* Main Container */}
-      <main className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
+      <main className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         
         {/* ========================================================================= */}
         {/* SECTION 1: HERO SHOWCASE (DISEÑO PROFESIONAL MASTERTECH) */}
         {/* ========================================================================= */}
-        <section className="relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-14 shadow-xl border bg-white dark:bg-gradient-to-b dark:from-[#161822] dark:via-[#11131a] dark:to-[#0D0D0D] border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <section className="relative rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xl border bg-white dark:bg-gradient-to-b dark:from-[#161822] dark:via-[#11131a] dark:to-[#0D0D0D] border-slate-200 dark:border-slate-800 transition-colors duration-300">
           {/* Ambient Glows */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-10 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center relative z-10">
             {/* Left Content */}
-            <div className="lg:col-span-6 space-y-5 text-center lg:text-left">
+            <div className="lg:col-span-6 space-y-4 text-center lg:text-left">
               <motion.div 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1870,7 +1870,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-3xl sm:text-5xl xl:text-6xl font-display font-black tracking-tight uppercase leading-[1.08] text-slate-900 dark:text-white"
+                className="text-3xl sm:text-4xl xl:text-5xl font-display font-black tracking-tight uppercase leading-[1.08] text-slate-900 dark:text-white"
               >
                 <span>Repuestos &</span> <br className="hidden sm:block" />
                 <span className="text-red-600 dark:text-red-500 italic">Autopartes OEM</span> <span>Certificadas</span>
@@ -1880,7 +1880,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 text-slate-600 dark:text-slate-300"
+                className="text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 text-slate-600 dark:text-slate-300"
               >
                 Pastillas cerámicas, amortiguadores heavy duty, lubricantes 100% sintéticos y componentes genuinos. Disponibilidad inmediata en taller o importación express desde EE.UU. con código OEM o serial VIN.
               </motion.p>
@@ -1890,37 +1890,46 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2"
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-1"
               >
                 <a 
-                  href="#selector-vehiculo"
-                  className="btn-primary !py-3.5 !px-8 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-red-600/20 hover:scale-105 transition-all cursor-pointer rounded-2xl"
+                  href="#catalogo-grid"
+                  className="btn-primary !py-3 !px-6 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-red-600/25 hover:scale-105 transition-all cursor-pointer rounded-2xl group"
                 >
-                  <ShoppingCart size={16} />
-                  <span>Explorar Catálogo</span>
+                  <Package size={16} />
+                  <span>Ver Repuestos en Stock</span>
+                  <ChevronDown size={15} className="text-white group-hover:translate-y-1 transition-transform animate-bounce" />
+                </a>
+
+                <a 
+                  href="#selector-vehiculo"
+                  className="px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-sm bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 hover:bg-slate-200 dark:hover:bg-white/20 hover:border-[#ff5500]/50"
+                >
+                  <Car size={16} className="text-[#ff5500]" />
+                  <span>Filtrar por Vehículo</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setIsUsaModalOpen(true)}
-                  className="px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-sm bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/25 hover:bg-slate-200 dark:hover:bg-white/20"
+                  className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-sm bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/15 hover:bg-slate-200 dark:hover:bg-white/15"
                 >
-                  <Plane size={16} className="text-blue-500 dark:text-sky-400" />
+                  <Plane size={15} className="text-blue-500 dark:text-sky-400" />
                   <span>Importación USA</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(true)}
-                  className="px-5 py-3.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
+                  className="px-4 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
-                  <ShoppingBag size={16} />
+                  <ShoppingBag size={15} />
                   <span>Carrito ({cartTotalItems})</span>
                 </button>
               </motion.div>
 
               {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4 text-xs font-medium text-slate-600 dark:text-slate-400">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs font-medium text-slate-600 dark:text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 size={14} className="text-emerald-500" />
                   Garantía en Taller
@@ -1936,8 +1945,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </div>
 
               {/* Quick Search Chips */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 pt-3 text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-semibold text-slate-700 dark:text-slate-300 mr-1">Búsquedas rápidas:</span>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 pt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-semibold text-slate-700 dark:text-slate-300 mr-1 flex items-center gap-1">
+                  <Search size={12} className="text-red-500" />
+                  Búsqueda directa:
+                </span>
                 {[
                   "Toyota Genuine",
                   "Mopar",
@@ -1975,7 +1987,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               className="lg:col-span-6 flex items-center justify-center relative"
             >
               <div 
-                className="relative w-full max-w-lg aspect-square rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group select-none"
+                className="relative w-full max-w-md lg:max-w-lg aspect-[4/3] sm:aspect-square max-h-[380px] lg:max-h-[410px] rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group select-none"
                 onMouseEnter={() => setIsHeroHovered(true)}
                 onMouseLeave={() => setIsHeroHovered(false)}
                 onTouchStart={handleTouchStartHero}
@@ -2067,7 +2079,50 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </div>
             </motion.div>
           </div>
+
+          {/* Bottom Catalog Invitation Banner */}
+          <div className="mt-8 pt-5 border-t border-slate-200/80 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+            <div className="flex items-center gap-2.5 text-xs text-slate-600 dark:text-zinc-300 text-center sm:text-left">
+              <span className="flex h-2.5 w-2.5 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="font-semibold text-slate-800 dark:text-zinc-200">
+                Inventario físico verificado disponible para entrega inmediata o instalación en taller
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2.5 w-full sm:w-auto justify-center sm:justify-end shrink-0">
+              <a 
+                href="#selector-vehiculo"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-white/10 transition-colors flex items-center gap-1.5"
+              >
+                <Car size={13} className="text-[#ff5500]" />
+                <span>Filtrar por vehículo</span>
+              </a>
+              <a 
+                href="#catalogo-grid"
+                className="px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-600/20 transition-all flex items-center gap-1.5 hover:scale-105 group"
+              >
+                <span>Ver catálogo abajo</span>
+                <ChevronDown size={14} className="group-hover:translate-y-0.5 transition-transform animate-bounce" />
+              </a>
+            </div>
+          </div>
         </section>
+
+        {/* Floating Scroll-Down Invitation Pill */}
+        <div className="flex justify-center -my-3 sm:-my-5 relative z-20">
+          <a 
+            href="#catalogo-grid"
+            aria-label="Ver repuestos disponibles abajo"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#12141a] text-slate-700 dark:text-zinc-200 hover:text-red-600 dark:hover:text-red-400 text-xs font-bold shadow-lg border border-slate-200 dark:border-white/15 hover:border-red-500/50 transition-all hover:scale-105 group"
+          >
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+            <span>Desliza para ver repuestos disponibles abajo</span>
+            <ChevronDown size={14} className="text-red-500 group-hover:translate-y-0.5 transition-transform animate-bounce" />
+          </a>
+        </div>
 
         {/* ========================================================================= */}
         {/* SECTION 2: BUSCADOR POR VEHÍCULO (3 PASOS: MARCA -> MODELO -> MOTOR)      */}
@@ -2090,16 +2145,26 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   </div>
                 </div>
 
-                {appliedVehicleFilter && (
-                  <button
-                    type="button"
-                    onClick={clearVehicleFilter}
-                    className="text-xs text-red-600 dark:text-red-400 font-bold flex items-center gap-1.5 cursor-pointer bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-xl border border-red-500/20 transition-all self-start sm:self-auto shrink-0"
-                  >
-                    <X size={13} />
-                    <span>Quitar filtro ({appliedVehicleFilter.brand}{appliedVehicleFilter.model ? ` ${appliedVehicleFilter.model}` : ''})</span>
-                  </button>
-                )}
+                <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                  {appliedVehicleFilter ? (
+                    <button
+                      type="button"
+                      onClick={clearVehicleFilter}
+                      className="text-xs text-red-600 dark:text-red-400 font-bold flex items-center gap-1.5 cursor-pointer bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-xl border border-red-500/20 transition-all shrink-0"
+                    >
+                      <X size={13} />
+                      <span>Quitar filtro ({appliedVehicleFilter.brand}{appliedVehicleFilter.model ? ` ${appliedVehicleFilter.model}` : ''})</span>
+                    </button>
+                  ) : (
+                    <a
+                      href="#catalogo-grid"
+                      className="text-xs font-bold text-slate-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-1 transition-colors px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5"
+                    >
+                      <span>Explorar inventario completo</span>
+                      <ChevronDown size={14} className="text-red-500" />
+                    </a>
+                  )}
+                </div>
               </div>
 
               {/* 3-Step Vehicle Selector Form */}
