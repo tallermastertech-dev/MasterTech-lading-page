@@ -8236,6 +8236,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           CAT_IMG_FILTROS: settingsForm.CAT_IMG_FILTROS || '',
                           CAT_IMG_CLIMATIZACION: settingsForm.CAT_IMG_CLIMATIZACION || '',
                           CAT_IMG_MOTOR: settingsForm.CAT_IMG_MOTOR || '',
+                          CAT_IMG_PARTES: settingsForm.CAT_IMG_PARTES || '',
                           CAT_IMG_DETAILING: settingsForm.CAT_IMG_DETAILING || '',
                           PROMO_IMG_FRENOS: settingsForm.PROMO_IMG_FRENOS || '',
                           PROMO_1_TAG: settingsForm.PROMO_1_TAG || '',
@@ -8677,6 +8678,13 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_MOTOR: val })}
                         aspectRatio={1 / 1}
                         placeholder="/assets/promo_turbo_charger.webp"
+                      />
+                      <ImageUploader
+                        label="Partes & Piezas"
+                        value={settingsForm.CAT_IMG_PARTES || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_PARTES: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/product_engine_piston_crankshaft.webp"
                       />
                       <ImageUploader
                         label="Cuidado & Detailing"
@@ -11822,6 +11830,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <option value="Filtros & Consumibles">Filtros & Consumibles</option>
                     <option value="Fluidos & Climatización">Fluidos & Climatización</option>
                     <option value="Inyección & Motor">Inyección & Motor</option>
+                    <option value="Partes & Piezas">Partes & Piezas</option>
                     <option value="Cuidado & Detailing">Cuidado & Detailing</option>
                   </select>
                 </div>

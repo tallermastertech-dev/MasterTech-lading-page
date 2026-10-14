@@ -353,6 +353,7 @@ const CATEGORIES = [
   "Filtros & Consumibles",
   "Fluidos & Climatización",
   "Inyección & Motor",
+  "Partes & Piezas",
   "Cuidado & Detailing"
 ];
 
@@ -2319,6 +2320,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               { name: "Filtros & Consumibles", label: "Filtros & Consumibles", icon: <Package size={20} className="text-red-500" />, img: config.CAT_IMG_FILTROS || "/assets/cat_filtros_oem.webp", desc: "Filtros de aire, aceite y microfiltros" },
               { name: "Fluidos & Climatización", label: "Fluidos & Climatización A/A", icon: <Sparkles size={20} className="text-red-500" />, img: config.CAT_IMG_CLIMATIZACION || "/assets/cat_climatizacion.webp", desc: "Gas R134a, refrigerantes y A/A" },
               { name: "Inyección & Motor", label: "Inyección & Motor", icon: <Gauge size={20} className="text-red-500" />, img: config.CAT_IMG_MOTOR || "/assets/promo_turbo_charger.webp", desc: "Turbocargadores e inyectores" },
+              { name: "Partes & Piezas", label: "Partes & Piezas", icon: <Wrench size={20} className="text-red-500" />, img: config.CAT_IMG_PARTES || "/assets/product_engine_piston_crankshaft.webp", desc: "Componentes mecánicos, tren motriz y recambios" },
               { name: "Cuidado & Detailing", label: "Cuidado & Detailing", icon: <Car size={20} className="text-red-500" />, img: config.CAT_IMG_DETAILING || "/assets/cat_cuidado_estetica.webp", desc: "Ceras cerámicas, champú y microfibras" }
             ].map((catItem, idx) => {
 
@@ -2586,9 +2588,27 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               )}
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+            {/* Category & Sort Dropdowns */}
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+              {/* Category Select */}
               <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 shrink-0">
+                <Tag size={13} />
+                <span className="hidden sm:inline">Categoría:</span>
+              </div>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/15 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer hover:border-red-500 transition-colors shadow-sm"
+              >
+                {CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat === "Todos" ? "Todas las Categorías" : cat}
+                  </option>
+                ))}
+              </select>
+
+              {/* Sort Dropdown */}
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 shrink-0 ml-1">
                 <ArrowUpDown size={13} />
                 <span className="hidden sm:inline">Ordenar:</span>
               </div>
