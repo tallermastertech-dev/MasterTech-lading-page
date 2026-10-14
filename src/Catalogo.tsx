@@ -1918,10 +1918,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               </div>
             </div>
 
-            {/* Right Showcase Visual - Compacto */}
+            {/* Right Showcase Visual - Proporcional y Nítido */}
             <div className="lg:col-span-5 flex items-center justify-center">
               <div 
-                className="relative w-full max-w-sm aspect-[16/10] max-h-[160px] sm:max-h-[180px] rounded-2xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-1.5 shadow-md group select-none"
+                className="relative w-full max-w-md aspect-[4/3] min-h-[220px] sm:min-h-[250px] lg:min-h-[270px] rounded-2xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-1.5 shadow-md group select-none"
                 onMouseEnter={() => setIsHeroHovered(true)}
                 onMouseLeave={() => setIsHeroHovered(false)}
                 onTouchStart={handleTouchStartHero}
@@ -1973,32 +1973,32 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(prev => (prev - 1 + heroImages.length) % heroImages.length); }}
                       aria-label="Imagen anterior"
-                      className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 shadow-md z-20 cursor-pointer"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-70 group-hover:opacity-100 shadow-md z-20 cursor-pointer"
                     >
-                      <ChevronLeft size={14} />
+                      <ChevronLeft size={16} />
                     </button>
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(prev => (prev + 1) % heroImages.length); }}
                       aria-label="Siguiente imagen"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 shadow-md z-20 cursor-pointer"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-70 group-hover:opacity-100 shadow-md z-20 cursor-pointer"
                     >
-                      <ChevronRight size={14} />
+                      <ChevronRight size={16} />
                     </button>
                   </>
                 )}
 
                 {/* Floating Micro-Badge */}
-                <div className="absolute bottom-2 left-2 right-2 p-2 rounded-xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-sm z-10">
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 px-3 py-2 rounded-xl bg-white/90 dark:bg-black/80 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-sm z-10">
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-600 dark:text-red-400 font-bold shrink-0">
                       <Flame size={13} />
                     </div>
-                    <div className="text-[11px] font-black text-slate-900 dark:text-white truncate max-w-[150px] sm:max-w-[180px]">
+                    <div className="text-xs font-black text-slate-900 dark:text-white truncate max-w-[170px] sm:max-w-[210px]">
                       {config.CATALOG_HERO_TITLE || "Frenos, Suspensión & Motor"}
                     </div>
                   </div>
-                  <span className="text-[9px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/30 shrink-0">
+                  <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/30 shrink-0">
                     {config.CATALOG_HERO_BADGE || "OEM 100%"}
                   </span>
                 </div>
