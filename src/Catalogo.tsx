@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye, Globe } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye, Globe, Share2, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
@@ -1174,10 +1174,69 @@ export default function Catalogo() {
   const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'stock' | 'usa'>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
   const [copiedPartId, setCopiedPartId] = useState<number | null>(null);
+  const [copiedShareId, setCopiedShareId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+  // Helper para generar slug amigable o parámetro de URL por producto
+  const getProductShareUrl = (item: CatalogItem) => {
+    if (typeof window === 'undefined') return '';
+    const origin = window.location.origin;
+    return `${origin}/catalogo?p=${item.id}`;
+  };
+
+  // Función para abrir el modal y actualizar la URL en la barra de navegación
+  const openProductModal = (item: CatalogItem) => {
+    setSelectedProduct(item);
+    setActiveImageIndex(0);
+    if (typeof window !== 'undefined' && window.history?.pushState) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('p', String(item.id));
+      window.history.pushState({ productId: item.id }, '', url.toString());
+    }
+  };
+
+  // Función para cerrar el modal y remover el parámetro de la URL
+  const closeProductModal = () => {
+    setSelectedProduct(null);
+    if (typeof window !== 'undefined' && window.history?.pushState) {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('p')) {
+        url.searchParams.delete('p');
+        window.history.pushState({}, '', url.toString());
+      }
+    }
+  };
+
+  // Función para copiar o compartir el enlace directo del repuesto
+  const handleShareProduct = async (item: CatalogItem, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const shareUrl = getProductShareUrl(item);
+    const shareText = `Consulta este repuesto en Taller MasterTech: ${item.title} (${item.price})${item.partNumber ? ` - N° OEM: ${item.partNumber}` : ''}`;
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: item.title,
+          text: shareText,
+          url: shareUrl
+        });
+        return;
+      } catch (err: any) {
+        if (err?.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopiedShareId(item.id);
+        setTimeout(() => setCopiedShareId(null), 2500);
+      }
+    } catch (_) {}
+  };
 
   const handleCopyPart = (id: number, partNumber: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -1534,6 +1593,57 @@ _Hola equipo Taller MasterTech 🛠️, quisiera procesar este pedido de repuest
       window.removeEventListener('storage', handleAdminSync);
     };
   }, []);
+
+  // Deep linking: Detect ?p=ID or ?producto=ID or ?part=OEM in the URL and open modal automatically
+  useEffect(() => {
+    if (typeof window === 'undefined' || catalogItems.length === 0) return;
+
+    const checkUrlProduct = () => {
+      const params = new URLSearchParams(window.location.search);
+      const prodIdStr = params.get('p') || params.get('producto') || params.get('prod') || params.get('id');
+      const partNumStr = params.get('part') || params.get('oem');
+
+      if (prodIdStr) {
+        const prodId = Number(prodIdStr);
+        const match = catalogItems.find(item => item.id === prodId || String(item.id) === prodIdStr);
+        if (match) {
+          setSelectedProduct(match);
+          setActiveImageIndex(0);
+          return;
+        }
+      }
+
+      if (partNumStr) {
+        const cleanPart = partNumStr.trim().toLowerCase();
+        const match = catalogItems.find(item => item.partNumber && item.partNumber.toLowerCase().includes(cleanPart));
+        if (match) {
+          setSelectedProduct(match);
+          setActiveImageIndex(0);
+          return;
+        }
+      }
+    };
+
+    checkUrlProduct();
+
+    // Listen to browser Back / Forward buttons
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const prodIdStr = params.get('p') || params.get('producto') || params.get('prod') || params.get('id');
+      if (prodIdStr) {
+        const prodId = Number(prodIdStr);
+        const match = catalogItems.find(item => item.id === prodId);
+        if (match) {
+          setSelectedProduct(match);
+        }
+      } else {
+        setSelectedProduct(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [catalogItems]);
 
 
 
@@ -2759,10 +2869,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     {/* Product Top Image Box */}
                     <div 
                       className="relative aspect-square bg-gradient-to-b from-slate-50 to-slate-100/60 dark:from-[#151722] dark:to-[#0c0e14] p-5 flex items-center justify-center cursor-pointer overflow-hidden group/img select-none"
-                      onClick={() => {
-                        setSelectedProduct(item);
-                        setActiveImageIndex(0);
-                      }}
+                      onClick={() => openProductModal(item)}
                     >
                       <img 
                         src={item.img || "/assets/cat_suspension_amortiguadores.webp"} 
@@ -2844,10 +2951,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                         {/* Title */}
                         <h3 
-                          onClick={() => {
-                            setSelectedProduct(item);
-                            setActiveImageIndex(0);
-                          }}
+                          onClick={() => openProductModal(item)}
                           className="product-title text-xs sm:text-sm font-bold text-slate-900 dark:text-white hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer leading-snug line-clamp-2 min-h-[2.6em]"
                           title={item.title}
                         >
@@ -2932,15 +3036,31 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           </motion.div>
                         )}
 
+                        {/* Botón Ver Ficha Técnica */}
                         <button
-                          onClick={() => {
-                            setSelectedProduct(item);
-                            setActiveImageIndex(0);
-                          }}
+                          onClick={() => openProductModal(item)}
                           className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 hover:border-red-500 text-slate-600 dark:text-zinc-300 hover:text-red-600 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                           title="Ver Ficha Técnica"
                         >
                           <Eye size={14} />
+                        </button>
+
+                        {/* Botón Compartir / Copiar Enlace Directo */}
+                        <button
+                          type="button"
+                          onClick={(e) => handleShareProduct(item, e)}
+                          className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
+                            copiedShareId === item.id
+                              ? 'bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                              : 'border-slate-200 dark:border-white/10 hover:border-blue-500 text-slate-600 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400'
+                          }`}
+                          title="Copiar enlace directo de este producto para publicar o compartir"
+                        >
+                          {copiedShareId === item.id ? (
+                            <CheckCheck size={14} className="text-emerald-500" />
+                          ) : (
+                            <Share2 size={14} />
+                          )}
                         </button>
 
                         <a
@@ -3265,14 +3385,39 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <Tag size={16} className="text-red-500" />
                   <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 uppercase tracking-wider">{selectedProduct.category}</span>
                 </div>
-                <button 
-                  type="button"
-                  onClick={() => setSelectedProduct(null)}
-                  className="p-1.5 rounded-full bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
-                  title="Cerrar modal"
-                >
-                  <X size={18} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button 
+                    type="button"
+                    onClick={() => handleShareProduct(selectedProduct)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                      copiedShareId === selectedProduct.id
+                        ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40'
+                        : 'bg-slate-200 dark:bg-white/10 hover:bg-blue-600 hover:text-white text-slate-700 dark:text-zinc-300 border-slate-300 dark:border-white/10'
+                    }`}
+                    title="Copiar enlace directo para compartir este producto"
+                  >
+                    {copiedShareId === selectedProduct.id ? (
+                      <>
+                        <CheckCheck size={14} className="text-emerald-500" />
+                        <span>¡Enlace Copiado!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Share2 size={13} />
+                        <span className="hidden sm:inline">Compartir Producto</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button 
+                    type="button"
+                    onClick={closeProductModal}
+                    className="p-1.5 rounded-full bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                    title="Cerrar modal"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
               </div>
 
               {/* Modal Body */}
@@ -3466,7 +3611,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     onClick={() => {
                       addToCart(selectedProduct, 1);
                       setIsCartOpen(true);
-                      setSelectedProduct(null);
+                      closeProductModal();
                     }}
                     className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider py-3.5 px-7 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-red-600/25 cursor-pointer"
                   >
