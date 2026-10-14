@@ -2592,11 +2592,11 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             </div>
 
             {/* Availability Filter Segmented Control */}
-            <div className="flex items-center bg-slate-100 dark:bg-white/5 p-1 rounded-2xl border border-slate-200 dark:border-white/10 self-start sm:self-end">
+            <div className="flex items-center bg-slate-100 dark:bg-white/5 p-1 rounded-2xl border border-slate-200 dark:border-white/10 self-start sm:self-end overflow-x-auto max-w-full scrollbar-none">
               <button
                 type="button"
                 onClick={() => setAvailabilityFilter('all')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   availabilityFilter === 'all'
                     ? 'bg-white dark:bg-[#1a1d28] text-slate-900 dark:text-white shadow-sm'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -2607,7 +2607,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <button
                 type="button"
                 onClick={() => setAvailabilityFilter('stock')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   availabilityFilter === 'stock'
                     ? 'bg-emerald-600 text-white shadow-sm'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -2619,14 +2619,14 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               <button
                 type="button"
                 onClick={() => setAvailabilityFilter('usa')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   availabilityFilter === 'usa'
                     ? 'bg-emerald-600 text-white shadow-sm'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 <Globe size={12} className="text-amber-300" />
-                <span>Originales EE.UU. en Stock ({catalogItems.filter(i => i.isImportedUSA).length})</span>
+                <span>Originales EE.UU. ({catalogItems.filter(i => i.isImportedUSA).length})</span>
               </button>
             </div>
           </div>}
@@ -2699,38 +2699,36 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             </div>
 
             {/* Category & Sort Dropdowns */}
-            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto justify-end">
               {/* Category Select */}
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 shrink-0">
-                <Tag size={13} />
-                <span className="hidden sm:inline">Categoría:</span>
+              <div className="flex items-center gap-1.5 col-span-1 sm:col-auto">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full sm:w-auto bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/15 rounded-xl px-2.5 sm:px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer hover:border-red-500 transition-colors shadow-sm truncate"
+                  title="Filtrar por Categoría"
+                >
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat === "Todos" ? "Todas las Categorías" : cat}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/15 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer hover:border-red-500 transition-colors shadow-sm"
-              >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat === "Todos" ? "Todas las Categorías" : cat}
-                  </option>
-                ))}
-              </select>
 
               {/* Sort Dropdown */}
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 shrink-0 ml-1">
-                <ArrowUpDown size={13} />
-                <span className="hidden sm:inline">Ordenar:</span>
+              <div className="flex items-center gap-1.5 col-span-1 sm:col-auto">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="w-full sm:w-auto bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/15 rounded-xl px-2.5 sm:px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer hover:border-red-500 transition-colors shadow-sm truncate"
+                  title="Ordenar catálogo"
+                >
+                  <option value="featured">Destacados MasterTech</option>
+                  <option value="price-asc">Precio: Menor a Mayor</option>
+                  <option value="price-desc">Precio: Mayor a Menor</option>
+                </select>
               </div>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-white dark:bg-[#12141a] border border-slate-200 dark:border-white/15 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer hover:border-red-500 transition-colors shadow-sm"
-              >
-                <option value="featured">Destacados MasterTech</option>
-                <option value="price-asc">Precio: Menor a Mayor</option>
-                <option value="price-desc">Precio: Mayor a Menor</option>
-              </select>
             </div>
           </div>
 
@@ -3372,24 +3370,24 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* Product Detail Modal */}
         <AnimatePresence>
           {selectedProduct && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 dark:bg-black/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/70 backdrop-blur-md overflow-y-auto">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col transition-colors"
+              className="bg-white dark:bg-[#12141a] text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 rounded-2xl sm:rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[92vh] sm:max-h-[90vh] flex flex-col transition-colors my-auto"
             >
               {/* Modal Header */}
-              <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-black/60">
-                <div className="flex items-center gap-2">
-                  <Tag size={16} className="text-red-500" />
-                  <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 uppercase tracking-wider">{selectedProduct.category}</span>
+              <div className="p-3.5 sm:p-5 md:p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-black/60 shrink-0 gap-2">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <Tag size={15} className="text-red-500 shrink-0" />
+                  <span className="text-xs font-bold text-slate-700 dark:text-zinc-300 uppercase tracking-wider truncate">{selectedProduct.category}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                   <button 
                     type="button"
                     onClick={() => handleShareProduct(selectedProduct)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                    className={`px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border ${
                       copiedShareId === selectedProduct.id
                         ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40'
                         : 'bg-slate-200 dark:bg-white/10 hover:bg-blue-600 hover:text-white text-slate-700 dark:text-zinc-300 border-slate-300 dark:border-white/10'
@@ -3398,13 +3396,13 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   >
                     {copiedShareId === selectedProduct.id ? (
                       <>
-                        <CheckCheck size={14} className="text-emerald-500" />
-                        <span>¡Enlace Copiado!</span>
+                        <CheckCheck size={14} className="text-emerald-500 shrink-0" />
+                        <span className="text-[11px] sm:text-xs">¡Copiado!</span>
                       </>
                     ) : (
                       <>
-                        <Share2 size={13} />
-                        <span className="hidden sm:inline">Compartir Producto</span>
+                        <Share2 size={13} className="shrink-0" />
+                        <span className="hidden xs:inline text-[11px] sm:text-xs">Compartir</span>
                       </>
                     )}
                   </button>
@@ -3412,7 +3410,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                   <button 
                     type="button"
                     onClick={closeProductModal}
-                    className="p-1.5 rounded-full bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                    className="p-1.5 sm:p-2 rounded-full bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                     title="Cerrar modal"
                   >
                     <X size={18} />
@@ -3576,29 +3574,31 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               })()}
 
               {/* Modal Footer CTA */}
-              <div className="p-4 sm:p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/70 flex flex-col sm:flex-row gap-3 items-center justify-between shrink-0">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xs text-slate-500 dark:text-zinc-400">Total:</span>
-                  <span className="text-2xl font-black text-slate-900 dark:text-white font-mono">
-                    {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)} USD` : selectedProduct.price}
-                  </span>
+              <div className="p-3.5 sm:p-5 md:p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/70 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between shrink-0">
+                <div className="flex items-center justify-between sm:justify-start gap-2">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-xs text-slate-500 dark:text-zinc-400">Total:</span>
+                    <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">
+                      {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)} USD` : selectedProduct.price}
+                    </span>
+                  </div>
                   {selectedProduct.isImportedUSA ? (
-                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30">
+                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30 whitespace-nowrap">
                       {selectedProduct.stock ?? 10} en Stock · USA
                     </span>
                   ) : (
-                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30">
+                    <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30 whitespace-nowrap">
                       {selectedProduct.stock ?? 10} en Stock
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <a
                     href={getWhatsAppMessage(selectedProduct.title, selectedProduct.price, selectedProduct.partNumber, selectedProduct.isImportedUSA, selectedProduct.stock)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3.5 rounded-xl bg-slate-200 dark:bg-white/10 hover:bg-[#25D366] text-slate-800 dark:text-zinc-300 hover:text-black transition-all flex items-center justify-center cursor-pointer border border-slate-300 dark:border-white/15"
+                    className="p-3 sm:p-3.5 rounded-xl bg-slate-200 dark:bg-white/10 hover:bg-[#25D366] text-slate-800 dark:text-zinc-300 hover:text-black transition-all flex items-center justify-center cursor-pointer border border-slate-300 dark:border-white/15 shrink-0"
                     title="Consultar por WhatsApp"
                   >
                     <WhatsAppIcon size={18} />
@@ -3606,16 +3606,16 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
                   <motion.button
                     type="button"
-                    whileTap={{ scale: 0.95 }}
+                    whileTap={{ scale: 0.96 }}
                     whileHover={{ scale: 1.02 }}
                     onClick={() => {
                       addToCart(selectedProduct, 1);
                       setIsCartOpen(true);
                       closeProductModal();
                     }}
-                    className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider py-3.5 px-7 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-red-600/25 cursor-pointer"
+                    className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider py-3 sm:py-3.5 px-4 sm:px-7 rounded-xl transition-all flex items-center justify-center gap-2 shadow-xl shadow-red-600/25 cursor-pointer"
                   >
-                    <ShoppingCart size={17} className="text-white" />
+                    <ShoppingCart size={16} className="text-white shrink-0" />
                     <span>Añadir al Carrito</span>
                   </motion.button>
                 </div>
