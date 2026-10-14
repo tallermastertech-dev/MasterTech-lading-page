@@ -2390,8 +2390,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             )}
           </div>
 
-          {/* Compact Category Pills (Visibles todas en pantalla) */}
-          <div className="flex flex-wrap items-center gap-2 pt-0.5 select-none">
+          {/* Grid de 10 Categorías (5 columnas x 2 filas simétricas al 100% de ancho, sin espacio perdido) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 pt-0.5 select-none w-full">
             {/* Chip: Todos */}
             <button
               type="button"
@@ -2400,19 +2400,28 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                 const el = document.getElementById('catalogo-grid');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 border shadow-sm ${
-                !selectedCategory
+              className={`w-full px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-between gap-1.5 border shadow-sm ${
+                !selectedCategory || selectedCategory === "Todos"
                   ? 'bg-red-600 text-white border-red-600 shadow-red-600/20'
                   : 'bg-white dark:bg-[#12141a] text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-white/10 hover:border-red-500/40 hover:bg-slate-50 dark:hover:bg-[#161822]'
               }`}
             >
-              <Package size={14} />
-              <span>Todos ({catalogItems.length})</span>
+              <div className="flex items-center gap-2 min-w-0">
+                <Package size={15} className="shrink-0" />
+                <span className="truncate">Todos</span>
+              </div>
+              <span className={`text-[10px] font-mono font-bold shrink-0 px-1.5 py-0.5 rounded ${
+                !selectedCategory || selectedCategory === "Todos"
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-zinc-400'
+              }`}>
+                {catalogItems.length}
+              </span>
             </button>
 
             {[
               { name: "Frenos & Discos", label: "Frenos & Discos", img: config.CAT_IMG_FRENOS || "/assets/cat_frenos_discos.webp" },
-              { name: "Suspensión & Amortiguadores", label: "Suspensión & Amortiguadores", img: config.CAT_IMG_SUSPENSION || "/assets/cat_suspension_amortiguadores.webp" },
+              { name: "Suspensión & Amortiguadores", label: "Suspensión", img: config.CAT_IMG_SUSPENSION || "/assets/cat_suspension_amortiguadores.webp" },
               { name: "Aceites & Lubricantes", label: "Aceites & Lubricantes", img: config.CAT_IMG_ACEITES || "/assets/cat_aceites_lubricantes.webp" },
               { name: "Baterías & Electricidad", label: "Baterías & Electricidad", img: config.CAT_IMG_BATERIAS || "/assets/cat_baterias_electricidad.webp" },
               { name: "Filtros & Consumibles", label: "Filtros & Consumibles", img: config.CAT_IMG_FILTROS || "/assets/cat_filtros_oem.webp" },
@@ -2433,23 +2442,29 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     const el = document.getElementById('catalogo-grid');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer flex items-center gap-2 shrink-0 shadow-sm ${
+                  className={`w-full px-2.5 sm:px-3 py-2 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-1.5 shadow-sm ${
                     isSelected
                       ? 'bg-red-50 dark:bg-red-950/30 border-red-500 text-red-600 dark:text-red-400 font-black ring-1 ring-red-500'
                       : 'bg-white dark:bg-[#12141a] border-slate-200 dark:border-white/10 hover:border-red-500/40 text-slate-800 dark:text-zinc-200 font-bold hover:bg-slate-50 dark:hover:bg-[#161822]'
                   }`}
                 >
-                  <div className="w-6 h-6 rounded-lg overflow-hidden bg-slate-100 dark:bg-[#0c0e14] shrink-0 border border-slate-200 dark:border-white/10 p-0.5">
-                    <img 
-                      src={catItem.img} 
-                      alt={catItem.label} 
-                      onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
-                      className="w-full h-full object-cover rounded"
-                    />
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-6 h-6 rounded-lg overflow-hidden bg-slate-100 dark:bg-[#0c0e14] shrink-0 border border-slate-200 dark:border-white/10 p-0.5">
+                      <img 
+                        src={catItem.img} 
+                        alt={catItem.label} 
+                        onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                        className="w-full h-full object-cover rounded"
+                      />
+                    </div>
+                    <span className="text-xs truncate">{catItem.label}</span>
                   </div>
-                  <span className="text-xs whitespace-nowrap">{catItem.label}</span>
-                  <span className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 font-bold">
-                    ({count})
+                  <span className={`text-[10px] font-mono font-bold shrink-0 px-1.5 py-0.5 rounded ${
+                    isSelected
+                      ? 'bg-red-500/20 text-red-600 dark:text-red-400'
+                      : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-zinc-500'
+                  }`}>
+                    {count}
                   </span>
                 </button>
               );
