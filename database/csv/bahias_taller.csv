@@ -1,0 +1,7 @@
+numero_bahia,tipo_bahia,mecanico_asignado,estado
+"1","Elevador Hidraulico 1","Jesus Mata","Ocupada"
+"2","Elevador Hidraulico 2","Beltran Lopez","Ocupada"
+"3","Bahia Diagnostico y Escaner","Aaron Rivas","Disponible"
+"4","Bahia Electricidad y A/C","Aaron Rivas","Ocupada"
+"5","Bahia Frenos y Suspension","Beltran Lopez","Disponible"
+"6","Bahia Mantenimiento Rapido","Jesus Mata","Disponible"

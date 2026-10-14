@@ -1,0 +1,9 @@
+id,nombre,rol,desc,img
+"1","Jesus Mata","JEFE DE MECANICA","Experto en diagnostico avanzado y reparacion de motores con mas de 15 anos de experiencia multimarca.","/jesus.jpg"
+"2","J. Vicente Betancourt","CEO - DIRECTOR","Direccion general y gestion estrategica de MasterTech Taller.","/assets/instalaciones.jpg"
+"3","Brenda Santaella","COORDINADORA LOGISTICA","Coordinacion y gestion de repuestos e insumos automotrices.","/assets/instalaciones.jpg"
+"4","Ambar Salazar","ASESORA DE LOGISTICA","Atencion directa y seguimiento continuo a clientes.","/assets/instalaciones.jpg"
+"5","Aaron Rivas","TECNICO ELECTRONICA","Especialista en diagnostico computarizado y reprogramacion de modulos.","/assets/instalaciones.jpg"
+"6","Domingo Blandin","ASESOR DE SERVICIO","Asesoria tecnica personalizada y recepcion de vehiculos.","/assets/instalaciones.jpg"
+"7","Beltran Lopez","TECNICO MECANICO","Mantenimiento preventivo, correctivo y sistemas de suspension.","/assets/instalaciones.jpg"
+"8","Jose Vasquez","MARKETING - DESARROLLADOR WEB","Desarrollo tecnologico, presencia digital y comunicacion.","/assets/instalaciones.jpg"
