@@ -1712,8 +1712,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
 
   const filteredItems = useMemo(() => {
     let result = catalogItems.filter(item => {
-      // 1. Category filter
-      const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
+      // 1. Category filter (Seguro ante cadenas vacías o 'Todos')
+      const matchesCategory = !selectedCategory || selectedCategory === "Todos" || item.category === selectedCategory;
 
       // 2. Brand filter
       let matchesBrand = selectedBrand === "Todas";
@@ -1747,24 +1747,37 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         matchesBrand = searchTerms.some(term => fullProductText.includes(term));
       }
 
-      // 3. Vehicle compatibility filter (from step selector or legacy)
+      // 3. Vehicle compatibility filter (Multimarca sirve y sale para TODOS los modelos de carros)
       let matchesVehicle = true;
-      if (appliedVehicleFilter && appliedVehicleFilter.brand) {
+      const compNorm = (item.compatibility || "").toLowerCase().trim();
+      const titleNorm = item.title.toLowerCase();
+      const descNorm = (item.desc || "").toLowerCase();
+      const longDescNorm = (item.longDesc || "").toLowerCase();
+      const specsNorm = (item.specs || []).join(" ").toLowerCase();
+
+      // Detección exhaustiva de piezas multimarca / universales
+      const isMultimarca = compNorm.includes("multimarca") || 
+                           compNorm.includes("multi-marca") || 
+                           compNorm.includes("multi marca") || 
+                           compNorm.includes("universal") || 
+                           compNorm.includes("todos los modelos") ||
+                           compNorm.includes("todas las marcas") ||
+                           compNorm.includes("todos los vehículos") ||
+                           compNorm.includes("todos los vehiculos") ||
+                           compNorm.includes("para todo") ||
+                           compNorm.includes("japoneses, americanos") ||
+                           compNorm.includes("vehículos livianos") ||
+                           compNorm.includes("camionetas, suvs") ||
+                           titleNorm.includes("multimarca") ||
+                           descNorm.includes("multimarca") ||
+                           specsNorm.includes("multimarca");
+
+      if (isMultimarca) {
+        // Los repuestos multimarca aplican a cualquier carro y siempre se muestran en el filtro
+        matchesVehicle = true;
+      } else if (appliedVehicleFilter && appliedVehicleFilter.brand) {
         const brandNorm = appliedVehicleFilter.brand.toLowerCase();
         const modelNorm = appliedVehicleFilter.model ? appliedVehicleFilter.model.toLowerCase() : "";
-
-        const compNorm = (item.compatibility || "").toLowerCase();
-        const titleNorm = item.title.toLowerCase();
-        const descNorm = (item.desc || "").toLowerCase();
-        const longDescNorm = (item.longDesc || "").toLowerCase();
-        const specsNorm = (item.specs || []).join(" ").toLowerCase();
-
-        const isUniversal = compNorm.includes("universal") || 
-                            compNorm.includes("multimarca") || 
-                            compNorm.includes("todos") ||
-                            compNorm.includes("japoneses, americanos") ||
-                            compNorm.includes("vehículos livianos") ||
-                            compNorm.includes("camionetas, suvs");
 
         const brandInItem = compNorm.includes(brandNorm) || 
                             titleNorm.includes(brandNorm) || 
@@ -1781,12 +1794,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                               descNorm.includes(cleanModel) || 
                               (baseModel && descNorm.includes(baseModel)) ||
                               specsNorm.includes(cleanModel);
-          matchesVehicle = isUniversal || (brandInItem && (modelInItem || !compNorm.includes('(')));
+          matchesVehicle = brandInItem && (modelInItem || !compNorm.includes('('));
         } else {
-          matchesVehicle = isUniversal || brandInItem;
+          matchesVehicle = brandInItem;
         }
-      } else if (selectedVehicle !== "Todos") {
-        matchesVehicle = (item.compatibility && item.compatibility.toLowerCase().includes(selectedVehicle.toLowerCase()));
+      } else if (selectedVehicle && selectedVehicle !== "Todos") {
+        matchesVehicle = compNorm.includes(selectedVehicle.toLowerCase());
       }
 
       // 4. Availability filter
@@ -2911,8 +2924,17 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           )}
 
                           {item.compatibility && (
-                            <span className="font-semibold text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[120px] text-right" title={item.compatibility}>
-                              {item.compatibility.split(',')[0]}
+                            <span 
+                              className={`font-semibold text-[10px] truncate max-w-[130px] text-right ${
+                                (item.compatibility.toLowerCase().includes('multimarca') || item.compatibility.toLowerCase().includes('universal'))
+                                  ? 'text-emerald-600 dark:text-emerald-400 font-bold'
+                                  : 'text-slate-500 dark:text-slate-400'
+                              }`} 
+                              title={item.compatibility}
+                            >
+                              {(item.compatibility.toLowerCase().includes('multimarca') || item.compatibility.toLowerCase().includes('universal'))
+                                ? 'Multimarca (Universal)'
+                                : item.compatibility.split(',')[0]}
                             </span>
                           )}
                         </div>
@@ -3534,9 +3556,20 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     )}
 
                     {selectedProduct.compatibility && (
-                      <div className="p-3.5 bg-red-500/10 dark:bg-red-950/20 border border-red-500/25 rounded-2xl text-xs text-slate-800 dark:text-zinc-200 flex items-center gap-3 shadow-md mb-2">
-                        <ShieldCheck size={18} className="text-red-500 shrink-0" />
-                        <span><strong className="text-slate-900 dark:text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
+                      <div className={`p-3.5 border rounded-2xl text-xs flex items-center gap-3 shadow-md mb-2 ${
+                        (selectedProduct.compatibility.toLowerCase().includes('multimarca') || selectedProduct.compatibility.toLowerCase().includes('universal'))
+                          ? 'bg-emerald-500/10 dark:bg-emerald-950/20 border-emerald-500/30 text-slate-800 dark:text-zinc-200'
+                          : 'bg-red-500/10 dark:bg-red-950/20 border-red-500/25 text-slate-800 dark:text-zinc-200'
+                      }`}>
+                        <ShieldCheck size={18} className={(selectedProduct.compatibility.toLowerCase().includes('multimarca') || selectedProduct.compatibility.toLowerCase().includes('universal')) ? 'text-emerald-500 shrink-0' : 'text-red-500 shrink-0'} />
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span><strong className="text-slate-900 dark:text-white">Compatibilidad de Vehículos:</strong> {selectedProduct.compatibility}</span>
+                          {(selectedProduct.compatibility.toLowerCase().includes('multimarca') || selectedProduct.compatibility.toLowerCase().includes('universal')) && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                              Aplica a todos los modelos de carros
+                            </span>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
