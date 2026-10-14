@@ -846,7 +846,7 @@ export default function App() {
   }
 
   if (isCatalogo) {
-    return <PrivateCatalogoGuard />;
+    return <Catalogo />;
   }
 
   if (isJornadas) {
@@ -1919,6 +1919,7 @@ export default function App() {
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li><a href="/servicios" className="hover:text-red-400 transition-colors">Servicios Mecánicos</a></li>
+                <li><a href="/catalogo" className="hover:text-red-400 transition-colors font-bold text-white">Catálogo de Repuestos</a></li>
                 <li><span className="text-slate-500 cursor-default">Manuales por Motor (Próximamente)</span></li>
                 <li><a href="/jeep" className="hover:text-red-400 transition-colors">Especialista Jeep Margarita</a></li>
                 <li><a href="/toyota" className="hover:text-red-400 transition-colors">Especialista Toyota Margarita</a></li>

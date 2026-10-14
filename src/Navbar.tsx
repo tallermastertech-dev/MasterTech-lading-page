@@ -188,6 +188,16 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
             </AnimatePresence>
           </div>
 
+          {/* 4. Catálogo de Repuestos Link */}
+          <a 
+            href="/catalogo" 
+            className={`transition-colors py-2 whitespace-nowrap ${
+              activePage === 'catalogo' ? 'text-primary font-bold border-b-2 border-primary pb-0.5' : 'hover:text-primary dark:hover:text-white'
+            }`}
+          >
+            Catálogo
+          </a>
+
           {/* 5. Preguntas Frecuentes Direct Link (No Chevron / No Dropdown) */}
           <a 
             href="/faq" 
@@ -307,6 +317,16 @@ export default function Navbar({ activePage = 'inicio', config = DEFAULT_CONFIG 
                   </div>
                 )}
               </div>
+
+              {/* 4. Catálogo de Repuestos */}
+              <a
+                href="/catalogo"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 text-base font-medium text-slate-900 dark:text-white hover:text-primary transition-colors py-2 border-b border-slate-100 dark:border-white/5"
+              >
+                <Package size={18} className="text-primary" />
+                <span>Catálogo de Repuestos</span>
+              </a>
 
               {/* 5. Preguntas Frecuentes Direct Link */}
               <a
