@@ -369,7 +369,6 @@ async function getSettings(force = false) {
 
   try {
     const { data, error } = await supabase.from('settings').select('*');
-    console.log(`[Supabase getSettings] Filas obtenidas de BD: ${data?.length || 0} | Error: ${error ? error.message : 'Ninguno'}`);
     
     const settingsObj: Record<string, string> = { ...defaultSettings };
 
@@ -586,7 +585,8 @@ const handleGetSettings = async (req: express.Request, res: express.Response) =>
   try {
     const authHeader = req.headers.authorization || '';
     const hasAdminToken = authHeader.startsWith('Bearer ') && authHeader.length > 20;
-    const isBypass = hasAdminToken || req.query._force === 'true' || req.query._t !== undefined || req.query.t !== undefined;
+    // Only bypass server-side Supabase cache when explicitly requested by admin actions
+    const isBypass = (hasAdminToken && req.query._force === 'true') || req.query._force === 'true';
     const settings = await getSettings(isBypass);
     
     // Strict real-time freshness: never cache settings so additions and deletions reflect everywhere immediately
@@ -1408,13 +1408,11 @@ const handlePutSettings = async (req: express.Request, res: express.Response) =>
 
 const handleGetInspectionSlots = async (req: express.Request, res: express.Response) => {
   try {
-    // Disponibilidad en tiempo real estricta: No almacenar en caché
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
-    cachedOccupiedSlots = null;
-    cachedOccupiedSlotsTime = 0;
-    const occupied = await rebuildAndPersistOccupiedSlots();
+    // Use cached slots with TTL to prevent continuous database queries and egress spikes
+    const occupied = await getOccupiedSlotsMap();
     res.json({ occupied });
   } catch (err: any) {
     console.error("Error in GET /inspection-slots:", err);

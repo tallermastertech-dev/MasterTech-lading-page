@@ -6,7 +6,7 @@
  * eliminating unnecessary server load and bandwidth/egress consumption.
  */
 
-export const SETTINGS_TTL_MS = 10 * 1000; // 10 seconds TTL
+export const SETTINGS_TTL_MS = 60 * 1000; // 60 seconds TTL (eliminates repeated background fetches)
 const STORAGE_KEY = 'mastertech_settings_store';
 const TIMESTAMP_KEY = 'mastertech_settings_timestamp';
 
