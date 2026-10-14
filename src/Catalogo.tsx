@@ -1844,157 +1844,91 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
       <Navbar activePage="catalogo" config={config} />
 
       {/* Main Container */}
-      <main className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
+      <main className="pt-20 sm:pt-22 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
         
         {/* ========================================================================= */}
-        {/* SECTION 1: HERO SHOWCASE (DISEÑO PROFESIONAL MASTERTECH) */}
+        {/* SECTION 1: HERO SHOWCASE (COMPACTO Y MODERNO MASTERTECH)                  */}
         {/* ========================================================================= */}
-        <section className="relative rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xl border bg-white dark:bg-gradient-to-b dark:from-[#161822] dark:via-[#11131a] dark:to-[#0D0D0D] border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <section className="relative rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-6 shadow-md border bg-white dark:bg-[#12141a] border-slate-200 dark:border-white/10 transition-colors duration-300 overflow-hidden">
           {/* Ambient Glows */}
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-10 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-1/4 w-72 h-72 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-60 h-60 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center relative z-10">
             {/* Left Content */}
-            <div className="lg:col-span-6 space-y-4 text-center lg:text-left">
-              <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="hero-tag inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full font-black text-xs uppercase tracking-widest bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400"
-              >
-                <ShieldCheck size={14} className="text-red-600 dark:text-red-400" />
+            <div className="lg:col-span-7 space-y-3 text-center lg:text-left">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-black text-[11px] uppercase tracking-wider bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400">
+                <ShieldCheck size={13} className="text-red-600 dark:text-red-400" />
                 <span>Stock en Margarita · Importación Directa EE.UU.</span>
-              </motion.div>
+              </div>
 
-              <motion.h1 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-3xl sm:text-4xl xl:text-5xl font-display font-black tracking-tight uppercase leading-[1.08] text-slate-900 dark:text-white"
-              >
-                <span>Repuestos &</span> <br className="hidden sm:block" />
-                <span className="text-red-600 dark:text-red-500 italic">Autopartes OEM</span> <span>Certificadas</span>
-              </motion.h1>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-display font-black tracking-tight uppercase leading-tight text-slate-900 dark:text-white">
+                <span>Repuestos &</span>{" "}
+                <span className="text-red-600 dark:text-red-500 italic">Autopartes OEM</span>{" "}
+                <span>Certificadas</span>
+              </h1>
 
-              <motion.p 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 text-slate-600 dark:text-slate-300"
-              >
-                Pastillas cerámicas, amortiguadores heavy duty, lubricantes 100% sintéticos y componentes genuinos. Disponibilidad inmediata en taller o importación express desde EE.UU. con código OEM o serial VIN.
-              </motion.p>
+              <p className="text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 text-slate-600 dark:text-slate-300">
+                Filtra por tu vehículo abajo o explora los <strong className="text-slate-900 dark:text-white font-mono">{catalogItems.length}</strong> repuestos en stock con garantía e instalación en taller.
+              </p>
 
               {/* Action CTAs */}
-              <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-1"
-              >
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
                 <a 
                   href="#catalogo-grid"
-                  className="btn-primary !py-3 !px-6 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-red-600/25 hover:scale-105 transition-all cursor-pointer rounded-2xl group"
+                  className="btn-primary !py-2.5 !px-5 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-md shadow-red-600/25 hover:scale-105 transition-all cursor-pointer rounded-xl group"
                 >
-                  <Package size={16} />
-                  <span>Ver Repuestos en Stock</span>
-                  <ChevronDown size={15} className="text-white group-hover:translate-y-1 transition-transform animate-bounce" />
+                  <Package size={15} />
+                  <span>Explorar Catálogo ({catalogItems.length})</span>
+                  <ChevronDown size={14} className="text-white group-hover:translate-y-0.5 transition-transform animate-bounce" />
                 </a>
 
                 <a 
                   href="#selector-vehiculo"
-                  className="px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-sm bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/20 hover:bg-slate-200 dark:hover:bg-white/20 hover:border-[#ff5500]/50"
+                  className="px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 text-slate-800 dark:text-white border border-slate-200 dark:border-white/15 hover:border-[#ff5500]/50"
                 >
-                  <Car size={16} className="text-[#ff5500]" />
+                  <Car size={15} className="text-[#ff5500]" />
                   <span>Filtrar por Vehículo</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setIsUsaModalOpen(true)}
-                  className="px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-sm bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/15 hover:bg-slate-200 dark:hover:bg-white/15"
+                  className="px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer text-blue-600 dark:text-sky-400 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-900/50"
                 >
-                  <Plane size={15} className="text-blue-500 dark:text-sky-400" />
-                  <span>Importación USA</span>
+                  <Plane size={14} />
+                  <span>Encargo USA</span>
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsCartOpen(true)}
-                  className="px-4 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
-                >
-                  <ShoppingBag size={15} />
-                  <span>Carrito ({cartTotalItems})</span>
-                </button>
-              </motion.div>
-
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2 text-xs font-medium text-slate-600 dark:text-slate-400">
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 size={14} className="text-emerald-500" />
-                  Garantía en Taller
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 size={14} className="text-emerald-500" />
-                  Instalación Disponible
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 size={14} className="text-emerald-500" />
-                  Marcas OEM & Genuinas
-                </span>
               </div>
 
-              {/* Quick Search Chips */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1.5 pt-2 text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-semibold text-slate-700 dark:text-slate-300 mr-1 flex items-center gap-1">
-                  <Search size={12} className="text-red-500" />
-                  Búsqueda directa:
+              {/* Trust Indicators (Inline compacto) */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 size={13} className="text-emerald-500" />
+                  Garantía en Taller
                 </span>
-                {[
-                  "Toyota Genuine",
-                  "Mopar",
-                  "Bosch",
-                  "Liqui Moly",
-                  "Permatex",
-                  "Wagner",
-                  "Denso",
-                  "Gates",
-                  "Valvoline",
-                  "ACDelco",
-                  "Winner"
-                ].map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery(tag);
-                      const el = document.getElementById('catalogo-grid');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-white/10 transition-colors cursor-pointer text-[11px] font-medium"
-                  >
-                    {tag}
-                  </button>
-                ))}
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 size={13} className="text-emerald-500" />
+                  Instalación Disponible
+                </span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 size={13} className="text-emerald-500" />
+                  Marcas OEM Genuinas
+                </span>
               </div>
             </div>
 
-            {/* Right 3D Auto Parts Visual - Carousel up to 5 images */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="lg:col-span-6 flex items-center justify-center relative"
-            >
+            {/* Right Showcase Visual - Compacto */}
+            <div className="lg:col-span-5 flex items-center justify-center">
               <div 
-                className="relative w-full max-w-md lg:max-w-lg aspect-[4/3] sm:aspect-square max-h-[380px] lg:max-h-[410px] rounded-3xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-2 shadow-xl group select-none"
+                className="relative w-full max-w-sm aspect-[16/10] max-h-[160px] sm:max-h-[180px] rounded-2xl overflow-hidden bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 p-1.5 shadow-md group select-none"
                 onMouseEnter={() => setIsHeroHovered(true)}
                 onMouseLeave={() => setIsHeroHovered(false)}
                 onTouchStart={handleTouchStartHero}
                 onTouchEnd={handleTouchEndHero}
               >
                 {/* Images with smooth transition */}
-                <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-xl">
                   <AnimatePresence mode="wait">
                     <motion.img 
                       key={currentHeroSlide}
@@ -2006,137 +1940,86 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 1.03 }}
                       transition={{ duration: 0.4, ease: "easeOut" }}
-                      className={`w-full h-full ${(config.CATALOG_HERO_FIT || 'cover') === 'contain' ? 'object-contain' : 'object-cover'} drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] group-hover:scale-105 transition-transform duration-700`}
+                      className={`w-full h-full ${(config.CATALOG_HERO_FIT || 'cover') === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 transition-transform duration-700`}
                     />
                   </AnimatePresence>
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 dark:from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 dark:from-black/70 via-transparent to-transparent pointer-events-none rounded-xl" />
 
-                {/* Top Pagination Dots / Indicators (only if > 1 image) */}
+                {/* Top Pagination Dots */}
                 {heroImages.length > 1 && (
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-slate-200 dark:border-white/15 z-20 shadow-md">
+                  <div className="absolute top-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-slate-200 dark:border-white/15 z-20 shadow-sm">
                     {heroImages.map((_, idx) => (
                       <button
                         key={idx}
                         type="button"
                         onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(idx); }}
                         aria-label={`Ir a diapositiva ${idx + 1}`}
-                        className={`transition-all duration-300 rounded-full h-1.5 cursor-pointer ${
+                        className={`transition-all duration-300 rounded-full h-1 cursor-pointer ${
                           idx === currentHeroSlide
-                            ? "w-6 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.9)]"
-                            : "w-2 bg-slate-400 dark:bg-white/40 hover:bg-slate-600 dark:hover:bg-white/80"
+                            ? "w-4 bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.9)]"
+                            : "w-1.5 bg-slate-400 dark:bg-white/40 hover:bg-slate-600 dark:hover:bg-white/80"
                         }`}
                       />
                     ))}
                   </div>
                 )}
 
-                {/* Left/Right Navigation Buttons (only if > 1 image) */}
+                {/* Left/Right Navigation Buttons */}
                 {heroImages.length > 1 && (
                   <>
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(prev => (prev - 1 + heroImages.length) % heroImages.length); }}
                       aria-label="Imagen anterior"
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg z-20 cursor-pointer"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 shadow-md z-20 cursor-pointer"
                     >
-                      <ChevronLeft size={18} />
+                      <ChevronLeft size={14} />
                     </button>
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setCurrentHeroSlide(prev => (prev + 1) % heroImages.length); }}
                       aria-label="Siguiente imagen"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg z-20 cursor-pointer"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-black/70 hover:bg-white dark:hover:bg-black text-slate-800 dark:text-white backdrop-blur-md border border-slate-200 dark:border-white/20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 shadow-md z-20 cursor-pointer"
                     >
-                      <ChevronRight size={18} />
+                      <ChevronRight size={14} />
                     </button>
                   </>
                 )}
 
                 {/* Floating Micro-Badge */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-md z-10">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-600 dark:text-red-400 font-bold shrink-0">
-                      <Flame size={16} />
+                <div className="absolute bottom-2 left-2 right-2 p-2 rounded-xl bg-white/90 dark:bg-black/75 backdrop-blur-md border border-slate-200 dark:border-white/15 flex items-center justify-between shadow-sm z-10">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-600 dark:text-red-400 font-bold shrink-0">
+                      <Flame size={13} />
                     </div>
-                    <div>
-                      <div className="text-xs font-black text-slate-900 dark:text-white">{config.CATALOG_HERO_TITLE || "Frenos, Suspensión & Motor"}</div>
-                      <div className="text-[10px] text-slate-600 dark:text-slate-300">{config.CATALOG_HERO_SUBTITLE || "Rendimiento garantizado y compatibilidad exacta"}</div>
+                    <div className="text-[11px] font-black text-slate-900 dark:text-white truncate max-w-[150px] sm:max-w-[180px]">
+                      {config.CATALOG_HERO_TITLE || "Frenos, Suspensión & Motor"}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[10px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-lg border border-red-500/30">
-                      {config.CATALOG_HERO_BADGE || "OEM 100%"}
-                    </span>
-                    {heroImages.length > 1 && (
-                      <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
-                        {currentHeroSlide + 1}/{heroImages.length}
-                      </span>
-                    )}
-                  </div>
+                  <span className="text-[9px] font-mono font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/30 shrink-0">
+                    {config.CATALOG_HERO_BADGE || "OEM 100%"}
+                  </span>
                 </div>
               </div>
-            </motion.div>
-          </div>
-
-          {/* Bottom Catalog Invitation Banner */}
-          <div className="mt-8 pt-5 border-t border-slate-200/80 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
-            <div className="flex items-center gap-2.5 text-xs text-slate-600 dark:text-zinc-300 text-center sm:text-left">
-              <span className="flex h-2.5 w-2.5 relative shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <span className="font-semibold text-slate-800 dark:text-zinc-200">
-                Inventario físico verificado disponible para entrega inmediata o instalación en taller
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2.5 w-full sm:w-auto justify-center sm:justify-end shrink-0">
-              <a 
-                href="#selector-vehiculo"
-                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-white/10 transition-colors flex items-center gap-1.5"
-              >
-                <Car size={13} className="text-[#ff5500]" />
-                <span>Filtrar por vehículo</span>
-              </a>
-              <a 
-                href="#catalogo-grid"
-                className="px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-600/20 transition-all flex items-center gap-1.5 hover:scale-105 group"
-              >
-                <span>Ver catálogo abajo</span>
-                <ChevronDown size={14} className="group-hover:translate-y-0.5 transition-transform animate-bounce" />
-              </a>
             </div>
           </div>
         </section>
 
-        {/* Floating Scroll-Down Invitation Pill */}
-        <div className="flex justify-center -my-3 sm:-my-5 relative z-20">
-          <a 
-            href="#catalogo-grid"
-            aria-label="Ver repuestos disponibles abajo"
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-[#12141a] text-slate-700 dark:text-zinc-200 hover:text-red-600 dark:hover:text-red-400 text-xs font-bold shadow-lg border border-slate-200 dark:border-white/15 hover:border-red-500/50 transition-all hover:scale-105 group"
-          >
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-            <span>Desliza para ver repuestos disponibles abajo</span>
-            <ChevronDown size={14} className="text-red-500 group-hover:translate-y-0.5 transition-transform animate-bounce" />
-          </a>
-        </div>
-
         {/* ========================================================================= */}
         {/* SECTION 2: BUSCADOR POR VEHÍCULO (3 PASOS: MARCA -> MODELO -> MOTOR)      */}
         {/* ========================================================================= */}
-        <section id="selector-vehiculo" className="scroll-mt-28">
-          <div className="bg-white dark:bg-[#12141a] rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-7 shadow-xl transition-colors">
-            <div className="max-w-7xl mx-auto space-y-4">
+        <section id="selector-vehiculo" className="scroll-mt-24">
+          <div className="bg-white dark:bg-[#12141a] rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-4 sm:p-5 shadow-md transition-colors">
+            <div className="max-w-7xl mx-auto space-y-3.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-[#ff5500]/10 border border-[#ff5500]/30 flex items-center justify-center text-[#ff5500] shrink-0">
                     <Car size={18} />
                   </div>
                   <div>
-                    <h2 className="text-base sm:text-lg font-black uppercase text-slate-900 dark:text-white tracking-tight">
+                    <h2 className="text-sm sm:text-base font-black uppercase text-slate-900 dark:text-white tracking-tight">
                       Seleccione su modelo de vehículo para buscar repuestos
                     </h2>
                     <p className="text-[11px] text-slate-500 dark:text-zinc-400">
@@ -2160,8 +2043,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       href="#catalogo-grid"
                       className="text-xs font-bold text-slate-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-1 transition-colors px-2.5 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5"
                     >
-                      <span>Explorar inventario completo</span>
-                      <ChevronDown size={14} className="text-red-500" />
+                      <span>O explorar catálogo completo ({catalogItems.length})</span>
+                      <ChevronDown size={14} className="text-red-500 animate-bounce" />
                     </a>
                   )}
                 </div>
@@ -2623,7 +2506,7 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
         {/* ========================================================================= */}
         {/* SECTION 4: PRODUCT CATALOG GRID (INVENTARIO DISPONIBLE) */}
         {/* ========================================================================= */}
-        <section id="catalogo-grid" className="space-y-6 pt-4">
+        <section id="catalogo-grid" className="scroll-mt-24 space-y-6 pt-2">
 
           {/* Skeleton loader while fetching from Supabase */}
           {isCatalogLoading && (
