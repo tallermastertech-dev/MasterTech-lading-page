@@ -2377,8 +2377,8 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
             )}
           </div>
 
-          {/* Compact Category Rail */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-0.5 scrollbar-none select-none">
+          {/* Compact Category Pills (Visibles todas en pantalla) */}
+          <div className="flex flex-wrap items-center gap-2 pt-0.5 select-none">
             {/* Chip: Todos */}
             <button
               type="button"
