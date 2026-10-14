@@ -130,7 +130,7 @@ async function syncTripleBackup() {
       
       let pushed = false;
       try {
-        const psScript = path.join(__dirname, 'get_github_token.ps1');
+        const psScript = path.join(REPO_DIR, 'scripts', 'get_github_token.ps1');
         const token = execSync(`powershell -NoProfile -ExecutionPolicy Bypass -File "${psScript}"`, { encoding: 'utf-8' }).trim();
         if (token) {
           const pushUrl = `https://x-access-token:${token}@github.com/tallermastertech-dev/MasterTech-lading-page.git`;
@@ -138,8 +138,8 @@ async function syncTripleBackup() {
           execSync(`"${GIT_EXEC}" update-ref refs/remotes/origin/main HEAD`, { cwd: REPO_DIR, stdio: 'ignore' });
           pushed = true;
         }
-      } catch (authErr) {
-        // Fallback a push estandar
+      } catch (authErr: any) {
+        console.warn('Fallo token push, intentando push estandar:', authErr.message);
       }
 
       if (!pushed) {
