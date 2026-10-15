@@ -555,24 +555,24 @@ export default function Jornadas() {
           const nLower = name.toLowerCase();
           const sLower = subtitle.toLowerCase();
           const pId = (p.id || '').toLowerCase();
-          if (pId.includes('m20') || nLower.includes('m20a') || nLower.includes('2.0l') || nLower.includes('corolla') || sLower.includes('m20a') || sLower.includes('2.0')) {
-            name = 'Corolla, RAV4, Camry, Levin';
-            subtitle = 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
-            regularPrice = regularPrice || '$1,075 USD';
-            promoPrice = promoPrice || '$698 USD';
-            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $381 USD';
-          } else if (pId.includes('t24') || nLower.includes('t24a') || nLower.includes('turbo') || nLower.includes('tacoma') || nLower.includes('4runner') || sLower.includes('t24a') || sLower.includes('2.4l')) {
-            name = 'Tacoma, 4Runner, Highlander, Lexus RX / TX';
-            subtitle = 'Motor 2.4L Turbo (T24A-FTS no híbrido)';
-            regularPrice = regularPrice || '$1,944 USD';
-            promoPrice = promoPrice || '$1,299 USD';
-            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $645 USD';
-          } else if (pId.includes('v35') || nLower.includes('v35a') || nLower.includes('3.5l') || nLower.includes('tundra') || sLower.includes('v35a') || sLower.includes('3.5')) {
+          if (pId.includes('v35') || nLower.includes('v35') || nLower.includes('3.5') || sLower.includes('v35') || sLower.includes('3.5') || nLower.includes('tundra') || nLower.includes('land cruiser') || nLower.includes('sequoia') || nLower.includes('lx600') || nLower.includes('twin-turbo')) {
             name = 'Tundra, Land Cruiser 300, Sequoia, Lexus LX';
             subtitle = 'Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)';
             regularPrice = regularPrice || '$2,200 USD';
             promoPrice = promoPrice || '$1,499 USD';
             discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $701 USD';
+          } else if (pId.includes('t24') || nLower.includes('t24') || nLower.includes('2.4') || sLower.includes('t24') || sLower.includes('2.4') || nLower.includes('tacoma') || nLower.includes('4runner') || nLower.includes('highlander')) {
+            name = 'Tacoma, 4Runner, Highlander, Lexus RX / TX';
+            subtitle = 'Motor 2.4L Turbo (T24A-FTS no híbrido)';
+            regularPrice = regularPrice || '$1,944 USD';
+            promoPrice = promoPrice || '$1,299 USD';
+            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $645 USD';
+          } else if (pId.includes('m20') || pId.includes('a25') || nLower.includes('m20') || nLower.includes('a25') || nLower.includes('2.0') || nLower.includes('2.5') || nLower.includes('corolla') || nLower.includes('rav4') || nLower.includes('camry') || sLower.includes('m20') || sLower.includes('a25')) {
+            name = 'Corolla, RAV4, Camry, Levin';
+            subtitle = 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
+            regularPrice = regularPrice || '$1,075 USD';
+            promoPrice = promoPrice || '$698 USD';
+            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $381 USD';
           }
 
           return {
