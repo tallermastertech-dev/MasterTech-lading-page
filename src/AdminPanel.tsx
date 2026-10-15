@@ -4171,12 +4171,23 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     const formattedPrice = `$${parsedVal.toFixed(2)}`;
     const cleanProduct = { ...product, title: titleTrim, price: formattedPrice };
 
-    const isEdit = cleanProduct.id && catalogItems.some(p => String(p.id) === String(cleanProduct.id));
+    const prevProduct = isEdit ? catalogItems.find(p => String(p.id) === String(cleanProduct.id)) : null;
+    const wasOutOfStock = prevProduct && Number(prevProduct.stock || 0) <= 0;
+    const isNowInStock = Number(cleanProduct.stock || 0) > 0;
+
     let updated: CatalogItem[] = [];
     if (isEdit) {
       updated = catalogItems.map(p => String(p.id) === String(cleanProduct.id) ? cleanProduct : p);
     } else {
       updated = [{ ...cleanProduct, id: Date.now() }, ...catalogItems];
+    }
+
+    if (wasOutOfStock && isNowInStock) {
+      dispatchPushNotification('Repuesto Reabastecido con Stock', {
+        body: `"${cleanProduct.title}" ahora cuenta con ${cleanProduct.stock} unidades en inventario. Las alertas Web Push llegaran a los clientes suscritos.`,
+        icon: cleanProduct.img || '/logo.png',
+        data: { url: '/catalogo' }
+      });
     }
 
     const sanitizedUpdated = sanitizeCatalogItems(updated);

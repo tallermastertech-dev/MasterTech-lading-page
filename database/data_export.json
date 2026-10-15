@@ -1,9 +1,9 @@
 {
   "metadata": {
     "fuente": "Sincronizacion Triple MasterTech",
-    "timestamp": "2026-10-15T13:42:46.227Z",
+    "timestamp": "2026-10-15T17:25:23.195Z",
     "total_productos": 24,
-    "total_leads": 3,
+    "total_leads": 5,
     "total_configuraciones": 42
   },
   "configuracion": [
@@ -124,8 +124,8 @@
     {
       "id": 61,
       "key": "OCCUPIED_SLOTS_JSON",
-      "value": "{\"2026-10-12\":[\"09:30 AM\"],\"2026-10-07\":[\"08:30 AM\"],\"2026-09-28\":[\"09:00 AM\"]}",
-      "updated_at": "2026-10-15T13:41:33.969178+00:00"
+      "value": "{\"2026-10-19\":[\"09:00 AM\",\"08:30 AM\"],\"2026-10-12\":[\"09:30 AM\"],\"2026-10-07\":[\"08:30 AM\"],\"2026-09-28\":[\"09:00 AM\"]}",
+      "updated_at": "2026-10-15T17:23:22.330728+00:00"
     },
     {
       "id": 49,
@@ -232,8 +232,8 @@
     {
       "id": 2221,
       "key": "SAVED_LEADS",
-      "value": "[{\"id\":1791404819168,\"nombre\":\"Diomedes Potentini\",\"telefono\":\"4123522739\",\"vehiculo\":\"Corolla Cross 2025\",\"servicio\":\"Línea de inspección gratuita — Chequeo preventivo de vehículo comprado de segunda mano\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM] Chequeo preventivo de vehículo comprado de segunda mano\",\"fecha_hora\":\"Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM\",\"created_at\":\"2026-10-07T20:26:59.168Z\"},{\"id\":1791216361033,\"nombre\":\"Jose Vasquez\",\"telefono\":\"04160306788\",\"vehiculo\":\"$runner 2002\",\"servicio\":\"Jornada VIP: Optimización y Rendimiento de Motor\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM] [Jornada VIP: Optimización y Rendimiento de Motor] Precio: Promocional.\",\"fecha_hora\":\"Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM\",\"created_at\":\"2026-10-05T16:06:01.033Z\"},{\"id\":1790007115185,\"nombre\":\"Mario Castro\",\"telefono\":\"0414-0875482\",\"vehiculo\":\"Toyota Corolla Levin\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM] revision para ver si aplica para eliminacion de EGR\",\"fecha_hora\":\"Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM\",\"created_at\":\"2026-09-21T16:11:55.185Z\"}]",
-      "updated_at": "2026-10-13T20:47:22.592742+00:00"
+      "value": "[{\"id\":1792084810078,\"nombre\":\"franceliys\",\"telefono\":\"04248169685\",\"vehiculo\":\"jeep gran cherokee\",\"servicio\":\"Línea de inspección gratuita — revision jesus mata\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM] revision jesus mata\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM\",\"created_at\":\"2026-10-15T17:20:10.078Z\"},{\"id\":1792077505565,\"nombre\":\"xavier fuertes\",\"telefono\":\"+34 609 24 60 10\",\"vehiculo\":\"jeep Cherokee\",\"servicio\":\"Línea de inspección gratuita — luces en tablero 100mil km\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM] luces en tablero 100mil km\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM\",\"created_at\":\"2026-10-15T15:18:25.565Z\"},{\"id\":1791404819168,\"nombre\":\"Diomedes Potentini\",\"telefono\":\"4123522739\",\"vehiculo\":\"Corolla Cross 2025\",\"servicio\":\"Línea de inspección gratuita — Chequeo preventivo de vehículo comprado de segunda mano\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM] Chequeo preventivo de vehículo comprado de segunda mano\",\"fecha_hora\":\"Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM\",\"created_at\":\"2026-10-07T20:26:59.168Z\"},{\"id\":1791216361033,\"nombre\":\"Jose Vasquez\",\"telefono\":\"04160306788\",\"vehiculo\":\"$runner 2002\",\"servicio\":\"Jornada VIP: Optimización y Rendimiento de Motor\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM] [Jornada VIP: Optimización y Rendimiento de Motor] Precio: Promocional.\",\"fecha_hora\":\"Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM\",\"created_at\":\"2026-10-05T16:06:01.033Z\"},{\"id\":1790007115185,\"nombre\":\"Mario Castro\",\"telefono\":\"0414-0875482\",\"vehiculo\":\"Toyota Corolla Levin\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM] revision para ver si aplica para eliminacion de EGR\",\"fecha_hora\":\"Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM\",\"created_at\":\"2026-09-21T16:11:55.185Z\"}]",
+      "updated_at": "2026-10-15T17:20:10.376453+00:00"
     },
     {
       "id": 8,
@@ -927,6 +927,34 @@
     }
   ],
   "leads_citas": [
+    {
+      "id": 1792084810078,
+      "nombre": "franceliys",
+      "telefono": "04248169685",
+      "vehiculo": "jeep gran cherokee",
+      "servicio": "Línea de inspección gratuita — revision jesus mata",
+      "status": "Confirmado",
+      "placa": "",
+      "anio": "",
+      "ubicacion": "",
+      "falla": "[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM] revision jesus mata",
+      "fecha_hora": "Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM",
+      "created_at": "2026-10-15T17:20:10.078Z"
+    },
+    {
+      "id": 1792077505565,
+      "nombre": "xavier fuertes",
+      "telefono": "+34 609 24 60 10",
+      "vehiculo": "jeep Cherokee",
+      "servicio": "Línea de inspección gratuita — luces en tablero 100mil km",
+      "status": "Confirmado",
+      "placa": "",
+      "anio": "",
+      "ubicacion": "",
+      "falla": "[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM] luces en tablero 100mil km",
+      "fecha_hora": "Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM",
+      "created_at": "2026-10-15T15:18:25.565Z"
+    },
     {
       "id": 1791404819168,
       "nombre": "Diomedes Potentini",

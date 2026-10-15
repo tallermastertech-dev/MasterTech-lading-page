@@ -11,7 +11,7 @@ self.addEventListener('activate', (event) => {
 
 // Listener para notificaciones push enviadas desde el servidor
 self.addEventListener('push', (event) => {
-  let data = { title: '🔔 Taller MasterTech', body: 'Tienes un nuevo recordatorio o cita agendada.', tag: 'mastertech-notif' };
+  let data = { title: 'Taller MasterTech', body: 'Tienes un nuevo recordatorio o cita agendada.', tag: 'mastertech-notif' };
   try {
     if (event.data) {
       data = event.data.json();
@@ -30,25 +30,26 @@ self.addEventListener('push', (event) => {
     renotify: true,
     vibrate: [200, 100, 200],
     data: {
-      url: data.url || '/admin'
+      url: data.url || '/catalogo'
     }
   };
 
-  event.waitUntil(self.registration.showNotification(data.title || '🔔 Recordatorio Taller MasterTech', options));
+  event.waitUntil(self.registration.showNotification(data.title || 'Recordatorio Taller MasterTech', options));
 });
 
-// Evento al hacer clic en la notificación: abre o enfoca el Panel Ejecutivo
+// Evento al hacer clic en la notificacion: abre o enfoca la URL correspondiente
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) ? event.notification.data.url : '/catalogo';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
-        if (client.url.includes('admin') && 'focus' in client) {
+        if ('focus' in client && client.url && client.url.includes(targetUrl.split('?')[0])) {
           return client.focus();
         }
       }
       if (clients.openWindow) {
-        return clients.openWindow('/admin');
+        return clients.openWindow(targetUrl);
       }
     })
   );

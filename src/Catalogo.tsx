@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Navbar from './Navbar';
-import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye, Globe, Share2, Link as LinkIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronDown, Search, Tag, Filter, CheckCircle2, Check, ShieldCheck, ArrowRight, ExternalLink, Package, X, Wrench, Plane, Send, Car, User, MapPin, ShoppingCart, Plus, Minus, Trash2, ShoppingBag, ZoomIn, Disc, Zap, Droplets, Sparkles, Layers, Flame, Gauge, Copy, CheckCheck, SlidersHorizontal, ArrowUpDown, RotateCcw, Eye, Globe, Share2, Link as LinkIcon, Bell, BellRing } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
+import { 
+  isProductSubscribed, 
+  subscribeProductAlert, 
+  unsubscribeProductAlert, 
+  checkAndTriggerStockAlerts, 
+  getStockAlerts 
+} from './utils/stockNotifications';
 
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
@@ -1090,6 +1097,51 @@ export default function Catalogo() {
   const [config, setConfig] = useState<any>(CONFIG_DEFAULT);
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [isCatalogLoading, setIsCatalogLoading] = useState(true);
+  const [stockAlertToast, setStockAlertToast] = useState<{ title: string; message: string; type: 'success' | 'info' | 'error' } | null>(null);
+  const [subscribedAlertsMap, setSubscribedAlertsMap] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    const syncAlertsMap = () => {
+      const alerts = getStockAlerts();
+      const map: Record<number, boolean> = {};
+      alerts.forEach(a => { map[a.id] = true; });
+      setSubscribedAlertsMap(map);
+    };
+    syncAlertsMap();
+    window.addEventListener('mastertech_stock_alerts_updated', syncAlertsMap);
+    return () => window.removeEventListener('mastertech_stock_alerts_updated', syncAlertsMap);
+  }, []);
+
+  // Verificar si hay alertas suscritas que ya tengan stock al cargar el catalogo
+  useEffect(() => {
+    if (Array.isArray(catalogItems) && catalogItems.length > 0) {
+      checkAndTriggerStockAlerts(catalogItems);
+    }
+  }, [catalogItems]);
+
+  const handleToggleStockAlert = async (product: CatalogItem) => {
+    if (subscribedAlertsMap[product.id]) {
+      unsubscribeProductAlert(product.id);
+      setStockAlertToast({
+        title: 'Alerta cancelada',
+        message: `Ya no recibirás alertas de stock para "${product.title}".`,
+        type: 'info'
+      });
+      setTimeout(() => setStockAlertToast(null), 4000);
+    } else {
+      const res = await subscribeProductAlert(product);
+      if (res.success) {
+        setStockAlertToast({
+          title: 'Alerta de Stock Activada',
+          message: `Te notificaremos en este navegador tan pronto "${product.title}" vuelva a estar disponible en taller.`,
+          type: 'success'
+        });
+        setTimeout(() => setStockAlertToast(null), 5000);
+      } else if (res.status === 'denied') {
+        alert('Las notificaciones de tu navegador están bloqueadas. Puedes activarlas haciendo clic en el icono del candado en la barra de direcciones de tu navegador y permitiendo las notificaciones.');
+      }
+    }
+  };
 
   // 3D Hero Carousel State (Up to 5 images)
   const heroImages = useMemo(() => {
@@ -2989,7 +3041,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           </span>
                         ) : <span />}
 
-                        {item.isImportedUSA ? (
+                        {item.stock === 0 ? (
+                          <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider bg-rose-600 text-white border border-rose-400/50 backdrop-blur-md shadow-md flex items-center gap-1 shrink-0">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                            <span>Agotado</span>
+                          </span>
+                        ) : item.isImportedUSA ? (
                           <span className="font-black text-[9px] px-2 py-0.5 rounded-md uppercase tracking-wider bg-emerald-600 text-white border border-emerald-400/50 backdrop-blur-md shadow-md flex items-center gap-1 shrink-0">
                             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                             <Globe size={9} className="text-amber-300" />
@@ -3172,6 +3229,28 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             <Share2 size={14} />
                           )}
                         </button>
+
+                        {item.stock === 0 && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleStockAlert(item);
+                            }}
+                            className={`p-2.5 rounded-xl transition-all flex items-center justify-center cursor-pointer border ${
+                              subscribedAlertsMap[item.id]
+                                ? 'bg-emerald-600 text-white border-emerald-500 shadow-md'
+                                : 'bg-amber-500/15 hover:bg-amber-500 text-amber-600 dark:text-amber-400 hover:text-white border-amber-500/30'
+                            }`}
+                            title={
+                              subscribedAlertsMap[item.id]
+                                ? "Alerta activada: te avisaremos por notificacion cuando haya stock (clic para desactivar)"
+                                : "Avisarme cuando este disponible (Notificacion en el navegador)"
+                            }
+                          >
+                            {subscribedAlertsMap[item.id] ? <Check size={14} /> : <Bell size={14} />}
+                          </button>
+                        )}
 
                         <a
                           href={getWhatsAppMessage(item.title, item.price, item.partNumber, item.isImportedUSA, item.stock)}
@@ -3593,12 +3672,19 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                             </span>
                           )}
 
-                          <span className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                            {selectedProduct.isImportedUSA 
-                              ? `● ${selectedProduct.stock ?? 10} disponibles en Tienda (Original USA)`
-                              : `● ${selectedProduct.stock ?? 10} disponibles en Tienda`}
-                          </span>
+                          {selectedProduct.stock === 0 ? (
+                            <span className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1.5 bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30">
+                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                              <span>Agotado actualmente</span>
+                            </span>
+                          ) : (
+                            <span className="text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1.5 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                              {selectedProduct.isImportedUSA 
+                                ? `● ${selectedProduct.stock ?? 10} disponibles en Tienda (Original USA)`
+                                : `● ${selectedProduct.stock ?? 10} disponibles en Tienda`}
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="text-xl font-bold leading-snug text-slate-900 dark:text-white">{selectedProduct.title}</h3>
@@ -3705,7 +3791,12 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                       {parsePrice(selectedProduct.price) > 0 ? `$${parsePrice(selectedProduct.price).toFixed(2)} USD` : selectedProduct.price}
                     </span>
                   </div>
-                  {selectedProduct.isImportedUSA ? (
+                  {selectedProduct.stock === 0 ? (
+                    <span className="text-[10px] font-bold bg-rose-500/20 text-rose-700 dark:text-rose-300 px-2.5 py-1 rounded border border-rose-400/30 whitespace-nowrap flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                      Agotado
+                    </span>
+                  ) : selectedProduct.isImportedUSA ? (
                     <span className="text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-400/30 whitespace-nowrap">
                       {selectedProduct.stock ?? 10} en Stock · USA
                     </span>
@@ -3722,25 +3813,51 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 sm:p-3.5 rounded-xl bg-slate-200 dark:bg-white/10 hover:bg-[#25D366] text-slate-800 dark:text-zinc-300 hover:text-black transition-all flex items-center justify-center cursor-pointer border border-slate-300 dark:border-white/15 shrink-0"
-                    title="Consultar por WhatsApp"
+                    title="Consultar disponibilidad por WhatsApp"
                   >
                     <WhatsAppIcon size={18} />
                   </a>
 
-                  <motion.button
-                    type="button"
-                    whileTap={{ scale: 0.96 }}
-                    whileHover={{ scale: 1.02 }}
-                    onClick={() => {
-                      addToCart(selectedProduct, 1);
-                      setIsCartOpen(true);
-                      closeProductModal();
-                    }}
-                    className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider py-3 sm:py-3.5 px-4 sm:px-7 rounded-xl transition-all flex items-center justify-center gap-2 shadow-xl shadow-red-600/25 cursor-pointer"
-                  >
-                    <ShoppingCart size={16} className="text-white shrink-0" />
-                    <span>Añadir al Carrito</span>
-                  </motion.button>
+                  {selectedProduct.stock === 0 ? (
+                    <motion.button
+                      type="button"
+                      whileTap={{ scale: 0.96 }}
+                      whileHover={{ scale: 1.02 }}
+                      onClick={() => handleToggleStockAlert(selectedProduct)}
+                      className={`flex-1 sm:flex-none text-xs font-black uppercase tracking-wider py-3 sm:py-3.5 px-4 sm:px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-xl cursor-pointer ${
+                        subscribedAlertsMap[selectedProduct.id]
+                          ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/25'
+                          : 'bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-amber-500/25'
+                      }`}
+                    >
+                      {subscribedAlertsMap[selectedProduct.id] ? (
+                        <>
+                          <Check size={16} className="text-white shrink-0" />
+                          <span>Alerta Activada</span>
+                        </>
+                      ) : (
+                        <>
+                          <Bell size={16} className="text-slate-950 shrink-0" />
+                          <span>Avisarme cuando haya stock</span>
+                        </>
+                      )}
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      type="button"
+                      whileTap={{ scale: 0.96 }}
+                      whileHover={{ scale: 1.02 }}
+                      onClick={() => {
+                        addToCart(selectedProduct, 1);
+                        setIsCartOpen(true);
+                        closeProductModal();
+                      }}
+                      className="flex-1 sm:flex-none bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider py-3 sm:py-3.5 px-4 sm:px-7 rounded-xl transition-all flex items-center justify-center gap-2 shadow-xl shadow-red-600/25 cursor-pointer"
+                    >
+                      <ShoppingCart size={16} className="text-white shrink-0" />
+                      <span>Añadir al Carrito</span>
+                    </motion.button>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -4143,6 +4260,37 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
           <p>© {new Date().getFullYear()} Taller MasterTech. Todos los derechos reservados. Repuestos y Tecnología Automotriz.</p>
         </div>
       </footer>
+
+      {/* Toast de Alertas de Stock Web Push */}
+      <AnimatePresence>
+        {stockAlertToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-md w-[92%] sm:w-auto px-5 py-3.5 rounded-2xl bg-slate-900/95 dark:bg-[#12141a]/95 backdrop-blur-xl border border-emerald-500/40 text-white shadow-2xl flex items-center gap-3.5"
+          >
+            <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 shrink-0">
+              <BellRing size={16} />
+            </div>
+            <div className="flex-1 text-left min-w-0">
+              <h5 className="text-xs font-black uppercase text-emerald-400 tracking-wider truncate">
+                {stockAlertToast.title}
+              </h5>
+              <p className="text-[11px] text-zinc-300 leading-snug">
+                {stockAlertToast.message}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setStockAlertToast(null)}
+              className="text-zinc-400 hover:text-white p-1 shrink-0 cursor-pointer"
+            >
+              <X size={14} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Hideable Bubble Widget: Live Exchange Rates & Budget Calculator */}
       <BrechaCambiariaPanel />

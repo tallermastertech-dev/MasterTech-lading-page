@@ -54,8 +54,11 @@ import {
   VolumeX,
   Package,
   Tag,
-  BadgePercent
+  BadgePercent,
+  Bell,
+  BellRing
 } from 'lucide-react';
+import { checkAndTriggerStockAlerts } from './utils/stockNotifications';
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
 import { getTallerStatus } from './utils/tallerStatus';
@@ -702,8 +705,24 @@ export default function App() {
       window.removeEventListener('mastertech_settings_updated', handleSettingsUpdated);
       window.removeEventListener('storage', () => loadSettings(true));
     };
+  }, []);
 
-    // Internal router listener
+  // Registro global de Service Worker para Web Push Notifications
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  }, []);
+
+  // Monitor de stock para alertas suscritas
+  useEffect(() => {
+    if (Array.isArray(catalogList) && catalogList.length > 0) {
+      checkAndTriggerStockAlerts(catalogList);
+    }
+  }, [catalogList]);
+
+  // Internal router listener
+  useEffect(() => {
     const handleHashChange = () => {
       setIsInspeccion(window.location.pathname === '/inspeccion');
       setIsContacto(window.location.pathname === '/contacto');
