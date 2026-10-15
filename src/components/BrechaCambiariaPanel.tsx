@@ -133,6 +133,15 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
   }, []);
 
   useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  useEffect(() => {
     try {
       const date = rates.timestamp ? new Date(rates.timestamp) : new Date();
       const formatted = date.toLocaleString('es-VE', {
@@ -1159,9 +1168,15 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
     <>
       {/* 1. NON-INTRUSIVE COMPACT FLOATING POPOVER (Anchored right above the bubble) */}
       {isOpen && (
-        <div 
-          className="brecha-telemetria-popup fixed bottom-16 left-3 sm:left-5 z-40 w-[94vw] sm:w-[430px] max-h-[85vh] overflow-y-auto bg-[#0d0f15]/98 backdrop-blur-3xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
-        >
+        <>
+          <div 
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
+            aria-label="Cerrar monitor cambiario"
+          />
+          <div 
+            className="brecha-telemetria-popup fixed bottom-16 sm:bottom-20 left-3 sm:left-5 z-50 w-[94vw] sm:w-[430px] max-h-[calc(100dvh-5.5rem)] overflow-y-auto bg-[#0d0f15]/98 backdrop-blur-3xl border border-amber-500/40 rounded-3xl shadow-2xl shadow-black/95 p-4 sm:p-5 space-y-4 animate-fade-in select-none"
+          >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
@@ -1388,14 +1403,15 @@ export default function BrechaCambiariaPanel({ initialOpen = false }: { initialO
               onClick={() => setIsOpen(false)}
               className="text-amber-400 hover:text-amber-300 font-bold cursor-pointer transition-colors"
             >
-              Minimizar ↑
+              Minimizar
             </button>
           </div>
         </div>
+        </>
       )}
 
       {/* 2. FLOATING BUBBLE TRIGGER BUTTON (Bottom-Left fixed) */}
-      <div className="fixed bottom-4 left-3 sm:left-5 z-40 select-none">
+      <div className="fixed bottom-4 left-3 sm:left-5 z-50 select-none">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`group flex items-center gap-2 px-3.5 py-2.5 rounded-full backdrop-blur-xl transition-all duration-300 shadow-2xl cursor-pointer ${

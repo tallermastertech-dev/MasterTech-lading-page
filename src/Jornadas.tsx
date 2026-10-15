@@ -545,7 +545,7 @@ export default function Jornadas() {
           ? rawJornada.packages
           : (fallback.id === rawJornada?.id && fallback.packages ? fallback.packages : []);
 
-        return rawPackages.map((p: JornadaPackage) => {
+        return rawPackages.map((p: JornadaPackage, idx: number) => {
           let name = p.name || '';
           let subtitle = p.subtitle || '';
           let discountBadge = p.discountBadge || '';
@@ -577,6 +577,7 @@ export default function Jornadas() {
 
           return {
             ...p,
+            id: p.id || `pkg_${idx}`,
             name,
             subtitle,
             discountBadge,
@@ -645,13 +646,16 @@ export default function Jornadas() {
   // Sincronizar paquete activo al cambiar de jornada
   useEffect(() => {
     if (currentJornada.packages && currentJornada.packages.length > 0) {
-      if (!selectedPackageId || !currentJornada.packages.some(p => p.id === selectedPackageId)) {
-        setSelectedPackageId(currentJornada.packages[0].id);
-      }
+      setSelectedPackageId((prevId) => {
+        if (prevId && currentJornada.packages!.some(p => p.id === prevId)) {
+          return prevId;
+        }
+        return currentJornada.packages![0].id;
+      });
     } else {
       setSelectedPackageId('');
     }
-  }, [currentJornada.id, currentJornada.packages]);
+  }, [currentJornada.id, currentJornada.packages?.length]);
 
   const activePackage = React.useMemo(() => {
     if (!currentJornada.packages || currentJornada.packages.length === 0) return null;
@@ -816,22 +820,22 @@ export default function Jornadas() {
       : '';
 
     const messageLines = [
-      `👋 *¡HOLA MASTERTECH! DESEO APARTAR MI CUPO DE JORNADA* 🛠️`,
+      `*HOLA MASTERTECH, DESEO APARTAR MI CUPO DE JORNADA*`,
       ``,
-      `🎯 *Jornada Seleccionada:* ${currentJornada.title}`,
-      activePackage ? `🚘 *Modelo(s):* ${activePackage.name}` : '',
-      activePackage?.subtitle ? `⚙️ *Motorización:* ${activePackage.subtitle}` : '',
+      `*Jornada Seleccionada:* ${currentJornada.title}`,
+      activePackage ? `*Modelo(s):* ${activePackage.name}` : '',
+      activePackage?.subtitle ? `*Motorizacion:* ${activePackage.subtitle}` : '',
       promoPriceDisplay 
-        ? `🏷️ *Precio Promocional de Jornada:* ${promoPriceDisplay} ${effectiveDiscountBadge ? `_(${effectiveDiscountBadge})_` : ''}`
+        ? `*Precio Promocional de Jornada:* ${promoPriceDisplay} ${effectiveDiscountBadge ? `_(${effectiveDiscountBadge})_` : ''}`
         : '',
-      `👤 *Nombre:* ${nameStr}`,
-      `🚗 *Vehículo:* ${vehicleStr}`,
-      `📞 *Teléfono:* ${clientPhone || "No indicado"}`,
-      `📅 *Turno Solicitado:* ${slotStr}`,
-      notes ? `📝 *Detalles/Notas:* ${notes}` : '',
-      `📋 *Términos:* He leído y acepto las Políticas y Cláusulas Oficiales de la Jornada`,
+      `*Nombre:* ${nameStr}`,
+      `*Vehiculo:* ${vehicleStr}`,
+      `*Telefono:* ${clientPhone || "No indicado"}`,
+      `*Turno Solicitado:* ${slotStr}`,
+      notes ? `*Detalles/Notas:* ${notes}` : '',
+      `*Terminos:* He leido y acepto las Politicas y Clausulas Oficiales de la Jornada`,
       ``,
-      `¿Tienen disponibilidad de cupo para confirmar mi cita con el descuento especial?`
+      `Deseo confirmar la disponibilidad de cupo para mi cita con el descuento especial.`
     ].filter(Boolean);
 
     const fullMessage = messageLines.join('\n');
@@ -946,7 +950,7 @@ export default function Jornadas() {
 
             <div className="space-y-4 max-w-2xl mx-auto relative z-10">
               <span className="px-5 py-2 rounded-full bg-amber-400 text-black text-xs font-black uppercase tracking-widest inline-block shadow-lg shadow-amber-400/20">
-                {config.JORNADA_EMPTY_BADGE || '⚡ PRÓXIMA APERTURA DE CUPOS'}
+                {config.JORNADA_EMPTY_BADGE || 'PROXIMA APERTURA DE CUPOS'}
               </span>
               <h2 className="text-3xl sm:text-5xl font-display font-black uppercase tracking-tight text-white leading-tight dark-vip-card-title" style={{ color: '#ffffff' }}>
                 {config.JORNADA_EMPTY_TITLE || 'No hay Jornadas VIP Activas en este momento'}
@@ -1297,15 +1301,20 @@ export default function Jornadas() {
                                     </div>
                                   </div>
                                   <div className="text-right shrink-0">
-                                    <span className={`inline-block px-2.5 py-1 rounded-lg text-xs font-black tracking-tight whitespace-nowrap shadow-xs transition-all ${
+                                    <div className="text-xs sm:text-sm font-black font-mono text-red-600 dark:text-amber-400">
+                                      {pkg.promoPrice}
+                                    </div>
+                                    {pkg.regularPrice && (
+                                      <div className="text-[10px] text-slate-400 dark:text-zinc-500 line-through">
+                                        {pkg.regularPrice}
+                                      </div>
+                                    )}
+                                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-black tracking-tight whitespace-nowrap shadow-xs transition-all mt-0.5 ${
                                       isSelected
                                         ? 'bg-red-600 text-white shadow-red-500/20'
                                         : 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
                                     }`}>
                                       {getPackageSavingsBadge(pkg)}
-                                    </span>
-                                    <span className="text-[9px] text-slate-400 dark:text-zinc-500 uppercase font-black block mt-0.5 text-right whitespace-nowrap">
-                                      Descuento
                                     </span>
                                   </div>
                                 </button>
@@ -1315,31 +1324,44 @@ export default function Jornadas() {
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-4">
-                        <div className="min-w-0 pr-1">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-zinc-500 block leading-tight">
-                            {activePackage ? `PRECIO REGULAR (${activePackage.name.split(/[,(]/)[0].trim()})` : 'PRECIO REGULAR'}
-                          </span>
-                          <span className="text-sm sm:text-base text-slate-400 dark:text-zinc-400 line-through font-bold whitespace-nowrap block mt-0.5">
-                            {effectiveRegularPrice && effectiveRegularPrice !== '---' ? effectiveRegularPrice : 'Consultar'}
-                          </span>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block whitespace-nowrap">
-                            {activePackage ? 'DESCUENTO DE JORNADA' : 'PRECIO JORNADA'}
-                          </span>
-                          <span className="text-xl sm:text-2xl lg:text-3xl font-display font-black text-red-600 dark:text-primary whitespace-nowrap block tracking-tight">
-                            {activePackage
-                              ? effectivePercentDiscount
-                              : (effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional')}
-                          </span>
+                      {/* Active Package Banner & Price Breakdown */}
+                      <div className="space-y-3 border-b border-slate-200 dark:border-white/10 pb-4">
+                        {activePackage && (
+                          <div className="flex items-center justify-between text-[11px] bg-amber-500/10 dark:bg-amber-950/30 px-3 py-2 rounded-xl border border-amber-500/25">
+                            <span className="font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wide flex items-center gap-1.5">
+                              <Package size={13} className="shrink-0 text-amber-500" />
+                              <span>Paquete Activo:</span>
+                            </span>
+                            <span className="font-black text-slate-900 dark:text-white truncate max-w-[240px]">
+                              {activePackage.name}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="min-w-0 pr-1">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-zinc-500 block leading-tight">
+                              {activePackage ? `PRECIO REGULAR (${activePackage.name.split(/[,(]/)[0].trim()})` : 'PRECIO REGULAR'}
+                            </span>
+                            <span className="text-sm sm:text-base text-slate-400 dark:text-zinc-400 line-through font-bold whitespace-nowrap block mt-0.5">
+                              {effectiveRegularPrice && effectiveRegularPrice !== '---' ? effectiveRegularPrice : 'Consultar'}
+                            </span>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block whitespace-nowrap">
+                              PRECIO JORNADA PROMOCIONAL
+                            </span>
+                            <span className="text-xl sm:text-2xl lg:text-3xl font-display font-black text-red-600 dark:text-primary whitespace-nowrap block tracking-tight">
+                              {effectivePromoPrice && effectivePromoPrice !== '---' ? effectivePromoPrice : 'Cupo Promocional'}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
                       <div className="bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center space-y-1">
                         <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
                           <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0" />
-                          AHORRAS {effectivePercentDiscount} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})
+                          <span>AHORRAS {activePackage ? getPackageSavingsBadge(activePackage) : effectivePercentDiscount} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})</span>
                         </span>
                         <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-snug">
                           {activePackage 
@@ -1484,7 +1506,7 @@ export default function Jornadas() {
                         <span>
                           {isBookingSubmitting
                             ? 'REGISTRANDO Y CONECTANDO...'
-                            : `RESERVAR CUPO VÍA WHATSAPP${activePackage ? ` (${effectivePercentDiscount})` : (effectivePromoPrice && effectivePromoPrice !== '---' && effectivePromoPrice.trim().length > 0 ? ` (${effectivePromoPrice})` : '')}`
+                            : `RESERVAR CUPO VIA WHATSAPP${effectivePromoPrice && effectivePromoPrice !== '---' && effectivePromoPrice.trim().length > 0 ? ` (${effectivePromoPrice})` : ''}`
                           }
                         </span>
                       </button>
