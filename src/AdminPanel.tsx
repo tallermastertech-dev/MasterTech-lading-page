@@ -4171,6 +4171,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     const formattedPrice = `$${parsedVal.toFixed(2)}`;
     const cleanProduct = { ...product, title: titleTrim, price: formattedPrice };
 
+    const isEdit = Boolean(cleanProduct.id && catalogItems.some(p => String(p.id) === String(cleanProduct.id)));
     const prevProduct = isEdit ? catalogItems.find(p => String(p.id) === String(cleanProduct.id)) : null;
     const wasOutOfStock = prevProduct && Number(prevProduct.stock || 0) <= 0;
     const isNowInStock = Number(cleanProduct.stock || 0) > 0;
@@ -12077,7 +12078,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                   className="w-full py-2.5 rounded-xl border border-dashed border-white/20 hover:border-amber-400/50 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-amber-300 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <Plus size={14} />
-                  <span>+ Añadir Otra Foto a la Galería (Sin Límite)</span>
+                  <span>Añadir Otra Foto a la Galería (Sin Límite)</span>
                 </button>
               </div>
             </div>

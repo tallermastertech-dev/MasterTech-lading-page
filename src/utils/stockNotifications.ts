@@ -103,10 +103,10 @@ export async function dispatchPushNotification(title: string, options: Notificat
     return false;
   }
 
-  const defaultOptions: NotificationOptions = {
+  const defaultOptions: any = {
     icon: '/logo.png',
     badge: '/logo.png',
-    vibrate: [200, 100, 200] as any,
+    vibrate: [200, 100, 200],
     ...options
   };
 
