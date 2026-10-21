@@ -403,7 +403,17 @@ Instagram: @tallermastertech`;
         </div>
 
         {/* Global Download Button */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <a
+            href="/MasterTech_Convocatoria_Tecnico_1920x1080.pdf"
+            download="MasterTech_Convocatoria_Tecnico_1920x1080.pdf"
+            className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg shadow-red-600/30 cursor-pointer"
+            title="Descargar infografia oficial en PDF 1920x1080"
+          >
+            <Download size={15} />
+            <span>Descargar PDF (1920x1080)</span>
+          </a>
+
           <button
             type="button"
             onClick={downloadTextGuide}
@@ -411,7 +421,7 @@ Instagram: @tallermastertech`;
             title="Descargar analisis y recomendaciones en formato texto"
           >
             <Download size={14} />
-            <span>Descargar Guia (.TXT)</span>
+            <span>Guia (.TXT)</span>
           </button>
         </div>
       </div>
@@ -461,6 +471,41 @@ Instagram: @tallermastertech`;
       {/* Tab 1: Artes Graficos Listos para Descargar */}
       {activeTab === 'artes' && (
         <div className="space-y-6">
+          {/* Banner Infografia Landscape 1920x1080 */}
+          <div className="bg-gradient-to-r from-red-950/40 via-black/80 to-slate-900 border border-red-500/40 rounded-3xl p-5 sm:p-6 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/20 border border-red-500/30 text-red-400 text-[10px] font-black uppercase tracking-wider">
+                <span>Formato Horizontal Presentacion & PDF</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                Infografia Oficial de Reclutamiento (1920x1080)
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-300 max-w-2xl">
+                Documento en alta resolucion con encabezado, hero de taller, requisitos tecnicos filtrados (Scanner, Redes CAN/LIN, Diagramas), caja CTA con WhatsApp y copy de redes.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+              <a
+                href="/MasterTech_Convocatoria_Tecnico_1920x1080.pdf"
+                download="MasterTech_Convocatoria_Tecnico_1920x1080.pdf"
+                className="px-5 py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-600/30 transition-all cursor-pointer"
+              >
+                <Download size={16} />
+                <span>Descargar PDF (1920x1080)</span>
+              </a>
+
+              <a
+                href="/MasterTech_Reclutamiento_Tecnico_1920x1080.jpg"
+                download="MasterTech_Reclutamiento_Tecnico_1920x1080.jpg"
+                className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 border border-white/20 transition-all cursor-pointer"
+              >
+                <Download size={15} />
+                <span>Descargar JPG (1920x1080)</span>
+              </a>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Arte 1: Tecnico Mecanico Automotriz */}
             <div className="bg-white dark:bg-[#0f1116] border border-slate-200 dark:border-white/10 rounded-3xl p-5 shadow-lg space-y-4 flex flex-col justify-between">
