@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import ReclutamientoKitSection from './components/ReclutamientoKitSection';
 import { fetchSettingsWithTTL, getCachedSettings } from './utils/settingsCache';
 
 const CONFIG_DEFAULT = {
@@ -516,6 +517,9 @@ export default function TrabajaConNosotros() {
                 </p>
               </div>
             </div>
+
+            {/* Kit de Reclutamiento, Diagnostico de IA y Plantillas de Arte Descargables */}
+            <ReclutamientoKitSection />
           </motion.div>
         </div>
       </main>
