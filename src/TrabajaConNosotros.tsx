@@ -165,23 +165,23 @@ export default function TrabajaConNosotros() {
 
       // 3. Formatear mensaje profesional de WhatsApp con Link Directo
       const cargoTxt = formCargo.trim() || 'Especialidad General / Talento MasterTech';
-      let msg = `💼 *POSTULACIÓN LABORAL - MASTERTECH* 🛠️\n\n`;
-      msg += `👤 *Candidato:* ${formNombre.trim()}\n`;
-      msg += `📱 *WhatsApp:* ${formTelefono.trim()}\n`;
-      msg += `🎯 *Área / Especialidad:* ${cargoTxt}\n`;
-      msg += `⏳ *Nivel de Experiencia:* ${formExperiencia}\n`;
+      let msg = `*POSTULACION LABORAL - MASTERTECH*\n\n`;
+      msg += `*Candidato:* ${formNombre.trim()}\n`;
+      msg += `*WhatsApp:* ${formTelefono.trim()}\n`;
+      msg += `*Area / Especialidad:* ${cargoTxt}\n`;
+      msg += `*Nivel de Experiencia:* ${formExperiencia}\n`;
       
       if (formMensaje.trim()) {
-        msg += `\n📝 *Perfil & Habilidades:*\n"${formMensaje.trim()}"\n`;
+        msg += `\n*Perfil y Habilidades:*\n"${formMensaje.trim()}"\n`;
       }
 
       if (uploadedCvUrl) {
-        msg += `\n📎 *Currículum Vitae (Ver / Descargar):*\n👉 ${uploadedCvUrl}\n`;
+        msg += `\n*Curriculum Vitae (Ver / Descargar):*\n${uploadedCvUrl}\n`;
       } else if (formCvFile) {
         const safeName = formCvFile.name.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
-        msg += `\n📎 *Currículum Vitae (Ver / Descargar):*\n👉 https://www.tallermastertech.com/api/cv/cv_${Date.now()}/${safeName}\n`;
+        msg += `\n*Curriculum Vitae (Ver / Descargar):*\nhttps://www.tallermastertech.com/api/cv/cv_${Date.now()}/${safeName}\n`;
       } else {
-        msg += `\n📎 *Currículum Vitae:*\nListo para coordinar entrevista o enviar mi CV.`;
+        msg += `\n*Curriculum Vitae:*\nListo para coordinar entrevista o enviar mi CV.`;
       }
 
       const targetPhone = (config.PHONE_NUMBER || '+584123565012').replace(/[^\d]/g, '');
@@ -214,25 +214,25 @@ export default function TrabajaConNosotros() {
   };
 
   return (
-    <div className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-black">
+    <div className="theme-root min-h-screen flex flex-col selection:bg-primary selection:text-white bg-slate-50 dark:bg-[#0a0b0f] text-slate-900 dark:text-white font-sans transition-colors duration-300">
       {/* Navigation Header */}
       <Navbar activePage="nosotros" config={config} />
 
       {/* Main Content */}
       <main className="flex-1 pt-28 sm:pt-32 pb-24 relative overflow-hidden">
         {/* Background Decorative Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/3 right-10 w-[400px] h-[400px] bg-yellow-500/5 rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-red-500/10 dark:bg-primary/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute bottom-1/3 right-10 w-[400px] h-[400px] bg-amber-500/5 dark:bg-yellow-500/5 rounded-full blur-[160px] pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Back button */}
           <div className="mb-6">
             <a
               href="/"
-              className="inline-flex items-center gap-2 text-xs font-bold text-zinc-400 hover:text-white transition-colors bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-sm cursor-pointer"
+              className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-sm shadow-xs cursor-pointer"
             >
               <ChevronLeft size={14} />
-              <span>Volver a la Página Principal</span>
+              <span>Volver a la Pagina Principal</span>
             </a>
           </div>
 
@@ -244,43 +244,43 @@ export default function TrabajaConNosotros() {
           >
             {/* Header Hero Section */}
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-black tracking-widest uppercase shadow-sm">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/10 dark:bg-primary/10 border border-red-500/30 dark:border-primary/30 text-red-600 dark:text-primary text-xs font-black tracking-widest uppercase shadow-xs">
                 <Briefcase className="w-3.5 h-3.5" />
                 <span>Oportunidades & Talento MasterTech</span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black tracking-tighter text-white leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black tracking-tighter text-slate-900 dark:text-white leading-tight">
                 ¿Quieres formar parte del <span className="text-primary italic">equipo MasterTech</span>?
               </h1>
               
-              <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">
-                Buscamos mecánicos, técnicos en diagnóstico electrónico, asesores y especialistas apasionados por la excelencia y la precisión automotriz en Isla de Margarita.
+              <p className="text-slate-600 dark:text-zinc-300 text-sm sm:text-base leading-relaxed">
+                Buscamos mecanicos, tecnicos en diagnostico electronico, asesores y especialistas apasionados por la excelencia y la precision automotriz en Isla de Margarita.
               </p>
             </div>
 
             {/* Main Application Form Card */}
-            <div className="bg-[#0f1116] border border-primary/40 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-black/80 relative overflow-hidden">
-              {/* Gold Top Light Line */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm" />
+            <div className="bg-white dark:bg-[#0f1116] border border-slate-200 dark:border-primary/40 rounded-3xl p-6 sm:p-10 shadow-xl shadow-slate-200/50 dark:shadow-2xl dark:shadow-black/80 relative overflow-hidden transition-colors">
+              {/* Top Accent Line */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent blur-xs" />
 
               {!formSuccess ? (
                 <div>
-                  <div className="flex items-center gap-3 border-b border-white/10 pb-5 mb-6">
-                    <div className="w-11 h-11 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-inner">
+                  <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/10 pb-5 mb-6">
+                    <div className="w-11 h-11 rounded-2xl bg-red-500/10 dark:bg-primary/10 border border-red-500/30 dark:border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-inner">
                       <Briefcase className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                        Formulario Oficial de <span className="text-primary italic">Postulación</span>
+                      <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                        Formulario Oficial de <span className="text-primary italic">Postulacion</span>
                       </h2>
-                      <p className="text-xs text-zinc-400">
-                        Completa tus datos y conecta al instante con nuestro equipo de selección vía WhatsApp.
+                      <p className="text-xs text-slate-500 dark:text-zinc-400">
+                        Completa tus datos y conecta al instante con nuestro equipo de seleccion via WhatsApp.
                       </p>
                     </div>
                   </div>
 
                   {formError && (
-                    <div className="mb-5 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs sm:text-sm flex items-center gap-3">
+                    <div className="mb-5 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs sm:text-sm flex items-center gap-3">
                       <AlertCircle size={18} className="shrink-0" />
                       <span>{formError}</span>
                     </div>
@@ -291,55 +291,55 @@ export default function TrabajaConNosotros() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Nombre */}
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
                           Nombre y Apellido <span className="text-primary">*</span>
                         </label>
                         <div className="relative">
-                          <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                          <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 pointer-events-none" />
                           <input
                             type="text"
                             required
                             value={formNombre}
                             onChange={(e) => setFormNombre(e.target.value)}
                             placeholder="Ej: Carlos Mendoza"
-                            className="w-full bg-[#07080a] border border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                            className="w-full bg-slate-50 dark:bg-[#07080a] border border-slate-200 dark:border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none transition-colors"
                           />
                         </div>
                       </div>
 
-                      {/* Teléfono / WhatsApp */}
+                      {/* Telefono / WhatsApp */}
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
                           WhatsApp de Contacto <span className="text-primary">*</span>
                         </label>
                         <div className="relative">
-                          <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                          <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 pointer-events-none" />
                           <input
                             type="tel"
                             required
                             value={formTelefono}
                             onChange={(e) => setFormTelefono(e.target.value)}
                             placeholder="Ej: +58 412 1234567"
-                            className="w-full bg-[#07080a] border border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                            className="w-full bg-slate-50 dark:bg-[#07080a] border border-slate-200 dark:border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none transition-colors"
                           />
                         </div>
                       </div>
                     </div>
 
-                    {/* Cargo / Área Deseada */}
+                    {/* Cargo / Area Deseada */}
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
-                        Área o Especialidad a la que aspiras
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
+                        Area o Especialidad a la que aspiras
                       </label>
                       <div className="space-y-2">
                         <div className="relative">
-                          <Briefcase size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                          <Briefcase size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 pointer-events-none" />
                           <input
                             type="text"
                             value={formCargo}
                             onChange={(e) => setFormCargo(e.target.value)}
-                            placeholder="Ej: Mecánica General, Diagnóstico con Scanner, Asesoría..."
-                            className="w-full bg-[#07080a] border border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                            placeholder="Ej: Mecanica General, Diagnostico con Scanner, Asesoria..."
+                            className="w-full bg-slate-50 dark:bg-[#07080a] border border-slate-200 dark:border-white/15 focus:border-primary rounded-xl py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none transition-colors"
                           />
                         </div>
 
@@ -350,7 +350,7 @@ export default function TrabajaConNosotros() {
                               key={idx}
                               type="button"
                               onClick={() => setFormCargo(sug)}
-                              className="text-[10px] bg-white/5 hover:bg-primary/20 hover:text-primary border border-white/10 px-2.5 py-1 rounded-lg text-zinc-400 transition-colors cursor-pointer"
+                              className="text-[10px] bg-slate-100 dark:bg-white/5 hover:bg-red-500/10 dark:hover:bg-primary/20 text-slate-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-primary border border-slate-200 dark:border-white/10 px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer"
                             >
                               + {sug}
                             </button>
@@ -361,16 +361,16 @@ export default function TrabajaConNosotros() {
 
                     {/* Nivel de Experiencia */}
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
                         Nivel de Experiencia en el Ramo
                       </label>
                       <select
                         value={formExperiencia}
                         onChange={(e) => setFormExperiencia(e.target.value)}
-                        className="w-full bg-[#07080a] border border-white/15 focus:border-primary rounded-xl py-3 px-4 text-sm text-white focus:outline-none transition-colors appearance-none cursor-pointer"
+                        className="w-full bg-slate-50 dark:bg-[#07080a] border border-slate-200 dark:border-white/15 focus:border-primary rounded-xl py-3 px-4 text-sm text-slate-900 dark:text-white focus:outline-none transition-colors appearance-none cursor-pointer"
                       >
                         {NIVELES_EXPERIENCIA.map((exp, i) => (
-                          <option key={i} value={exp}>
+                          <option key={i} value={exp} className="bg-white dark:bg-[#07080a] text-slate-900 dark:text-white">
                             {exp}
                           </option>
                         ))}
@@ -379,32 +379,32 @@ export default function TrabajaConNosotros() {
 
                     {/* Breve Resumen / Certificaciones */}
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
-                        Resumen de Experiencia, Marcas o Habilidades <span className="text-zinc-500 font-normal lowercase">(opcional)</span>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
+                        Resumen de Experiencia, Marcas o Habilidades <span className="text-slate-500 dark:text-zinc-500 font-normal lowercase">(opcional)</span>
                       </label>
                       <textarea
                         rows={3}
                         value={formMensaje}
                         onChange={(e) => setFormMensaje(e.target.value)}
-                        placeholder="Menciona las marcas con las que tienes más experiencia (Toyota, Ford, Chevrolet, etc.), herramientas que dominas o cursos/certificaciones..."
-                        className="w-full bg-[#07080a] border border-white/15 focus:border-primary rounded-xl p-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none transition-colors resize-none"
+                        placeholder="Menciona las marcas con las que tienes mas experiencia (Toyota, Ford, Chevrolet, etc.), herramientas que dominas o cursos/certificaciones..."
+                        className="w-full bg-slate-50 dark:bg-[#07080a] border border-slate-200 dark:border-white/15 focus:border-primary rounded-xl p-3.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none transition-colors resize-none"
                       />
                     </div>
 
-                    {/* Adjuntar Currículum */}
+                    {/* Adjuntar Curriculum */}
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5">
-                        Adjuntar Currículum Vitae (PDF, DOCX o Imagen)
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300 mb-1.5">
+                        Adjuntar Curriculum Vitae (PDF, DOCX o Imagen)
                       </label>
                       
-                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-white/15 hover:border-primary/60 bg-[#07080a] rounded-2xl p-4 sm:p-5 text-center cursor-pointer transition-all group">
+                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-red-500/60 dark:hover:border-primary/60 bg-slate-50 dark:bg-[#07080a] rounded-2xl p-4 sm:p-5 text-center cursor-pointer transition-all group">
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                           onChange={handleFileChange}
                           className="hidden"
                         />
-                        <div className="w-10 h-10 rounded-xl bg-white/5 group-hover:bg-primary/20 flex items-center justify-center text-zinc-400 group-hover:text-primary mb-2 transition-colors">
+                        <div className="w-10 h-10 rounded-xl bg-slate-200/70 dark:bg-white/5 group-hover:bg-red-500/10 dark:group-hover:bg-primary/20 flex items-center justify-center text-slate-500 dark:text-zinc-400 group-hover:text-primary mb-2 transition-colors">
                           <Upload size={18} />
                         </div>
                         {formCvFile ? (
@@ -414,11 +414,11 @@ export default function TrabajaConNosotros() {
                           </div>
                         ) : (
                           <>
-                            <span className="text-xs sm:text-sm font-bold text-zinc-300 group-hover:text-white">
+                            <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-zinc-300 group-hover:text-slate-900 dark:group-hover:text-white">
                               Haz click para subir tu CV
                             </span>
-                            <span className="text-[10px] text-zinc-500 mt-0.5">
-                              Formatos permitidos: PDF, Word o Imagen (máx. 10MB)
+                            <span className="text-[10px] text-slate-400 dark:text-zinc-500 mt-0.5">
+                              Formatos permitidos: PDF, Word o Imagen (max. 10MB)
                             </span>
                           </>
                         )}
@@ -430,32 +430,32 @@ export default function TrabajaConNosotros() {
                       <button
                         type="submit"
                         disabled={formSubmitting}
-                        className="w-full btn-primary !py-4 text-sm sm:text-base font-black uppercase tracking-wider flex items-center justify-center gap-3 rounded-2xl shadow-[0_10px_30px_rgba(212,175,55,0.3)] hover:shadow-[0_15px_40px_rgba(212,175,55,0.5)] transition-all cursor-pointer border-none"
+                        className="w-full btn-primary !py-4 text-sm sm:text-base font-black uppercase tracking-wider flex items-center justify-center gap-3 rounded-2xl shadow-md hover:scale-[1.01] transition-all cursor-pointer border-none"
                       >
                         <WhatsAppIcon size={20} />
-                        <span>{formSubmitting ? 'Procesando postulación...' : 'ENVIAR POSTULACIÓN VÍA WHATSAPP'}</span>
+                        <span>{formSubmitting ? 'Procesando postulacion...' : 'ENVIAR POSTULACION VIA WHATSAPP'}</span>
                         <ArrowRight size={18} />
                       </button>
                     </div>
 
-                    <p className="text-[11px] text-center text-zinc-500 leading-relaxed">
-                      Al enviar tu postulación se abrirá un chat directo con nuestro departamento de Recursos Humanos y Gerencia Técnica para coordinar la evaluación y entrevista.
+                    <p className="text-[11px] text-center text-slate-500 dark:text-zinc-400 leading-relaxed">
+                      Al enviar tu postulacion se abrira un chat directo con nuestro departamento de Recursos Humanos y Gerencia Tecnica para coordinar la evaluacion y entrevista.
                     </p>
                   </form>
                 </div>
               ) : (
                 /* Success View */
                 <div className="text-center py-8 sm:py-12 space-y-6 animate-fade-in">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-500 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-md">
                     <CheckCircle2 size={32} />
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="text-2xl sm:text-3xl font-black text-white">
-                      ¡Postulación Preparada con Éxito!
+                    <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                      ¡Postulacion Preparada con Exito!
                     </h3>
-                    <p className="text-sm text-zinc-300 max-w-md mx-auto leading-relaxed">
-                      Hemos recibido tus datos correctamente. Haz click en el botón a continuación para enviar tu mensaje directo por WhatsApp a nuestro equipo.
+                    <p className="text-sm text-slate-600 dark:text-zinc-300 max-w-md mx-auto leading-relaxed">
+                      Hemos recibido tus datos correctamente. Haz click en el boton a continuacion para enviar tu mensaje directo por WhatsApp a nuestro equipo.
                     </p>
                   </div>
 
@@ -475,9 +475,9 @@ export default function TrabajaConNosotros() {
                     <button
                       type="button"
                       onClick={resetForm}
-                      className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase py-4 px-6 rounded-2xl transition-all cursor-pointer"
+                      className="w-full sm:w-auto bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20 text-slate-800 dark:text-white font-bold text-xs uppercase py-4 px-6 rounded-2xl transition-all cursor-pointer"
                     >
-                      Enviar otra postulación
+                      Enviar otra postulacion
                     </button>
                   </div>
                 </div>
@@ -486,33 +486,33 @@ export default function TrabajaConNosotros() {
 
             {/* Why Work with MasterTech Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-              <div className="bg-[#0f1116] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary">
+              <div className="bg-white dark:bg-[#0f1116] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm space-y-2 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-red-500/10 dark:bg-primary/10 border border-red-500/30 dark:border-primary/30 flex items-center justify-center text-primary">
                   <Wrench size={18} />
                 </div>
-                <h3 className="text-sm font-black text-white uppercase tracking-wide">Tecnología de Vanguardia</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Trabaja con scanners multimarca de última generación, elevadores profesionales y herramientas especializadas.
+                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wide">Tecnologia de Vanguardia</h3>
+                <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                  Trabaja con scanners multimarca de ultima generacion, elevadores profesionales y herramientas especializadas.
                 </p>
               </div>
 
-              <div className="bg-[#0f1116] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="bg-white dark:bg-[#0f1116] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm space-y-2 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500 dark:text-emerald-400">
                   <Award size={18} />
                 </div>
-                <h3 className="text-sm font-black text-white uppercase tracking-wide">Cultura de Excelencia</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Forma parte de un equipo comprometido con la transparencia, la puntualidad y los más altos estándares automotrices.
+                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wide">Cultura de Excelencia</h3>
+                <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                  Forma parte de un equipo comprometido con la transparencia, la puntualidad y los mas altos estandares automotrices.
                 </p>
               </div>
 
-              <div className="bg-[#0f1116] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <div className="bg-white dark:bg-[#0f1116] p-5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm space-y-2 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
                   <Sparkles size={18} />
                 </div>
-                <h3 className="text-sm font-black text-white uppercase tracking-wide">Crecimiento Continuo</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Capacitación permanente en nuevas tecnologías híbridas, electrónicas y sistemas mecánicos avanzados.
+                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wide">Crecimiento Continuo</h3>
+                <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                  Capacitacion permanente en nuevas tecnologias hibridas, electronicas y sistemas mecanicos avanzados.
                 </p>
               </div>
             </div>
@@ -521,7 +521,7 @@ export default function TrabajaConNosotros() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-white/10 text-center text-xs text-zinc-500 bg-[#060708]">
+      <footer className="py-8 border-t border-slate-200 dark:border-white/10 text-center text-xs text-slate-500 dark:text-zinc-500 bg-slate-100 dark:bg-[#060708] transition-colors">
         <div className="max-w-7xl mx-auto px-6 space-y-2">
           <p>© {new Date().getFullYear()} Taller MasterTech C.A. Todos los derechos reservados. Porlamar, Isla de Margarita.</p>
         </div>
