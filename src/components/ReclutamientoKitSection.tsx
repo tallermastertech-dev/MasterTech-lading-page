@@ -532,10 +532,10 @@ Instagram: @tallermastertech`;
                   </div>
 
                   {/* Foto real taller */}
-                  <div className="relative h-44 rounded-xl overflow-hidden border border-red-600/30">
+                  <div className="relative h-48 rounded-xl overflow-hidden border border-red-600/30">
                     <img 
-                      src="/assets/servicio-mecanica.webp" 
-                      alt="Tecnico MasterTech" 
+                      src="/assets/taller_camioneta_hero.png" 
+                      alt="Taller MasterTech Diagnostico" 
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2.5">
@@ -563,15 +563,14 @@ Instagram: @tallermastertech`;
 
               <div className="pt-4 border-t border-slate-200 dark:border-white/10 flex items-center justify-between gap-3">
                 <span className="text-xs text-slate-500 dark:text-zinc-400">Formato Feed / WhatsApp</span>
-                <button
-                  type="button"
-                  disabled={isGeneratingPng === 'tecnico'}
-                  onClick={() => generateAndDownloadPng('tecnico')}
-                  className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-md shadow-red-600/25 transition-all cursor-pointer disabled:opacity-50"
+                <a
+                  href="/MasterTech_Arte_Tecnico_Feed_1080x1350.png"
+                  download="MasterTech_Arte_Tecnico_Feed_1080x1350.png"
+                  className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-md shadow-red-600/25 transition-all cursor-pointer"
                 >
                   <Download size={14} />
-                  <span>{isGeneratingPng === 'tecnico' ? 'Generando PNG...' : 'Descargar Arte (PNG)'}</span>
-                </button>
+                  <span>Descargar Arte (PNG)</span>
+                </a>
               </div>
             </div>
 

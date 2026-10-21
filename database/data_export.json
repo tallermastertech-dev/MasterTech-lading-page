@@ -1,9 +1,9 @@
 {
   "metadata": {
     "fuente": "Sincronizacion Triple MasterTech",
-    "timestamp": "2026-10-21T15:55:15.113Z",
+    "timestamp": "2026-10-21T16:19:26.323Z",
     "total_productos": 27,
-    "total_leads": 9,
+    "total_leads": 10,
     "total_configuraciones": 80
   },
   "configuracion": [
@@ -290,12 +290,6 @@
       "updated_at": "2026-10-19T19:31:09.373556+00:00"
     },
     {
-      "id": 61,
-      "key": "OCCUPIED_SLOTS_JSON",
-      "value": "{\"2026-10-26\":[\"08:30 AM\",\"09:00 AM\",\"09:30 AM\"],\"2026-10-19\":[\"10:00 AM\",\"09:00 AM\",\"08:30 AM\"],\"2026-10-12\":[\"09:30 AM\"],\"2026-10-07\":[\"08:30 AM\"],\"2026-09-28\":[\"09:00 AM\"]}",
-      "updated_at": "2026-10-20T18:13:30.897432+00:00"
-    },
-    {
       "id": 49,
       "key": "WHATSAPP_MESSAGE_TEMPLATE",
       "value": "Hola *{nombre}*, te saludamos desde *Taller MasterTech*. Hemos recibido tu solicitud para el servicio de *{servicio}* para tu *{vehiculo}*. Quisiéramos coordinar los detalles de tu cita. ¿En qué horario te resultaría más cómodo asistir?",
@@ -318,6 +312,12 @@
       "key": "CAT_IMG_SUSPENSION",
       "value": "/assets/cat_suspension_amortiguadores.webp",
       "updated_at": "2026-10-19T19:31:09.373556+00:00"
+    },
+    {
+      "id": 61,
+      "key": "OCCUPIED_SLOTS_JSON",
+      "value": "{\"2026-10-26\":[\"08:30 AM\",\"09:00 AM\",\"09:30 AM\",\"10:30 AM\"],\"2026-10-19\":[\"10:00 AM\",\"09:00 AM\",\"08:30 AM\"],\"2026-10-12\":[\"09:30 AM\"],\"2026-10-07\":[\"08:30 AM\"],\"2026-09-28\":[\"09:00 AM\"]}",
+      "updated_at": "2026-10-21T16:13:34.820551+00:00"
     },
     {
       "id": 10,
@@ -460,8 +460,8 @@
     {
       "id": 2221,
       "key": "SAVED_LEADS",
-      "value": "[{\"id\":1792441054704,\"nombre\":\"Gabriela Hernández\",\"telefono\":\"0424-8256136\",\"vehiculo\":\"Corolla levin chino\",\"servicio\":\"Línea de inspección gratuita — revision completa\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 08:30 AM] revision completa\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 08:30 AM\",\"created_at\":\"2026-10-19T20:17:34.704Z\"},{\"id\":1792440872434,\"nombre\":\"Tomás López\",\"telefono\":\"0412-1967775\",\"vehiculo\":\"Toyota Sienna  año 2000\",\"servicio\":\"Línea de inspección gratuita —  falla es que no quiere hacer los cambios la caja automática , ella e\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:00 AM] falla es que no quiere hacer los cambios la caja automática , ella es de 3 cambios , se queda en el primero , se le reviso el aceite de caja y está en nivel correcto\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:00 AM\",\"created_at\":\"2026-10-19T20:14:32.434Z\"},{\"id\":1792422115215,\"nombre\":\"David Castillo\",\"telefono\":\"0426-4574072\",\"vehiculo\":\"No hay inf\",\"servicio\":\"Línea de inspección gratuita — revision para ver si necesita repro\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:30 AM] revision para ver si necesita repro\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:30 AM\",\"created_at\":\"2026-10-19T15:01:55.215Z\"},{\"id\":1792193311052,\"nombre\":\"Carlos Velásquez\",\"telefono\":\"04148139126\",\"vehiculo\":\"No especificado (Landing Inspección)\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 10:00 AM]\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 10:00 AM\",\"created_at\":\"2026-10-16T23:28:31.052Z\"},{\"id\":1792084810078,\"nombre\":\"franceliys\",\"telefono\":\"04248169685\",\"vehiculo\":\"jeep gran cherokee\",\"servicio\":\"Línea de inspección gratuita — revision jesus mata\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM] revision jesus mata\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM\",\"created_at\":\"2026-10-15T17:20:10.078Z\"},{\"id\":1792077505565,\"nombre\":\"xavier fuertes\",\"telefono\":\"+34 609 24 60 10\",\"vehiculo\":\"jeep Cherokee\",\"servicio\":\"Línea de inspección gratuita — luces en tablero 100mil km\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM] luces en tablero 100mil km\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM\",\"created_at\":\"2026-10-15T15:18:25.565Z\"},{\"id\":1791404819168,\"nombre\":\"Diomedes Potentini\",\"telefono\":\"4123522739\",\"vehiculo\":\"Corolla Cross 2025\",\"servicio\":\"Línea de inspección gratuita — Chequeo preventivo de vehículo comprado de segunda mano\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM] Chequeo preventivo de vehículo comprado de segunda mano\",\"fecha_hora\":\"Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM\",\"created_at\":\"2026-10-07T20:26:59.168Z\"},{\"id\":1791216361033,\"nombre\":\"Jose Vasquez\",\"telefono\":\"04160306788\",\"vehiculo\":\"$runner 2002\",\"servicio\":\"Jornada VIP: Optimización y Rendimiento de Motor\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM] [Jornada VIP: Optimización y Rendimiento de Motor] Precio: Promocional.\",\"fecha_hora\":\"Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM\",\"created_at\":\"2026-10-05T16:06:01.033Z\"},{\"id\":1790007115185,\"nombre\":\"Mario Castro\",\"telefono\":\"0414-0875482\",\"vehiculo\":\"Toyota Corolla Levin\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM] revision para ver si aplica para eliminacion de EGR\",\"fecha_hora\":\"Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM\",\"created_at\":\"2026-09-21T16:11:55.185Z\"}]",
-      "updated_at": "2026-10-19T20:17:35.009405+00:00"
+      "value": "[{\"id\":1792599215400,\"nombre\":\"Alex Bracho\",\"telefono\":\"04141845875\",\"vehiculo\":\"No especificado (Landing Inspección)\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 10:30 AM]\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 10:30 AM\",\"created_at\":\"2026-10-21T16:13:35.400Z\"},{\"id\":1792441054704,\"nombre\":\"Gabriela Hernández\",\"telefono\":\"0424-8256136\",\"vehiculo\":\"Corolla levin chino\",\"servicio\":\"Línea de inspección gratuita — revision completa\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 08:30 AM] revision completa\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 08:30 AM\",\"created_at\":\"2026-10-19T20:17:34.704Z\"},{\"id\":1792440872434,\"nombre\":\"Tomás López\",\"telefono\":\"0412-1967775\",\"vehiculo\":\"Toyota Sienna  año 2000\",\"servicio\":\"Línea de inspección gratuita —  falla es que no quiere hacer los cambios la caja automática , ella e\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:00 AM] falla es que no quiere hacer los cambios la caja automática , ella es de 3 cambios , se queda en el primero , se le reviso el aceite de caja y está en nivel correcto\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:00 AM\",\"created_at\":\"2026-10-19T20:14:32.434Z\"},{\"id\":1792422115215,\"nombre\":\"David Castillo\",\"telefono\":\"0426-4574072\",\"vehiculo\":\"No hay inf\",\"servicio\":\"Línea de inspección gratuita — revision para ver si necesita repro\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:30 AM] revision para ver si necesita repro\",\"fecha_hora\":\"Cita Inspección: [2026-10-26] Lunes 26 oct a las 09:30 AM\",\"created_at\":\"2026-10-19T15:01:55.215Z\"},{\"id\":1792193311052,\"nombre\":\"Carlos Velásquez\",\"telefono\":\"04148139126\",\"vehiculo\":\"No especificado (Landing Inspección)\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 10:00 AM]\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 10:00 AM\",\"created_at\":\"2026-10-16T23:28:31.052Z\"},{\"id\":1792084810078,\"nombre\":\"franceliys\",\"telefono\":\"04248169685\",\"vehiculo\":\"jeep gran cherokee\",\"servicio\":\"Línea de inspección gratuita — revision jesus mata\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM] revision jesus mata\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 09:00 AM\",\"created_at\":\"2026-10-15T17:20:10.078Z\"},{\"id\":1792077505565,\"nombre\":\"xavier fuertes\",\"telefono\":\"+34 609 24 60 10\",\"vehiculo\":\"jeep Cherokee\",\"servicio\":\"Línea de inspección gratuita — luces en tablero 100mil km\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM] luces en tablero 100mil km\",\"fecha_hora\":\"Cita Inspección: [2026-10-19] Lunes 19 oct a las 08:30 AM\",\"created_at\":\"2026-10-15T15:18:25.565Z\"},{\"id\":1791404819168,\"nombre\":\"Diomedes Potentini\",\"telefono\":\"4123522739\",\"vehiculo\":\"Corolla Cross 2025\",\"servicio\":\"Línea de inspección gratuita — Chequeo preventivo de vehículo comprado de segunda mano\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM] Chequeo preventivo de vehículo comprado de segunda mano\",\"fecha_hora\":\"Cita Inspección: [2026-10-12] Lunes 12 oct a las 09:30 AM\",\"created_at\":\"2026-10-07T20:26:59.168Z\"},{\"id\":1791216361033,\"nombre\":\"Jose Vasquez\",\"telefono\":\"04160306788\",\"vehiculo\":\"$runner 2002\",\"servicio\":\"Jornada VIP: Optimización y Rendimiento de Motor\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM] [Jornada VIP: Optimización y Rendimiento de Motor] Precio: Promocional.\",\"fecha_hora\":\"Cita Inspección: [2026-10-07] Miércoles 7 oct a las 08:30 AM\",\"created_at\":\"2026-10-05T16:06:01.033Z\"},{\"id\":1790007115185,\"nombre\":\"Mario Castro\",\"telefono\":\"0414-0875482\",\"vehiculo\":\"Toyota Corolla Levin\",\"servicio\":\"Línea de inspección gratuita\",\"status\":\"Confirmado\",\"placa\":\"\",\"anio\":\"\",\"ubicacion\":\"\",\"falla\":\"[Cita Inspección: Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM] revision para ver si aplica para eliminacion de EGR\",\"fecha_hora\":\"Cita Inspección: [2026-09-28] Lunes 28 sept a las 09:00 AM\",\"created_at\":\"2026-09-21T16:11:55.185Z\"}]",
+      "updated_at": "2026-10-21T16:13:35.65343+00:00"
     },
     {
       "id": 8,
@@ -1231,6 +1231,20 @@
     }
   ],
   "leads_citas": [
+    {
+      "id": 1792599215400,
+      "nombre": "Alex Bracho",
+      "telefono": "04141845875",
+      "vehiculo": "No especificado (Landing Inspección)",
+      "servicio": "Línea de inspección gratuita",
+      "status": "Confirmado",
+      "placa": "",
+      "anio": "",
+      "ubicacion": "",
+      "falla": "[Cita Inspección: Cita Inspección: [2026-10-26] Lunes 26 oct a las 10:30 AM]",
+      "fecha_hora": "Cita Inspección: [2026-10-26] Lunes 26 oct a las 10:30 AM",
+      "created_at": "2026-10-21T16:13:35.400Z"
+    },
     {
       "id": 1792441054704,
       "nombre": "Gabriela Hernández",
