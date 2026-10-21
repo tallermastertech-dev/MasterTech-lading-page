@@ -73,27 +73,69 @@ Esta es la opcion mas recomendada por velocidad y costo cero:
 
 ---
 
-### Opcion C: Servidor VPS con Nginx
+### Opcion C: Servidor VPS (GitHub + PM2 + Nginx + Certbot)
 
-Configuracion recomendada para `/etc/nginx/sites-available/tallermastertech`:
+Estandar oficial de despliegue en VPS Linux:
 
-```nginx
-server {
-    listen 80;
-    server_name tudominio.com www.tudominio.com;
-    root /var/www/tallermastertech/dist;
-    index index.html;
+1. **Clonar el proyecto desde GitHub en el VPS:**
+   ```bash
+   cd /var/www
+   git clone https://github.com/tallermastertech-dev/MasterTech-lading-page.git tallermastertech
+   cd tallermastertech
+   npm install
+   npm run build
+   ```
 
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
+2. **Configurar y gestionar la ejecucion con PM2:**
+   ```bash
+   npm install -g pm2
+   pm2 start npm --name "mastertech-web" -- run preview -- --port 3000 --host
+   pm2 save
+   pm2 startup
+   ```
 
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2)$ {
-        expires 1y;
-        add_header Cache-Control "public, no-transform";
-    }
-}
-```
+3. **Configuracion de Nginx como Reverse Proxy:**
+   Archivo `/etc/nginx/sites-available/tallermastertech`:
+   ```nginx
+   server {
+       listen 80;
+       server_name tudominio.com www.tudominio.com;
+
+       location / {
+           proxy_pass http://localhost:3000;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection 'upgrade';
+           proxy_set_header Host $host;
+           proxy_cache_bypass $http_upgrade;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+       }
+   }
+   ```
+   Habilitar sitio y reiniciar Nginx:
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/tallermastertech /etc/nginx/sites-enabled/
+   sudo nginx -t
+   sudo systemctl restart nginx
+   ```
+
+4. **Instalacion de Certificado SSL con Certbot (Let's Encrypt):**
+   ```bash
+   sudo apt update
+   sudo apt install certbot python3-certbot-nginx -y
+   sudo certbot --nginx -d tudominio.com -d www.tudominio.com
+   ```
+   Certbot configurara automaticamente la renovacion periodica y el cifrado HTTPS.
+
+5. **Actualizaciones continuas desde GitHub:**
+   ```bash
+   git pull origin main
+   npm install
+   npm run build
+   pm2 reload mastertech-web
+   ```
 
 ---
 
