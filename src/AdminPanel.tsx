@@ -274,11 +274,11 @@ const DEFAULT_CATALOG: CatalogItem[] = [
     isImportedUSA: true
   },
 
-  // 5. Filtros & Consumibles
+  // 5. Filtros
   {
     id: 9,
     title: "Filtro de Aire Cónico de Alto Flujo K&N / Intake Performance",
-    category: "Filtros & Consumibles",
+    category: "Filtros",
     price: "$42.00",
     desc: "Filtro de aire cónico de algodón plisado lavable y reutilizable para mayor flujo de admisión.",
     longDesc: "Maximiza la respuesta de aceleración protegiendo las cámaras de combustión contra micropartículas.",
@@ -293,7 +293,7 @@ const DEFAULT_CATALOG: CatalogItem[] = [
   {
     id: 10,
     title: "Kit de Microfiltros y Sellos Vitón para Inyectores OEM",
-    category: "Filtros & Consumibles",
+    category: "Filtros",
     price: "$35.00",
     desc: "Kit de microfiltros de alta retención y sellos vitón resistentes a gasolina para inyección electrónica.",
     longDesc: "Mantenimiento preventivo para inyectores: asegura pulverización uniforme y previene fugas de combustible.",
@@ -3053,7 +3053,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
     } else if (cleanP.startsWith('17801') || rawUpper.startsWith('17801')) {
       localMatch = {
         title: `Filtro de Aire Motor Toyota OEM (${cleanRaw.toUpperCase()})`,
-        category: 'Filtros & Consumibles',
+        category: 'Filtros',
         price: '$22.00',
         partNumber: cleanRaw.toUpperCase(),
         desc: 'Filtro de aire para motor Toyota Genuine Parts, celulosa micro-plegada con retención del 99.2% de micropartículas.',
@@ -3067,7 +3067,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
           'Retención certificada de partículas de hasta 5 micras',
           `Referencia OEM Toyota: ${cleanRaw.toUpperCase()}`
         ],
-        img: '/assets/cat_filtros_consumibles.webp',
+        img: '/assets/cat_filtros_oem.webp',
         msg: '✅ Datos decodificados al instante desde catálogo OEM Toyota.'
       };
     } else if (cleanP.startsWith('90915') || rawUpper.startsWith('90915')) {
@@ -8246,6 +8246,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           CAT_IMG_ACEITES: settingsForm.CAT_IMG_ACEITES || '',
                           CAT_IMG_BATERIAS: settingsForm.CAT_IMG_BATERIAS || '',
                           CAT_IMG_FILTROS: settingsForm.CAT_IMG_FILTROS || '',
+                          CAT_IMG_ADITIVOS: settingsForm.CAT_IMG_ADITIVOS || '',
                           CAT_IMG_CLIMATIZACION: settingsForm.CAT_IMG_CLIMATIZACION || '',
                           CAT_IMG_MOTOR: settingsForm.CAT_IMG_MOTOR || '',
                           CAT_IMG_PARTES: settingsForm.CAT_IMG_PARTES || '',
@@ -8671,11 +8672,18 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         placeholder="/assets/cat_baterias_electricidad.webp"
                       />
                       <ImageUploader
-                        label="Filtros & Consumibles"
+                        label="Filtros"
                         value={settingsForm.CAT_IMG_FILTROS || ''}
                         onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_FILTROS: val })}
                         aspectRatio={1 / 1}
                         placeholder="/assets/cat_filtros_oem.webp"
+                      />
+                      <ImageUploader
+                        label="Aditivos"
+                        value={settingsForm.CAT_IMG_ADITIVOS || ''}
+                        onChange={(val) => setSettingsForm({ ...settingsForm, CAT_IMG_ADITIVOS: val })}
+                        aspectRatio={1 / 1}
+                        placeholder="/assets/cat_aditivos.webp"
                       />
                       <ImageUploader
                         label="Fluidos & Climatización"
@@ -11839,7 +11847,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     <option value="Suspensión & Amortiguadores">Suspensión & Amortiguadores</option>
                     <option value="Aceites & Lubricantes">Aceites & Lubricantes</option>
                     <option value="Baterías & Electricidad">Baterías & Electricidad</option>
-                    <option value="Filtros & Consumibles">Filtros & Consumibles</option>
+                    <option value="Filtros">Filtros</option>
+                    <option value="Aditivos">Aditivos</option>
                     <option value="Fluidos & Climatización">Fluidos & Climatización</option>
                     <option value="Inyección & Motor">Inyección & Motor</option>
                     <option value="Partes & Piezas">Partes & Piezas</option>
