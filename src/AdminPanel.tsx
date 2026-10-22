@@ -829,7 +829,12 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
       return ['control-taller', 'manuales'];
     }
 
-    // 3. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Manuales Técnicos, Jornadas y Admin Proveedores)
+    // 3. Rol Especialista / Encargado de Repuestos (Acceso exclusivo a Catálogo de Repuestos y Admin Proveedores)
+    if (access === 'repuestos' || role.toLowerCase().includes('repuesto') || role.toLowerCase() === 'repuestos' || role.toLowerCase() === 'admin repuestos') {
+      return ['catalogo', 'proveedores'];
+    }
+
+    // 4. Rol Logística & Asesores (Dashboard, Tasas Cambiarias, Control de Taller, Citas, Catálogo, Manuales Técnicos, Jornadas y Admin Proveedores)
     if (access === 'logistica' || role.includes('log') || role.includes('asesor') || role.includes('coordinad')) {
       return ['dashboard', 'brecha', 'control-taller', 'leads', 'catalogo', 'manuales', 'jornadas', 'proveedores'];
     }
@@ -11047,6 +11052,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                     ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-950 dark:text-amber-300 border-amber-300 dark:border-amber-500/40' 
                                     : (u.accessLevel === 'control_taller' || u.role === 'Control de Taller')
                                     ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
+                                    : (u.accessLevel === 'repuestos' || (u.role || '').toLowerCase().includes('repuesto'))
+                                    ? 'bg-red-100 dark:bg-red-500/20 text-red-950 dark:text-red-300 border-red-300 dark:border-red-500/40'
                                     : (u.accessLevel === 'administracion' || u.role === 'Administración')
                                     ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-950 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40'
                                     : 'bg-blue-100 dark:bg-blue-500/20 text-blue-950 dark:text-blue-300 border-blue-300 dark:border-blue-500/40'
@@ -11060,6 +11067,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                                     <>
                                       <Wrench size={11} className="text-amber-400" />
                                       <span>Control de Taller (Acceso Único)</span>
+                                    </>
+                                  ) : (u.accessLevel === 'repuestos' || (u.role || '').toLowerCase().includes('repuesto')) ? (
+                                    <>
+                                      <Package size={11} className="text-red-700 dark:text-red-300" />
+                                      <span>Repuestos (Catálogo + Proveedores)</span>
                                     </>
                                   ) : (u.accessLevel === 'administracion' || u.role === 'Administración') ? (
                                     <>
@@ -11092,7 +11104,8 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <div className="pt-3 border-t border-slate-100 dark:border-white/10 flex items-center justify-between gap-2">
                           <button
                             onClick={() => {
-                              setEditingUser({ ...u, password: '', accessLevel: isFull ? 'full' : 'logistica' });
+                              const userAccess = u.accessLevel || ((u.role || '').toLowerCase().includes('repuesto') ? 'repuestos' : (u.role === 'Control de Taller') ? 'control_taller' : isFull ? 'full' : 'logistica');
+                              setEditingUser({ ...u, password: '', accessLevel: userAccess });
                               setUserModalError('');
                               setShowModalPassword(false);
                               setIsUserModalOpen(true);
@@ -11213,10 +11226,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             const isFull = newRole.includes('CEO') || newRole.includes('Director') || newRole.includes('Marketing') || newRole.includes('Super');
                             const isTaller = newRole === 'Control de Taller' || newRole.toLowerCase().includes('taller') || newRole.toLowerCase().includes('mecanic');
                             const isAdmin = newRole.includes('Administra') || newRole.includes('Admin');
+                            const isRepuestos = newRole.toLowerCase().includes('repuesto');
                             setEditingUser({ 
                               ...editingUser, 
                               role: newRole,
-                              accessLevel: isFull ? 'full' : isTaller ? 'control_taller' : isAdmin ? 'administracion' : 'logistica'
+                              accessLevel: isFull ? 'full' : isTaller ? 'control_taller' : isRepuestos ? 'repuestos' : isAdmin ? 'administracion' : 'logistica'
                             });
                           }}
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400 cursor-pointer"
@@ -11224,6 +11238,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           <option value="CEO - Director">CEO - Director</option>
                           <option value="Marketing">Marketing</option>
                           <option value="Administración">Administración</option>
+                          <option value="Encargado de Repuestos">Encargado de Repuestos</option>
                           <option value="Asesor Logística">Asesor Logística</option>
                           <option value="Coordinadora Logística">Coordinadora Logística</option>
                           <option value="Control de Taller">Control de Taller</option>
@@ -11236,10 +11251,11 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                           Nivel de Permisos en el Panel
                         </label>
                         <select
-                          value={editingUser.accessLevel || (editingUser.role === 'Control de Taller' ? 'control_taller' : editingUser.role === 'Administración' ? 'administracion' : isFullAdminUser(editingUser) ? 'full' : 'logistica')}
+                          value={editingUser.accessLevel || (editingUser.role === 'Control de Taller' ? 'control_taller' : editingUser.role === 'Encargado de Repuestos' || (editingUser.role || '').toLowerCase().includes('repuesto') ? 'repuestos' : editingUser.role === 'Administración' ? 'administracion' : isFullAdminUser(editingUser) ? 'full' : 'logistica')}
                           onChange={(e) => setEditingUser({ ...editingUser, accessLevel: e.target.value })}
                           className="w-full bg-black/50 border border-white/10 rounded-xl py-2.5 px-3 text-xs text-white outline-none focus:border-amber-400 cursor-pointer"
                         >
+                          <option value="repuestos">Repuestos (Acceso exclusivo a Catálogo de Repuestos y Admin Proveedores)</option>
                           <option value="control_taller">Control de Taller (Acceso ÚNICO y exclusivo a la sección Control de Taller)</option>
                           <option value="full">Super Administrador (Acceso Total: Todas las pestañas del Panel)</option>
                           <option value="administracion">Administración (Dashboard, Tasas Cambiarias y Admin Proveedores)</option>
