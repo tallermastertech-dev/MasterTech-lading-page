@@ -859,7 +859,7 @@ const handlePostLeads = async (req: express.Request, res: express.Response) => {
 // Helper: Get admin users from settings (or fallback from secure environment variables)
 async function getAdminUsersList(): Promise<any[]> {
   const masterEmail = (process.env.ADMIN_EMAIL || 'admin@tallermastertech.com').toLowerCase().trim();
-  const masterPass = process.env.ADMIN_PASSWORD || 'mastertech2026';
+  const masterPass = process.env.ADMIN_PASSWORD || 'admin123';
 
   const defaultKnownUsers = [
     { id: 'user-jvaask16', name: 'J. Vicente Betancourt', email: 'jvaask16@gmail.com', password: 'Jvaask2006..', role: 'CEO - Director', accessLevel: 'full', createdAt: '2026-10-02T18:12:21.439Z' },
