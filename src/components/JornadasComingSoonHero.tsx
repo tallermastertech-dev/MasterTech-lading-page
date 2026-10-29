@@ -123,67 +123,52 @@ export default function JornadasComingSoonHero({
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto rounded-3xl overflow-hidden border border-white/15 bg-[#050608] shadow-[0_20px_70px_rgba(0,0,0,0.9)] my-6">
-      {/* Fondo: Deportivo rojo iluminando en la oscuridad */}
-      <div className="relative w-full min-h-[580px] sm:min-h-[640px] md:min-h-[720px] flex flex-col justify-between p-6 sm:p-10 z-10">
-        
-        {/* Imagen de fondo con faros encendidos */}
-        <div 
-          className="absolute inset-0 bg-cover bg-bottom bg-no-repeat pointer-events-none opacity-90 transition-all duration-700"
-          style={{ backgroundImage: "url('/assets/coming_soon_car_clean.webp')" }}
-        />
+    <div className="relative w-full max-w-xl sm:max-w-2xl mx-auto rounded-3xl overflow-hidden border border-white/15 bg-[#07080a] shadow-[0_25px_80px_rgba(0,0,0,0.95)] my-6 aspect-[720/1024]">
+      {/* Fondo: Deportivo rojo iluminando en la oscuridad - 100% visible sin oscurecimiento */}
+      <img
+        src="/assets/coming_soon_car_clean.webp"
+        alt="Próxima Jornada MasterTech"
+        className="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none select-none"
+      />
 
-        {/* Gradientes de contraste cinemático */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/80 pointer-events-none" />
-        <div className="absolute top-0 inset-x-0 h-48 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none" />
-
-        {/* ==================== ZONA SUPERIOR: LOGO Y BADGE ==================== */}
-        <div className="relative z-20 flex flex-col items-center text-center space-y-3 pt-2">
-          {/* Logo MasterTech */}
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-            <img src="/logo.png" alt="Taller MasterTech" className="h-6 w-auto object-contain" />
-            <span className="text-[11px] font-black tracking-widest text-[#D4AF37] uppercase font-mono">
-              MASTERTECH C.A.
-            </span>
-          </div>
-
-          {/* Badge de Temporada */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-600/20 border border-red-500/40 text-red-400 text-xs font-black tracking-widest uppercase shadow-lg shadow-red-950/50">
-            <Flame size={14} className="animate-pulse text-red-500" />
-            <span>{jornada.season || 'EDICIÓN ESPECIAL LIMITADA'}</span>
-          </div>
+      {/* Zona Superior de Contenido: El texto se ubica arriba en la atmósfera oscura, dejando el capó y faros completamente libres */}
+      <div className="relative z-20 flex flex-col items-center text-center px-4 sm:px-8 pt-6 sm:pt-10 space-y-2.5 sm:space-y-3.5 max-w-lg mx-auto">
+        {/* Logo MasterTech & Badge de Temporada */}
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 border border-white/15 backdrop-blur-md shadow-lg">
+          <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
+          <span className="text-[10px] sm:text-[11px] font-black tracking-widest text-[#D4AF37] uppercase font-mono">
+            MASTERTECH C.A.
+          </span>
+          <span className="text-zinc-500">•</span>
+          <span className="text-[10px] sm:text-[11px] font-black uppercase text-red-400">
+            {jornada.season || 'EDICIÓN ESPECIAL'}
+          </span>
         </div>
 
-        {/* ==================== ZONA CENTRAL: COMING SOON + MES VARIABLE ==================== */}
-        <div className="relative z-20 flex flex-col items-center text-center space-y-3 my-auto py-8">
-          {/* Texto Principal COMING SOON con efecto metálico iluminado */}
-          <h2 className="text-5xl sm:text-7xl md:text-8xl font-display font-black tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-slate-400 drop-shadow-[0_10px_25px_rgba(255,255,255,0.25)] select-none">
+        {/* Titular Principal COMING SOON con efecto metálico */}
+        <div className="space-y-0.5 sm:space-y-1 pt-1">
+          <h2 className="text-4xl sm:text-6xl md:text-7xl font-display font-black tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 drop-shadow-[0_8px_25px_rgba(255,255,255,0.3)] select-none">
             {jornada.comingSoonTitle || 'COMING SOON'}
           </h2>
 
-          {/* Mes o Temporada Dinámica */}
-          <div className="flex items-center gap-3">
-            <span className="h-[2px] w-8 sm:w-16 bg-gradient-to-r from-transparent to-[#D4AF37]" />
-            <h3 className="text-xl sm:text-3xl md:text-4xl font-display font-black tracking-widest uppercase text-[#D4AF37] drop-shadow-[0_2px_10px_rgba(212,175,55,0.4)]">
+          {/* Mes Variable */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3">
+            <span className="h-[1.5px] w-6 sm:w-12 bg-gradient-to-r from-transparent to-[#D4AF37]" />
+            <h3 className="text-lg sm:text-2xl md:text-3xl font-display font-black tracking-widest uppercase text-[#D4AF37] drop-shadow-[0_2px_10px_rgba(212,175,55,0.45)]">
               {displayMonthOrSeason}
             </h3>
-            <span className="h-[2px] w-8 sm:w-16 bg-gradient-to-l from-transparent to-[#D4AF37]" />
+            <span className="h-[1.5px] w-6 sm:w-12 bg-gradient-to-l from-transparent to-[#D4AF37]" />
           </div>
-
-          {/* Título de la jornada a develar */}
-          <p className="text-xs sm:text-sm md:text-base font-bold text-slate-200 max-w-xl mx-auto leading-relaxed drop-shadow-md px-4">
-            {jornada.title}
-          </p>
-
-          <p className="text-[11px] sm:text-xs text-zinc-400 max-w-md mx-auto">
-            {jornada.comingSoonSubtitle || 'Estamos preparando cupos estrictamente limitados y paquetes de optimización al más alto nivel.'}
-          </p>
         </div>
 
-        {/* ==================== ZONA INFERIOR: COUNTDOWN + BOTÓN LISTA VIP ==================== */}
-        <div className="relative z-20 flex flex-col items-center space-y-5 pb-2">
-          {/* Contador Regresivo */}
-          <div className="flex items-center gap-2 sm:gap-3 bg-black/75 backdrop-blur-md px-4 sm:px-6 py-2.5 rounded-2xl border border-white/15 shadow-xl">
+        {/* Mensaje de Misterio / Subtítulo */}
+        <p className="text-[11px] sm:text-xs md:text-sm font-semibold text-zinc-300 max-w-md mx-auto leading-snug drop-shadow-md px-2">
+          {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por comenzar en Isla de Margarita.'}
+        </p>
+
+        {/* Contador Regresivo Compacto Horizontal */}
+        <div className="pt-1 sm:pt-2">
+          <div className="inline-flex items-center gap-1.5 sm:gap-3 bg-black/75 backdrop-blur-md px-3 sm:px-5 py-2 rounded-2xl border border-white/15 shadow-xl">
             {[
               { val: timeLeft.days, label: 'DÍAS' },
               { val: timeLeft.hours, label: 'HORAS' },
@@ -191,35 +176,37 @@ export default function JornadasComingSoonHero({
               { val: timeLeft.secs, label: 'SEG' }
             ].map((unit, idx) => (
               <React.Fragment key={idx}>
-                <div className="text-center min-w-[48px] sm:min-w-[58px]">
-                  <span className="text-xl sm:text-3xl font-display font-black text-white block leading-none font-mono">
+                <div className="text-center min-w-[34px] sm:min-w-[46px]">
+                  <span className="text-base sm:text-2xl font-display font-black text-white block leading-none font-mono">
                     {String(unit.val).padStart(2, '0')}
                   </span>
-                  <span className="text-[8px] sm:text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mt-0.5">
+                  <span className="text-[7px] sm:text-[8px] font-bold text-zinc-400 uppercase tracking-widest block mt-0.5">
                     {unit.label}
                   </span>
                 </div>
-                {idx < 3 && <span className="text-amber-400 font-black text-lg sm:text-2xl opacity-70">:</span>}
+                {idx < 3 && <span className="text-amber-400 font-bold text-sm sm:text-lg opacity-70">:</span>}
               </React.Fragment>
             ))}
           </div>
+        </div>
 
-          {/* Botón Lista de Espera */}
+        {/* Botón Lista de Espera VIP */}
+        <div className="pt-1">
           <button
             type="button"
             onClick={handleWaitlistClick}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_10px_35px_rgba(220,38,38,0.5)] transition-all cursor-pointer hover:scale-105 border border-red-400/40"
+            className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_8px_30px_rgba(220,38,38,0.5)] transition-all cursor-pointer hover:scale-105 border border-red-400/40"
           >
-            <WhatsAppIcon size={18} className="text-white fill-current shrink-0" />
+            <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
             <span>UNIRME A LA LISTA DE ESPERA VIP</span>
-            <ChevronRight size={16} />
+            <ChevronRight size={14} />
           </button>
-
-          <span className="text-[10px] text-zinc-400 font-semibold flex items-center gap-1.5">
-            <ShieldCheck size={13} className="text-emerald-400" />
-            <span>Acceso anticipado a cupos con tarifa preferencial MasterTech</span>
-          </span>
         </div>
+
+        <span className="text-[9px] sm:text-[10px] text-zinc-400 font-semibold flex items-center justify-center gap-1.5 pt-0.5">
+          <ShieldCheck size={12} className="text-emerald-400 shrink-0" />
+          <span>Acceso anticipado a cupos con tarifa preferencial MasterTech</span>
+        </span>
       </div>
     </div>
   );
