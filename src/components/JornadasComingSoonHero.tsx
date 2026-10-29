@@ -110,7 +110,7 @@ export default function JornadasComingSoonHero({
   };
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0b0d13] via-[#060709] to-[#030406] shadow-[0_25px_80px_rgba(0,0,0,0.95)] my-4">
+    <div className="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden border border-slate-800/80 dark:border-white/15 ring-1 ring-slate-900/10 dark:ring-white/5 bg-gradient-to-br from-[#0c0e14] via-[#07080a] to-[#040507] shadow-2xl shadow-slate-950/25 dark:shadow-[0_25px_80px_rgba(0,0,0,0.95)] my-4">
       <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[460px] lg:min-h-[480px]">
         {/* COLUMNA IZQUIERDA (6 cols): Textos, cuenta regresiva y botón 100% legibles */}
         <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-center items-start text-left space-y-4 z-20">
@@ -200,17 +200,12 @@ export default function JornadasComingSoonHero({
           {/* Halo ambiental rojo tenue detrás del deportivo */}
           <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/15 rounded-full blur-[80px] pointer-events-none" />
 
-          {/* Imagen del vehículo centrada, nítida y personalizada con marca MasterTech */}
+          {/* Imagen del vehículo centrada, nítida, sin bordes duros y personalizada con marca MasterTech */}
           <img
             src="/assets/coming_soon_car_mastertech.webp"
             alt="Próxima Jornada MasterTech"
-            className="w-full h-full max-h-[440px] object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105 drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]"
+            className="w-full h-full max-h-[440px] object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105 drop-shadow-[0_10px_25px_rgba(220,38,38,0.25)]"
           />
-
-          {/* Difuminado suave en el borde izquierdo para fundirse con el fondo */}
-          <div className="hidden lg:block absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#060709] to-transparent pointer-events-none" />
-          {/* Difuminado suave en el borde superior en móvil */}
-          <div className="lg:hidden absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[#060709] to-transparent pointer-events-none" />
         </div>
       </div>
     </div>
