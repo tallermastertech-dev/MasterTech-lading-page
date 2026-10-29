@@ -436,7 +436,7 @@ const DEFAULT_JORNADAS = [
         subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
         regularPrice: "$1,075 USD",
         promoPrice: "$698 USD",
-        discountBadge: "AHORRAS $381 USD"
+        discountBadge: "AHORRA $381"
       },
       {
         id: "pkg_t24a_fts",
@@ -444,7 +444,7 @@ const DEFAULT_JORNADAS = [
         subtitle: "Motor 2.4L Turbo (T24A-FTS no híbrido)",
         regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
-        discountBadge: "AHORRAS $645 USD"
+        discountBadge: "AHORRA $645"
       },
       {
         id: "pkg_v35a_fts",
@@ -452,7 +452,7 @@ const DEFAULT_JORNADAS = [
         subtitle: "Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)",
         regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
-        discountBadge: "AHORRAS $701 USD"
+        discountBadge: "AHORRA $701"
       }
     ]
   },
@@ -12043,7 +12043,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         type="text"
                         value={editingProduct.discountBadge || ''}
                         onChange={(e) => setEditingProduct({ ...editingProduct, discountBadge: e.target.value })}
-                        placeholder="Ej. -15% OFF, AHORRAS $40 USD"
+                        placeholder="Ej. -15% OFF, AHORRA $40"
                         className="w-full bg-black/40 border border-white/10 rounded-xl p-2 text-white text-xs outline-none focus:border-red-500"
                       />
                       <span className="text-[10px] text-zinc-500 mt-1 block">Si se deja vacío, se calculará automáticamente el porcentaje.</span>
@@ -12428,7 +12428,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                 </label>
                 <input
                   type="text"
-                  placeholder="Ej: AHORRAS $40 USD o 3 CUPOS / MIÉRCOLES o CUPOS LIMITADOS"
+                  placeholder="Ej: AHORRA $40 o 3 CUPOS / MIÉRCOLES o CUPOS LIMITADOS"
                   value={editingJornada.discountBadge || ''}
                   onChange={(e) => setEditingJornada({ ...editingJornada, discountBadge: e.target.value })}
                   className="w-full bg-black/40 border border-amber-500/30 rounded-xl p-2.5 text-amber-300 font-bold outline-none focus:border-primary text-xs"
@@ -12461,7 +12461,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
                             regularPrice: "$1,075 USD",
                             promoPrice: "$698 USD",
-                            discountBadge: "AHORRAS $381 USD"
+                            discountBadge: "AHORRA $381"
                           },
                           {
                             id: `pkg_t24a_${Date.now()}`,
@@ -12469,7 +12469,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             subtitle: "Motor 2.4L Turbo (T24A-FTS no híbrido)",
                             regularPrice: "$1,944 USD",
                             promoPrice: "$1,299 USD",
-                            discountBadge: "AHORRAS $645 USD"
+                            discountBadge: "AHORRA $645"
                           },
                           {
                             id: `pkg_v35a_${Date.now()}`,
@@ -12477,7 +12477,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             subtitle: "Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)",
                             regularPrice: "$2,200 USD",
                             promoPrice: "$1,499 USD",
-                            discountBadge: "AHORRAS $701 USD"
+                            discountBadge: "AHORRA $701"
                           }
                         ];
                         setEditingJornada({

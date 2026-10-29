@@ -199,7 +199,7 @@ const JORNADAS_DATA: JornadaItem[] = [
         subtitle: "Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)",
         regularPrice: "$1,075 USD",
         promoPrice: "$698 USD",
-        discountBadge: "AHORRAS $381 USD"
+        discountBadge: "AHORRA $381"
       },
       {
         id: "pkg_t24a_fts",
@@ -207,7 +207,7 @@ const JORNADAS_DATA: JornadaItem[] = [
         subtitle: "Motor 2.4L Turbo (T24A-FTS no híbrido)",
         regularPrice: "$1,944 USD",
         promoPrice: "$1,299 USD",
-        discountBadge: "AHORRAS $645 USD"
+        discountBadge: "AHORRA $645"
       },
       {
         id: "pkg_v35a_fts",
@@ -215,7 +215,7 @@ const JORNADAS_DATA: JornadaItem[] = [
         subtitle: "Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)",
         regularPrice: "$2,200 USD",
         promoPrice: "$1,499 USD",
-        discountBadge: "AHORRAS $701 USD"
+        discountBadge: "AHORRA $701"
       }
     ]
   },
@@ -619,19 +619,19 @@ export default function Jornadas() {
             subtitle = 'Motor 3.5L Twin-Turbo (V35A-FTS no híbrido)';
             regularPrice = regularPrice || '$2,200 USD';
             promoPrice = promoPrice || '$1,499 USD';
-            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $701 USD';
+            discountBadge = 'AHORRA $701';
           } else if (pId.includes('t24') || nLower.includes('t24') || nLower.includes('2.4') || sLower.includes('t24') || sLower.includes('2.4') || nLower.includes('tacoma') || nLower.includes('4runner') || nLower.includes('highlander')) {
             name = 'Tacoma, 4Runner, Highlander, Lexus RX / TX';
             subtitle = 'Motor 2.4L Turbo (T24A-FTS no híbrido)';
             regularPrice = regularPrice || '$1,944 USD';
             promoPrice = promoPrice || '$1,299 USD';
-            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $645 USD';
+            discountBadge = 'AHORRA $645';
           } else if (pId.includes('m20') || pId.includes('a25') || nLower.includes('m20') || nLower.includes('a25') || nLower.includes('2.0') || nLower.includes('2.5') || nLower.includes('corolla') || nLower.includes('rav4') || nLower.includes('camry') || sLower.includes('m20') || sLower.includes('a25')) {
             name = 'Corolla, RAV4, Camry, Levin';
             subtitle = 'Motor 2.0L / 2.5L (M20A-FKS / A25A-FKS)';
             regularPrice = regularPrice || '$1,075 USD';
             promoPrice = promoPrice || '$698 USD';
-            discountBadge = (discountBadge && /^AHORRAS/i.test(discountBadge)) ? discountBadge : 'AHORRAS $381 USD';
+            discountBadge = 'AHORRA $381';
           }
 
           return {
@@ -639,7 +639,7 @@ export default function Jornadas() {
             id: p.id || `pkg_${idx}`,
             name,
             subtitle,
-            discountBadge,
+            discountBadge: (discountBadge || '').replace(/AHORRAS/i, 'AHORRA').replace(/\s*USD$/i, ''),
             regularPrice,
             promoPrice
           };
@@ -660,16 +660,17 @@ export default function Jornadas() {
   const getPackageSavingsBadge = (pkg?: JornadaPackage | null): string => {
     if (!pkg) return '';
     const b = (pkg.discountBadge || '').trim();
-    if (/^AHORRAS/i.test(b)) {
-      return b;
+    const match = b.match(/(\d+[\d,.]*)/);
+    if (match) {
+      return `AHORRA $${match[1]}`;
     }
     const regNum = parseFloat((pkg.regularPrice || '').replace(/[^0-9.]/g, ''));
     const promoNum = parseFloat((pkg.promoPrice || '').replace(/[^0-9.]/g, ''));
     if (regNum > 0 && promoNum > 0 && regNum > promoNum) {
       const diff = Math.round(regNum - promoNum);
-      return `AHORRAS $${diff} USD`;
+      return `AHORRA $${diff}`;
     }
-    if (b && !b.includes('%')) return b;
+    if (b && !b.includes('%')) return b.replace(/^AHORRAS/i, 'AHORRA').replace(/\s*USD$/i, '');
     return 'AHORRO VIP';
   };
 
@@ -1476,7 +1477,7 @@ export default function Jornadas() {
                       <div className="bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-center space-y-1">
                         <span className="text-xs font-black uppercase tracking-wider text-amber-600 dark:text-amber-300 flex items-center justify-center gap-1.5">
                           <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0" />
-                          <span>AHORRAS {activePackage ? getPackageSavingsBadge(activePackage) : effectivePercentDiscount} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})</span>
+                          <span>{activePackage ? getPackageSavingsBadge(activePackage) : `AHORRA ${effectivePercentDiscount}`} ({activePackage ? activePackage.name.split(/[,(]/)[0].trim() : 'Jornada'})</span>
                         </span>
                         <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-snug">
                           {activePackage 
