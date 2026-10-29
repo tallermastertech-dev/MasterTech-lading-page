@@ -9141,7 +9141,15 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         benefits: ["Beneficio 1", "Beneficio 2"],
                         specs: [{ label: "Garantía", val: "1 Año" }],
                         compatibleModels: "Apto para todas las marcas.",
-                        packages: []
+                        packages: [],
+                        status: "active",
+                        season: "Navidad & Fin de Año",
+                        targetMonth: "DICIEMBRE",
+                        comingSoonTitle: "COMING SOON",
+                        comingSoonSubtitle: "La próxima jornada de alto rendimiento automotriz está por comenzar en Isla de Margarita.",
+                        countdownEnd: "2026-12-01T08:00",
+                        vehiculosAtendidos: "25+ vehículos atendidos",
+                        fechaRealizacion: "Diciembre 2026"
                       });
                       setIsJornadaModalOpen(true);
                     }}
@@ -9634,10 +9642,37 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border border-white/10 shrink-0">
                           <img src={j.img || "/assets/servicio-mecanica.webp"} alt={j.title} className="w-full h-full object-cover" />
                         </div>
-                        <div>
-                          <span className="text-[9px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
-                            {j.badge}
-                          </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-[9px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
+                              {j.badge}
+                            </span>
+                            {j.status === 'coming_soon' && (
+                              <span className="text-[9px] font-black uppercase text-purple-300 bg-purple-500/20 border border-purple-500/40 px-2 py-0.5 rounded-full inline-block">
+                                Coming Soon
+                              </span>
+                            )}
+                            {j.status === 'completed' && (
+                              <span className="text-[9px] font-black uppercase text-blue-300 bg-blue-500/20 border border-blue-500/40 px-2 py-0.5 rounded-full inline-block">
+                                Finalizada ({j.vehiculosAtendidos || 'Atendida'})
+                              </span>
+                            )}
+                            {(!j.status || j.status === 'active') && (
+                              <span className="text-[9px] font-black uppercase text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full inline-block">
+                                Activa
+                              </span>
+                            )}
+                            {j.season && (
+                              <span className="text-[9px] font-black uppercase text-rose-300 bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 rounded-full inline-block">
+                                {j.season}
+                              </span>
+                            )}
+                            {j.targetMonth && (
+                              <span className="text-[9px] font-black uppercase text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full inline-block">
+                                {j.targetMonth}
+                              </span>
+                            )}
+                          </div>
                           <h3 className="font-bold text-white text-sm leading-snug line-clamp-2 mt-1">{j.title}</h3>
                         </div>
                       </div>
@@ -12126,6 +12161,167 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
             </div>
 
             <div className="space-y-3 text-xs">
+              {/* Estado y Ciclo de Vida de la Jornada */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+                <label className="text-zinc-300 font-bold block uppercase tracking-wider text-[11px]">
+                  Estado y Modalidad de la Jornada
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingJornada({ ...editingJornada, status: 'active' })}
+                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      editingJornada.status === 'active' || !editingJornada.status
+                        ? 'bg-emerald-500/20 border-emerald-500 text-white font-bold shadow-md shadow-emerald-500/10'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="text-[11px] font-black uppercase">Activa</div>
+                    <div className="text-[9px] text-zinc-400 mt-0.5">En Curso / Reservas</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setEditingJornada({ ...editingJornada, status: 'coming_soon' })}
+                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      editingJornada.status === 'coming_soon'
+                        ? 'bg-purple-500/25 border-purple-500 text-purple-200 font-bold shadow-md shadow-purple-500/20'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="text-[11px] font-black uppercase">Coming Soon</div>
+                    <div className="text-[9px] text-zinc-400 mt-0.5">Misterio / Preventa</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setEditingJornada({ ...editingJornada, status: 'completed' })}
+                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                      editingJornada.status === 'completed'
+                        ? 'bg-blue-500/20 border-blue-500 text-blue-200 font-bold shadow-md shadow-blue-500/10'
+                        : 'bg-black/30 border-white/10 text-zinc-400 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="text-[11px] font-black uppercase">Finalizada</div>
+                    <div className="text-[9px] text-zinc-400 mt-0.5">Historial / Récord</div>
+                  </button>
+                </div>
+
+                {/* Temporada y Mes Variable */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-white/5">
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Temporada Especial</label>
+                    <select
+                      value={editingJornada.season || ''}
+                      onChange={(e) => setEditingJornada({ ...editingJornada, season: e.target.value })}
+                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
+                    >
+                      <option value="">(Sin temporada específica)</option>
+                      <option value="Black Friday">Black Friday</option>
+                      <option value="Navidad & Fin de Año">Navidad & Fin de Año</option>
+                      <option value="Carnavales">Carnavales</option>
+                      <option value="Día del Amor y la Amistad">Día del Amor y la Amistad (San Valentín)</option>
+                      <option value="Semana Santa">Semana Santa</option>
+                      <option value="Vacaciones de Verano">Vacaciones de Verano</option>
+                      <option value="Aniversario MasterTech">Aniversario MasterTech</option>
+                      <option value="Edición Especial">Edición Especial</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-zinc-400 font-bold block mb-1">Mes Variable (12 Meses)</label>
+                    <select
+                      value={editingJornada.targetMonth || ''}
+                      onChange={(e) => setEditingJornada({ ...editingJornada, targetMonth: e.target.value })}
+                      className="w-full bg-black/40 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-primary text-xs"
+                    >
+                      <option value="">(Seleccionar mes)</option>
+                      <option value="ENERO">ENERO</option>
+                      <option value="FEBRERO">FEBRERO</option>
+                      <option value="MARZO">MARZO</option>
+                      <option value="ABRIL">ABRIL</option>
+                      <option value="MAYO">MAYO</option>
+                      <option value="JUNIO">JUNIO</option>
+                      <option value="JULIO">JULIO</option>
+                      <option value="AGOSTO">AGOSTO</option>
+                      <option value="SEPTIEMBRE">SEPTIEMBRE</option>
+                      <option value="OCTUBRE">OCTUBRE</option>
+                      <option value="NOVIEMBRE">NOVIEMBRE</option>
+                      <option value="DICIEMBRE">DICIEMBRE</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Campos Específicos para Coming Soon / Misterio */}
+                {editingJornada.status === 'coming_soon' && (
+                  <div className="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3 space-y-3 mt-2">
+                    <span className="text-[11px] font-black uppercase text-purple-300 block">
+                      Configuración de Pantalla Coming Soon & Cuenta Regresiva
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1">Título Coming Soon</label>
+                        <input
+                          type="text"
+                          placeholder="Ej: COMING SOON o PRÓXIMAMENTE"
+                          value={editingJornada.comingSoonTitle || ''}
+                          onChange={(e) => setEditingJornada({ ...editingJornada, comingSoonTitle: e.target.value })}
+                          className="w-full bg-black/50 border border-purple-500/30 rounded-xl p-2 text-white outline-none focus:border-purple-400 text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-zinc-400 font-bold block mb-1">Fin Cuenta Regresiva</label>
+                        <input
+                          type="datetime-local"
+                          value={editingJornada.countdownEnd || ''}
+                          onChange={(e) => setEditingJornada({ ...editingJornada, countdownEnd: e.target.value })}
+                          className="w-full bg-black/50 border border-purple-500/30 rounded-xl p-2 text-white outline-none focus:border-purple-400 text-xs"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1">Subtítulo / Mensaje Misterioso</label>
+                      <textarea
+                        rows={2}
+                        placeholder="Ej: La mayor transformación de potencia y eficiencia para vehículos modernos llega a Margarita..."
+                        value={editingJornada.comingSoonSubtitle || ''}
+                        onChange={(e) => setEditingJornada({ ...editingJornada, comingSoonSubtitle: e.target.value })}
+                        className="w-full bg-black/50 border border-purple-500/30 rounded-xl p-2 text-white outline-none focus:border-purple-400 text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Campos para Registro Histórico / Vehículos Atendidos */}
+                <div className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-3 space-y-2 mt-2">
+                  <span className="text-[11px] font-black uppercase text-blue-300 block">
+                    Registro de Resultados e Historial de la Jornada
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1">Vehículos Atendidos</label>
+                      <input
+                        type="text"
+                        placeholder="Ej: 28 vehículos atendidos"
+                        value={editingJornada.vehiculosAtendidos || ''}
+                        onChange={(e) => setEditingJornada({ ...editingJornada, vehiculosAtendidos: e.target.value })}
+                        className="w-full bg-black/50 border border-blue-500/30 rounded-xl p-2 text-white outline-none focus:border-blue-400 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-zinc-400 font-bold block mb-1">Fecha / Período de Realización</label>
+                      <input
+                        type="text"
+                        placeholder="Ej: Octubre 2026 o 15 al 25 Octubre"
+                        value={editingJornada.fechaRealizacion || ''}
+                        onChange={(e) => setEditingJornada({ ...editingJornada, fechaRealizacion: e.target.value })}
+                        className="w-full bg-black/50 border border-blue-500/30 rounded-xl p-2 text-white outline-none focus:border-blue-400 text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="text-zinc-400 font-bold block mb-1">Distintivo / Badge</label>
                 <input
@@ -12171,7 +12367,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
 
               <div>
                 <label className="text-zinc-400 font-bold block mb-1">
-                  Distintivo de Descuento / Ahorro (Cápsula con llama 🔥)
+                  Distintivo de Descuento / Ahorro (Cápsula de Ahorro Destacado)
                 </label>
                 <input
                   type="text"

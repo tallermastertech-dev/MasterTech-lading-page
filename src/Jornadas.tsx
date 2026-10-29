@@ -31,6 +31,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import InspectionSlotPicker from './InspectionSlotPicker';
 import BrechaCambiariaPanel from './components/BrechaCambiariaPanel';
+import JornadasComingSoonHero from './components/JornadasComingSoonHero';
+import JornadasHistorialSection from './components/JornadasHistorialSection';
 import { fetchSettingsWithTTL } from './utils/settingsCache';
 
 const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
@@ -152,6 +154,14 @@ interface JornadaItem {
   jornadaSlots?: string[] | string;
   images?: string[];
   packages?: JornadaPackage[];
+  status?: 'active' | 'coming_soon' | 'completed';
+  season?: string;
+  targetMonth?: string;
+  comingSoonTitle?: string;
+  comingSoonSubtitle?: string;
+  countdownEnd?: string;
+  vehiculosAtendidos?: number | string;
+  fechaRealizacion?: string;
 }
 
 const JORNADAS_DATA: JornadaItem[] = [
@@ -512,13 +522,23 @@ export default function Jornadas() {
     return JORNADAS_DATA;
   }, [config]);
 
-  useEffect(() => {
-    if (currentJornadasList.length > 0 && !currentJornadasList.some((j: any) => j.id === activeJornadaId)) {
-      setActiveJornadaId(currentJornadasList[0].id);
-    }
-  }, [currentJornadasList, activeJornadaId]);
+  // Filtramos las jornadas activas / en coming_soon y las finalizadas
+  const activeAndComingSoonList = React.useMemo(() => {
+    return currentJornadasList.filter((j: any) => j.status !== 'completed');
+  }, [currentJornadasList]);
 
-  const rawJornada = currentJornadasList.find((j: any) => j.id === activeJornadaId) || currentJornadasList[0] || JORNADAS_DATA[0];
+  const completedJornadasList = React.useMemo(() => {
+    return currentJornadasList.filter((j: any) => j.status === 'completed');
+  }, [currentJornadasList]);
+
+  useEffect(() => {
+    const targetPool = activeAndComingSoonList.length > 0 ? activeAndComingSoonList : currentJornadasList;
+    if (targetPool.length > 0 && !targetPool.some((j: any) => j.id === activeJornadaId)) {
+      setActiveJornadaId(targetPool[0].id);
+    }
+  }, [activeAndComingSoonList, currentJornadasList, activeJornadaId]);
+
+  const rawJornada = (activeAndComingSoonList.find((j: any) => j.id === activeJornadaId) || activeAndComingSoonList[0]) || currentJornadasList.find((j: any) => j.id === activeJornadaId) || currentJornadasList[0] || JORNADAS_DATA[0];
 
   const currentJornada = React.useMemo(() => {
     const fallback = JORNADAS_DATA[0];
@@ -585,9 +605,17 @@ export default function Jornadas() {
             promoPrice
           };
         });
-      })()
+      })(),
+      status: (rawJornada?.status || 'active') as 'active' | 'coming_soon' | 'completed',
+      season: rawJornada?.season || '',
+      targetMonth: rawJornada?.targetMonth || '',
+      comingSoonTitle: rawJornada?.comingSoonTitle || 'COMING SOON',
+      comingSoonSubtitle: rawJornada?.comingSoonSubtitle || '',
+      countdownEnd: rawJornada?.countdownEnd || config.JORNADA_COUNTDOWN_END || '',
+      vehiculosAtendidos: rawJornada?.vehiculosAtendidos || '',
+      fechaRealizacion: rawJornada?.fechaRealizacion || ''
     };
-  }, [rawJornada]);
+  }, [rawJornada, config.JORNADA_COUNTDOWN_END]);
 
   const getPackageSavingsBadge = (pkg?: JornadaPackage | null): string => {
     if (!pkg) return '';
@@ -1099,16 +1127,26 @@ export default function Jornadas() {
           </section>
 
           {/* Selected Jornada Detail Display */}
-          <section className="py-8 px-6 max-w-7xl mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentJornada.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-8 text-slate-900 dark:text-white"
-              >
+          {currentJornada.status === 'coming_soon' ? (
+            /* Pantalla Especial de Coming Soon / Misterio con Faros del Deportivo y Cuenta Regresiva */
+            <section className="py-4 px-4 sm:px-6 max-w-7xl mx-auto">
+              <JornadasComingSoonHero 
+                jornada={currentJornada}
+                whatsappLink={config.WHATSAPP_LINK}
+                phoneNumber={config.PHONE_NUMBER}
+              />
+            </section>
+          ) : (
+            <section className="py-8 px-6 max-w-7xl mx-auto">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentJornada.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="space-y-8 text-slate-900 dark:text-white"
+                >
                 <div className="grid lg:grid-cols-12 gap-8 items-start">
                   {/* Left Content (7 cols) */}
                   <div className="lg:col-span-7 bg-white dark:bg-[#12141a]/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-lg dark:shadow-2xl space-y-6 relative overflow-hidden">
@@ -1609,6 +1647,7 @@ export default function Jornadas() {
             </motion.div>
             </AnimatePresence>
           </section>
+          )}
         </main>
       )}
 
@@ -1820,6 +1859,9 @@ export default function Jornadas() {
           </div>
         </div>
       </section>
+
+      {/* Historial de Jornadas & Temporadas Pasadas (Prueba Social y Récord del Taller) */}
+      <JornadasHistorialSection completedJornadas={completedJornadasList} />
 
       {/* Footer */}
       <footer className="py-12 border-t border-slate-200 dark:border-white/10 text-center text-xs text-slate-500 dark:text-zinc-500 bg-slate-100 dark:bg-transparent">

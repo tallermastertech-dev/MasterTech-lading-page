@@ -12,7 +12,7 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_S
 const TARGET_DOCS_DIR = 'C:\\Users\\maste\\OneDrive\\Documents\\TALLERMASTERTECH';
 const REPO_DIR = 'C:\\Users\\maste\\OneDrive\\Desktop\\PAGINA WEBS\\lading mastertech';
 const REPO_DB_DIR = path.join(REPO_DIR, 'database');
-const GIT_EXEC = 'C:\\Users\\maste\\AppData\\Local\\GitHubDesktop\\app-3.6.4\\resources\\app\\git\\cmd\\git.exe';
+const GIT_EXEC = 'C:\\Users\\maste\\AppData\\Local\\GitHubDesktop\\app-3.6.7\\resources\\app\\git\\cmd\\git.exe';
 
 async function syncTripleBackup() {
   console.log('====================================================================');
