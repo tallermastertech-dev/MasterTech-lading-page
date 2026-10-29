@@ -195,25 +195,32 @@ export default function JornadasComingSoonHero({
           </div>
         </div>
 
-        {/* COLUMNA DERECHA (6 cols): Vitrina de exhibición automotriz de alta gama */}
+        {/* COLUMNA DERECHA (6 cols): Vitrina de exhibición adaptada a Modo Claro y Modo Oscuro */}
         <div className="lg:col-span-6 p-4 sm:p-6 lg:p-6 flex items-center justify-center">
-          <div className="relative w-full h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-b from-[#11141c] via-[#090b10] to-[#040507] border border-slate-900/10 dark:border-white/10 shadow-lg dark:shadow-none flex items-center justify-center">
+          <div className="relative w-full h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-b from-slate-100 via-slate-50 to-slate-200/90 dark:bg-gradient-to-b dark:from-[#11141c] dark:via-[#090b10] dark:to-[#040507] border border-slate-200 dark:border-white/10 shadow-inner flex items-center justify-center transition-colors">
             {/* Badge de Vitrina Oficial MasterTech */}
-            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 shadow-sm">
+            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-[9px] font-black uppercase tracking-widest text-zinc-300 font-mono">
+              <span className="text-[9px] font-black uppercase tracking-widest text-slate-700 dark:text-zinc-300 font-mono">
                 PREVIEW VIP
               </span>
             </div>
 
-            {/* Halo ambiental rojo tenue detrás del deportivo */}
-            <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/20 rounded-full blur-[80px] pointer-events-none" />
+            {/* Halo ambiental rojo detrás del deportivo */}
+            <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-500/10 dark:bg-red-600/20 rounded-full blur-[80px] pointer-events-none" />
 
-            {/* Imagen del vehículo centrada, 100% transparente en bordes y personalizada con marca MasterTech */}
+            {/* Imagen del vehículo para Modo Claro (Estudio Claro con reflejos y sombras suaves) */}
+            <img
+              src="/assets/coming_soon_car_light.webp"
+              alt="Próxima Jornada MasterTech"
+              className="dark:hidden w-full h-full object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
+            />
+
+            {/* Imagen del vehículo para Modo Oscuro (Estudio Nocturno con haces de luz) */}
             <img
               src="/assets/coming_soon_car_mastertech.webp"
               alt="Próxima Jornada MasterTech"
-              className="w-full h-full object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
+              className="hidden dark:block w-full h-full object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
             />
           </div>
         </div>
