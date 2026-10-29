@@ -200,9 +200,9 @@ export default function JornadasComingSoonHero({
           {/* Halo ambiental rojo tenue detrás del deportivo */}
           <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/15 rounded-full blur-[80px] pointer-events-none" />
 
-          {/* Imagen del vehículo centrada, nítida y sin marcas de agua */}
+          {/* Imagen del vehículo centrada, nítida y personalizada con marca MasterTech */}
           <img
-            src="/assets/coming_soon_car_centered_clean.webp"
+            src="/assets/coming_soon_car_mastertech.webp"
             alt="Próxima Jornada MasterTech"
             className="w-full h-full max-h-[440px] object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105 drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]"
           />
