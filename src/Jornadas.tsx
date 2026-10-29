@@ -1724,7 +1724,7 @@ export default function Jornadas() {
       {/* =========================================================================
           POLÍTICAS, CONDICIONES Y CLÁUSULAS OFICIALES DE LA JORNADA VIP (FORMATO COMPACTO)
           ========================================================================= */}
-      <section id="politicas-jornada" className="py-12 sm:py-16 px-6 max-w-7xl mx-auto border-t border-slate-200 dark:border-white/10">
+      <section id="politicas-jornada" className="pt-8 pb-4 sm:pt-10 sm:pb-6 px-4 sm:px-6 max-w-7xl mx-auto border-t border-slate-200 dark:border-white/10">
         <div className="bg-white dark:bg-[#12141a]/95 border border-slate-200 dark:border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 shadow-lg dark:shadow-2xl relative overflow-hidden text-slate-900 dark:text-white">
           {/* Ambient Glow */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/5 blur-[100px] rounded-full pointer-events-none" />
