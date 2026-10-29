@@ -1417,15 +1417,7 @@ export default function Jornadas() {
                                     </div>
                                   </div>
                                   <div className="text-right shrink-0">
-                                    <div className="text-xs sm:text-sm font-black font-mono text-red-600 dark:text-amber-400">
-                                      {pkg.promoPrice}
-                                    </div>
-                                    {pkg.regularPrice && (
-                                      <div className="text-[10px] text-slate-400 dark:text-zinc-500 line-through">
-                                        {pkg.regularPrice}
-                                      </div>
-                                    )}
-                                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-black tracking-tight whitespace-nowrap shadow-xs transition-all mt-0.5 ${
+                                    <span className={`inline-block px-2.5 py-1 rounded-lg text-[10px] font-black tracking-tight whitespace-nowrap shadow-xs transition-all ${
                                       isSelected
                                         ? 'bg-red-600 text-white shadow-red-500/20'
                                         : 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
