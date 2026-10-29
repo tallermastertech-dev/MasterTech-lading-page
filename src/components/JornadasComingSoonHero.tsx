@@ -196,16 +196,21 @@ export default function JornadasComingSoonHero({
         </div>
 
         {/* COLUMNA DERECHA (6 cols): El deportivo rojo centrado, faros luminosos y silueta de alto impacto */}
-        <div className="lg:col-span-6 relative w-full h-[320px] sm:h-[400px] lg:h-full min-h-[340px] sm:min-h-[420px] lg:min-h-[480px] flex items-center justify-center overflow-hidden p-4 sm:p-6">
+        <div className="lg:col-span-6 relative w-full h-[340px] sm:h-[420px] lg:h-full min-h-[360px] sm:min-h-[440px] lg:min-h-[500px] flex items-center justify-center overflow-hidden">
           {/* Halo ambiental rojo tenue detrás del deportivo */}
-          <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/15 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute w-80 h-80 sm:w-96 sm:h-96 bg-red-600/20 rounded-full blur-[90px] pointer-events-none" />
 
-          {/* Imagen del vehículo centrada, nítida, sin bordes duros y personalizada con marca MasterTech */}
+          {/* Imagen del vehículo centrada, 100% transparente en bordes y personalizada con marca MasterTech */}
           <img
             src="/assets/coming_soon_car_mastertech.webp"
             alt="Próxima Jornada MasterTech"
-            className="w-full h-full max-h-[440px] object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105 drop-shadow-[0_10px_25px_rgba(220,38,38,0.25)]"
+            className="w-full h-full object-contain lg:object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
           />
+
+          {/* Difuminado suave en el borde izquierdo para fundirse con la columna de texto */}
+          <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#07080a] to-transparent pointer-events-none z-10" />
+          {/* Difuminado suave en el borde superior en móvil */}
+          <div className="lg:hidden absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#07080a] to-transparent pointer-events-none z-10" />
         </div>
       </div>
     </div>
