@@ -199,7 +199,7 @@ export default function JornadasComingSoonHero({
         <div className="lg:col-span-6 p-4 sm:p-6 lg:p-6 flex items-center justify-center">
           <div className="relative w-full h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-b from-slate-100 via-slate-50 to-slate-200/90 dark:bg-gradient-to-b dark:from-[#11141c] dark:via-[#090b10] dark:to-[#040507] border border-slate-200 dark:border-white/10 shadow-inner flex items-center justify-center transition-colors">
             {/* Badge de Vitrina Oficial MasterTech */}
-            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-xs">
+            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/85 dark:bg-black/60 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
               <span className="text-[9px] font-black uppercase tracking-widest text-slate-700 dark:text-zinc-300 font-mono">
                 PREVIEW VIP
@@ -209,14 +209,14 @@ export default function JornadasComingSoonHero({
             {/* Halo ambiental rojo detrás del deportivo */}
             <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-500/10 dark:bg-red-600/20 rounded-full blur-[80px] pointer-events-none" />
 
-            {/* Imagen del vehículo para Modo Claro (Estudio Claro con reflejos y sombras suaves) */}
+            {/* Imagen del vehículo para Modo Claro: Estudio Automotriz de Alta Gama Iluminado */}
             <img
-              src="/assets/coming_soon_car_light.webp"
+              src="/assets/coming_soon_car_light_studio.webp"
               alt="Próxima Jornada MasterTech"
-              className="dark:hidden w-full h-full object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
+              className="dark:hidden w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
             />
 
-            {/* Imagen del vehículo para Modo Oscuro (Estudio Nocturno con haces de luz) */}
+            {/* Imagen del vehículo para Modo Oscuro: Estudio Nocturno con faros y proyección lumínica */}
             <img
               src="/assets/coming_soon_car_mastertech.webp"
               alt="Próxima Jornada MasterTech"
