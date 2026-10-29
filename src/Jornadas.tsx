@@ -1060,13 +1060,13 @@ export default function Jornadas() {
                   : "SELECCIONA LA JORNADA PARA TU VEHÍCULO"}
               </h2>
               <p className="text-xs md:text-sm text-slate-500 dark:text-zinc-400">
-                {currentJornadasList.length === 1
+                {activeAndComingSoonList.length === 1
                   ? "Atención técnica especializada y cupos estrictamente limitados por fecha"
                   : "Desliza o selecciona para explorar todas las jornadas disponibles"}
               </p>
             </div>
 
-            {currentJornadasList.length === 1 ? (
+            {activeAndComingSoonList.length === 1 ? (
               /* Cuando es una sola jornada: ocupa todo el ancho y se presenta de forma destacada sin flechas */
               <div className="w-full">
                 <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 p-5 md:p-6 rounded-3xl bg-white dark:bg-[#12141a] dark:bg-gradient-to-r dark:from-amber-950/30 dark:via-[#12141a] dark:to-red-950/20 border-2 border-amber-500/30 dark:border-amber-500/40 shadow-md dark:shadow-2xl text-slate-900 dark:text-white backdrop-blur-xl">
@@ -1110,7 +1110,7 @@ export default function Jornadas() {
             ) : (
               <div className="relative flex items-center group/slider">
                 {/* Left Slide Arrow - sólo si hay más de 3 jornadas */}
-                {currentJornadasList.length > 3 && (
+                {activeAndComingSoonList.length > 3 && (
                   <button
                     type="button"
                     onClick={() => scrollTabs('left')}
@@ -1125,11 +1125,11 @@ export default function Jornadas() {
                 <div
                   ref={tabsRef}
                   className={`flex items-center gap-3 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none snap-x w-full ${
-                    currentJornadasList.length <= 3 ? 'justify-center' : ''
+                    activeAndComingSoonList.length <= 3 ? 'justify-center' : ''
                   }`}
                   style={{ scrollSnapType: 'x mandatory' }}
                 >
-                  {currentJornadasList.map((j: any) => {
+                  {activeAndComingSoonList.map((j: any) => {
                     const isActive = j.id === activeJornadaId;
                     return (
                       <button
@@ -1153,7 +1153,7 @@ export default function Jornadas() {
                 </div>
 
                 {/* Right Slide Arrow - sólo si hay más de 3 jornadas */}
-                {currentJornadasList.length > 3 && (
+                {activeAndComingSoonList.length > 3 && (
                   <button
                     type="button"
                     onClick={() => scrollTabs('right')}
