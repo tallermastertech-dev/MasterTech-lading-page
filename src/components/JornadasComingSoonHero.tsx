@@ -232,10 +232,13 @@ export default function JornadasComingSoonHero({
         </div>
       </div>
 
-      {/* VISTA MODO OSCURO: Layout cinematográfico 2 columnas con superdeportivo oscuro */}
-      <div className="hidden dark:block rounded-3xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0c0e14] via-[#07080a] to-[#040507] shadow-[0_25px_80px_rgba(0,0,0,0.95)]">
+      {/* VISTA MODO OSCURO: Layout cinematográfico de Develación VIP (Car Reveal Cloth en Seda Rubí Nocturna) */}
+      <div className="hidden dark:block rounded-3xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0c0e14] via-[#07080a] to-[#040507] shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative">
+        {/* Acento sutil superior en rojo y oro MasterTech */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-[#d4af37] to-amber-500" />
+
         <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[460px] lg:min-h-[480px]">
-          {/* COLUMNA IZQUIERDA (6 cols): Textos, cuenta regresiva y botón VIP */}
+          {/* COLUMNA IZQUIERDA (6 cols): Textos editoriales estilo alta costura, cuenta regresiva y botón VIP */}
           <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-center items-start text-left space-y-4 z-20">
             {/* Logo MasterTech & Badge de Temporada */}
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 shadow-xs">
@@ -249,16 +252,21 @@ export default function JornadasComingSoonHero({
               </span>
             </div>
 
-            {/* Titular Principal COMING SOON + Mes */}
+            {/* Titular Editorial COMING soon en Modo Oscuro */}
             <div className="space-y-1">
-              <h2 className="text-4xl sm:text-5xl lg:text-5xl font-display font-black tracking-tight uppercase text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400 select-none leading-none">
-                {jornada.comingSoonTitle || 'COMING SOON'}
-              </h2>
-              <div className="flex items-center gap-3 pt-1">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-display font-black tracking-widest uppercase text-[#D4AF37]">
+              <div className="flex items-baseline flex-wrap gap-2">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-white select-none leading-none">
+                  COMING
+                </h2>
+                <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#D4AF37] font-normal lowercase tracking-normal -translate-y-1">
+                  soon
+                </span>
+              </div>
+              <div className="flex items-center gap-3 pt-1.5">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-[#D4AF37]">
                   {displayMonthOrSeason}
                 </h3>
-                <span className="h-[2px] w-12 sm:w-20 bg-gradient-to-r from-[#D4AF37] to-transparent" />
+                <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-[#D4AF37] to-transparent" />
               </div>
             </div>
 
@@ -318,25 +326,27 @@ export default function JornadasComingSoonHero({
             </div>
           </div>
 
-          {/* COLUMNA DERECHA (6 cols): Vitrina oscura con el superdeportivo nocturno */}
+          {/* COLUMNA DERECHA (6 cols): Vitrina oscura con el superdeportivo velado en seda líquida carmesí */}
           <div className="lg:col-span-6 p-4 sm:p-6 lg:p-6 flex items-center justify-center">
             <div className="relative w-full h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-b from-[#11141c] via-[#090b10] to-[#040507] border border-white/10 shadow-inner flex items-center justify-center">
-              {/* Badge de Vitrina Oficial MasterTech */}
-              <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 shadow-xs">
+              {/* Badge de Develación VIP */}
+              <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-xs">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                 <span className="text-[9px] font-black uppercase tracking-widest text-zinc-300 font-mono">
-                  PREVIEW VIP
+                  DEVELACIÓN VIP
                 </span>
               </div>
 
-              {/* Halo ambiental rojo detrás del deportivo */}
+              {/* Halo ambiental rojo detrás del velo */}
               <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/20 rounded-full blur-[80px] pointer-events-none" />
 
-              {/* Imagen del vehículo para Modo Oscuro con faros iluminados y branding oficial MasterTech */}
+              {/* Imagen del vehículo para Modo Oscuro: Superdeportivo bajo seda líquida carmesí */}
               <img
-                src="/assets/coming_soon_car_mastertech.webp"
-                alt="Próxima Jornada MasterTech"
-                className="w-full h-full object-contain object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
+                src="/assets/coming_soon_reveal_silk_dark.webp"
+                alt="Develación VIP MasterTech"
+                className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
