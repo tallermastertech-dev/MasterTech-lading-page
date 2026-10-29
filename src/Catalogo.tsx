@@ -11,6 +11,7 @@ import {
   checkAndTriggerStockAlerts, 
   getStockAlerts 
 } from './utils/stockNotifications';
+import { getProductRecommendations } from './utils/productRecommendations';
 
 const CONFIG_DEFAULT = {
   PHONE_NUMBER: "+584123565012",
@@ -47,6 +48,39 @@ export interface CatalogItem {
 }
 
 export const DEFAULT_CATALOG: CatalogItem[] = [
+  {
+    id: 1792430000001,
+    title: "Filtro de Aceite Sintético de Alta Durabilidad OEM",
+    category: "Filtros",
+    price: "$15.00",
+    isPromo: false,
+    desc: "Filtro de aceite de celulosa sintética de alta retención de micropartículas. Diseñado para intervalos de servicio prolongados de 5.000 a 10.000 km con máxima protección de lubricación para motores multiválvula y turbocargados.",
+    longDesc: "Repuesto OEM #15400-PLM-A02. Válvula de alivio de presión de silicona y empaque anti-drenaje de alta resistencia térmica.",
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/catalogo/1791920966313_imagen_principal__portada___vi_webp.webp",
+    images: ["https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/catalogo/1791920982299_media_webp.webp"],
+    badge: "Repuesto Certificado OEM",
+    specs: ["Honda", "Toyota", "Jeep", "Ford", "Chevrolet", "Retención micropartículas 99%", "Garantía de instalación en taller MasterTech"],
+    compatibility: "Multimarca, Honda, Toyota, Jeep, Dodge, Ford, Chevrolet",
+    partNumber: "15400-PLM-A02",
+    stock: 12,
+    isImportedUSA: true
+  },
+  {
+    id: 1792430000002,
+    title: "Limpiador de Sensores MAF & Contactos CRC OEM",
+    category: "Filtros & Consumibles",
+    price: "$18.00",
+    isPromo: false,
+    desc: "Limpiador especializado de evaporación ultrarrápida formulado para sensores de flujo de masa de aire (MAF), sensores MAP y cuerpos de aceleración electrónicos. Remueve suciedad y contaminantes sin dejar residuos.",
+    longDesc: "Fórmula de precisión OEM no inflamable después de evaporación, segura para plásticos y aleaciones delicadas de sensores automotrices.",
+    img: "https://mulxylpctqkfbfqeuvno.supabase.co/storage/v1/object/public/mastertech-media/catalogo/1791903568500_imagen_principal__portada___vi_webp.webp",
+    badge: "Fórmula Certificada OEM",
+    specs: ["Sensores de Flujo MAF", "Cuerpos de aceleración", "Sensores MAP", "Evaporación ultrarrápida", "Seguro para plásticos y conectores"],
+    compatibility: "Multimarcas (Sensores de flujo de aire y sistemas de admisión)",
+    partNumber: "05110",
+    stock: 16,
+    isImportedUSA: true
+  },
   {
     id: 1791920988156,
     title: "Filtro aire Cabina UAC 1174C",
@@ -1337,6 +1371,7 @@ export default function Catalogo() {
   const [selectedProduct, setSelectedProduct] = useState<CatalogItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const modalBodyRef = useRef<HTMLDivElement>(null);
 
   // Helper para generar slug amigable o parámetro de URL por producto
   const getProductShareUrl = (item: CatalogItem) => {
@@ -1349,6 +1384,9 @@ export default function Catalogo() {
   const openProductModal = (item: CatalogItem) => {
     setSelectedProduct(item);
     setActiveImageIndex(0);
+    if (modalBodyRef.current) {
+      modalBodyRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     if (typeof window !== 'undefined' && window.history?.pushState) {
       const url = new URL(window.location.href);
       url.searchParams.set('p', String(item.id));
@@ -3615,9 +3653,10 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
               {(() => {
                 const allPhotos = [selectedProduct.img, ...(selectedProduct.images || [])].filter(Boolean);
                 const currentImg = (allPhotos && allPhotos[activeImageIndex]) || selectedProduct.img || '/assets/cat_frenos_discos.webp';
+                const { companionProducts, similarProducts } = getProductRecommendations(selectedProduct, catalogItems);
 
                 return (
-                  <div className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 max-h-[calc(90vh-135px)] pb-10 scrollbar-thin">
+                  <div ref={modalBodyRef} className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 max-h-[calc(90vh-135px)] pb-10 scrollbar-thin">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                       {/* Gallery Viewer */}
                       <div className="space-y-3">
@@ -3777,6 +3816,183 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                               Aplica a todos los modelos de carros
                             </span>
                           )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ========================================================================= */}
+                    {/* FRECUENTEMENTE USADO CON / HACEN EL JUEGO */}
+                    {/* ========================================================================= */}
+                    {companionProducts && companionProducts.length > 0 && (
+                      <div className="rounded-2xl border border-red-500/25 bg-gradient-to-br from-red-500/5 via-slate-50/50 to-amber-500/5 dark:from-red-950/20 dark:via-black/30 dark:to-amber-950/20 p-4 sm:p-5 space-y-3.5 shadow-sm">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-xl bg-red-600/10 dark:bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0">
+                              <Layers size={16} />
+                            </div>
+                            <div>
+                              <h4 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+                                <span>Frecuentemente Usado Con</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-amber-700 dark:text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                                  Hacen el juego
+                                </span>
+                              </h4>
+                              <p className="text-[11px] text-slate-600 dark:text-zinc-400">
+                                Repuestos complementarios recomendados para este servicio o mantenimiento
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Listado de repuestos que hacen juego */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                          {companionProducts.map((companion) => (
+                            <div
+                              key={companion.id}
+                              className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 hover:border-red-500/50 transition-all group shadow-xs hover:shadow-md"
+                            >
+                              <div
+                                onClick={() => openProductModal(companion)}
+                                className="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 dark:bg-black shrink-0 border border-slate-200 dark:border-white/10 cursor-pointer group-hover:scale-105 transition-transform"
+                                title="Tocar para ver este repuesto"
+                              >
+                                <img src={companion.img} alt={companion.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                              </div>
+
+                              <div className="flex-1 min-w-0">
+                                <h5
+                                  onClick={() => openProductModal(companion)}
+                                  className="text-xs font-bold text-slate-900 dark:text-white truncate cursor-pointer hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                                  title={companion.title}
+                                >
+                                  {companion.title}
+                                </h5>
+
+                                {companion.partNumber && (
+                                  <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-400 block truncate">
+                                    OEM #{companion.partNumber}
+                                  </span>
+                                )}
+
+                                <div className="flex items-baseline gap-1 mt-0.5">
+                                  <span className="text-sm font-black text-slate-900 dark:text-white font-mono">
+                                    {companion.price}
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 uppercase">USD</span>
+                                </div>
+
+                                <div className="flex items-center gap-2 mt-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => openProductModal(companion)}
+                                    className="text-[11px] font-bold text-red-600 dark:text-red-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+                                  >
+                                    <span>Ver repuesto</span>
+                                    <ArrowRight size={11} />
+                                  </button>
+                                  <span className="text-slate-300 dark:text-white/20">•</span>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => addToCart(companion, 1, e)}
+                                    className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+                                  >
+                                    <Plus size={11} />
+                                    <span>Añadir</span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Botón Combo: Llevar el juego completo */}
+                        {companionProducts[0] && (
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 p-3 rounded-xl bg-slate-100/90 dark:bg-black/60 border border-slate-200 dark:border-white/10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <Sparkles size={15} className="text-amber-500 shrink-0" />
+                              <span className="text-slate-700 dark:text-zinc-300">
+                                Lleva el juego completo por{' '}
+                                <strong className="text-slate-950 dark:text-white font-mono text-sm">
+                                  ${(parsePrice(selectedProduct.price) + parsePrice(companionProducts[0].price)).toFixed(2)} USD
+                                </strong>
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                addToCart(selectedProduct, 1, e);
+                                addToCart(companionProducts[0], 1, e);
+                              }}
+                              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md shadow-red-600/20 cursor-pointer transition-all hover:scale-102"
+                            >
+                              <ShoppingCart size={13} />
+                              <span>Añadir Combo al Carrito</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* ========================================================================= */}
+                    {/* TAMBIÉN TE PUEDE INTERESAR / ALTERNATIVAS SIMILARES */}
+                    {/* ========================================================================= */}
+                    {similarProducts && similarProducts.length > 0 && (
+                      <div className="space-y-3 pt-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <Zap size={14} className="text-amber-500" />
+                            <span>También te puede interesar</span>
+                          </h4>
+                          <span className="text-[10px] text-slate-500 dark:text-zinc-400 font-bold uppercase tracking-wider">
+                            Alternativas Similares
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {similarProducts.slice(0, 3).map((item) => (
+                            <div
+                              key={item.id}
+                              onClick={() => openProductModal(item)}
+                              className="p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-red-500/50 transition-all cursor-pointer group flex flex-col justify-between hover:shadow-lg"
+                              title="Tocar para ver este repuesto"
+                            >
+                              <div>
+                                <div className="aspect-square rounded-xl overflow-hidden bg-white dark:bg-black border border-slate-200 dark:border-white/10 mb-2">
+                                  <img
+                                    src={item.img}
+                                    alt={item.title}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                </div>
+                                <h5 className="text-[11px] sm:text-xs font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                                  {item.title}
+                                </h5>
+                                {item.compatibility && (
+                                  <span className="text-[9px] text-slate-500 dark:text-zinc-400 truncate block mt-0.5">
+                                    {item.compatibility}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="mt-2 pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between">
+                                <span className="text-xs font-black text-slate-900 dark:text-white font-mono">
+                                  {item.price}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    addToCart(item, 1, e);
+                                  }}
+                                  className="p-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-all cursor-pointer shadow-xs hover:scale-110"
+                                  title="Añadir al carrito"
+                                >
+                                  <Plus size={11} />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -4166,6 +4382,57 @@ _Hola equipo Taller MasterTech 🛠️, he completado el formulario web. Quedo a
                           );
                         })}
                       </div>
+
+                      {/* Smart cross-sell: Complementos frecuentemente añadidos con el pedido */}
+                      {(() => {
+                        const cartProductIds = new Set(cart.map(c => c.product.id));
+                        const suggested: CatalogItem[] = [];
+                        for (const cItem of cart) {
+                          const { companionProducts } = getProductRecommendations(cItem.product, catalogItems);
+                          for (const comp of companionProducts) {
+                            if (!cartProductIds.has(comp.id) && !suggested.some(s => s.id === comp.id)) {
+                              suggested.push(comp);
+                              if (suggested.length >= 2) break;
+                            }
+                          }
+                          if (suggested.length >= 2) break;
+                        }
+                        if (suggested.length === 0) return null;
+
+                        return (
+                          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5">
+                                <Layers size={13} className="text-red-500" />
+                                <span>Frecuentemente añadido con tu pedido:</span>
+                              </span>
+                              <span className="text-[9px] font-black uppercase text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                                Hacen juego
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {suggested.map((sug) => (
+                                <div key={sug.id} className="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 text-xs">
+                                  <div className="flex items-center gap-2 min-w-0 pr-1">
+                                    <img src={sug.img} alt="" className="w-10 h-10 object-cover rounded-lg shrink-0 border border-slate-200 dark:border-white/10" />
+                                    <div className="min-w-0">
+                                      <p className="font-bold text-[11px] truncate text-slate-900 dark:text-white" title={sug.title}>{sug.title}</p>
+                                      <span className="text-[10px] font-mono text-slate-600 dark:text-zinc-400">{sug.price}</span>
+                                    </div>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => addToCart(sug, 1, e)}
+                                    className="px-2.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider shrink-0 cursor-pointer shadow-xs hover:scale-105 transition-all"
+                                  >
+                                    + Añadir
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })()}
 
                       {/* Order Calculation Summary Box */}
                       <div className="p-4 rounded-2xl space-y-2 bg-red-50/70 dark:bg-gradient-to-r dark:from-red-950/30 dark:via-slate-900 dark:to-red-950/30 border border-red-200 dark:border-red-500/30">
