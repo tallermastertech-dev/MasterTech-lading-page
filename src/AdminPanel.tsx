@@ -9148,6 +9148,7 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         comingSoonTitle: "COMING SOON",
                         comingSoonSubtitle: "La próxima jornada de alto rendimiento automotriz está por comenzar en Isla de Margarita.",
                         countdownEnd: "2026-12-01T08:00",
+                        jornadaEnd: "2026-12-15T20:00",
                         vehiculosAtendidos: "25+ vehículos atendidos",
                         fechaRealizacion: "Diciembre 2026"
                       });
@@ -9670,6 +9671,16 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                             {j.targetMonth && (
                               <span className="text-[9px] font-black uppercase text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full inline-block">
                                 {j.targetMonth}
+                              </span>
+                            )}
+                            {j.countdownEnd && j.status === 'coming_soon' && (
+                              <span className="text-[9px] font-bold text-purple-300 bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 rounded-full inline-block">
+                                Apertura: {j.countdownEnd.replace('T', ' ')}
+                              </span>
+                            )}
+                            {j.jornadaEnd && (
+                              <span className="text-[9px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full inline-block">
+                                Retiro: {j.jornadaEnd.replace('T', ' ')}
                               </span>
                             )}
                           </div>
@@ -12291,6 +12302,52 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                     </div>
                   </div>
                 )}
+
+                {/* Automatización Temporal (Liberación y Retiro Automático) */}
+                <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-3.5 space-y-3 mt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-black uppercase text-amber-300 block tracking-wider">
+                      Automatización de Tiempos (Liberación y Retiro Automático)
+                    </span>
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-500/30">
+                      100% Automático
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed">
+                    Configura las fechas exactas para que el sistema abra y retire la jornada automáticamente sin que tengas que intervenir de forma manual:
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="bg-black/40 border border-purple-500/30 rounded-xl p-2.5 space-y-1">
+                      <label className="text-purple-300 font-bold block text-[11px]">
+                        1. Liberación Automática (Inicio)
+                      </label>
+                      <input
+                        type="datetime-local"
+                        value={editingJornada.countdownEnd || ''}
+                        onChange={(e) => setEditingJornada({ ...editingJornada, countdownEnd: e.target.value })}
+                        className="w-full bg-black/60 border border-purple-500/30 rounded-lg p-2 text-white outline-none focus:border-purple-400 text-xs"
+                      />
+                      <span className="text-[10px] text-zinc-500 block leading-tight">
+                        Si la jornada está en Coming Soon, al cumplirse esta fecha se libera sola y se abren las reservas al público.
+                      </span>
+                    </div>
+
+                    <div className="bg-black/40 border border-amber-500/30 rounded-xl p-2.5 space-y-1">
+                      <label className="text-amber-300 font-bold block text-[11px]">
+                        2. Cierre y Retiro Automático (Fin)
+                      </label>
+                      <input
+                        type="datetime-local"
+                        value={editingJornada.jornadaEnd || ''}
+                        onChange={(e) => setEditingJornada({ ...editingJornada, jornadaEnd: e.target.value })}
+                        className="w-full bg-black/60 border border-amber-500/30 rounded-lg p-2 text-white outline-none focus:border-amber-400 text-xs"
+                      />
+                      <span className="text-[10px] text-zinc-500 block leading-tight">
+                        Al cumplirse esta fecha, la jornada se retira sola de las reservas activas y se traslada automáticamente al historial de ediciones anteriores.
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Campos para Registro Histórico / Vehículos Atendidos */}
                 <div className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-3 space-y-2 mt-2">

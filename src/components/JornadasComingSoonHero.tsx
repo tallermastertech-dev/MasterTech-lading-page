@@ -26,6 +26,7 @@ interface JornadaItemState {
   comingSoonTitle?: string;
   comingSoonSubtitle?: string;
   countdownEnd?: string;
+  jornadaEnd?: string;
   vehiculosAtendidos?: number | string;
   fechaRealizacion?: string;
   regularPrice?: string;
@@ -43,6 +44,7 @@ interface JornadasComingSoonHeroProps {
   jornada: JornadaItemState;
   whatsappLink?: string;
   phoneNumber?: string;
+  onCountdownComplete?: () => void;
 }
 
 const MONTHS_LIST = [
@@ -59,7 +61,8 @@ export const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; cla
 export default function JornadasComingSoonHero({
   jornada,
   whatsappLink = "https://wa.link/xnj37f",
-  phoneNumber = "+584123565012"
+  phoneNumber = "+584123565012",
+  onCountdownComplete
 }: JornadasComingSoonHeroProps) {
   // Cuenta regresiva
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; mins: number; secs: number }>({
@@ -86,6 +89,9 @@ export default function JornadasComingSoonHero({
       const diff = target.getTime() - new Date().getTime();
       if (diff <= 0) {
         setTimeLeft({ days: 0, hours: 0, mins: 0, secs: 0 });
+        if (targetDateStr && onCountdownComplete) {
+          onCountdownComplete();
+        }
         return;
       }
 

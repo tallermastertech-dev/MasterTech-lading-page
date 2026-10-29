@@ -160,6 +160,7 @@ interface JornadaItem {
   comingSoonTitle?: string;
   comingSoonSubtitle?: string;
   countdownEnd?: string;
+  jornadaEnd?: string;
   vehiculosAtendidos?: number | string;
   fechaRealizacion?: string;
 }
@@ -522,14 +523,52 @@ export default function Jornadas() {
     return JORNADAS_DATA;
   }, [config]);
 
+  // Live ticker para recalcular automaticamente liberaciones y retiros
+  const [currentTimestamp, setCurrentTimestamp] = React.useState<number>(() => Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTimestamp(Date.now());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Evaluamos el ciclo de vida automatico de cada jornada segun sus fechas y horas establecidas
+  const evaluatedJornadasList = React.useMemo(() => {
+    return currentJornadasList.map((j: any) => {
+      let dynamicStatus = j.status || 'active';
+
+      // 1. Cierre y Retiro Automatico: Si tiene fecha de culminacion (jornadaEnd) y ya paso, pasa automaticamente a 'completed'
+      if (j.jornadaEnd) {
+        const endTime = new Date(j.jornadaEnd).getTime();
+        if (!isNaN(endTime) && currentTimestamp >= endTime) {
+          dynamicStatus = 'completed';
+        }
+      }
+
+      // 2. Liberacion Automatica: Si estaba en 'coming_soon' y ya paso o llego a cero su countdownEnd, se libera automaticamente a 'active'
+      if (dynamicStatus === 'coming_soon' && j.countdownEnd) {
+        const releaseTime = new Date(j.countdownEnd).getTime();
+        if (!isNaN(releaseTime) && currentTimestamp >= releaseTime) {
+          dynamicStatus = 'active';
+        }
+      }
+
+      return {
+        ...j,
+        status: dynamicStatus
+      };
+    });
+  }, [currentJornadasList, currentTimestamp]);
+
   // Filtramos las jornadas activas / en coming_soon y las finalizadas
   const activeAndComingSoonList = React.useMemo(() => {
-    return currentJornadasList.filter((j: any) => j.status !== 'completed');
-  }, [currentJornadasList]);
+    return evaluatedJornadasList.filter((j: any) => j.status !== 'completed');
+  }, [evaluatedJornadasList]);
 
   const completedJornadasList = React.useMemo(() => {
-    return currentJornadasList.filter((j: any) => j.status === 'completed');
-  }, [currentJornadasList]);
+    return evaluatedJornadasList.filter((j: any) => j.status === 'completed');
+  }, [evaluatedJornadasList]);
 
   useEffect(() => {
     const targetPool = activeAndComingSoonList.length > 0 ? activeAndComingSoonList : currentJornadasList;
@@ -612,6 +651,7 @@ export default function Jornadas() {
       comingSoonTitle: rawJornada?.comingSoonTitle || 'COMING SOON',
       comingSoonSubtitle: rawJornada?.comingSoonSubtitle || '',
       countdownEnd: rawJornada?.countdownEnd || config.JORNADA_COUNTDOWN_END || '',
+      jornadaEnd: rawJornada?.jornadaEnd || '',
       vehiculosAtendidos: rawJornada?.vehiculosAtendidos || '',
       fechaRealizacion: rawJornada?.fechaRealizacion || ''
     };
@@ -1127,13 +1167,50 @@ export default function Jornadas() {
           </section>
 
           {/* Selected Jornada Detail Display */}
-          {currentJornada.status === 'coming_soon' ? (
+          {activeAndComingSoonList.length === 0 ? (
+            /* Pantalla cuando todas las jornadas han concluido en su fecha limite */
+            <section className="py-12 px-4 sm:px-6 max-w-4xl mx-auto text-center">
+              <div className="bg-[#12141a]/90 border border-white/10 rounded-3xl p-8 sm:p-12 backdrop-blur-xl space-y-6 shadow-2xl">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-black uppercase tracking-wider">
+                  <CheckCircle2 size={16} />
+                  <span>Jornada Culminada con Exito</span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+                  La jornada actual ha concluido en el tiempo establecido
+                </h2>
+                <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                  Agradecemos la confianza de toda nuestra clientela. Puedes revisar el registro historico de vehiculos atendidos en la seccion inferior o unirte a la lista prioritaria para la proxima edicion.
+                </p>
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <a
+                    href={(() => {
+                      const msg = `*HOLA MASTERTECH, DESEO INFORMACION DE LA PROXIMA JORNADA ESPECIAL*\n\nMe gustaria recibir notificacion prioritaria cuando aperture la nueva jornada.`;
+                      const cleanPhone = (config.PHONE_NUMBER || '+584123565012').replace(/\D/g, '');
+                      return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+                    })()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary !py-3 !px-8 text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 w-full sm:w-auto"
+                  >
+                    <span>Avisarme de la Proxima Jornada</span>
+                  </a>
+                  <a
+                    href="#historial-jornadas"
+                    className="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold uppercase transition-all w-full sm:w-auto text-center"
+                  >
+                    Ver Registro de Vehiculos Atendidos
+                  </a>
+                </div>
+              </div>
+            </section>
+          ) : currentJornada.status === 'coming_soon' ? (
             /* Pantalla Especial de Coming Soon / Misterio con Faros del Deportivo y Cuenta Regresiva */
             <section className="py-4 px-4 sm:px-6 max-w-7xl mx-auto">
               <JornadasComingSoonHero 
                 jornada={currentJornada}
                 whatsappLink={config.WHATSAPP_LINK}
                 phoneNumber={config.PHONE_NUMBER}
+                onCountdownComplete={() => setCurrentTimestamp(Date.now())}
               />
             </section>
           ) : (
