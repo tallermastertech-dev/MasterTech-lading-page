@@ -1866,68 +1866,6 @@ export default function Jornadas() {
           </AnimatePresence>
         </div>
 
-        {/* Bottom Banner Confirmation */}
-        <div className="mt-10 bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-          <div className="space-y-1">
-            <h4 className="text-slate-900 dark:text-white font-extrabold text-sm sm:text-base flex items-center justify-center sm:justify-start gap-2">
-              <ShieldCheck className="text-emerald-500 dark:text-emerald-400" size={18} />
-              <span>Garantía de Calidad y Transparencia Técnica</span>
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-zinc-400 max-w-2xl">
-              Cupos limitados por jornada con atención personalizada para cada vehículo, recepción puntual en turnos asignados, rigurosas pruebas técnicas y garantía oficial por escrito.
-            </p>
-          </div>
-
-          <a 
-            href={config.WHATSAPP_LINK || "https://wa.me/584123565012"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary !px-6 !py-3 text-xs font-bold whitespace-nowrap shadow-xl"
-          >
-            <span>CONSULTAR DISPONIBILIDAD</span>
-          </a>
-        </div>
-      </section>
-
-      {/* Guarantees & Why MasterTech */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-[#12141a] p-6 rounded-3xl border border-slate-200 dark:border-white/10 flex items-start gap-4 shadow-sm dark:shadow-none">
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 flex items-center justify-center shrink-0 text-amber-600 dark:text-amber-400">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Garantía Total MasterTech</h3>
-              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
-                Todos nuestros trabajos de reprogramación, electrónica y climatización incluyen respaldo directo por escrito y garantía de satisfacción.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-[#12141a] p-6 rounded-3xl border border-slate-200 dark:border-white/10 flex items-start gap-4 shadow-sm dark:shadow-none">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0 text-primary">
-              <Award className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Equipos Importados OEM</h3>
-              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
-                Utilizamos escáneres multimarca y programadores de última generación para garantizar lecturas quirúrgicas sin riesgos en tu vehículo.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-[#12141a] p-6 rounded-3xl border border-slate-200 dark:border-white/10 flex items-start gap-4 shadow-sm dark:shadow-none">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-500/10 border border-cyan-300 dark:border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-600 dark:text-cyan-400">
-              <Clock className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">Atención VIP & Lounge</h3>
-              <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
-                Espera cómodamente en nuestra área climatizada VIP con Wi-Fi de alta velocidad, café de cortesía y atención personalizada.
-              </p>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Historial de Jornadas & Temporadas Pasadas (Prueba Social y Récord del Taller) */}
