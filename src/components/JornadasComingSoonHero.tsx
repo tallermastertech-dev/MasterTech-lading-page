@@ -111,299 +111,220 @@ export default function JornadasComingSoonHero({
 
   return (
     <div className="relative w-full max-w-5xl mx-auto my-4 transition-colors">
-      {/* VISTA MODO CLARO: Edición Develación VIP (Car Reveal Cloth en Seda Champagne) */}
-      <div className="block dark:hidden bg-gradient-to-b from-[#fdfbf9] via-[#f8f5ef] to-[#f2ede4] border border-[#e2dcd2] rounded-3xl overflow-hidden shadow-2xl shadow-stone-300/40 relative">
-        {/* Acento sutil superior en oro y rojo MasterTech */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-600 via-[#d4af37] to-red-600" />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[460px] lg:min-h-[480px]">
-          {/* COLUMNA IZQUIERDA (6 cols): Textos editoriales estilo alta costura, cuenta regresiva y botón VIP */}
-          <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-center items-start text-left space-y-4 z-20">
-            {/* Badge MasterTech & Edición */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ede7dc]/80 border border-[#ded5c6] shadow-xs">
-              <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
-              <span className="text-[10px] sm:text-[11px] font-black tracking-widest text-[#2c2720] uppercase font-mono">
-                MASTERTECH C.A.
-              </span>
-              <span className="text-amber-800/40">•</span>
-              <span className="text-[10px] sm:text-[11px] font-black uppercase text-red-600">
-                {jornada.season || 'EDICIÓN ESPECIAL'}
+      {/* VISTA MODO CLARO: Tarjeta de Develación VIP con fondo de seda integrado */}
+      <div className="block dark:hidden relative rounded-3xl overflow-hidden border border-[#ded5c6] shadow-2xl shadow-stone-300/50 bg-[#fdfbf9]">
+        {/* Acento superior en degradado oro/rojo */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-600 via-[#d4af37] to-red-600 z-30" />
+
+        {/* Imagen de fondo integrada a la derecha */}
+        <div className="absolute top-0 right-0 bottom-0 w-full lg:w-3/5 pointer-events-none select-none z-0 overflow-hidden">
+          <img
+            src="/assets/coming_soon_suv_reveal_silk_v2.webp"
+            alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
+            className="w-full h-full object-cover object-right opacity-90 transition-transform duration-1000 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          {/* Degradado para fundir suavemente la imagen con el fondo marfil hacia la izquierda */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fdfbf9] via-[#fdfbf9]/85 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#fdfbf9] via-transparent to-[#fdfbf9]/60 lg:hidden" />
+        </div>
+
+        {/* Contenido en primer plano */}
+        <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center items-start text-left space-y-4 min-h-[460px] lg:min-h-[480px]">
+          {/* Badge MasterTech & Edición */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ede7dc]/90 backdrop-blur-md border border-[#ded5c6] shadow-xs">
+            <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
+            <span className="text-[10px] sm:text-[11px] font-black tracking-widest text-[#2c2720] uppercase font-mono">
+              MASTERTECH C.A.
+            </span>
+            <span className="text-amber-800/40">•</span>
+            <span className="text-[10px] sm:text-[11px] font-black uppercase text-red-600">
+              {jornada.season || 'EDICIÓN ESPECIAL'}
+            </span>
+          </div>
+
+          {/* Titular Editorial COMING Soon */}
+          <div className="space-y-1">
+            <div className="flex items-baseline flex-wrap gap-2">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-[#1e1b18] select-none leading-none">
+                COMING
+              </h2>
+              <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#b8860b] font-normal lowercase tracking-normal -translate-y-1">
+                Soon
               </span>
             </div>
-
-            {/* Titular Editorial COMING Soon inspirado en la referencia */}
-            <div className="space-y-1">
-              <div className="flex items-baseline flex-wrap gap-2">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-[#1e1b18] select-none leading-none">
-                  COMING
-                </h2>
-                <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#b8860b] font-normal lowercase tracking-normal -translate-y-1">
-                  Soon
-                </span>
-              </div>
-              <div className="flex items-center gap-3 pt-1.5">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-amber-700">
-                  {displayMonthOrSeason}
-                </h3>
-                <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-amber-600 to-transparent" />
-              </div>
-            </div>
-
-            {/* Título y Subtítulo de la Jornada */}
-            <div className="space-y-1.5">
-              <p className="text-sm sm:text-base font-black text-[#1e1b18] uppercase tracking-wide leading-snug">
-                {jornada.title}
-              </p>
-              <p className="text-xs sm:text-sm text-[#5a544c] max-w-lg leading-relaxed">
-                {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por abrir cupos en Isla de Margarita. Regístrate en la lista de espera prioritaria antes del lanzamiento oficial.'}
-              </p>
-            </div>
-
-            {/* Contador Regresivo en Cajas de Cristal Marfil */}
-            <div className="pt-1 w-full sm:w-auto">
-              <span className="text-[10px] font-bold text-[#7a7266] uppercase tracking-widest block mb-2">
-                Tiempo para apertura de cupos:
-              </span>
-              <div className="inline-flex items-center gap-2 sm:gap-3 bg-[#ede7dc]/80 backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl border border-[#ded5c6] shadow-sm">
-                {[
-                  { val: timeLeft.days, label: 'DÍAS' },
-                  { val: timeLeft.hours, label: 'HORAS' },
-                  { val: timeLeft.mins, label: 'MIN' },
-                  { val: timeLeft.secs, label: 'SEG' }
-                ].map((unit, idx) => (
-                  <React.Fragment key={idx}>
-                    <div className="text-center min-w-[42px] sm:min-w-[48px]">
-                      <span className="text-xl sm:text-2xl font-display font-black text-[#1e1b18] block leading-none font-mono">
-                        {String(unit.val).padStart(2, '0')}
-                      </span>
-                      <span className="text-[8px] sm:text-[9px] font-bold text-[#7a7266] uppercase tracking-widest block mt-1">
-                        {unit.label}
-                      </span>
-                    </div>
-                    {idx < 3 && <span className="text-amber-600 font-bold text-base sm:text-lg opacity-70">:</span>}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-
-            {/* Botón VIP Lista de Espera */}
-            <div className="pt-2 w-full sm:w-auto space-y-2">
-              <button
-                type="button"
-                onClick={handleWaitlistClick}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_8px_25px_rgba(220,38,38,0.30)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
-              >
-                <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
-                <span>UNIRME A LA LISTA DE ESPERA VIP</span>
-                <ChevronRight size={15} />
-              </button>
-
-              <span className="text-[10px] text-[#6b6458] font-semibold flex items-center gap-1.5 pt-1">
-                <ShieldCheck size={13} className="text-emerald-700 shrink-0" />
-                <span>Acceso anticipado a cupos con tarifa preferencial MasterTech</span>
-              </span>
+            <div className="flex items-center gap-3 pt-1.5">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-amber-700">
+                {displayMonthOrSeason}
+              </h3>
+              <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-amber-600 to-transparent" />
             </div>
           </div>
 
-          {/* COLUMNA DERECHA (6 cols): Vitrina con Silueta de Cerradura VIP (Keyhole Reveal) */}
-          <div className="lg:col-span-6 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center">
-            {/* SVG Filter para definición del Keyhole */}
-            <svg width="0" height="0" className="absolute pointer-events-none">
-              <defs>
-                <clipPath id="keyhole-clip-light" clipPathUnits="objectBoundingBox">
-                  {/* Cerradura elegante normalizada: círculo arriba en (0.5, 0.35) radio 0.33, cuerpo acampanado hacia abajo */}
-                  <path d="M 0.5 0.02 C 0.69 0.02 0.84 0.17 0.84 0.36 C 0.84 0.49 0.76 0.60 0.65 0.66 L 0.72 0.94 C 0.73 0.97 0.70 1.0 0.66 1.0 L 0.34 1.0 C 0.30 1.0 0.27 0.97 0.28 0.94 L 0.35 0.66 C 0.24 0.60 0.16 0.49 0.16 0.36 C 0.16 0.17 0.31 0.02 0.5 0.02 Z" />
-                </clipPath>
-              </defs>
-            </svg>
+          {/* Título y Subtítulo de la Jornada */}
+          <div className="space-y-1.5">
+            <p className="text-sm sm:text-base font-black text-[#1e1b18] uppercase tracking-wide leading-snug">
+              {jornada.title}
+            </p>
+            <p className="text-xs sm:text-sm text-[#5a544c] max-w-lg leading-relaxed">
+              {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por abrir cupos en Isla de Margarita. Regístrate en la lista de espera prioritaria antes del lanzamiento oficial.'}
+            </p>
+          </div>
 
-            {/* Contenedor de la Cerradura con brillo sutil y profundidad */}
-            <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[3/4] flex items-center justify-center group">
-              {/* Resplandor ambiental cálido detrás de la cerradura */}
-              <div className="absolute inset-0 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Borde exterior decorativo con forma de cerradura */}
-              <div 
-                className="relative w-full h-full p-2 transition-transform duration-700 group-hover:scale-[1.02] flex items-center justify-center"
-              >
-                {/* Ventana de Cerradura con clipPath */}
-                <div 
-                  className="relative w-full h-full overflow-hidden shadow-[0_20px_50px_rgba(180,140,80,0.25)] border-2 border-amber-600/30"
-                  style={{
-                    clipPath: 'url(#keyhole-clip-light)',
-                    WebkitClipPath: 'url(#keyhole-clip-light)'
-                  }}
-                >
-                  {/* Fotografía de la camioneta SUV bajo la seda champagne vista por la cerradura */}
-                  <img
-                    src="/assets/coming_soon_suv_reveal_silk_v2.webp"
-                    alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
-                    className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                    decoding="async"
-                  />
-
-                  {/* Sombra interna sutil sobre los bordes de la cerradura */}
-                  <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.35)] pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Texto de pie editorial estilo referencia */}
-              <div className="absolute -bottom-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#ded5c6] shadow-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
-                <span className="text-[10px] font-serif italic text-[#2c2720] tracking-wide">
-                  The reveal is about to unlock
-                </span>
-              </div>
+          {/* Contador Regresivo en Cajas de Cristal Marfil */}
+          <div className="pt-1 w-full sm:w-auto">
+            <span className="text-[10px] font-bold text-[#7a7266] uppercase tracking-widest block mb-2">
+              Tiempo para apertura de cupos:
+            </span>
+            <div className="inline-flex items-center gap-2 sm:gap-3 bg-[#ede7dc]/90 backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl border border-[#ded5c6] shadow-sm">
+              {[
+                { val: timeLeft.days, label: 'DÍAS' },
+                { val: timeLeft.hours, label: 'HORAS' },
+                { val: timeLeft.mins, label: 'MIN' },
+                { val: timeLeft.secs, label: 'SEG' }
+              ].map((unit, idx) => (
+                <React.Fragment key={idx}>
+                  <div className="text-center min-w-[42px] sm:min-w-[48px]">
+                    <span className="text-xl sm:text-2xl font-display font-black text-[#1e1b18] block leading-none font-mono">
+                      {String(unit.val).padStart(2, '0')}
+                    </span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-[#7a7266] uppercase tracking-widest block mt-1">
+                      {unit.label}
+                    </span>
+                  </div>
+                  {idx < 3 && <span className="text-amber-600 font-bold text-base sm:text-lg opacity-70">:</span>}
+                </React.Fragment>
+              ))}
             </div>
+          </div>
+
+          {/* Botón VIP Lista de Espera */}
+          <div className="pt-2 w-full sm:w-auto space-y-2">
+            <button
+              type="button"
+              onClick={handleWaitlistClick}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_8px_25px_rgba(220,38,38,0.30)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
+            >
+              <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
+              <span>UNIRME A LA LISTA DE ESPERA VIP</span>
+              <ChevronRight size={15} />
+            </button>
+
+            <span className="text-[10px] text-[#6b6458] font-semibold flex items-center gap-1.5 pt-1">
+              <ShieldCheck size={13} className="text-emerald-700 shrink-0" />
+              <span>Acceso anticipado a cupos con tarifa preferencial MasterTech</span>
+            </span>
           </div>
         </div>
       </div>
 
-      {/* VISTA MODO OSCURO: Layout cinematográfico de Develación VIP (Car Reveal Cloth en Seda Rubí Nocturna) */}
-      <div className="hidden dark:block rounded-3xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#0c0e14] via-[#07080a] to-[#040507] shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative">
-        {/* Acento sutil superior en rojo y oro MasterTech */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-[#d4af37] to-amber-500" />
+      {/* VISTA MODO OSCURO: Tarjeta de Develación VIP con fondo de seda roja nocturna integrada */}
+      <div className="hidden dark:block relative rounded-3xl overflow-hidden border border-white/15 shadow-[0_25px_80px_rgba(0,0,0,0.95)] bg-[#07080a]">
+        {/* Acento superior en rojo y oro MasterTech */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-[#d4af37] to-amber-500 z-30" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center min-h-[460px] lg:min-h-[480px]">
-          {/* COLUMNA IZQUIERDA (6 cols): Textos editoriales estilo alta costura, cuenta regresiva y botón VIP */}
-          <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-center items-start text-left space-y-4 z-20">
-            {/* Logo MasterTech & Badge de Temporada */}
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 shadow-xs">
-              <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
-              <span className="text-[10px] sm:text-[11px] font-black tracking-widest text-[#D4AF37] uppercase font-mono">
-                MASTERTECH C.A.
-              </span>
-              <span className="text-zinc-500">•</span>
-              <span className="text-[10px] sm:text-[11px] font-black uppercase text-red-400">
-                {jornada.season || 'EDICIÓN ESPECIAL'}
+        {/* Imagen de fondo integrada a la derecha */}
+        <div className="absolute top-0 right-0 bottom-0 w-full lg:w-3/5 pointer-events-none select-none z-0 overflow-hidden">
+          <img
+            src="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
+            alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
+            className="w-full h-full object-cover object-right opacity-80 transition-transform duration-1000 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          {/* Degradado para fundir suavemente la imagen con el fondo nocturno hacia la izquierda */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#07080a] via-[#07080a]/90 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-[#07080a]/60 lg:hidden" />
+          {/* Resplandor ambiental rojo carmesí */}
+          <div className="absolute right-10 top-1/2 -translate-y-1/2 w-80 h-80 bg-red-600/15 rounded-full blur-[90px]" />
+        </div>
+
+        {/* Contenido en primer plano */}
+        <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center items-start text-left space-y-4 min-h-[460px] lg:min-h-[480px]">
+          {/* Logo MasterTech & Badge de Temporada */}
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 shadow-xs backdrop-blur-md">
+            <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
+            <span className="text-[10px] sm:text-[11px] font-black tracking-widest text-[#D4AF37] uppercase font-mono">
+              MASTERTECH C.A.
+            </span>
+            <span className="text-zinc-500">•</span>
+            <span className="text-[10px] sm:text-[11px] font-black uppercase text-red-400">
+              {jornada.season || 'EDICIÓN ESPECIAL'}
+            </span>
+          </div>
+
+          {/* Titular Editorial COMING soon en Modo Oscuro */}
+          <div className="space-y-1">
+            <div className="flex items-baseline flex-wrap gap-2">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-white select-none leading-none">
+                COMING
+              </h2>
+              <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#D4AF37] font-normal lowercase tracking-normal -translate-y-1">
+                soon
               </span>
             </div>
-
-            {/* Titular Editorial COMING soon en Modo Oscuro */}
-            <div className="space-y-1">
-              <div className="flex items-baseline flex-wrap gap-2">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-white select-none leading-none">
-                  COMING
-                </h2>
-                <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#D4AF37] font-normal lowercase tracking-normal -translate-y-1">
-                  soon
-                </span>
-              </div>
-              <div className="flex items-center gap-3 pt-1.5">
-                <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-[#D4AF37]">
-                  {displayMonthOrSeason}
-                </h3>
-                <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-[#D4AF37] to-transparent" />
-              </div>
-            </div>
-
-            {/* Título y Subtítulo de la Jornada */}
-            <div className="space-y-1.5">
-              <p className="text-sm sm:text-base font-black text-white uppercase tracking-wide leading-snug">
-                {jornada.title}
-              </p>
-              <p className="text-xs sm:text-sm text-zinc-300 max-w-lg leading-relaxed">
-                {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por abrir cupos en Isla de Margarita. Regístrate en la lista de espera prioritaria antes del lanzamiento oficial.'}
-              </p>
-            </div>
-
-            {/* Contador Regresivo */}
-            <div className="pt-1 w-full sm:w-auto">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">
-                Tiempo para apertura de cupos:
-              </span>
-              <div className="inline-flex items-center gap-2 sm:gap-3 bg-black/80 backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl border border-white/15 shadow-xl">
-                {[
-                  { val: timeLeft.days, label: 'DÍAS' },
-                  { val: timeLeft.hours, label: 'HORAS' },
-                  { val: timeLeft.mins, label: 'MIN' },
-                  { val: timeLeft.secs, label: 'SEG' }
-                ].map((unit, idx) => (
-                  <React.Fragment key={idx}>
-                    <div className="text-center min-w-[42px] sm:min-w-[48px]">
-                      <span className="text-xl sm:text-2xl font-display font-black text-white block leading-none font-mono">
-                        {String(unit.val).padStart(2, '0')}
-                      </span>
-                      <span className="text-[8px] sm:text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mt-1">
-                        {unit.label}
-                      </span>
-                    </div>
-                    {idx < 3 && <span className="text-amber-400 font-bold text-base sm:text-lg opacity-70">:</span>}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-
-            {/* Botón VIP Lista de Espera */}
-            <div className="pt-2 w-full sm:w-auto space-y-2">
-              <button
-                type="button"
-                onClick={handleWaitlistClick}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_8px_30px_rgba(220,38,38,0.35)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
-              >
-                <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
-                <span>UNIRME A LA LISTA DE ESPERA VIP</span>
-                <ChevronRight size={15} />
-              </button>
-
-              <span className="text-[10px] text-zinc-400 font-semibold flex items-center gap-1.5 pt-1">
-                <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
-                <span>Acceso anticipado a cupos con tarifa preferencial MasterTech</span>
-              </span>
+            <div className="flex items-center gap-3 pt-1.5">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-[#D4AF37]">
+                {displayMonthOrSeason}
+              </h3>
+              <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-[#D4AF37] to-transparent" />
             </div>
           </div>
 
-          {/* COLUMNA DERECHA (6 cols): Vitrina con Silueta de Cerradura VIP (Keyhole Reveal) en Modo Oscuro */}
-          <div className="lg:col-span-6 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center">
-            {/* SVG Filter para definición del Keyhole Modo Oscuro */}
-            <svg width="0" height="0" className="absolute pointer-events-none">
-              <defs>
-                <clipPath id="keyhole-clip-dark" clipPathUnits="objectBoundingBox">
-                  <path d="M 0.5 0.02 C 0.69 0.02 0.84 0.17 0.84 0.36 C 0.84 0.49 0.76 0.60 0.65 0.66 L 0.72 0.94 C 0.73 0.97 0.70 1.0 0.66 1.0 L 0.34 1.0 C 0.30 1.0 0.27 0.97 0.28 0.94 L 0.35 0.66 C 0.24 0.60 0.16 0.49 0.16 0.36 C 0.16 0.17 0.31 0.02 0.5 0.02 Z" />
-                </clipPath>
-              </defs>
-            </svg>
+          {/* Título y Subtítulo de la Jornada */}
+          <div className="space-y-1.5">
+            <p className="text-sm sm:text-base font-black text-white uppercase tracking-wide leading-snug">
+              {jornada.title}
+            </p>
+            <p className="text-xs sm:text-sm text-zinc-300 max-w-lg leading-relaxed">
+              {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por abrir cupos en Isla de Margarita. Regístrate en la lista de espera prioritaria antes del lanzamiento oficial.'}
+            </p>
+          </div>
 
-            {/* Contenedor de la Cerradura con halo rojo y profundidad */}
-            <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[3/4] flex items-center justify-center group">
-              {/* Resplandor ambiental rojo carmesí detrás de la cerradura */}
-              <div className="absolute inset-0 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Borde exterior decorativo con forma de cerradura */}
-              <div 
-                className="relative w-full h-full p-2 transition-transform duration-700 group-hover:scale-[1.02] flex items-center justify-center"
-              >
-                {/* Ventana de Cerradura con clipPath */}
-                <div 
-                  className="relative w-full h-full overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.9)] border-2 border-red-500/40"
-                  style={{
-                    clipPath: 'url(#keyhole-clip-dark)',
-                    WebkitClipPath: 'url(#keyhole-clip-dark)'
-                  }}
-                >
-                  {/* Fotografía del SUV bajo la seda líquida carmesí vista por la cerradura */}
-                  <img
-                    src="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
-                    alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
-                    className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                    decoding="async"
-                  />
-
-                  {/* Sombra interna para efecto de cerradura profunda */}
-                  <div className="absolute inset-0 shadow-[inset_0_0_35px_rgba(0,0,0,0.85)] pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Texto de pie editorial estilo referencia */}
-              <div className="absolute -bottom-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/15 shadow-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-[10px] font-serif italic text-zinc-300 tracking-wide">
-                  The door is about to unlock
-                </span>
-              </div>
+          {/* Contador Regresivo */}
+          <div className="pt-1 w-full sm:w-auto">
+            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">
+              Tiempo para apertura de cupos:
+            </span>
+            <div className="inline-flex items-center gap-2 sm:gap-3 bg-black/80 backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl border border-white/15 shadow-xl">
+              {[
+                { val: timeLeft.days, label: 'DÍAS' },
+                { val: timeLeft.hours, label: 'HORAS' },
+                { val: timeLeft.mins, label: 'MIN' },
+                { val: timeLeft.secs, label: 'SEG' }
+              ].map((unit, idx) => (
+                <React.Fragment key={idx}>
+                  <div className="text-center min-w-[42px] sm:min-w-[48px]">
+                    <span className="text-xl sm:text-2xl font-display font-black text-white block leading-none font-mono">
+                      {String(unit.val).padStart(2, '0')}
+                    </span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mt-1">
+                      {unit.label}
+                    </span>
+                  </div>
+                  {idx < 3 && <span className="text-amber-400 font-bold text-base sm:text-lg opacity-70">:</span>}
+                </React.Fragment>
+              ))}
             </div>
+          </div>
+
+          {/* Botón VIP Lista de Espera */}
+          <div className="pt-2 w-full sm:w-auto space-y-2">
+            <button
+              type="button"
+              onClick={handleWaitlistClick}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_8px_30px_rgba(220,38,38,0.35)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
+            >
+              <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
+              <span>UNIRME A LA LISTA DE ESPERA VIP</span>
+              <ChevronRight size={15} />
+            </button>
+
+            <span className="text-[10px] text-zinc-400 font-semibold flex items-center gap-1.5 pt-1">
+              <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+              <span>Acceso anticipado a cupos con tarifa preferencial MasterTech</span>
+            </span>
           </div>
         </div>
       </div>
