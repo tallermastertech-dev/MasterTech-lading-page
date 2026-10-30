@@ -94,15 +94,18 @@ export default function JornadasComingSoonHero({
 
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
-    // Imágenes configurables con fallback a las oficiales de develación SUV
-  const lightImg = jornada.comingSoonImgLight || '/assets/coming_soon_suv_reveal_silk_v2.webp';
-  const darkImg = jornada.comingSoonImgDark || jornada.comingSoonImgLight || '/assets/coming_soon_suv_reveal_silk_dark_v2.webp';
 
-  return () => clearInterval(interval);
+    return () => clearInterval(interval);
   }, [targetDateStr]);
 
   // Texto del mes o temporada
   const displayMonthOrSeason = (jornada.targetMonth || jornada.season || 'PRÓXIMO MES').toUpperCase();
+
+  // Titular configurable (ej: COMING SOON, PRÓXIMA EDICIÓN, etc.)
+  const rawTitle = (jornada.comingSoonTitle || 'COMING SOON').trim();
+  const titleWords = rawTitle.split(/\s+/);
+  const titleFirst = titleWords[0] || 'COMING';
+  const titleRest = titleWords.slice(1).join(' ');
 
   const handleWaitlistClick = () => {
     const msg = `*HOLA MASTERTECH, DESEO ENTRAR EN LA LISTA VIP DE ESPERA*\n\n*Jornada de Temporada:* ${jornada.title}\n*Temporada / Mes:* ${displayMonthOrSeason}\n\nDeseo recibir acceso prioritario y la notificacion de apertura de cupos antes de que se agoten.`;
@@ -123,16 +126,16 @@ export default function JornadasComingSoonHero({
   return (
     <div className="relative w-full max-w-5xl mx-auto my-4 transition-colors">
       {/* VISTA MODO CLARO: Tarjeta de Develación VIP con fondo de seda integrado */}
-      <div className="block dark:hidden relative rounded-3xl overflow-hidden border border-[#ded5c6] shadow-2xl shadow-stone-300/50 bg-[#fdfbf9]">
+      <div className="block dark:hidden relative rounded-3xl overflow-hidden border border-[#ded5c6] shadow-2xl shadow-stone-300/40 bg-[#fdfbf9]">
         {/* Acento superior en degradado oro/rojo */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-600 via-[#d4af37] to-red-600 z-30" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-[#d4af37] to-amber-600 z-30" />
 
-        {/* Imagen de fondo integrada a la derecha */}
+        {/* Imagen de fondo integrada a la derecha con máscara ultra-suave */}
         <div 
           className="absolute top-0 right-0 bottom-0 w-full lg:w-[68%] pointer-events-none select-none z-0 overflow-hidden"
           style={{
-            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)'
+            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.02) 10%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.7) 60%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.02) 10%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.7) 60%, black 100%)'
           }}
         >
           <img
@@ -144,12 +147,20 @@ export default function JornadasComingSoonHero({
           />
         </div>
 
-        {/* Viñeta sutil en esquinas para fundir la imagen de forma completamente natural */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#fdfbf9] via-[#fdfbf9]/70 via-35% to-transparent pointer-events-none z-[1]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#fdfbf9] via-transparent to-[#fdfbf9]/40 lg:hidden pointer-events-none z-[1]" />
+        {/* Viñeta sutil en móvil para asegurar legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#fdfbf9] via-transparent to-[#fdfbf9]/30 lg:hidden pointer-events-none z-[1]" />
 
         {/* Contenido en primer plano */}
         <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center items-start text-left space-y-4 min-h-[460px] lg:min-h-[480px]">
+          {/* Eyebrow de Lanzamiento */}
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+            <span className="text-[10px] sm:text-[11px] font-mono font-black tracking-[0.25em] uppercase text-red-600">
+              PRÓXIMO LANZAMIENTO
+            </span>
+            <span className="h-px w-8 bg-gradient-to-r from-red-600/40 to-transparent" />
+          </div>
+
           {/* Badge MasterTech & Edición */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ede7dc]/90 backdrop-blur-md border border-[#ded5c6] shadow-xs">
             <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
@@ -162,37 +173,42 @@ export default function JornadasComingSoonHero({
             </span>
           </div>
 
-          {/* Titular Editorial COMING Soon */}
-          <div className="space-y-1">
-            <div className="flex items-baseline flex-wrap gap-2">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-[#1e1b18] select-none leading-none">
-                COMING
+          {/* Titular Principal de Alto Impacto */}
+          <div className="space-y-2">
+            <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter uppercase text-stone-900 select-none leading-none font-sans">
+                {titleFirst}
               </h2>
-              <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#b8860b] font-normal lowercase tracking-normal -translate-y-1">
-                Soon
-              </span>
+              {titleRest ? (
+                <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter uppercase bg-gradient-to-r from-red-600 via-amber-600 to-amber-700 bg-clip-text text-transparent select-none leading-none font-sans">
+                  {titleRest}
+                </span>
+              ) : null}
             </div>
-            <div className="flex items-center gap-3 pt-1.5">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-amber-700">
+
+            {/* Mes / Temporada con Pill Técnico */}
+            <div className="flex items-center gap-3 pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-stone-900 text-[#f59e0b] border border-stone-800 text-[11px] sm:text-xs font-mono font-black tracking-[0.22em] uppercase shadow-xs">
+                <Calendar size={12} className="text-amber-400 shrink-0" />
                 {displayMonthOrSeason}
-              </h3>
-              <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-amber-600 to-transparent" />
+              </span>
+              <span className="h-px flex-1 max-w-[100px] bg-gradient-to-r from-amber-600/50 to-transparent" />
             </div>
           </div>
 
-          {/* Título y Subtítulo de la Jornada */}
-          <div className="space-y-1.5">
-            <p className="text-sm sm:text-base font-black text-[#1e1b18] uppercase tracking-wide leading-snug">
+          {/* Nombre de la Jornada y Descripción */}
+          <div className="space-y-1.5 max-w-xl">
+            <h3 className="text-base sm:text-lg lg:text-xl font-black text-stone-900 tracking-tight leading-snug">
               {jornada.title}
-            </p>
-            <p className="text-xs sm:text-sm text-[#5a544c] max-w-lg leading-relaxed">
+            </h3>
+            <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
               {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por abrir cupos en Isla de Margarita. Regístrate en la lista de espera prioritaria antes del lanzamiento oficial.'}
             </p>
           </div>
 
           {/* Contador Regresivo en Cajas de Cristal Marfil */}
           <div className="pt-1 w-full sm:w-auto">
-            <span className="text-[10px] font-bold text-[#7a7266] uppercase tracking-widest block mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-stone-500 uppercase tracking-[0.2em] block mb-2">
               Tiempo para apertura de cupos:
             </span>
             <div className="inline-flex items-center gap-2 sm:gap-3 bg-[#ede7dc]/90 backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl border border-[#ded5c6] shadow-sm">
@@ -204,10 +220,10 @@ export default function JornadasComingSoonHero({
               ].map((unit, idx) => (
                 <React.Fragment key={idx}>
                   <div className="text-center min-w-[42px] sm:min-w-[48px]">
-                    <span className="text-xl sm:text-2xl font-display font-black text-[#1e1b18] block leading-none font-mono">
+                    <span className="text-2xl sm:text-3xl font-mono font-black text-stone-900 block leading-none tabular-nums">
                       {String(unit.val).padStart(2, '0')}
                     </span>
-                    <span className="text-[8px] sm:text-[9px] font-bold text-[#7a7266] uppercase tracking-widest block mt-1">
+                    <span className="text-[9px] sm:text-[10px] font-mono font-bold text-stone-500 uppercase tracking-widest block mt-1">
                       {unit.label}
                     </span>
                   </div>
@@ -222,7 +238,7 @@ export default function JornadasComingSoonHero({
             <button
               type="button"
               onClick={handleWaitlistClick}
-              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_8px_25px_rgba(220,38,38,0.30)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm uppercase tracking-[0.15em] flex items-center justify-center gap-2.5 shadow-[0_8px_25px_rgba(220,38,38,0.30)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
             >
               <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
               <span>UNIRME A LA LISTA DE ESPERA VIP</span>
@@ -246,8 +262,8 @@ export default function JornadasComingSoonHero({
         <div 
           className="absolute top-0 right-0 bottom-0 w-full lg:w-[68%] pointer-events-none select-none z-0 overflow-hidden"
           style={{
-            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)'
+            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.02) 10%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.7) 60%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.02) 10%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.7) 60%, black 100%)'
           }}
         >
           <img
@@ -260,12 +276,21 @@ export default function JornadasComingSoonHero({
         </div>
 
         {/* Viñeta sutil en esquinas y resplandor ambiental rojo carmesí */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07080a] via-[#07080a]/70 via-35% to-transparent pointer-events-none z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#07080a] via-[#07080a]/60 via-35% to-transparent pointer-events-none z-[1]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-[#07080a]/40 lg:hidden pointer-events-none z-[1]" />
         <div className="absolute right-10 top-1/2 -translate-y-1/2 w-80 h-80 bg-red-600/15 rounded-full blur-[90px] pointer-events-none z-[1]" />
 
         {/* Contenido en primer plano */}
         <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center items-start text-left space-y-4 min-h-[460px] lg:min-h-[480px]">
+          {/* Eyebrow de Lanzamiento */}
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-[10px] sm:text-[11px] font-mono font-black tracking-[0.25em] uppercase text-red-400">
+              PRÓXIMO LANZAMIENTO
+            </span>
+            <span className="h-px w-8 bg-gradient-to-r from-red-500/40 to-transparent" />
+          </div>
+
           {/* Logo MasterTech & Badge de Temporada */}
           <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 shadow-xs backdrop-blur-md">
             <img src="/logo.png" alt="Taller MasterTech" className="h-5 w-auto object-contain" />
@@ -278,37 +303,42 @@ export default function JornadasComingSoonHero({
             </span>
           </div>
 
-          {/* Titular Editorial COMING soon en Modo Oscuro */}
-          <div className="space-y-1">
-            <div className="flex items-baseline flex-wrap gap-2">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black tracking-[0.22em] uppercase text-white select-none leading-none">
-                COMING
+          {/* Titular Principal de Alto Impacto */}
+          <div className="space-y-2">
+            <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter uppercase text-white select-none leading-none font-sans">
+                {titleFirst}
               </h2>
-              <span className="font-serif italic text-2xl sm:text-3xl lg:text-4xl text-[#D4AF37] font-normal lowercase tracking-normal -translate-y-1">
-                soon
-              </span>
+              {titleRest ? (
+                <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter uppercase bg-gradient-to-r from-red-500 via-amber-400 to-yellow-300 bg-clip-text text-transparent select-none leading-none font-sans">
+                  {titleRest}
+                </span>
+              ) : null}
             </div>
-            <div className="flex items-center gap-3 pt-1.5">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-display font-black tracking-widest uppercase text-[#D4AF37]">
+
+            {/* Mes / Temporada con Pill Técnico */}
+            <div className="flex items-center gap-3 pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/10 text-[#D4AF37] border border-[#D4AF37]/30 text-[11px] sm:text-xs font-mono font-black tracking-[0.22em] uppercase backdrop-blur-md shadow-xs">
+                <Calendar size={12} className="text-[#D4AF37] shrink-0" />
                 {displayMonthOrSeason}
-              </h3>
-              <span className="h-[2px] w-12 sm:w-16 bg-gradient-to-r from-[#D4AF37] to-transparent" />
+              </span>
+              <span className="h-px flex-1 max-w-[100px] bg-gradient-to-r from-[#D4AF37]/50 to-transparent" />
             </div>
           </div>
 
-          {/* Título y Subtítulo de la Jornada */}
-          <div className="space-y-1.5">
-            <p className="text-sm sm:text-base font-black text-white uppercase tracking-wide leading-snug">
+          {/* Nombre de la Jornada y Descripción */}
+          <div className="space-y-1.5 max-w-xl">
+            <h3 className="text-base sm:text-lg lg:text-xl font-black text-white tracking-tight leading-snug">
               {jornada.title}
-            </p>
-            <p className="text-xs sm:text-sm text-zinc-300 max-w-lg leading-relaxed">
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
               {jornada.comingSoonSubtitle || 'La mayor jornada de alto rendimiento automotriz está por abrir cupos en Isla de Margarita. Regístrate en la lista de espera prioritaria antes del lanzamiento oficial.'}
             </p>
           </div>
 
           {/* Contador Regresivo */}
           <div className="pt-1 w-full sm:w-auto">
-            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-2">
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-zinc-400 uppercase tracking-[0.2em] block mb-2">
               Tiempo para apertura de cupos:
             </span>
             <div className="inline-flex items-center gap-2 sm:gap-3 bg-black/80 backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl border border-white/15 shadow-xl">
@@ -320,10 +350,10 @@ export default function JornadasComingSoonHero({
               ].map((unit, idx) => (
                 <React.Fragment key={idx}>
                   <div className="text-center min-w-[42px] sm:min-w-[48px]">
-                    <span className="text-xl sm:text-2xl font-display font-black text-white block leading-none font-mono">
+                    <span className="text-2xl sm:text-3xl font-mono font-black text-white block leading-none tabular-nums">
                       {String(unit.val).padStart(2, '0')}
                     </span>
-                    <span className="text-[8px] sm:text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mt-1">
+                    <span className="text-[9px] sm:text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-widest block mt-1">
                       {unit.label}
                     </span>
                   </div>
@@ -338,7 +368,7 @@ export default function JornadasComingSoonHero({
             <button
               type="button"
               onClick={handleWaitlistClick}
-              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-[0_8px_30px_rgba(220,38,38,0.35)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 via-red-700 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm uppercase tracking-[0.15em] flex items-center justify-center gap-2.5 shadow-[0_8px_30px_rgba(220,38,38,0.35)] transition-all cursor-pointer hover:scale-105 border border-red-500/30"
             >
               <WhatsAppIcon size={16} className="text-white fill-current shrink-0" />
               <span>UNIRME A LA LISTA DE ESPERA VIP</span>
