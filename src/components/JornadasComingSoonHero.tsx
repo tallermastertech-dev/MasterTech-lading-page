@@ -205,28 +205,56 @@ export default function JornadasComingSoonHero({
             </div>
           </div>
 
-          {/* COLUMNA DERECHA (6 cols): Vitrina con el superdeportivo velado en seda de develación */}
-          <div className="lg:col-span-6 p-4 sm:p-6 lg:p-6 flex items-center justify-center">
-            <div className="relative w-full h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-b from-[#f7f3ea] via-[#efe8db] to-[#e6dccb] border border-[#ded5c6] shadow-inner flex items-center justify-center">
-              {/* Badge de Develación VIP */}
-              <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-[#ded5c6] shadow-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-[#2c2720] font-mono">
-                  DEVELACIÓN VIP
-                </span>
+          {/* COLUMNA DERECHA (6 cols): Vitrina con Silueta de Cerradura VIP (Keyhole Reveal) */}
+          <div className="lg:col-span-6 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center">
+            {/* SVG Filter para definición del Keyhole */}
+            <svg width="0" height="0" className="absolute pointer-events-none">
+              <defs>
+                <clipPath id="keyhole-clip-light" clipPathUnits="objectBoundingBox">
+                  {/* Cerradura elegante normalizada: círculo arriba en (0.5, 0.35) radio 0.33, cuerpo acampanado hacia abajo */}
+                  <path d="M 0.5 0.02 C 0.69 0.02 0.84 0.17 0.84 0.36 C 0.84 0.49 0.76 0.60 0.65 0.66 L 0.72 0.94 C 0.73 0.97 0.70 1.0 0.66 1.0 L 0.34 1.0 C 0.30 1.0 0.27 0.97 0.28 0.94 L 0.35 0.66 C 0.24 0.60 0.16 0.49 0.16 0.36 C 0.16 0.17 0.31 0.02 0.5 0.02 Z" />
+                </clipPath>
+              </defs>
+            </svg>
+
+            {/* Contenedor de la Cerradura con brillo sutil y profundidad */}
+            <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[3/4] flex items-center justify-center group">
+              {/* Resplandor ambiental cálido detrás de la cerradura */}
+              <div className="absolute inset-0 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Borde exterior decorativo con forma de cerradura */}
+              <div 
+                className="relative w-full h-full p-2 transition-transform duration-700 group-hover:scale-[1.02] flex items-center justify-center"
+              >
+                {/* Ventana de Cerradura con clipPath */}
+                <div 
+                  className="relative w-full h-full overflow-hidden shadow-[0_20px_50px_rgba(180,140,80,0.25)] border-2 border-amber-600/30"
+                  style={{
+                    clipPath: 'url(#keyhole-clip-light)',
+                    WebkitClipPath: 'url(#keyhole-clip-light)'
+                  }}
+                >
+                  {/* Fotografía de la camioneta SUV bajo la seda champagne vista por la cerradura */}
+                  <img
+                    src="/assets/coming_soon_suv_reveal_silk_v2.webp"
+                    alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
+                    className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                    decoding="async"
+                  />
+
+                  {/* Sombra interna sutil sobre los bordes de la cerradura */}
+                  <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.35)] pointer-events-none" />
+                </div>
               </div>
 
-              {/* Halo sutil cálido detrás del velo */}
-              <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none" />
-
-              {/* Fotografía de la camioneta SUV (Toyota 4Runner / Jeep) cubierta en seda satinada champagne */}
-              <img
-                src="/assets/coming_soon_suv_reveal_silk_v2.webp"
-                alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
-                className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
-                loading="lazy"
-                decoding="async"
-              />
+              {/* Texto de pie editorial estilo referencia */}
+              <div className="absolute -bottom-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#ded5c6] shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" />
+                <span className="text-[10px] font-serif italic text-[#2c2720] tracking-wide">
+                  The reveal is about to unlock
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -326,28 +354,55 @@ export default function JornadasComingSoonHero({
             </div>
           </div>
 
-          {/* COLUMNA DERECHA (6 cols): Vitrina oscura con el superdeportivo velado en seda líquida carmesí */}
-          <div className="lg:col-span-6 p-4 sm:p-6 lg:p-6 flex items-center justify-center">
-            <div className="relative w-full h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-b from-[#11141c] via-[#090b10] to-[#040507] border border-white/10 shadow-inner flex items-center justify-center">
-              {/* Badge de Develación VIP */}
-              <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-300 font-mono">
-                  DEVELACIÓN VIP
-                </span>
+          {/* COLUMNA DERECHA (6 cols): Vitrina con Silueta de Cerradura VIP (Keyhole Reveal) en Modo Oscuro */}
+          <div className="lg:col-span-6 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center">
+            {/* SVG Filter para definición del Keyhole Modo Oscuro */}
+            <svg width="0" height="0" className="absolute pointer-events-none">
+              <defs>
+                <clipPath id="keyhole-clip-dark" clipPathUnits="objectBoundingBox">
+                  <path d="M 0.5 0.02 C 0.69 0.02 0.84 0.17 0.84 0.36 C 0.84 0.49 0.76 0.60 0.65 0.66 L 0.72 0.94 C 0.73 0.97 0.70 1.0 0.66 1.0 L 0.34 1.0 C 0.30 1.0 0.27 0.97 0.28 0.94 L 0.35 0.66 C 0.24 0.60 0.16 0.49 0.16 0.36 C 0.16 0.17 0.31 0.02 0.5 0.02 Z" />
+                </clipPath>
+              </defs>
+            </svg>
+
+            {/* Contenedor de la Cerradura con halo rojo y profundidad */}
+            <div className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[3/4] flex items-center justify-center group">
+              {/* Resplandor ambiental rojo carmesí detrás de la cerradura */}
+              <div className="absolute inset-0 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Borde exterior decorativo con forma de cerradura */}
+              <div 
+                className="relative w-full h-full p-2 transition-transform duration-700 group-hover:scale-[1.02] flex items-center justify-center"
+              >
+                {/* Ventana de Cerradura con clipPath */}
+                <div 
+                  className="relative w-full h-full overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.9)] border-2 border-red-500/40"
+                  style={{
+                    clipPath: 'url(#keyhole-clip-dark)',
+                    WebkitClipPath: 'url(#keyhole-clip-dark)'
+                  }}
+                >
+                  {/* Fotografía del SUV bajo la seda líquida carmesí vista por la cerradura */}
+                  <img
+                    src="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
+                    alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
+                    className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                    decoding="async"
+                  />
+
+                  {/* Sombra interna para efecto de cerradura profunda */}
+                  <div className="absolute inset-0 shadow-[inset_0_0_35px_rgba(0,0,0,0.85)] pointer-events-none" />
+                </div>
               </div>
 
-              {/* Halo ambiental rojo detrás del velo */}
-              <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/20 rounded-full blur-[80px] pointer-events-none" />
-
-              {/* Imagen del vehículo para Modo Oscuro: Camioneta SUV (Toyota 4Runner / Jeep) bajo seda líquida carmesí */}
-              <img
-                src="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
-                alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
-                className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
-                loading="lazy"
-                decoding="async"
-              />
+              {/* Texto de pie editorial estilo referencia */}
+              <div className="absolute -bottom-3 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/15 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-[10px] font-serif italic text-zinc-300 tracking-wide">
+                  The door is about to unlock
+                </span>
+              </div>
             </div>
           </div>
         </div>
