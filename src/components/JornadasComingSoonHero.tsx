@@ -128,18 +128,25 @@ export default function JornadasComingSoonHero({
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-600 via-[#d4af37] to-red-600 z-30" />
 
         {/* Imagen de fondo integrada a la derecha */}
-        <div className="absolute top-0 right-0 bottom-0 w-full lg:w-3/5 pointer-events-none select-none z-0 overflow-hidden">
+        <div 
+          className="absolute top-0 right-0 bottom-0 w-full lg:w-[68%] pointer-events-none select-none z-0 overflow-hidden"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)'
+          }}
+        >
           <img
             src={lightImg}
             alt="Develación VIP MasterTech - Modo Claro"
-            className="w-full h-full object-cover object-right opacity-90 transition-transform duration-1000 hover:scale-105"
+            className="w-full h-full object-cover object-right opacity-95 transition-transform duration-1000 hover:scale-105"
             loading="lazy"
             decoding="async"
           />
-          {/* Degradado para fundir suavemente la imagen con el fondo marfil hacia la izquierda */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fdfbf9] via-[#fdfbf9]/85 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#fdfbf9] via-transparent to-[#fdfbf9]/60 lg:hidden" />
         </div>
+
+        {/* Viñeta sutil en esquinas para fundir la imagen de forma completamente natural */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#fdfbf9] via-[#fdfbf9]/70 via-35% to-transparent pointer-events-none z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#fdfbf9] via-transparent to-[#fdfbf9]/40 lg:hidden pointer-events-none z-[1]" />
 
         {/* Contenido en primer plano */}
         <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center items-start text-left space-y-4 min-h-[460px] lg:min-h-[480px]">
@@ -236,20 +243,26 @@ export default function JornadasComingSoonHero({
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 via-[#d4af37] to-amber-500 z-30" />
 
         {/* Imagen de fondo integrada a la derecha */}
-        <div className="absolute top-0 right-0 bottom-0 w-full lg:w-3/5 pointer-events-none select-none z-0 overflow-hidden">
+        <div 
+          className="absolute top-0 right-0 bottom-0 w-full lg:w-[68%] pointer-events-none select-none z-0 overflow-hidden"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.05) 15%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.85) 65%, black 100%)'
+          }}
+        >
           <img
             src={darkImg}
             alt="Develación VIP MasterTech - Modo Oscuro"
-            className="w-full h-full object-cover object-right opacity-80 transition-transform duration-1000 hover:scale-105"
+            className="w-full h-full object-cover object-right opacity-90 transition-transform duration-1000 hover:scale-105"
             loading="lazy"
             decoding="async"
           />
-          {/* Degradado para fundir suavemente la imagen con el fondo nocturno hacia la izquierda */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#07080a] via-[#07080a]/90 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-[#07080a]/60 lg:hidden" />
-          {/* Resplandor ambiental rojo carmesí */}
-          <div className="absolute right-10 top-1/2 -translate-y-1/2 w-80 h-80 bg-red-600/15 rounded-full blur-[90px]" />
         </div>
+
+        {/* Viñeta sutil en esquinas y resplandor ambiental rojo carmesí */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#07080a] via-[#07080a]/70 via-35% to-transparent pointer-events-none z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-[#07080a]/40 lg:hidden pointer-events-none z-[1]" />
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 w-80 h-80 bg-red-600/15 rounded-full blur-[90px] pointer-events-none z-[1]" />
 
         {/* Contenido en primer plano */}
         <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl flex flex-col justify-center items-start text-left space-y-4 min-h-[460px] lg:min-h-[480px]">
