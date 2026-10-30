@@ -650,6 +650,8 @@ export default function Jornadas() {
       targetMonth: rawJornada?.targetMonth || '',
       comingSoonTitle: rawJornada?.comingSoonTitle || 'COMING SOON',
       comingSoonSubtitle: rawJornada?.comingSoonSubtitle || '',
+      comingSoonImgLight: rawJornada?.comingSoonImgLight || '',
+      comingSoonImgDark: rawJornada?.comingSoonImgDark || '',
       countdownEnd: rawJornada?.countdownEnd || config.JORNADA_COUNTDOWN_END || '',
       jornadaEnd: rawJornada?.jornadaEnd || '',
       vehiculosAtendidos: rawJornada?.vehiculosAtendidos || '',

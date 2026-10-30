@@ -12,6 +12,9 @@ interface JornadaComingSoonHeroProps {
     comingSoonSubtitle?: string;
     countdownEnd?: string;
     promoPrice?: string;
+    comingSoonImgLight?: string;
+    comingSoonImgDark?: string;
+    img?: string;
   };
   whatsappLink: string;
   phoneNumber: string;
@@ -91,7 +94,11 @@ export default function JornadasComingSoonHero({
 
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
-    return () => clearInterval(interval);
+    // Imágenes configurables con fallback a las oficiales de develación SUV
+  const lightImg = jornada.comingSoonImgLight || '/assets/coming_soon_suv_reveal_silk_v2.webp';
+  const darkImg = jornada.comingSoonImgDark || jornada.comingSoonImgLight || '/assets/coming_soon_suv_reveal_silk_dark_v2.webp';
+
+  return () => clearInterval(interval);
   }, [targetDateStr]);
 
   // Texto del mes o temporada
@@ -109,6 +116,10 @@ export default function JornadasComingSoonHero({
     window.open(url, '_blank');
   };
 
+  // Imágenes configurables con fallback a las oficiales de develación SUV
+  const lightImg = jornada.comingSoonImgLight || '/assets/coming_soon_suv_reveal_silk_v2.webp';
+  const darkImg = jornada.comingSoonImgDark || jornada.comingSoonImgLight || '/assets/coming_soon_suv_reveal_silk_dark_v2.webp';
+
   return (
     <div className="relative w-full max-w-5xl mx-auto my-4 transition-colors">
       {/* VISTA MODO CLARO: Tarjeta de Develación VIP con fondo de seda integrado */}
@@ -119,8 +130,8 @@ export default function JornadasComingSoonHero({
         {/* Imagen de fondo integrada a la derecha */}
         <div className="absolute top-0 right-0 bottom-0 w-full lg:w-3/5 pointer-events-none select-none z-0 overflow-hidden">
           <img
-            src="/assets/coming_soon_suv_reveal_silk_v2.webp"
-            alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
+            src={lightImg}
+            alt="Develación VIP MasterTech - Modo Claro"
             className="w-full h-full object-cover object-right opacity-90 transition-transform duration-1000 hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -227,8 +238,8 @@ export default function JornadasComingSoonHero({
         {/* Imagen de fondo integrada a la derecha */}
         <div className="absolute top-0 right-0 bottom-0 w-full lg:w-3/5 pointer-events-none select-none z-0 overflow-hidden">
           <img
-            src="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
-            alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
+            src={darkImg}
+            alt="Develación VIP MasterTech - Modo Oscuro"
             className="w-full h-full object-cover object-right opacity-80 transition-transform duration-1000 hover:scale-105"
             loading="lazy"
             decoding="async"

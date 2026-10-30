@@ -12300,6 +12300,35 @@ export default function AdminPanel({ config: propConfig, onLogout }: AdminPanelP
                         className="w-full bg-black/50 border border-purple-500/30 rounded-xl p-2 text-white outline-none focus:border-purple-400 text-xs"
                       />
                     </div>
+
+                    {/* Imágenes Personalizadas para la Develación de Coming Soon (Modo Claro & Modo Oscuro) */}
+                    <div className="pt-2 border-t border-purple-500/20 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold uppercase text-purple-300">
+                          Imágenes de Develación VIP (Fondo de Tarjeta Coming Soon)
+                        </span>
+                        <span className="text-[9px] text-zinc-400">
+                          Modo Claro y Oscuro
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <ImageUploader
+                          label="Imagen Develación (Modo Claro)"
+                          value={editingJornada.comingSoonImgLight || ''}
+                          onChange={(url) => setEditingJornada({ ...editingJornada, comingSoonImgLight: url })}
+                          placeholder="/assets/coming_soon_suv_reveal_silk_v2.webp"
+                        />
+                        <ImageUploader
+                          label="Imagen Develación (Modo Oscuro)"
+                          value={editingJornada.comingSoonImgDark || ''}
+                          onChange={(url) => setEditingJornada({ ...editingJornada, comingSoonImgDark: url })}
+                          placeholder="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
+                        />
+                      </div>
+                      <p className="text-[10px] text-zinc-400 leading-relaxed">
+                        Puedes subir fotos personalizadas (JPG, PNG o WebP) o pegar una URL. Si las dejas vacías, el sistema utilizará automáticamente las imágenes de develación del SUV oficial de MasterTech.
+                      </p>
+                    </div>
                   </div>
                 )}
 
