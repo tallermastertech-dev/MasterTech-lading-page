@@ -219,10 +219,10 @@ export default function JornadasComingSoonHero({
               {/* Halo sutil cálido detrás del velo */}
               <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none" />
 
-              {/* Fotografía del deportivo cubierto en seda satinada champagne */}
+              {/* Fotografía de la camioneta SUV (Toyota 4Runner / Jeep) cubierta en seda satinada champagne */}
               <img
-                src="/assets/coming_soon_reveal_silk.webp"
-                alt="Develación VIP MasterTech"
+                src="/assets/coming_soon_suv_reveal_silk_v2.webp"
+                alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
                 className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
                 loading="lazy"
                 decoding="async"
@@ -340,10 +340,10 @@ export default function JornadasComingSoonHero({
               {/* Halo ambiental rojo detrás del velo */}
               <div className="absolute w-72 h-72 sm:w-80 sm:h-80 bg-red-600/20 rounded-full blur-[80px] pointer-events-none" />
 
-              {/* Imagen del vehículo para Modo Oscuro: Superdeportivo bajo seda líquida carmesí */}
+              {/* Imagen del vehículo para Modo Oscuro: Camioneta SUV (Toyota 4Runner / Jeep) bajo seda líquida carmesí */}
               <img
-                src="/assets/coming_soon_reveal_silk_dark.webp"
-                alt="Develación VIP MasterTech"
+                src="/assets/coming_soon_suv_reveal_silk_dark_v2.webp"
+                alt="Develación VIP MasterTech - Toyota 4Runner / Jeep"
                 className="w-full h-full object-cover object-center pointer-events-none select-none transition-transform duration-700 hover:scale-105"
                 loading="lazy"
                 decoding="async"
