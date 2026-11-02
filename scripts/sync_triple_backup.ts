@@ -117,7 +117,64 @@ async function syncTripleBackup() {
   fs.copyFileSync(path.join(TARGET_DOCS_DIR, 'schema_sqlite.sql'), path.join(REPO_DB_DIR, 'schema_sqlite.sql'));
   fs.copyFileSync(path.join(TARGET_DOCS_DIR, 'seed_data.sql'), path.join(REPO_DB_DIR, 'seed_data.sql'));
 
-  console.log('[3/4] Base de datos local y archivos de respaldo actualizados.');
+  // Sincronizar imagenes activas de Supabase al repositorio y respaldo local
+  console.log('[3/4] Sincronizando imagenes activas al repositorio local...');
+  const repoMediaDir = path.join(REPO_DIR, 'public', 'media');
+  const docsMediaDir = path.join(TARGET_DOCS_DIR, 'media');
+  fs.mkdirSync(repoMediaDir, { recursive: true });
+  fs.mkdirSync(docsMediaDir, { recursive: true });
+
+  const mediaUrls = new Set<string>();
+  function collectUrls(obj: any) {
+    if (!obj) return;
+    if (typeof obj === 'string') {
+      if (obj.startsWith('http') && (obj.includes('supabase.co') || obj.includes('.webp') || obj.includes('.jpg') || obj.includes('.png') || obj.includes('.jpeg'))) {
+        mediaUrls.add(obj);
+      }
+    } else if (Array.isArray(obj)) {
+      obj.forEach(collectUrls);
+    } else if (typeof obj === 'object') {
+      Object.values(obj).forEach(val => {
+        if (typeof val === 'string' && (val.startsWith('[') || val.startsWith('{'))) {
+          try {
+            collectUrls(JSON.parse(val));
+            return;
+          } catch (e) {}
+        }
+        collectUrls(val);
+      });
+    }
+  }
+  collectUrls(exportPayload);
+
+  let newOrUpdatedImgs = 0;
+  for (const url of mediaUrls) {
+    try {
+      const match = url.match(/mastertech-media\/(.+)$/);
+      let relPath = match ? match[1] : path.basename(url);
+      relPath = decodeURIComponent(relPath);
+
+      const repoDest = path.join(repoMediaDir, relPath);
+      const docsDest = path.join(docsMediaDir, relPath);
+
+      if (!fs.existsSync(repoDest)) {
+        fs.mkdirSync(path.dirname(repoDest), { recursive: true });
+        const res = await fetch(url);
+        if (res.ok) {
+          const buffer = Buffer.from(await res.arrayBuffer());
+          fs.writeFileSync(repoDest, buffer);
+          fs.mkdirSync(path.dirname(docsDest), { recursive: true });
+          fs.writeFileSync(docsDest, buffer);
+          newOrUpdatedImgs++;
+        }
+      } else if (!fs.existsSync(docsDest)) {
+        fs.mkdirSync(path.dirname(docsDest), { recursive: true });
+        fs.copyFileSync(repoDest, docsDest);
+      }
+    } catch (imgErr: any) {}
+  }
+
+  console.log(`[3/4] Base de datos local y ${mediaUrls.size} imagenes verificadas (${newOrUpdatedImgs} nuevas descargadas).`);
 
   // 4. Git Add, Commit y Push a GitHub
   console.log('[4/4] Subiendo respaldo sincronizado a GitHub (origin main)...');
