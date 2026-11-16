@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial Animado: Cómo Ingresar y Registrarse en MasterTech</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #07080a; color: #f1f5f9; }
+    .font-mono-num { font-family: 'JetBrains+Mono', monospace; }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.4); }
+      50% { box-shadow: 0 0 50px rgba(220, 38, 38, 0.8); }
+    }
+    .pulse-glow { animation: pulseGlow 2s infinite; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#07080a] text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 select-none">
+
+  <!-- Header Superior -->
+  <header class="w-full max-w-5xl flex items-center justify-between pb-6 border-b border-white/10 mb-6">
+    <div class="flex items-center gap-3">
+      <img src="/logo.png" alt="MasterTech Logo" class="h-10 w-auto object-contain">
+      <div>
+        <h1 class="text-lg sm:text-xl font-black tracking-tight uppercase flex items-center gap-2">
+          <span>TALLER MASTERTECH C.A.</span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-mono-num font-bold bg-red-600/20 text-red-400 border border-red-500/30">VIDEO OFICIAL</span>
+        </h1>
+        <p class="text-xs text-slate-400">Tutorial animado interactivo: Cómo ingresar y registrarte en menos de 1 minuto</p>
+      </div>
+    </div>
+
+    <!-- Selector de Formato (Horizontal / Vertical) -->
+    <div class="hidden sm:flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/10 text-xs font-bold">
+      <button id="btnAspect169" class="px-3 py-1.5 rounded-lg bg-red-600 text-white transition-all shadow-sm">16:9 Horizontal</button>
+      <button id="btnAspect916" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">9:16 Reels / TikTok</button>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal del Video Animado -->
+  <main class="w-full max-w-5xl flex flex-col items-center">
+    
+    <!-- Marco de Video Canvas -->
+    <div id="videoWrapper" class="relative w-full max-w-4xl aspect-video rounded-3xl overflow-hidden bg-black border-2 border-white/15 shadow-[0_20px_70px_rgba(0,0,0,0.9)] flex items-center justify-center transition-all duration-300">
+      
+      <!-- Canvas de Renderizado de Animación -->
+      <canvas id="animCanvas" width="1280" height="720" class="w-full h-full object-contain block"></canvas>
+
+      <!-- Overlay de Inicio / Pausa -->
+      <div id="playOverlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 z-30">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center shadow-[0_0_50px_rgba(220,38,38,0.7)] hover:scale-110 transition-transform">
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-white ml-1.5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+        <p class="mt-4 text-base sm:text-lg font-black uppercase tracking-wider text-white">Haz clic para reproducir el video con voz venezolana</p>
+        <p class="text-xs text-amber-400 mt-1 font-mono-num font-bold">Duración: 1 minuto 18 segundos • Locución ElevenLabs en Español</p>
+      </div>
+
+      <!-- Barra de Subtítulos Estilo Reels / Karaoke en Vivo -->
+      <div id="captionContainer" class="absolute bottom-14 left-6 right-6 text-center pointer-events-none z-20 transition-opacity duration-300">
+        <div id="captionText" class="inline-block px-5 py-2.5 rounded-2xl bg-black/85 backdrop-blur-md border border-white/15 text-sm sm:text-base font-black text-amber-300 uppercase tracking-wide shadow-2xl max-w-2xl leading-snug">
+          Cargando video...
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Barra de Controles de Reproducción -->
+    <div class="w-full max-w-4xl mt-4 bg-white/5 border border-white/10 rounded-2xl p-3 sm:p-4 flex flex-col gap-3">
+      
+      <!-- Barra de Progreso de Tiempo -->
+      <div class="flex items-center gap-3">
+        <span id="timeCurrent" class="text-xs font-mono-num font-bold text-slate-400 w-10 text-right">00:00</span>
+        <div id="progressBarContainer" class="flex-1 h-2.5 bg-white/10 rounded-full cursor-pointer relative overflow-hidden">
+          <div id="progressBar" class="h-full bg-gradient-to-r from-red-600 via-amber-500 to-yellow-400 rounded-full w-0 transition-all duration-100"></div>
+        </div>
+        <span id="timeTotal" class="text-xs font-mono-num font-bold text-slate-400 w-10">01:18</span>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+        
+        <div class="flex items-center gap-2">
+          <!-- Botón Play/Pause -->
+          <button id="btnPlayPause" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-md">
+            <svg id="iconPlay" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="iconPause" class="w-4 h-4 fill-current hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <span id="labelPlayPause">REPRODUCIR</span>
+          </button>
+
+          <!-- Botón Reiniciar -->
+          <button id="btnRestart" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
+            Reiniciar
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Botón Descargar Audio MP3 -->
+          <a href="/assets/tutorial_registro_mastertech.mp3" download="tutorial_registro_mastertech.mp3" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Audio MP3</span>
+          </a>
+
+          <!-- Botón Grabar y Descargar Video -->
+          <button id="btnExportVideo" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-md">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            <span id="labelExportVideo">DESCARGAR VIDEO</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Ficha de Información de la Locución -->
+    <div class="w-full max-w-4xl mt-6 p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-sm font-black uppercase text-amber-400 flex items-center gap-2">
+          <span>PARÁMETROS DE VOZ ELEVENLABS</span>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 text-amber-300">Natural & Humana</span>
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">Voz: Antoni • Modelo: Eleven Multilingual v2 • Tono: Venezolano cercano, dinámico y comercial • Estabilidad: 42%</p>
+      </div>
+      <div class="text-xs font-mono-num text-slate-400 sm:text-right">
+        <div>Web Oficial: <strong class="text-white">tallermastertech.com</strong></div>
+        <div>Ubicación: <span class="text-slate-300">Porlamar, Isla de Margarita</span></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Elemento de Audio Oculto -->
+  <audio id="voiceAudio" preload="auto" src="/assets/tutorial_registro_mastertech.mp3"></audio>
+
+  <!-- Lógica de Animación y Renderizado del Video -->
+  <script>
+    const canvas = document.getElementById('animCanvas');
+    const ctx = canvas.getContext('2d');
+    const audio = document.getElementById('voiceAudio');
+    const playOverlay = document.getElementById('playOverlay');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const iconPlay = document.getElementById('iconPlay');
+    const iconPause = document.getElementById('iconPause');
+    const labelPlayPause = document.getElementById('labelPlayPause');
+    const btnRestart = document.getElementById('btnRestart');
+    const progressBar = document.getElementById('progressBar');
+    const progressBarContainer = document.getElementById('progressBarContainer');
+    const timeCurrent = document.getElementById('timeCurrent');
+    const timeTotal = document.getElementById('timeTotal');
+    const captionText = document.getElementById('captionText');
+    const videoWrapper = document.getElementById('videoWrapper');
+    const btnAspect169 = document.getElementById('btnAspect169');
+    const btnAspect916 = document.getElementById('btnAspect916');
+    const btnExportVideo = document.getElementById('btnExportVideo');
+    const labelExportVideo = document.getElementById('labelExportVideo');
+
+    // Carga de imágenes para el video
+    const logoImg = new Image();
+    logoImg.src = '/logo.png';
+    const heroBgImg = new Image();
+    heroBgImg.src = '/assets/hero_bg_custom.webp';
+    const suvImg = new Image();
+    suvImg.src = '/assets/coming_soon_suv_reveal_silk_v2.webp';
+
+    // Segmentos del Guion sincronizados con el audio (en segundos)
+    const scriptTimeline = [
+      { start: 0, end: 7, text: "¡Epa, mi pana! ¿Cómo estás? Bienvenidos a Taller MasterTech en Margarita.", scene: 1 },
+      { start: 7, end: 14, text: "Hoy te muestro lo fácil que es entrar a nuestra web y apartar tu cupo.", scene: 1 },
+      { start: 14, end: 23, text: "Paso 1: Abre tu navegador y escribe: tallermastertech.com", scene: 2 },
+      { start: 23, end: 32, text: "Verás mecánica especializada, catálogo de repuestos Brock y jornadas activas.", scene: 2 },
+      { start: 32, end: 40, text: "Paso 2: Dale clic al botón 'Apartar Cupo' o 'Agendar Cita'.", scene: 3 },
+      { start: 40, end: 50, text: "Paso 3: Rellena tus datos: nombre, WhatsApp, modelo de tu carro y el servicio.", scene: 4 },
+      { start: 50, end: 60, text: "Paso 4: Haz clic en enviar, ¡y listo! Te contactamos de inmediato por WhatsApp.", scene: 5 },
+      { start: 60, end: 69, text: "Confirmamos tu hora preferencial, sin colas ni complicaciones.", scene: 5 },
+      { start: 69, end: 78, text: "¡Ingresa ya a tallermastertech.com y asegura tu cupo en Margarita!", scene: 5 }
+    ];
+
+    let isPlaying = false;
+    let isVertical = false;
+    let isRecording = false;
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    // Formateo mm:ss
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    // Toggle Play/Pause
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          isPlaying = true;
+          playOverlay.classList.add('opacity-0', 'pointer-events-none');
+          iconPlay.classList.add('hidden');
+          iconPause.classList.remove('hidden');
+          labelPlayPause.textContent = "PAUSAR";
+        }).catch(e => console.error(e));
+      } else {
+        audio.pause();
+        isPlaying = false;
+        playOverlay.classList.remove('opacity-0', 'pointer-events-none');
+        iconPlay.classList.remove('hidden');
+        iconPause.classList.add('hidden');
+        labelPlayPause.textContent = "REANUDAR";
+      }
+    }
+
+    playOverlay.addEventListener('click', togglePlay);
+    btnPlayPause.addEventListener('click', togglePlay);
+
+    btnRestart.addEventListener('click', () => {
+      audio.currentTime = 0;
+      if (audio.paused) togglePlay();
+    });
+
+    progressBarContainer.addEventListener('click', (e) => {
+      const rect = progressBarContainer.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = pos * (audio.duration || 78);
+    });
+
+    // Formato 16:9 vs 9:16
+    btnAspect169.addEventListener('click', () => {
+      isVertical = false;
+      canvas.width = 1280;
+      canvas.height = 720;
+      videoWrapper.className = "relative w-full max-w-4xl aspect-video rounded-3xl overflow-hidden bg-black border-2 border-white/15 shadow-[0_20px_70px_rgba(0,0,0,0.9)] flex items-center justify-center transition-all duration-300";
+      btnAspect169.className = "px-3 py-1.5 rounded-lg bg-red-600 text-white transition-all shadow-sm";
+      btnAspect916.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
+    });
+
+    btnAspect916.addEventListener('click', () => {
+      isVertical = true;
+      canvas.width = 720;
+      canvas.height = 1280;
+      videoWrapper.className = "relative w-full max-w-md aspect-[9/16] rounded-3xl overflow-hidden bg-black border-2 border-white/15 shadow-[0_20px_70px_rgba(0,0,0,0.9)] flex items-center justify-center transition-all duration-300";
+      btnAspect916.className = "px-3 py-1.5 rounded-lg bg-red-600 text-white transition-all shadow-sm";
+      btnAspect169.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
+    });
+
+    // =========================================================
+    // DIBUJO Y ANIMACIÓN DEL CANVAS CUADRO POR CUADRO (60 FPS)
+    // =========================================================
+    function drawFrame() {
+      const t = audio.currentTime || 0;
+      const total = audio.duration || 78;
+      const progress = total > 0 ? (t / total) : 0;
+
+      progressBar.style.width = `${progress * 100}%`;
+      timeCurrent.textContent = formatTime(t);
+      timeTotal.textContent = formatTime(total);
+
+      // Subtítulo actual
+      const curSegment = scriptTimeline.find(s => t >= s.start && t < s.end) || scriptTimeline[scriptTimeline.length - 1];
+      if (curSegment) {
+        captionText.textContent = curSegment.text;
+      }
+
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // 1. Fondo base degradado oscuro con patrón de fibra de carbono
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, '#07080a');
+      bgGrad.addColorStop(0.5, '#0f1217');
+      bgGrad.addColorStop(1, '#08090d');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Líneas ambientales de carreras animadas
+      ctx.strokeStyle = 'rgba(220, 38, 38, 0.08)';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 8; i++) {
+        const offset = ((t * 80) + (i * 180)) % (W + 300) - 150;
+        ctx.beginPath();
+        ctx.moveTo(offset, 0);
+        ctx.lineTo(offset + 250, H);
+        ctx.stroke();
+      }
+
+      // 2. Renderizado por Escena
+      const sceneId = curSegment ? curSegment.scene : 1;
+
+      if (sceneId === 1) {
+        renderScene1(ctx, W, H, t);
+      } else if (sceneId === 2) {
+        renderScene2(ctx, W, H, t);
+      } else if (sceneId === 3) {
+        renderScene3(ctx, W, H, t);
+      } else if (sceneId === 4) {
+        renderScene4(ctx, W, H, t);
+      } else if (sceneId === 5) {
+        renderScene5(ctx, W, H, t);
+      }
+
+      // Partículas y resplandor superior
+      ctx.fillStyle = 'rgba(220, 38, 38, 0.35)';
+      ctx.fillRect(0, 0, W, 4);
+
+      requestAnimationFrame(drawFrame);
+    }
+
+    // ESCENA 1: INTRO CINEMATOGRÁFICA
+    function renderScene1(ctx, W, H, t) {
+      const cx = W / 2;
+      const cy = H / 2 - (isVertical ? 60 : 30);
+
+      // Círculo de resplandor rojo
+      const glowGrad = ctx.createRadialGradient(cx, cy, 30, cx, cy, isVertical ? 240 : 350);
+      glowGrad.addColorStop(0, 'rgba(220, 38, 38, 0.25)');
+      glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = glowGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Logo centrado con escalado suave
+      const scale = 1 + Math.sin(t * 2) * 0.03;
+      const logoW = isVertical ? 220 : 260;
+      const logoH = isVertical ? 70 : 85;
+
+      ctx.save();
+      ctx.translate(cx, cy - 80);
+      ctx.scale(scale, scale);
+      if (logoImg.complete && logoImg.naturalWidth > 0) {
+        ctx.drawImage(logoImg, -logoW / 2, -logoH / 2, logoW, logoH);
+      } else {
+        ctx.fillStyle = '#dc2626';
+        ctx.font = '900 36px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText('MASTERTECH', 0, 10);
+      }
+      ctx.restore();
+
+      // Badge VIP
+      ctx.fillStyle = '#1c1f26';
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 1.5;
+      const badgeW = isVertical ? 280 : 360;
+      const badgeH = 34;
+      ctx.beginPath();
+      ctx.roundRect(cx - badgeW / 2, cy - 10, badgeW, badgeH, 17);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '800 13px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('ISLA DE MARGARITA • CENTRO OFICIAL', cx, cy + 12);
+
+      // Título principal de la escena
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `900 ${isVertical ? '34px' : '44px'} Inter`;
+      ctx.textAlign = 'center';
+      ctx.fillText('¿CÓMO INGRESAR Y REGISTRARTE?', cx, cy + 85);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 16px Inter';
+      ctx.fillText('Aparta tu cita en menos de 1 minuto sin colas', cx, cy + 125);
+    }
+
+    // ESCENA 2: APERTURA DE NAVEGADOR Y WEB
+    function renderScene2(ctx, W, H, t) {
+      const cx = W / 2;
+      const cy = H / 2 - 20;
+
+      // Mockup de ventana de navegador
+      const winW = isVertical ? W * 0.9 : 880;
+      const winH = isVertical ? H * 0.65 : 460;
+      const winX = cx - winW / 2;
+      const winY = cy - winH / 2;
+
+      ctx.fillStyle = '#13171f';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(winX, winY, winW, winH, 20);
+      ctx.fill();
+      ctx.stroke();
+
+      // Barra superior del navegador
+      ctx.fillStyle = '#0f1217';
+      ctx.beginPath();
+      ctx.roundRect(winX, winY, winW, 55, [20, 20, 0, 0]);
+      ctx.fill();
+
+      // Botoncitos de ventana
+      ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(winX + 25, winY + 28, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(winX + 45, winY + 28, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(winX + 65, winY + 28, 6, 0, Math.PI * 2); ctx.fill();
+
+      // Barra de dirección URL con tipeo animado
+      const searchBoxW = winW - 140;
+      ctx.fillStyle = '#1c222e';
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(winX + 90, winY + 12, searchBoxW, 32, 10);
+      ctx.fill();
+      ctx.stroke();
+
+      // Efecto máquina de escribir
+      const fullUrl = 'https://tallermastertech.com';
+      const typeProgress = Math.min(1, Math.max(0, (t - 14) / 4));
+      const charsToShow = Math.floor(typeProgress * fullUrl.length);
+      const displayUrl = fullUrl.substring(0, charsToShow);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = '700 13px Inter';
+      ctx.textAlign = 'left';
+      ctx.fillText('🔒 ' + displayUrl + (typeProgress < 1 && Math.floor(t * 3) % 2 === 0 ? '|' : ''), winX + 105, winY + 33);
+
+      // Contenido simulado de la landing page cargando
+      if (t >= 18) {
+        // Hero Card de MasterTech
+        ctx.fillStyle = '#0b0d11';
+        ctx.fillRect(winX + 15, winY + 70, winW - 30, winH - 85);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 24px Inter';
+        ctx.fillText('TECNOLOGÍA Y PRECISIÓN AUTOMOTRIZ', winX + 35, winY + 120);
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = '800 16px Inter';
+        ctx.fillText('TALLER MASTERTECH • ISLA DE MARGARITA', winX + 35, winY + 150);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '500 13px Inter';
+        ctx.fillText('Especialistas en Scanner OEM, Reprogramación, Mecánica y Repuestos Brock', winX + 35, winY + 180);
+
+        // Tarjetas de servicios
+        const cardW = (winW - 90) / 3;
+        const labels = ['Diagnóstico Scanner', 'Jornadas VIP', 'Repuestos OEM'];
+        for (let i = 0; i < (isVertical ? 2 : 3); i++) {
+          const cx = winX + 35 + i * (cardW + 10);
+          ctx.fillStyle = '#171c26';
+          ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+          ctx.beginPath();
+          ctx.roundRect(cx, winY + 210, cardW, 110, 12);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#f8fafc';
+          ctx.font = '800 13px Inter';
+          ctx.fillText(labels[i], cx + 15, winY + 245);
+
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = '600 11px Inter';
+          ctx.fillText('Ver detalles →', cx + 15, winY + 290);
+        }
+      }
+    }
+
+    // ESCENA 3: CLIC EN APARTAR CUPO / AGENDAR CITA
+    function renderScene3(ctx, W, H, t) {
+      renderScene2(ctx, W, H, 20); // Renderiza el fondo de la web
+
+      const cx = W / 2;
+      const cy = H / 2 + 100;
+
+      // Resaltado gigante del botón de llamada a la acción
+      const btnW = isVertical ? 290 : 340;
+      const btnH = 65;
+      const btnX = cx - btnW / 2;
+      const btnY = cy - btnH / 2;
+
+      // Ondas de radar
+      const waveScale = 1 + (t % 1.5) * 0.3;
+      ctx.strokeStyle = `rgba(220, 38, 38, ${Math.max(0, 1 - (t % 1.5))})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(btnX - (waveScale - 1) * btnW / 2, btnY - (waveScale - 1) * btnH / 2, btnW * waveScale, btnH * waveScale, 20 * waveScale);
+      ctx.stroke();
+
+      // Botón principal
+      const gradBtn = ctx.createLinearGradient(btnX, btnY, btnX + btnW, btnY + btnH);
+      gradBtn.addColorStop(0, '#dc2626');
+      gradBtn.addColorStop(1, '#b91c1c');
+      ctx.fillStyle = gradBtn;
+      ctx.beginPath();
+      ctx.roundRect(btnX, btnY, btnW, btnH, 18);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 16px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('APARTAR CUPO VIP / CITAS', cx, cy + 6);
+
+      // Cursor animado desplazándose hacia el botón
+      const curX = btnX + btnW * 0.75 + Math.sin(t * 4) * 8;
+      const curY = btnY + btnH * 0.65 + Math.cos(t * 4) * 5;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(curX, curY);
+      ctx.lineTo(curX + 16, curY + 16);
+      ctx.lineTo(curX + 6, curY + 18);
+      ctx.lineTo(curX + 3, curY + 26);
+      ctx.lineTo(curX - 2, curY + 24);
+      ctx.lineTo(curX + 1, curY + 16);
+      ctx.lineTo(curX - 6, curY + 14);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Indicador paso 2
+      ctx.fillStyle = '#d4af37';
+      ctx.font = '900 18px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('PASO 2: HAZ CLIC EN APARTAR CUPO', cx, btnY - 30);
+    }
+
+    // ESCENA 4: FORMULARIO INTERACTIVO DE REGISTRO
+    function renderScene4(ctx, W, H, t) {
+      const cx = W / 2;
+      const cy = H / 2 - 20;
+
+      const modalW = isVertical ? W * 0.92 : 620;
+      const modalH = isVertical ? 580 : 480;
+      const modalX = cx - modalW / 2;
+      const modalY = cy - modalH / 2;
+
+      // Modal Glassmorphism
+      ctx.fillStyle = '#11141b';
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(modalX, modalY, modalW, modalH, 24);
+      ctx.fill();
+      ctx.stroke();
+
+      // Título del formulario
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 20px Inter';
+      ctx.textAlign = 'left';
+      ctx.fillText('RESERVA DE CUPO & CITA TALLER', modalX + 30, modalY + 45);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '500 12px Inter';
+      ctx.fillText('Por favor ingresa los datos de tu vehículo para asignarte cupo', modalX + 30, modalY + 68);
+
+      // Campos interactivos llenándose
+      const fields = [
+        { label: 'TU NOMBRE COMPLETO', val: 'Carlos Mendoza', timeStart: 41 },
+        { label: 'NÚMERO DE TELÉFONO / WHATSAPP', val: '0412-356-5012', timeStart: 44 },
+        { label: 'VEHÍCULO (MARCA / MODELO / AÑO)', val: 'Toyota 4Runner 2022 (V6)', timeStart: 47 },
+        { label: 'SERVICIO SOLICITADO', val: 'Diagnóstico Scanner + Entonación', timeStart: 49 }
+      ];
+
+      fields.forEach((f, idx) => {
+        const fy = modalY + 95 + idx * 75;
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '700 11px Inter';
+        ctx.fillText(f.label, modalX + 30, fy);
+
+        // Caja de input
+        ctx.fillStyle = '#191f2c';
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(modalX + 30, fy + 8, modalW - 60, 40, 10);
+        ctx.fill();
+        ctx.stroke();
+
+        // Texto escribiéndose en el input
+        if (t >= f.timeStart) {
+          const charProg = Math.min(1, (t - f.timeStart) / 1.5);
+          const shown = f.val.substring(0, Math.floor(charProg * f.val.length));
+          ctx.fillStyle = '#38bdf8';
+          ctx.font = '700 13px Inter';
+          ctx.fillText(shown, modalX + 45, fy + 33);
+        }
+      });
+
+      // Botón Enviar formulario
+      const subBtnY = modalY + modalH - 60;
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.roundRect(modalX + 30, subBtnY, modalW - 60, 44, 12);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 13px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('CONFIRMAR REGISTRO Y ENVIAR POR WHATSAPP', cx, subBtnY + 27);
+    }
+
+    // ESCENA 5: CONFIRMACIÓN Y CONTACTO VIP
+    function renderScene5(ctx, W, H, t) {
+      const cx = W / 2;
+      const cy = H / 2 - 20;
+
+      // Icono Check Verde Animado
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+      ctx.beginPath();
+      ctx.arc(cx, cy - 80, 55, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath();
+      ctx.arc(cx, cy - 80, 40, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 36px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('✓', cx, cy - 68);
+
+      // Titular de Éxito
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `900 ${isVertical ? '28px' : '34px'} Inter`;
+      ctx.fillText('¡REGISTRO CONFIRMADO!', cx, cy + 5);
+
+      ctx.fillStyle = '#d4af37';
+      ctx.font = '800 15px Inter';
+      ctx.fillText('Acceso Prioritario MasterTech Asignado', cx, cy + 35);
+
+      // Notificación simulación de WhatsApp
+      const notifW = isVertical ? W * 0.88 : 460;
+      const notifH = 85;
+      const notifX = cx - notifW / 2;
+      const notifY = cy + 65;
+
+      ctx.fillStyle = '#075e54';
+      ctx.strokeStyle = '#25d366';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(notifX, notifY, notifW, notifH, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#25d366';
+      ctx.font = '900 12px Inter';
+      ctx.textAlign = 'left';
+      ctx.fillText('💬 WHATSAPP MASTERTECH EN VIVO', notifX + 20, notifY + 28);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '600 12px Inter';
+      ctx.fillText('"¡Hola Carlos! Tu cupo ha sido reservado con éxito.', notifX + 20, notifY + 50);
+      ctx.fillText('Te esperamos en Porlamar en tu horario preferencial."', notifX + 20, notifY + 68);
+
+      // Cierre
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '700 13px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText('Ingresa hoy mismo a: tallermastertech.com', cx, notifY + 120);
+    }
+
+    // =========================================================
+    // EXPORTACIÓN AUTOMÁTICA DE VIDEO MP4/WEBM
+    // =========================================================
+    btnExportVideo.addEventListener('click', async () => {
+      if (isRecording) return;
+      isRecording = true;
+      labelExportVideo.textContent = "GRABANDO (1:18)...";
+      btnExportVideo.classList.replace('from-emerald-600', 'from-amber-600');
+      btnExportVideo.classList.replace('to-teal-600', 'to-yellow-600');
+
+      recordedChunks = [];
+      
+      // Capturamos el canvas a 60 fps
+      const stream = canvas.captureStream(60);
+
+      // Conectamos el audio del elemento al stream
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const source = audioCtx.createMediaElementSource(audio);
+      const dest = audioCtx.createMediaStreamDestination();
+      source.connect(dest);
+      source.connect(audioCtx.destination);
+
+      dest.stream.getAudioTracks().forEach(track => stream.addTrack(track));
+
+      const options = { mimeType: 'video/webm;codecs=vp9,opus' };
+      try {
+        mediaRecorder = new MediaRecorder(stream, options);
+      } catch (e) {
+        mediaRecorder = new MediaRecorder(stream);
+      }
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'tutorial_registro_mastertech.webm';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 100);
+
+        isRecording = false;
+        labelExportVideo.textContent = "DESCARGAR VIDEO";
+        btnExportVideo.classList.replace('from-amber-600', 'from-emerald-600');
+        btnExportVideo.classList.replace('to-yellow-600', 'to-teal-600');
+        alert('¡Video grabado y descargado con éxito!');
+      };
+
+      // Reiniciamos y grabamos desde el segundo 0
+      audio.currentTime = 0;
+      mediaRecorder.start();
+      audio.play();
+
+      audio.onended = () => {
+        if (isRecording) {
+          mediaRecorder.stop();
+        }
+      };
+    });
+
+    // Iniciar bucle de dibujo
+    requestAnimationFrame(drawFrame);
+  </script>
+</body>
+</html>
